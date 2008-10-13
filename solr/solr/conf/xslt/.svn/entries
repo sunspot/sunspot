@@ -1,0 +1,40 @@
+8
+
+dir
+701571
+http://svn.apache.org/repos/asf/lucene/solr/trunk/client/ruby/solr-ruby/solr/conf/xslt
+http://svn.apache.org/repos/asf
+
+
+
+2007-01-02T16:11:42.100811Z
+491827
+ehatcher
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+13f79535-47bb-0310-9956-ffa450edef68
+
+example.xsl
+file
+
+
+
+
+2008-10-03T23:55:28.000000Z
+a2406be3eed25d35483335b75943334c
+2007-01-02T16:11:42.100811Z
+491827
+ehatcher
+

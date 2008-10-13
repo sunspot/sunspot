@@ -8,7 +8,8 @@ RUBYFORGE_PROJECT = 'sunspot' # The unix name for your project
 HOMEPATH = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
-#  ['activesupport', '>= 1.3.1']
+  ['solr-ruby', '= 0.0.6',
+   'extlib', '>= 0.9.7']
 ]    # An array of rubygem dependencies [name, version]
 
 @config_file = "~/.rubyforge/user-config.yml"
