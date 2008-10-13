@@ -11,6 +11,9 @@ describe Sunspot::Indexer do
       integer :category_ids
       float :average_rating
       time :published_at
+      string :sort_title do
+        title.downcase.sub(/^(a|an|the)\W+/, '') if title = self.title
+      end
     end
   end
 
@@ -66,6 +69,15 @@ describe Sunspot::Indexer do
       post :published_at => Time.parse('1983-07-08 05:00:00 -0400')
       connection.should_receive(:add).with do |hash|
         hash[:published_at_t].should == '1983-07-08T09:00:00Z'
+      end
+    end
+
+    it 'should correctly index a virtual field' do
+      post :title => 'The Blog Post'
+      Post.is_searchable do
+      end
+      connection.should_receive(:add).with do |hash|
+        hash[:sort_title_s].should == 'blog post'
       end
     end
 
