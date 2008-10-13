@@ -9,29 +9,28 @@ module Sunspot
         if model.kind_of? Enumerable
           model.each { |mod| self.add mod }
         else
-          connection.add(fields.inject(:id => "#{model.class.name}:#{model.id}",
-                                       :type => Indexer.superclasses_for(model.class).map { |clazz| clazz.name }) do |hash, field|
+          hash = static_hash_for model
+          for field in fields
             hash.merge! field.pair_for(model)
-            hash
-          end)
+          end
+          connection.add hash
         end
       end
 
       def fields
-        fields_hash.values
+        @fields ||= []
       end
 
       def add_fields(fields)
-        for field in fields
-          fields_hash[field.name] = field
-        end
+        self.fields.concat fields
       end
 
       protected 
       attr_reader :connection
 
-      def fields_hash
-        @fields_hash ||= {}
+      def static_hash_for(model)
+        { :id => "#{model.class.name}:#{model.id}",
+          :type => Indexer.superclasses_for(model.class).map { |clazz| clazz.name }}
       end
     end
 
@@ -45,6 +44,7 @@ module Sunspot
         indexer = self.new(connection)
         for superclass in superclasses_for(clazz)
           indexer.add_fields ::Sunspot::Fields.for(superclass)
+          indexer.add_fields ::Sunspot::Fields.keywords_for(superclass)
         end
         indexer
       end

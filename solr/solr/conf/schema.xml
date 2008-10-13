@@ -25,7 +25,7 @@ For more information, on how to customize this file, please see
 http://wiki.apache.org/solr/SchemaXml
 -->
 
-<schema name="flare" version="1.1">
+<schema name="sunspot" version="1.1">
   <!-- attribute "name" is the name of this schema and is only used for display purposes.
   Applications should change this to reflect the nature of the search collection.
   version="1.1" is Solr's version number for the schema syntax and semantics.  It should

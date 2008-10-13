@@ -4,6 +4,12 @@ module Sunspot
       @clazz = clazz
     end
 
+    def keywords(*names, &block)
+      for name in names
+        Sunspot::Fields.add_keywords clazz, build_field(name, Sunspot::Type::TextType, &block)
+      end
+    end
+
     def method_missing(method, *args, &block)
       begin
         type = ::Sunspot::Type.const_get "#{method.to_s.camel_case}Type"
@@ -11,7 +17,7 @@ module Sunspot
         super(method.to_sym, *args, &block) and return
       end
       name = args.shift
-      build_field(name, type, *args, &block)
+      Sunspot::Fields.add clazz, build_field(name, type, *args, &block)
     end
 
     protected
@@ -21,9 +27,9 @@ module Sunspot
 
     def build_field(name, type, *args, &block)
       unless block
-        Sunspot::Fields.add clazz, Sunspot::AttributeField.new(name, type)
+        Sunspot::AttributeField.new(name, type)
       else
-        Sunspot::Fields.add clazz, Sunspot::VirtualField.new(name, type, &block)
+        Sunspot::VirtualField.new(name, type, &block)
       end
     end
   end
