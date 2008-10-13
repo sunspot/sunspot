@@ -6,7 +6,7 @@ module Sunspot
 
     def method_missing(method, *args, &block)
       begin
-        type = ::Sunspot::Type.const_get method.to_s.upcase 
+        type = ::Sunspot::Type.const_get "#{method.to_s.camel_case}Type"
       rescue(NameError)
         super(method.to_sym, *args, &block) and return
       end

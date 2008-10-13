@@ -13,11 +13,19 @@ class IndexTest < Test::Unit::TestCase
     end
   end
 
-  def test_index_keywords
+  def will_test_index_text
     post = Post.new :title => 'A Title', :body => 'The Blog Posts here'
     connection.expects(:add).with do |hash|
       assert_equal 'A Title', hash[:title_text]
       assert_equal 'The Blog Posts here', hash[:body_text]
+    end
+    Sunspot::Index.add post
+  end
+
+  def test_index_string_field
+    post = Post.new :title => 'A Title'
+    connection.expects(:add).with do |hash|
+      'A Title' == hash[:title_s]
     end
     Sunspot::Index.add post
   end

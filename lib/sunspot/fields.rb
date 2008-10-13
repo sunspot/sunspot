@@ -4,6 +4,7 @@ module Sunspot
 
   class <<Fields
     def add(clazz, fields)
+      fields = [fields] unless fields.kind_of? Enumerable
       (fields_hash[clazz.object_id] ||= []).concat fields
     end
 
