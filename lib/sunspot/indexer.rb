@@ -5,15 +5,11 @@ module Sunspot
     end
 
     def add(model)
-      if model.kind_of? Enumerable
-        model.each { |mod| self.add mod }
-      else
-        hash = static_hash_for model
-        for field in fields
-          hash.merge! field.pair_for(model)
-        end
-        connection.add hash
+      hash = static_hash_for model
+      for field in fields
+        hash.merge! field.pair_for(model)
       end
+      connection.add hash
     end
 
     def fields
@@ -45,6 +41,7 @@ module Sunspot
         indexer.add_fields ::Sunspot::Fields.for(superclass)
         indexer.add_fields ::Sunspot::Fields.keywords_for(superclass)
       end
+      raise ArgumentError, "Class #{clazz.name} has not been configured for indexing" if indexer.fields.empty?
       indexer
     end
 

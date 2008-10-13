@@ -1,12 +1,12 @@
-class BaseClass; end
+class BaseClass
+  include Sunspot::Searchable
+end
 
 class Post < BaseClass
-  include Sunspot::Searchable
-
   @@id = 0
 
   attr_reader :id
-  attr_accessor :title, :body, :blog_id, :published_at, :average_rating
+  attr_accessor :title, :body, :blog_id, :published_at, :average_rating, :author_name
 
   def initialize(attrs = {})
     @id = @@id += 1

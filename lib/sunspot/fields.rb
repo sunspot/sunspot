@@ -10,7 +10,7 @@ module Sunspot
 
     def add_keywords(clazz, fields)
       fields = [fields] unless fields.kind_of? Enumerable
-      self.keywords_for(clazz).concat fields
+      keywords_for(clazz).concat fields
     end
 
     def for(clazz)
