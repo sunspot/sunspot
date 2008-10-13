@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper.rb')
 
-describe Sunspot::Index do
+describe Sunspot::Indexer do
   before :each do
     Solr::Connection.stub!(:new).and_return connection
 
@@ -15,7 +15,7 @@ describe Sunspot::Index do
   end
 
   after :each do
-    Sunspot::Index.add post
+    Sunspot::Indexer.add post
   end
 
   it 'should index id and type' do
