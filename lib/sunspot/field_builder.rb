@@ -14,8 +14,10 @@ module Sunspot
       build_field(name, type, *args, &block)
     end
 
-    private
+    protected
     attr_reader :clazz
+
+    private
 
     def build_field(name, type, *args, &block)
       unless block

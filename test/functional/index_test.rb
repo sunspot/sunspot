@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'helper')
+require File.join(File.dirname(__FILE__), 'test_helper')
 
 class IndexTest < Test::Unit::TestCase
   def setup

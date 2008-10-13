@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'helper')
+require File.join(File.dirname(__FILE__), 'test_helper')
 lib_require 'sunspot', 'searchable'
 
 class SearchableTest < Test::Unit::TestCase

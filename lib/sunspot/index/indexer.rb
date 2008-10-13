@@ -27,7 +27,7 @@ module Sunspot
         end
       end
 
-      private
+      protected 
       attr_reader :connection
 
       def fields_hash

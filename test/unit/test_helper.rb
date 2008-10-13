@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '..', 'helper')
+require File.join(File.dirname(__FILE__), '..', 'test_helper')
 
 def lib_require(*args)
   require File.join(File.dirname(__FILE__), '..', '..', 'lib', *args)

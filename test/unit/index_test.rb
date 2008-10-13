@@ -1,5 +1,5 @@
-require File.join(File.dirname(__FILE__), 'helper')
-require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'sunspot', 'index')
+require File.join(File.dirname(__FILE__), 'test_helper')
+lib_require 'sunspot', 'index'
 
 class IndexTest < Test::Unit::TestCase
   def test_add

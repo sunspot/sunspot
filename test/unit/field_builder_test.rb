@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'helper')
+require File.join(File.dirname(__FILE__), 'test_helper')
 lib_require 'sunspot', 'field_builder'
 
 class FieldBuilderTest < Test::Unit::TestCase
