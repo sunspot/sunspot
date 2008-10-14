@@ -6,7 +6,7 @@ module Sunspot
 
     def keywords(*names, &block)
       for name in names
-        Sunspot::Fields.add_keywords clazz, build_field(name, Sunspot::Type::TextType, &block)
+        ::Sunspot::Field.register clazz, build_field(name, ::Sunspot::Type::TextType, &block)
       end
     end
 
@@ -17,7 +17,7 @@ module Sunspot
         super(method.to_sym, *args, &block) and return
       end
       name = args.shift
-      Sunspot::Fields.add clazz, build_field(name, type, *args, &block)
+      ::Sunspot::Field.register clazz, build_field(name, type, *args, &block)
     end
 
     protected
@@ -27,9 +27,9 @@ module Sunspot
 
     def build_field(name, type, *args, &block)
       unless block
-        Sunspot::AttributeField.new(name, type)
+        ::Sunspot::Field::AttributeField.new(name, type)
       else
-        Sunspot::VirtualField.new(name, type, &block)
+        ::Sunspot::Field::VirtualField.new(name, type, &block)
       end
     end
   end
