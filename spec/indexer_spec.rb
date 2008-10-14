@@ -4,6 +4,7 @@ describe Sunspot::Indexer do
   before :each do
     Solr::Connection.stub!(:new).and_return connection
 
+    Sunspot::Field.unregister_all!
     Post.is_searchable do
       keywords :title, :body
       string :title

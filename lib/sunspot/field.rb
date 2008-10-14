@@ -58,6 +58,10 @@ module Sunspot
       fields_hash[clazz.object_id] ||= []
     end
 
+    def unregister_all!
+      fields_hash.clear
+    end
+
     private
 
     def fields_hash
