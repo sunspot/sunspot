@@ -11,6 +11,17 @@ module Sunspot
         end
       end
 
+      def ==(other)
+        other.respond_to?(:name) &&
+          other.respond_to?(:type) &&
+          self.name == other.name &&
+          self.type == other.type
+      end
+
+      def hash
+        name.hash + 31 * type.hash
+      end
+
       protected
 
       def to_indexed(value)
