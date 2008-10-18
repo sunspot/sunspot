@@ -3,19 +3,6 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe Sunspot::Indexer do
   before :each do
     Solr::Connection.stub!(:new).and_return connection
-
-    Sunspot::Field.unregister_all!
-    Post.is_searchable do
-      keywords :title, :body
-      string :title
-      integer :blog_id
-      integer :category_ids
-      float :average_rating
-      time :published_at
-      string :sort_title do
-        title.downcase.sub(/^(a|an|the)\W+/, '') if title = self.title
-      end
-    end
   end
 
   describe 'when indexing an object' do
