@@ -1,0 +1,75 @@
+= sunspot
+
+Sunspot is a Ruby gem for expressive, powerful Ruby-Solr interaction. Sunspot is
+built on top of the solr-ruby gem, which provides a low-level interface for Solr
+interaction; the aim of Sunspot is to make the process of indexing data, and then
+searching for indexed data, as simple and expressive as Ruby itself.
+
+Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
+objects such as the filesystem.
+
+Sunspot is currently a work in progress and is not feature-complete.
+
+=== Sunspot Features:
+
+1) Define indexing strategy for each searchable class using intuitive block-based API
+2) Clean separation between keyword-searchable fields and fields for scoping/ordering
+3) Define fields based on existing attributes or "virtual fields" for custom indexing
+4) Define association facets, which return model objects as row values
+5) Search using both hash and block interface; assign operators to hash keys for
+   easy translation of web request parameters into search.
+
+= Using Sunspot
+
+=== Define an index:
+
+  class Post
+    #...
+    is_searchable do
+      keywords :title, :body
+      string :author_name
+      integer :blog_id
+      integer :category_ids
+      float :average_rating
+      time :published_at
+      string :sort_title do
+        title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title
+      end
+    end
+  end
+       
+
+== REQUIREMENTS:
+
+1) extlib
+2) solr-ruby
+3) Java
+
+== INSTALL:
+
+* FIX (sudo gem install, anything else)
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2008 Mat Brown
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
