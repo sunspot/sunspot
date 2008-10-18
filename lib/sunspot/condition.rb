@@ -6,7 +6,7 @@ module Sunspot
       end
 
       def to_solr_query
-        "#{field.indexed_name}:#{solr_value}"
+        "#{field.indexed_name}:#{to_solr_conditional}"
       end
 
       protected
@@ -22,6 +22,8 @@ module Sunspot
     end
 
     class EqualTo < Base
+      private
+
       def to_solr_conditional
         "#{solr_value}"
       end
