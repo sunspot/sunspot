@@ -6,7 +6,7 @@ module Sunspot
 
     def keywords(*names, &block)
       for name in names
-        ::Sunspot::Field.register clazz, build_field(name, ::Sunspot::Type::TextType, &block)
+        ::Sunspot::Field.register_keywords clazz, build_field(name, ::Sunspot::Type::TextType, &block)
       end
     end
 

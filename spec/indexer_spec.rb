@@ -56,7 +56,7 @@ describe Sunspot::Indexer do
     it 'should correctly index a time field' do
       post :published_at => Time.parse('1983-07-08 05:00:00 -0400')
       connection.should_receive(:add).with do |hash|
-        hash[:published_at_t].should == '1983-07-08T09:00:00Z'
+        hash[:published_at_d].should == '1983-07-08T09:00:00Z'
       end
     end
 

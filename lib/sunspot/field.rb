@@ -5,7 +5,7 @@ module Sunspot
 
       def pair_for(model)
         if value = value_for(model)
-          { type.indexed_name(name).to_sym => to_indexed(value) }
+          { indexed_name.to_sym => to_indexed(value) }
         else
           {}
         end
@@ -22,7 +22,9 @@ module Sunspot
         name.hash + 31 * type.hash
       end
 
-      protected
+      def indexed_name
+        type.indexed_name name
+      end
 
       def to_indexed(value)
         if value.kind_of? Array 
@@ -65,6 +67,15 @@ module Sunspot
       self.for(clazz).concat fields
     end
 
+    def register_keywords(clazz, fields)
+      fields = [fields] unless fields.kind_of? Enumerable
+      self.keywords_for(clazz).concat fields
+    end
+
+    def keywords_for(clazz)
+      keyword_fields_hash[clazz.object_id] ||= []
+    end
+
     def for(clazz)
       fields_hash[clazz.object_id] ||= []
     end
@@ -77,6 +88,10 @@ module Sunspot
 
     def fields_hash
       @fields_hash ||= {}
+    end
+
+    def keyword_fields_hash
+      @keyword_fields_hash ||= {}
     end
   end
 end

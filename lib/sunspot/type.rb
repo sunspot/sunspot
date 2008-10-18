@@ -48,7 +48,7 @@ module Sunspot
 
     class <<TimeType
       def indexed_name(name)
-        "#{name}_t"
+        "#{name}_d"
       end
 
       def to_indexed(value)
