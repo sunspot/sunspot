@@ -18,6 +18,10 @@ module Sunspot
       def configure_search(&block)
         ::Sunspot::FieldBuilder.new(self).instance_eval(&block) if block
       end
+
+      def search(attrs = {}, &block)
+        ::Sunspot::Search.new(self, attrs, &block).execute!
+      end
     end
 
     module InstanceMethods

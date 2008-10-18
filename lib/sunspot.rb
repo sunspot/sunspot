@@ -4,7 +4,7 @@ gem 'extlib'
 require 'solr'
 require 'extlib'
 
-%w(field field_builder indexer type searchable).each { |filename| require File.join(File.dirname(__FILE__), 'sunspot', filename) }
+%w(field field_builder indexer query query_builder search searchable type).each { |filename| require File.join(File.dirname(__FILE__), 'sunspot', filename) }
 
 module Sunspot
 end
