@@ -57,7 +57,7 @@ $hoe = Hoe.new(GEM_NAME, VERS) do |p|
   p.summary = DESCRIPTION
   p.url = HOMEPATH
   p.rubyforge_name = RUBYFORGE_PROJECT if RUBYFORGE_PROJECT
-  p.test_globs = ["test/**/test_*.rb"]
+  p.test_globs = ["spec/**/*_spec.rb"]
   p.clean_globs |= ['**/.*.sw?', '*.gem', '.config', '**/.DS_Store']  #An array of file patterns to delete on clean.
 
   # == Optional
@@ -65,7 +65,7 @@ $hoe = Hoe.new(GEM_NAME, VERS) do |p|
   #p.extra_deps = EXTRA_DEPENDENCIES
 
     #p.spec_extras = {}    # A hash of extra values to set in the gemspec.
-  end
+end
 
 CHANGES = $hoe.paragraphs_of('History.txt', 0..1).join("\\n\\n")
 PATH    = (RUBYFORGE_PROJECT == GEM_NAME) ? RUBYFORGE_PROJECT : "#{RUBYFORGE_PROJECT}/#{GEM_NAME}"
