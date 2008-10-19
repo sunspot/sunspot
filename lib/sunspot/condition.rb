@@ -36,5 +36,13 @@ module Sunspot
         "[* TO #{solr_value}]"
       end
     end
+
+    class GreaterThan < Base
+      private
+
+      def to_solr_conditional
+        "[#{solr_value} TO *]"
+      end
+    end
   end
 end
