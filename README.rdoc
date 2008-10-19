@@ -12,11 +12,11 @@ Sunspot is currently a work in progress and is not feature-complete.
 
 === Sunspot Features:
 
-  * Define indexing strategy for each searchable class using intuitive block-based API
-  * Clean separation between keyword-searchable fields and fields for scoping/ordering
-  * Define fields based on existing attributes or "virtual fields" for custom indexing
-  * Define association facets, which return model objects as row values
-  * Search using both hash and block interface; assign operators to hash keys for easy translation of web request parameters into search.
+* Define indexing strategy for each searchable class using intuitive block-based API
+* Clean separation between keyword-searchable fields and fields for scoping/ordering
+* Define fields based on existing attributes or "virtual fields" for custom indexing
+* Define association facets, which return model objects as row values
+* Search using both hash and block interface; assign operators to hash keys for easy translation of web request parameters into search.
 
 = Using Sunspot
 
@@ -40,9 +40,9 @@ Sunspot is currently a work in progress and is not feature-complete.
 
 == REQUIREMENTS:
 
-  1. extlib
-  2. solr-ruby
-  3. Java
+1. extlib
+2. solr-ruby
+3. Java
 
 == INSTALL:
 
