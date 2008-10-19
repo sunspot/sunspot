@@ -42,6 +42,13 @@ describe Sunspot::Search do
       with.published_at time
     end
   end
+
+  it 'should scope by less than match with float using block syntax' do
+    connection.should_receive(:query).with('(average_rating_f:[* TO 3\.0]) AND (type:Post)')
+    Post.search do
+      with.average_rating.less_than 3.0
+    end
+  end
   
   private
 

@@ -18,7 +18,7 @@ Sunspot is currently a work in progress and is not feature-complete.
 * Define association facets, which return model objects as row values
 * Search using both hash and block interface; assign operators to hash keys for easy translation of web request parameters into search.
 
-= Using Sunspot
+== Using Sunspot
 
 === Define an index:
 

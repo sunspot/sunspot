@@ -28,5 +28,13 @@ module Sunspot
         "#{solr_value}"
       end
     end
+
+    class LessThan < Base
+      private
+
+      def to_solr_conditional
+        "[* TO #{solr_value}]"
+      end
+    end
   end
 end
