@@ -6,7 +6,7 @@ module Sunspot
 
     def method_missing(field_name, *args)
       if args.length == 0 then ConditionBuilder.new(field_name, @query)
-      elsif args.length == 1 then @query.build_condition field_name, ::Sunspot::Condition::EqualTo, args.first
+      elsif args.length == 1 then @query.add_condition @query.build_condition(field_name, ::Sunspot::Condition::EqualTo, args.first)
       else super(field_name.to_sym, *args)
       end
     end
@@ -23,7 +23,11 @@ module Sunspot
       rescue(NameError)
         super(condition_name.to_sym, *args)
       end
-      @query.build_condition @field_name, clazz, args.first
+      if value = args.first
+        @query.add_condition @query.build_condition(@field_name, clazz, args.first)
+      else
+        @query.interpret_condition @field_name, clazz
+      end
     end
   end
 end
