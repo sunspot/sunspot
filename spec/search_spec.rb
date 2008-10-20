@@ -79,6 +79,30 @@ describe Sunspot::Search do
     end
   end
 
+  it 'should raise ArgumentError if bogus field scoped' do
+    lambda do
+      Post.search do
+        with.bogus.equal_to :field
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  it 'should raise NoMethodError if bogus condition name referenced' do
+    lambda do
+      Post.search do
+        with.category_ids.resembling :bogus_condition
+      end
+    end.should raise_error(NoMethodError)
+  end
+
+  it 'should raise NoMethodError if more than one argument passed to scope method' do # or should it?
+    lambda do
+      Post.search do
+        with.category_ids 4, 5
+      end
+    end.should raise_error(NoMethodError)
+  end
+
   private
 
   def connection
