@@ -12,7 +12,7 @@ module Sunspot
       protected
       attr_accessor :field, :value
 
-      def solr_value
+      def solr_value(value = self.value)
         escape field.to_indexed(value)
       end
 
@@ -42,6 +42,30 @@ module Sunspot
 
       def to_solr_conditional
         "[#{solr_value} TO *]"
+      end
+    end
+
+    class Between < Base
+      private
+
+      def to_solr_conditional
+        "[#{solr_value value.first} TO #{solr_value value.last}]"                  
+      end
+    end
+
+    class AnyOf < Base
+      private
+
+      def to_solr_conditional
+        "(#{value.map { |v| solr_value v } * ' OR '})"
+      end
+    end
+
+    class AllOf < Base
+      private
+
+      def to_solr_conditional
+        "(#{value.map { |v| solr_value v } * ' AND '})"
       end
     end
   end

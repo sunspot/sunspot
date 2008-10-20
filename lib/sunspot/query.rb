@@ -31,7 +31,8 @@ module Sunspot
 
     def init_conditions_from_hash(hash)
       hash.each_pair do |field_name, value|
-        build_condition field_name, ::Sunspot::Condition::EqualTo, value rescue(ArgumentError)
+        condition_clazz = value.is_a?(Array) ? ::Sunspot::Condition::AnyOf : ::Sunspot::Condition::EqualTo
+        build_condition field_name, condition_clazz, value rescue(ArgumentError)
       end
     end
 

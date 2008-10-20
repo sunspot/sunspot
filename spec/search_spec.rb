@@ -56,7 +56,29 @@ describe Sunspot::Search do
       with.average_rating.greater_than 3.0
     end
   end
-  
+
+  it 'should scope by between match with float using block syntax' do
+    connection.should_receive(:query).with('(average_rating_f:[2\.0 TO 4\.0]) AND (type:Post)')
+    Post.search do
+      with.average_rating.between 2.0..4.0
+    end
+  end
+
+  it 'should scope by any match with integer' do
+    connection.should_receive(:query).with('(category_ids_i:(2 OR 7 OR 12)) AND (type:Post)').twice #TODO confirm that this is the right syntax for Solr
+    Post.search :conditions => { :category_ids => [2, 7, 12] }
+    Post.search do
+      with.category_ids.any_of [2, 7, 12]
+    end
+  end
+
+  it 'should scope by all match with integer using block syntax' do
+    connection.should_receive(:query).with('(category_ids_i:(2 AND 7 AND 12)) AND (type:Post)') #TODO confirm that this is the right syntax for Solr
+    Post.search do
+      with.category_ids.all_of [2, 7, 12]
+    end
+  end
+
   private
 
   def connection

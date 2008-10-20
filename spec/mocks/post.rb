@@ -16,7 +16,7 @@ class Post < BaseClass
     float :average_rating
     time :published_at
     string :sort_title do
-      title.downcase.sub(/^(a|an|the)\W+/, '') if title = self.title
+      title.downcase.sub(/^(a|an|the)\W+/, '') if title
     end
   end
 
