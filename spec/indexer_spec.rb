@@ -17,7 +17,7 @@ describe Sunspot::Indexer do
       end
     end
 
-    it 'should index keywords' do
+    it 'should index text' do
       post :title => 'A Title', :body => 'A Post'
       connection.should_receive(:add).with do |hash|
         hash[:title_text].should == 'A Title'

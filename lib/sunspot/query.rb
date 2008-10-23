@@ -2,21 +2,22 @@ module Sunspot
   class Query
     attr_accessor :keywords
 
-    def initialize(types, keywords, dynamic_scope)
+    def initialize(types, keywords, conditions)
       @keywords, @types = keywords, types
-      @dynamic_scope = dynamic_scope
+      @conditions = conditions
     end
 
     def to_solr
       query_components = []
       query_components << keywords if keywords
+      query_components.concat scope_queries
       query_components.concat condition_queries
       query_components << types_query if types_query
       query_components.map { |component| "(#{component})"} * ' AND '
     end
 
-    def add_condition(condition)
-      conditions << condition
+    def add_scope(condition)
+      scope << condition
     end
 
     def build_condition(field_name, condition_clazz, value)
@@ -33,32 +34,36 @@ module Sunspot
 
     private
 
-    def dynamic_conditions
-      dynamic_conditions = @dynamic_scope.map do |field_name, value|
+    def conditions
+      conditions = @conditions.map do |field_name, value|
         condition_clazz = if hash_interpreters.has_key?(field_name.to_s) then hash_interpreters[field_name.to_s]
                           elsif value.is_a?(Array) then ::Sunspot::Condition::AnyOf
                           else ::Sunspot::Condition::EqualTo
                           end
         begin
           build_condition field_name, condition_clazz, value
-        rescue ArgumentError
+        rescue ArgumentError #TODO make our own exception class for this
           # ignore nonexistant fields
         end
       end
-      dynamic_conditions.compact!
-      dynamic_conditions
+      conditions.compact!
+      conditions
+    end
+
+    def scope
+      @scope ||= []
+    end
+
+    def scope_queries
+      scope.map { |condition| condition.to_solr_query }
+    end
+
+    def condition_queries
+      conditions.map { |condition| condition.to_solr_query }
     end
 
     def hash_interpreters
       @hash_interpreters ||= {}
-    end
-
-    def conditions
-      @conditions ||= []
-    end
-
-    def condition_queries
-      (conditions + dynamic_conditions).map { |condition| "#{condition.to_solr_query}" }
     end
 
     #TODO once the condition structure is up and running, this method

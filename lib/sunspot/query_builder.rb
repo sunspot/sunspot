@@ -9,7 +9,7 @@ module Sunspot
     end
 
     def with
-      @conditions_builder ||= ::Sunspot::ConditionsBuilder.new(@query)
+      @conditions_builder ||= ::Sunspot::ScopeBuilder.new(@query)
     end
     alias_method :conditions, :with
   end
