@@ -9,7 +9,7 @@ class Post < BaseClass
   attr_accessor :title, :body, :blog_id, :published_at, :average_rating, :author_name
 
   is_searchable do
-    keywords :title, :body
+    text :title, :body
     string :title
     integer :blog_id
     integer :category_ids

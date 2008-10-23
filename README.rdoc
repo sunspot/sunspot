@@ -25,7 +25,7 @@ Sunspot is currently a work in progress and is not feature-complete.
   class Post
     #...
     is_searchable do
-      keywords :title, :body
+      text :title, :body
       string :author_name
       integer :blog_id
       integer :category_ids

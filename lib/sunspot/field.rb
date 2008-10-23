@@ -67,12 +67,12 @@ module Sunspot
       self.for(clazz).concat fields
     end
 
-    def register_keywords(clazz, fields)
+    def register_text(clazz, fields)
       fields = [fields] unless fields.kind_of? Enumerable
-      self.keywords_for(clazz).concat fields
+      self.text_for(clazz).concat fields
     end
 
-    def keywords_for(clazz)
+    def text_for(clazz)
       keyword_fields_hash[clazz.object_id] ||= []
     end
 

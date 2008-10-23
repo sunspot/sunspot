@@ -39,7 +39,7 @@ module Sunspot
       indexer = self.new(connection)
       for superclass in superclasses_for(clazz)
         indexer.add_fields ::Sunspot::Field.for(superclass)
-        indexer.add_fields ::Sunspot::Field.keywords_for(superclass)
+        indexer.add_fields ::Sunspot::Field.text_for(superclass)
       end
       raise ArgumentError, "Class #{clazz.name} has not been configured for indexing" if indexer.fields.empty?
       indexer
