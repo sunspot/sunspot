@@ -10,13 +10,26 @@ objects such as the filesystem.
 
 Sunspot is currently a work in progress and is not feature-complete.
 
-=== Sunspot Features:
+=== Sunspot already has these features:
 
 * Define indexing strategy for each searchable class using intuitive block-based API
 * Clean separation between keyword-searchable fields and fields for scoping/ordering
 * Define fields based on existing attributes or "virtual fields" for custom indexing
+* Indexes each object's entire superclass hierarchy, for easy searching for all objects inheriting from a parent class
+* Intuitive DSL for scoping searches, with all the usual boolean operators available
+* Ability to pass dynamic conditions in as a hash, and define which operator to use for each condition
+
+=== Sunspot will have these features:
+
+* Adapters for DataMapper, ActiveRecord, and File objects
+* Extensible adapter architecture for easy integration of other ORMs or non-model classes
+* High-power integration with ORM features for maximum efficiency (e.g., specify AR :include argument for eager loading associations when hydrating search results)
+* Ordering
+* Full compatibility with will_paginate
+* Intuitive interface for requesting facets on indexed fields
 * Define association facets, which return model objects as row values
-* Search using both hash and block interface; assign operators to hash keys for easy translation of web request parameters into search.
+* Access search parameters as hash or object attributes, for easy integration with form helpers or query string builders
+* Plugins for drop-in integration with Merb and Rails
 
 == Using Sunspot
 
