@@ -1,14 +1,14 @@
 = sunspot
 
-Sunspot is a Ruby gem for expressive, powerful Ruby-Solr interaction. Sunspot is
-built on top of the solr-ruby gem, which provides a low-level interface for Solr
-interaction; the aim of Sunspot is to make the process of indexing data, and then
-searching for indexed data, as simple and expressive as Ruby itself.
+Sunspot is a Ruby library for expressive, powerful interaction with the Solr search engine.
+Sunspot is built on top of the solr-ruby gem, which provides a low-level interface for Solr
+interaction; Sunspot provides simple, intuitive, expressive DSL backed by powerful
+features for indexing objects and searching against them.
 
 Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
 objects such as the filesystem.
 
-Sunspot is currently a work in progress and is not feature-complete.
+Sunspot is currently under active development and is not feature-complete.
 
 === Sunspot already has these features:
 
