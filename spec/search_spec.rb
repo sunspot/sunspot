@@ -1,5 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
+#TODO USE FILTER QUERIES!!!
 describe Sunspot::Search do
   before :each do
     Solr::Connection.stub!(:new).and_return connection
