@@ -2,7 +2,7 @@
 
 Sunspot is a Ruby library for expressive, powerful interaction with the Solr search engine.
 Sunspot is built on top of the solr-ruby gem, which provides a low-level interface for Solr
-interaction; Sunspot provides simple, intuitive, expressive DSL backed by powerful
+interaction; Sunspot provides a simple, intuitive, expressive DSL backed by powerful
 features for indexing objects and searching against them.
 
 Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
