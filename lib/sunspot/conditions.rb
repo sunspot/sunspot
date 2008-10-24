@@ -1,11 +1,20 @@
 module Sunspot
   class Conditions
     def initialize(query, conditions_hash)
-      @query, @conditions_hash = query, conditions_hash
+      @query = query
+      @conditions_hash = conditions_hash.inject({}) do |hash, pair|
+        field_name, value = pair
+        hash[field_name.to_s] = value
+        hash
+      end
     end
     
     def interpret(field_name, condition_type)
       operators_hash[field_name.to_s] = Sunspot::Condition.const_get condition_type.to_s.camel_case
+    end
+
+    def default(field_name, value)
+      conditions_hash[field_name.to_s] ||= value
     end
 
     def conditions

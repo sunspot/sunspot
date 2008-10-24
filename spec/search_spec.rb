@@ -93,6 +93,20 @@ describe Sunspot::Search do
     end
   end
 
+  it 'should allow setting of default conditions' do
+    connection.should_receive(:query).with('(average_rating_f:2\.0) AND (type:Post)')
+    Post.search do
+      conditions.default :average_rating, 2.0
+    end
+  end
+
+  it 'should not use default condition value if condition provided' do
+    connection.should_receive(:query).with('(average_rating_f:3\.0) AND (type:Post)')
+    Post.search :conditions => { :average_rating => 3.0 } do
+      conditions.default :average_rating, 2.0
+    end
+  end
+
   it 'should raise ArgumentError if bogus field scoped' do
     lambda do
       Post.search do
@@ -101,7 +115,7 @@ describe Sunspot::Search do
     end.should raise_error(ArgumentError)
   end
 
-  it 'should raise NoMethodError if bogus condition name referenced' do
+  it 'should raise NoMethodError if bogus operator referenced' do
     lambda do
       Post.search do
         with.category_ids.resembling :bogus_condition

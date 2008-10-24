@@ -36,7 +36,19 @@ Sunspot is currently a work in progress and is not feature-complete.
       end
     end
   end
-       
+
+=== Search for objects:
+  
+  Post.search :conditions => { :average_rating => 3.0 } do
+    keywords 'great pizza'
+    with.author_name 'Mark Twain'
+    with.blog_id.any_of [2, 14]
+    with.category_ids.all_of [4, 10]
+    with.published_at.less_than Time.now
+
+    conditions.interpret :average_rating, :greater_than
+    conditions.default :average_rating, 4.0
+  end
 
 == REQUIREMENTS:
 
