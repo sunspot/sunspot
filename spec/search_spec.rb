@@ -45,9 +45,11 @@ describe Sunspot::Search do
 
   it 'should scope by less than match with float' do
     connection.should_receive(:query).with('(average_rating_f:[* TO 3\.0]) AND (type:Post)').twice
+
     Post.search :conditions => { :average_rating => 3.0 } do
-      with.average_rating.less_than
+      conditions.interpret :average_rating, :less_than
     end
+
     Post.search do
       with.average_rating.less_than 3.0
     end
@@ -56,7 +58,7 @@ describe Sunspot::Search do
   it 'should scope by greater than match with float' do
     connection.should_receive(:query).with('(average_rating_f:[3\.0 TO *]) AND (type:Post)').twice
     Post.search :conditions => { :average_rating => 3.0 } do 
-      with.average_rating.greater_than
+      conditions.interpret :average_rating, :greater_than
     end
     Post.search do
       with.average_rating.greater_than 3.0
@@ -66,7 +68,7 @@ describe Sunspot::Search do
   it 'should scope by between match with float' do
     connection.should_receive(:query).with('(average_rating_f:[2\.0 TO 4\.0]) AND (type:Post)').twice
     Post.search :conditions => { :average_rating => [2.0, 4.0] } do
-      with.average_rating.between
+      conditions.interpret :average_rating, :between
     end
     Post.search do
       with.average_rating.between 2.0..4.0
@@ -84,7 +86,7 @@ describe Sunspot::Search do
   it 'should scope by all match with integer' do
     connection.should_receive(:query).with('(category_ids_i:(2 AND 7 AND 12)) AND (type:Post)').twice #TODO confirm that this is the right syntax for Solr
     Post.search :conditions => { :category_ids => [2, 7, 12] } do
-      with.category_ids.all_of
+      conditions.interpret :category_ids, :all_of
     end
     Post.search do
       with.category_ids.all_of [2, 7, 12]

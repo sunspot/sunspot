@@ -11,6 +11,9 @@ module Sunspot
     def with
       @conditions_builder ||= ::Sunspot::ScopeBuilder.new(@query)
     end
-    alias_method :conditions, :with
+
+    def conditions
+      @query.conditions
+    end
   end
 end
