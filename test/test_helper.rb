@@ -1,17 +1,13 @@
 begin
   require 'matchy'
   require 'context'
-  require 'mocha'
+  require 'rr'
   require 'ruby-debug'
 rescue LoadError
   require 'rubygems'
-  gem 'ruby-debug'
-  gem 'matchy'
-  gem 'jeremymcanally-context'
-  gem 'mocha'
   require 'matchy'
   require 'context'
-  require 'mocha'
+  require 'rr'
   require 'ruby-debug'
 end
 

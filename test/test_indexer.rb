@@ -1,80 +1,60 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
-class IndexerTest < Test::Unit::TestCase
-  before :each do
-    Solr::Connection.stubs(:new).returns connection
+class TestIndexer < Test::Unit::TestCase
+  include RR::Adapters::TestUnit
+
+  before do
+    stub(Solr::Connection).new { connection }
   end
 
   describe 'when indexing an object' do
-    after :each do
+    after do
       Sunspot::Indexer.add post
     end
 
     test 'should index id and type' do
-      connection.expects(:add).with do |hash|
-        hash[:id].should == "Post:#{post.id}"
-        hash[:type].should include('Post', 'BaseClass')
-      end
+      connection.add(hash_including(:id => "Post:#{post.id}", :type => ['Post', 'BaseClass']))
     end
 
     test 'should index text' do
       post :title => 'A Title', :body => 'A Post'
-      connection.expects(:add).with do |hash|
-        hash[:title_text].should == 'A Title'
-        hash[:body_text].should == 'A Post'
-      end
+      connection.add(hash_including(:title_text => 'A Title', :body_text => 'A Post'))
     end
 
     test 'should correctly index a string attribute field' do 
       post :title => 'A Title'
-      connection.expects(:add).with do |hash|
-        hash[:title_s].should == 'A Title'
-      end
+      connection.add(hash_including(:title_s => 'A Title'))
     end
 
     test 'should correctly index an integer attribute field' do
       post :blog_id => 4
-      connection.expects(:add).with do |hash|
-        hash[:blog_id_i].should == '4'
-      end
+      connection.add(hash_including(:blog_id_i => '4'))
     end
 
     test 'should correctly index a float attribute field' do
       post :average_rating => 2.23
-      connection.expects(:add).with do |hash|
-        hash[:average_rating_f].should == '2.23'
-      end
+      connection.add(hash_including(:average_rating_f => '2.23'))
     end
 
     test 'should allow indexing by a multiple-value field' do
       post :category_ids => [3, 14]
-      connection.expects(:add).with do |hash|
-        hash[:category_ids_i].should == ['3', '14']
-      end
+      connection.add(hash_including(:category_ids_i => ['3', '14']))
     end
 
     test 'should correctly index a time field' do
       post :published_at => Time.parse('1983-07-08 05:00:00 -0400')
-      connection.expects(:add).with do |hash|
-        hash[:published_at_d].should == '1983-07-08T09:00:00Z'
-      end
+      connection.add(hash_including(:published_at_d => '1983-07-08T09:00:00Z'))
     end
 
     test 'should correctly index a virtual field' do
       post :title => 'The Blog Post'
-      Post.is_searchable do
-      end
-      connection.expects(:add).with do |hash|
-        hash[:sort_title_s].should == 'blog post'
-      end
+      connection.add(hash_including(:sort_title_s => 'blog post'))
     end
 
     test 'should correctly index a field that is defined on a superclass' do
       BaseClass.is_searchable { string :author_name }
       post :author_name => 'Mat Brown'
-      connection.expects(:add).with do |hash|
-        hash[:author_name_s].should == 'Mat Brown'
-      end
+      connection.add(hash_including(:author_name_s => 'Mat Brown'))
     end
   end
 
@@ -90,7 +70,7 @@ class IndexerTest < Test::Unit::TestCase
   private
 
   def connection
-    @connection ||= mock('Connection')
+    @connection ||= mock!
   end
 
   def post(attrs = {})
