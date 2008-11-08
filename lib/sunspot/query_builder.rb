@@ -22,5 +22,9 @@ module Sunspot
       raise ArgumentError, "unknown argument #{options.keys.first.inspect} passed to paginate" unless options.empty?
       @query.paginate(page, per_page)
     end
+
+    def order_by(field_name, direction = nil)
+      @query.order_by(field_name, direction)
+    end
   end
 end

@@ -1,10 +1,12 @@
 module Sunspot
   class Query
-    attr_accessor :keywords, :conditions, :rows, :start
+    attr_accessor :keywords, :conditions, :rows, :start, :sort
 
-    def initialize(types, keywords, conditions_hash)
-      @keywords, @types = keywords, types
-      @conditions = Sunspot::Conditions.new(self, conditions_hash)
+    def initialize(types, params) 
+      @keywords, @types = params[:keywords], types
+      @conditions = Sunspot::Conditions.new(self, params[:conditions] || {})
+      paginate(params[:page], params[:per_page]) if params[:page]
+      self.order = params[:order] if params[:order]
     end
 
     def to_solr
@@ -23,14 +25,22 @@ module Sunspot
     end
 
     def build_condition(field_name, condition_clazz, value)
-      field = fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{types * ', '} with name '#{field_name}'")
-      condition_clazz.new(field, value)
+      condition_clazz.new(field(field_name), value)
     end
 
     def paginate(page, per_page = nil)
       per_page ||= 30 #FIXME this should come out of configuration
       @start = (page - 1) * per_page
       @rows = per_page
+    end
+
+    def order=(order)
+      order_by(*order.split(' '))
+    end
+
+    def order_by(field_name, direction = nil)
+      direction ||= :asc
+      @sort = "#{field(field_name).indexed_name} #{direction}"
     end
 
     protected
@@ -57,6 +67,10 @@ module Sunspot
       elsif types.length == 1 then "type:#{types.first}"
       else "type:(#{types * ' OR '})"
       end
+    end
+
+    def field(field_name)
+      fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{types * ', '} with name '#{field_name}'")
     end
 
     def fields_hash

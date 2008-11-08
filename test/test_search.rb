@@ -110,16 +110,26 @@ class TestSearch < Test::Unit::TestCase
   end
 
   test 'should paginate using default per_page' do
-    connection.query('(type:Post)', :filter_queries => [], :rows => 30, :start => 30)
+    connection.query('(type:Post)', :filter_queries => [], :rows => 30, :start => 30).times(2)
+    Sunspot.search Post, :page => 2
     Sunspot.search Post do
       paginate :page => 2
     end
   end
 
   test 'should paginate using provided per_page' do
-    connection.query('(type:Post)', :filter_queries => [], :rows => 15, :start => 45)
+    connection.query('(type:Post)', :filter_queries => [], :rows => 15, :start => 45).times(2)
+    Sunspot.search Post, :page => 4, :per_page => 15
     Sunspot.search Post do
       paginate :page => 4, :per_page => 15
+    end
+  end
+
+  test 'should order' do
+    connection.query('(type:Post)', :filter_queries => [], :sort => 'average_rating_f desc').times(2)
+    Sunspot.search Post, :order => 'average_rating desc'
+    Sunspot.search Post do
+      order_by :average_rating, :desc
     end
   end
 
