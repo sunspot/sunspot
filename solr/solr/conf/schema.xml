@@ -195,11 +195,18 @@ http://wiki.apache.org/solr/SchemaXml
       Longer patterns will be matched first.  if equal size patterns
       both match, the first appearing in the schema will be used.  -->
       <dynamicField name="*_text"      type="text"    indexed="true"  stored="false"   multiValued="true"/>
-      <dynamicField name="*_s"         type="string"  indexed="true"  stored="false"   multiValued="true"/>
-      <dynamicField name="*_i"         type="sint"    indexed="true"  stored="false"   multiValued="true"/>
-      <dynamicField name="*_f"         type="sfloat"  indexed="true"  stored="false"   multiValued="true"/>
-      <dynamicField name="*_d"         type="date"    indexed="true"  stored="false"   multiValued="true"/>
-      <dynamicField name="*_b"         type="boolean" indexed="true"  stored="false"   multiValued="true"/>
+
+      <dynamicField name="*_s"         type="string"  indexed="true"  stored="false"   multiValued="false"/>
+      <dynamicField name="*_i"         type="sint"    indexed="true"  stored="false"   multiValued="false"/>
+      <dynamicField name="*_f"         type="sfloat"  indexed="true"  stored="false"   multiValued="false"/>
+      <dynamicField name="*_d"         type="date"    indexed="true"  stored="false"   multiValued="false"/>
+      <dynamicField name="*_b"         type="boolean" indexed="true"  stored="false"   multiValued="false"/>
+
+      <dynamicField name="*_sm"        type="string"  indexed="true"  stored="false"   multiValued="true"/>
+      <dynamicField name="*_im"        type="sint"    indexed="true"  stored="false"   multiValued="true"/>
+      <dynamicField name="*_fm"        type="sfloat"  indexed="true"  stored="false"   multiValued="true"/>
+      <dynamicField name="*_dm"        type="date"    indexed="true"  stored="false"   multiValued="true"/>
+      <dynamicField name="*_bm"        type="boolean" indexed="true"  stored="false"   multiValued="true"/>
     </fields>
 
     <!-- field to use to determine and enforce document uniqueness. -->

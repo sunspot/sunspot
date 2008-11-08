@@ -38,7 +38,7 @@ class TestIndexer < Test::Unit::TestCase
 
     test 'should allow indexing by a multiple-value field' do
       post :category_ids => [3, 14]
-      connection.add(hash_including(:category_ids_i => ['3', '14']))
+      connection.add(hash_including(:category_ids_im => ['3', '14']))
     end
 
     test 'should correctly index a time field' do

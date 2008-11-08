@@ -12,7 +12,7 @@ class Post < BaseClass
     text :title, :body
     string :title
     integer :blog_id
-    integer :category_ids
+    integer :category_ids, :multiple => true
     float :average_rating
     time :published_at
     string :sort_title do

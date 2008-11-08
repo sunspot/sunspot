@@ -79,7 +79,7 @@ class TestSearch < Test::Unit::TestCase
   end
 
   test 'should scope by any match with integer' do
-    connection.query('(category_ids_i:(2 OR 7 OR 12)) AND (type:Post)').times(2) #TODO confirm that this is the right syntax for Solr
+    connection.query('(category_ids_im:(2 OR 7 OR 12)) AND (type:Post)').times(2) #TODO confirm that this is the right syntax for Solr
     Post.search :conditions => { :category_ids => [2, 7, 12] }
     Post.search do
       with.category_ids.any_of [2, 7, 12]
@@ -87,7 +87,7 @@ class TestSearch < Test::Unit::TestCase
   end
 
   test 'should scope by all match with integer' do
-    connection.query('(category_ids_i:(2 AND 7 AND 12)) AND (type:Post)').times(2) #TODO confirm that this is the right syntax for Solr
+    connection.query('(category_ids_im:(2 AND 7 AND 12)) AND (type:Post)').times(2) #TODO confirm that this is the right syntax for Solr
     Post.search :conditions => { :category_ids => [2, 7, 12] } do
       conditions.interpret :category_ids, :all_of
     end

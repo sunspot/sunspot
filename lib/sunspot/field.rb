@@ -3,6 +3,11 @@ module Sunspot
     class Base
       attr_accessor :name, :type
 
+      def initialize(name, type, options = {})
+        @name, @type = name, type
+        @multiple = options[:multiple]
+      end
+
       def pair_for(model)
         if value = value_for(model)
           { indexed_name.to_sym => to_indexed(value) }
@@ -23,7 +28,7 @@ module Sunspot
       end
 
       def indexed_name
-        type.indexed_name name
+        "#{type.indexed_name(name)}#{'m' if multiple?}"
       end
 
       def to_indexed(value)
@@ -33,13 +38,15 @@ module Sunspot
           type.to_indexed(value)
         end
       end
+
+      protected
+
+      def multiple?
+        !!@multiple
+      end
     end
 
     class AttributeField < ::Sunspot::Field::Base
-      def initialize(name, type)
-        @name, @type = name, type
-      end
-
       protected
 
       def value_for(model)
@@ -48,8 +55,9 @@ module Sunspot
     end
 
     class VirtualField < ::Sunspot::Field::Base
-      def initialize(name, type, &block)
-        @name, @type, @block = name, type, block
+      def initialize(name, type, options = {}, &block)
+        super(name, type, options)
+        @block = block
       end
 
       protected

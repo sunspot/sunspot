@@ -26,10 +26,11 @@ module Sunspot
     private
 
     def build_field(name, type, *args, &block)
+      options = args.shift if args.first.is_a?(Hash)
       unless block
-        ::Sunspot::Field::AttributeField.new(name, type)
+        ::Sunspot::Field::AttributeField.new(name, type, options || {})
       else
-        ::Sunspot::Field::VirtualField.new(name, type, &block)
+        ::Sunspot::Field::VirtualField.new(name, type, options || {}, &block)
       end
     end
   end
