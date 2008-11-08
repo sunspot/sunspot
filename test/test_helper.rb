@@ -15,5 +15,3 @@ $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'sunspot'
 
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each { |file| require file }
-
-Test::Unit::TestCase.class_eval { include RR::Adapters::TestUnit }
