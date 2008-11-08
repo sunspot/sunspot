@@ -109,6 +109,20 @@ class TestSearch < Test::Unit::TestCase
     end
   end
 
+  test 'should paginate using default per_page' do
+    connection.query('(type:Post)', :filter_queries => [], :rows => 30, :start => 30)
+    Sunspot.search Post do
+      paginate :page => 2
+    end
+  end
+
+  test 'should paginate using provided per_page' do
+    connection.query('(type:Post)', :filter_queries => [], :rows => 15, :start => 45)
+    Sunspot.search Post do
+      paginate :page => 4, :per_page => 15
+    end
+  end
+
   test 'should raise ArgumentError if bogus field scoped' do
     lambda do
       Sunspot.search Post do
@@ -123,6 +137,22 @@ class TestSearch < Test::Unit::TestCase
         with.category_ids.resembling :bogus_condition
       end
     end.should raise_error(NoMethodError)
+  end
+
+  test 'should raise ArgumentError if no :page argument given to paginate' do
+    lambda do
+      Sunspot.search Post do
+        paginate
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  test 'should raise ArgumentError if bogus argument given to paginate' do
+    lambda do
+      Sunspot.search Post do
+        paginate :page => 4, :ugly => :puppy
+      end
+    end.should raise_error(ArgumentError)
   end
 
   test 'should raise NoMethodError if more than one argument passed to scope method' do # or should it?

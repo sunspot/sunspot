@@ -1,6 +1,6 @@
 module Sunspot
   class Query
-    attr_accessor :keywords, :conditions
+    attr_accessor :keywords, :conditions, :rows, :start
 
     def initialize(types, keywords, conditions_hash)
       @keywords, @types = keywords, types
@@ -25,6 +25,12 @@ module Sunspot
     def build_condition(field_name, condition_clazz, value)
       field = fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{types * ', '} with name '#{field_name}'")
       condition_clazz.new(field, value)
+    end
+
+    def paginate(page, per_page = nil)
+      per_page ||= 30 #FIXME this should come out of configuration
+      @start = (page - 1) * per_page
+      @rows = per_page
     end
 
     protected

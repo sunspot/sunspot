@@ -62,6 +62,8 @@ Sunspot is currently under active development and is not feature-complete.
 
     conditions.interpret :average_rating, :greater_than
     conditions.default :average_rating, 4.0
+
+    paginate :page => 3, :per_page => 15
   end
 
 == REQUIREMENTS:

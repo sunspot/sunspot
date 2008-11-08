@@ -7,7 +7,11 @@ module Sunspot
     end
 
     def execute!
-      @solr_result = connection.query(query.to_solr, :filter_queries => query.filter_queries)
+      query_options = {}
+      query_options[:filter_queries] = query.filter_queries
+      query_options[:rows] = query.rows if query.rows
+      query_options[:start] = query.start if query.start
+      @solr_result = connection.query(query.to_solr, query_options)
     end
 
     protected
