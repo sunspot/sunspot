@@ -1,6 +1,8 @@
 %w[rubygems rake rake/clean fileutils newgem rubigen].each { |f| require f }
 require File.dirname(__FILE__) + '/lib/sunspot'
 
+ENV['RUBYOPT'] = '-W1'
+
 # Generate all the Rake tasks
 # Run 'rake -T' to see list of generated tasks (from gem root directory)
 $hoe = Hoe.new('sunspot', Sunspot::VERSION) do |p|
