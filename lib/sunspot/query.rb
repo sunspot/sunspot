@@ -10,10 +10,12 @@ module Sunspot
     def to_solr
       query_components = []
       query_components << keywords if keywords
-      query_components.concat scope_queries
-      query_components.concat condition_queries
       query_components << types_query if types_query
       query_components.map { |component| "(#{component})"} * ' AND '
+    end
+
+    def filter_queries
+      scope_queries + condition_queries
     end
 
     def add_scope(condition)
