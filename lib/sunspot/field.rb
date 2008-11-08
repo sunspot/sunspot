@@ -33,7 +33,11 @@ module Sunspot
 
       def to_indexed(value)
         if value.kind_of? Array 
-          value.map { |val| to_indexed(val) }
+          if multiple?
+            value.map { |val| to_indexed(val) }
+          else
+            raise ArgumentError, "#{name} is not a multiple-value field, so it cannot index values #{value.inspect}"
+          end
         else
           type.to_indexed(value)
         end

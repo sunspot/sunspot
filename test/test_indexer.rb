@@ -67,6 +67,13 @@ class TestIndexer < Test::Unit::TestCase
     lambda { Sunspot::Indexer.add(Time.now) }.should raise_error(ArgumentError)
   end
 
+  test 'should throw an ArgumentError if single-value field tries to index multiple values' do
+    lambda do
+      Post.configure_search { string :author_name }
+      Sunspot::Indexer.add(post(:author_name => ['Mat Brown', 'Matthew Brown']))
+    end.should raise_error(ArgumentError)
+  end
+
   private
 
   def connection
