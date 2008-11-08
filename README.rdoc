@@ -37,22 +37,23 @@ Sunspot is currently under active development and is not feature-complete.
 
   class Post
     #...
-    is_searchable do
-      text :title, :body
-      string :author_name
-      integer :blog_id
-      integer :category_ids
-      float :average_rating
-      time :published_at
-      string :sort_title do
-        title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title
-      end
+  end
+
+  Sunspot.setup(Post) do
+    text :title, :body
+    string :author_name
+    integer :blog_id
+    integer :category_ids
+    float :average_rating
+    time :published_at
+    string :sort_title do
+      title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title
     end
   end
 
 === Search for objects:
   
-  Post.search :conditions => { :average_rating => 3.0 } do
+  Sunspot.search Post, :conditions => { :average_rating => 3.0 } do
     keywords 'great pizza'
     with.author_name 'Mark Twain'
     with.blog_id.any_of [2, 14]
