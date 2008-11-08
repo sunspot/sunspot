@@ -9,7 +9,7 @@ class TestIndexer < Test::Unit::TestCase
 
   describe 'when indexing an object' do
     after do
-      Sunspot::Indexer.add post
+      Sunspot.index post
     end
 
     test 'should index id and type' do

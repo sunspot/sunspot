@@ -9,3 +9,19 @@ require 'extlib'
 module Sunspot
   VERSION='0.0.1'
 end
+
+class <<Sunspot
+  def setup(clazz, &block)
+    ::Sunspot::FieldBuilder.new(clazz).instance_eval(&block) if block
+  end
+
+  def index(*objects)
+    for object in objects
+      ::Sunspot::Indexer.add(object)
+    end
+  end
+
+  def search(*types, &block)
+    ::Sunspot::Search.new(*types, &block).execute!
+  end
+end
