@@ -5,7 +5,8 @@ module Sunspot
 
       def initialize(name, type, options = {})
         @name, @type = name, type
-        @multiple = options[:multiple]
+        @multiple = options.delete(:multiple)
+        raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
       end
 
       def pair_for(model)
@@ -42,8 +43,6 @@ module Sunspot
           type.to_indexed(value)
         end
       end
-
-      protected
 
       def multiple?
         !!@multiple

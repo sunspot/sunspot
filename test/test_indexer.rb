@@ -52,15 +52,19 @@ class TestIndexer < Test::Unit::TestCase
     end
 
     test 'should correctly index a field that is defined on a superclass' do
-      BaseClass.is_searchable { string :author_name }
+      Sunspot.setup(BaseClass) { string :author_name }
       post :author_name => 'Mat Brown'
       connection.add(hash_including(:author_name_s => 'Mat Brown'))
     end
   end
 
   test 'should throw a NoMethodError only if a nonexistent type is defined' do
-    lambda { Post.configure_search { string :author_name }}.should_not raise_error
-    lambda { Post.configure_search { bogus :journey }}.should raise_error(NoMethodError)
+    lambda { Sunspot.setup(Post) { string :author_name }}.should_not raise_error
+    lambda { Sunspot.setup(Post) { bogus :journey }}.should raise_error(NoMethodError)
+  end
+
+  test 'should throw a NoMethodError if a nonexistent field argument is passed' do
+    lambda { Sunspot.setup(Post) { string :author_name, :bogus => :argument }}.should raise_error(ArgumentError)
   end
 
   test 'should throw an ArgumentError if an attempt is made to index an object that has no configuration' do
@@ -69,7 +73,7 @@ class TestIndexer < Test::Unit::TestCase
 
   test 'should throw an ArgumentError if single-value field tries to index multiple values' do
     lambda do
-      Post.configure_search { string :author_name }
+      Sunspot.setup(Post) { string :author_name }
       Sunspot::Indexer.add(post(:author_name => ['Mat Brown', 'Matthew Brown']))
     end.should raise_error(ArgumentError)
   end

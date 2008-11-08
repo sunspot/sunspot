@@ -1,5 +1,4 @@
 class BaseClass
-  include Sunspot::Searchable
 end
 
 class Post < BaseClass
