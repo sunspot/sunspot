@@ -8,7 +8,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should search by keywords' do
-    connection.query('(keyword search) AND (type:Post)', :filter_queries => []).times(2)
+    mock(connection).query('(keyword search) AND (type:Post)', :filter_queries => []).times(2)
     Sunspot.search Post, :keywords => 'keyword search'
     Sunspot.search Post do
       keywords 'keyword search'
@@ -16,7 +16,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by exact match with a string' do
-    connection.query('(type:Post)', :filter_queries => ['title_s:My\ Pet\ Post']).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => ['title_s:My\ Pet\ Post']).times(2)
     Sunspot.search Post, :conditions => { :title => 'My Pet Post' }
     Sunspot.search Post do
       with.title 'My Pet Post'
@@ -24,7 +24,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should ignore nonexistant fields in hash scope' do
-    connection.query('(type:Post)', :filter_queries => [])
+    mock(connection).query('(type:Post)', :filter_queries => [])
     Sunspot.search Post, :conditions => { :bogus => 'Field' }
   end
 
@@ -37,7 +37,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by exact match with time' do
-    connection.query('(type:Post)', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z']).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z']).times(2)
     time = Time.parse('1983-07-08 05:00:00 -0400')
     Sunspot.search Post, :conditions => { :published_at => time }
     Sunspot.search Post do
@@ -46,7 +46,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by less than match with float' do
-    connection.query('(type:Post)', :filter_queries => ['average_rating_f:[* TO 3\.0]']).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => ['average_rating_f:[* TO 3\.0]']).times(2)
 
     Sunspot.search Post, :conditions => { :average_rating => 3.0 } do
       conditions.interpret :average_rating, :less_than
@@ -58,7 +58,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by greater than match with float' do
-    connection.query('(type:Post)', :filter_queries => ['average_rating_f:[3\.0 TO *]']).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => ['average_rating_f:[3\.0 TO *]']).times(2)
     Sunspot.search Post, :conditions => { :average_rating => 3.0 } do 
       conditions.interpret :average_rating, :greater_than
     end
@@ -68,7 +68,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by between match with float' do
-    connection.query('(type:Post)', :filter_queries => ['average_rating_f:[2\.0 TO 4\.0]']).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => ['average_rating_f:[2\.0 TO 4\.0]']).times(2)
     Sunspot.search Post, :conditions => { :average_rating => [2.0, 4.0] } do
       conditions.interpret :average_rating, :between
     end
@@ -78,7 +78,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by any match with integer' do
-    connection.query('(type:Post)', :filter_queries => ['category_ids_im:(2 OR 7 OR 12)']).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => ['category_ids_im:(2 OR 7 OR 12)']).times(2)
     Sunspot.search Post, :conditions => { :category_ids => [2, 7, 12] }
     Sunspot.search Post do
       with.category_ids.any_of [2, 7, 12]
@@ -86,7 +86,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by all match with integer' do
-    connection.query('(type:Post)', :filter_queries => ['category_ids_im:(2 AND 7 AND 12)']).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => ['category_ids_im:(2 AND 7 AND 12)']).times(2)
     Sunspot.search Post, :conditions => { :category_ids => [2, 7, 12] } do
       conditions.interpret :category_ids, :all_of
     end
@@ -96,21 +96,21 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should allow setting of default conditions' do
-    connection.query('(type:Post)', :filter_queries => ['average_rating_f:2\.0'])
+    mock(connection).query('(type:Post)', :filter_queries => ['average_rating_f:2\.0'])
     Sunspot.search Post do
       conditions.default :average_rating, 2.0
     end
   end
 
   test 'should not use default condition value if condition provided' do
-    connection.query('(type:Post)', :filter_queries => ['average_rating_f:3\.0'])
+    mock(connection).query('(type:Post)', :filter_queries => ['average_rating_f:3\.0'])
     Sunspot.search Post, :conditions => { :average_rating => 3.0 } do
       conditions.default :average_rating, 2.0
     end
   end
 
   test 'should paginate using default per_page' do
-    connection.query('(type:Post)', :filter_queries => [], :rows => 30, :start => 30).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => [], :rows => 30, :start => 30).times(2)
     Sunspot.search Post, :page => 2
     Sunspot.search Post do
       paginate :page => 2
@@ -118,7 +118,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should paginate using provided per_page' do
-    connection.query('(type:Post)', :filter_queries => [], :rows => 15, :start => 45).times(2)
+    mock(connection).query('(type:Post)', :filter_queries => [], :rows => 15, :start => 45).times(2)
     Sunspot.search Post, :page => 4, :per_page => 15
     Sunspot.search Post do
       paginate :page => 4, :per_page => 15
@@ -126,7 +126,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should order' do
-    connection.query('(type:Post)', :filter_queries => [], :sort => 'average_rating_f desc').times(2)
+    mock(connection).query('(type:Post)', :filter_queries => [], :sort => 'average_rating_f desc').times(2)
     Sunspot.search Post, :order => 'average_rating desc'
     Sunspot.search Post do
       order_by :average_rating, :desc
@@ -176,6 +176,6 @@ class TestBuildSearch < Test::Unit::TestCase
   private
 
   def connection
-    @connection ||= mock!
+    @connection ||= Object.new
   end
 end
