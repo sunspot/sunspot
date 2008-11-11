@@ -13,7 +13,7 @@ class TestIndexer < Test::Unit::TestCase
     end
 
     test 'should index id and type' do
-      connection.add(hash_including(:id => "Post:#{post.id}", :type => ['Post', 'BaseClass']))
+      connection.add(hash_including(:id => "Post #{post.id}", :type => ['Post', 'BaseClass']))
     end
 
     test 'should index text' do

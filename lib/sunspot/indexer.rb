@@ -24,7 +24,7 @@ module Sunspot
     attr_reader :connection
 
     def static_hash_for(model)
-      { :id => "#{model.class.name}:#{model.id}",
+      { :id => ::Sunspot::Adapters.adapt_instance(model).index_id,
         :type => Indexer.superclasses_for(model.class).map { |clazz| clazz.name }}
     end
   end

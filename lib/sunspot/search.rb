@@ -26,10 +26,9 @@ module Sunspot
           type_id_hash
         end.inject([]) do |results, pair|
           type_name, ids = pair
-          type = type_with_name(type_name)
-          results.concat class_adapter_for(type).load_all(ids) #TODO this should be encapsulated in Adapters
+          results.concat ::Sunspot::Adapters.adapt_class(type_with_name(type_name)).load_all(ids)
         end.sort_by do |result|
-          hit_ids.index(instance_adapter_for(result).index_id)
+          hit_ids.index(::Sunspot::Adapters.adapt_instance(result).index_id)
         end
       end
     end
@@ -38,21 +37,6 @@ module Sunspot
     attr_reader :query, :types
 
     private
-
-    def instance_adapter_for(instance)
-      @instance_adapters_cache ||= {}
-      (@instance_adapters_cache[instance.class] ||= adapter_for(instance.class).const_get('InstanceAdapter')).new(instance)
-    end
-
-    def class_adapter_for(clazz)
-      @class_adapters_cache ||= {}
-      @class_adapters_cache[clazz] ||= adapter_for(clazz).const_get('ClassAdapter').new(clazz)
-    end
-
-    def adapter_for(type)
-      @adapters_cache ||= {}
-      @adapters_cache[type] ||= ::Sunspot::Adapters.for(type)
-    end
 
     def type_with_name(type_name)
       @types_cache ||= {}

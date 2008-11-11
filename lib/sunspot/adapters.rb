@@ -30,6 +30,14 @@ module Sunspot
       end
     end
 
+    def adapt_class(clazz)
+      self.for(clazz).const_get('ClassAdapter').new(clazz)
+    end
+
+    def adapt_instance(instance)
+      self.for(instance.class).const_get('InstanceAdapter').new(instance)
+    end
+
     def for(clazz)
       while clazz != Object
         return adapters[clazz.name] if adapters[clazz.name]
