@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
-class TestSearch < Test::Unit::TestCase
+class TestBuildSearch < Test::Unit::TestCase
   include RR::Adapters::TestUnit
 
   before do

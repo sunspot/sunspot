@@ -3,6 +3,7 @@ end
 
 class Post < BaseClass
   @@id = 0
+  @@posts = [nil]
 
   attr_reader :id
   attr_accessor :title, :body, :blog_id, :published_at, :average_rating, :author_name
@@ -10,11 +11,20 @@ class Post < BaseClass
 
   def initialize(attrs = {})
     @id = @@id += 1
+    @@posts << self
     attrs.each_pair { |attribute, value| self.send "#{attribute}=", value }
   end
 
   def category_ids
     @category_ids ||= []
+  end
+
+  def self.get(id)
+    @@posts[id]
+  end
+
+  def self.get_all(ids)
+    ids.map { |id| get(id) }.sort_by { |post| post.id } # this is so that results are not ordered by coincidence
   end
 
   private
