@@ -22,11 +22,27 @@ class TestRetrieveSearch < Test::Unit::TestCase
     Sunspot.search(Post).results.should == [post_2, post_1]
   end
 
+  test 'should return search total as attribute of results if pagination is provided' do
+    stub_results(Post.new, 4)
+    Sunspot.search(Post, :page => 1).results.total_entries.should == 4
+  end
+
+  test 'should return vanilla array if pagination is provided but WillPaginate is not available' do
+    stub_results(Post.new)
+    without_class(WillPaginate) do
+      Sunspot.search(Post, :page => 1).results.should_not respond_to(:total_entries)
+    end
+  end
+
   private
 
   def stub_results(*results)
+    total_hits = if results.last.is_a?(Integer) then results.pop 
+                 else results.length
+                 end
     response = Object.new
     stub(response).hits { results.map { |result| { 'id' => "#{result.class.name} #{result.id}" }}}
+    stub(response).total_hits { total_hits }
     stub(connection).query { response }
   end
 

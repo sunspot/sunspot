@@ -43,6 +43,14 @@ module Sunspot
       @sort = "#{field(field_name).indexed_name} #{direction}"
     end
 
+
+    def page
+      return nil unless start && rows
+      start / rows + 1
+    end
+
+    alias_method :per_page, :rows
+
     protected
     attr_accessor :types
 
