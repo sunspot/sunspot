@@ -34,6 +34,11 @@ class TestRetrieveSearch < Test::Unit::TestCase
     end
   end
 
+  test 'should return total' do
+    stub_results(Post.new, Post.new, 4)
+    Sunspot.search(Post, :page => 1).total.should == 4
+  end
+
   private
 
   def stub_results(*results)

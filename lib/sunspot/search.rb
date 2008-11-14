@@ -19,12 +19,16 @@ module Sunspot
 
     def results
       @results ||= if query.page && defined?(WillPaginate::Collection)
-                     WillPaginate::Collection.create(query.page, query.per_page, @solr_result.total_hits) do |pager|
-                       pager.replace(result_objects)
-                     end
-                   else
-                     result_objects
-                   end
+        WillPaginate::Collection.create(query.page, query.per_page, @solr_result.total_hits) do |pager|
+          pager.replace(result_objects)
+        end
+      else
+        result_objects
+      end
+    end
+
+    def total
+      @total ||= @solr_result.total_hits
     end
 
     protected
