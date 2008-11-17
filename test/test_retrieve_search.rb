@@ -39,6 +39,30 @@ class TestRetrieveSearch < Test::Unit::TestCase
     Sunspot.search(Post, :page => 1).total.should == 4
   end
 
+  test 'should give access to order through hash and object' do
+    stub_results
+    search = Sunspot.search(Post, :order => 'sort_title asc')
+    search.attributes[:order].should == 'sort_title asc'
+    search.order.should == 'sort_title asc'
+  end
+
+  test 'should give nil order if no order set' do
+    stub_results
+    search = Sunspot.search(Post)
+    search.attributes.should have_key(:order)
+    search.attributes[:order].should be_nil
+    search.order.should be_nil
+  end
+
+  test 'should give access to page and per-page through hash and object' do
+    stub_results
+    search = Sunspot.search(Post, :page => 2, :per_page => 15)
+    search.attributes[:page].should == 2
+    search.attributes[:per_page].should == 15
+    search.page.should == 2
+    search.per_page.should == 15
+  end
+
   private
 
   def stub_results(*results)

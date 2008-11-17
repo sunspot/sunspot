@@ -31,6 +31,22 @@ module Sunspot
       @total ||= @solr_result.total_hits
     end
 
+    def attributes
+      @query.attributes
+    end
+
+    def order
+      @query.attributes[:order]
+    end
+
+    def page
+      @query.attributes[:page]
+    end
+
+    def per_page
+      @query.attributes[:per_page]
+    end
+
     protected
     attr_reader :query, :types
 
@@ -56,7 +72,7 @@ module Sunspot
     end
 
     def connection
-      Solr::Connection.new('http://localhost:8983/solr', true)
+      Solr::Connection.new('http://localhost:8983/solr', :autocommit => :on)
     end
   end
 end

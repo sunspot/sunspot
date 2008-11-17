@@ -32,6 +32,7 @@ module Sunspot
       per_page ||= 30 #FIXME this should come out of configuration
       @start = (page - 1) * per_page
       @rows = per_page
+      attributes[:page], attributes[:per_page] = page, per_page
     end
 
     def order=(order)
@@ -41,12 +42,18 @@ module Sunspot
     def order_by(field_name, direction = nil)
       direction ||= :asc
       @sort = "#{field(field_name).indexed_name} #{direction}"
+      attributes[:order] = "#{field_name} #{direction}"
     end
-
 
     def page
       return nil unless start && rows
       start / rows + 1
+    end
+
+    def attributes
+      @attributes ||= {
+        :order => nil
+      }
     end
 
     alias_method :per_page, :rows
