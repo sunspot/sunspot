@@ -63,6 +63,39 @@ class TestRetrieveSearch < Test::Unit::TestCase
     search.per_page.should == 15
   end
 
+  test 'should give access to keywords' do
+    stub_results
+    search = Sunspot.search(Post, :keywords => 'some keywords')
+    search.attributes[:keywords].should == 'some keywords'
+    search.keywords.should == 'some keywords'
+  end
+
+  test 'should have nil keywords if no keywords given' do
+    stub_results
+    search = Sunspot.search(Post)
+    search.attributes.should have_key(:keywords)
+    search.attributes[:keywords].should be_nil
+    search.keywords.should be_nil
+  end
+
+  test 'should give access to conditions' do
+    stub_results
+    search = Sunspot.search(Post, :conditions => { :blog_id => 1 })
+    search.attributes[:conditions][:blog_id].should == 1
+    search.conditions.blog_id.should == 1
+  end
+
+  test 'should have nil values for fields with unspecified conditions' do
+    stub_results
+    search = Sunspot.search(Post)
+    %w(title blog_id category_ids average_rating published_at sort_title).each do |field_name|
+      search.attributes[:conditions].should have_key(field_name.to_sym)
+      search.attributes[:conditions][field_name.to_sym].should == nil
+      search.conditions.should respond_to(field_name)
+      search.conditions.send(field_name).should == nil
+    end
+  end
+
   private
 
   def stub_results(*results)

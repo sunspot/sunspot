@@ -53,7 +53,7 @@ Sunspot is currently under active development and is not feature-complete.
 
 === Search for objects:
   
-  Sunspot.search Post, :conditions => { :average_rating => 3.0 } do
+  search = Sunspot.search Post, :conditions => { :average_rating => 3.0 } do
     keywords 'great pizza'
     with.author_name 'Mark Twain'
     with.blog_id.any_of [2, 14]
@@ -66,6 +66,16 @@ Sunspot is currently under active development and is not feature-complete.
     paginate :page => 3, :per_page => 15
     order_by :average_rating, :desc
   end
+
+=== Get data and parameters from search:
+
+  search.results
+  search.total
+  search.page
+  search.per_page
+  search.keywords
+  search.conditions.average_rating
+  search.attributes[:conditions]
 
 == REQUIREMENTS:
 

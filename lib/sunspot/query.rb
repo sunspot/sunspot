@@ -7,6 +7,10 @@ module Sunspot
       @conditions = Sunspot::Conditions.new(self, params[:conditions] || {})
       paginate(params[:page], params[:per_page]) if params[:page]
       self.order = params[:order] if params[:order]
+      attributes[:keywords] = @keywords
+      params[:conditions].each_pair do |field_name, value|
+        attributes[:conditions][field_name.to_sym] = value
+      end if params[:conditions]
     end
 
     def to_solr
@@ -52,7 +56,8 @@ module Sunspot
 
     def attributes
       @attributes ||= {
-        :order => nil
+        :order => nil,
+        :conditions => fields_hash.keys.inject({}) { |conditions, key| conditions[key.to_sym] = nil; conditions }
       }
     end
 

@@ -4,7 +4,7 @@ gem 'extlib'
 require 'solr'
 require 'extlib'
 
-%w(adapters condition conditions scope_builder field field_builder indexer query query_builder search type).each do |filename|
+%w(adapters condition conditions field field_builder indexer query query_builder scope_builder search type util).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 

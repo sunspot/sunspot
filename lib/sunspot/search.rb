@@ -47,6 +47,14 @@ module Sunspot
       @query.attributes[:per_page]
     end
 
+    def keywords
+      @query.attributes[:keywords]
+    end
+
+    def conditions
+      ::Sunspot::Util::ClosedStruct.new(@query.attributes[:conditions])
+    end
+
     protected
     attr_reader :query, :types
 
