@@ -4,6 +4,7 @@ class TestBuildSearch < Test::Unit::TestCase
   include RR::Adapters::TestUnit
 
   before do
+    Sunspot.reset!
     stub(Solr::Connection).new { connection }
   end
 

@@ -1,6 +1,7 @@
 module Sunspot
   class Search
-    def initialize(*types, &block)
+    def initialize(connection, *types, &block)
+      @connection = connection
       params = types.last.is_a?(Hash) ? types.pop : {}
       @query = Sunspot::Query.new(types, params)
       QueryBuilder.new(@query).instance_eval(&block) if block
@@ -56,7 +57,7 @@ module Sunspot
     end
 
     protected
-    attr_reader :query, :types
+    attr_reader :query, :types, :connection
 
     private
 
@@ -77,10 +78,6 @@ module Sunspot
     def type_with_name(type_name)
       @types_cache ||= {}
       @types_cache[type_name] ||= type_name.split('::').inject(Module) { |namespace, name| namespace.const_get(name) }
-    end
-
-    def connection
-      Solr::Connection.new('http://localhost:8983/solr', :autocommit => :on)
     end
   end
 end

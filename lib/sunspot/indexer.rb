@@ -30,12 +30,11 @@ module Sunspot
   end
 
   class <<Indexer
-    def add(model)
-      self.for(model.class).add model
+    def add(connection, model)
+      self.for(model.class, connection).add model
     end
 
-    def for(clazz, connection = nil)
-      connection ||= Solr::Connection.new('http://localhost:8983/solr')
+    def for(clazz, connection)
       indexer = self.new(connection)
       for superclass in superclasses_for(clazz)
         indexer.add_fields ::Sunspot::Field.for(superclass)
