@@ -26,13 +26,3 @@ class Test::Unit::TestCase
     Object.class_eval { const_set(clazz.name.to_sym, clazz) }
   end
 end
-
-class StubEverything
-  def initialize(ret = nil)
-    @ret = ret
-  end
-
-  def method_missing(method, *args, &block)
-    @ret
-  end
-end

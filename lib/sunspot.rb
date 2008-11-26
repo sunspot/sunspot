@@ -5,7 +5,7 @@ require 'solr'
 require 'extlib'
 require File.join(File.dirname(__FILE__), 'light_config')
 
-%w(adapters condition conditions configuration field field_builder indexer query query_builder scope_builder search type util).each do |filename|
+%w(adapters condition conditions configuration field field_builder indexer query query_builder scope_builder search session type util).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 
@@ -19,23 +19,24 @@ class <<Sunspot
   end
 
   def index(*objects)
-    for object in objects
-      ::Sunspot::Indexer.add(connection, object)
-    end
+    session.index(*objects)
   end
 
   def search(*types, &block)
-    ::Sunspot::Search.new(connection, *types, &block).execute!
+    session.search(*types, &block)
+  end
+
+  def config
+    session.config
   end
 
   def reset!
-    @connection = nil
-    @config = nil
+    @session = nil
   end
 
   private
 
-  def connection
-    @connection ||= Solr::Connection.new(config.solr.url, :autocommit => :on)
+  def session
+    @session ||= ::Sunspot::Session.new
   end
 end
