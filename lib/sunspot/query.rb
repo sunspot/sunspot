@@ -77,7 +77,7 @@ module Sunspot
     end
 
     def condition_queries
-      conditions.conditions.map { |condition| condition.to_solr_query } # TODO the fact that we're calling conditions.conditions means there is a semantics problem here somewhere
+      conditions.restrictions.map { |condition| condition.to_solr_query } # TODO the fact that we're calling conditions.conditions means there is a semantics problem here somewhere
     end
 
     #TODO once the scope structure is up and running, this method

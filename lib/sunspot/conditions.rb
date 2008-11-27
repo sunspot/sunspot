@@ -17,7 +17,7 @@ module Sunspot
       conditions_hash[field_name.to_s] ||= value
     end
 
-    def conditions
+    def restrictions
       conditions_hash.map { |field_name, value| condition_for(field_name, value) }.compact
     end
 
