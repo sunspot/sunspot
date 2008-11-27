@@ -1,5 +1,4 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
-require 'mocha'
 
 class TestSession < Test::Unit::TestCase
   context 'using singleton session' do
@@ -7,9 +6,6 @@ class TestSession < Test::Unit::TestCase
       Sunspot.reset!
       connection.expects(:add)
       connection.expects(:query)
-    end
-
-    after do
     end
 
     test 'should open connection with defaults if nothing specified' do

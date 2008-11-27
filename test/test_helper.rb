@@ -7,10 +7,10 @@ gem 'mislav-will_paginate', '~> 2.3'
 
 require 'matchy'
 require 'context'
-require 'rr'
 require 'ruby-debug'
 require 'will_paginate'
 require 'will_paginate/collection'
+require 'mocha'
 
 require File.join(File.dirname(__FILE__), 'custom_expectation')
 

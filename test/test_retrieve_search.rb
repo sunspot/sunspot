@@ -1,11 +1,9 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
 class TestRetrieveSearch < Test::Unit::TestCase
-  include RR::Adapters::TestUnit
-
   before do
     Sunspot.reset!
-    stub(Solr::Connection).new { connection } 
+    Solr::Connection.stubs(:new).returns(connection)
   end
 
   test 'should load search result' do
@@ -103,10 +101,10 @@ class TestRetrieveSearch < Test::Unit::TestCase
     total_hits = if results.last.is_a?(Integer) then results.pop 
                  else results.length
                  end
-    response = Object.new
-    stub(response).hits { results.map { |result| { 'id' => "#{result.class.name} #{result.id}" }}}
-    stub(response).total_hits { total_hits }
-    stub(connection).query { response }
+    response = stub
+    response.stubs(:hits).returns(results.map { |result| { 'id' => "#{result.class.name} #{result.id}" }})
+    response.stubs(:total_hits).returns(total_hits)
+    connection.stubs(:query).returns(response)
   end
 
   def connection
