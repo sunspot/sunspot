@@ -10,7 +10,7 @@ module Sunspot
     end
     
     def interpret(field_name, condition_type)
-      operators_hash[field_name.to_s] = Sunspot::Condition.const_get condition_type.to_s.camel_case
+      operators_hash[field_name.to_s] = Sunspot::Restriction.const_get condition_type.to_s.camel_case
     end
 
     def default(field_name, value)
@@ -34,8 +34,8 @@ module Sunspot
     end
 
     def default_operator_for(value)
-      if value.is_a?(Array) then Sunspot::Condition::AnyOf
-      else Sunspot::Condition::EqualTo
+      if value.is_a?(Array) then Sunspot::Restriction::AnyOf
+      else Sunspot::Restriction::EqualTo
       end
     end
 

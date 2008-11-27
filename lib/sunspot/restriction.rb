@@ -1,5 +1,5 @@
 module Sunspot
-  module Condition
+  module Restriction
     class Base
       def initialize(field, value)
         @field, @value = field, value

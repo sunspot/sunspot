@@ -5,7 +5,7 @@ require 'solr'
 require 'extlib'
 require File.join(File.dirname(__FILE__), 'light_config')
 
-%w(adapters condition conditions configuration field field_builder indexer query query_builder scope_builder search session type util).each do |filename|
+%w(adapters restriction conditions configuration field field_builder indexer query query_builder scope_builder search session type util).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 
