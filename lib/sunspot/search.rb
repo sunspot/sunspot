@@ -1,9 +1,9 @@
 module Sunspot
   class Search
-    def initialize(connection, *types, &block)
+    def initialize(connection, configuration, *types, &block)
       @connection = connection
       params = types.last.is_a?(Hash) ? types.pop : {}
-      @query = Sunspot::Query.new(types, params)
+      @query = Sunspot::Query.new(types, params, configuration)
       QueryBuilder.new(@query).instance_eval(&block) if block
       @types = types
     end

@@ -9,7 +9,7 @@ module Sunspot
     end
 
     def search(*types, &block)
-      ::Sunspot::Search.new(connection, *types, &block).execute!
+      ::Sunspot::Search.new(connection, @config, *types, &block).execute!
     end
 
     def index(*objects)

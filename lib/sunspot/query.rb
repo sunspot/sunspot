@@ -2,8 +2,8 @@ module Sunspot
   class Query
     attr_accessor :keywords, :conditions, :rows, :start, :sort
 
-    def initialize(types, params) 
-      @keywords, @types = params[:keywords], types
+    def initialize(types, params, configuration)
+      @keywords, @types, @configuration = params[:keywords], types, configuration
       @conditions = Sunspot::Conditions.new(self, params[:conditions] || {})
       paginate(params[:page], params[:per_page]) if params[:page]
       self.order = params[:order] if params[:order]
@@ -33,7 +33,7 @@ module Sunspot
     end
 
     def paginate(page, per_page = nil)
-      per_page ||= 30 #FIXME this should come out of configuration
+      per_page ||= configuration.pagination.default_per_page
       @start = (page - 1) * per_page
       @rows = per_page
       attributes[:page], attributes[:per_page] = page, per_page
@@ -64,7 +64,7 @@ module Sunspot
     alias_method :per_page, :rows
 
     protected
-    attr_accessor :types
+    attr_accessor :types, :configuration
 
     private
 
@@ -77,13 +77,11 @@ module Sunspot
     end
 
     def condition_queries
-      conditions.restrictions.map { |condition| condition.to_solr_query } # TODO the fact that we're calling conditions.conditions means there is a semantics problem here somewhere
+      conditions.restrictions.map { |condition| condition.to_solr_query }
     end
 
-    #TODO once the scope structure is up and running, this method
-    #     can be ditched - just need it to make the spec pass now
     def types_query
-      if types.nil? || types.empty? then nil
+      if types.nil? || types.empty? then "type:[* TO &]"
       elsif types.length == 1 then "type:#{types.first}"
       else "type:(#{types * ' OR '})"
       end
