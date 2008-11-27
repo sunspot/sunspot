@@ -2,9 +2,10 @@ module Sunspot
   class Session
     attr_reader :config
 
-    def initialize(config = Sunspot::Configuration.build)
+    def initialize(config = Sunspot::Configuration.build, connection = nil)
       @config = config
       yield(@config) if block_given?
+      @connection = connection
     end
 
     def search(*types, &block)

@@ -1,53 +1,50 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 
 class TestRetrieveSearch < Test::Unit::TestCase
-  before do
-    Sunspot.reset!
-    Solr::Connection.stubs(:new).returns(connection)
-  end
+  CONFIG = Sunspot::Configuration.build
 
   test 'should load search result' do
     post = Post.new
     stub_results(post)
 
-    Sunspot.search(Post).results.should == [post]
+    session.search(Post).results.should == [post]
   end
 
   test 'should load multiple search results in order' do
     post_1, post_2 = Post.new, Post.new
     stub_results(post_1, post_2)
-    Sunspot.search(Post).results.should == [post_1, post_2]
+    session.search(Post).results.should == [post_1, post_2]
     stub_results(post_2, post_1)
-    Sunspot.search(Post).results.should == [post_2, post_1]
+    session.search(Post).results.should == [post_2, post_1]
   end
 
   test 'should return search total as attribute of results if pagination is provided' do
     stub_results(Post.new, 4)
-    Sunspot.search(Post, :page => 1).results.total_entries.should == 4
+    session.search(Post, :page => 1).results.total_entries.should == 4
   end
 
   test 'should return vanilla array if pagination is provided but WillPaginate is not available' do
     stub_results(Post.new)
     without_class(WillPaginate) do
-      Sunspot.search(Post, :page => 1).results.should_not respond_to(:total_entries)
+      session.search(Post, :page => 1).results.should_not respond_to(:total_entries)
     end
   end
 
   test 'should return total' do
     stub_results(Post.new, Post.new, 4)
-    Sunspot.search(Post, :page => 1).total.should == 4
+    session.search(Post, :page => 1).total.should == 4
   end
 
   test 'should give access to order through hash and object' do
     stub_results
-    search = Sunspot.search(Post, :order => 'sort_title asc')
+    search = session.search(Post, :order => 'sort_title asc')
     search.attributes[:order].should == 'sort_title asc'
     search.order.should == 'sort_title asc'
   end
 
   test 'should give nil order if no order set' do
     stub_results
-    search = Sunspot.search(Post)
+    search = session.search(Post)
     search.attributes.should have_key(:order)
     search.attributes[:order].should be_nil
     search.order.should be_nil
@@ -55,7 +52,7 @@ class TestRetrieveSearch < Test::Unit::TestCase
 
   test 'should give access to page and per-page through hash and object' do
     stub_results
-    search = Sunspot.search(Post, :page => 2, :per_page => 15)
+    search = session.search(Post, :page => 2, :per_page => 15)
     search.attributes[:page].should == 2
     search.attributes[:per_page].should == 15
     search.page.should == 2
@@ -64,14 +61,14 @@ class TestRetrieveSearch < Test::Unit::TestCase
 
   test 'should give access to keywords' do
     stub_results
-    search = Sunspot.search(Post, :keywords => 'some keywords')
+    search = session.search(Post, :keywords => 'some keywords')
     search.attributes[:keywords].should == 'some keywords'
     search.keywords.should == 'some keywords'
   end
 
   test 'should have nil keywords if no keywords given' do
     stub_results
-    search = Sunspot.search(Post)
+    search = session.search(Post)
     search.attributes.should have_key(:keywords)
     search.attributes[:keywords].should be_nil
     search.keywords.should be_nil
@@ -79,14 +76,14 @@ class TestRetrieveSearch < Test::Unit::TestCase
 
   test 'should give access to conditions' do
     stub_results
-    search = Sunspot.search(Post, :conditions => { :blog_id => 1 })
+    search = session.search(Post, :conditions => { :blog_id => 1 })
     search.attributes[:conditions][:blog_id].should == 1
     search.conditions.blog_id.should == 1
   end
 
   test 'should have nil values for fields with unspecified conditions' do
     stub_results
-    search = Sunspot.search(Post)
+    search = session.search(Post)
     %w(title blog_id category_ids average_rating published_at sort_title).each do |field_name|
       search.attributes[:conditions].should have_key(field_name.to_sym)
       search.attributes[:conditions][field_name.to_sym].should == nil
@@ -109,5 +106,9 @@ class TestRetrieveSearch < Test::Unit::TestCase
 
   def connection
     @connection ||= Object.new
+  end
+
+  def session
+    @session ||= Sunspot::Session.new(CONFIG, connection)
   end
 end
