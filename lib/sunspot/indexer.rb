@@ -42,6 +42,10 @@ module Sunspot
       self.for(model.class, connection).remove(model)
     end
 
+    def remove_all(connection, clazz = nil)
+      connection.delete_by_query("type:#{clazz ? clazz.name : '[* TO *]'}")
+    end
+
     def for(clazz, connection)
       indexer = self.new(connection)
       for superclass in superclasses_for(clazz)

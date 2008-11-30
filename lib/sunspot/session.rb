@@ -24,6 +24,16 @@ module Sunspot
       end
     end
 
+    def remove_all(*classes)
+      if classes.empty?
+        ::Sunspot::Indexer.remove_all(connection)
+      else
+        classes.each do |clazz|
+          ::Sunspot::Indexer.remove_all(connection, clazz)
+        end
+      end
+    end
+
     private
 
     def connection

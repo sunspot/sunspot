@@ -62,6 +62,16 @@ class TestIndexer < Test::Unit::TestCase
       connection.expects(:delete).with("Post #{post.id}")
       session.remove(post)
     end
+
+    test 'should be able to remove everything from the index' do
+      connection.expects(:delete_by_query).with("type:[* TO *]")
+      session.remove_all
+    end
+
+    test 'should be able to remove everything of a given class from the index' do
+      connection.expects(:delete_by_query).with("type:Post")
+      session.remove_all(Post)
+    end
   end
 
   test 'should throw a NoMethodError only if a nonexistent type is defined' do
