@@ -18,6 +18,12 @@ module Sunspot
       end
     end
 
+    def remove(*objects)
+      for object in objects
+        ::Sunspot::Indexer.remove(connection, object)
+      end
+    end
+
     private
 
     def connection

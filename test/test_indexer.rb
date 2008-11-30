@@ -57,6 +57,11 @@ class TestIndexer < Test::Unit::TestCase
       connection.expects(:add).with(has_entries(:author_name_s => 'Mat Brown'))
       session.index post
     end
+
+    test 'should remove an object from the index' do
+      connection.expects(:delete).with("Post #{post.id}")
+      session.remove(post)
+    end
   end
 
   test 'should throw a NoMethodError only if a nonexistent type is defined' do

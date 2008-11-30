@@ -20,6 +20,10 @@ module Sunspot
       self.fields.concat fields
     end
 
+    def remove(model)
+      connection.delete(::Sunspot::Adapters.adapt_instance(model).index_id)
+    end
+
     protected 
     attr_reader :connection
 
@@ -31,7 +35,11 @@ module Sunspot
 
   class <<Indexer
     def add(connection, model)
-      self.for(model.class, connection).add model
+      self.for(model.class, connection).add(model)
+    end
+
+    def remove(connection, model)
+      self.for(model.class, connection).remove(model)
     end
 
     def for(clazz, connection)
