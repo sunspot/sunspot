@@ -1,6 +1,3 @@
-class BaseClass
-end
-
 class Post < BaseClass
   @@id = 0
   @@posts = [nil]

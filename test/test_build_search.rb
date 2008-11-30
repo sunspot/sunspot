@@ -129,6 +129,41 @@ class TestBuildSearch < Test::Unit::TestCase
     end
   end
 
+  test 'should build search for multiple types' do
+    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => [])    
+    session.search(Post, Comment)
+  end
+
+  test 'should allow search on fields common to all types' do
+    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z']).times(2)
+    time = Time.parse('1983-07-08 05:00:00 -0400')
+    session.search Post, Comment, :conditions => { :published_at => time }
+    session.search Post, Comment do
+      with.published_at time
+    end
+  end
+
+  test 'should raise exception if search scoped to field not common to all types' do
+    lambda do
+      session.search Post, Comment do
+        with.blog_id 1
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  test 'should raise exception if search scoped to field configured differently between types' do
+    lambda do
+      session.search Post, Comment do
+        with.average_rating 2.2 # this is a float in Post but an integer in Comment
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  test 'should ignore condition if field is not common to all types' do
+    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => [])    
+    session.search Post, Comment, :conditions => { :blog_id => 1 }
+  end
+
   test 'should raise ArgumentError if bogus field scoped' do
     lambda do
       session.search Post do

@@ -17,6 +17,7 @@ require File.join(File.dirname(__FILE__), 'custom_expectation')
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'sunspot'
 
+require File.join(File.dirname(__FILE__), 'mocks', 'base_class.rb')
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each { |file| require file }
 
 class Test::Unit::TestCase

@@ -81,7 +81,7 @@ module Sunspot
     end
 
     def types_query
-      if types.nil? || types.empty? then "type:[* TO &]"
+      if types.nil? || types.empty? then "type:[* TO *]"
       elsif types.length == 1 then "type:#{types.first}"
       else "type:(#{types * ' OR '})"
       end
@@ -92,11 +92,22 @@ module Sunspot
     end
 
     def fields_hash
-      @fields_hash ||= types.inject({}) do |hash, type|
-        ::Sunspot::Field.for(type).each do |field|
-          hash[field.name.to_s] ||= field
+      @fields_hash ||= begin
+        fields_hash = types.inject({}) do |hash, type|
+          ::Sunspot::Field.for(type).each do |field|
+            (hash[field.name.to_s] ||= {})[type.name] = field
+          end
+          hash
         end
-        hash
+        fields_hash.each_pair do |field_name, field_configurations_hash|
+          if types.any? { |type| field_configurations_hash[type.name].nil? } # at least one type doesn't have this field configured
+            fields_hash.delete(field_name)
+          elsif field_configurations_hash.values.map { |configuration| configuration.indexed_name }.uniq.length != 1 # fields with this name have different configs
+            fields_hash.delete(field_name)
+          else
+            fields_hash[field_name] = field_configurations_hash.values.first
+          end
+        end
       end
     end
   end
