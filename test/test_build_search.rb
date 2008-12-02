@@ -122,7 +122,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should order' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => [], :sort => 'average_rating_f desc').times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => [], :sort => [{ :average_rating_f => :descending }]).times(2)
     session.search Post, :order => 'average_rating desc'
     session.search Post do
       order_by :average_rating, :desc

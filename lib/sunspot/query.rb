@@ -45,7 +45,7 @@ module Sunspot
 
     def order_by(field_name, direction = nil)
       direction ||= :asc
-      @sort = "#{field(field_name).indexed_name} #{direction}"
+      @sort = [{ field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }] #TODO should support multiple order columns
       attributes[:order] = "#{field_name} #{direction}"
     end
 
