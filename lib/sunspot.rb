@@ -25,6 +25,14 @@ class <<Sunspot
   def search(*types, &block)
     session.search(*types, &block)
   end
+  
+  def remove(*objects)
+    session.remove(*objects)
+  end
+
+  def remove_all(*classes)
+    session.remove_all(*classes)
+  end
 
   def config
     session.config
