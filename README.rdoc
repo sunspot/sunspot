@@ -96,15 +96,11 @@ I will be endeavoring to make setting up Solr less of a pain with future version
   search.conditions.average_rating
   search.attributes[:conditions]
 
-== REQUIREMENTS:
+== Requirements
 
 1. extlib
 2. solr-ruby
 3. Java
-
-== INSTALL:
-
-* FIX (sudo gem install, anything else)
 
 == LICENSE:
 
