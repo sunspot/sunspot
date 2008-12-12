@@ -50,6 +50,7 @@ solr/lib/jsp-2.1/core-3.1.1.jar
 solr/lib/jsp-2.1/jsp-2.1.jar
 solr/lib/jsp-2.1/jsp-api-2.1.jar
 solr/lib/servlet-api-2.5-6.1.3.jar
+solr/logs
 solr/solr/README.txt
 solr/solr/bin/abc
 solr/solr/bin/abo
