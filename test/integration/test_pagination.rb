@@ -13,4 +13,20 @@ class TestPagination < Test::Unit::TestCase
     results = Sunspot.search(Post) { order_by :blog_id }.results
     results.should == @posts
   end
+
+  should 'return first page of 10' do
+    results = Sunspot.search(Post) do
+      order_by :blog_id
+      paginate :page => 1, :per_page => 10
+    end.results
+    results.should == @posts[0,10]
+  end
+
+  should 'return second page of 10' do
+    results = Sunspot.search(Post) do
+      order_by :blog_id
+      paginate :page => 2, :per_page => 10
+    end.results
+    results.should == @posts[10,10]
+  end
 end
