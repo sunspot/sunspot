@@ -4,7 +4,7 @@ class TestBuildSearch < Test::Unit::TestCase
   CONFIG = Sunspot::Configuration.build
 
   test 'should search by keywords' do
-    connection.expects(:query).with('(keyword search) AND (type:Post)', :filter_queries => []).times(2)
+    connection.expects(:query).with('(keyword search) AND (type:Post)', :filter_queries => [], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     session.search Post, :keywords => 'keyword search'
     session.search Post do
       keywords 'keyword search'
@@ -12,7 +12,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by exact match with a string' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['title_s:My\ Pet\ Post']).times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['title_s:My\ Pet\ Post'], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     session.search Post, :conditions => { :title => 'My Pet Post' }
     session.search Post do
       with.title 'My Pet Post'
@@ -20,7 +20,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should ignore nonexistant fields in hash scope' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => [])
+    connection.expects(:query).with('(type:Post)', :filter_queries => [], :start => 0, :rows => CONFIG.pagination.default_per_page)
     session.search Post, :conditions => { :bogus => 'Field' }
   end
 
@@ -33,7 +33,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by exact match with time' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z']).times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     time = Time.parse('1983-07-08 05:00:00 -0400')
     session.search Post, :conditions => { :published_at => time }
     session.search Post do
@@ -42,7 +42,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by less than match with float' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[* TO 3\.0]']).times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[* TO 3\.0]'], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
 
     session.search Post, :conditions => { :average_rating => 3.0 } do
       conditions.interpret :average_rating, :less_than
@@ -54,7 +54,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by greater than match with float' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[3\.0 TO *]']).times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[3\.0 TO *]'], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     session.search Post, :conditions => { :average_rating => 3.0 } do 
       conditions.interpret :average_rating, :greater_than
     end
@@ -64,7 +64,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by between match with float' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[2\.0 TO 4\.0]']).times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[2\.0 TO 4\.0]'], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     session.search Post, :conditions => { :average_rating => [2.0, 4.0] } do
       conditions.interpret :average_rating, :between
     end
@@ -74,7 +74,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by any match with integer' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['category_ids_im:(2 OR 7 OR 12)']).times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['category_ids_im:(2 OR 7 OR 12)'], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     session.search Post, :conditions => { :category_ids => [2, 7, 12] }
     session.search Post do
       with.category_ids.any_of [2, 7, 12]
@@ -82,7 +82,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should scope by all match with integer' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['category_ids_im:(2 AND 7 AND 12)']).times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['category_ids_im:(2 AND 7 AND 12)'], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     session.search Post, :conditions => { :category_ids => [2, 7, 12] } do
       conditions.interpret :category_ids, :all_of
     end
@@ -92,14 +92,14 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should allow setting of default conditions' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:2\.0'])
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:2\.0'], :start => 0, :rows => CONFIG.pagination.default_per_page)
     session.search Post do
       conditions.default :average_rating, 2.0
     end
   end
 
   test 'should not use default condition value if condition provided' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:3\.0'])
+    connection.expects(:query).with('(type:Post)', :filter_queries => ['average_rating_f:3\.0'], :start => 0, :rows => CONFIG.pagination.default_per_page)
     session.search Post, :conditions => { :average_rating => 3.0 } do
       conditions.default :average_rating, 2.0
     end
@@ -122,7 +122,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should order' do
-    connection.expects(:query).with('(type:Post)', :filter_queries => [], :sort => [{ :average_rating_f => :descending }]).times(2)
+    connection.expects(:query).with('(type:Post)', :filter_queries => [], :sort => [{ :average_rating_f => :descending }], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     session.search Post, :order => 'average_rating desc'
     session.search Post do
       order_by :average_rating, :desc
@@ -130,12 +130,12 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should build search for multiple types' do
-    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => [])    
+    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => [], :start => 0, :rows => CONFIG.pagination.default_per_page)
     session.search(Post, Comment)
   end
 
   test 'should allow search on fields common to all types' do
-    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z']).times(2)
+    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'], :start => 0, :rows => CONFIG.pagination.default_per_page).times(2)
     time = Time.parse('1983-07-08 05:00:00 -0400')
     session.search Post, Comment, :conditions => { :published_at => time }
     session.search Post, Comment do
@@ -160,7 +160,7 @@ class TestBuildSearch < Test::Unit::TestCase
   end
 
   test 'should ignore condition if field is not common to all types' do
-    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => [])    
+    connection.expects(:query).with('(type:(Post OR Comment))', :filter_queries => [], :start => 0, :rows => CONFIG.pagination.default_per_page)    
     session.search Post, Comment, :conditions => { :blog_id => 1 }
   end
 

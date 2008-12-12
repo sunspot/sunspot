@@ -5,7 +5,7 @@ module Sunspot
     def initialize(types, params, configuration)
       @keywords, @types, @configuration = params[:keywords], types, configuration
       @conditions = Sunspot::Conditions.new(self, params[:conditions] || {})
-      paginate(params[:page], params[:per_page]) if params[:page]
+      paginate(params[:page], params[:per_page])
       self.order = params[:order] if params[:order]
       attributes[:keywords] = @keywords
       params[:conditions].each_pair do |field_name, value|
@@ -32,7 +32,8 @@ module Sunspot
       condition_clazz.new(field(field_name), value)
     end
 
-    def paginate(page, per_page = nil)
+    def paginate(page = nil, per_page = nil)
+      page ||= 1
       per_page ||= configuration.pagination.default_per_page
       @start = (page - 1) * per_page
       @rows = per_page
