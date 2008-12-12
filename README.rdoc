@@ -33,6 +33,23 @@ Sunspot is currently under active development and is not feature-complete.
 * Access search parameters as hash or object attributes, for easy integration with form helpers or query string builders
 * Plugins for drop-in integration with Merb and Rails
 
+== Installation
+
+  gem sources -a http://gems.github.com
+  gem install outoftime-sunspot
+
+You will find an installation of Solr in the gem directory. You can start it on port 8983 by doing:
+
+  cd /path/to/gems/outoftime-sunspot/solr
+  java -jar start.jar
+
+You can also run your own instance of Solr wherever you'd like; just copy the solr/config/schema.xml file out of the gem's solr into your installation.
+You can change the URL at which Sunspot accesses Solr with:
+
+  Sunspot.config.solr.url = 'http://solr.my.host:9818/solr'
+
+I will be endeavoring to make setting up Solr less of a pain with future versions.
+
 == Using Sunspot
 
 === Define an index:
