@@ -12,7 +12,11 @@ require 'will_paginate/collection'
 
 require File.join(File.dirname(__FILE__), 'custom_expectation')
 
-$:.unshift(File.dirname(__FILE__) + '/../lib')
+unless gem_name = ENV['SUNSPOT_TEST_GEM']
+  $:.unshift(File.dirname(__FILE__) + '/../lib')
+else
+  gem gem_name
+end
 require 'sunspot'
 
 require File.join(File.dirname(__FILE__), 'mocks', 'base_class.rb')

@@ -2,11 +2,11 @@ require 'sunspot/version'
 
 AUTHOR = 'Mat Brown'  # can also be an array of Authors
 EMAIL = "mat@patch.com"
-DESCRIPTION = "description of gem"
+DESCRIPTION = "Awesome Solr interaction for Ruby"
 GEM_NAME = 'sunspot' # what ppl will type to install your gem
 RUBYFORGE_PROJECT = 'sunspot' # The unix name for your project
-HOMEPATH = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
-DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
+HOMEPATH = "http://github.com/outoftime/sunspot"
+DOWNLOAD_PATH = "http://github.com/outoftime/sunspot"
 EXTRA_DEPENDENCIES = [
   ['solr-ruby', '= 0.0.6',
    'extlib', '>= 0.9.7']
@@ -39,7 +39,7 @@ VERS = Sunspot::VERSION::STRING + (REV ? ".#{REV}" : "")
 RDOC_OPTS = ['--quiet', '--title', 'sunspot documentation',
     "--opname", "index.html",
     "--line-numbers",
-    "--main", "README",
+    "--main", "README.rdoc",
     "--inline-source"]
 
 class Hoe

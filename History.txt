@@ -1,4 +1,7 @@
-== 0.0.1 2008-10-13
+== 0.0.1 2008-12-11
 
 * 1 major enhancement:
   * Initial release
+  * Define indexing for any class using DSL
+  * Search indexed classes using DSL
+  
