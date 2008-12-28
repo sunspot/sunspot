@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+require 'rubygems'
+gem 'daemons', '~> 1.0'
+require 'daemons'
+
+working_directory = FileUtils.pwd
+Daemons.run_proc('sunspot-solr') do
+  FileUtils.cd(File.join(working_directory, File.dirname(__FILE__), '..', 'solr')) do
+    Kernel.exec('java', '-jar', 'start.jar')
+  end
+end
