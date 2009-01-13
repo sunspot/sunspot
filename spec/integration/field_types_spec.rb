@@ -1,6 +1,6 @@
-require File.join(File.dirname(__FILE__), 'test_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
-class TestFieldTypes < Test::Unit::TestCase
+describe 'field types' do
   def self.test_field_type(name, field, *values)
     raise(ArgumentError, 'Please supply five values') unless values.length == 5
 
@@ -14,40 +14,40 @@ class TestFieldTypes < Test::Unit::TestCase
         end
       end
 
-      test 'should filter by exact match' do
+      it 'should filter by exact match' do
         Sunspot.search(Post) { with.send(field, values[2]) }.results.should == [@posts[2]]
       end
 
-      test 'should filter by less than' do
+      it 'should filter by less than' do
         results = Sunspot.search(Post) { with.send(field).less_than values[2] }.results
         (0..2).each { |i| results.should include(@posts[i]) }
         (3..4).each { |i| results.should_not include(@posts[i]) }
       end
 
-      test 'should filter by greater than' do
+      it 'should filter by greater than' do
         results = Sunspot.search(Post) { with.send(field).greater_than values[2] }.results
         (2..4).each { |i| results.should include(@posts[i]) }
         (0..1).each { |i| results.should_not include(@posts[i]) }
       end
 
-      test 'should filter by between' do
+      it 'should filter by between' do
         results = Sunspot.search(Post) { with.send(field).between(values[1]..values[3]) }.results
         (1..3).each { |i| results.should include(@posts[i]) }
         [0, 4].each { |i| results.should_not include(@posts[i]) }
       end
 
-      test 'should filter by any of' do
+      it 'should filter by any of' do
         results = Sunspot.search(Post) { with.send(field).any_of(values.values_at(1, 3)) }.results
         [1, 3].each { |i| results.should include(@posts[i]) }
         [0, 2, 4].each { |i| results.should_not include(@posts[i]) }
       end
 
-      test 'should order by field ascending' do
+      it 'should order by field ascending' do
         results = Sunspot.search(Post) { order_by field, :asc }.results
         results.should == @posts
       end
 
-      test 'should order by field descending' do
+      it 'should order by field descending' do
         results = Sunspot.search(Post) { order_by field, :desc }.results
         results.should == @posts.reverse
       end

@@ -1,6 +1,6 @@
-require File.join(File.dirname(__FILE__), 'test_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
-class TestKeywordSearch < Test::Unit::TestCase
+describe 'keyword search' do
   before :all do
     Sunspot.remove_all
     @posts = []
@@ -13,18 +13,18 @@ class TestKeywordSearch < Test::Unit::TestCase
     Sunspot.index(*@posts)
   end
 
-  test 'matches a single keyword out of a single field' do
+  it 'matches a single keyword out of a single field' do
     results = Sunspot.search(Post) { keywords 'toast' }.results
     [0, 2].each { |i| results.should include(@posts[i]) }
     [1].each { |i| results.should_not include(@posts[i]) }
   end
 
-  test 'matches multiple words out of a single field' do
+  it 'matches multiple words out of a single field' do
     results = Sunspot.search(Post) { keywords 'elects toast' }.results
     results.should == [@posts[0]]
   end
 
-  test 'matches multiple words in multiple fields' do
+  it 'matches multiple words in multiple fields' do
     results = Sunspot.search(Post) { keywords 'toast wind' }.results
     [0, 2].each { |i| results.should include(@posts[i]) }
     [1].each { |i| results.should_not include(@posts[i]) }

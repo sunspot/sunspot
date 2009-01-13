@@ -1,5 +1,2 @@
-coverage
-README.txt
-.*.swp
-/doc/
-pkg
+sunspot-solr.pid
+*.swp

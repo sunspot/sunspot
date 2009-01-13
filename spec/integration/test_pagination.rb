@@ -1,6 +1,6 @@
-require File.join(File.dirname(__FILE__), 'test_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
-class TestPagination < Test::Unit::TestCase
+describe 'pagination' do
   before :all do
     Sunspot.remove_all
     @posts = (0..19).map do |i|
@@ -9,12 +9,12 @@ class TestPagination < Test::Unit::TestCase
     Sunspot.index(*@posts)
   end
 
-  should 'return all by default' do
+  it 'should return all by default' do
     results = Sunspot.search(Post) { order_by :blog_id }.results
     results.should == @posts
   end
 
-  should 'return first page of 10' do
+  it 'should return first page of 10' do
     results = Sunspot.search(Post) do
       order_by :blog_id
       paginate :page => 1, :per_page => 10
@@ -22,7 +22,7 @@ class TestPagination < Test::Unit::TestCase
     results.should == @posts[0,10]
   end
 
-  should 'return second page of 10' do
+  it 'should return second page of 10' do
     results = Sunspot.search(Post) do
       order_by :blog_id
       paginate :page => 2, :per_page => 10
