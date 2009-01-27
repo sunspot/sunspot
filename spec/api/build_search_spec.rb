@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe 'Search' do
   it 'should search by keywords' do
-    connection.should_receive(:query).with('(keyword search) AND (type:Post)', :filter_queries => [], :start => 0, :rows => config.pagination.default_per_page).twice
+    connection.should_receive(:query).with('(keyword search) AND (type:Post)', hash_including).twice
     session.search Post, :keywords => 'keyword search'
     session.search Post do
       keywords 'keyword search'
@@ -10,7 +10,7 @@ describe 'Search' do
   end
 
   it 'should scope by exact match with a string' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['title_s:My\ Pet\ Post'], :start => 0, :rows => config.pagination.default_per_page).twice
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['title_s:My\ Pet\ Post'])).twice
     session.search Post, :conditions => { :title => 'My Pet Post' }
     session.search Post do
       with.title 'My Pet Post'
@@ -18,7 +18,7 @@ describe 'Search' do
   end
 
   it 'should ignore nonexistant fields in hash scope' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => [], :start => 0, :rows => config.pagination.default_per_page)
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => []))
     session.search Post, :conditions => { :bogus => 'Field' }
   end
 
@@ -31,7 +31,7 @@ describe 'Search' do
   end
 
   it 'should scope by exact match with time' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'], :start => 0, :rows => config.pagination.default_per_page).twice
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'])).twice
     time = Time.parse('1983-07-08 05:00:00 -0400')
     session.search Post, :conditions => { :published_at => time }
     session.search Post do
@@ -40,39 +40,28 @@ describe 'Search' do
   end
 
   it 'should scope by less than match with float' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[* TO 3\.0]'], :start => 0, :rows => config.pagination.default_per_page).twice
-
-    session.search Post, :conditions => { :average_rating => 3.0 } do
-      conditions.interpret :average_rating, :less_than
-    end
-
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[* TO 3\.0]']))
     session.search Post do
       with.average_rating.less_than 3.0
     end
   end
 
   it 'should scope by greater than match with float' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[3\.0 TO *]'], :start => 0, :rows => config.pagination.default_per_page).twice
-    session.search Post, :conditions => { :average_rating => 3.0 } do 
-      conditions.interpret :average_rating, :greater_than
-    end
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[3\.0 TO *]']))
     session.search Post do
       with.average_rating.greater_than 3.0
     end
   end
 
   it 'should scope by between match with float' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['average_rating_f:[2\.0 TO 4\.0]'], :start => 0, :rows => config.pagination.default_per_page).twice
-    session.search Post, :conditions => { :average_rating => [2.0, 4.0] } do
-      conditions.interpret :average_rating, :between
-    end
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[2\.0 TO 4\.0]']))
     session.search Post do
       with.average_rating.between 2.0..4.0
     end
   end
 
   it 'should scope by any match with integer' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['category_ids_im:(2 OR 7 OR 12)'], :start => 0, :rows => config.pagination.default_per_page).twice
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['category_ids_im:(2 OR 7 OR 12)'])).twice
     session.search Post, :conditions => { :category_ids => [2, 7, 12] }
     session.search Post do
       with.category_ids.any_of [2, 7, 12]
@@ -80,31 +69,19 @@ describe 'Search' do
   end
 
   it 'should scope by all match with integer' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['category_ids_im:(2 AND 7 AND 12)'], :start => 0, :rows => config.pagination.default_per_page).twice
-    session.search Post, :conditions => { :category_ids => [2, 7, 12] } do
-      conditions.interpret :category_ids, :all_of
-    end
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['category_ids_im:(2 AND 7 AND 12)']))
     session.search Post do
       with.category_ids.all_of [2, 7, 12]
     end
   end
 
-  it 'should allow setting of default conditions' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['average_rating_f:2\.0'], :start => 0, :rows => config.pagination.default_per_page)
-    session.search Post do
-      conditions.default :average_rating, 2.0
-    end
+  it 'should paginate using default per_page when page not provided' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:rows => 30))
+    session.search Post
   end
 
-  it 'should not use default condition value if condition provided' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => ['average_rating_f:3\.0'], :start => 0, :rows => config.pagination.default_per_page)
-    session.search Post, :conditions => { :average_rating => 3.0 } do
-      conditions.default :average_rating, 2.0
-    end
-  end
-
-  it 'should paginate using default per_page' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => [], :rows => 30, :start => 30).twice
+  it 'should paginate using default per_page when page provided' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:rows => 30, :start => 30)).twice
     session.search Post, :page => 2
     session.search Post do
       paginate :page => 2
@@ -120,7 +97,7 @@ describe 'Search' do
   end
 
   it 'should order' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => [], :sort => [{ :average_rating_f => :descending }], :start => 0, :rows => config.pagination.default_per_page).twice
+    connection.should_receive(:query).with('(type:Post)', hash_including(:sort => [{ :average_rating_f => :descending }])).twice
     session.search Post, :order => 'average_rating desc'
     session.search Post do
       order_by :average_rating, :desc
@@ -128,12 +105,12 @@ describe 'Search' do
   end
 
   it 'should build search for multiple types' do
-    connection.should_receive(:query).with('(type:(Post OR Comment))', :filter_queries => [], :start => 0, :rows => config.pagination.default_per_page)
+    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including)
     session.search(Post, Comment)
   end
 
   it 'should allow search on fields common to all types' do
-    connection.should_receive(:query).with('(type:(Post OR Comment))', :filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'], :start => 0, :rows => config.pagination.default_per_page).twice
+    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including(:filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'])).twice
     time = Time.parse('1983-07-08 05:00:00 -0400')
     session.search Post, Comment, :conditions => { :published_at => time }
     session.search Post, Comment do
@@ -158,7 +135,7 @@ describe 'Search' do
   end
 
   it 'should ignore condition if field is not common to all types' do
-    connection.should_receive(:query).with('(type:(Post OR Comment))', :filter_queries => [], :start => 0, :rows => config.pagination.default_per_page)    
+    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including(:filter_queries => []))    
     session.search Post, Comment, :conditions => { :blog_id => 1 }
   end
 

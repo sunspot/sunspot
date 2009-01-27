@@ -1,11 +1,18 @@
 module Sunspot
   class Search
+    attr_reader :builder
+
     def initialize(connection, configuration, *types, &block)
       @connection = connection
       params = types.last.is_a?(Hash) ? types.pop : {}
       @query = Sunspot::Query.new(types, params, configuration)
-      QueryBuilder.new(@query).instance_eval(&block) if block
+      @builder = build_with(::Sunspot::Builder::StandardBuilder, params)
+      @query.dsl.instance_eval(&block) if block
       @types = types
+    end
+
+    def build_with(builder_class, *args)
+      @query.build_with(builder_class, *args)
     end
 
     def execute!
@@ -30,30 +37,6 @@ module Sunspot
 
     def total
       @total ||= @solr_result.total_hits
-    end
-
-    def attributes
-      @query.attributes
-    end
-
-    def order
-      @query.attributes[:order]
-    end
-
-    def page
-      @query.attributes[:page]
-    end
-
-    def per_page
-      @query.attributes[:per_page]
-    end
-
-    def keywords
-      @query.attributes[:keywords]
-    end
-
-    def conditions
-      ::Sunspot::Util::ClosedStruct.new(@query.attributes[:conditions])
     end
 
     protected

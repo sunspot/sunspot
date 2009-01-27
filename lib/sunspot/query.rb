@@ -3,14 +3,8 @@ module Sunspot
     attr_accessor :keywords, :conditions, :rows, :start, :sort
 
     def initialize(types, params, configuration)
-      @keywords, @types, @configuration = params[:keywords], types, configuration
-      @conditions = Sunspot::Conditions.new(self, params[:conditions] || {})
-      paginate(params[:page], params[:per_page])
-      self.order = params[:order] if params[:order]
-      attributes[:keywords] = @keywords
-      params[:conditions].each_pair do |field_name, value|
-        attributes[:conditions][field_name.to_sym] = value
-      end if params[:conditions]
+      @types, @configuration = types, configuration
+      paginate
     end
 
     def to_solr
@@ -21,7 +15,7 @@ module Sunspot
     end
 
     def filter_queries
-      scope_queries + condition_queries
+      scope_queries
     end
 
     def add_scope(condition)
@@ -37,7 +31,6 @@ module Sunspot
       per_page ||= configuration.pagination.default_per_page
       @start = (page - 1) * per_page
       @rows = per_page
-      attributes[:page], attributes[:per_page] = page, per_page
     end
 
     def order=(order)
@@ -47,7 +40,6 @@ module Sunspot
     def order_by(field_name, direction = nil)
       direction ||= :asc
       @sort = [{ field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }] #TODO should support multiple order columns
-      attributes[:order] = "#{field_name} #{direction}"
     end
 
     def page
@@ -55,11 +47,12 @@ module Sunspot
       start / rows + 1
     end
 
-    def attributes
-      @attributes ||= {
-        :order => nil,
-        :conditions => fields_hash.keys.inject({}) { |conditions, key| conditions[key.to_sym] = nil; conditions }
-      }
+    def dsl
+      @dsl ||= ::Sunspot::DSL::Query.new(self)
+    end
+
+    def build_with(builder_class, *args)
+      builder_class.new(dsl, types, fields_hash.keys, *args)
     end
 
     alias_method :per_page, :rows
@@ -75,10 +68,6 @@ module Sunspot
 
     def scope_queries
       scope.map { |condition| condition.to_solr_query }
-    end
-
-    def condition_queries
-      conditions.restrictions.map { |condition| condition.to_solr_query }
     end
 
     def types_query
