@@ -7,7 +7,8 @@ module Sunspot
 
       def text(*names, &block)
         for name in names
-          ::Sunspot::Field.register_text clazz, build_field(name, ::Sunspot::Type::TextType, &block)
+          field = build_field(name, ::Sunspot::Type::TextType, &block)
+          ::Sunspot::Field.register_text(clazz, field)
         end
       end
 

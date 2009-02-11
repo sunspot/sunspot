@@ -6,8 +6,13 @@ module Sunspot
       end
 
       def method_missing(field_name, *args)
-        if args.length == 0 then RestrictionBuilder.new(field_name, @query)
-        elsif args.length == 1 then @query.add_scope @query.build_condition(field_name, ::Sunspot::Restriction::EqualTo, args.first)
+        if args.length == 0
+          RestrictionBuilder.new(field_name, @query)
+        elsif args.length == 1
+          condition = @query.build_condition(field_name,
+                                             ::Sunspot::Restriction::EqualTo,
+                                             args.first)
+          @query.add_scope(condition)
         else super(field_name.to_sym, *args)
         end
       end
@@ -19,14 +24,15 @@ module Sunspot
 
         def method_missing(condition_name, *args)
           clazz = begin
-                    ::Sunspot::Restriction.const_get(condition_name.to_s.camel_case)
-                  rescue(NameError)
-                    super(condition_name.to_sym, *args)
-                  end
+            ::Sunspot::Restriction.const_get(condition_name.to_s.camel_case)
+          rescue(NameError)
+            super(condition_name.to_sym, *args)
+          end
           if value = args.first
-            @query.add_scope @query.build_condition(@field_name, clazz, args.first)
+            condition = @query.build_condition(@field_name, clazz, args.first)
+            @query.add_scope(condition)
           else
-            @query.interpret_condition @field_name, clazz
+            @query.interpret_condition(@field_name, clazz)
           end
         end
       end

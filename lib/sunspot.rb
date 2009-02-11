@@ -5,7 +5,8 @@ require 'solr'
 require 'extlib'
 require File.join(File.dirname(__FILE__), 'light_config')
 
-%w(adapters builder restriction configuration field indexer query search session type util dsl).each do |filename|
+%w(adapters builder restriction configuration
+   field indexer query search session type util dsl).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 
@@ -25,7 +26,7 @@ class <<Sunspot
   def search(*types, &block)
     session.search(*types, &block)
   end
-  
+
   def remove(*objects)
     session.remove(*objects)
   end

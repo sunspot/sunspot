@@ -22,8 +22,14 @@ module Sunspot
 
     class StandardBuilder < ParamsBuilder
       def initialize(query_dsl, types, field_names, params = {})
-        params = { :keywords => nil, :conditions => {}, :order => nil, :page => nil, :per_page => nil }.merge(params)
-        field_names.each { |field_name| params[:conditions][field_name.to_sym] = nil unless params[:conditions].has_key?(field_name.to_sym) }
+        params = { :keywords => nil, :conditions => {},
+                   :order => nil, :page => nil,
+                   :per_page => nil }.merge(params)
+        field_names.each do |field_name|
+          unless params[:conditions].has_key?(field_name.to_sym)
+            params[:conditions][field_name.to_sym] = nil
+          end
+        end
         super(query_dsl, types, field_names, params)
       end
 
@@ -35,7 +41,9 @@ module Sunspot
         conditions.each_pair do |field_name, value|
           unless value.nil?
             unless value.is_a?(Array)
-              search.with.send(field_name, value) if field_names.include?(field_name.to_s)
+              if field_names.include?(field_name.to_s)
+                search.with.send(field_name, value)
+              end
             else
               search.with.send(field_name).any_of(value)
             end
@@ -61,7 +69,7 @@ module Sunspot
       def conditions
         ::Sunspot::Util::ClosedStruct.new(params[:conditions])
       end
-      
+
       def order
         params[:order]
       end

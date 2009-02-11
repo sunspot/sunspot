@@ -27,7 +27,8 @@ module Sunspot
 
     def results
       @results ||= if query.page && defined?(WillPaginate::Collection)
-        WillPaginate::Collection.create(query.page, query.per_page, @solr_result.total_hits) do |pager|
+        WillPaginate::Collection.create(query.page, query.per_page,
+                                        @solr_result.total_hits) do |pager|
           pager.replace(result_objects)
         end
       else
@@ -52,7 +53,8 @@ module Sunspot
         type_id_hash
       end.inject([]) do |results, pair|
         type_name, ids = pair
-        results.concat ::Sunspot::Adapters.adapt_class(type_with_name(type_name)).load_all(ids)
+        type = type_with_name(type_name)
+        results.concat(::Sunspot::Adapters.adapt_class(type).load_all(ids))
       end.sort_by do |result|
         hit_ids.index(::Sunspot::Adapters.adapt_instance(result).index_id)
       end
@@ -60,7 +62,10 @@ module Sunspot
 
     def type_with_name(type_name)
       @types_cache ||= {}
-      @types_cache[type_name] ||= type_name.split('::').inject(Module) { |namespace, name| namespace.const_get(name) }
+      @types_cache[type_name] ||=
+        type_name.split('::').inject(Module) do |namespace, name|
+        namespace.const_get(name)
+      end
     end
   end
 end
