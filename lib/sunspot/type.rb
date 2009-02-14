@@ -53,11 +53,7 @@ module Sunspot
 
       def to_indexed(value)
         if value
-          time = if value.respond_to?(:to_time)
-            value.to_time
-          else
-            Time.parse(value.to_s)
-          end
+          time = value.respond_to?(:to_time) ? value.to_time : Time.parse(value.to_s)
           time.utc.strftime('%FT%TZ')
         end
       end

@@ -6,11 +6,7 @@ module Sunspot
       def initialize(name, type, options = {})
         @name, @type = name, type
         @multiple = options.delete(:multiple)
-        if unknown_key = options.keys.first
-          raise ArgumentError,
-                "Unknown field option #{unknown_key.inspect}"
-                "provided for field #{name.inspect}"
-        end
+        raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
       end
 
       def pair_for(model)
@@ -37,13 +33,11 @@ module Sunspot
       end
 
       def to_indexed(value)
-        if value.kind_of?(Array)
+        if value.kind_of? Array 
           if multiple?
             value.map { |val| to_indexed(val) }
           else
-            raise ArgumentError,
-                  "#{name} is not a multiple-value field, so it cannot"
-                  " index values #{value.inspect}"
+            raise ArgumentError, "#{name} is not a multiple-value field, so it cannot index values #{value.inspect}"
           end
         else
           type.to_indexed(value)

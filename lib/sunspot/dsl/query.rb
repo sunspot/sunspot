@@ -2,7 +2,7 @@ module Sunspot
   module DSL
     class Query
       def initialize(query)
-        @query = query
+        @query = query 
       end
 
       def keywords(keywords)
@@ -18,13 +18,9 @@ module Sunspot
       end
 
       def paginate(options = {})
-        page = options.delete(:page) ||
-          raise(ArgumentError, "paginate requires a :page argument")
+        page = options.delete(:page) || raise(ArgumentError, "paginate requires a :page argument")
         per_page = options.delete(:per_page)
-        if argument = options.keys.first
-          raise ArgumentError,
-                "unknown argument #{argument.inspect} passed to paginate"
-        end
+        raise ArgumentError, "unknown argument #{options.keys.first.inspect} passed to paginate" unless options.empty?
         @query.paginate(page, per_page)
       end
 

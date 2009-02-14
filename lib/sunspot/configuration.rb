@@ -1,7 +1,7 @@
 module Sunspot
   module Configuration
   end
-
+  
   class <<Configuration
     def build
       LightConfig.build do

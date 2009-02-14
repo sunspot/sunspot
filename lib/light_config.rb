@@ -9,7 +9,7 @@ module LightConfig
           define_method property do
             @properties[property]
           end
-
+          
           define_method "#{property}=" do |value|
             @properties[property] = value
           end
@@ -24,9 +24,7 @@ module LightConfig
     end
 
     def method_missing(method, *args, &block)
-      unless args.length < 2
-        raise ArgumentError("wrong number of arguments(#{args.length} for 1)")
-      end
+      raise ArgumentError("wrong number of arguments(#{args.length} for 1)") unless args.length < 2
       value = if block then ::LightConfig::Configuration.new(&block)
               else args.first
               end

@@ -38,9 +38,8 @@ module Sunspot
     end
 
     def order_by(field_name, direction = nil)
-      solr_direction = direction.to_s == 'desc' ? :descending : :ascending
-      #TODO should support multiple order columns
-      @sort = [{ field(field_name).indexed_name.to_sym => solr_direction }]
+      direction ||= :asc
+      @sort = [{ field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }] #TODO should support multiple order columns
     end
 
     def page
@@ -79,30 +78,26 @@ module Sunspot
     end
 
     def field(field_name)
-      fields_hash[field_name.to_s] ||
-        raise(ArgumentError,
-              "No field configured for #{types * ', '} " +
-              "with name '#{field_name}'")
+      fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{types * ', '} with name '#{field_name}'")
     end
 
     def fields_hash
       @fields_hash ||= begin
-        fields_for_types = Hash.new { |h, k| h[k] = {} }
-        types.each do |type|
+        fields_hash = types.inject({}) do |hash, type|
           ::Sunspot::Field.for(type).each do |field|
-            fields_for_types[field.name.to_s][type.name] = field
+            (hash[field.name.to_s] ||= {})[type.name] = field
+          end
+          hash
+        end
+        fields_hash.each_pair do |field_name, field_configurations_hash|
+          if types.any? { |type| field_configurations_hash[type.name].nil? } # at least one type doesn't have this field configured
+            fields_hash.delete(field_name)
+          elsif field_configurations_hash.values.map { |configuration| configuration.indexed_name }.uniq.length != 1 # fields with this name have different configs
+            fields_hash.delete(field_name)
+          else
+            fields_hash[field_name] = field_configurations_hash.values.first
           end
         end
-        fields_hash = {}
-        fields_for_types.each_pair do |field_name, fields_for_type|
-          unless types.any? { |type|
-              fields_for_type[type.name].nil? } ||
-            fields_for_type.values.map { |configuration|
-              configuration.indexed_name }.uniq.length != 1 then
-            fields_hash[field_name] = fields_for_type.values.first
-          end
-        end
-        fields_hash
       end
     end
   end
