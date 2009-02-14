@@ -38,17 +38,14 @@ Sunspot is currently under active development and is not feature-complete.
   gem sources -a http://gems.github.com
   gem install outoftime-sunspot
 
-You will find an installation of Solr in the gem directory. You can start it on port 8983 by doing:
+In order to start the packaged Solr installation, run:
 
-  cd /path/to/gems/outoftime-sunspot/solr
-  java -jar start.jar
+  sunspot-solr start -- -d /path/to/data/directory [-p port]
 
 You can also run your own instance of Solr wherever you'd like; just copy the solr/config/schema.xml file out of the gem's solr into your installation.
 You can change the URL at which Sunspot accesses Solr with:
 
   Sunspot.config.solr.url = 'http://solr.my.host:9818/solr'
-
-I will be endeavoring to make setting up Solr less of a pain with future versions.
 
 == Using Sunspot
 
@@ -72,29 +69,49 @@ I will be endeavoring to make setting up Solr less of a pain with future version
 
 === Search for objects:
   
-  search = Sunspot.search Post, :conditions => { :average_rating => 3.0 } do
+  search = Sunspot.search Post do
     keywords 'great pizza'
     with.author_name 'Mark Twain'
     with.blog_id.any_of [2, 14]
     with.category_ids.all_of [4, 10]
     with.published_at.less_than Time.now
 
-    conditions.interpret :average_rating, :greater_than
-    conditions.default :average_rating, 4.0
-
     paginate :page => 3, :per_page => 15
     order_by :average_rating, :desc
   end
 
-=== Get data and parameters from search:
+=== Get data from search:
 
   search.results
   search.total
   search.page
   search.per_page
-  search.keywords
-  search.conditions.average_rating
-  search.attributes[:conditions]
+
+=== Build search from a hash (e.g., params) and retrieve them later:
+
+  search = Sunspot.search Post, :keywords => 'great pizza',
+                                :conditions => { :author_name => 'Mark Twain',
+                                                 :blog_id => [4, 10] },
+                                :order => 'published_at desc'
+  search.builder.keywords
+    #=> "great pizza"
+  search.builder.conditions.author_name
+    #=> "Mark Twain"
+  search.builder.params[:conditions][:blog_id]
+    #=> [4, 10]
+
+This functionality is great for building a search from user input; if you're
+building a search using business logic in your application, the block DSL
+is the way to go. Note you can mix-and-match the two:
+
+  search = Sunspot.search Post, :keywords => 'great pizza' do
+    with.blog_id 1
+  end
+
+  search.builder.keywords
+    #=> "great pizza"
+  search.builder.blog_id
+    #=> nil
 
 == Requirements
 
