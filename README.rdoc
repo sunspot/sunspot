@@ -40,7 +40,9 @@ Sunspot is currently under active development and is not feature-complete.
 
 In order to start the packaged Solr installation, run:
 
-  sunspot-solr start -- -d /path/to/data/directory [-p port]
+  sunspot-solr start -- [-d /path/to/data/directory] [-p port]
+
+If you don't specify a data directory, your Solr index will be stored in your operating system's temporary directory.
 
 You can also run your own instance of Solr wherever you'd like; just copy the solr/config/schema.xml file out of the gem's solr into your installation.
 You can change the URL at which Sunspot accesses Solr with:

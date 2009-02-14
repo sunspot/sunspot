@@ -3,6 +3,7 @@ require 'rubygems'
 gem 'daemons', '~> 1.0'
 gem 'optiflag', '~> 0.6.5'
 require 'fileutils'
+require 'tmpdir'
 require 'daemons'
 require 'optiflag'
 
@@ -15,7 +16,7 @@ module SolrFlags extend OptiFlagSet
     long_form 'port'
   end
 
-  flag 'd' do
+  optional_flag 'd' do
     description 'Solr data directory'
   end
 
@@ -23,7 +24,7 @@ module SolrFlags extend OptiFlagSet
 end
 
 port = ARGV.flags.p || '8983'
-data_dir = File.expand_path(ARGV.flags.d) if ARGV.flags.d
+data_dir = File.expand_path(ARGV.flags.d || File.join(Dir.tmpdir, 'solr_data'))
 
 Daemons.run_proc('sunspot-solr') do
   FileUtils.cd(working_directory) do
