@@ -1,3 +1,4 @@
 sunspot-solr.pid
 *.swp
 coverage
+pkg

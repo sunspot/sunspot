@@ -6,34 +6,38 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown"]
-  s.date = %q{2008-12-12}
-  s.description = %q{}
-  s.email = ["mat@patch.com"]
-  s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "solr/README.txt", "solr/solr/README.txt", "solr/solr/conf/protwords.txt", "solr/solr/conf/stopwords.txt", "solr/solr/conf/synonyms.txt"]
-  s.files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "Rakefile", "config/hoe.rb", "config/requirements.rb", "lib/light_config.rb", "lib/sunspot.rb", "lib/sunspot/adapters.rb", "lib/sunspot/conditions.rb", "lib/sunspot/conditions_builder.rb", "lib/sunspot/configuration.rb", "lib/sunspot/field.rb", "lib/sunspot/field_builder.rb", "lib/sunspot/indexer.rb", "lib/sunspot/query.rb", "lib/sunspot/query_builder.rb", "lib/sunspot/restriction.rb", "lib/sunspot/scope_builder.rb", "lib/sunspot/search.rb", "lib/sunspot/session.rb", "lib/sunspot/type.rb", "lib/sunspot/util.rb", "lib/sunspot/version.rb", "log/test_solr.log", "setup.rb", "solr/README.txt", "solr/etc/jetty.xml", "solr/etc/webdefault.xml", "solr/exampledocs/books.csv", "solr/exampledocs/hd.xml", "solr/exampledocs/ipod_other.xml", "solr/exampledocs/ipod_video.xml", "solr/exampledocs/mem.xml", "solr/exampledocs/monitor.xml", "solr/exampledocs/monitor2.xml", "solr/exampledocs/mp500.xml", "solr/exampledocs/post.jar", "solr/exampledocs/post.sh", "solr/exampledocs/sd500.xml", "solr/exampledocs/solr.xml", "solr/exampledocs/spellchecker.xml", "solr/exampledocs/utf8-example.xml", "solr/exampledocs/vidcard.xml", "solr/lib/jetty-6.1.3.jar", "solr/lib/jetty-util-6.1.3.jar", "solr/lib/jsp-2.1/ant-1.6.5.jar", "solr/lib/jsp-2.1/core-3.1.1.jar", "solr/lib/jsp-2.1/jsp-2.1.jar", "solr/lib/jsp-2.1/jsp-api-2.1.jar", "solr/lib/servlet-api-2.5-6.1.3.jar", "solr/logs", "solr/solr/README.txt", "solr/solr/bin/abc", "solr/solr/bin/abo", "solr/solr/bin/backup", "solr/solr/bin/backupcleaner", "solr/solr/bin/commit", "solr/solr/bin/optimize", "solr/solr/bin/readercycle", "solr/solr/bin/rsyncd-disable", "solr/solr/bin/rsyncd-enable", "solr/solr/bin/rsyncd-start", "solr/solr/bin/rsyncd-stop", "solr/solr/bin/scripts-util", "solr/solr/bin/snapcleaner", "solr/solr/bin/snapinstaller", "solr/solr/bin/snappuller", "solr/solr/bin/snappuller-disable", "solr/solr/bin/snappuller-enable", "solr/solr/bin/snapshooter", "solr/solr/conf/admin-extra.html", "solr/solr/conf/protwords.txt", "solr/solr/conf/schema.xml", "solr/solr/conf/scripts.conf", "solr/solr/conf/solrconfig.xml", "solr/solr/conf/stopwords.txt", "solr/solr/conf/synonyms.txt", "solr/solr/conf/xslt", "solr/solr/data/spell", "solr/start.jar", "solr/webapps/solr.war", "tasks/deployment.rake", "tasks/environment.rake", "tasks/rcov.rake", "tasks/solr.rake", "tasks/website.rake", "test/api/test_build_search.rb", "test/api/test_helper.rb", "test/api/test_indexer.rb", "test/api/test_retrieve_search.rb", "test/api/test_session.rb", "test/custom_expectation.rb", "test/integration/test_field_types.rb", "test/integration/test_helper.rb", "test/integration/test_keyword_search.rb", "test/integration/test_pagination.rb", "test/mocks/base_class.rb", "test/mocks/comment.rb", "test/mocks/mock_adapter.rb", "test/mocks/post.rb", "test/test_helper.rb"]
+  s.date = %q{2009-02-14}
+  s.default_executable = %q{sunspot-solr}
+  s.description = %q{Library for expressive, powerful interaction with the Solr search engine}
+  s.email = %q{mat@patch.com}
+  s.executables = ["sunspot-solr"]
+  s.files = ["Rakefile", "README.rdoc", "History.txt", "VERSION.yml", "bin/sunspot-solr", "lib/sunspot", "lib/sunspot/session.rb", "lib/sunspot/type.rb", "lib/sunspot/adapters.rb", "lib/sunspot/restriction.rb", "lib/sunspot/configuration.rb", "lib/sunspot/dsl.rb", "lib/sunspot/search.rb", "lib/sunspot/builder.rb", "lib/sunspot/field.rb", "lib/sunspot/indexer.rb", "lib/sunspot/query.rb", "lib/sunspot/util.rb", "lib/sunspot/dsl", "lib/sunspot/dsl/fields.rb", "lib/sunspot/dsl/scope.rb", "lib/sunspot/dsl/query.rb", "lib/sunspot.rb", "lib/light_config.rb", "spec/spec_helper.rb", "spec/custom_expectation.rb", "spec/integration", "spec/integration/spec_helper.rb", "spec/integration/keyword_search_spec.rb", "spec/integration/field_types_spec.rb", "spec/integration/test_pagination.rb", "spec/mocks", "spec/mocks/base_class.rb", "spec/mocks/mock_adapter.rb", "spec/mocks/post.rb", "spec/mocks/comment.rb", "spec/api", "spec/api/search_retrieval_spec.rb", "spec/api/spec_helper.rb", "spec/api/session_spec.rb", "spec/api/build_search_spec.rb", "spec/api/standard_search_builder_spec.rb", "spec/api/indexer_spec.rb", "tasks/gemspec.rake", "tasks/rcov.rake", "tasks/spec.rake", "solr/etc/webdefault.xml", "solr/etc/jetty.xml", "solr/lib/jetty-util-6.1.3.jar", "solr/lib/servlet-api-2.5-6.1.3.jar", "solr/lib/jetty-6.1.3.jar", "solr/lib/jsp-2.1", "solr/lib/jsp-2.1/jsp-2.1.jar", "solr/lib/jsp-2.1/ant-1.6.5.jar", "solr/lib/jsp-2.1/core-3.1.1.jar", "solr/lib/jsp-2.1/jsp-api-2.1.jar", "solr/webapps/solr.war", "solr/solr/conf/elevate.xml", "solr/solr/conf/protwords.txt", "solr/solr/conf/synonyms.txt", "solr/solr/conf/solrconfig.xml", "solr/solr/conf/schema.xml", "solr/solr/conf/stopwords.txt", "solr/start.jar"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/outoftime/sunspot}
-  s.post_install_message = %q{PostInstall.txt}
-  s.rdoc_options = ["--main", "README.rdoc"]
+  s.rdoc_options = ["--inline-source", "--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubyforge_project = %q{sunspot}
   s.rubygems_version = %q{1.3.1}
-  s.summary = %q{library for expressive, powerful interaction with the Solr search engine}
-  s.test_files = ["test/api/test_build_search.rb", "test/api/test_helper.rb", "test/api/test_indexer.rb", "test/api/test_retrieve_search.rb", "test/api/test_session.rb", "test/integration/test_field_types.rb", "test/integration/test_helper.rb", "test/integration/test_keyword_search.rb", "test/integration/test_pagination.rb", "test/test_helper.rb"]
+  s.summary = %q{Library for expressive, powerful interaction with the Solr search engine}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 2
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<newgem>, [">= 1.0.6"])
-      s.add_development_dependency(%q<hoe>, [">= 1.8.0"])
+      s.add_runtime_dependency(%q<solr-ruby>, [">= 0.0.6"])
+      s.add_runtime_dependency(%q<extlib>, [">= 0.9.10"])
+      s.add_development_dependency(%q<rspec>, ["~> 1.1"])
+      s.add_development_dependency(%q<ruby-debug>, ["~> 0.10"])
     else
-      s.add_dependency(%q<newgem>, [">= 1.0.6"])
-      s.add_dependency(%q<hoe>, [">= 1.8.0"])
+      s.add_dependency(%q<solr-ruby>, [">= 0.0.6"])
+      s.add_dependency(%q<extlib>, [">= 0.9.10"])
+      s.add_dependency(%q<rspec>, ["~> 1.1"])
+      s.add_dependency(%q<ruby-debug>, ["~> 0.10"])
     end
   else
-    s.add_dependency(%q<newgem>, [">= 1.0.6"])
-    s.add_dependency(%q<hoe>, [">= 1.8.0"])
+    s.add_dependency(%q<solr-ruby>, [">= 0.0.6"])
+    s.add_dependency(%q<extlib>, [">= 0.9.10"])
+    s.add_dependency(%q<rspec>, ["~> 1.1"])
+    s.add_dependency(%q<ruby-debug>, ["~> 0.10"])
   end
 end
