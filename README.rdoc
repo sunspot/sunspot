@@ -121,6 +121,10 @@ is the way to go. Note you can mix-and-match the two:
 2. solr-ruby
 3. Java
 
+== Further Reading
+
+Posts about Sunspot from my tumblog: http://outofti.me/tagged/sunspot
+
 == LICENSE:
 
 (The MIT License)
