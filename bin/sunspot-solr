@@ -1,12 +1,38 @@
 #!/usr/bin/env ruby
-require 'fileutils'
 require 'rubygems'
 gem 'daemons', '~> 1.0'
+gem 'optiflag', '~> 0.6.5'
+require 'fileutils'
 require 'daemons'
+require 'optiflag'
 
 working_directory = FileUtils.pwd
+solr_home = File.join(File.dirname(__FILE__), '..', 'solr')
+
+module SolrFlags extend OptiFlagSet
+  optional_flag 'p' do
+    description 'Port on which to run Solr (default 8983)'
+    long_form 'port'
+  end
+
+  flag 'd' do
+    description 'Solr data directory'
+  end
+
+  and_process!
+end
+
+port = ARGV.flags.p || '8983'
+data_dir = File.expand_path(ARGV.flags.d) if ARGV.flags.d
+
 Daemons.run_proc('sunspot-solr') do
-  FileUtils.cd(File.join(working_directory, File.dirname(__FILE__), '..', 'solr')) do
-    Kernel.exec('java', '-jar', 'start.jar')
+  FileUtils.cd(working_directory) do
+    FileUtils.cd(solr_home) do
+      args = ['java']
+      args << "-Djetty.port=#{port}" if port
+      args << "-Dsolr.data.dir=#{data_dir}" if data_dir
+      args << '-jar' << 'start.jar'
+      Kernel.exec(*args)
+    end
   end
 end
