@@ -1,4 +1,3 @@
-require 'rubygems'
 gem 'solr-ruby'
 gem 'extlib'
 require 'solr'
