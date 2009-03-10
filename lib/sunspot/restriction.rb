@@ -9,6 +9,10 @@ module Sunspot
         "#{field.indexed_name}:#{to_solr_conditional}"
       end
 
+      def to_negative_solr_query
+        "-#{field.indexed_name}:#{to_solr_conditional}"
+      end
+
       protected
       attr_accessor :field, :value
 

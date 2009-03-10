@@ -75,6 +75,49 @@ describe 'Search' do
     end
   end
 
+  it 'should scope by not equal match with string' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-title_s:Bad\ Post']))
+    session.search Post do
+      without.title 'Bad Post'
+    end
+  end
+
+  it 'should scope by not less than match with float' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-average_rating_f:[* TO 3\.0]']))
+    session.search Post do
+      without.average_rating.less_than 3.0
+    end
+  end
+
+  it 'should scope by not greater than match with float' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-average_rating_f:[3\.0 TO *]']))
+    session.search Post do
+      without.average_rating.greater_than 3.0
+    end
+  end
+
+  it 'should scope by not between match with float' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-average_rating_f:[2\.0 TO 4\.0]']))
+    session.search Post do
+      without.average_rating.between 2.0..4.0
+    end
+  end
+
+  it 'should scope by not any match with integer' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-category_ids_im:(2 OR 7 OR 12)']))
+    session.search Post do
+      without.category_ids.any_of [2, 7, 12]
+    end
+  end
+
+
+  it 'should scope by not all match with integer' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-category_ids_im:(2 AND 7 AND 12)']))
+    session.search Post do
+      without.category_ids.all_of [2, 7, 12]
+    end
+  end
+
   it 'should paginate using default per_page when page not provided' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:rows => 30))
     session.search Post

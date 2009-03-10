@@ -13,6 +13,10 @@ module Sunspot
         @conditions_builder ||= ::Sunspot::DSL::Scope.new(@query)
       end
 
+      def without
+        @negative_conditions_builder ||= ::Sunspot::DSL::Scope.new(@query, true)
+      end
+
       def conditions
         @query.conditions
       end

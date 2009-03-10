@@ -1,3 +1,6 @@
+== 0.0.3 TBD
+* Negative scoping using without() method
+
 == 0.0.2 2009-02-14
 * Run sunspot's built-in Solr instance using
   sunspot-solr executable

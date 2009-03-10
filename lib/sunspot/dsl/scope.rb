@@ -1,20 +1,28 @@
 module Sunspot
   module DSL
     class Scope
-      def initialize(query)
-        @query = query
+      def initialize(query, negative = false)
+        @query, @negative = query, negative
       end
 
       def method_missing(field_name, *args)
-        if args.length == 0 then RestrictionBuilder.new(field_name, @query)
-        elsif args.length == 1 then @query.add_scope @query.build_condition(field_name, ::Sunspot::Restriction::EqualTo, args.first)
-        else super(field_name.to_sym, *args)
+        if args.length == 0 
+          RestrictionBuilder.new(field_name, @query, @negative)
+        elsif args.length == 1
+          scope = @query.build_condition(field_name, ::Sunspot::Restriction::EqualTo, args.first)
+          unless @negative
+            @query.add_scope(scope)
+          else
+            @query.add_negative_scope(scope)
+          end
+        else
+          super(field_name.to_sym, *args)
         end
       end
 
       class RestrictionBuilder
-        def initialize(field_name, query)
-          @field_name, @query = field_name, query
+        def initialize(field_name, query, negative)
+          @field_name, @query, @negative = field_name, query, negative
         end
 
         def method_missing(condition_name, *args)
@@ -23,10 +31,11 @@ module Sunspot
                   rescue(NameError)
                     super(condition_name.to_sym, *args)
                   end
-          if value = args.first
-            @query.add_scope @query.build_condition(@field_name, clazz, args.first)
+          scope = @query.build_condition(@field_name, clazz, args.first)
+          unless @negative
+            @query.add_scope(scope)
           else
-            @query.interpret_condition @field_name, clazz
+            @query.add_negative_scope(scope)
           end
         end
       end

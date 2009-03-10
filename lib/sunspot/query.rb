@@ -14,12 +14,17 @@ module Sunspot
       query_components.map { |component| "(#{component})"} * ' AND '
     end
 
-    def filter_queries
-      scope_queries
+    def scope_queries
+      scope.map { |condition| condition.to_solr_query } +
+        negative_scope.map { |condition| condition.to_negative_solr_query }
     end
 
     def add_scope(condition)
       scope << condition
+    end
+
+    def add_negative_scope(condition)
+      negative_scope << condition
     end
 
     def build_condition(field_name, condition_clazz, value)
@@ -66,8 +71,8 @@ module Sunspot
       @scope ||= []
     end
 
-    def scope_queries
-      scope.map { |condition| condition.to_solr_query }
+    def negative_scope
+      @negative_scope ||= []
     end
 
     def types_query
