@@ -14,13 +14,13 @@ module Sunspot
 
     def index(*objects)
       for object in objects
-        ::Sunspot::Indexer.add(connection, object)
+        setup_for(object).indexer(connection).add(object)
       end
     end
 
     def remove(*objects)
       for object in objects
-        ::Sunspot::Indexer.remove(connection, object)
+        setup_for(object).indexer(connection).remove(object)
       end
     end
 
@@ -35,6 +35,10 @@ module Sunspot
     end
 
     private
+
+    def setup_for(object)
+      Sunspot::Setup.for(object.class) || raise(ArgumentError, "Sunspot is not configured for #{object.class.inspect}")
+    end
 
     def connection
       @connection ||= Solr::Connection.new(config.solr.url, :autocommit => :on)

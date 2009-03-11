@@ -30,6 +30,14 @@ module Sunspot
       text_fields
     end
 
+    def all_fields
+      fields + text_fields
+    end
+
+    def indexer(connection)
+      Sunspot::Indexer.new(connection, self)
+    end
+
     protected
 
     def parent
