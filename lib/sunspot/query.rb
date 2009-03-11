@@ -38,10 +38,6 @@ module Sunspot
       @rows = per_page
     end
 
-    def order=(order)
-      order_by(*order.split(' '))
-    end
-
     def order_by(field_name, direction = nil)
       direction ||= :asc
       @sort = [{ field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }] #TODO should support multiple order columns
@@ -89,7 +85,7 @@ module Sunspot
     def fields_hash
       @fields_hash ||= begin
         fields_hash = types.inject({}) do |hash, type|
-          ::Sunspot::Field.for(type).each do |field|
+          Sunspot::Setup.for(type).fields.each do |field|
             (hash[field.name.to_s] ||= {})[type.name] = field
           end
           hash

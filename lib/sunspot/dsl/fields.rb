@@ -1,13 +1,13 @@
 module Sunspot
   module DSL
     class Fields
-      def initialize(clazz)
-        @clazz = clazz
+      def initialize(setup)
+        @setup = setup
       end
 
       def text(*names, &block)
         for name in names
-          ::Sunspot::Field.register_text clazz, build_field(name, ::Sunspot::Type::TextType, &block)
+          @setup.add_text_fields(build_field(name, ::Sunspot::Type::TextType, &block))
         end
       end
 
@@ -18,7 +18,7 @@ module Sunspot
           super(method.to_sym, *args, &block) and return
         end
         name = args.shift
-        ::Sunspot::Field.register clazz, build_field(name, type, *args, &block)
+        @setup.add_fields(build_field(name, type, *args, &block))
       end
 
       protected

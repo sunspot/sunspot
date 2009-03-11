@@ -17,17 +17,6 @@ module Sunspot
         end
       end
 
-      def ==(other)
-        other.respond_to?(:name) &&
-          other.respond_to?(:type) &&
-          self.name == other.name &&
-          self.type == other.type
-      end
-
-      def hash
-        name.hash + 31 * type.hash
-      end
-
       def indexed_name
         "#{type.indexed_name(name)}#{'m' if multiple?}"
       end
@@ -69,40 +58,6 @@ module Sunspot
       def value_for(model)
         model.instance_eval(&block)
       end
-    end
-  end
-
-  class <<Field
-    def register(clazz, fields)
-      fields = [fields] unless fields.kind_of? Enumerable
-      self.for(clazz).concat fields
-    end
-
-    def register_text(clazz, fields)
-      fields = [fields] unless fields.kind_of? Enumerable
-      self.text_for(clazz).concat fields
-    end
-
-    def text_for(clazz)
-      keyword_fields_hash[clazz.object_id] ||= []
-    end
-
-    def for(clazz)
-      fields_hash[clazz.object_id] ||= []
-    end
-
-    def unregister_all!
-      fields_hash.clear
-    end
-
-    private
-
-    def fields_hash
-      @fields_hash ||= {}
-    end
-
-    def keyword_fields_hash
-      @keyword_fields_hash ||= {}
     end
   end
 end

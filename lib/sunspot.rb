@@ -4,7 +4,7 @@ require 'solr'
 require 'extlib'
 require File.join(File.dirname(__FILE__), 'light_config')
 
-%w(adapters builder restriction configuration field indexer query search session type util dsl).each do |filename|
+%w(adapters builder restriction configuration setup field indexer query search session type util dsl).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 
@@ -14,7 +14,7 @@ end
 
 class <<Sunspot
   def setup(clazz, &block)
-    ::Sunspot::DSL::Fields.new(clazz).instance_eval(&block) if block
+    Sunspot::Setup.setup(clazz, &block)
   end
 
   def index(*objects)

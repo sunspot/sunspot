@@ -17,10 +17,6 @@ module Sunspot
         @negative_conditions_builder ||= ::Sunspot::DSL::Scope.new(@query, true)
       end
 
-      def conditions
-        @query.conditions
-      end
-
       def paginate(options = {})
         page = options.delete(:page) || raise(ArgumentError, "paginate requires a :page argument")
         per_page = options.delete(:per_page)
