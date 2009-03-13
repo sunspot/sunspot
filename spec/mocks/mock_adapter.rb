@@ -1,17 +1,13 @@
 require File.join(File.dirname(__FILE__), 'post')
 
 module MockAdapter
-  class InstanceAdapter
-    include Sunspot::Adapters::InstanceAdapter
-    
+  class InstanceAdapter < Sunspot::Adapters::InstanceAdapter
     def id
       instance.id
     end
   end
 
-  class ClassAdapter
-    include Sunspot::Adapters::ClassAdapter
-
+  class DataAccessor < Sunspot::Adapters::DataAccessor
     def load(id)
       clazz.get(id.to_i)
     end
@@ -22,4 +18,5 @@ module MockAdapter
   end
 end
 
-Sunspot::Adapters.register(MockAdapter, BaseClass)
+Sunspot::Adapters::DataAccessor.register(MockAdapter::DataAccessor, BaseClass)
+Sunspot::Adapters::InstanceAdapter.register(MockAdapter::InstanceAdapter, BaseClass)

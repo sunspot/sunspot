@@ -13,13 +13,13 @@ module Sunspot
     end
 
     def remove(model)
-      @connection.delete(::Sunspot::Adapters.adapt_instance(model).index_id)
+      @connection.delete(::Sunspot::Adapters::InstanceAdapter.adapt(model).index_id)
     end
 
     protected 
 
     def static_hash_for(model)
-      { :id => ::Sunspot::Adapters.adapt_instance(model).index_id,
+      { :id => ::Sunspot::Adapters::InstanceAdapter.adapt(model).index_id,
         :type => Indexer.superclasses_for(model.class).map { |clazz| clazz.name }}
     end
   end

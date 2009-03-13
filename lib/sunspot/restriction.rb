@@ -85,7 +85,7 @@ module Sunspot
       end
 
       def to_solr_query
-        adapter = Sunspot::Adapters.adapt_instance(@object)
+        adapter = Sunspot::Adapters::InstanceAdapter.adapt(@object)
         "id:#{escape(adapter.index_id)}"
       end
     end
