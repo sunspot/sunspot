@@ -106,8 +106,15 @@ describe 'scoped_search' do
 
     it 'should return objects not excluded' do
       excluded_post = @posts.shift
-      @posts.each do |included_post|
+      for included_post in @posts
         Sunspot.search(Post) { without(excluded_post) }.results.should include(included_post)
+      end
+    end
+
+    it 'should not return excluded objects' do
+      excluded_posts = [@posts.shift, @posts.shift]
+      for excluded_post in excluded_posts
+        Sunspot.search(Post) { without(excluded_posts) }.results.should_not include(excluded_post)
       end
     end
   end

@@ -13,11 +13,13 @@ module Sunspot
         @conditions_builder ||= ::Sunspot::DSL::Scope::implementation(@query.field_names).new(@query)
       end
 
-      def without(identity = nil)
-        unless identity
+      def without(*instances)
+        if instances.empty?
           @negative_conditions_builder ||= ::Sunspot::DSL::Scope::implementation(@query.field_names).new(@query, true)
         else
-          @query.add_negative_scope(Sunspot::Restriction::SameAs.new(identity))
+          for instance in instances.flatten
+            @query.add_negative_scope(Sunspot::Restriction::SameAs.new(instance))
+          end
         end
       end
 

@@ -118,6 +118,22 @@ describe 'Search' do
     end
   end
 
+  it 'should restrict multiple objects passed as varargs by object identity' do
+    post1, post2 = Post.new, Post.new
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ["-id:Post\\ #{post1.id}", "-id:Post\\ #{post2.id}"]))
+    session.search Post do
+      without post1, post2
+    end
+  end
+
+  it 'should restrict multiple objects passed as array by object identity' do
+    posts = [Post.new, Post.new]
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ["-id:Post\\ #{posts.first.id}", "-id:Post\\ #{posts.last.id}"]))
+    session.search Post do
+      without posts
+    end
+  end
+
   it 'should paginate using default per_page when page not provided' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:rows => 30))
     session.search Post
