@@ -1,3 +1,5 @@
+#require File.join(File.dirname(__FILE__), 'setup', 'composite')
+
 module Sunspot
   class Setup
     def initialize(clazz)
@@ -54,8 +56,14 @@ module Sunspot
         self.for!(clazz).setup(&block)
       end
 
-      def for(clazz)
-        setups[clazz.name] || self.for(clazz.superclass) if clazz
+      def for(classes)
+        classes = Array(classes)
+        unless classes.length > 1
+          clazz = classes.first
+          setups[clazz.name] || self.for(clazz.superclass) if clazz
+        else
+          Sunspot::Setup::Composite.new(classes.map { |clazz| self.for(clazz) })
+        end
       end
 
       def for!(clazz)

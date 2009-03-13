@@ -53,10 +53,9 @@ module Sunspot
       end
 
       protected
-      attr_accessor :block
 
       def value_for(model)
-        model.instance_eval(&block)
+        model.instance_eval(&@block)
       end
     end
   end

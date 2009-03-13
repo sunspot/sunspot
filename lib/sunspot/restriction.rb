@@ -1,5 +1,11 @@
 module Sunspot
   module Restriction
+    class <<self
+      def names
+        constants - ['Base']
+      end
+    end
+
     class Base
       def initialize(field, value)
         @field, @value = field, value
@@ -16,7 +22,7 @@ module Sunspot
       protected
       attr_accessor :field, :value
 
-      def solr_value(value = self.value)
+      def solr_value(value = @value)
         escape field.to_indexed(value)
       end
 

@@ -10,11 +10,11 @@ module Sunspot
       end
 
       def with
-        @conditions_builder ||= ::Sunspot::DSL::Scope.new(@query)
+        @conditions_builder ||= ::Sunspot::DSL::Scope::implementation(@query.field_names).new(@query)
       end
 
       def without
-        @negative_conditions_builder ||= ::Sunspot::DSL::Scope.new(@query, true)
+        @negative_conditions_builder ||= ::Sunspot::DSL::Scope::implementation(@query.field_names).new(@query, true)
       end
 
       def paginate(options = {})

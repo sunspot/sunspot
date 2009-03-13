@@ -13,16 +13,13 @@ module Sunspot
 
       def method_missing(method, *args, &block)
         begin
-          type = ::Sunspot::Type.const_get "#{method.to_s.camel_case}Type"
+          type = ::Sunspot::Type.const_get("#{method.to_s.camel_case}Type")
         rescue(NameError)
           super(method.to_sym, *args, &block) and return
         end
         name = args.shift
         @setup.add_fields(build_field(name, type, *args, &block))
       end
-
-      protected
-      attr_reader :clazz
 
       private
 

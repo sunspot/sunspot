@@ -33,7 +33,7 @@ module Sunspot
 
     def paginate(page = nil, per_page = nil)
       page ||= 1
-      per_page ||= configuration.pagination.default_per_page
+      per_page ||= @configuration.pagination.default_per_page
       @start = (page - 1) * per_page
       @rows = per_page
     end
@@ -53,13 +53,18 @@ module Sunspot
     end
 
     def build_with(builder_class, *args)
-      builder_class.new(dsl, types, fields_hash.keys, *args)
+      builder_class.new(dsl, @types, fields_hash.keys, *args)
+    end
+
+    def field_names
+      fields_hash.keys
+    end
+
+    def fields
+      fields_hash.values
     end
 
     alias_method :per_page, :rows
-
-    protected
-    attr_accessor :types, :configuration
 
     private
 
@@ -72,26 +77,26 @@ module Sunspot
     end
 
     def types_query
-      if types.nil? || types.empty? then "type:[* TO *]"
-      elsif types.length == 1 then "type:#{types.first}"
-      else "type:(#{types * ' OR '})"
+      if @types.nil? || @types.empty? then "type:[* TO *]"
+      elsif @types.length == 1 then "type:#{@types.first}"
+      else "type:(#{@types * ' OR '})"
       end
     end
 
     def field(field_name)
-      fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{types * ', '} with name '#{field_name}'")
+      fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{@types * ', '} with name '#{field_name}'")
     end
 
     def fields_hash
       @fields_hash ||= begin
-        fields_hash = types.inject({}) do |hash, type|
+        fields_hash = @types.inject({}) do |hash, type|
           Sunspot::Setup.for(type).fields.each do |field|
             (hash[field.name.to_s] ||= {})[type.name] = field
           end
           hash
         end
         fields_hash.each_pair do |field_name, field_configurations_hash|
-          if types.any? { |type| field_configurations_hash[type.name].nil? } # at least one type doesn't have this field configured
+          if @types.any? { |type| field_configurations_hash[type.name].nil? } # at least one type doesn't have this field configured
             fields_hash.delete(field_name)
           elsif field_configurations_hash.values.map { |configuration| configuration.indexed_name }.uniq.length != 1 # fields with this name have different configs
             fields_hash.delete(field_name)

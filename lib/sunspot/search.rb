@@ -17,17 +17,17 @@ module Sunspot
 
     def execute!
       query_options = {}
-      query_options[:filter_queries] = query.scope_queries
-      query_options[:rows] = query.rows
-      query_options[:start] = query.start if query.start
-      query_options[:sort] = query.sort if query.sort
-      @solr_result = connection.query(query.to_solr, query_options)
+      query_options[:filter_queries] = @query.scope_queries
+      query_options[:rows] = @query.rows
+      query_options[:start] = @query.start if @query.start
+      query_options[:sort] = @query.sort if @query.sort
+      @solr_result = @connection.query(@query.to_solr, query_options)
       self
     end
 
     def results
-      @results ||= if query.page && defined?(WillPaginate::Collection)
-        WillPaginate::Collection.create(query.page, query.per_page, @solr_result.total_hits) do |pager|
+      @results ||= if @query.page && defined?(WillPaginate::Collection)
+        WillPaginate::Collection.create(@query.page, @query.per_page, @solr_result.total_hits) do |pager|
           pager.replace(result_objects)
         end
       else
@@ -38,9 +38,6 @@ module Sunspot
     def total
       @total ||= @solr_result.total_hits
     end
-
-    protected
-    attr_reader :query, :types, :connection
 
     private
 

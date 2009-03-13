@@ -22,14 +22,6 @@ describe 'Search' do
     session.search Post, :conditions => { :bogus => 'Field' }
   end
 
-  it 'should raise an ArgumentError for nonexistant fields in block scope' do
-    lambda do 
-      session.search Post do
-        with.bogus 'Field'
-      end
-    end.should raise_error(ArgumentError)
-  end
-
   it 'should scope by exact match with time' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'])).twice
     time = Time.parse('1983-07-08 05:00:00 -0400')
@@ -161,20 +153,20 @@ describe 'Search' do
     end
   end
 
-  it 'should raise exception if search scoped to field not common to all types' do
+  it 'should raise NoMethodError if search scoped to field not common to all types' do
     lambda do
       session.search Post, Comment do
         with.blog_id 1
       end
-    end.should raise_error(ArgumentError)
+    end.should raise_error(NoMethodError)
   end
 
-  it 'should raise exception if search scoped to field configured differently between types' do
+  it 'should raise NoMethodError if search scoped to field configured differently between types' do
     lambda do
       session.search Post, Comment do
         with.average_rating 2.2 # this is a float in Post but an integer in Comment
       end
-    end.should raise_error(ArgumentError)
+    end.should raise_error(NoMethodError)
   end
 
   it 'should ignore condition if field is not common to all types' do
@@ -182,12 +174,20 @@ describe 'Search' do
     session.search Post, Comment, :conditions => { :blog_id => 1 }
   end
 
-  it 'should raise ArgumentError if bogus field scoped' do
+  it 'should raise an NoMethodError for nonexistant fields in block scope' do
+    lambda do 
+      session.search Post do
+        with.bogus 'Field'
+      end
+    end.should raise_error(NoMethodError)
+  end
+
+  it 'should raise NoMethodError if bogus field scoped' do
     lambda do
       session.search Post do
         with.bogus.equal_to :field
       end
-    end.should raise_error(ArgumentError)
+    end.should raise_error(NoMethodError)
   end
 
   it 'should raise NoMethodError if bogus operator referenced' do
@@ -214,12 +214,12 @@ describe 'Search' do
     end.should raise_error(ArgumentError)
   end
 
-  it 'should raise NoMethodError if more than one argument passed to scope method' do # or should it?
+  it 'should raise ArgumentError if more than one argument passed to scope method' do
     lambda do
       session.search Post do
         with.category_ids 4, 5
       end
-    end.should raise_error(NoMethodError)
+    end.should raise_error(ArgumentError)
   end
 
   private
