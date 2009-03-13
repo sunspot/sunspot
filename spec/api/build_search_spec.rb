@@ -110,6 +110,14 @@ describe 'Search' do
     end
   end
 
+  it 'should restrict by object identity' do
+    post = Post.new
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ["-id:Post\\ #{post.id}"]))
+    session.search Post do
+      without post
+    end
+  end
+
   it 'should paginate using default per_page when page not provided' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:rows => 30))
     session.search Post

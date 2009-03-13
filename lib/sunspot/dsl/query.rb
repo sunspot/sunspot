@@ -13,8 +13,12 @@ module Sunspot
         @conditions_builder ||= ::Sunspot::DSL::Scope::implementation(@query.field_names).new(@query)
       end
 
-      def without
-        @negative_conditions_builder ||= ::Sunspot::DSL::Scope::implementation(@query.field_names).new(@query, true)
+      def without(identity = nil)
+        unless identity
+          @negative_conditions_builder ||= ::Sunspot::DSL::Scope::implementation(@query.field_names).new(@query, true)
+        else
+          @query.add_negative_scope(Sunspot::Restriction::SameAs.new(identity))
+        end
       end
 
       def paginate(options = {})

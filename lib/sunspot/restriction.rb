@@ -2,7 +2,7 @@ module Sunspot
   module Restriction
     class <<self
       def names
-        constants - ['Base']
+        constants - %w(Base SameAs) #XXX this seems ugly
       end
     end
 
@@ -16,7 +16,7 @@ module Sunspot
       end
 
       def to_negative_solr_query
-        "-#{field.indexed_name}:#{to_solr_conditional}"
+        "-#{to_solr_query}"
       end
 
       protected
@@ -76,6 +76,17 @@ module Sunspot
 
       def to_solr_conditional
         "(#{value.map { |v| solr_value v } * ' AND '})"
+      end
+    end
+
+    class SameAs < Base
+      def initialize(object)
+        @object = object
+      end
+
+      def to_solr_query
+        adapter = Sunspot::Adapters.adapt_instance(@object)
+        "id:#{escape(adapter.index_id)}"
       end
     end
   end

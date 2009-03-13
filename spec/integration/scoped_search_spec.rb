@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe 'field types' do
+describe 'scoped_search' do
   def self.test_field_type(name, field, *values)
     raise(ArgumentError, 'Please supply five values') unless values.length == 5
 
@@ -89,4 +89,26 @@ describe 'field types' do
   test_field_type 'Float', :average_rating, -2.5, 0.0, 3.2, 3.5, 16.0
   test_field_type 'Time', :published_at, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
                                             '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
+
+  describe 'exclusion by identity' do
+    before do
+      @posts = (1..5).map do |i|
+        post = Post.new
+        Sunspot.index(post)
+        post
+      end
+    end
+
+    it 'should not return excluded object' do
+      excluded_post = @posts.shift
+      Sunspot.search(Post) { without(excluded_post) }.results.should_not include(excluded_post)
+    end
+
+    it 'should return objects not excluded' do
+      excluded_post = @posts.shift
+      @posts.each do |included_post|
+        Sunspot.search(Post) { without(excluded_post) }.results.should include(included_post)
+      end
+    end
+  end
 end

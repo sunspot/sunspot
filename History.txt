@@ -1,5 +1,6 @@
-== 0.0.3 TBD
+== 0.0.5 TBD
 * Negative scoping using without() method
+* Exclusion by object identity using without(instance)
 
 == 0.0.2 2009-02-14
 * Run sunspot's built-in Solr instance using
