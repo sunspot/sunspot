@@ -10,7 +10,7 @@ describe 'keyword search' do
                        :body => 'The interpreted strain scans the buffer around the upper temper')
     @posts << Post.new(:title => 'The toast abbreviates the recovering spirit',
                        :body => 'Does the wind interpret the buffer?')
-    Sunspot.index(*@posts)
+    Sunspot.index!(*@posts)
   end
 
   it 'matches a single keyword out of a single field' do

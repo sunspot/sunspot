@@ -7,6 +7,7 @@ describe 'search faceting' do
           Sunspot.index(Post.new(field => value1))
         end
         Sunspot.index(Post.new(field => value2))
+        Sunspot.commit
       end
 
       before :each do

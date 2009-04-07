@@ -56,6 +56,13 @@ describe 'indexer' do
       session.index post
     end
 
+    it 'should commit immediately after index! called' do
+      post :title => 'The Blog Post'
+      connection.should_receive(:add).ordered
+      connection.should_receive(:commit).ordered
+      session.index!(post)
+    end
+
     it 'should remove an object from the index' do
       connection.should_receive(:delete).with("Post #{post.id}")
       session.remove(post)

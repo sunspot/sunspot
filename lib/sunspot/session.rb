@@ -18,6 +18,15 @@ module Sunspot
       end
     end
 
+    def index!(*objects)
+      index(*objects)
+      commit
+    end
+
+    def commit
+      connection.commit
+    end
+
     def remove(*objects)
       for object in objects
         setup_for(object).indexer(connection).remove(object)
@@ -41,7 +50,7 @@ module Sunspot
     end
 
     def connection
-      @connection ||= Solr::Connection.new(config.solr.url, :autocommit => :on)
+      @connection ||= Solr::Connection.new(config.solr.url)
     end
   end
 end

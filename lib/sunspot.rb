@@ -21,6 +21,14 @@ class <<Sunspot
     session.index(*objects)
   end
 
+  def index!(*objects)
+    session.index!(*objects)
+  end
+
+  def commit
+    session.commit
+  end
+
   def search(*types, &block)
     session.search(*types, &block)
   end

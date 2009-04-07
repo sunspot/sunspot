@@ -12,6 +12,7 @@ describe 'scoped_search' do
           Sunspot.index(post)
           post
         end
+        Sunspot.commit
       end
 
       it 'should filter by exact match' do
@@ -97,6 +98,7 @@ describe 'scoped_search' do
         Sunspot.index(post)
         post
       end
+      Sunspot.commit
     end
 
     it 'should not return excluded object' do
