@@ -68,7 +68,7 @@ describe 'retrieving search' do
   private
 
   def stub_results(*results)
-    total_hits = if results.last.is_a?(Integer) then results.pop 
+    total_hits = if results.last.is_a?(Integer) then results.pop
                  else results.length
                  end
     response = mock('response')

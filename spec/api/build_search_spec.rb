@@ -213,7 +213,7 @@ describe 'Search' do
   end
 
   it 'should raise an NoMethodError for nonexistant fields in block scope' do
-    lambda do 
+    lambda do
       session.search Post do
         with.bogus 'Field'
       end

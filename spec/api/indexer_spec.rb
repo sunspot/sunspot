@@ -13,7 +13,7 @@ describe 'indexer' do
       session.index post
     end
 
-    it 'should correctly index a string attribute field' do 
+    it 'should correctly index a string attribute field' do
       post :title => 'A Title'
       connection.should_receive(:add).with(hash_including(:title_s => 'A Title'))
       session.index post

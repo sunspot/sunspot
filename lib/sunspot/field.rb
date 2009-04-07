@@ -22,7 +22,7 @@ module Sunspot
       end
 
       def to_indexed(value)
-        if value.kind_of? Array 
+        if value.kind_of? Array
           if multiple?
             value.map { |val| to_indexed(val) }
           else

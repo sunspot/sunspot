@@ -67,7 +67,7 @@ module Sunspot
       private
 
       def to_solr_conditional
-        "[#{solr_value value.first} TO #{solr_value value.last}]"                  
+        "[#{solr_value value.first} TO #{solr_value value.last}]"
       end
     end
 

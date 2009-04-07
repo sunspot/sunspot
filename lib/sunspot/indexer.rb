@@ -16,7 +16,7 @@ module Sunspot
       @connection.delete(::Sunspot::Adapters::InstanceAdapter.adapt(model).index_id)
     end
 
-    protected 
+    protected
 
     def static_hash_for(model)
       { :id => ::Sunspot::Adapters::InstanceAdapter.adapt(model).index_id,

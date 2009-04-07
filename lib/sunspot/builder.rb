@@ -61,7 +61,7 @@ module Sunspot
       def conditions
         ::Sunspot::Util::ClosedStruct.new(params[:conditions])
       end
-      
+
       def order
         params[:order]
       end

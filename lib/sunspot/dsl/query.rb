@@ -2,7 +2,7 @@ module Sunspot
   module DSL
     class Query
       def initialize(query)
-        @query = query 
+        @query = query
       end
 
       def keywords(keywords)

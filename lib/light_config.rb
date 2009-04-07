@@ -9,7 +9,7 @@ module LightConfig
           define_method property do
             @properties[property]
           end
-          
+
           define_method "#{property}=" do |value|
             @properties[property] = value
           end
