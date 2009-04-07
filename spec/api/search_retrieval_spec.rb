@@ -40,6 +40,14 @@ describe 'retrieving search' do
     facet_values(result, :title).should == ['Author 1', 'Author 2']
   end
 
+  it 'should return counts for facet' do
+    stub_facet(:title_s, 'Author 1' => 2, 'Author 2' => 1)
+    result = session.search Post do
+      facet :title
+    end
+    facet_counts(result, :title).should == [2, 1]
+  end
+
   it 'should return integer facet' do
     stub_facet(:blog_id_i, '3' => 2, '1' => 1)
     result = session.search Post do
@@ -91,6 +99,10 @@ describe 'retrieving search' do
 
   def facet_values(result, field_name)
     result.facet(field_name).rows.map { |row| row.value }
+  end
+
+  def facet_counts(result, field_name)
+    result.facet(field_name).rows.map { |row| row.count }
   end
 
   def config

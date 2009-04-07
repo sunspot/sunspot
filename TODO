@@ -1,0 +1,4 @@
+* Query-based faceting (?)
+* Don't auto-commit (provide index! method for a convenient index-and-commit)
+* Switch to RSolr
+* Use autoload rather than loading everything at the outset
