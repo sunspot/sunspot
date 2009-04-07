@@ -33,6 +33,12 @@ module Sunspot
       def order_by(field_name, direction = nil)
         @query.order_by(field_name, direction)
       end
+
+      def facet(*field_names)
+        for field_name in field_names
+          @query.add_field_facet(field_name)
+        end
+      end
     end
   end
 end

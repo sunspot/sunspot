@@ -163,6 +163,20 @@ describe 'Search' do
     end
   end
 
+  it 'should request single field facet' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:facets => { :fields => %w(category_ids_im) }))
+    session.search Post do
+      facet :category_ids
+    end
+  end
+
+  it 'should request multiple field facet' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:facets => { :fields => %w(category_ids_im blog_id_i) }))
+    session.search Post do
+      facet :category_ids, :blog_id
+    end
+  end
+
   it 'should build search for multiple types' do
     connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including)
     session.search(Post, Comment)

@@ -22,6 +22,9 @@ module Sunspot
       negative_scope.each do |condition|
         Sunspot::Util.deep_merge!(params, condition.to_negative_params)
       end
+      facets.each do |facet|
+        Sunspot::Util.deep_merge!(params, facet.to_params)
+      end
       params
     end
 
@@ -31,6 +34,10 @@ module Sunspot
 
     def add_negative_scope(condition)
       negative_scope << condition
+    end
+
+    def add_field_facet(field_name)
+      facets << Sunspot::Facets::FieldFacet.new(field(field_name))
     end
 
     def build_condition(field_name, condition_clazz, value)
@@ -80,6 +87,10 @@ module Sunspot
 
     def negative_scope
       @negative_scope ||= []
+    end
+
+    def facets
+      @facets ||= []
     end
 
     def types_query
