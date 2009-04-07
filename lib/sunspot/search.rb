@@ -16,12 +16,8 @@ module Sunspot
     end
 
     def execute!
-      query_options = {}
-      query_options[:filter_queries] = @query.scope_queries
-      query_options[:rows] = @query.rows
-      query_options[:start] = @query.start if @query.start
-      query_options[:sort] = @query.sort if @query.sort
-      @solr_result = @connection.query(@query.to_solr, query_options)
+      params = @query.to_params
+      @solr_result = @connection.query(params.delete(:q), params)
       self
     end
 

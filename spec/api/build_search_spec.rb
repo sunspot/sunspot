@@ -18,7 +18,7 @@ describe 'Search' do
   end
 
   it 'should ignore nonexistant fields in hash scope' do
-    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => []))
+    connection.should_receive(:query).with('(type:Post)', hash_not_including(:filter_queries))
     session.search Post, :conditions => { :bogus => 'Field' }
   end
 
@@ -148,7 +148,7 @@ describe 'Search' do
   end
 
   it 'should paginate using provided per_page' do
-    connection.should_receive(:query).with('(type:Post)', :filter_queries => [], :rows => 15, :start => 45).twice
+    connection.should_receive(:query).with('(type:Post)', hash_including(:rows => 15, :start => 45)).twice
     session.search Post, :page => 4, :per_page => 15
     session.search Post do
       paginate :page => 4, :per_page => 15
@@ -194,7 +194,7 @@ describe 'Search' do
   end
 
   it 'should ignore condition if field is not common to all types' do
-    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including(:filter_queries => []))    
+    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_not_including(:filter_queries))
     session.search Post, Comment, :conditions => { :blog_id => 1 }
   end
 

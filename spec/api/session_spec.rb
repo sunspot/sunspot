@@ -39,6 +39,6 @@ describe 'Session' do
   end
 
   def connection
-    @connection ||= stub_everything('Connection')
+    @connection ||= mock('Connection').as_null_object
   end
 end

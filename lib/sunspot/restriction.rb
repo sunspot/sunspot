@@ -11,6 +11,14 @@ module Sunspot
         @field, @value = field, value
       end
 
+      def to_params
+        { :filter_queries => [to_solr_query] }
+      end
+
+      def to_negative_params
+        { :filter_queries => [to_negative_solr_query] }
+      end
+
       def to_solr_query
         "#{field.indexed_name}:#{to_solr_conditional}"
       end

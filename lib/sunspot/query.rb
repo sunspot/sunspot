@@ -7,16 +7,22 @@ module Sunspot
       paginate
     end
 
-    def to_solr
+    def to_params
+      params = {}
       query_components = []
       query_components << keywords if keywords
       query_components << types_query if types_query
-      query_components.map { |component| "(#{component})"} * ' AND '
-    end
-
-    def scope_queries
-      scope.map { |condition| condition.to_solr_query } +
-        negative_scope.map { |condition| condition.to_negative_solr_query }
+      params[:q] = query_components.map { |component| "(#{component})"} * ' AND '
+      params[:sort] = @sort if @sort
+      params[:start] = @start if @start
+      params[:rows] = @rows if @rows
+      scope.each do |condition|
+        Sunspot::Util.deep_merge!(params, condition.to_params)
+      end
+      negative_scope.each do |condition|
+        Sunspot::Util.deep_merge!(params, condition.to_negative_params)
+      end
+      params
     end
 
     def add_scope(condition)
