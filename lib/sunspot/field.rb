@@ -33,6 +33,10 @@ module Sunspot
         end
       end
 
+      def cast(value)
+        type.cast(value)
+      end
+
       def multiple?
         !!@multiple
       end

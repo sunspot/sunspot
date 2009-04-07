@@ -77,6 +77,10 @@ module Sunspot
       fields_hash.values
     end
 
+    def field(field_name)
+      fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{@types * ', '} with name '#{field_name}'")
+    end
+
     alias_method :per_page, :rows
 
     private
@@ -98,10 +102,6 @@ module Sunspot
       elsif @types.length == 1 then "type:#{@types.first}"
       else "type:(#{@types * ' OR '})"
       end
-    end
-
-    def field(field_name)
-      fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{@types * ', '} with name '#{field_name}'")
     end
 
     def fields_hash

@@ -32,6 +32,39 @@ describe 'retrieving search' do
     session.search(Post, :page => 1).total.should == 4
   end
 
+  it 'should return string facet' do
+    stub_facet(:title_s, 'Author 1' => 2, 'Author 2' => 1)
+    result = session.search Post do
+      facet :title
+    end
+    facet_values(result, :title).should == ['Author 1', 'Author 2']
+  end
+
+  it 'should return integer facet' do
+    stub_facet(:blog_id_i, '3' => 2, '1' => 1)
+    result = session.search Post do
+      facet :blog_id
+    end
+    facet_values(result, :blog_id).should == [3, 1]
+  end
+
+  it 'should return float facet' do
+    stub_facet(:average_rating_f, '9.3' => 2, '1.1' => 1)
+    result = session.search Post do
+      facet :average_rating
+    end
+    facet_values(result, :average_rating).should == [9.3, 1.1]
+  end
+
+  it 'should return time facet' do
+    stub_facet(:published_at_d, '2009-04-07T20:25:23Z' => 3, '2009-04-07T20:26:19Z' => 1)
+    result = session.search Post do
+      facet :published_at
+    end
+    facet_values(result, :published_at).should == [Time.gm(2009, 04, 07, 20, 25, 23),
+                                                   Time.gm(2009, 04, 07, 20, 26, 19)]
+  end
+
   private
 
   def stub_results(*results)
@@ -44,9 +77,24 @@ describe 'retrieving search' do
     connection.stub!(:query).and_return(response)
   end
 
+  def stub_facet(name, values)
+    response = mock('response')
+    facets = values.map do |data, count|
+      value = Solr::Response::Standard::FacetValue.new
+      value.name = data
+      value.value = count
+      value
+    end.sort_by { |value| -value.value }
+    response.stub!(:field_facets).with(name.to_s).and_return(facets)
+    connection.stub!(:query).and_return(response)
+  end
+
+  def facet_values(result, field_name)
+    result.facet(field_name).rows.map { |row| row.value }
+  end
+
   def config
     @config ||= Sunspot::Configuration.build
-
   end
 
   def connection

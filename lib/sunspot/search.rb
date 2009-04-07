@@ -35,6 +35,11 @@ module Sunspot
       @total ||= @solr_result.total_hits
     end
 
+    def facet(field_name)
+      field = @query.field(field_name)
+      Sunspot::Facet.new(@solr_result.field_facets(field.indexed_name), field)
+    end
+
     private
 
     def result_objects
