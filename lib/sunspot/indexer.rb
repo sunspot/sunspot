@@ -22,17 +22,17 @@ module Sunspot
       { :id => ::Sunspot::Adapters::InstanceAdapter.adapt(model).index_id,
         :type => Indexer.superclasses_for(model.class).map { |clazz| clazz.name }}
     end
-  end
 
-  class <<Indexer
-    def remove_all(connection, clazz = nil)
-      connection.delete_by_query("type:#{clazz ? clazz.name : '[* TO *]'}")
-    end
+    class <<self
+      def remove_all(connection, clazz = nil)
+        connection.delete_by_query("type:#{clazz ? clazz.name : '[* TO *]'}")
+      end
 
-    def superclasses_for(clazz)
-      superclasses_for = [clazz]
-      superclasses_for << (clazz = clazz.superclass) while clazz.superclass != Object
-      superclasses_for
+      def superclasses_for(clazz)
+        superclasses_for = [clazz]
+        superclasses_for << (clazz = clazz.superclass) while clazz.superclass != Object
+        superclasses_for
+      end
     end
   end
 end

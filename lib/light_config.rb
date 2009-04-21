@@ -31,10 +31,10 @@ module LightConfig
       @configuration.instance_variable_get(:@properties)[method] = value
     end
   end
-end
 
-class <<LightConfig
-  def build(&block)
-    LightConfig::Configuration.new(&block)
+  class <<self
+    def build(&block)
+      LightConfig::Configuration.new(&block)
+    end
   end
 end
