@@ -91,6 +91,18 @@ describe 'scoped_search' do
   test_field_type 'Time', :published_at, :published_at, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
                                                            '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
 
+  describe 'Boolean field type' do
+    before :all do
+      Sunspot.remove_all
+      @posts = [Post.new(:featured => true), Post.new(:featured => false)].each { |post| Sunspot.index(post) }
+      Sunspot.commit
+    end
+
+    it 'should filter by exact match' do
+      Sunspot.search(Post) { with.featured true }.results.should == [@posts[0]]
+    end
+  end
+
   describe 'exclusion by identity' do
     before do
       @posts = (1..5).map do |i|

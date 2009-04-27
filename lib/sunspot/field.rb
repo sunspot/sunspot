@@ -30,7 +30,7 @@ module Sunspot
       # Hash:: a single key-value pair with the field name and value
       #
       def pair_for(model)
-        if value = value_for(model)
+        unless (value = value_for(model)).nil?
           { indexed_name.to_sym => to_indexed(value) }
         else
           {}

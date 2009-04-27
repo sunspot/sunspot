@@ -115,5 +115,32 @@ module Sunspot
         end
       end
     end
+
+    # 
+    # The boolean type represents true/false values. Note that +nil+ will not be
+    # indexed at all; only +false+ will be indexed with a false value.
+    #
+    module BooleanType
+      class <<self
+        def indexed_name(name)
+        "#{name}_b"
+        end
+
+        def to_indexed(value)
+          unless value.nil?
+            value ? 'true' : 'false'
+          end
+        end
+
+        def cast(string)
+          case string
+          when 'true'
+            true
+          when 'false'
+            false
+          end
+        end
+      end
+    end
   end
 end

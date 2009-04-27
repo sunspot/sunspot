@@ -43,6 +43,24 @@ describe 'indexer' do
       session.index post
     end
 
+    it 'should correctly index a boolean field' do
+      post :featured => true
+      connection.should_receive(:add).with(hash_including(:featured_b => 'true'))
+      session.index post
+    end
+
+    it 'should correctly index a false boolean field' do
+      post :featured => false
+      connection.should_receive(:add).with(hash_including(:featured_b => 'false'))
+      session.index post
+    end
+
+    it 'should not index a nil boolean field' do
+      post
+      connection.should_receive(:add).with(hash_not_including(:featured_b))
+      session.index post
+    end
+
     it 'should correctly index a virtual field' do
       post :title => 'The Blog Post'
       connection.should_receive(:add).with(hash_including(:sort_title_s => 'blog post'))

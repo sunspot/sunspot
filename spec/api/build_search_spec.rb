@@ -30,6 +30,14 @@ describe 'Search' do
       with.published_at time
     end
   end
+  
+  it 'should scope by exact match with boolean' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['featured_b:false'])).twice
+    session.search Post, :conditions => { :featured => false }
+    session.search Post do
+      with.featured false
+    end
+  end
 
   it 'should scope by less than match with float' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[* TO 3\.0]']))

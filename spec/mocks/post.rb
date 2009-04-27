@@ -3,7 +3,8 @@ class Post < BaseClass
   @@posts = [nil]
 
   attr_reader :id
-  attr_accessor :title, :body, :blog_id, :published_at, :ratings_average, :author_name
+  attr_accessor :title, :body, :blog_id, :published_at, :ratings_average, :author_name, :featured
+  alias_method :featured?, :featured
 
 
   def initialize(attrs = {})
@@ -35,6 +36,7 @@ Sunspot.setup(Post) do
   integer :category_ids, :multiple => true
   float :average_rating, :using => :ratings_average
   time :published_at
+  boolean :featured, :using => :featured?
   string :sort_title do
     title.downcase.sub(/^(a|an|the)\W+/, '') if title
   end

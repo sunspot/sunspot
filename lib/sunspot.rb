@@ -75,6 +75,7 @@ module Sunspot
     # * +integer+
     # * +float+
     # * +time+
+    # * +boolean+
     #
     # Note that the +text+ type behaves quite differently from the others -
     # this is the type that is indexed as fulltext, and is searched using the
