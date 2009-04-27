@@ -153,7 +153,11 @@ module Sunspot
       #
       # Object:: The value to index
       def value_for(model)
-        model.instance_eval(&@block)
+        if @block.arity <= 0
+          model.instance_eval(&@block)
+        else
+          @block.call(model)
+        end
       end
     end
   end

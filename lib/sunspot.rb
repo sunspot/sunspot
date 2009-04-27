@@ -56,7 +56,15 @@ module Sunspot
     #
     # +:sort_title+ is a virtual field, which evaluates the block inside the
     # context of the instance being indexed, and indexes the value returned
-    # by the block.
+    # by the block. If the block you pass takes an argument, it will be passed
+    # the instance rather than being evaluated inside of it; so, the following
+    # example is equivalent to the one above (assuming #title is public):
+    #
+    #   Sunspot.setup(Post) do
+    #     string :sort_title do |post|
+    #       post.title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title
+    #     end
+    #   end
     #
     # ===== Field Types
     #

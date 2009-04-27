@@ -49,6 +49,12 @@ describe 'indexer' do
       session.index post
     end
 
+    it 'should correctly index an external virtual field' do
+      post :category_ids => [1, 2, 3]
+      connection.should_receive(:add).with(hash_including(:primary_category_id_i => '1'))
+      session.index post
+    end
+
     it 'should correctly index a field that is defined on a superclass' do
       Sunspot.setup(BaseClass) { string :author_name }
       post :author_name => 'Mat Brown'

@@ -38,4 +38,7 @@ Sunspot.setup(Post) do
   string :sort_title do
     title.downcase.sub(/^(a|an|the)\W+/, '') if title
   end
+  integer :primary_category_id do |post|
+    post.category_ids.first
+  end
 end
