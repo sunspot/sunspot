@@ -67,9 +67,8 @@ module Sunspot
         @query.paginate(page, per_page)
       end
 
-      # Specify the order that results should be returned in. At this point only
-      # one field can be used for ordering, but that will surely change in 
-      # future versions
+      # Specify the order that results should be returned in. This method can
+      # be called multiple times; precedence will be in the order given.
       #
       # ==== Parameters
       #

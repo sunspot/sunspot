@@ -115,7 +115,7 @@ module Sunspot
     #
     def order_by(field_name, direction = nil)
       direction ||= :asc
-      @sort = [{ field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }] #TODO should support multiple order columns
+      (@sort ||= []) << { field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }
     end
 
     # 
@@ -285,7 +285,9 @@ module Sunspot
         end
       end
       if params.has_key?(:order)
-        order_by(*params[:order].split(' '))
+        for order in Array(params[:order])
+          order_by(*order.split(' '))
+        end
       end
       if params.has_key?(:page)
         paginate(params[:page], params[:per_page])

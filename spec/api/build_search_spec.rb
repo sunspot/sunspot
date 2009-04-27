@@ -163,6 +163,16 @@ describe 'Search' do
     end
   end
 
+  it 'should order by multiple columns' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:sort => [{ :average_rating_f => :descending },
+                                                                                   { :sort_title_s => :ascending }])).twice
+    session.search Post, :order => ['average_rating desc', 'sort_title asc']
+    session.search Post do
+      order_by :average_rating, :desc
+      order_by :sort_title, :asc
+    end
+  end
+
   it 'should request single field facet' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:facets => { :fields => %w(category_ids_im) }))
     session.search Post do

@@ -120,4 +120,24 @@ describe 'scoped_search' do
       end
     end
   end
+
+  describe 'multiple column ordering' do
+    before do
+      Sunspot.remove_all
+      @posts = [
+        Post.new(:ratings_average => 2, :title => 'banana'),
+        Post.new(:ratings_average => 2, :title => 'eggplant'),
+        Post.new(:ratings_average => 1, :title => 'apple')
+      ].each { |post| Sunspot.index(post) }
+      Sunspot.commit
+    end
+
+    it 'should order with precedence given' do
+      search = Sunspot.search(Post) do
+        order_by :average_rating, :desc
+        order_by :sort_title, :asc
+      end
+      search.results.should == @posts
+    end
+  end
 end

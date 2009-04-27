@@ -1,4 +1,3 @@
-* Support multiple order fields
 * Add boolean field type
 * Give access to result IDs without instantiation
 * Switch to RSolr
