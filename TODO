@@ -1,4 +1,3 @@
-* Remove search builder
 * Implement :using option for attribute fields
 * Support external evaluation of virtual fields
 * Support multiple order fields

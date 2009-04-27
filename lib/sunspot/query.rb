@@ -12,6 +12,7 @@ module Sunspot
     def initialize(types, params, configuration)
       @types, @configuration = types, configuration
       @rows = @configuration.pagination.default_per_page
+      apply_params(params)
     end
 
     # 
@@ -258,6 +259,36 @@ module Sunspot
             fields_hash[field_name] = field_configurations_hash.values.first
           end
         end
+      end
+    end
+
+    def apply_params(params)
+      if params.has_key?(:keywords)
+        self.keywords = params[:keywords]
+      end
+      if params.has_key?(:conditions)
+        params[:conditions].each_pair do |field_name, value|
+          begin
+            restriction_type =
+              case value
+              when Array
+                Restriction::AnyOf
+              when Range
+                Restriction::Between
+              else
+                Restriction::EqualTo
+              end
+            add_restriction(field_name, restriction_type, value)
+          rescue ArgumentError
+            # ignore fields we don't recognize
+          end
+        end
+      end
+      if params.has_key?(:order)
+        order_by(*params[:order].split(' '))
+      end
+      if params.has_key?(:page)
+        paginate(params[:page], params[:per_page])
       end
     end
   end

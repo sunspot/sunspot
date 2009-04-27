@@ -5,20 +5,12 @@ module Sunspot
   # Instances of Search are returned by the Sunspot.search method.
   #
   class Search
-    attr_reader :builder #TODO deprecated after builder removed
-
     def initialize(connection, configuration, *types, &block) #:nodoc:
       @connection = connection
       params = types.last.is_a?(Hash) ? types.pop : {}
       @query = Query.new(types, params, configuration)
-      @builder = build_with(Builder::StandardBuilder, params)
       @query.dsl.instance_eval(&block) if block
       @types = types
-    end
-
-    # TODO deprecated after builder removed
-    def build_with(builder_class, *args)
-      @query.build_with(builder_class, *args)
     end
 
     #
