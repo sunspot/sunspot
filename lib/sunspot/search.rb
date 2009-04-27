@@ -81,8 +81,11 @@ module Sunspot
     # Sunspot::Facet:: Facet object for the given field
     #
     def facet(field_name)
-      field = @query.field(field_name)
-      Facet.new(@solr_result.field_facets(field.indexed_name), field)
+      (@facets_cache ||= {})[field_name.to_sym] ||=
+        begin
+          field = @query.field(field_name)
+          Facet.new(@solr_result.field_facets(field.indexed_name), field)
+        end
     end
 
     private
