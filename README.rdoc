@@ -60,7 +60,7 @@ You can change the URL at which Sunspot accesses Solr with:
     string :author_name
     integer :blog_id
     integer :category_ids
-    float :average_rating
+    float :average_rating, :using => :ratings_average
     time :published_at
     string :sort_title do
       title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title
@@ -80,6 +80,8 @@ You can change the URL at which Sunspot accesses Solr with:
 
     paginate :page => 3, :per_page => 15
     order_by :average_rating, :desc
+
+    facet(:blog_id)
   end
 
 === Get data from search:
@@ -88,32 +90,7 @@ You can change the URL at which Sunspot accesses Solr with:
   search.total
   search.page
   search.per_page
-
-=== Build search from a hash (e.g., params) and retrieve them later:
-
-  search = Sunspot.search Post, :keywords => 'great pizza',
-                                :conditions => { :author_name => 'Mark Twain',
-                                                 :blog_id => [4, 10] },
-                                :order => 'published_at desc'
-  search.builder.keywords
-    #=> "great pizza"
-  search.builder.conditions.author_name
-    #=> "Mark Twain"
-  search.builder.params[:conditions][:blog_id]
-    #=> [4, 10]
-
-This functionality is great for building a search from user input; if you're
-building a search using business logic in your application, the block DSL
-is the way to go. Note you can mix-and-match the two:
-
-  search = Sunspot.search Post, :keywords => 'great pizza' do
-    with.blog_id 1
-  end
-
-  search.builder.keywords
-    #=> "great pizza"
-  search.builder.blog_id
-    #=> nil
+  search.facet(:blog_id)
 
 == About the API documentation
 

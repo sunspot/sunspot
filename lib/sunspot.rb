@@ -38,17 +38,27 @@ module Sunspot
     #     string :author_name
     #     integer :blog_id
     #     integer :category_ids
-    #     float :average_rating
+    #     float :average_rating, :using => :ratings_average
     #     time :published_at
     #     string :sort_title do
     #       title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title
     #     end
     #   end
     #
-    # All of the calls except for the last one will simply index the value
-    # returned by the given method. The last call is for a virtual field,
-    # which evalues the block inside the context of the instance being indexed,
-    # and indexes the value returned by the block.
+    # ====== Attribute Fields vs. Virtual Fields
+    #
+    # Attribute fields call a method on the indexed object and index the
+    # return value. All of the fields defined above except for the last one are
+    # attribute fields. By default, the field name will also be the attribute
+    # used; this can be overriden with the +:using+ option, as in
+    # +:average_rating+ above. In that case, the attribute +:ratings_average+
+    # will be indexed with the field name +:average_rating+.
+    #
+    # +:sort_title+ is a virtual field, which evaluates the block inside the
+    # context of the instance being indexed, and indexes the value returned
+    # by the block.
+    #
+    # ===== Field Types
     #
     # The available types are:
     # 
@@ -124,8 +134,7 @@ module Sunspot
       session.commit
     end
 
-    # Search for objects in the index.  +search+ provides a rich DSL for
-    # constructing queries - see Sunspot::DSL::Query for the full API.
+    # Search for objects in the index.
     #
     # ==== Parameters
     #
@@ -135,7 +144,44 @@ module Sunspot
     #
     # ==== Returns
     #
-    # Sunspot::Search:: Object containing results, facets, counts, etc.
+    # Sunspot::Search:: Object containing results, facets, count, etc.
+    #
+    # The fields available for restriction, ordering, etc. are those that meet
+    # the following criteria:
+    #
+    # * They are not of type +text+.
+    # * They are defined for all of the classes being searched
+    # * They have the same data type for all of the classes being searched
+    # * They have the same multiple flag for all of the classes being searched.
+    #
+    # The restrictions available are the constants defined in the
+    # Sunspot::Restriction class. The standard restrictions are:
+    #
+    #   with(:field_name).equal_to(value)
+    #   with(:field_name, value) # shorthand for above
+    #   with(:field_name).less_than(value)
+    #   with(:field_name).greater_than(value)
+    #   with(:field_name).between(value1..value2)
+    #   with(:field_name).any_of([value1, value2, value3])
+    #   with(:field_name).all_of([value1, value2, value3])
+    #   without(some_instance) # exclude that particular instance
+    #
+    # +without+ can be substituted for +with+, causing the restriction to be
+    # negated; in the last example above, +with+ can be used, but most likely
+    # does not make sense.
+    #
+    # ==== Example
+    #
+    #   Sunspot.search(Post) do
+    #     keywords 'great pizza'
+    #     with(:published_at).less_than Time.now
+    #     with :blog_id, 1
+    #     facet :category_ids
+    #     order_by :published_at, :desc
+    #     paginate 2, 15
+    #   end
+    #
+    # See Sunspot::DSL::Query for the full API presented inside the block.
     #
     def search(*types, &block)
       session.search(*types, &block)

@@ -4,35 +4,7 @@ module Sunspot
     # Sunspot.search method. Methods of this class are available inside the
     # search block.
     #
-    # The fields available for restriction, ordering, etc. are those that meet
-    # the following criteria:
-    #
-    # * They are defined for all of the classes being searched
-    # * They have the same data type for all of the classes being searched
-    # * They have the same multiple flag for all of the classes being searched.
-    #
-    # The restrictions available are the constants defined in the
-    # Sunspot::Restriction class. The standard restrictions are:
-    #
-    #   with(:field_name).equal_to(value)
-    #   with(:field_name, value) # shorthand for above
-    #   with(:field_name).less_than(value)
-    #   with(:field_name).greater_than(value)
-    #   with(:field_name).between(value1..value2)
-    #   with(:field_name).any_of([value1, value2, value3])
-    #   with(:field_name).all_of([value1, value2, value3])
-    #   without(some_instance) # exclude that particular instance
-    #
-    # ==== Example
-    #
-    #   Sunspot.search(Post) do
-    #     keywords 'great pizza'
-    #     with(:published_at).less_than Time.now
-    #     with :blog_id, 1
-    #     facet :category_ids
-    #     order_by :published_at, :desc
-    #     paginate 2, 15
-    #   end
+    # See Sunspot.search for usage examples
     #
     class Query
       def initialize(query) #:nodoc:

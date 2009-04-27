@@ -26,7 +26,7 @@ describe 'indexer' do
     end
 
     it 'should correctly index a float attribute field' do
-      post :average_rating => 2.23
+      post :ratings_average => 2.23
       connection.should_receive(:add).with(hash_including(:average_rating_f => '2.23'))
       session.index post
     end

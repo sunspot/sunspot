@@ -1,14 +1,14 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe 'scoped_search' do
-  def self.test_field_type(name, field, *values)
+  def self.test_field_type(name, attribute, field, *values)
     raise(ArgumentError, 'Please supply five values') unless values.length == 5
 
     context "with field of type #{name}" do
       before :all do
         Sunspot.remove_all
         @posts = values.map do |value|
-          post = Post.new(field => value)
+          post = Post.new(attribute => value)
           Sunspot.index(post)
           post
         end
@@ -85,11 +85,11 @@ describe 'scoped_search' do
     end
   end
 
-  test_field_type 'String', :title, 'apple', 'banana', 'cherry', 'date', 'eggplant'
-  test_field_type 'Integer', :blog_id, -2, 0, 3, 12, 20
-  test_field_type 'Float', :average_rating, -2.5, 0.0, 3.2, 3.5, 16.0
-  test_field_type 'Time', :published_at, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
-                                            '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
+  test_field_type 'String', :title, :title, 'apple', 'banana', 'cherry', 'date', 'eggplant'
+  test_field_type 'Integer', :blog_id, :blog_id, -2, 0, 3, 12, 20
+  test_field_type 'Float', :ratings_average, :average_rating, -2.5, 0.0, 3.2, 3.5, 16.0
+  test_field_type 'Time', :published_at, :published_at, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
+                                                           '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
 
   describe 'exclusion by identity' do
     before do

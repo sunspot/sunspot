@@ -101,13 +101,20 @@ module Sunspot
 
     #
     # AttributeFields call methods directly on indexed objects and index the
-    # return value of the method.
+    # return value of the method. By default, the field name is also the
+    # attribute that provides the value for indexing, but this can be overridden
+    # with the :using option.
     #
     class AttributeField < Base
+      def initialize(name, type, options = {})
+        @attribute_name = options.delete(:using) || name
+        super
+      end
+
       protected
 
       #
-      # Call the method named by the field name and return its value
+      # Call the field's attribute name on the given model and return the value.
       #
       # ==== Parameters
       #
@@ -118,7 +125,7 @@ module Sunspot
       # Object:: The value to index
       #
       def value_for(model)
-        model.send(name)
+        model.send(@attribute_name)
       end
     end
 
