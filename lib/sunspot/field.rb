@@ -12,7 +12,7 @@ module Sunspot
       attr_accessor :type # The Type of the field
 
       def initialize(name, type, options = {}) #:nodoc
-        @name, @type = name, type
+        @name, @type = name.to_sym, type
         @multiple = options.delete(:multiple)
         raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
       end

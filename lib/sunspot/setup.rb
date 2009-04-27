@@ -135,7 +135,7 @@ module Sunspot
       #   Setup instance associated with the given class or its nearest ancestor
       #   
       def for(clazz) #:nodoc:
-        setups[clazz.name] || self.for(clazz.superclass) if clazz
+        setups[clazz.name.to_sym] || self.for(clazz.superclass) if clazz
       end
 
       protected
@@ -152,7 +152,7 @@ module Sunspot
       # Sunspot::Setup:: New or existing setup for this class
       #
       def for!(clazz) #:nodoc:
-        setups[clazz.name] ||= new(clazz)
+        setups[clazz.name.to_sym] ||= new(clazz)
       end
 
       private

@@ -78,7 +78,7 @@ module Sunspot
         #
         def register(instance_adapter, *classes)
           for clazz in classes
-            instance_adapters[clazz.name] = instance_adapter
+            instance_adapters[clazz.name.to_sym] = instance_adapter
           end
         end
 
@@ -96,7 +96,8 @@ module Sunspot
         #
         def for(clazz) #:nodoc:
           while clazz != Object
-            return instance_adapters[clazz.name] if instance_adapters[clazz.name]
+            class_name = clazz.name.to_sym
+            return instance_adapters[class_name] if instance_adapters[class_name]
             clazz = clazz.superclass
           end
           nil
@@ -188,7 +189,7 @@ module Sunspot
         #
         def register(data_accessor, *classes)
           for clazz in classes
-            data_accessors[clazz.name] = data_accessor
+            data_accessors[clazz.name.to_sym] = data_accessor
           end
         end
 
@@ -206,7 +207,8 @@ module Sunspot
         #
         def for(clazz) #:nodoc:
           while clazz != Object
-            return data_accessors[clazz.name] if data_accessors[clazz.name]
+            class_name = clazz.name.to_sym
+            return data_accessors[class_name] if data_accessors[class_name]
             clazz = clazz.superclass
           end
         end

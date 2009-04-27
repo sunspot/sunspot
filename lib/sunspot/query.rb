@@ -199,7 +199,7 @@ module Sunspot
     #   If the given field name is not configured for the types being queried
     #
     def field(field_name)
-      fields_hash[field_name.to_s] || raise(ArgumentError, "No field configured for #{@types * ', '} with name '#{field_name}'")
+      fields_hash[field_name.to_sym] || raise(ArgumentError, "No field configured for #{@types * ', '} with name '#{field_name}'")
     end
 
     private
@@ -246,7 +246,7 @@ module Sunspot
       @fields_hash ||= begin
         fields_hash = @types.inject({}) do |hash, type|
           Setup.for(type).fields.each do |field|
-            (hash[field.name.to_s] ||= {})[type.name] = field
+            (hash[field.name.to_sym] ||= {})[type.name] = field
           end
           hash
         end
