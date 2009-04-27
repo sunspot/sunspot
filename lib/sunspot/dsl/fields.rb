@@ -1,19 +1,49 @@
 module Sunspot
   module DSL
+    # The Fields class provides a DSL for specifying field definitions in the
+    # Sunspot.setup block. As well as the #text method, which creates fulltext
+    # fields, uses #method_missing to allow definition of typed fields. The
+    # available methods are determined by the constants defined in 
+    # Sunspot::Type - in theory (though this is untested), plugin developers
+    # should be able to add support for new types simply by creating new
+    # implementations in Sunspot::Type
+    #
     class Fields
-      def initialize(setup)
+      def initialize(setup) #:nodoc:
         @setup = setup
       end
 
+      # Add a text field. Text fields are tokenized before indexing and are
+      # the only fields searched in fulltext searches. If a block is passed,
+      # create a virtual field; otherwise create an attribute field.
+      #
+      # ==== Parameters
+      #
+      # names...<Symbol>:: One or more field names
+      #
       def text(*names, &block)
         for name in names
-          @setup.add_text_fields(build_field(name, ::Sunspot::Type::TextType, &block))
+          @setup.add_text_fields(build_field(name, Type::TextType, &block))
         end
       end
 
+      # method_missing is used to provide access to typed fields, because
+      # developers should be able to add new Sunspot::Type implementations
+      # dynamically and have them recognized inside the Fields DSL. Like #text,
+      # these methods will create a VirtualField if a block is passed, or an
+      # AttributeField if not.
+      #
+      # ==== Example
+      #
+      #   Sunspot.setup(File) do
+      #     time :mtime
+      #   end
+      #
+      # The call to +time+ will create a field of type Sunspot::Types::TimeType
+      #
       def method_missing(method, *args, &block)
         begin
-          type = ::Sunspot::Type.const_get("#{method.to_s.camel_case}Type")
+          type = Type.const_get("#{method.to_s.camel_case}Type")
         rescue(NameError)
           super(method.to_sym, *args, &block) and return
         end
@@ -23,12 +53,16 @@ module Sunspot
 
       private
 
-      def build_field(name, type, *args, &block)
+      # Factory method for field instances, used by the public methods in this
+      # class. Create a VirtualField if a block is passed, or an AttributeField
+      # if not.
+      #
+      def build_field(name, type, *args, &block) #:nodoc:
         options = args.shift if args.first.is_a?(Hash)
         unless block
-          ::Sunspot::Field::AttributeField.new(name, type, options || {})
+          Field::AttributeField.new(name, type, options || {})
         else
-          ::Sunspot::Field::VirtualField.new(name, type, options || {}, &block)
+          Field::VirtualField.new(name, type, options || {}, &block)
         end
       end
     end

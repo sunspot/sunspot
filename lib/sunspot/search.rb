@@ -1,26 +1,44 @@
 module Sunspot
+  # 
+  # This class encapsulates the results of a Solr search. It provides access
+  # to search results, total result count, facets, and pagination information.
+  # Instances of Search are returned by the Sunspot.search method.
+  #
   class Search
-    attr_reader :builder
+    attr_reader :builder #TODO deprecated after builder removed
 
-    def initialize(connection, configuration, *types, &block)
+    def initialize(connection, configuration, *types, &block) #:nodoc:
       @connection = connection
       params = types.last.is_a?(Hash) ? types.pop : {}
-      @query = Sunspot::Query.new(types, params, configuration)
-      @builder = build_with(::Sunspot::Builder::StandardBuilder, params)
+      @query = Query.new(types, params, configuration)
+      @builder = build_with(Builder::StandardBuilder, params)
       @query.dsl.instance_eval(&block) if block
       @types = types
     end
 
+    # TODO deprecated after builder removed
     def build_with(builder_class, *args)
       @query.build_with(builder_class, *args)
     end
 
-    def execute!
+    #
+    # Execute the search on the Solr instance and store the results
+    #
+    def execute! #:nodoc:
       params = @query.to_params
       @solr_result = @connection.query(params.delete(:q), params)
       self
     end
 
+    # 
+    # Get the collection of results as instantiated objects. If WillPaginate is
+    # available, the results will be a WillPaginate::Collection instance; if
+    # not, it will be a vanilla Array.
+    #
+    # ==== Returns
+    #
+    # WillPaginate::Collection or Array:: Instantiated result objects
+    #
     def results
       @results ||= if @query.page && defined?(WillPaginate::Collection)
         WillPaginate::Collection.create(@query.page, @query.per_page, @solr_result.total_hits) do |pager|
@@ -31,17 +49,44 @@ module Sunspot
       end
     end
 
+    # 
+    # The total number of documents matching the query parameters
+    #
+    # ==== Returns
+    #
+    # Integer:: Total matching documents
+    #
     def total
       @total ||= @solr_result.total_hits
     end
 
+    # 
+    # Get the facet object for the given field. This field will need to have
+    # been requested as a field facet inside the search block.
+    #
+    # ==== Parameters
+    #
+    # field_name<Symbol>:: field name for which to get the facet
+    #
+    # ==== Returns
+    #
+    # Sunspot::Facet:: Facet object for the given field
+    #
     def facet(field_name)
       field = @query.field(field_name)
-      Sunspot::Facet.new(@solr_result.field_facets(field.indexed_name), field)
+      Facet.new(@solr_result.field_facets(field.indexed_name), field)
     end
 
     private
 
+    # 
+    # Collection of instantiated result objects corresponding to the results
+    # returned by Solr.
+    #
+    # ==== Returns
+    #
+    # Array:: Collection of instantiated result objects
+    #
     def result_objects
       hit_ids = @solr_result.hits.map { |hit| hit['id'] }
       hit_ids.inject({}) do |type_id_hash, hit_id|
@@ -50,15 +95,10 @@ module Sunspot
         type_id_hash
       end.inject([]) do |results, pair|
         type_name, ids = pair
-        results.concat ::Sunspot::Adapters::DataAccessor.create(type_with_name(type_name)).load_all(ids)
+        results.concat(Adapters::DataAccessor.create(Object.full_const_get(type_name)).load_all(ids))
       end.sort_by do |result|
-        hit_ids.index(::Sunspot::Adapters::InstanceAdapter.adapt(result).index_id)
+        hit_ids.index(Adapters::InstanceAdapter.adapt(result).index_id)
       end
-    end
-
-    def type_with_name(type_name)
-      @types_cache ||= {}
-      @types_cache[type_name] ||= type_name.split('::').inject(Module) { |namespace, name| namespace.const_get(name) }
     end
   end
 end

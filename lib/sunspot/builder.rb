@@ -59,7 +59,7 @@ module Sunspot
       end
 
       def conditions
-        ::Sunspot::Util::ClosedStruct.new(params[:conditions])
+        Util::ClosedStruct.new(params[:conditions])
       end
 
       def order

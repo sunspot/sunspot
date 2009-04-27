@@ -32,6 +32,14 @@ describe 'retrieving search' do
     session.search(Post, :page => 1).total.should == 4
   end
 
+  it 'should return field name for facet' do
+    stub_facet(:title_s, {})
+    result = session.search Post do
+      facet :title
+    end
+    result.facet(:title).field_name.should == :title
+  end
+
   it 'should return string facet' do
     stub_facet(:title_s, 'Author 1' => 2, 'Author 2' => 1)
     result = session.search Post do

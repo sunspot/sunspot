@@ -1,9 +1,23 @@
 module Sunspot
-  class Indexer
+  # 
+  # This class presents a service for adding, updating, and removing data
+  # from the Solr index. An Indexer instance is associated with a particular
+  # setup, and thus is capable of indexing instances of a certain class (and its
+  # subclasses).
+  #
+  class Indexer #:nodoc:
     def initialize(connection, setup)
       @connection, @setup = connection, setup
     end
 
+    # 
+    # Construct a representation of the model for indexing and send it to the
+    # connection for indexing
+    #
+    # ==== Parameters
+    #
+    # model<Object>:: the model to index
+    #
     def add(model)
       hash = static_hash_for(model)
       for field in @setup.all_fields
@@ -12,26 +26,42 @@ module Sunspot
       @connection.add(hash)
     end
 
+    # 
+    # Remove the given model from the Solr index
+    #
     def remove(model)
-      @connection.delete(::Sunspot::Adapters::InstanceAdapter.adapt(model).index_id)
+      @connection.delete(Adapters::InstanceAdapter.adapt(model).index_id)
+    end
+
+    # 
+    # Delete all documents of the class indexed by this indexer from Solr.
+    #
+    def remove_all
+      @connection.delete_by_query("type:#{@setup.clazz.name}")
     end
 
     protected
 
+    # 
+    # All indexed documents index and store the +id+ and +type+ fields.
+    # This method constructs the document hash containing those key-value
+    # pairs.
+    #
     def static_hash_for(model)
-      { :id => ::Sunspot::Adapters::InstanceAdapter.adapt(model).index_id,
-        :type => Indexer.superclasses_for(model.class).map { |clazz| clazz.name }}
+      { :id => Adapters::InstanceAdapter.adapt(model).index_id,
+        :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }}
     end
 
     class <<self
-      def remove_all(connection, clazz = nil)
-        connection.delete_by_query("type:#{clazz ? clazz.name : '[* TO *]'}")
-      end
-
-      def superclasses_for(clazz)
-        superclasses_for = [clazz]
-        superclasses_for << (clazz = clazz.superclass) while clazz.superclass != Object
-        superclasses_for
+      # 
+      # Delete all documents from the Solr index
+      #
+      # ==== Parameters
+      #
+      # connection<Solr::Connection>::
+      #   connection to which to send the delete request
+      def remove_all(connection)
+        connection.delete_by_query("type:[* TO *]")
       end
     end
   end

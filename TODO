@@ -1,3 +1,10 @@
-* Use autoload rather than loading everything at the outset
-* Query-based faceting (?)
+* Restriction objects aware of whether they are negative; always call #to_params
+* Query objects store an undifferentiated collection of components
+* Remove search builder
+* Implement :using option for attribute fields
+* Support external evaluation of virtual fields
+* Support multiple order fields
+* Give access to result IDs without instantiation
 * Switch to RSolr
+* Query-based faceting (?)
+* ActiveRecord, DataMapper, File adapters

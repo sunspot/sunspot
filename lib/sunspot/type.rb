@@ -1,65 +1,102 @@
 module Sunspot
+  # 
+  # This module contains singleton objects that represent the types that can be
+  # indexed and searched using Sunspot. Plugin developers should be able to
+  # add new constants to the Type module; as long as they implement the
+  # appropriate methods, Sunspot should be able to integrate them (note that
+  # this capability is untested at the moment). The required methods are:
+  #
+  # +indexed_name+::
+  #   Convert a given field name into its form as stored in Solr. This
+  #   generally means adding a suffix to match a Solr dynamicField definition.
+  # +to_indexed+::
+  #   Convert a value of this type into the appropriate Solr string
+  #   representation.
+  # +cast+::
+  #   Convert a Solr string representation of a value into the appropriate
+  #   Ruby type.
+  #
   module Type
+    # 
+    # Text is a special type that stores data for fulltext search. Unlike other
+    # types, Text fields are tokenized and are made available to the keyword
+    # search phrase. Text fields cannot be faceted, ordered upon, or used in
+    # restrictions. Similarly, text fields are the only fields that are made
+    # available to keyword search.
+    #
     module TextType
       class <<self
-        def indexed_name(name)
+        def indexed_name(name) #:nodoc:
         "#{name}_text"
         end
 
-        def to_indexed(value)
+        def to_indexed(value) #:nodoc:
           value.to_s if value
         end
       end
     end
 
+    # 
+    # The String type represents string data.
+    #
     module StringType
       class <<self
-        def indexed_name(name)
+        def indexed_name(name) #:nodoc:
         "#{name}_s"
         end
 
-        def to_indexed(value)
+        def to_indexed(value) #:nodoc:
           value.to_s if value
         end
 
-        def cast(string)
+        def cast(string) #:nodoc:
           string
         end
       end
     end
 
+    # 
+    # The Integer type represents integers.
+    #
     module IntegerType
       class <<self
-        def indexed_name(name)
+        def indexed_name(name) #:nodoc:
         "#{name}_i"
         end
 
-        def to_indexed(value)
+        def to_indexed(value) #:nodoc:
           value.to_i.to_s if value
         end
 
-        def cast(string)
+        def cast(string) #:nodoc:
           string.to_i
         end
       end
     end
 
+    # 
+    # The Float type represents floating-point numbers.
+    #
     module FloatType
       class <<self
-        def indexed_name(name)
+        def indexed_name(name) #:nodoc:
         "#{name}_f"
         end
 
-        def to_indexed(value)
+        def to_indexed(value) #:nodoc:
           value.to_f.to_s if value
         end
 
-        def cast(string)
+        def cast(string) #:nodoc:
           string.to_f
         end
       end
     end
 
+    # 
+    # The time type represents times. Note that times are always converted to
+    # UTC before indexing, and facets of Time fields always return times in UTC.
+    #
     module TimeType
       class <<self
         def indexed_name(name)
