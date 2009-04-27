@@ -27,6 +27,15 @@ describe 'retrieving search' do
     end
   end
 
+  it 'should return raw results without loading instances' do
+    post_1, post_2 = Array.new(2) { Post.new }
+    stub_results(post_1, post_2)
+    %w(load load_all).each { |message| MockAdapter::DataAccessor.should_not_receive(message) }
+    session.search(Post, :page => 1).raw_results.map do |raw_result|
+      [raw_result.class_name, raw_result.primary_key]
+    end.should == [['Post', post_1.id.to_s], ['Post', post_2.id.to_s]]
+  end
+
   it 'should return total' do
     stub_results(Post.new, Post.new, 4)
     session.search(Post, :page => 1).total.should == 4

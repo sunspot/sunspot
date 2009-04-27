@@ -5,6 +5,8 @@ module Sunspot
   # Instances of Search are returned by the Sunspot.search method.
   #
   class Search
+    RawResult = Struct.new(:class_name, :primary_key)
+
     def initialize(connection, configuration, *types, &block) #:nodoc:
       @connection = connection
       params = types.last.is_a?(Hash) ? types.pop : {}
@@ -39,6 +41,20 @@ module Sunspot
       else
         result_objects
       end
+    end
+
+    # 
+    # Access raw results without instantiating objects from persistent storage.
+    # This may be useful if you are using search as an intermediate step in data
+    # retrieval. Returns an ordered collection of objects that respond to
+    # #class_name and #primary_key
+    #
+    # ==== Returns
+    #
+    # Array:: Ordered collection of raw results
+    #
+    def raw_results
+      @raw_results ||= hit_ids.map { |hit_id| RawResult.new(*hit_id.match(/([^ ]+) (.+)/)[1..2]) }
     end
 
     # 
@@ -80,10 +96,8 @@ module Sunspot
     # Array:: Collection of instantiated result objects
     #
     def result_objects
-      hit_ids = @solr_result.hits.map { |hit| hit['id'] }
-      hit_ids.inject({}) do |type_id_hash, hit_id|
-        match = /([^ ]+) (.+)/.match hit_id
-        (type_id_hash[match[1]] ||= []) << match[2]
+      raw_results.inject({}) do |type_id_hash, raw_result|
+        (type_id_hash[raw_result.class_name] ||= []) << raw_result.primary_key
         type_id_hash
       end.inject([]) do |results, pair|
         type_name, ids = pair
@@ -91,6 +105,10 @@ module Sunspot
       end.sort_by do |result|
         hit_ids.index(Adapters::InstanceAdapter.adapt(result).index_id)
       end
+    end
+
+    def hit_ids
+      @hit_ids ||= @solr_result.hits.map { |hit| hit['id'] }
     end
   end
 end
