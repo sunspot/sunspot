@@ -1,5 +1,3 @@
-* Restriction objects aware of whether they are negative; always call #to_params
-* Query objects store an undifferentiated collection of components
 * Remove search builder
 * Implement :using option for attribute fields
 * Support external evaluation of virtual fields

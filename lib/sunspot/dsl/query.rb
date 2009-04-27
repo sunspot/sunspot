@@ -67,7 +67,7 @@ module Sunspot
           @negative_conditions_builder ||= DSL::Scope::implementation(@query.field_names).new(@query, true)
         else
           for instance in instances.flatten
-            @query.add_negative_scope(Restriction::SameAs.new(instance))
+            @query.add_component(Restriction::SameAs.new(instance, true))
           end
         end
       end

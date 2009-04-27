@@ -36,38 +36,45 @@ module Sunspot
       params[:sort] = @sort if @sort
       params[:start] = @start if @start
       params[:rows] = @rows if @rows
-      scope.each do |restriction|
-        Util.deep_merge!(params, restriction.to_params)
-      end
-      negative_scope.each do |restriction|
-        Util.deep_merge!(params, restriction.to_negative_params)
-      end
-      facets.each do |facet|
-        Util.deep_merge!(params, facet.to_params)
+      for component in components
+        Util.deep_merge!(params, component.to_params)
       end
       params
     end
 
     # 
-    # Add a restriction to the query's scope
+    # Add a query component
     #
     # ==== Parameters
     #
-    # restriction<Sunspot::Restriction>::  A restriction query component
+    # component<~to_params>::  A restriction query component
     #
-    def add_scope(restriction)
-      scope << restriction
+    def add_component(component)
+      components << component
     end
 
     # 
-    # Add a negative restriction to the query's scope
-    #
+    # Add instance of Sunspot::Restriction::Base to query components. This
+    # method is exposed to the DSL because the Query instance holds field
+    # definitions and is able to translate field names into full field
+    # definitions, and memoize # the result.
+    # 
     # ==== Parameters
     #
-    # restriction<Sunspot::Restriction>:: A restriction query component
+    # field_name<Symbol>:: Name of the field to which the restriction applies
+    # restriction_clazz<Class>::
+    #   Subclass of Sunspot::Restriction::Base to instantiate
+    # value<Object>::
+    #   Value against which the restriction applies (e.g. less_than(2) has a
+    #   value of 2)
+    # negative:: Whether this restriction should be negated
     #
-    def add_negative_scope(condition)
-      negative_scope << condition
+    # ==== Returns
+    #
+    # Sunspot::Restriction::Base:: Restriction instance
+    #
+    def add_restriction(field_name, restriction_clazz, value, negative = false)
+      add_component(restriction_clazz.new(field(field_name), value, negative))
     end
 
     # 
@@ -78,30 +85,7 @@ module Sunspot
     # field_name<Symbol>:: Name of the field on which to get a facet
     #
     def add_field_facet(field_name)
-      facets << Facets::FieldFacet.new(field(field_name))
-    end
-
-    # 
-    # Factory method for instances of Sunspot::Restriction::Base. This method is
-    # exposed to the DSL because the Query instance holds field definitions and
-    # is able to translate field names into full field definitions, and memoize
-    # the result.
-    # 
-    # ==== Parameters
-    #
-    # field_name<Symbol>:: Name of the field to which the restriction applies
-    # restriction_clazz<Class>::
-    #   Subclass of Sunspot::Restriction::Base to instantiate
-    # value<Object>::
-    #   Value against which the restriction applies (e.g. less_than(2) has a
-    #   value of 2)
-    #
-    # ==== Returns
-    #
-    # Sunspot::Restriction::Base:: Restriction instance
-    #
-    def build_restriction(field_name, restriction_clazz, value)
-      restriction_clazz.new(field(field_name), value)
+      add_component(Facets::FieldFacet.new(field(field_name)))
     end
 
     #
@@ -221,23 +205,10 @@ module Sunspot
 
     # ==== Returns
     #
-    # Array:: Collection of restriction objects for this query
+    # Array:: Collection of query components
     #
-    def scope
-      @scope ||= []
-    end
-
-    # XXX deprecated by future refactor
-    def negative_scope
-      @negative_scope ||= []
-    end
-
-    # ==== Returns
-    #
-    # Array:: Collection of facet objects for this query
-    #
-    def facets
-      @facets ||= []
+    def components
+      @components ||= []
     end
 
     # 

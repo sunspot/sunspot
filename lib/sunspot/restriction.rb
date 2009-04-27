@@ -27,8 +27,8 @@ module Sunspot
     # * #to_solr_conditional
     #
     class Base #:nodoc:
-      def initialize(field, value)
-        @field, @value = field, value
+      def initialize(field, value, negative = false)
+        @field, @value, @negative = field, value, negative
       end
 
       # 
@@ -43,12 +43,20 @@ module Sunspot
       # Hash:: Representation of this restriction as solr-ruby parameters
       #
       def to_params
-        { :filter_queries => [to_positive_boolean_phrase] }
+        { :filter_queries => [to_boolean_phrase] }
       end
 
-      # XXX deprecated after refactor
-      def to_negative_params
-        { :filter_queries => [to_negative_boolean_phrase] }
+      # 
+      # Return the boolean phrase associated with this restriction object.
+      # Differentiates between positive and negative boolean phrases depending
+      # on whether this restriction is negated.
+      #
+      def to_boolean_phrase
+        unless negative?
+          to_positive_boolean_phrase
+        else
+          to_negative_boolean_phrase
+        end
       end
 
       # 
@@ -82,6 +90,13 @@ module Sunspot
       end
 
       protected
+
+      # 
+      # Whether this restriction should be negated from its original meaning
+      #
+      def negative?
+        !!@negative
+      end
 
       # 
       # Return escaped Solr API representation of given value
@@ -171,8 +186,8 @@ module Sunspot
     # Result must be the exact instance given (only useful when negated).
     #
     class SameAs < Base
-      def initialize(object)
-        @object = object
+      def initialize(object, negative = false)
+        @object, @negative = object, negative
       end
 
       def to_positive_boolean_phrase
