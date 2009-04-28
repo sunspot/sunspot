@@ -96,7 +96,7 @@ module Sunspot
     # clazz<Class>:: Class setup is configured for
     #
     def clazz
-      Object.full_const_get(@class_name)
+      Util.full_const_get(@class_name)
     end
 
     protected

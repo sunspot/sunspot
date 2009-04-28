@@ -43,7 +43,7 @@ module Sunspot
       #
       def method_missing(method, *args, &block)
         begin
-          type = Type.const_get("#{method.to_s.camel_case}Type")
+          type = Type.const_get("#{Util.camel_case(method.to_s)}Type")
         rescue(NameError)
           super(method.to_sym, *args, &block) and return
         end

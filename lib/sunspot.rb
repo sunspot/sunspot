@@ -1,7 +1,5 @@
 gem 'solr-ruby'
-gem 'extlib'
 require 'solr'
-require 'extlib'
 require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(adapters restriction configuration setup field facets indexer query search facet facet_row session type util dsl).each do |filename|
@@ -20,7 +18,7 @@ end
 # may be instantiated and used (if you need to connect to multiple Solr
 # instances, for example.)
 #
-# Note that the configuration of classes for index/search (the +configure+
+# Note that the configuration of classes for index/search (the +setup+
 # method) is _not_ session-specific, but rather global.
 #
 module Sunspot

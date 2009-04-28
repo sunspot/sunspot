@@ -24,6 +24,53 @@ module Sunspot
       end
 
       # 
+      # Convert a string to snake case
+      #
+      # ==== Parameters
+      #
+      # string<String>:: String to convert to snake case
+      #
+      # ==== Returns
+      #
+      # String:: String in snake case
+      #
+      def snake_case(string)
+        string.scan(/(^|[A-Z])([^A-Z]+)/).map! { |word| word.join.downcase }.join('_')
+      end
+
+      # 
+      # Convert a string to camel case
+      #
+      # ==== Parameters
+      #
+      # string<String>:: String to convert to camel case
+      #
+      # ==== Returns
+      #
+      # String:: String in camel case
+      #
+      def camel_case(string)
+        string.split('_').map! { |word| word.capitalize }.join
+      end
+
+      # 
+      # Get a constant from a fully qualified name
+      #
+      # ==== Parameters
+      #
+      # string<String>:: The fully qualified name of a constant
+      #
+      # ==== Returns
+      #
+      # Object:: Value of constant named
+      #
+      def full_const_get(string)
+        string.split('::').inject(Object) do |context, const_name|
+          context.const_get(const_name)
+        end
+      end
+
+      # 
       # Perform a deep merge of hashes, returning the result as a new hash.
       # See #deep_merge_into for rules used to merge the hashes
       #
