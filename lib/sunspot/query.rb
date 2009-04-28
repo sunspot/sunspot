@@ -158,28 +158,6 @@ module Sunspot
     end
 
     # 
-    # The names of the fields available to this query
-    #
-    # ==== Returns
-    #
-    # Array:: Field names (as Symbol)
-    #
-    def field_names
-      fields_hash.keys
-    end
-
-    # 
-    # The fields available to this query
-    # 
-    # ==== Returns
-    #
-    # Array:: Field objects (as Sunspot::Field::Base instances)
-    #
-    def fields
-      fields_hash.values
-    end
-
-    # 
     # Get a Sunspot::Field::Base instance corresponding to the given field name
     #
     # ==== Parameters

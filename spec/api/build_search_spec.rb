@@ -54,7 +54,8 @@ describe 'Search' do
   end
 
   it 'should scope by between match with float' do
-    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[2\.0 TO 4\.0]']))
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[2\.0 TO 4\.0]'])).twice
+    session.search Post, :conditions => { :average_rating => 2.0..4.0 }
     session.search Post do
       with(:average_rating).between 2.0..4.0
     end
