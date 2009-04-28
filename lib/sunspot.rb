@@ -101,7 +101,7 @@ module Sunspot
     #
     # ==== Parameters
     #
-    # objects...<Object>:: objects to index
+    # objects...<Object>:: objects to index (may pass an array or varargs)
     #
     # ==== Example
     #
@@ -121,7 +121,7 @@ module Sunspot
     #
     # ==== Parameters
     #
-    # objects...<Object>:: objects to index
+    # objects...<Object>:: objects to index (may pass an array or varargs)
     #
     def index!(*objects)
       session.index!(*objects)
@@ -182,6 +182,14 @@ module Sunspot
     # negated. In the last example above, only +without+ works, as it does not
     # make sense to search only for an instance you already have.
     #
+    # Equality restrictions can take +nil+ as a value, which restricts the
+    # results to documents that have no value for the given field. Passing +nil+
+    # as a value to other restriction types is illegal. Thus:
+    #
+    #   with(:field_name, nil) # ok
+    #   with(:field_name).equal_to(nil) # ok
+    #   with(:field_name).less_than(nil) # bad
+    #
     # ==== Example
     #
     #   Sunspot.search(Post) do
@@ -207,7 +215,8 @@ module Sunspot
     #
     # ==== Parameters
     #
-    # objects...<Object>:: Objects to remove from the index
+    # objects...<Object>::
+    #   Objects to remove from the index (may pass an array or varargs)
     #
     # ==== Example
     #
@@ -225,7 +234,8 @@ module Sunspot
     # ==== Parameters
     #
     # classes...<Class>::
-    #   classes for which to remove all instances from the index
+    #   classes for which to remove all instances from the index (may pass an
+    #   array or varargs)
     #
     # ==== Example
     #

@@ -25,6 +25,7 @@ module Sunspot
     # See Sunspot.search
     #
     def search(*types, &block)
+      types.flatten!
       Search.new(connection, @config, *types, &block).execute!
     end
 
@@ -32,6 +33,7 @@ module Sunspot
     # See Sunspot.index
     #
     def index(*objects)
+      objects.flatten!
       for object in objects
         setup_for(object).indexer(connection).add(object)
       end
@@ -56,6 +58,7 @@ module Sunspot
     # See Sunspot.remove
     #
     def remove(*objects)
+      objects.flatten!
       for object in objects
         setup_for(object).indexer(connection).remove(object)
       end
@@ -65,6 +68,7 @@ module Sunspot
     # See Sunspot.remove_all
     #
     def remove_all(*classes)
+      classes.flatten!
       if classes.empty?
         Indexer.remove_all(connection)
       else

@@ -1,4 +1,3 @@
-* Allow restricting by nil field value
 * Facet by type
 * Dynamic fields
 * Switch to RSolr

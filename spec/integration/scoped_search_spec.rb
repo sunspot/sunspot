@@ -94,8 +94,8 @@ describe 'scoped_search' do
   describe 'Boolean field type' do
     before :all do
       Sunspot.remove_all
-      @posts = [Post.new(:featured => true), Post.new(:featured => false), Post.new].each { |post| Sunspot.index(post) }
-      Sunspot.commit
+      @posts = [Post.new(:featured => true), Post.new(:featured => false), Post.new]
+      Sunspot.index!(@posts)
     end
 
     it 'should filter by exact match for true' do
@@ -104,6 +104,22 @@ describe 'scoped_search' do
 
     it 'should filter for exact match for false' do
       Sunspot.search(Post) { with(:featured, false) }.results.should == [@posts[1]]
+    end
+  end
+
+  describe 'passing nil value to equal' do
+    before :all do
+      Sunspot.remove_all
+      @posts = [Post.new(:title => 'apple'), Post.new]
+      Sunspot.index!(@posts)
+    end
+
+    it 'should filter results without value for field' do
+      Sunspot.search(Post) { with(:title, nil) }.results.should == [@posts[1]]
+    end
+
+    it 'should exclude results without value for field' do
+      Sunspot.search(Post) { without(:title, nil) }.results.should == [@posts[0]]
     end
   end
 

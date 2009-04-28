@@ -118,7 +118,21 @@ describe 'Search' do
     end
   end
 
-  it 'should restrict by object identity' do
+  it 'should scope by empty field' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-average_rating_f:[* TO *]']))
+    session.search Post do
+      with :average_rating, nil
+    end
+  end
+
+  it 'should scope by non-empty field' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[* TO *]']))
+    session.search Post do
+      without :average_rating, nil
+    end
+  end
+
+  it 'should exclude by object identity' do
     post = Post.new
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ["-id:Post\\ #{post.id}"]))
     session.search Post do
@@ -126,7 +140,7 @@ describe 'Search' do
     end
   end
 
-  it 'should restrict multiple objects passed as varargs by object identity' do
+  it 'should exclude multiple objects passed as varargs by object identity' do
     post1, post2 = Post.new, Post.new
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ["-id:Post\\ #{post1.id}", "-id:Post\\ #{post2.id}"]))
     session.search Post do
@@ -134,7 +148,7 @@ describe 'Search' do
     end
   end
 
-  it 'should restrict multiple objects passed as array by object identity' do
+  it 'should exclude multiple objects passed as array by object identity' do
     posts = [Post.new, Post.new]
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ["-id:Post\\ #{posts.first.id}", "-id:Post\\ #{posts.last.id}"]))
     session.search Post do

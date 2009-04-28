@@ -116,9 +116,26 @@ module Sunspot
     end
 
     # 
-    # Results must have field with value equal to given value
+    # Results must have field with value equal to given value. If the value
+    # is nil, results must have no value for the given field.
     #
     class EqualTo < Base
+      def to_positive_boolean_phrase
+        unless @value.nil?
+          super
+        else
+          "-#{@field.indexed_name}:[* TO *]"
+        end
+      end
+
+      def to_negative_boolean_phrase
+        unless @value.nil?
+          super
+        else
+          "#{@field.indexed_name}:[* TO *]"
+        end
+      end
+
       private
 
       def to_solr_conditional
