@@ -1,5 +1,7 @@
+=== 0.8 ===
 * Facet by type
 * Dynamic fields
+* ActiveRecord, DataMapper, File adapters
+=== 0.9 ===
 * Switch to RSolr
 * Query-based faceting (?)
-* ActiveRecord, DataMapper, File adapters

@@ -90,6 +90,12 @@ describe 'retrieving search' do
                                                    Time.gm(2009, 04, 07, 20, 26, 19)]
   end
 
+  it 'should return boolean facet' do
+    stub_facet(:featured_b, 'true' => 3, 'false' => 1)
+    result = session.search(Post) { facet(:featured) }
+    facet_values(result, :featured).should == [true, false]
+  end
+
   private
 
   def stub_results(*results)

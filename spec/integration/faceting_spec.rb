@@ -35,4 +35,5 @@ describe 'search faceting' do
   test_field_type('Float', :ratings_average, :average_rating, 2.2, 1.1)
   test_field_type('Time', :published_at, :published_at, Time.mktime(2008, 02, 17, 17, 45, 04),
                                                         Time.mktime(2008, 07, 02, 03, 56, 22))
+  test_field_type('Boolean', :featured, :featured, true, false)
 end
