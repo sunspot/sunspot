@@ -147,17 +147,14 @@ module Sunspot
     end
 
     # 
-    # XXX Will be deprecated when builder is removed
+    # Get a DSL instance for building this query.
+    #
+    # ==== Returns
+    #
+    # Sunspot::DSL::Query:: DSL instance
     #
     def dsl
       @dsl ||= DSL::Query.new(self)
-    end
-
-    # 
-    # XXX Will be deprecated when builder is removed
-    #
-    def build_with(builder_class, *args)
-      builder_class.new(dsl, @types, fields_hash.keys, *args)
     end
 
     # 
@@ -199,7 +196,7 @@ module Sunspot
     #   If the given field name is not configured for the types being queried
     #
     def field(field_name)
-      fields_hash[field_name.to_sym] || raise(ArgumentError, "No field configured for #{@types * ', '} with name '#{field_name}'")
+      fields_hash[field_name.to_sym] || raise(UnrecognizedFieldError, "No field configured for #{@types * ', '} with name '#{field_name}'")
     end
 
     private
@@ -279,7 +276,7 @@ module Sunspot
                 Restriction::EqualTo
               end
             add_restriction(field_name, restriction_type, value)
-          rescue ArgumentError
+          rescue UnrecognizedFieldError
             # ignore fields we don't recognize
           end
         end

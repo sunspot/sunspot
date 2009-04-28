@@ -16,59 +16,59 @@ describe 'scoped_search' do
       end
 
       it 'should filter by exact match' do
-        Sunspot.search(Post) { with.send(field, values[2]) }.results.should == [@posts[2]]
+        Sunspot.search(Post) { with(field, values[2]) }.results.should == [@posts[2]]
       end
 
       it 'should reject by inexact match' do
-        results = Sunspot.search(Post) { without.send(field, values[2]) }.results
+        results = Sunspot.search(Post) { without(field, values[2]) }.results
         [0, 1, 3, 4].each { |i| results.should include(@posts[i]) }
         results.should_not include(@posts[2])
       end
 
       it 'should filter by less than' do
-        results = Sunspot.search(Post) { with.send(field).less_than values[2] }.results
+        results = Sunspot.search(Post) { with(field).less_than values[2] }.results
         (0..2).each { |i| results.should include(@posts[i]) }
         (3..4).each { |i| results.should_not include(@posts[i]) }
       end
 
       it 'should reject by less than' do
-        results = Sunspot.search(Post) { without.send(field).less_than values[2] }.results
+        results = Sunspot.search(Post) { without(field).less_than values[2] }.results
         (0..2).each { |i| results.should_not include(@posts[i]) }
         (3..4).each { |i| results.should include(@posts[i]) }
       end
 
       it 'should filter by greater than' do
-        results = Sunspot.search(Post) { with.send(field).greater_than values[2] }.results
+        results = Sunspot.search(Post) { with(field).greater_than values[2] }.results
         (2..4).each { |i| results.should include(@posts[i]) }
         (0..1).each { |i| results.should_not include(@posts[i]) }
       end
 
       it 'should reject by greater than' do
-        results = Sunspot.search(Post) { without.send(field).greater_than values[2] }.results
+        results = Sunspot.search(Post) { without(field).greater_than values[2] }.results
         (2..4).each { |i| results.should_not include(@posts[i]) }
         (0..1).each { |i| results.should include(@posts[i]) }
       end
 
       it 'should filter by between' do
-        results = Sunspot.search(Post) { with.send(field).between(values[1]..values[3]) }.results
+        results = Sunspot.search(Post) { with(field).between(values[1]..values[3]) }.results
         (1..3).each { |i| results.should include(@posts[i]) }
         [0, 4].each { |i| results.should_not include(@posts[i]) }
       end
 
       it 'should reject by between' do
-        results = Sunspot.search(Post) { without.send(field).between(values[1]..values[3]) }.results
+        results = Sunspot.search(Post) { without(field).between(values[1]..values[3]) }.results
         (1..3).each { |i| results.should_not include(@posts[i]) }
         [0, 4].each { |i| results.should include(@posts[i]) }
       end
 
       it 'should filter by any of' do
-        results = Sunspot.search(Post) { with.send(field).any_of(values.values_at(1, 3)) }.results
+        results = Sunspot.search(Post) { with(field).any_of(values.values_at(1, 3)) }.results
         [1, 3].each { |i| results.should include(@posts[i]) }
         [0, 2, 4].each { |i| results.should_not include(@posts[i]) }
       end
 
       it 'should reject by any of' do
-        results = Sunspot.search(Post) { without.send(field).any_of(values.values_at(1, 3)) }.results
+        results = Sunspot.search(Post) { without(field).any_of(values.values_at(1, 3)) }.results
         [1, 3].each { |i| results.should_not include(@posts[i]) }
         [0, 2, 4].each { |i| results.should include(@posts[i]) }
       end
@@ -94,12 +94,16 @@ describe 'scoped_search' do
   describe 'Boolean field type' do
     before :all do
       Sunspot.remove_all
-      @posts = [Post.new(:featured => true), Post.new(:featured => false)].each { |post| Sunspot.index(post) }
+      @posts = [Post.new(:featured => true), Post.new(:featured => false), Post.new].each { |post| Sunspot.index(post) }
       Sunspot.commit
     end
 
-    it 'should filter by exact match' do
-      Sunspot.search(Post) { with.featured true }.results.should == [@posts[0]]
+    it 'should filter by exact match for true' do
+      Sunspot.search(Post) { with(:featured, true) }.results.should == [@posts[0]]
+    end
+
+    it 'should filter for exact match for false' do
+      Sunspot.search(Post) { with(:featured, false) }.results.should == [@posts[1]]
     end
   end
 

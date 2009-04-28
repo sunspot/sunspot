@@ -13,7 +13,7 @@ describe 'Search' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['title_s:My\ Pet\ Post'])).twice
     session.search Post, :conditions => { :title => 'My Pet Post' }
     session.search Post do
-      with.title 'My Pet Post'
+      with :title, 'My Pet Post'
     end
   end
 
@@ -27,7 +27,7 @@ describe 'Search' do
     time = Time.parse('1983-07-08 05:00:00 -0400')
     session.search Post, :conditions => { :published_at => time }
     session.search Post do
-      with.published_at time
+      with :published_at, time
     end
   end
   
@@ -35,28 +35,28 @@ describe 'Search' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['featured_b:false'])).twice
     session.search Post, :conditions => { :featured => false }
     session.search Post do
-      with.featured false
+      with :featured, false
     end
   end
 
   it 'should scope by less than match with float' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[* TO 3\.0]']))
     session.search Post do
-      with.average_rating.less_than 3.0
+      with(:average_rating).less_than 3.0
     end
   end
 
   it 'should scope by greater than match with float' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[3\.0 TO *]']))
     session.search Post do
-      with.average_rating.greater_than 3.0
+      with(:average_rating).greater_than 3.0
     end
   end
 
   it 'should scope by between match with float' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['average_rating_f:[2\.0 TO 4\.0]']))
     session.search Post do
-      with.average_rating.between 2.0..4.0
+      with(:average_rating).between 2.0..4.0
     end
   end
 
@@ -64,49 +64,49 @@ describe 'Search' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['category_ids_im:(2 OR 7 OR 12)'])).twice
     session.search Post, :conditions => { :category_ids => [2, 7, 12] }
     session.search Post do
-      with.category_ids.any_of [2, 7, 12]
+      with(:category_ids).any_of [2, 7, 12]
     end
   end
 
   it 'should scope by all match with integer' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['category_ids_im:(2 AND 7 AND 12)']))
     session.search Post do
-      with.category_ids.all_of [2, 7, 12]
+      with(:category_ids).all_of [2, 7, 12]
     end
   end
 
   it 'should scope by not equal match with string' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-title_s:Bad\ Post']))
     session.search Post do
-      without.title 'Bad Post'
+      without :title, 'Bad Post'
     end
   end
 
   it 'should scope by not less than match with float' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-average_rating_f:[* TO 3\.0]']))
     session.search Post do
-      without.average_rating.less_than 3.0
+      without(:average_rating).less_than 3.0
     end
   end
 
   it 'should scope by not greater than match with float' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-average_rating_f:[3\.0 TO *]']))
     session.search Post do
-      without.average_rating.greater_than 3.0
+      without(:average_rating).greater_than 3.0
     end
   end
 
   it 'should scope by not between match with float' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-average_rating_f:[2\.0 TO 4\.0]']))
     session.search Post do
-      without.average_rating.between 2.0..4.0
+      without(:average_rating).between 2.0..4.0
     end
   end
 
   it 'should scope by not any match with integer' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-category_ids_im:(2 OR 7 OR 12)']))
     session.search Post do
-      without.category_ids.any_of [2, 7, 12]
+      without(:category_ids).any_of [2, 7, 12]
     end
   end
 
@@ -114,7 +114,7 @@ describe 'Search' do
   it 'should scope by not all match with integer' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['-category_ids_im:(2 AND 7 AND 12)']))
     session.search Post do
-      without.category_ids.all_of [2, 7, 12]
+      without(:category_ids).all_of [2, 7, 12]
     end
   end
 
@@ -205,24 +205,24 @@ describe 'Search' do
     time = Time.parse('1983-07-08 05:00:00 -0400')
     session.search Post, Comment, :conditions => { :published_at => time }
     session.search Post, Comment do
-      with.published_at time
+      with :published_at, time
     end
   end
 
-  it 'should raise NoMethodError if search scoped to field not common to all types' do
+  it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field not common to all types' do
     lambda do
       session.search Post, Comment do
-        with.blog_id 1
+        with :blog_id, 1
       end
-    end.should raise_error(NoMethodError)
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
-  it 'should raise NoMethodError if search scoped to field configured differently between types' do
+  it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field configured differently between types' do
     lambda do
       session.search Post, Comment do
-        with.average_rating 2.2 # this is a float in Post but an integer in Comment
+        with :average_rating, 2.2 # this is a float in Post but an integer in Comment
       end
-    end.should raise_error(NoMethodError)
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'should ignore condition if field is not common to all types' do
@@ -230,26 +230,18 @@ describe 'Search' do
     session.search Post, Comment, :conditions => { :blog_id => 1 }
   end
 
-  it 'should raise an NoMethodError for nonexistant fields in block scope' do
+  it 'should raise Sunspot::UnrecognizedFieldError for nonexistant fields in block scope' do
     lambda do
       session.search Post do
-        with.bogus 'Field'
+        with :bogus, 'Field'
       end
-    end.should raise_error(NoMethodError)
-  end
-
-  it 'should raise NoMethodError if bogus field scoped' do
-    lambda do
-      session.search Post do
-        with.bogus.equal_to :field
-      end
-    end.should raise_error(NoMethodError)
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'should raise NoMethodError if bogus operator referenced' do
     lambda do
       session.search Post do
-        with.category_ids.resembling :bogus_condition
+        with(:category_ids).resembling :bogus_condition
       end
     end.should raise_error(NoMethodError)
   end
@@ -270,10 +262,10 @@ describe 'Search' do
     end.should raise_error(ArgumentError)
   end
 
-  it 'should raise ArgumentError if more than one argument passed to scope method' do
+  it 'should raise ArgumentError if more than two arguments passed to scope method' do
     lambda do
       session.search Post do
-        with.category_ids 4, 5
+        with(:category_ids, 4, 5)
       end
     end.should raise_error(ArgumentError)
   end

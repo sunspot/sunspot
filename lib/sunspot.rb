@@ -24,6 +24,9 @@ end
 # method) is _not_ session-specific, but rather global.
 #
 module Sunspot
+  UnrecognizedFieldError = Class.new(Exception)
+  UnrecognizedRestrictionError = Class.new(Exception)
+
   class <<self
     # Configures indexing and search for a given class.
     #
@@ -176,8 +179,8 @@ module Sunspot
     #   without(some_instance) # exclude that particular instance
     #
     # +without+ can be substituted for +with+, causing the restriction to be
-    # negated; in the last example above, +with+ can be used, but most likely
-    # does not make sense.
+    # negated. In the last example above, only +without+ works, as it does not
+    # make sense to search only for an instance you already have.
     #
     # ==== Example
     #
@@ -185,6 +188,7 @@ module Sunspot
     #     keywords 'great pizza'
     #     with(:published_at).less_than Time.now
     #     with :blog_id, 1
+    #     without current_post
     #     facet :category_ids
     #     order_by :published_at, :desc
     #     paginate 2, 15

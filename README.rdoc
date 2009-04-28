@@ -67,22 +67,26 @@ You can change the URL at which Sunspot accesses Solr with:
     end
   end
 
+See Sunspot.setup for more information.
+
 === Search for objects:
   
   search = Sunspot.search Post do
     keywords 'great pizza'
-    with.author_name 'Mark Twain'
-    with.blog_id.any_of [2, 14]
-    with.category_ids.all_of [4, 10]
-    with.published_at.less_than Time.now
-    without.title 'Bad Title'
+    with :author_name, 'Mark Twain'
+    with(:blog_id).any_of [2, 14]
+    with(:category_ids).all_of [4, 10]
+    with(:published_at).less_than Time.now
+    without :title, 'Bad Title'
     without bad_instance # specifically exclude this instance from results
 
     paginate :page => 3, :per_page => 15
     order_by :average_rating, :desc
 
-    facet(:blog_id)
+    facet :blog_id
   end
+
+See Sunspot.search for more information.
 
 === Get data from search:
 
