@@ -11,7 +11,6 @@ begin
     s.authors = ['Mat Brown']
     s.files = FileList['[A-Z]*', '{bin,lib,spec,tasks}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/conf/*', 'solr/start.jar']
     s.add_dependency 'solr-ruby', '>= 0.0.6'
-    s.add_dependency 'extlib', '>= 0.9.10'
     s.add_development_dependency 'rspec', '~> 1.1'
     s.add_development_dependency 'ruby-debug', '~> 0.10'
   end

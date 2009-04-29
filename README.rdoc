@@ -104,11 +104,10 @@ code, but excluded from the RDoc. If you find yourself needing to access methods
 that are not part of the public API in order to do what you need, please contact
 me so I can rectify the situation!
 
-== Requirements
+== Dependencies
 
-1. extlib
-2. solr-ruby
-3. Java
+1. solr-ruby
+2. Java
 
 == Further Reading
 
