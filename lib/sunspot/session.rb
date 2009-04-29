@@ -19,6 +19,7 @@ module Sunspot
       @config = config
       yield(@config) if block_given?
       @connection = connection
+      @updates = 0
     end
 
     #
@@ -34,6 +35,7 @@ module Sunspot
     #
     def index(*objects)
       objects.flatten!
+      @updates += objects.length
       for object in objects
         setup_for(object).indexer(connection).add(object)
       end
@@ -51,6 +53,7 @@ module Sunspot
     # See Sunspot.commit!
     #
     def commit
+      @updates = 0
       connection.commit
     end
 
@@ -59,6 +62,7 @@ module Sunspot
     #
     def remove(*objects)
       objects.flatten!
+      @updates += objects.length
       for object in objects
         setup_for(object).indexer(connection).remove(object)
       end
@@ -70,12 +74,28 @@ module Sunspot
     def remove_all(*classes)
       classes.flatten!
       if classes.empty?
+        @updates += 1
         Indexer.remove_all(connection)
       else
+        @updates += classes.length
         for clazz in classes
           Setup.for(clazz).indexer(connection).remove_all
         end
       end
+    end
+
+    # 
+    # See Sunspot.dirty?
+    #
+    def dirty?
+      @updates > 0
+    end
+
+    # 
+    # See Sunspot.commit_if_dirty
+    #
+    def commit_if_dirty
+      commit if dirty?
     end
 
     private

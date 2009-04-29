@@ -46,6 +46,56 @@ describe 'Session' do
     end
   end
 
+  context 'dirty sessions' do
+    before :each do
+      connection.stub!(:add)
+      connection.stub!(:commit)
+      Solr::Connection.stub!(:new).and_return(connection)
+      @session = Sunspot::Session.new
+    end
+
+    it 'should start out not dirty' do
+      @session.dirty?.should be_false
+    end
+
+    it 'should be dirty after adding an item' do
+      @session.index(Post.new)
+      @session.dirty?.should be_true
+    end
+
+    it 'should be dirty after deleting an item' do
+      @session.remove(Post.new)
+      @session.dirty?.should be_true
+    end
+
+    it 'should be dirty after a remove_all for a class' do
+      @session.remove_all(Post)
+      @session.dirty?.should be_true
+    end
+
+    it 'should be dirty after a global remove_all' do
+      @session.remove_all
+      @session.dirty?.should be_true
+    end
+
+    it 'should not be dirty after a commit' do
+      @session.index(Post.new)
+      @session.commit
+      @session.dirty?.should be_false
+    end
+
+    it 'should not commit when commit_if_dirty called on clean session' do
+      connection.should_not_receive(:commit)
+      @session.commit_if_dirty
+    end
+
+    it 'should commit when commit_if_dirty called on dirty session' do
+      connection.should_receive(:commit)
+      @session.index(Post.new)
+      @session.commit_if_dirty
+    end
+  end
+
   def connection
     @connection ||= mock('Connection').as_null_object
   end

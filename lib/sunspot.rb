@@ -243,6 +243,25 @@ module Sunspot
       session.remove_all(*classes)
     end
 
+    #
+    # True if documents have been added, updated, or removed since the last
+    # commit.
+    #
+    # ==== Returns
+    #
+    # Boolean:: Whether there have been any updates since the last commit
+    #
+    def dirty?
+      session.dirty?
+    end
+
+    # 
+    # Sends a commit if the session is dirty (see #dirty?).
+    #
+    def commit_if_dirty
+      session.commit_if_dirty
+    end
+    
     # Returns the configuration associated with the singleton session. See
     # Sunspot::Configuration for details.
     #
