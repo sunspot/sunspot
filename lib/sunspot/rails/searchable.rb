@@ -14,6 +14,10 @@ module Sunspot
 
           Sunspot.setup(self, &block)
         end
+
+        def searchable?
+          false
+        end
       end
 
       module ClassMethods
@@ -33,6 +37,26 @@ module Sunspot
         def remove_all_from_index!
           Sunspot.remove_all(self)
           Sunspot.commit
+        end
+
+        def index_orphans
+          indexed_ids = search_ids.to_set
+          all(:select => 'id').each do |object|
+            indexed_ids.delete(object.id)
+          end
+          indexed_ids.to_a
+        end
+
+        def clean_index_orphans
+          index_orphans.each do |id|
+            new do |fake_instance|
+              fake_instance.id = id
+            end.remove_from_index
+          end
+        end
+
+        def searchable?
+          true
         end
       end
 

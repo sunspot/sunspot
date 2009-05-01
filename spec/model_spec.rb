@@ -115,4 +115,40 @@ describe 'ActiveRecord mixin' do
       Post.search_ids.to_set.should == @posts.map { |post| post.id }.to_set
     end
   end
+  
+  describe 'searchable?()' do
+    it 'should not be true for models that have not been configured for search' do
+      Blog.should_not be_searchable
+    end
+
+    it 'should be true for models that have been configured for search' do
+      Post.should be_searchable
+    end
+  end
+
+  describe 'index_orphans()' do
+    before :each do
+      @posts = Array.new(2) { Post.create }.each { |post| post.index }
+      Sunspot.commit
+      @posts.first.destroy
+    end
+
+    it 'should return IDs of objects that are in the index but not the database' do
+      Post.index_orphans.should == [@posts.first.id]
+    end
+  end
+
+  describe 'clean_index_orphans()' do
+    before :each do
+      @posts = Array.new(2) { Post.create }.each { |post| post.index }
+      Sunspot.commit
+      @posts.first.destroy
+    end
+
+    it 'should remove orphans from the index' do
+      Post.clean_index_orphans
+      Sunspot.commit
+      Post.search.results.should == [@posts.last]
+    end
+  end
 end
