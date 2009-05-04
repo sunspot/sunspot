@@ -8,11 +8,23 @@ module Sunspot
       end
 
       module ActsAsMethods
-        def searchable(&block)
+        def searchable(options = {}, &block)
           extend ClassMethods
           include InstanceMethods
 
           Sunspot.setup(self, &block)
+
+          unless options[:auto_index] == false
+            after_save do |searchable|
+              searchable.index
+            end
+          end
+
+          unless options[:auto_remove] == false
+            after_destroy do |searchable|
+              searchable.remove_from_index
+            end
+          end
         end
 
         def searchable?
