@@ -1,0 +1,4 @@
+test:
+  solr:
+    hostname: localhost
+    port: 8980

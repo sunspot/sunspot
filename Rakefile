@@ -18,3 +18,11 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+task :environment do
+  ENV['RAILS_ROOT'] ||= File.join(File.dirname(__FILE__), 'spec', 'mock_app')
+  ENV['RAILS_ENV'] ||= 'test'
+  require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'))
+end
+
+FileList['tasks/*.rake'].each { |file| load(file) }
