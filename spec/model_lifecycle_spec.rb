@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'searchable with lifecycle' do
   describe 'on create' do
     before :each do
