@@ -39,6 +39,19 @@ module Sunspot
           Sunspot.commit
         end
 
+        def reindex(batch = nil)
+          remove_all_from_index
+          unless batch
+            Sunspot.index(all)
+          else
+            offset = 0
+            while(offset < count)
+              Sunspot.index(all(:offset => offset, :limit => batch))
+              offset += batch
+            end
+          end
+        end
+
         def index_orphans
           indexed_ids = search_ids.to_set
           all(:select => 'id').each do |object|

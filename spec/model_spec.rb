@@ -151,4 +151,31 @@ describe 'ActiveRecord mixin' do
       Post.search.results.should == [@posts.last]
     end
   end
+
+  describe 'reindex()' do
+    before :each do
+      @posts = Array.new(2) { Post.create }
+    end
+
+    it 'should index all instances' do
+      Post.reindex
+      Sunspot.commit
+      Post.search.results.to_set.should == @posts.to_set
+    end
+
+    it 'should index with a batch size' do
+      Post.reindex(1)
+      Sunspot.commit
+      Post.search.results.to_set.should == @posts.to_set
+    end
+
+    it 'should remove all currently indexed instances' do
+      old_post = Post.create!
+      old_post.index!
+      old_post.destroy
+      Post.reindex
+      Sunspot.commit
+      Post.search.results.to_set.should == @posts.to_set
+    end
+  end
 end
