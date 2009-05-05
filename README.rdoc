@@ -14,6 +14,8 @@ provides the following features:
 * Provide rake tasks for starting and stopping the development Solr instance,
   using the configuration in sunspot.yml
 
+Sunspot::Rails has been tested with Rails versions 2.1, 2.2, and 2.3
+
 === Installation
 
 First, install the Sunspot and Sunspot::Rails gems:
@@ -22,8 +24,12 @@ First, install the Sunspot and Sunspot::Rails gems:
 
 In your project's <code>config/environment.rb</code>, add the following gem dependencies:
 
-  config.gem 'outoftime-sunspot', :lib => 'sunspot'
   config.gem 'outoftime-sunspot_rails', :lib => 'sunspot/rails'
+
+If you are using an older version of Rails that doesn't support plugins-as-gems,
+use:
+
+  script/plugin install git://github.com/outoftime/sunspot_rails.git
 
 Create the file <code>config/sunspot.yml</code> and set it up for your environments. Here is a sample:
 
