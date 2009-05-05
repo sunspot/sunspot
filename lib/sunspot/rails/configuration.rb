@@ -1,8 +1,31 @@
-module Sunspot
-  module Rails
+module Sunspot #:nodoc:
+  module Rails #:nodoc:
+    # 
+    # Sunspot::Rails is configured via the config/sunspot.yml file, which
+    # contains properties keyed by environment name. A sample sunspot.yml file
+    # would look like:
+    # 
+    #   development:
+    #     solr:
+    #       hostname: localhost
+    #       port: 8982
+    #   test:
+    #     solr:
+    #       hostname: localhost
+    #       port: 8983
+    #
+    # Sunspot::Rails uses the configuration to set up the Solr connection, as
+    # well as for starting Solr with the appropriate port using the
+    # +rake sunspot:solr:start+ task.
+    #
     class Configuration
-      attr_writer :hostname, :port
-
+      # 
+      # The host name at which to connect to Solr. Default 'localhost'.
+      #
+      # ==== Returns
+      #
+      # String:: host name
+      #
       def hostname
         @hostname ||= 
           if user_configuration.has_key?('solr')
@@ -10,6 +33,13 @@ module Sunspot
           end || 'localhost'
       end
 
+      # 
+      # The port at which to connect to Solr. Default 8983.
+      #
+      # ==== Returns
+      #
+      # Integer:: port
+      #
       def port
         @port ||=
           if user_configuration.has_key?('solr')
@@ -19,6 +49,14 @@ module Sunspot
 
       private
 
+      # 
+      # Memoized hash of configuration options for the current Rails environment
+      # as specified in config/sunspot.yml
+      #
+      # ==== Returns
+      #
+      # Hash:: configuration options for current environment
+      #
       def user_configuration
         @user_configuration ||=
           begin

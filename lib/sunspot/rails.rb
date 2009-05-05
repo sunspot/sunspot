@@ -1,5 +1,5 @@
-module Sunspot
-  module Rails
+module Sunspot #:nodoc:
+  module Rails #:nodoc:
     class <<self
       def configuration
         @configuration ||= Sunspot::Rails::Configuration.new
