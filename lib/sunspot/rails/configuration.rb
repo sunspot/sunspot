@@ -16,7 +16,7 @@ module Sunspot #:nodoc:
     #
     # Sunspot::Rails uses the configuration to set up the Solr connection, as
     # well as for starting Solr with the appropriate port using the
-    # +rake sunspot:solr:start+ task.
+    # <code>rake sunspot:solr:start</code> task.
     #
     class Configuration
       # 

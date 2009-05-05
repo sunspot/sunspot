@@ -91,10 +91,10 @@ index whenever they are destroyed. This behavior can be disabled:
     end
   end
 
-Note that <strong>using the <code>:auto_remove</code> option is not recommended
-</strong>, as destroying an object without removing it from the index will
+Note that <b>using the <code>:auto_remove</code> option is not recommended
+</b>, as destroying an object without removing it from the index will
 create an orphaned document in the index, which is a Bad Thing. Turning off
-+:auto_index+ is perfectly safe if you prefer to manage indexing manually
+<code>:auto_index</code> is perfectly safe if you prefer to manage indexing manually
 (perhaps using a background job).
 
 If you have disabled lifecycle indexing hooks, you can invoke indexing
@@ -165,11 +165,11 @@ Be sure to check out the Sunspot documentation for all the details.
 ==== Adding search functionality in mixins
 
 Sunspot does not require that search setup for a given class happen all in one
-place; it is perfectly acceptable to call the +Sunspot.setup+ method more than
-once. This capability is particularly useful for adding search functionality
-in mixins. For instance, if you have a +Ratable+ module, you may wish to add
-additional search fields for searchable classes that mix in that module.
-For example:
+place; it is perfectly acceptable to call the <code>Sunspot.setup</code> method
+more than once. This capability is particularly useful for adding search
+functionality in mixins. For instance, if you have a +Ratable+ module, you may
+wish to add additional search fields for searchable classes that mix in that
+module. For example:
 
   module Ratable
     def self.included(base)

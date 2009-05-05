@@ -21,9 +21,9 @@ module Sunspot #:nodoc:
         # search should be defined before activating any mixins that extend
         # search configuration.
         #
-        # The block passed into this method is evaluated by the +Sunspot.setup+
-        # method. See the Sunspot documentation for complete information on
-        # the functionality provided by that method.
+        # The block passed into this method is evaluated by the
+        # <code>Sunspot.setup</code> method. See the Sunspot documentation for
+        # complete information on the functionality provided by that method.
         #
         # ==== Options (+options+)
         # 
@@ -32,8 +32,8 @@ module Sunspot #:nodoc:
         #   Default: true
         # :auto_remove<Boolean>::
         #   Automatically remove models from the Solr index when they are
-        #   destroyed. <strong>Setting this option to +false+ is not recommended
-        #   </strong>(see the README).
+        #   destroyed. <b>Setting this option to +false+ is not recommended
+        #   </b>(see the README).
         #
         # ==== Example
         #
