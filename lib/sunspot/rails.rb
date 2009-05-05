@@ -1,3 +1,5 @@
+require 'sunspot'
+
 module Sunspot #:nodoc:
   module Rails #:nodoc:
     class <<self
