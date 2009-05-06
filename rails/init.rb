@@ -1,4 +1,3 @@
-config.gem 'outoftime-sunspot', :version => '>= 0.7.2', :lib => 'sunspot'
 require 'sunspot'
 
 Sunspot.config.solr.url = URI::HTTP.build(:host => Sunspot::Rails.configuration.hostname,

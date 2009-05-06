@@ -24,6 +24,7 @@ First, install the Sunspot and Sunspot::Rails gems:
 
 In your project's <code>config/environment.rb</code>, add the following gem dependencies:
 
+  config.gem 'outoftime-sunspot', :lib => 'sunspot'
   config.gem 'outoftime-sunspot_rails', :lib => 'sunspot/rails'
 
 If you are using an older version of Rails that doesn't support plugins-as-gems,
