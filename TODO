@@ -1,6 +1,3 @@
-=== 0.7.3 ===
-* bang! form of remove, remove_all
-* Better exception handling for nonexistent adapter (etc.?)
 === 0.8 ===
 * Expose Query as part of public API
 * Facet by type

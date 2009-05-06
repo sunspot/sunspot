@@ -94,13 +94,19 @@ module Sunspot
         #
         # Class:: Subclass of InstanceAdapter, or nil if none found
         #
+        # ==== Raises
+        #
+        # Sunspot::NoAdapterError:: If no adapter is registered for this class
+        #
         def for(clazz) #:nodoc:
+          original_class_name = clazz.name
           while clazz != Object
             class_name = clazz.name.to_sym
             return instance_adapters[class_name] if instance_adapters[class_name]
             clazz = clazz.superclass
           end
-          nil
+          raise(Sunspot::NoAdapterError,
+                "No adapter is configured for #{original_class_name} or its superclasses. See the documentation for Sunspot::Adapters")
         end
 
         protected

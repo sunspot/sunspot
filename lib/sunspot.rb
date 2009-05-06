@@ -24,6 +24,8 @@ end
 module Sunspot
   UnrecognizedFieldError = Class.new(Exception)
   UnrecognizedRestrictionError = Class.new(Exception)
+  NoAdapterError = Class.new(Exception)
+  NoSetupError = Class.new(Exception)
 
   class <<self
     # Configures indexing and search for a given class.
@@ -225,9 +227,21 @@ module Sunspot
       session.remove(*objects)
     end
 
+    # 
+    # Remove objects from the index and immediately commit. See Sunspot.remove
+    #
+    # ==== Parameters
+    #
+    # objects...<Object>:: Objects to remove from the index
+    #
+    def remove!
+      session.remove!(*objects)
+    end
+
     # Remove all objects of the given classes from the index. There isn't much
     # use for this in general operations but it can be useful for maintenance,
-    # testing, etc.
+    # testing, etc. If no arguments are passed, remove everything from the
+    # index.
     #
     # ==== Parameters
     #
@@ -240,6 +254,18 @@ module Sunspot
     #   Sunspot.remove_all(Post, Blog)
     #
     def remove_all(*classes)
+      session.remove_all(*classes)
+    end
+
+    # 
+    # Remove all objects of the given classes from the index and immediately
+    # commit. See Sunspot.remove_all
+    #
+    # ==== Parameters
+    #
+    # classes...<Class>::
+    #   classes for which to remove all instances from the index
+    def remove_all!(*classes)
       session.remove_all(*classes)
     end
 

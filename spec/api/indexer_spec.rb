@@ -92,9 +92,21 @@ describe 'indexer' do
       session.remove(post)
     end
 
-    it 'should be able to remove everything from the index' do
+    it 'should remove an object from the index and immediately commit' do
+      connection.should_receive(:delete).with("Post #{post.id}").ordered
+      connection.should_receive(:commit).ordered
+      session.remove!(post)
+    end
+
+    it 'should remove everything from the index' do
       connection.should_receive(:delete_by_query).with("type:[* TO *]")
       session.remove_all
+    end
+
+    it 'should remove everything from the index and immediately commit' do
+      connection.should_receive(:delete_by_query).with("type:[* TO *]").ordered
+      connection.should_receive(:commit).ordered
+      session.remove_all!
     end
 
     it 'should be able to remove everything of a given class from the index' do
@@ -113,7 +125,7 @@ describe 'indexer' do
   end
 
   it 'should throw an ArgumentError if an attempt is made to index an object that has no configuration' do
-    lambda { session.index(Time.now) }.should raise_error(ArgumentError)
+    lambda { session.index(Time.now) }.should raise_error(Sunspot::NoSetupError)
   end
 
   it 'should throw an ArgumentError if single-value field tries to index multiple values' do
@@ -121,6 +133,10 @@ describe 'indexer' do
       Sunspot.setup(Post) { string :author_name }
       session.index(post(:author_name => ['Mat Brown', 'Matthew Brown']))
     end.should raise_error(ArgumentError)
+  end
+
+  it 'should throw a NoAdapterError if class without adapter is indexed' do
+    lambda { session.index(User.new) }.should raise_error(Sunspot::NoAdapterError)
   end
 
   private

@@ -68,6 +68,14 @@ module Sunspot
       end
     end
 
+    # 
+    # See Sunspot.remove!
+    #
+    def remove!(*objects)
+      remove(*objects)
+      commit
+    end
+
     #
     # See Sunspot.remove_all
     #
@@ -82,6 +90,14 @@ module Sunspot
           Setup.for(clazz).indexer(connection).remove_all
         end
       end
+    end
+
+    # 
+    # See Sunspot.remove_all!
+    #
+    def remove_all!(*classes)
+      remove_all(*classes)
+      commit
     end
 
     # 
@@ -112,7 +128,7 @@ module Sunspot
     # Sunspot::Setup:: The setup for the object's class
     #
     def setup_for(object)
-      Setup.for(object.class) || raise(ArgumentError, "Sunspot is not configured for #{object.class.inspect}")
+      Setup.for(object.class) || raise(NoSetupError, "Sunspot is not configured for #{object.class.inspect}")
     end
 
     # 
