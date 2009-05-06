@@ -16,7 +16,7 @@ provides the following features:
 
 Sunspot::Rails has been tested with Rails versions 2.1, 2.2, and 2.3
 
-=== Installation
+== Installation
 
 First, install the Sunspot and Sunspot::Rails gems:
 
@@ -60,9 +60,9 @@ Note that using the built-in Solr instance packaged with Sunspot is great for
 development, but is not recommended for production. See the Sunspot
 documentation for more information.
 
-=== Usage
+== Usage
 
-==== Setup
+=== Setup
 
 In order for an ActiveRecord model to be indexable and searchable, it must be
 configured for search. For example:
@@ -81,7 +81,7 @@ configured for search. For example:
 See the documentation for Sunspot.setup for full details on what can go in the
 configuration block.
 
-==== Indexing
+=== Indexing
 
 By default, models are indexed whenever they are saved, and removed from the
 index whenever they are destroyed. This behavior can be disabled:
@@ -105,7 +105,7 @@ operations directly on your model:
   post.index
   post.remove_from_index
 
-==== Committing
+=== Committing
 
 When data is changed in Solr, it is initially stored in memory and not made
 available to the currently running searcher instance. Issuing a +commit+ to Solr
@@ -125,7 +125,7 @@ available:
 When writing tests outside of the context of a controller request, you will want
 to use one of these two approaches.
 
-==== Searching
+=== Searching
 
 Do it like this:
 
@@ -140,7 +140,7 @@ See the documentation for <code>Sunspot.search</code> for all the options
 available in the search block, and the information available in the result
 block.
 
-==== Searching for IDs
+=== Searching for IDs
 
 In some situations, you may want to get the IDs for models returned by a search
 without actually loading the models out of the database. For that, you can
@@ -148,7 +148,7 @@ call +search_ids+, using the same block format as #search. This will return an
 array of IDs.
 
 
-==== Searching for multiple types
+=== Searching for multiple types
 
 Sunspot is entirely agnostic about whether searches are for one or more types;
 the only restriction is that columns used for restriction, ordering, etc. are
@@ -163,7 +163,7 @@ be added, so just use the interface provided by Sunspot:
 
 Be sure to check out the Sunspot documentation for all the details.
 
-==== Adding search functionality in mixins
+=== Adding search functionality in mixins
 
 Sunspot does not require that search setup for a given class happen all in one
 place; it is perfectly acceptable to call the <code>Sunspot.setup</code> method
@@ -190,7 +190,7 @@ The above pattern requires that the class be declared searchable before the
 module is mixed in; other patterns (such as passing a :searchable option to an
 acts_as_-style declaration) may be more flexible.
 
-==== Utility methods
+=== Utility methods
 
 If you need to completely reindex all of the instances of a given model class,
 you can issue:
@@ -204,7 +204,7 @@ remove those documents from the index, use +clean_index_orphans+. Note that
 neither of these operations should be needed if Sunspot and Sunspot::Rails are
 used as intended.
 
-=== Further Reading
+== Further Reading
 
 Reading the documentation for Sunspot[http://github.com/outoftime/sunspot] is
 highly recommended. Sunspot::Rails exists to wrap Sunspot with a Rails-friendly
@@ -213,16 +213,16 @@ implemented in Sunspot.
 
 Posts about Sunspot on my blog are available at http://outofti.me/tagged/sunspot
 
-=== Bugs
+== Bugs
 
 Please submit bug reports to
 http://outoftime.lighthouseapp.com/projects/20339-sunspot
 
-=== Contributors
+== Contributors
 
 Mat Brown <mat@patch.com>
 
-=== MIT License
+== MIT License
 
 Copyright (c) 2009 Mat Brown
 
