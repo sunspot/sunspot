@@ -9,10 +9,9 @@ module Sunspot
   class Query #:nodoc:
     attr_writer :keywords # <String> full-text keyword boolean phrase
 
-    def initialize(types, params, configuration)
+    def initialize(types, configuration) #:nodoc:
       @types, @configuration = types, configuration
       @rows = @configuration.pagination.default_per_page
-      apply_params(params)
     end
 
     # 
@@ -158,6 +157,18 @@ module Sunspot
     end
 
     # 
+    # Build the query using the DSL block passed into Sunspot.search
+    #
+    # ==== Returns
+    #
+    # Sunspot::Query:: self
+    #
+    def build(&block)
+      dsl.instance_eval(&block)
+      self
+    end
+
+    # 
     # Get a Sunspot::Field::Base instance corresponding to the given field name
     #
     # ==== Parameters
@@ -175,6 +186,39 @@ module Sunspot
     #
     def field(field_name)
       fields_hash[field_name.to_sym] || raise(UnrecognizedFieldError, "No field configured for #{@types * ', '} with name '#{field_name}'")
+    end
+
+    #TODO document
+    def options=(options) #:nodoc:
+      if options.has_key?(:keywords)
+        self.keywords = options[:keywords]
+      end
+      if options.has_key?(:conditions)
+        options[:conditions].each_pair do |field_name, value|
+          begin
+            restriction_type =
+              case value
+              when Array
+                Restriction::AnyOf
+              when Range
+                Restriction::Between
+              else
+                Restriction::EqualTo
+              end
+            add_restriction(field_name, restriction_type, value)
+          rescue UnrecognizedFieldError
+            # ignore fields we don't recognize
+          end
+        end
+      end
+      if options.has_key?(:order)
+        for order in Array(options[:order])
+          order_by(*order.split(' '))
+        end
+      end
+      if options.has_key?(:page)
+        paginate(options[:page], options[:per_page])
+      end
     end
 
     private
@@ -234,38 +278,6 @@ module Sunspot
             fields_hash[field_name] = field_configurations_hash.values.first
           end
         end
-      end
-    end
-
-    def apply_params(params)
-      if params.has_key?(:keywords)
-        self.keywords = params[:keywords]
-      end
-      if params.has_key?(:conditions)
-        params[:conditions].each_pair do |field_name, value|
-          begin
-            restriction_type =
-              case value
-              when Array
-                Restriction::AnyOf
-              when Range
-                Restriction::Between
-              else
-                Restriction::EqualTo
-              end
-            add_restriction(field_name, restriction_type, value)
-          rescue UnrecognizedFieldError
-            # ignore fields we don't recognize
-          end
-        end
-      end
-      if params.has_key?(:order)
-        for order in Array(params[:order])
-          order_by(*order.split(' '))
-        end
-      end
-      if params.has_key?(:page)
-        paginate(params[:page], params[:per_page])
       end
     end
   end

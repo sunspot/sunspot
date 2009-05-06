@@ -7,12 +7,12 @@ module Sunspot
   class Search
     RawResult = Struct.new(:class_name, :primary_key)
 
-    def initialize(connection, configuration, *types, &block) #:nodoc:
+    attr_reader :query
+
+    #XXX should types be passed in here? should we pass in a Query instance?
+    def initialize(connection, query) #:nodoc:
       @connection = connection
-      params = types.last.is_a?(Hash) ? types.pop : {}
-      @query = Query.new(types, params, configuration)
-      @query.dsl.instance_eval(&block) if block
-      @types = types
+      @query = query
     end
 
     #

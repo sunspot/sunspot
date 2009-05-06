@@ -146,6 +146,29 @@ module Sunspot
       session.commit
     end
 
+    # 
+    # Create a new Search instance, but do not execute it immediately. Generally
+    # you will want to use the #search method to execute searches using the
+    # DSL; however, if you are building searches dynamically (using the Builder
+    # pattern, for instance), it may be easier to access the Query API directly.
+    # 
+    # ==== Parameters
+    #
+    # types<Class>...::
+    #   Zero, one, or more types to search for. If no types are passed, all
+    #   configured types will be searched for.
+    #
+    # ==== Returns
+    #
+    # Sunspot::Search::
+    #   Search object, not yet executed. Query parameters can be added manually;
+    #   then #execute! should be called.
+    # 
+    def new_search(*types)
+      session.new_search(*types)
+    end
+
+
     # Search for objects in the index.
     #
     # ==== Parameters
@@ -153,6 +176,18 @@ module Sunspot
     # types<Class>...::
     #   Zero, one, or more types to search for. If no types are passed, all
     #   configured types will be searched.
+    #
+    # ==== Options (last argument, optional)
+    #
+    # :keywords<String>:: Fulltext search string
+    # :conditions<Hash>::
+    #   Hash of key-value pairs to be used as restrictions. Keys are field
+    #   names. Scalar values are used as equality restrictions; arrays are used
+    #   as "any of" restrictions; and Ranges are used as range restrictions.
+    # :order<String>:: order field and direction (e.g., 'updated_at desc')
+    # :page<Integer>:: Page to start on for pagination
+    # :per_page<Integer>::
+    #   Number of results to use per page. Ignored if :page is not specified.
     #
     # ==== Returns
     #

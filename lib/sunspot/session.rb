@@ -22,12 +22,23 @@ module Sunspot
       @updates = 0
     end
 
+    # 
+    # See Sunspot.new_search
+    #
+    def new_search(*types)
+      types.flatten!
+      Search.new(connection, Query.new(types, @config))
+    end
+
     #
     # See Sunspot.search
     #
     def search(*types, &block)
-      types.flatten!
-      Search.new(connection, @config, *types, &block).execute!
+      options = types.last.is_a?(Hash) ? types.pop : {}
+      search = new_search(*types)
+      search.query.build(&block) if block
+      search.query.options = options
+      search.execute!
     end
 
     #
