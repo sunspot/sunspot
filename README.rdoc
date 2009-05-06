@@ -10,9 +10,7 @@ features for indexing objects and searching against them.
 Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
 objects such as the filesystem.
 
-Sunspot is currently under active development and is not feature-complete.
-
-=== Sunspot already has these features:
+=== Features:
 
 * Define indexing strategy for each searchable class using intuitive block-based API
 * Clean separation between keyword-searchable fields and fields for scoping/ordering
@@ -23,13 +21,6 @@ Sunspot is currently under active development and is not feature-complete.
 * Extensible adapter architecture for easy integration of other ORMs or non-model classes
 * Full compatibility with will_paginate
 * Ordering
-
-=== Sunspot will have these features:
-
-* Adapters for DataMapper, ActiveRecord, and File objects
-* High-power integration with ORM features for maximum efficiency (e.g., specify AR :include argument for eager loading associations when hydrating search results)
-* Define association facets, which return model objects as row values
-* Plugins for drop-in integration with Merb and Rails
 
 == Installation
 
@@ -46,6 +37,11 @@ You can also run your own instance of Solr wherever you'd like; just copy the so
 You can change the URL at which Sunspot accesses Solr with:
 
   Sunspot.config.solr.url = 'http://solr.my.host:9818/solr'
+
+== Rails Integration
+
+The {Sunspot::Rails}[http://github.com/outoftime/sunspot_rails] plugin makes
+integrating Sunspot into Rails drop-in easy.
 
 == Using Sunspot
 
@@ -109,15 +105,24 @@ me so I can rectify the situation!
 1. solr-ruby
 2. Java
 
+== Bugs
+
+Please submit bug reports to
+http://outoftime.lighthouseapp.com/projects/20339-sunspot
+
 == Further Reading
 
 Posts about Sunspot from my tumblog: http://outofti.me/tagged/sunspot
+
+== Contributors
+
+Mat Brown <mat@patch.com>
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 Mat Brown
+Copyright (c) 2008-2009 Mat Brown
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

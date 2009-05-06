@@ -1,4 +1,7 @@
 === 0.8 ===
+* Expose Query as part of public API
+* Better exception handling for nonexistent adapter (etc.?)
+* bang! form of remove, remove_all
 * Facet by type
 * Dynamic fields
 * ActiveRecord, DataMapper, File adapters
