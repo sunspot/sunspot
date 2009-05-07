@@ -16,11 +16,14 @@ body {
 	margin: 2% 4%;
 }
 
-pre.ruby {
-	font-family: monospace;
-	margin: 0 2% 0 2%;
-	padding: 2%;
-	background-color: #eaeaea;
+.highlight {
+	margin: 0 2em;
+	padding: 1em;
+	background-color: #333;
+}
+
+.highlight pre {
+	margin: 0;
 }
 
 h1, h2, h3 {

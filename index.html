@@ -1,3 +1,6 @@
+---
+title: "Sunspot: Pure-Ruby Solr Search and Indexing"
+---
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -32,8 +35,8 @@ Sunspot.setup(Post) do
     comments.map { |comment| comment.body }
   end
   integer :blog_id
-	integer :author_id
-  integer :category_ids, :multiple =&gt; true
+  integer :author_id
+  integer :category_ids, :multiple => true
   time :published_at
   string :sort_title do
     title.downcase.gsub(/^(an?|the)/, '')
@@ -47,7 +50,7 @@ Sunspot.search(Post) do
   with :blog_id, 1
   with(:published_at).less_than Time.now
   order_by :published_at, :desc
-  paginate :page =&gt; 2, :per_page =&gt; 15
+  paginate :page => 2, :per_page => 15
   facet :category_ids, :author_id
 end
 {% endhighlight %}
