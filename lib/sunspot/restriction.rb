@@ -12,6 +12,11 @@ module Sunspot
       def names
         constants - %w(Base SameAs) #XXX this seems ugly
       end
+
+      def [](restriction_name)
+        @types ||= {}
+        @types[restriction_name.to_sym] ||= const_get(Sunspot::Util.camel_case(restriction_name.to_s))
+      end
     end
 
     # 

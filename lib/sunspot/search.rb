@@ -9,7 +9,6 @@ module Sunspot
 
     attr_reader :query
 
-    #XXX should types be passed in here? should we pass in a Query instance?
     def initialize(connection, query) #:nodoc:
       @connection = connection
       @query = query

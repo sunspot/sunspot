@@ -92,6 +92,23 @@ See Sunspot.search for more information.
   search.per_page
   search.facet(:blog_id)
 
+=== Building searches manually:
+
+The search DSL is great for building searches from fairly static parameters,
+but a highly dynamic search might want to leverage an intermediate approach
+(such as an application of the Builder pattern). For these cases, Sunspot
+exposes direct access to the Query object:
+
+  search = Sunspot.new_search(Post)
+  search.query.keywords = 'great pizza'
+  search.query.add_restriction(:author_name, :equal_to, 'Mark Twain')
+  search.query.add_restriction(:title, :equal_to, 'Bad Title', true) # negate the restriction
+  search.query.exclude_instance(bad_instance)
+  search.query.paginate(3, 15)
+  search.query.order_by(:average_rating, :desc)
+  search.query.add_field_facet(:blog_id)
+  search.execute! 
+
 == About the API documentation
 
 All of the methods documented in the RDoc are considered part of Sunspot's

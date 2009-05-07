@@ -1,5 +1,6 @@
 === 0.8 ===
 * Expose Query as part of public API
+* Non-instance-eval access to search DSL
 * Facet by type
 * Dynamic fields
 === 0.9 ===

@@ -6,7 +6,7 @@ module Sunspot
   # components it contains, respond to the #to_params method, which returns
   # a hash of parameters in the format recognized by the solr-ruby API.
   #
-  class Query #:nodoc:
+  class Query
     attr_writer :keywords # <String> full-text keyword boolean phrase
 
     def initialize(types, configuration) #:nodoc:
@@ -15,50 +15,32 @@ module Sunspot
     end
 
     # 
-    # Representation of this query as solr-ruby parameters. Constructs the hash
-    # by deep-merging scope and facet parameters, adding in various other
-    # parameters from instance data.
-    #
-    # Note that solr-ruby takes the :q parameter as a separate argument; for
-    # the sake of consistency, the Query object ignores this fact (the Search
-    # object extracts it back out).
-    #
-    # ==== Returns
-    #
-    # Hash:: Representation of query in solr-ruby form
-    #
-    def to_params
-      params = {}
-      query_components = []
-      query_components << @keywords if @keywords
-      query_components << types_phrase if types_phrase
-      params[:q] = query_components.map { |component| "(#{component})"} * ' AND '
-      params[:sort] = @sort if @sort
-      params[:start] = @start if @start
-      params[:rows] = @rows if @rows
-      for component in components
-        Util.deep_merge!(params, component.to_params)
-      end
-      params
-    end
-
+    # Add a restriction to the query.
     # 
-    # Add a query component
-    #
     # ==== Parameters
     #
-    # component<~to_params>::  A restriction query component
+    # field_name<Symbol>:: Name of the field to which the restriction applies
+    # restriction_type<Class,Symbol>::
+    #   Subclass of Sunspot::Restriction::Base, or snake_cased name as symbol
+    #   (e.g., +:equal_to+)
+    # value<Object>::
+    #   Value against which the restriction applies (e.g. less_than(2) has a
+    #   value of 2)
+    # negated::
+    #   Whether this restriction should be negated (use add_negated_restriction)
     #
-    def add_component(component)
-      components << component
+    def add_restriction(field_name, restriction_type, value, negated = false)
+      if restriction_type.is_a?(Symbol)
+        restriction_type = Restriction[restriction_type]
+      end
+      add_component(restriction_type.new(field(field_name), value, negated))
     end
 
     # 
-    # Add instance of Sunspot::Restriction::Base to query components. This
-    # method is exposed to the DSL because the Query instance holds field
-    # definitions and is able to translate field names into full field
-    # definitions, and memoize # the result.
-    # 
+    # Add a negated restriction to the query. The restriction will be taken as
+    # the opposite of its usual meaning (e.g., an :equal_to restriction will
+    # be "not equal to".
+    #
     # ==== Parameters
     #
     # field_name<Symbol>:: Name of the field to which the restriction applies
@@ -67,18 +49,24 @@ module Sunspot
     # value<Object>::
     #   Value against which the restriction applies (e.g. less_than(2) has a
     #   value of 2)
-    # negative:: Whether this restriction should be negated
     #
-    # ==== Returns
+    def add_negated_restriction(field_name, restriction_type, value)
+      add_restriction(field_name, restriction_type, value, true)
+    end
+
     #
-    # Sunspot::Restriction::Base:: Restriction instance
+    # Exclude a particular instance from the search results
     #
-    def add_restriction(field_name, restriction_clazz, value, negative = false)
-      add_component(restriction_clazz.new(field(field_name), value, negative))
+    # ==== Parameters
+    #
+    # instance<Object>:: instance to exclude from results
+    #
+    def exclude_instance(instance)
+      add_component(Sunspot::Restriction::SameAs.new(instance, true))
     end
 
     # 
-    # Add a field facet
+    # Add a field facet. See Sunspot::Facet for more information.
     #
     # ==== Parameters
     #
@@ -118,6 +106,46 @@ module Sunspot
     end
 
     # 
+    # Build the query using the DSL block passed into Sunspot.search
+    #
+    # ==== Returns
+    #
+    # Sunspot::Query:: self
+    #
+    def build(&block)
+      dsl.instance_eval(&block)
+      self
+    end
+
+    # 
+    # Representation of this query as solr-ruby parameters. Constructs the hash
+    # by deep-merging scope and facet parameters, adding in various other
+    # parameters from instance data.
+    #
+    # Note that solr-ruby takes the :q parameter as a separate argument; for
+    # the sake of consistency, the Query object ignores this fact (the Search
+    # object extracts it back out).
+    #
+    # ==== Returns
+    #
+    # Hash:: Representation of query in solr-ruby form
+    #
+    def to_params #:nodoc:
+      params = {}
+      query_components = []
+      query_components << @keywords if @keywords
+      query_components << types_phrase if types_phrase
+      params[:q] = query_components.map { |component| "(#{component})"} * ' AND '
+      params[:sort] = @sort if @sort
+      params[:start] = @start if @start
+      params[:rows] = @rows if @rows
+      for component in components
+        Util.deep_merge!(params, component.to_params)
+      end
+      params
+    end
+
+    # 
     # Page that this query will return (used by Sunspot::Search to expose
     # pagination)
     #
@@ -125,7 +153,7 @@ module Sunspot
     #
     # Integer:: Page number
     #
-    def page
+    def page #:nodoc:
       if @start && @rows
         @start / @rows + 1
       else
@@ -141,7 +169,7 @@ module Sunspot
     #
     # Integer:: Rows per page
     #
-    def per_page
+    def per_page #:nodoc:
       @rows
     end
 
@@ -152,20 +180,8 @@ module Sunspot
     #
     # Sunspot::DSL::Query:: DSL instance
     #
-    def dsl
+    def dsl #:nodoc:
       @dsl ||= DSL::Query.new(self)
-    end
-
-    # 
-    # Build the query using the DSL block passed into Sunspot.search
-    #
-    # ==== Returns
-    #
-    # Sunspot::Query:: self
-    #
-    def build(&block)
-      dsl.instance_eval(&block)
-      self
     end
 
     # 
@@ -184,11 +200,32 @@ module Sunspot
     # ArgumentError::
     #   If the given field name is not configured for the types being queried
     #
-    def field(field_name)
+    def field(field_name) #:nodoc:
       fields_hash[field_name.to_sym] || raise(UnrecognizedFieldError, "No field configured for #{@types * ', '} with name '#{field_name}'")
     end
 
-    #TODO document
+    # 
+    # Pass in search options as a hash. This is not the preferred way of
+    # building a Sunspot search, but it is made available as experience shows
+    # Ruby developers like to pass in hashes. Probably nice for quick one-offs
+    # on the console, anyway.
+    #
+    # ==== Options (+options+)
+    #
+    # :keywords:: Keyword string for fulltext search
+    # :conditions::
+    #   Hash of key-value pairs, where keys are field names, and values are one
+    #   of scalar, Array, or Range. Scalars are evaluated as EqualTo
+    #   restrictions; Arrays are AnyOf restrictions, and Ranges are Between
+    #   restrictions.
+    # :order::
+    #   Order the search results. Either a string or array of strings of the
+    #   form "field_name direction"
+    # :page::
+    #   Page to use for pagination
+    # :per_page::
+    #   Number of results to show per page
+    #
     def options=(options) #:nodoc:
       if options.has_key?(:keywords)
         self.keywords = options[:keywords]
@@ -222,6 +259,17 @@ module Sunspot
     end
 
     private
+
+    # 
+    # Add a query component
+    #
+    # ==== Parameters
+    #
+    # component<~to_params>::  A restriction query component
+    #
+    def add_component(component)
+      components << component
+    end
 
     # ==== Returns
     #

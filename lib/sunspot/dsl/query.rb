@@ -115,12 +115,12 @@ module Sunspot
           if value == NONE
             DSL::Restriction.new(field_name.to_sym, @query, true)
           else
-            @query.add_restriction(field_name, Sunspot::Restriction::EqualTo, value, true)
+            @query.add_negated_restriction(field_name, Sunspot::Restriction::EqualTo, value)
           end
         else
           instances = args
           for instance in instances.flatten
-            @query.add_component(Sunspot::Restriction::SameAs.new(instance, true))
+            @query.exclude_instance(instance)
           end
         end
       end

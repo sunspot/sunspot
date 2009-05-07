@@ -203,7 +203,7 @@ describe 'Search' do
     end
   end
 
-  it 'should request multiple field facet' do
+  it 'should request multiple field facets' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:facets => { :fields => %w(category_ids_im blog_id_i) }))
     session.search Post do
       facet :category_ids, :blog_id
