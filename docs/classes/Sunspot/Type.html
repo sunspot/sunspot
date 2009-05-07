@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Sunspot::Type [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Sunspot::Type
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/sunspot/type_rb.html">lib/sunspot/type.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            This module contains singleton objects that represent the types that can be
+            indexed and searched using <a href="../Sunspot.html">Sunspot</a>. Plugin
+            developers should be able to add new constants to the <a
+            href="Type.html">Type</a> module; as long as they implement the appropriate
+            methods, <a href="../Sunspot.html">Sunspot</a> should be able to integrate
+            them (note that this capability is untested at the moment). The required
+            methods are:
+            </p>
+            <table>
+            <tr><td valign="top"><tt>indexed_name</tt>:</td><td>Convert a given field name into its form as stored in Solr. This generally
+            means adding a suffix to match a Solr dynamic<a href="Field.html">Field</a>
+            definition.
+            
+            </td></tr>
+            <tr><td valign="top"><tt>to_indexed</tt>:</td><td>Convert a value of this type into the appropriate Solr string
+            representation.
+            
+            </td></tr>
+            <tr><td valign="top"><tt>cast</tt>:</td><td>Convert a Solr string representation of a value into the appropriate Ruby
+            type.
+            
+            </td></tr>
+            </table>
+          </div>
+          <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              Module <a href="Type/BooleanType.html" class="link">Sunspot::Type::BooleanType</a><br />
+              Module <a href="Type/FloatType.html" class="link">Sunspot::Type::FloatType</a><br />
+              Module <a href="Type/IntegerType.html" class="link">Sunspot::Type::IntegerType</a><br />
+              Module <a href="Type/StringType.html" class="link">Sunspot::Type::StringType</a><br />
+              Module <a href="Type/TextType.html" class="link">Sunspot::Type::TextType</a><br />
+              Module <a href="Type/TimeType.html" class="link">Sunspot::Type::TimeType</a><br />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

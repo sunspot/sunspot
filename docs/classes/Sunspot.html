@@ -1,0 +1,693 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Sunspot [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Sunspot
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../files/lib/sunspot_rb.html">lib/sunspot.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/session_rb.html">lib/sunspot/session.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/type_rb.html">lib/sunspot/type.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/facets_rb.html">lib/sunspot/facets.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/facet_rb.html">lib/sunspot/facet.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/adapters_rb.html">lib/sunspot/adapters.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/restriction_rb.html">lib/sunspot/restriction.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/facet_row_rb.html">lib/sunspot/facet_row.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/configuration_rb.html">lib/sunspot/configuration.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/search_rb.html">lib/sunspot/search.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/setup_rb.html">lib/sunspot/setup.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/field_rb.html">lib/sunspot/field.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/indexer_rb.html">lib/sunspot/indexer.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/util_rb.html">lib/sunspot/util.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/query_rb.html">lib/sunspot/query.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/dsl/fields_rb.html">lib/sunspot/dsl/fields.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/dsl/scope_rb.html">lib/sunspot/dsl/scope.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/dsl/query_rb.html">lib/sunspot/dsl/query.rb</a>
+          </li>
+          <li>
+            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            The <a href="Sunspot.html">Sunspot</a> module provides class-method entry
+            points to most of the functionality provided by the <a
+            href="Sunspot.html">Sunspot</a> library. Internally, the <a
+            href="Sunspot.html">Sunspot</a> singleton class contains a
+            (non-thread-safe!) instance of <a
+            href="Sunspot/Session.html">Sunspot::Session</a>, to which it delegates
+            most of the class methods it exposes. In the method documentation below,
+            this instance is referred to as the &#8220;singleton session&#8221;.
+            </p>
+            <p>
+            Though the singleton session provides a convenient entry point to <a
+            href="Sunspot.html">Sunspot</a>, it is by no means required to use the <a
+            href="Sunspot.html">Sunspot</a> class methods. Multiple sessions may be
+            instantiated and used (if you need to connect to multiple Solr instances,
+            for example.)
+            </p>
+            <p>
+            Note that the configuration of classes for index/search (the <tt>setup</tt>
+            method) is <em>not</em> session-specific, but rather global.
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000004">commit</a></li>
+              <li><a href="#M000012">commit_if_dirty</a></li>
+              <li><a href="#M000013">config</a></li>
+              <li><a href="#M000011">dirty?</a></li>
+              <li><a href="#M000002">index</a></li>
+              <li><a href="#M000003">index!</a></li>
+              <li><a href="#M000005">new_search</a></li>
+              <li><a href="#M000007">remove</a></li>
+              <li><a href="#M000008">remove!</a></li>
+              <li><a href="#M000009">remove_all</a></li>
+              <li><a href="#M000010">remove_all!</a></li>
+              <li><a href="#M000014">reset!</a></li>
+              <li><a href="#M000006">search</a></li>
+              <li><a href="#M000001">setup</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              Module <a href="Sunspot/Adapters.html" class="link">Sunspot::Adapters</a><br />
+              Module <a href="Sunspot/Configuration.html" class="link">Sunspot::Configuration</a><br />
+              Module <a href="Sunspot/DSL.html" class="link">Sunspot::DSL</a><br />
+              Module <a href="Sunspot/Facets.html" class="link">Sunspot::Facets</a><br />
+              Module <a href="Sunspot/Field.html" class="link">Sunspot::Field</a><br />
+              Module <a href="Sunspot/Type.html" class="link">Sunspot::Type</a><br />
+              Class <a href="Sunspot/Facet.html" class="link">Sunspot::Facet</a><br />
+              Class <a href="Sunspot/FacetRow.html" class="link">Sunspot::FacetRow</a><br />
+              Class <a href="Sunspot/Search.html" class="link">Sunspot::Search</a><br />
+              Class <a href="Sunspot/Session.html" class="link">Sunspot::Session</a><br />
+            </div>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>UnrecognizedFieldError</td>
+                    <td>=</td>
+                    <td class='context-item-value'>Class.new(Exception)</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>UnrecognizedRestrictionError</td>
+                    <td>=</td>
+                    <td class='context-item-value'>Class.new(Exception)</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>NoAdapterError</td>
+                    <td>=</td>
+                    <td class='context-item-value'>Class.new(Exception)</td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>NoSetupError</td>
+                    <td>=</td>
+                    <td class='context-item-value'>Class.new(Exception)</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000004'>
+                <a name='M000004'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>commit</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Commits the singleton session
+                  </p>
+                  <p>
+                  When documents are added to or removed from Solr, the changes are initially
+                  stored in memory, and are not reflected in Solr&#8217;s existing searcher
+                  instance. When a commit message is sent, the changes are written to disk,
+                  and a new searcher is spawned. Commits are thus fairly expensive, so if
+                  your application needs to index several documents as part of a single
+                  operation, it is advisable to index them all and then call commit at the
+                  end of the operation.
+                  </p>
+                  <p>
+                  Note that Solr can also be configured to automatically perform a commit
+                  after either a specified interval after the last change, or after a
+                  specified number of documents are added. See <a
+                  href="http://wiki.apache.org/solr/SolrConfigXml">wiki.apache.org/solr/SolrConfigXml</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000004-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000004-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 145</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000012'>
+                <a name='M000012'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>commit_if_dirty</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Sends a commit if the session is dirty (see <a
+                  href="Sunspot.html#M000011">dirty?</a>).
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000012-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 322</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit_if_dirty</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit_if_dirty</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000013'>
+                <a name='M000013'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>config</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Returns the configuration associated with the singleton session. See <a
+                  href="Sunspot/Configuration.html">Sunspot::Configuration</a> for details.
+                  </p>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">LightConfig::Configuration:</td><td>configuration for singleton session
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000013-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 333</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">config</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000011'>
+                <a name='M000011'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>dirty?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  True if documents have been added, updated, or removed since the last
+                  commit.
+                  </p>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">Boolean:</td><td>Whether there have been any updates since the last commit
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000011-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 315</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dirty?</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">dirty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000002'>
+                <a name='M000002'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>index</span>
+                  <span class='arguments'>(*objects)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Indexes objects on the singleton session.
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">objects...<Object>:</td><td>objects to index (may pass an array or varargs)
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Example</h4>
+                  <pre>post1, post2 = Array(2) { Post.create }&#x000A;Sunspot.index(post1, post2)</pre>
+                  <p>
+                  Note that indexed objects won&#8217;t be reflected in search until a commit
+                  is sent - see <a href="Sunspot.html#M000003">Sunspot.index!</a> and <a
+                  href="Sunspot.html#M000004">Sunspot.commit</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000002-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000002-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 114</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">index</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000003'>
+                <a name='M000003'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>index!</span>
+                  <span class='arguments'>(*objects)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Indexes objects on the singleton session and commits immediately.
+                  </p>
+                  <p>
+                  See: <a href="Sunspot.html#M000002">Sunspot.index</a> and <a
+                  href="Sunspot.html#M000004">Sunspot.commit</a>
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">objects...<Object>:</td><td>objects to index (may pass an array or varargs)
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000003-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000003-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 126</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">index!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000005'>
+                <a name='M000005'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>new_search</span>
+                  <span class='arguments'>(*types)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Create a new <a href="Sunspot/Search.html">Search</a> instance, but do not
+                  execute it immediately. Generally you will want to use the <a
+                  href="Sunspot.html#M000006">search</a> method to execute searches using the
+                  <a href="Sunspot/DSL.html">DSL</a>; however, if you are building searches
+                  dynamically (using the Builder pattern, for instance), it may be easier to
+                  access the Query API directly.
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">types<Class>&#8230;:</td><td>Zero, one, or more types to search for. If no types are passed, all
+                  configured types will be searched for.
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">Sunspot::Search:</td><td><a href="Sunspot/Search.html">Search</a> object, not yet executed. Query
+                  parameters can be added manually; then execute! should be called.
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000005-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 167</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000007'>
+                <a name='M000007'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>remove</span>
+                  <span class='arguments'>(*objects)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Remove objects from the index. Any time an object is destroyed, it must be
+                  removed from the index; otherwise, the index will contain broken references
+                  to objects that do not exist, which will cause errors when those objects
+                  are matched in search results.
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">objects...<Object>:</td><td>Objects to remove from the index (may pass an array or varargs)
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Example</h4>
+                  <pre>post.destroy&#x000A;Sunspot.remove(post)</pre>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 261</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000008'>
+                <a name='M000008'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>remove!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Remove objects from the index and immediately commit. See <a
+                  href="Sunspot.html#M000007">Sunspot.remove</a>
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">objects...<Object>:</td><td>Objects to remove from the index
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000008-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 272</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove!</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000009'>
+                <a name='M000009'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>remove_all</span>
+                  <span class='arguments'>(*classes)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Remove all objects of the given classes from the index. There isn&#8217;t
+                  much use for this in general operations but it can be useful for
+                  maintenance, testing, etc. If no arguments are passed, remove everything
+                  from the index.
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">classes...<Class>:</td><td>classes for which to remove all instances from the index (may pass an array
+                  or varargs)
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Example</h4>
+                  <pre>Sunspot.remove_all(Post, Blog)</pre>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000009-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 291</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000010'>
+                <a name='M000010'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>remove_all!</span>
+                  <span class='arguments'>(*classes)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Remove all objects of the given classes from the index and immediately
+                  commit. See <a href="Sunspot.html#M000009">Sunspot.remove_all</a>
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">classes...<Class>:</td><td>classes for which to remove all instances from the index
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000010-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 303</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000014'>
+                <a name='M000014'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>reset!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Resets the singleton session. This is useful for clearing out all static
+                  data between tests, but probably nowhere else.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000014-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 341</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>&#x000A;      <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000006'>
+                <a name='M000006'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>search</span>
+                  <span class='arguments'>(*types, &amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  <a href="Sunspot/Search.html">Search</a> for objects in the index.
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">types<Class>&#8230;:</td><td>Zero, one, or more types to search for. If no types are passed, all
+                  configured types will be searched.
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Options (last argument, optional)</h4>
+                  <table>
+                  <tr><td valign="top">:keywords<String>:</td><td>Fulltext search string
+                  
+                  </td></tr>
+                  <tr><td valign="top">:conditions<Hash>:</td><td>Hash of key-value pairs to be used as restrictions. Keys are field names.
+                  Scalar values are used as equality restrictions; arrays are used as
+                  &#8220;any of&#8221; restrictions; and Ranges are used as range
+                  restrictions.
+                  
+                  </td></tr>
+                  <tr><td valign="top">:order<String>:</td><td>order field and direction (e.g., &#8216;updated_at desc&#8217;)
+                  
+                  </td></tr>
+                  <tr><td valign="top">:page<Integer>:</td><td>Page to start on for pagination
+                  
+                  </td></tr>
+                  <tr><td valign="top">:per_page<Integer>:</td><td>Number of results to use per page. Ignored if :page is not specified.
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">Sunspot::Search:</td><td>Object containing results, facets, count, etc.
+                  
+                  </td></tr>
+                  </table>
+                  <p>
+                  The fields available for restriction, ordering, etc. are those that meet
+                  the following criteria:
+                  </p>
+                  <ul>
+                  <li>They are not of type <tt>text</tt>.
+                  
+                  </li>
+                  <li>They are defined for all of the classes being searched
+                  
+                  </li>
+                  <li>They have the same data type for all of the classes being searched
+                  
+                  </li>
+                  <li>They have the same multiple flag for all of the classes being searched.
+                  
+                  </li>
+                  </ul>
+                  <p>
+                  The restrictions available are the constants defined in the
+                  Sunspot::Restriction class. The standard restrictions are:
+                  </p>
+                  <pre>with(:field_name).equal_to(value)&#x000A;with(:field_name, value) # shorthand for above&#x000A;with(:field_name).less_than(value)&#x000A;with(:field_name).greater_than(value)&#x000A;with(:field_name).between(value1..value2)&#x000A;with(:field_name).any_of([value1, value2, value3])&#x000A;with(:field_name).all_of([value1, value2, value3])&#x000A;without(some_instance) # exclude that particular instance</pre>
+                  <p>
+                  <tt>without</tt> can be substituted for <tt>with</tt>, causing the
+                  restriction to be negated. In the last example above, only <tt>without</tt>
+                  works, as it does not make sense to search only for an instance you already
+                  have.
+                  </p>
+                  <p>
+                  Equality restrictions can take <tt>nil</tt> as a value, which restricts the
+                  results to documents that have no value for the given field. Passing
+                  <tt>nil</tt> as a value to other restriction types is illegal. Thus:
+                  </p>
+                  <pre>with(:field_name, nil) # ok&#x000A;with(:field_name).equal_to(nil) # ok&#x000A;with(:field_name).less_than(nil) # bad</pre>
+                  <h4>Example</h4>
+                  <pre>Sunspot.search(Post) do&#x000A;  keywords 'great pizza'&#x000A;  with(:published_at).less_than Time.now&#x000A;  with :blog_id, 1&#x000A;  without current_post&#x000A;  facet :category_ids&#x000A;  order_by :published_at, :desc&#x000A;  paginate 2, 15&#x000A;end</pre>
+                  <p>
+                  See <a href="Sunspot/DSL/Query.html">Sunspot::DSL::Query</a> for the full
+                  API presented inside the block.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000006-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 242</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000001'>
+                <a name='M000001'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>setup</span>
+                  <span class='arguments'>(clazz, &amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Configures indexing and search for a given class.
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">clazz<Class>:</td><td>class to configure
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Example</h4>
+                  <pre>Sunspot.setup(Post) do&#x000A;  text :title, :body&#x000A;  string :author_name&#x000A;  integer :blog_id&#x000A;  integer :category_ids&#x000A;  float :average_rating, :using =&gt; :ratings_average&#x000A;  time :published_at&#x000A;  string :sort_title do&#x000A;    title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title&#x000A;  end&#x000A;end</pre>
+                  <h6>Attribute Fields vs. Virtual Fields</h6>
+                  <p>
+                  Attribute fields call a method on the indexed object and index the return
+                  value. All of the fields defined above except for the last one are
+                  attribute fields. By default, the field name will also be the attribute
+                  used; this can be overriden with the <tt>:using</tt> option, as in
+                  <tt>:average_rating</tt> above. In that case, the attribute
+                  <tt>:ratings_average</tt> will be indexed with the field name
+                  <tt>:average_rating</tt>.
+                  </p>
+                  <p>
+                  <tt>:sort_title</tt> is a virtual field, which evaluates the block inside
+                  the context of the instance being indexed, and indexes the value returned
+                  by the block. If the block you pass takes an argument, it will be passed
+                  the instance rather than being evaluated inside of it; so, the following
+                  example is equivalent to the one above (assuming title is public):
+                  </p>
+                  <pre>Sunspot.setup(Post) do&#x000A;  string :sort_title do |post|&#x000A;    post.title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title&#x000A;  end&#x000A;end</pre>
+                  <h5><a href="Sunspot/Field.html">Field</a> Types</h5>
+                  <p>
+                  The available types are:
+                  </p>
+                  <ul>
+                  <li><tt>text</tt>
+                  
+                  </li>
+                  <li><tt>string</tt>
+                  
+                  </li>
+                  <li><tt>integer</tt>
+                  
+                  </li>
+                  <li><tt>float</tt>
+                  
+                  </li>
+                  <li><tt>time</tt>
+                  
+                  </li>
+                  <li><tt>boolean</tt>
+                  
+                  </li>
+                  </ul>
+                  <p>
+                  Note that the <tt>text</tt> type behaves quite differently from the others
+                  - this is the type that is indexed as fulltext, and is searched using the
+                  <tt>keywords</tt> method inside the search <a
+                  href="Sunspot/DSL.html">DSL</a>. Text fields cannot have restrictions set
+                  on them, nor can they be used in order statements or for facets. All other
+                  types are indexed literally, and thus can be used for all of those
+                  operations. They will not, however, be searched in fulltext. In this way,
+                  <a href="Sunspot.html">Sunspot</a> provides a complete barrier between
+                  fulltext fields and value fields.
+                  </p>
+                  <p>
+                  It is fine to specify a field both as a text field and a string field;
+                  internally, the fields will have different names so there is no danger of
+                  conflict.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000001-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000001-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 96</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-constant">Setup</span>.<span class="ruby-identifier">setup</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

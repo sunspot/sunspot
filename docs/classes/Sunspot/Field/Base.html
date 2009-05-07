@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Sunspot::Field::Base [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Sunspot::Field::Base
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/sunspot/field_rb.html">lib/sunspot/field.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong>Object</strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            <a href="../Field.html">Field</a> classes encapsulate information about a
+            field that has been configured for search and indexing. They expose methods
+            that are useful for both operations.
+            </p>
+            <p>
+            Subclasses of <a href="Base.html">Field::Base</a> must implement the method
+            value_for
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000032">new</a></li>
+            </ol>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000036">cast</a></li>
+              <li><a href="#M000034">indexed_name</a></li>
+              <li><a href="#M000037">multiple?</a></li>
+              <li><a href="#M000033">pair_for</a></li>
+              <li><a href="#M000035">to_indexed</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>name</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>type</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000032'>
+                <a name='M000032'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(name, type, options = {})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">options</span> = {}) <span class="ruby-comment cmt">#:nodoc</span>&#x000A;        <span class="ruby-ivar">@name</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">type</span>&#x000A;        <span class="ruby-ivar">@multiple</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:multiple</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000036'>
+                <a name='M000036'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>cast</span>
+                  <span class='arguments'>(value)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Cast the value into the appropriate Ruby class for the field&#8217;s type
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">value<String>:</td><td>Solr&#8217;s representation of the value
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">Object:</td><td>The cast value
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 90</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-identifier">type</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000034'>
+                <a name='M000034'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>indexed_name</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  The name of the field as it is indexed in Solr. The indexed name contains a
+                  suffix that contains information about the type as well as whether the
+                  field allows multiple values for a document.
+                  </p>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">String:</td><td>The field&#8217;s indexed name
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 48</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indexed_name</span>&#x000A;        <span class="ruby-node">&quot;#{type.indexed_name(name)}#{'m' if multiple?}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000037'>
+                <a name='M000037'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>multiple?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">Boolean:</td><td>true if the field allows multiple values; false if not
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 97</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">multiple?</span>&#x000A;        <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-ivar">@multiple</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000033'>
+                <a name='M000033'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>pair_for</span>
+                  <span class='arguments'>(model)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  A key-value pair where the key is the field&#8217;s indexed name and the
+                  value is the value that should be indexed for the given model. This can be
+                  merged directly into the document hash for adding to solr-ruby.
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">model<Object>:</td><td>the model from which to extract the value
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">Hash:</td><td>a single key-value pair with the field name and value
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 32</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pair_for</span>(<span class="ruby-identifier">model</span>)&#x000A;        <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">value</span> = <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">model</span>)).<span class="ruby-identifier">nil?</span>&#x000A;          { <span class="ruby-identifier">indexed_name</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>) }&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          {}&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000035'>
+                <a name='M000035'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_indexed</span>
+                  <span class='arguments'>(value)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Convert a value to its representation for Solr indexing. This delegates to
+                  the <a href="Base.html#M000035">to_indexed</a> method on the field&#8217;s
+                  type.
+                  </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">value<Object>:</td><td>Value to convert to Solr representation
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">String:</td><td>Solr representation of the object
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Raises</h4>
+                  <table>
+                  <tr><td valign="top">ArgumentError:</td><td>the value is an array, but this field does not allow multiple values
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 68</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Array</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">multiple?</span>&#x000A;            <span class="ruby-identifier">value</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">val</span><span class="ruby-operator">|</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">val</span>) }&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;#{name} is not a multiple-value field, so it cannot index values #{value.inspect}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
