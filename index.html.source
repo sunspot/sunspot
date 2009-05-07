@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Sunspot: Pure-Ruby Solr Search and Indexing</title>
+		<link rel="stylesheet" type="text/css" href="main.css"/>
+    <link rel="stylesheet" type="text/css" href="ruby.css"/>
+	</head>
+	<body>
+		<div id="main">
+      <a href="http://github.com/outoftime/sunspot">
+        <img src="forkme.png" class="forkme"/>
+      </a>
+      <div id="content">
+  			<h1>Sunspot</h1>
+  			<h4>Pure-Ruby Solr Search and Indexing</h4>
+  
+  			<p>
+          All the power of the <a href="http://lucene.apache.org/solr/">Solr</a>
+          search engine; all the beauty of Ruby.
+          <a href="http://github.com/outoftime/sunspot">Sunspot</a> exposes all
+          of Solr's most powerful search features using an API of elegant DSLs.
+          That means robust, flexible fulltext search with no boolean queries and
+          no string programming.
+  			</p>
+  
+  			<h3>Index your objects.</h3>
+  			<pre class="ruby">Sunspot.setup(Post) do
+  text :title, :body
+  text :comments do
+    comments.map { |comment| comment.body }
+  end
+  integer :blog_id
+	integer :author_id
+  integer :category_ids, :multiple =&gt; true
+  time :published_at
+  string :sort_title do
+    title.downcase.gsub(/^(an?|the)/, '')
+  end
+end</pre>
+
+  		<h3>Search for them.</h3>
+  		<pre class="ruby">Sunspot.search(Post) do
+  with :blog_id, 1
+  with(:published_at).less_than Time.now
+  order_by :published_at, :desc
+  paginate :page =&gt; 2, :per_page =&gt; 15
+  facet :category_ids, :author_id
+end</pre>
+  
+      <h3>Use it with Rails.</h3>
+      <p>
+        <a href="http://github.com/outoftime/sunspot_rails">Sunspot::Rails</a> hooks
+        Sunspot into Rails with drop-in ease, extending ActiveRecord objects for
+        searchability and managing the commit cycle transparently. Get Solr search
+        in your Rails app in five minutes.
+      </p>
+  
+      <h3>Get all this.</h3>
+      <ul>
+        <li>
+          Define searchable fields in an intuitive DSL, either indexing data
+          directly from attributes or defining virtual attributes for
+          search-specific information.
+        </li>
+        <li>
+          Use Sunspot's search DSL to restrict results using all the usual
+          logical operators, negate them, or exclude individual objects from the
+          results.
+        <li>
+          Index subclasses, search for superclasses: Sunspot stores the entire
+          class hierarchy for each object that's indexed.
+        </li>
+        <li>
+          Use field facets for powerful drill-down search.
+        </li>
+        <li>
+          If you've got WillPaginate installed, use it seamlessly with Sunspot's
+          search results.
+        </li>
+      </ul>
+  
+      <h3>Get started.</h3>
+      <p>
+        Check out the <a href="docs/index.html">documentation</a>.<br/>
+        Browse the
+        <a href="http://github.com/outoftime/sunspot">source</a>.<br/>
+        Report bugs on
+        <a href="http://outoftime.lighthouseapp.com/projects/20339-sunspot/overview">
+          Lighthouse
+        </a>.<br/>Install it with
+        <code>
+          sudo gem install outoftime-sunspot --source=http://gems.github.com
+        </code>
+      </p>
+  	</div>
+  </div>
+	</body>
+</html>
