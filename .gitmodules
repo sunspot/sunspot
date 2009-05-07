@@ -1,0 +1,3 @@
+[submodule "pages"]
+	path = pages
+	url = git://github.com/outoftime/sunspot.git
