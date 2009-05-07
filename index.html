@@ -1,14 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
 		<title>Sunspot: Pure-Ruby Solr Search and Indexing</title>
-		<link href="main.css" rel="stylesheet" type="text/css" />
-    <link href="ruby.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="main.css"/>
+    <link rel="stylesheet" type="text/css" href="ruby.css"/>
 	</head>
 	<body>
 		<div id="main">
       <a href="http://github.com/outoftime/sunspot">
-        <img class="forkme" src="forkme.png" />
+        <img src="forkme.png" class="forkme"/>
       </a>
       <div id="content">
   			<h1>Sunspot</h1>
@@ -24,28 +25,32 @@
   			</p>
   
   			<h3>Index your objects.</h3>
-  			<pre class="ruby"><span class="constant">Sunspot</span><span class="punct">.</span><span class="ident">setup</span><span class="punct">(</span><span class="constant">Post</span><span class="punct">)</span> <span class="keyword">do</span>
-  <span class="ident">text</span> <span class="symbol">:title</span><span class="punct">,</span> <span class="symbol">:body</span>
-  <span class="ident">text</span> <span class="symbol">:comments</span> <span class="keyword">do</span>
-    <span class="ident">comments</span><span class="punct">.</span><span class="ident">map</span> <span class="punct">{</span> <span class="punct">|</span><span class="ident">comment</span><span class="punct">|</span> <span class="ident">comment</span><span class="punct">.</span><span class="ident">body</span> <span class="punct">}</span>
-  <span class="keyword">end</span>
-  <span class="ident">integer</span> <span class="symbol">:blog_id</span>
-	<span class="ident">integer</span> <span class="symbol">:author_id</span>
-  <span class="ident">integer</span> <span class="symbol">:category_ids</span><span class="punct">,</span> <span class="symbol">:multiple</span> <span class="punct">=&gt;</span> <span class="constant">true</span>
-  <span class="ident">time</span> <span class="symbol">:published_at</span>
-  <span class="ident">string</span> <span class="symbol">:sort_title</span> <span class="keyword">do</span>
-    <span class="ident">title</span><span class="punct">.</span><span class="ident">downcase</span><span class="punct">.</span><span class="ident">gsub</span><span class="punct">(/</span><span class="regex">^(an?|the)</span><span class="punct">/,</span> <span class="punct">'</span><span class="string"></span><span class="punct">')</span>
-  <span class="keyword">end</span>
-<span class="keyword">end</span></pre>
+{% highlight ruby %}
+Sunspot.setup(Post) do
+  text :title, :body
+  text :comments do
+    comments.map { |comment| comment.body }
+  end
+  integer :blog_id
+	integer :author_id
+  integer :category_ids, :multiple =&gt; true
+  time :published_at
+  string :sort_title do
+    title.downcase.gsub(/^(an?|the)/, '')
+  end
+end
+{% endhighlight %}
 
   		<h3>Search for them.</h3>
-  		<pre class="ruby"><span class="constant">Sunspot</span><span class="punct">.</span><span class="ident">search</span><span class="punct">(</span><span class="constant">Post</span><span class="punct">)</span> <span class="keyword">do</span>
-  <span class="ident">with</span> <span class="symbol">:blog_id</span><span class="punct">,</span> <span class="number">1</span>
-  <span class="ident">with</span><span class="punct">(</span><span class="symbol">:published_at</span><span class="punct">).</span><span class="ident">less_than</span> <span class="constant">Time</span><span class="punct">.</span><span class="ident">now</span>
-  <span class="ident">order_by</span> <span class="symbol">:published_at</span><span class="punct">,</span> <span class="symbol">:desc</span>
-  <span class="ident">paginate</span> <span class="symbol">:page</span> <span class="punct">=&gt;</span> <span class="number">2</span><span class="punct">,</span> <span class="symbol">:per_page</span> <span class="punct">=&gt;</span> <span class="number">15</span>
-  <span class="ident">facet</span> <span class="symbol">:category_ids</span><span class="punct">,</span> <span class="symbol">:author_id</span>
-<span class="keyword">end</span></pre>
+{% highlight ruby %}
+Sunspot.search(Post) do
+  with :blog_id, 1
+  with(:published_at).less_than Time.now
+  order_by :published_at, :desc
+  paginate :page =&gt; 2, :per_page =&gt; 15
+  facet :category_ids, :author_id
+end
+{% endhighlight %}
   
       <h3>Use it with Rails.</h3>
       <p>
@@ -77,17 +82,17 @@
           If you've got WillPaginate installed, use it seamlessly with Sunspot's
           search results.
         </li>
-      </li></ul>
+      </ul>
   
       <h3>Get started.</h3>
       <p>
-        Check out the <a href="docs/index.html">documentation</a>.<br />
+        Check out the <a href="docs/index.html">documentation</a>.<br/>
         Browse the
-        <a href="http://github.com/outoftime/sunspot">source</a>.<br />
+        <a href="http://github.com/outoftime/sunspot">source</a>.<br/>
         Report bugs on
         <a href="http://outoftime.lighthouseapp.com/projects/20339-sunspot/overview">
           Lighthouse
-        </a>.<br />Install it with
+        </a>.<br/>Install it with
         <code>
           sudo gem install outoftime-sunspot --source=http://gems.github.com
         </code>
