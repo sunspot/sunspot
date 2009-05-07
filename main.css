@@ -1,0 +1,74 @@
+body {
+	font-family: Helvetica;
+	background-color: #ddd;
+	margin: 0;
+	padding: 0;
+}
+
+#main {
+	position: relative;
+	background-color: #fff;
+	border: 2px solid #666;
+	margin: 1% 23% 1% 23%;
+}
+
+#content {
+	margin: 2% 4%;
+}
+
+pre.ruby {
+	font-family: monospace;
+	margin: 0 2% 0 2%;
+	padding: 2%;
+	background-color: #eaeaea;
+}
+
+h1, h2, h3 {
+	color: #f90;
+}
+
+h1 {
+	font-size: 4em;
+	margin: 0 0 .1em 0;
+}
+
+h2 {
+	font-size: 2em;
+	margin: 0 0 .1em 0;
+}
+
+h3 {
+	font-size: 1.5em;
+	margin: 1em 0 .5em 0;
+}
+
+h4 {
+	margin: 0 0 .1em 0;
+	color: #666;
+}
+
+p {
+	margin: 1em 0 1em 0;
+	font-size: .9em;
+	clear: left;
+}
+
+ul {
+	margin: 0;
+	font-size: .8em;
+}
+
+a {
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.forkme {
+	position: absolute;
+	right: 0px;
+	border: 0px solid transparent;
+}
