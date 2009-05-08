@@ -1,5 +1,4 @@
 === 0.8 ===
-* Non-instance-eval access to search DSL
 * Facet by type
 * Restrict field names to \w
 * Dynamic fields

@@ -113,7 +113,7 @@ module Sunspot
     # Sunspot::Query:: self
     #
     def build(&block)
-      dsl.instance_eval(&block)
+      Util.instance_eval_or_call(dsl, &block)
       self
     end
 

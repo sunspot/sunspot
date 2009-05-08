@@ -245,6 +245,14 @@ describe 'Search' do
     session.search Post, Comment, :conditions => { :blog_id => 1 }
   end
 
+  it 'should allow building search using block argument rather than instance_eval' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['blog_id_i:1']))
+    @blog_id = 1
+    session.search Post do |query|
+      query.with(:blog_id, @blog_id)
+    end
+  end
+
   it 'should raise Sunspot::UnrecognizedFieldError for nonexistant fields in block scope' do
     lambda do
       session.search Post do

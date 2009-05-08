@@ -236,6 +236,15 @@ module Sunspot
     #     order_by :published_at, :desc
     #     paginate 2, 15
     #   end
+    #  
+    # If the block passed to #search takes an argument, that argument will
+    # present the DSL, and the block will be evaluated in the calling context.
+    # This will come in handy for building searches using instance data or
+    # methods, e.g.:
+    #
+    #   Sunspot.search(Post) do |query|
+    #     query.with(:blog_id, @current_blog.id)
+    #   end
     #
     # See Sunspot::DSL::Query for the full API presented inside the block.
     #

@@ -71,6 +71,23 @@ module Sunspot
       end
 
       # 
+      # Evaluate the given proc in the context of the given object if the
+      # block's arity is non-positive, or by passing the given object as an
+      # argument if it is negative.
+      # 
+      # ==== Parameters
+      # 
+      # object<Object>:: Object to pass to the proc
+      #
+      def instance_eval_or_call(object, &block)
+        if block.arity > 0
+          block.call(object)
+        else
+          object.instance_eval(&block)
+        end
+      end
+
+      # 
       # Perform a deep merge of hashes, returning the result as a new hash.
       # See #deep_merge_into for rules used to merge the hashes
       #
