@@ -47,8 +47,8 @@
             The <a href="Fields.html">Fields</a> class provides a <a
             href="../DSL.html">DSL</a> for specifying field definitions in the <a
             href="../../Sunspot.html#M000001">Sunspot.setup</a> block. As well as the
-            <a href="Fields.html#M000029">text</a> method, which creates fulltext
-            fields, uses <a href="Fields.html#M000030">method_missing</a> to allow
+            <a href="Fields.html#M000028">text</a> method, which creates fulltext
+            fields, uses <a href="Fields.html#M000029">method_missing</a> to allow
             definition of typed fields. The available methods are determined by the
             constants defined in <a href="../Type.html">Sunspot::Type</a> - in theory
             (though this is untested), plugin developers should be able to add support
@@ -60,26 +60,26 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000030">method_missing</a></li>
-              <li><a href="#M000029">text</a></li>
+              <li><a href="#M000029">method_missing</a></li>
+              <li><a href="#M000028">text</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000030'>
-                <a name='M000030'>      </a>
+              <div class='public-instance method' id='method-M000029'>
+                <a name='M000029'>      </a>
                 <div class='synopsis'>
                   <span class='name'>method_missing</span>
                   <span class='arguments'>(method, *args, &amp;block)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  <a href="Fields.html#M000030">method_missing</a> is used to provide access
+                  <a href="Fields.html#M000029">method_missing</a> is used to provide access
                   to typed fields, because developers should be able to add new <a
                   href="../Type.html">Sunspot::Type</a> implementations dynamically and have
                   them recognized inside the <a href="Fields.html">Fields</a> <a
-                  href="../DSL.html">DSL</a>. Like <a href="Fields.html#M000029">text</a>,
+                  href="../DSL.html">DSL</a>. Like <a href="Fields.html#M000028">text</a>,
                   these methods will create a VirtualField if a block is passed, or an
                   AttributeField if not.
                   </p>
@@ -91,14 +91,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000030-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000029-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fields.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">method</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">type</span> = <span class="ruby-constant">Type</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-node">&quot;#{Util.camel_case(method.to_s)}Type&quot;</span>)&#x000A;        <span class="ruby-keyword kw">rescue</span>(<span class="ruby-constant">NameError</span>)&#x000A;          <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">method</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">name</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>&#x000A;        <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">add_fields</span>(<span class="ruby-identifier">build_field</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">type</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>))&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000029-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fields.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">method</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">type</span> = <span class="ruby-constant">Type</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-node">&quot;#{Util.camel_case(method.to_s)}Type&quot;</span>)&#x000A;        <span class="ruby-keyword kw">rescue</span>(<span class="ruby-constant">NameError</span>)&#x000A;          <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">method</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">name</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>&#x000A;        <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">add_fields</span>(<span class="ruby-identifier">build_field</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">type</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>))&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000029'>
-                <a name='M000029'>      </a>
+              <div class='public-instance method' id='method-M000028'>
+                <a name='M000028'>      </a>
                 <div class='synopsis'>
                   <span class='name'>text</span>
                   <span class='arguments'>(*names, &amp;block)</span>
@@ -117,10 +117,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000029-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000028-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000029-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fields.rb, line 24</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">names</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">name</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">names</span>&#x000A;          <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">add_text_fields</span>(<span class="ruby-identifier">build_field</span>(<span class="ruby-identifier">name</span>, <span class="ruby-constant">Type</span><span class="ruby-operator">::</span><span class="ruby-constant">TextType</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>))&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000028-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fields.rb, line 24</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">names</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">name</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">names</span>&#x000A;          <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">add_text_fields</span>(<span class="ruby-identifier">build_field</span>(<span class="ruby-identifier">name</span>, <span class="ruby-constant">Type</span><span class="ruby-operator">::</span><span class="ruby-constant">TextType</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>))&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -39,12 +39,12 @@
             (<a href="http://github.com/outoftime/sunspot/tree/master/lib/sunspot/session.rb">view online</a>)
           </li>
           <li class='other'>
-            <a href="../files/lib/sunspot/facets_rb.html">lib/sunspot/facets.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/master/lib/sunspot/facets.rb">view online</a>)
-          </li>
-          <li class='other'>
             <a href="../files/lib/sunspot/type_rb.html">lib/sunspot/type.rb</a>
             (<a href="http://github.com/outoftime/sunspot/tree/master/lib/sunspot/type.rb">view online</a>)
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/facets_rb.html">lib/sunspot/facets.rb</a>
+            (<a href="http://github.com/outoftime/sunspot/tree/master/lib/sunspot/facets.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../files/lib/sunspot/facet_rb.html">lib/sunspot/facet.rb</a>
@@ -67,12 +67,12 @@
             (<a href="http://github.com/outoftime/sunspot/tree/master/lib/sunspot/configuration.rb">view online</a>)
           </li>
           <li class='other'>
-            <a href="../files/lib/sunspot/setup_rb.html">lib/sunspot/setup.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/master/lib/sunspot/setup.rb">view online</a>)
-          </li>
-          <li class='other'>
             <a href="../files/lib/sunspot/search_rb.html">lib/sunspot/search.rb</a>
             (<a href="http://github.com/outoftime/sunspot/tree/master/lib/sunspot/search.rb">view online</a>)
+          </li>
+          <li class='other'>
+            <a href="../files/lib/sunspot/setup_rb.html">lib/sunspot/setup.rb</a>
+            (<a href="http://github.com/outoftime/sunspot/tree/master/lib/sunspot/setup.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../files/lib/sunspot/indexer_rb.html">lib/sunspot/indexer.rb</a>
@@ -137,18 +137,17 @@
             <h3>public class</h3>
             <ol>
               <li><a href="#M000004">commit</a></li>
-              <li><a href="#M000012">commit_if_dirty</a></li>
-              <li><a href="#M000013">config</a></li>
-              <li><a href="#M000011">dirty?</a></li>
+              <li><a href="#M000011">commit_if_dirty</a></li>
+              <li><a href="#M000012">config</a></li>
+              <li><a href="#M000010">dirty?</a></li>
               <li><a href="#M000002">index</a></li>
               <li><a href="#M000003">index!</a></li>
-              <li><a href="#M000005">new_search</a></li>
-              <li><a href="#M000007">remove</a></li>
-              <li><a href="#M000008">remove!</a></li>
-              <li><a href="#M000009">remove_all</a></li>
-              <li><a href="#M000010">remove_all!</a></li>
-              <li><a href="#M000014">reset!</a></li>
-              <li><a href="#M000006">search</a></li>
+              <li><a href="#M000006">remove</a></li>
+              <li><a href="#M000007">remove!</a></li>
+              <li><a href="#M000008">remove_all</a></li>
+              <li><a href="#M000009">remove_all!</a></li>
+              <li><a href="#M000013">reset!</a></li>
+              <li><a href="#M000005">search</a></li>
               <li><a href="#M000001">setup</a></li>
             </ol>
           </div>
@@ -228,8 +227,8 @@
                   <pre id='M000004-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 145</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000012'>
-                <a name='M000012'>      </a>
+              <div class='public-class method' id='method-M000011'>
+                <a name='M000011'>      </a>
                 <div class='synopsis'>
                   <span class='name'>commit_if_dirty</span>
                   <span class='arguments'>()</span>
@@ -237,18 +236,18 @@
                 <div class='description'>
                   <p>
                   Sends a commit if the session is dirty (see <a
-                  href="Sunspot.html#M000011">dirty?</a>).
+                  href="Sunspot.html#M000010">dirty?</a>).
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000012-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 322</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit_if_dirty</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit_if_dirty</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000011-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 287</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit_if_dirty</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit_if_dirty</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000013'>
-                <a name='M000013'>      </a>
+              <div class='public-class method' id='method-M000012'>
+                <a name='M000012'>      </a>
                 <div class='synopsis'>
                   <span class='name'>config</span>
                   <span class='arguments'>()</span>
@@ -266,14 +265,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000013-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 333</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">config</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000012-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 298</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">config</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000011'>
-                <a name='M000011'>      </a>
+              <div class='public-class method' id='method-M000010'>
+                <a name='M000010'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dirty?</span>
                   <span class='arguments'>()</span>
@@ -291,10 +290,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000011-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 315</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dirty?</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">dirty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000010-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 280</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dirty?</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">dirty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-class method' id='method-M000002'>
@@ -356,45 +355,8 @@
                   <pre id='M000003-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 126</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">index!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000005'>
-                <a name='M000005'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>new_search</span>
-                  <span class='arguments'>(*types)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Create a new <a href="Sunspot/Search.html">Search</a> instance, but do not
-                  execute it immediately. Generally you will want to use the <a
-                  href="Sunspot.html#M000006">search</a> method to execute searches using the
-                  <a href="Sunspot/DSL.html">DSL</a>; however, if you are building searches
-                  dynamically (using the Builder pattern, for instance), it may be easier to
-                  access the Query API directly.
-                  </p>
-                  <h4>Parameters</h4>
-                  <table>
-                  <tr><td valign="top">types<Class>&#8230;:</td><td>Zero, one, or more types to search for. If no types are passed, all
-                  configured types will be searched for.
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Returns</h4>
-                  <table>
-                  <tr><td valign="top">Sunspot::Search:</td><td><a href="Sunspot/Search.html">Search</a> object, not yet executed. Query
-                  parameters can be added manually; then execute! should be called.
-                  
-                  </td></tr>
-                  </table>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000005-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 167</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000007'>
-                <a name='M000007'>      </a>
+              <div class='public-class method' id='method-M000006'>
+                <a name='M000006'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove</span>
                   <span class='arguments'>(*objects)</span>
@@ -416,14 +378,14 @@
                   <pre>post.destroy&#x000A;Sunspot.remove(post)</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 261</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000006-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 226</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000008'>
-                <a name='M000008'>      </a>
+              <div class='public-class method' id='method-M000007'>
+                <a name='M000007'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove!</span>
                   <span class='arguments'>()</span>
@@ -431,7 +393,7 @@
                 <div class='description'>
                   <p>
                   Remove objects from the index and immediately commit. See <a
-                  href="Sunspot.html#M000007">Sunspot.remove</a>
+                  href="Sunspot.html#M000006">Sunspot.remove</a>
                   </p>
                   <h4>Parameters</h4>
                   <table>
@@ -441,14 +403,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000008-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 272</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove!</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 237</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove!</span>&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000009'>
-                <a name='M000009'>      </a>
+              <div class='public-class method' id='method-M000008'>
+                <a name='M000008'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_all</span>
                   <span class='arguments'>(*classes)</span>
@@ -471,14 +433,14 @@
                   <pre>Sunspot.remove_all(Post, Blog)</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000009-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 291</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000008-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 256</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000010'>
-                <a name='M000010'>      </a>
+              <div class='public-class method' id='method-M000009'>
+                <a name='M000009'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_all!</span>
                   <span class='arguments'>(*classes)</span>
@@ -486,7 +448,7 @@
                 <div class='description'>
                   <p>
                   Remove all objects of the given classes from the index and immediately
-                  commit. See <a href="Sunspot.html#M000009">Sunspot.remove_all</a>
+                  commit. See <a href="Sunspot.html#M000008">Sunspot.remove_all</a>
                   </p>
                   <h4>Parameters</h4>
                   <table>
@@ -496,14 +458,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000010-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 303</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000009-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 268</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000014'>
-                <a name='M000014'>      </a>
+              <div class='public-class method' id='method-M000013'>
+                <a name='M000013'>      </a>
                 <div class='synopsis'>
                   <span class='name'>reset!</span>
                   <span class='arguments'>()</span>
@@ -515,14 +477,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000014-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 341</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>&#x000A;      <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000013-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 306</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>&#x000A;      <span class="ruby-ivar">@session</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000006'>
-                <a name='M000006'>      </a>
+              <div class='public-class method' id='method-M000005'>
+                <a name='M000005'>      </a>
                 <div class='synopsis'>
                   <span class='name'>search</span>
                   <span class='arguments'>(*types, &amp;block)</span>
@@ -535,27 +497,6 @@
                   <table>
                   <tr><td valign="top">types<Class>&#8230;:</td><td>Zero, one, or more types to search for. If no types are passed, all
                   configured types will be searched.
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Options (last argument, optional)</h4>
-                  <table>
-                  <tr><td valign="top">:keywords<String>:</td><td>Fulltext search string
-                  
-                  </td></tr>
-                  <tr><td valign="top">:conditions<Hash>:</td><td>Hash of key-value pairs to be used as restrictions. Keys are field names.
-                  Scalar values are used as equality restrictions; arrays are used as
-                  &#8220;any of&#8221; restrictions; and Ranges are used as range
-                  restrictions.
-                  
-                  </td></tr>
-                  <tr><td valign="top">:order<String>:</td><td>order field and direction (e.g., &#8216;updated_at desc&#8217;)
-                  
-                  </td></tr>
-                  <tr><td valign="top">:page<Integer>:</td><td>Page to start on for pagination
-                  
-                  </td></tr>
-                  <tr><td valign="top">:per_page<Integer>:</td><td>Number of results to use per page. Ignored if :page is not specified.
                   
                   </td></tr>
                   </table>
@@ -608,10 +549,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000006-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 242</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000005-source'><span class="ruby-comment cmt"># File lib/sunspot.rb, line 207</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">session</span>.<span class="ruby-identifier">search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-class method' id='method-M000001'>

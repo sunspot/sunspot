@@ -49,51 +49,51 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000044">cast</a></li>
-              <li><a href="#M000042">indexed_name</a></li>
-              <li><a href="#M000043">to_indexed</a></li>
+              <li><a href="#M000043">cast</a></li>
+              <li><a href="#M000041">indexed_name</a></li>
+              <li><a href="#M000042">to_indexed</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000044'>
-                <a name='M000044'>      </a>
+              <div class='public-class method' id='method-M000043'>
+                <a name='M000043'>      </a>
                 <div class='synopsis'>
                   <span class='name'>cast</span>
                   <span class='arguments'>(string)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 135</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cast</span>(<span class="ruby-identifier">string</span>)&#x000A;          <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">string</span>&#x000A;          <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'true'</span>&#x000A;            <span class="ruby-keyword kw">true</span>&#x000A;          <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'false'</span>&#x000A;            <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 135</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cast</span>(<span class="ruby-identifier">string</span>)&#x000A;          <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">string</span>&#x000A;          <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'true'</span>&#x000A;            <span class="ruby-keyword kw">true</span>&#x000A;          <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'false'</span>&#x000A;            <span class="ruby-keyword kw">false</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000042'>
-                <a name='M000042'>      </a>
+              <div class='public-class method' id='method-M000041'>
+                <a name='M000041'>      </a>
                 <div class='synopsis'>
                   <span class='name'>indexed_name</span>
                   <span class='arguments'>(name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 125</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indexed_name</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-node">&quot;#{name}_b&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 125</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indexed_name</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-node">&quot;#{name}_b&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000043'>
-                <a name='M000043'>      </a>
+              <div class='public-class method' id='method-M000042'>
+                <a name='M000042'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_indexed</span>
                   <span class='arguments'>(value)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 129</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-identifier">value</span> <span class="ruby-value">? </span><span class="ruby-value str">'true'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">'false'</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 129</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-identifier">value</span> <span class="ruby-value">? </span><span class="ruby-value str">'true'</span> <span class="ruby-operator">:</span> <span class="ruby-value str">'false'</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

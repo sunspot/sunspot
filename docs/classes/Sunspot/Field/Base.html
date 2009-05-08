@@ -57,15 +57,15 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000032">new</a></li>
+              <li><a href="#M000031">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000036">cast</a></li>
-              <li><a href="#M000034">indexed_name</a></li>
-              <li><a href="#M000037">multiple?</a></li>
-              <li><a href="#M000033">pair_for</a></li>
-              <li><a href="#M000035">to_indexed</a></li>
+              <li><a href="#M000035">cast</a></li>
+              <li><a href="#M000033">indexed_name</a></li>
+              <li><a href="#M000036">multiple?</a></li>
+              <li><a href="#M000032">pair_for</a></li>
+              <li><a href="#M000034">to_indexed</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -88,22 +88,22 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000032'>
-                <a name='M000032'>      </a>
+              <div class='public-class method' id='method-M000031'>
+                <a name='M000031'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(name, type, options = {})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000031-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">options</span> = {}) <span class="ruby-comment cmt">#:nodoc</span>&#x000A;        <span class="ruby-ivar">@name</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">type</span>&#x000A;        <span class="ruby-ivar">@multiple</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:multiple</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">options</span> = {}) <span class="ruby-comment cmt">#:nodoc</span>&#x000A;        <span class="ruby-ivar">@name</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">type</span>&#x000A;        <span class="ruby-ivar">@multiple</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:multiple</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000036'>
-                <a name='M000036'>      </a>
+              <div class='public-instance method' id='method-M000035'>
+                <a name='M000035'>      </a>
                 <div class='synopsis'>
                   <span class='name'>cast</span>
                   <span class='arguments'>(value)</span>
@@ -126,14 +126,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 90</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-identifier">type</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 90</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-identifier">type</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000034'>
-                <a name='M000034'>      </a>
+              <div class='public-instance method' id='method-M000033'>
+                <a name='M000033'>      </a>
                 <div class='synopsis'>
                   <span class='name'>indexed_name</span>
                   <span class='arguments'>()</span>
@@ -152,14 +152,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 48</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indexed_name</span>&#x000A;        <span class="ruby-node">&quot;#{type.indexed_name(name)}#{'m' if multiple?}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 48</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indexed_name</span>&#x000A;        <span class="ruby-node">&quot;#{type.indexed_name(name)}#{'m' if multiple?}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000037'>
-                <a name='M000037'>      </a>
+              <div class='public-instance method' id='method-M000036'>
+                <a name='M000036'>      </a>
                 <div class='synopsis'>
                   <span class='name'>multiple?</span>
                   <span class='arguments'>()</span>
@@ -173,14 +173,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 97</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">multiple?</span>&#x000A;        <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-ivar">@multiple</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 97</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">multiple?</span>&#x000A;        <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-ivar">@multiple</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000033'>
-                <a name='M000033'>      </a>
+              <div class='public-instance method' id='method-M000032'>
+                <a name='M000032'>      </a>
                 <div class='synopsis'>
                   <span class='name'>pair_for</span>
                   <span class='arguments'>(model)</span>
@@ -205,14 +205,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 32</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pair_for</span>(<span class="ruby-identifier">model</span>)&#x000A;        <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">value</span> = <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">model</span>)).<span class="ruby-identifier">nil?</span>&#x000A;          { <span class="ruby-identifier">indexed_name</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>) }&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          {}&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 32</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pair_for</span>(<span class="ruby-identifier">model</span>)&#x000A;        <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">value</span> = <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">model</span>)).<span class="ruby-identifier">nil?</span>&#x000A;          { <span class="ruby-identifier">indexed_name</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>) }&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          {}&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000035'>
-                <a name='M000035'>      </a>
+              <div class='public-instance method' id='method-M000034'>
+                <a name='M000034'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_indexed</span>
                   <span class='arguments'>(value)</span>
@@ -220,7 +220,7 @@
                 <div class='description'>
                   <p>
                   Convert a value to its representation for Solr indexing. This delegates to
-                  the <a href="Base.html#M000035">to_indexed</a> method on the field&#8217;s
+                  the <a href="Base.html#M000034">to_indexed</a> method on the field&#8217;s
                   type.
                   </p>
                   <h4>Parameters</h4>
@@ -243,10 +243,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 68</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Array</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">multiple?</span>&#x000A;            <span class="ruby-identifier">value</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">val</span><span class="ruby-operator">|</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">val</span>) }&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;#{name} is not a multiple-value field, so it cannot index values #{value.inspect}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 68</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Array</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">multiple?</span>&#x000A;            <span class="ruby-identifier">value</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">val</span><span class="ruby-operator">|</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">val</span>) }&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;#{name} is not a multiple-value field, so it cannot index values #{value.inspect}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

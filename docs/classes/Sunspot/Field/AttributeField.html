@@ -54,32 +54,32 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000040">new</a></li>
+              <li><a href="#M000039">new</a></li>
             </ol>
             <h3>protected instance</h3>
             <ol>
-              <li><a href="#M000041">value_for</a></li>
+              <li><a href="#M000040">value_for</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000040'>
-                <a name='M000040'>      </a>
+              <div class='public-class method' id='method-M000039'>
+                <a name='M000039'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(name, type, options = {})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 109</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-ivar">@attribute_name</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:using</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">name</span>&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 109</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-ivar">@attribute_name</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:using</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">name</span>&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Protected instance methods</h2>
-              <div class='protected-instance method' id='method-M000041'>
-                <a name='M000041'>      </a>
+              <div class='protected-instance method' id='method-M000040'>
+                <a name='M000040'>      </a>
                 <div class='synopsis'>
                   <span class='name'>value_for</span>
                   <span class='arguments'>(model)</span>
@@ -103,10 +103,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 127</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">model</span>)&#x000A;        <span class="ruby-identifier">model</span>.<span class="ruby-identifier">send</span>(<span class="ruby-ivar">@attribute_name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/sunspot/field.rb, line 127</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value_for</span>(<span class="ruby-identifier">model</span>)&#x000A;        <span class="ruby-identifier">model</span>.<span class="ruby-identifier">send</span>(<span class="ruby-ivar">@attribute_name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -32,7 +32,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Thu May 07 15:55:55 -0400 2009</span>
+          <span class='datetime'>Fri May 08 10:11:10 -0400 2009</span>
         </div>
       </div>
       <div id='content'>
@@ -126,7 +126,7 @@
             <h3>Search for objects:</h3>
             <pre>search = Sunspot.search Post do&#x000A;  keywords 'great pizza'&#x000A;  with :author_name, 'Mark Twain'&#x000A;  with(:blog_id).any_of [2, 14]&#x000A;  with(:category_ids).all_of [4, 10]&#x000A;  with(:published_at).less_than Time.now&#x000A;  without :title, 'Bad Title'&#x000A;  without bad_instance # specifically exclude this instance from results&#x000A;&#x000A;  paginate :page =&gt; 3, :per_page =&gt; 15&#x000A;  order_by :average_rating, :desc&#x000A;&#x000A;  facet :blog_id&#x000A;end</pre>
             <p>
-            See <a href="../classes/Sunspot.html#M000006">Sunspot.search</a> for more
+            See <a href="../classes/Sunspot.html#M000005">Sunspot.search</a> for more
             information.
             </p>
             <h3>Get data from search:</h3>

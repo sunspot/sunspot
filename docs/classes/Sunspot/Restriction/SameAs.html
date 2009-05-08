@@ -51,41 +51,41 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000021">new</a></li>
+              <li><a href="#M000020">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000022">to_positive_boolean_phrase</a></li>
+              <li><a href="#M000021">to_positive_boolean_phrase</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000021'>
-                <a name='M000021'>      </a>
+              <div class='public-class method' id='method-M000020'>
+                <a name='M000020'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(object, negative = false)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000021-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000020-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000021-source'><span class="ruby-comment cmt"># File lib/sunspot/restriction.rb, line 206</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">object</span>, <span class="ruby-identifier">negative</span> = <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-ivar">@object</span>, <span class="ruby-ivar">@negative</span> = <span class="ruby-identifier">object</span>, <span class="ruby-identifier">negative</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000020-source'><span class="ruby-comment cmt"># File lib/sunspot/restriction.rb, line 206</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">object</span>, <span class="ruby-identifier">negative</span> = <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-ivar">@object</span>, <span class="ruby-ivar">@negative</span> = <span class="ruby-identifier">object</span>, <span class="ruby-identifier">negative</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000022'>
-                <a name='M000022'>      </a>
+              <div class='public-instance method' id='method-M000021'>
+                <a name='M000021'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_positive_boolean_phrase</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000021-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000022-source'><span class="ruby-comment cmt"># File lib/sunspot/restriction.rb, line 210</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_positive_boolean_phrase</span>&#x000A;        <span class="ruby-identifier">adapter</span> = <span class="ruby-constant">Adapters</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceAdapter</span>.<span class="ruby-identifier">adapt</span>(<span class="ruby-ivar">@object</span>)&#x000A;        <span class="ruby-node">&quot;id:#{Solr::Util.query_parser_escape(adapter.index_id)}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000021-source'><span class="ruby-comment cmt"># File lib/sunspot/restriction.rb, line 210</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_positive_boolean_phrase</span>&#x000A;        <span class="ruby-identifier">adapter</span> = <span class="ruby-constant">Adapters</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceAdapter</span>.<span class="ruby-identifier">adapt</span>(<span class="ruby-ivar">@object</span>)&#x000A;        <span class="ruby-node">&quot;id:#{Solr::Util.query_parser_escape(adapter.index_id)}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -48,51 +48,51 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000047">cast</a></li>
-              <li><a href="#M000045">indexed_name</a></li>
-              <li><a href="#M000046">to_indexed</a></li>
+              <li><a href="#M000046">cast</a></li>
+              <li><a href="#M000044">indexed_name</a></li>
+              <li><a href="#M000045">to_indexed</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000047'>
-                <a name='M000047'>      </a>
+              <div class='public-class method' id='method-M000046'>
+                <a name='M000046'>      </a>
                 <div class='synopsis'>
                   <span class='name'>cast</span>
                   <span class='arguments'>(string)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000047-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000046-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000047-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 113</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cast</span>(<span class="ruby-identifier">string</span>)&#x000A;          <span class="ruby-constant">Time</span>.<span class="ruby-identifier">xmlschema</span>(<span class="ruby-identifier">string</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000046-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 113</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cast</span>(<span class="ruby-identifier">string</span>)&#x000A;          <span class="ruby-constant">Time</span>.<span class="ruby-identifier">xmlschema</span>(<span class="ruby-identifier">string</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000045'>
-                <a name='M000045'>      </a>
+              <div class='public-class method' id='method-M000044'>
+                <a name='M000044'>      </a>
                 <div class='synopsis'>
                   <span class='name'>indexed_name</span>
                   <span class='arguments'>(name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 102</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indexed_name</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-node">&quot;#{name}_d&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 102</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indexed_name</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-node">&quot;#{name}_d&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000046'>
-                <a name='M000046'>      </a>
+              <div class='public-class method' id='method-M000045'>
+                <a name='M000045'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_indexed</span>
                   <span class='arguments'>(value)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000046-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000046-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 106</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>&#x000A;            <span class="ruby-identifier">time</span> = <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:to_time</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_time</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span>)&#x000A;            <span class="ruby-identifier">time</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">xmlschema</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 106</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>&#x000A;            <span class="ruby-identifier">time</span> = <span class="ruby-identifier">value</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:to_time</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_time</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span>)&#x000A;            <span class="ruby-identifier">time</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">xmlschema</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
