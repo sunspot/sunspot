@@ -44,7 +44,7 @@ module Sunspot
     # ==== Parameters
     #
     # field_name<Symbol>:: Name of the field to which the restriction applies
-    # restriction_clazz<Class>::
+    # restriction_type<Class>::
     #   Subclass of Sunspot::Restriction::Base to instantiate
     # value<Object>::
     #   Value against which the restriction applies (e.g. less_than(2) has a

@@ -7,7 +7,7 @@ module Sunspot
   class Search
     RawResult = Struct.new(:class_name, :primary_key)
 
-    attr_reader :query
+    attr_reader :query # Sunspot::Query:: Query information for this search
 
     def initialize(connection, query) #:nodoc:
       @connection = connection
