@@ -1,7 +1,7 @@
 === 0.8 ===
-* Facet by type
 * Restrict field names to \w
 * Dynamic fields
+* Facet by type (?)
 === 0.9 ===
 * Switch to RSolr
 * Query-based faceting (?)

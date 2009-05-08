@@ -12,6 +12,9 @@ module Sunspot
       attr_accessor :type # The Type of the field
 
       def initialize(name, type, options = {}) #:nodoc
+        unless name.to_s =~ /^\w+$/
+          raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
+        end
         @name, @type = name.to_sym, type
         @multiple = options.delete(:multiple)
         raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?

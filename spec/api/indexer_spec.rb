@@ -139,6 +139,12 @@ describe 'indexer' do
     lambda { session.index(User.new) }.should raise_error(Sunspot::NoAdapterError)
   end
 
+  it 'should throw an ArgumentError if a non-word character is included in the field name' do
+    lambda do
+      Sunspot.setup(Post) { string :"bad name" }
+    end.should raise_error(ArgumentError)
+  end
+
   private
 
   def config
