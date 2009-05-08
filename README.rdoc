@@ -1,7 +1,7 @@
 = Sunspot::Rails
 
 Sunspot::Rails is a Rails plugin that provides drop-in integration of the
-Sunspot[http://github.com/outoftime/sunspot] Solr search library with Rails. It
+Sunspot[http://outoftime.github.com/sunspot] Solr search library with Rails. It
 provides the following features:
 
 * Configure Sunspot using config/sunspot.yml
@@ -206,7 +206,7 @@ used as intended.
 
 == Further Reading
 
-Reading the documentation for Sunspot[http://github.com/outoftime/sunspot] is
+Reading the {Sunspot documentation}[http://outoftime.github.com/sunspot/docs] is
 highly recommended. Sunspot::Rails exists to wrap Sunspot with a Rails-friendly
 API, but almost all of the functionality you use in Sunspot::Rails is
 implemented in Sunspot.
