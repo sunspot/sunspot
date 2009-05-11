@@ -7,15 +7,27 @@ module Sunspot
     #
     # Subclasses of Field::Base must implement the method #value_for
     #
-    class Base
+    class StaticField
+      class <<self
+        def build(name, type, options = {}, &block)
+          data_extractor =
+            if block
+              DataExtractor::VirtualExtractor.new(&block)
+            else
+              DataExtractor::AttributeExtractor.new(options.delete(:using) || name)
+            end
+          new(name, type, data_extractor, options)
+        end
+      end
+
       attr_accessor :name # The public-facing name of the field
       attr_accessor :type # The Type of the field
 
-      def initialize(name, type, options = {}) #:nodoc
+      def initialize(name, type, data_extractor, options = {}) #:nodoc
         unless name.to_s =~ /^\w+$/
           raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
         end
-        @name, @type = name.to_sym, type
+        @name, @type, @data_extractor = name.to_sym, type, data_extractor
         @multiple = options.delete(:multiple)
         raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
       end
@@ -33,7 +45,7 @@ module Sunspot
       # Hash:: a single key-value pair with the field name and value
       #
       def pair_for(model)
-        unless (value = value_for(model)).nil?
+        unless (value = @data_extractor.value_for(model)).nil?
           { indexed_name.to_sym => to_indexed(value) }
         else
           {}
@@ -99,68 +111,6 @@ module Sunspot
       # Boolean:: true if the field allows multiple values; false if not
       def multiple?
         !!@multiple
-      end
-    end
-
-    #
-    # AttributeFields call methods directly on indexed objects and index the
-    # return value of the method. By default, the field name is also the
-    # attribute that provides the value for indexing, but this can be overridden
-    # with the :using option.
-    #
-    class AttributeField < Base
-      def initialize(name, type, options = {})
-        @attribute_name = options.delete(:using) || name
-        super
-      end
-
-      protected
-
-      #
-      # Call the field's attribute name on the given model and return the value.
-      #
-      # ==== Parameters
-      #
-      # model<Object>:: The object from which to extract the value
-      #
-      # ==== Returns
-      #
-      # Object:: The value to index
-      #
-      def value_for(model)
-        model.send(@attribute_name)
-      end
-    end
-
-    #
-    # VirtualFields extract data by evaluating the provided block in the context
-    # of the model instance.
-    #
-    class VirtualField < Base
-      def initialize(name, type, options = {}, &block)
-        super(name, type, options)
-        @block = block
-      end
-
-      protected
-
-      # 
-      # Evaluate the block in the model's context and return the block's return
-      # value.
-      #
-      # ==== Parameters
-      #
-      # model<Object>:: The object from which to extract the value
-      #
-      # ==== Returns
-      #
-      # Object:: The value to index
-      def value_for(model)
-        if @block.arity <= 0
-          model.instance_eval(&@block)
-        else
-          @block.call(model)
-        end
       end
     end
   end

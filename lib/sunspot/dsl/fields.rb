@@ -23,7 +23,7 @@ module Sunspot
       #
       def text(*names, &block)
         for name in names
-          @setup.add_text_fields(build_field(name, Type::TextType, &block))
+          @setup.add_text_fields(Field::StaticField.build(name, Type::TextType, &block))
         end
       end
 
@@ -48,22 +48,7 @@ module Sunspot
           super(method.to_sym, *args, &block) and return
         end
         name = args.shift
-        @setup.add_fields(build_field(name, type, *args, &block))
-      end
-
-      private
-
-      # Factory method for field instances, used by the public methods in this
-      # class. Create a VirtualField if a block is passed, or an AttributeField
-      # if not.
-      #
-      def build_field(name, type, *args, &block) #:nodoc:
-        options = args.shift if args.first.is_a?(Hash)
-        unless block
-          Field::AttributeField.new(name, type, options || {})
-        else
-          Field::VirtualField.new(name, type, options || {}, &block)
-        end
+        @setup.add_fields(Field::StaticField.build(name, type, *args, &block))
       end
     end
   end
