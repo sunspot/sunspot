@@ -115,6 +115,16 @@ describe 'indexer' do
     end
   end
 
+  describe 'dynamic fields' do
+    #TODO all types, multiple values, virtuals
+
+    it 'should index string data' do
+      post(:custom => { :test => 'string' })
+      connection.should_receive(:add).with(hash_including(:"custom:test_s" => 'string'))
+      session.index(post)
+    end
+  end
+
   it 'should throw a NoMethodError only if a nonexistent type is defined' do
     lambda { Sunspot.setup(Post) { string :author_name }}.should_not raise_error
     lambda { Sunspot.setup(Post) { bogus :journey }}.should raise_error(NoMethodError)

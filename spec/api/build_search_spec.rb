@@ -157,6 +157,15 @@ describe 'Search' do
     end
   end
 
+  it 'should restrict by dynamic field using block' do
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['custom\:test_s:string']))
+    session.search Post do
+      dynamic :custom do
+        with :test, 'string'
+      end
+    end
+  end
+
   it 'should paginate using default per_page when page not provided' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:rows => 30))
     session.search Post

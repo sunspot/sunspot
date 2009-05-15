@@ -6,7 +6,7 @@ module Sunspot
   class Setup #:nodoc:
     def initialize(clazz)
       @class_name = clazz.name
-      @fields, @text_fields = [], []
+      @fields, @text_fields, @dynamic_fields = [], [], []
       @dsl = DSL::Fields.new(self)
     end
 
@@ -30,6 +30,11 @@ module Sunspot
     #
     def add_text_fields(fields)
       @text_fields.concat(Array(fields))
+    end
+
+    #TODO document
+    def add_dynamic_fields(fields)
+      @dynamic_fields.concat(Array(fields))
     end
 
     # 
@@ -75,7 +80,14 @@ module Sunspot
     # Array:: Collection of all text and scope fields associated with this setup
     #
     def all_fields
-      fields + text_fields
+      fields + text_fields + dynamic_fields
+    end
+
+    # TODO document
+    def dynamic_fields
+      dynamic_fields = @dynamic_fields.dup
+      dynamic_fields.concat(parent.dynamic_fields) if parent
+      dynamic_fields
     end
 
     # 

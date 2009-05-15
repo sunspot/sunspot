@@ -25,8 +25,12 @@ class Post < BaseClass
     ids.map { |id| get(id) }.sort_by { |post| post.id } # this is so that results are not ordered by coincidence
   end
 
+  def custom
+    @custom ||= {}
+  end
+
   private
-  attr_writer :category_ids
+  attr_writer :category_ids, :custom
 end
 
 Sunspot.setup(Post) do
@@ -43,4 +47,5 @@ Sunspot.setup(Post) do
   integer :primary_category_id do |post|
     post.category_ids.first
   end
+  dynamic :custom
 end

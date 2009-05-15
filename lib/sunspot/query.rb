@@ -12,6 +12,7 @@ module Sunspot
     def initialize(types, configuration) #:nodoc:
       @types, @configuration = types, configuration
       @rows = @configuration.pagination.default_per_page
+      @components = []
     end
 
     # 
@@ -33,7 +34,8 @@ module Sunspot
       if restriction_type.is_a?(Symbol)
         restriction_type = Restriction[restriction_type]
       end
-      add_component(restriction_type.new(field(field_name), value, negated))
+      @components << restriction = restriction_type.new(field(field_name), value, negated)
+      restriction
     end
 
     # 
@@ -62,7 +64,7 @@ module Sunspot
     # instance<Object>:: instance to exclude from results
     #
     def exclude_instance(instance)
-      add_component(Sunspot::Restriction::SameAs.new(instance, true))
+      @components << Sunspot::Restriction::SameAs.new(instance, true)
     end
 
     # 
@@ -73,7 +75,13 @@ module Sunspot
     # field_name<Symbol>:: Name of the field on which to get a facet
     #
     def add_field_facet(field_name)
-      add_component(Facets::FieldFacet.new(field(field_name)))
+      @components << Facets::FieldFacet.new(field(field_name))
+    end
+
+    # TODO document
+    def add_dynamic_query(field_name)
+      @components << dynamic_query = DynamicQuery.new(dynamic_field(field_name), self)
+      dynamic_query
     end
 
     #
@@ -139,7 +147,7 @@ module Sunspot
       params[:sort] = @sort if @sort
       params[:start] = @start if @start
       params[:rows] = @rows if @rows
-      for component in components
+      for component in @components
         Util.deep_merge!(params, component.to_params)
       end
       params
@@ -204,6 +212,10 @@ module Sunspot
       fields_hash[field_name.to_sym] || raise(UnrecognizedFieldError, "No field configured for #{@types * ', '} with name '#{field_name}'")
     end
 
+    def dynamic_field(field_name)
+      field = dynamic_fields_hash[field_name.to_sym]
+    end
+
     # 
     # Pass in search options as a hash. This is not the preferred way of
     # building a Sunspot search, but it is made available as experience shows
@@ -261,25 +273,6 @@ module Sunspot
     private
 
     # 
-    # Add a query component
-    #
-    # ==== Parameters
-    #
-    # component<~to_params>::  A restriction query component
-    #
-    def add_component(component)
-      components << component
-    end
-
-    # ==== Returns
-    #
-    # Array:: Collection of query components
-    #
-    def components
-      @components ||= []
-    end
-
-    # 
     # Boolean phrase that restricts results to objects of the type(s) under
     # query. If this is an open query (no types specified) then it sends a
     # no-op phrase because Solr requires that the :q parameter not be empty.
@@ -310,23 +303,43 @@ module Sunspot
     # Hash:: field names keyed to field objects
     #
     def fields_hash
-      @fields_hash ||= begin
-        fields_hash = @types.inject({}) do |hash, type|
-          Setup.for(type).fields.each do |field|
-            (hash[field.name.to_sym] ||= {})[type.name] = field
+      @fields_hash ||=
+        begin
+          fields_hash = @types.inject({}) do |hash, type|
+            Setup.for(type).fields.each do |field|
+              (hash[field.name.to_sym] ||= {})[type.name] = field
+            end
+            hash
           end
-          hash
-        end
-        fields_hash.each_pair do |field_name, field_configurations_hash|
-          if @types.any? { |type| field_configurations_hash[type.name].nil? } # at least one type doesn't have this field configured
-            fields_hash.delete(field_name)
-          elsif field_configurations_hash.values.map { |configuration| configuration.indexed_name }.uniq.length != 1 # fields with this name have different configs
-            fields_hash.delete(field_name)
-          else
-            fields_hash[field_name] = field_configurations_hash.values.first
+          fields_hash.each_pair do |field_name, field_configurations_hash|
+            if @types.any? { |type| field_configurations_hash[type.name].nil? } # at least one type doesn't have this field configured
+              fields_hash.delete(field_name)
+            elsif field_configurations_hash.values.map { |configuration| configuration.indexed_name }.uniq.length != 1 # fields with this name have different configs
+              fields_hash.delete(field_name)
+            else
+              fields_hash[field_name] = field_configurations_hash.values.first
+            end
           end
         end
-      end
+    end
+
+    def dynamic_fields_hash
+      @dynamic_fields_hash ||=
+        begin
+          dynamic_fields_hash = @types.inject({}) do |hash, type|
+            Setup.for(type).dynamic_fields.each do |field|
+              (hash[field.name.to_sym] ||= {})[type.name] = field
+            end
+            hash
+          end
+          dynamic_fields_hash.each_pair do |field_name, field_configurations_hash|
+            if @types.any? { |type| field_configurations_hash[type.name].nil? }
+              dynamic_fields_hash.delete(field_name)
+            else
+              dynamic_fields_hash[field_name] = field_configurations_hash.values.first
+            end
+          end
+        end
     end
   end
 end

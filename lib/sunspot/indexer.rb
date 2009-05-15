@@ -21,7 +21,7 @@ module Sunspot
     def add(model)
       hash = static_hash_for(model)
       for field in @setup.all_fields
-        hash.merge!(field.pair_for(model))
+        hash.merge!(field.pairs_for(model))
       end
       @connection.add(hash)
     end
