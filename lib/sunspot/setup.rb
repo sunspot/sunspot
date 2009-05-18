@@ -52,9 +52,7 @@ module Sunspot
     # Array:: Collection of all fields associated with this setup
     #
     def fields
-      fields = @fields.dup
-      fields.concat(parent.fields) if parent
-      fields
+      get_inheritable_collection(:fields)
     end
 
     # 
@@ -66,9 +64,7 @@ module Sunspot
     # Array:: Collection of all text fields associated with this setup
     #
     def text_fields
-      text_fields = @text_fields.dup
-      text_fields.concat(parent.text_fields) if parent
-      text_fields
+      get_inheritable_collection(:text_fields)
     end
 
     # 
@@ -85,9 +81,7 @@ module Sunspot
 
     # TODO document
     def dynamic_fields
-      dynamic_fields = @dynamic_fields.dup
-      dynamic_fields.concat(parent.dynamic_fields) if parent
-      dynamic_fields
+      get_inheritable_collection(:dynamic_fields)
     end
 
     # 
@@ -122,6 +116,14 @@ module Sunspot
     #
     def parent
       Setup.for(clazz.superclass)
+    end
+
+    private
+
+    def get_inheritable_collection(name)
+      collection = instance_variable_get(:"@#{name}").dup
+      collection.concat(parent.send(name)) if parent
+      collection
     end
 
     class <<self

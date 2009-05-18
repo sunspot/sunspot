@@ -48,7 +48,7 @@ module Sunspot
       objects.flatten!
       @updates += objects.length
       for object in objects
-        setup_for(object).indexer(connection).add(object)
+        indexer_for(object).add(object)
       end
     end
 
@@ -75,7 +75,7 @@ module Sunspot
       objects.flatten!
       @updates += objects.length
       for object in objects
-        setup_for(object).indexer(connection).remove(object)
+        indexer_for(object).remove(object)
       end
     end
 
@@ -140,6 +140,10 @@ module Sunspot
     #
     def setup_for(object)
       Setup.for(object.class) || raise(NoSetupError, "Sunspot is not configured for #{object.class.inspect}")
+    end
+
+    def indexer_for(object)
+      setup_for(object).indexer(connection)
     end
 
     # 
