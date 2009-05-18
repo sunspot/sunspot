@@ -17,6 +17,25 @@ module Sunspot
   #   Ruby type.
   #
   module Type
+    NATIVE_TYPE_CACHE = {}
+
+    class <<self
+      def for_value(value)
+        NATIVE_TYPE_CACHE.each_pair do |native_type, type|
+          return type if value.is_a?(native_type)
+        end
+        Type::StringType
+      end
+    end
+
+    module HandlesNative
+      def handles_native(*classes)
+        for clazz in classes
+          NATIVE_TYPE_CACHE[clazz] = self
+        end
+      end
+    end
+
     # 
     # Text is a special type that stores data for fulltext search. Unlike other
     # types, Text fields are tokenized and are made available to the keyword
@@ -59,6 +78,9 @@ module Sunspot
     # The Integer type represents integers.
     #
     module IntegerType
+      extend HandlesNative
+      handles_native Integer
+
       class <<self
         def indexed_name(name) #:nodoc:
         "#{name}_i"
@@ -78,6 +100,9 @@ module Sunspot
     # The Float type represents floating-point numbers.
     #
     module FloatType
+      extend HandlesNative
+      handles_native Float
+
       class <<self
         def indexed_name(name) #:nodoc:
         "#{name}_f"
@@ -98,6 +123,9 @@ module Sunspot
     # UTC before indexing, and facets of Time fields always return times in UTC.
     #
     module TimeType
+      extend HandlesNative
+      handles_native Date, Time
+
       class <<self
         def indexed_name(name)
         "#{name}_d"
@@ -128,6 +156,9 @@ module Sunspot
     # indexed at all; only +false+ will be indexed with a false value.
     #
     module BooleanType
+      extend HandlesNative
+      handles_native TrueClass, FalseClass
+
       class <<self
         def indexed_name(name)
         "#{name}_b"
