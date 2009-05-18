@@ -12,7 +12,7 @@ module Sunspot
       def indexed_name
         Solr::Util.query_parser_escape("#{@type.indexed_name(@name)}#{'m' if @multiple}")
       end
-
+      
       # Convert a value to its representation for Solr indexing. This delegates
       # to the #to_indexed method on the field's type.
       #
@@ -119,30 +119,30 @@ module Sunspot
     #TODO document
     class DynamicField
       class <<self
-        def build(name)
-          new(name, DataExtractor::AttributeExtractor.new(name))
+        def build(name, options)
+          new(name, DataExtractor::AttributeExtractor.new(name), options)
         end
       end
 
       attr_accessor :name
 
-      def initialize(name, data_extractor)
+      def initialize(name, data_extractor, options)
         @name, @data_extractor = name, data_extractor
+        @multiple = !!options.delete(:multiple)
       end
 
       def pairs_for(model)
         pairs = {}
         if values = @data_extractor.value_for(model)
           values.each_pair do |custom_name, value|
-            type = Type::StringType
-            pairs[indexed_name(custom_name, type).to_sym] = type.to_indexed(value)
+            type = Type.for_value(value)
+            pairs[indexed_name(custom_name, type).to_sym] = to_indexed(value, type)
           end
         end
         pairs
       end
 
       def build(custom_name, value)
-        value = value.first if value.respond_to?(:first)
         DynamicFieldInstance.new(@name, custom_name, Type.for_value(value), @data_extractor)
       end
 
@@ -150,6 +150,18 @@ module Sunspot
 
       def indexed_name(custom_name, type)
         type.indexed_name("#{@name}:#{custom_name}")
+      end
+
+      def to_indexed(value, type)
+        if value.is_a? Array
+          if @multiple
+            value.map { |val| to_indexed(val, type) }
+          else
+            raise ArgumentError, "#{name} is not a multiple-value field, so it cannot index values #{value.inspect}"
+          end
+        else
+          type.to_indexed(value)
+        end
       end
     end
 

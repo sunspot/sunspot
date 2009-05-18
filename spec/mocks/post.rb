@@ -29,8 +29,12 @@ class Post < BaseClass
     @custom ||= {}
   end
 
+  def multi_custom
+    @multi_custom ||= {}
+  end
+
   private
-  attr_writer :category_ids, :custom
+  attr_writer :category_ids, :custom, :multi_custom
 end
 
 Sunspot.setup(Post) do
@@ -48,4 +52,5 @@ Sunspot.setup(Post) do
     post.category_ids.first
   end
   dynamic :custom
+  dynamic :multi_custom, :multiple => true
 end

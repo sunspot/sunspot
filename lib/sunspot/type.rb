@@ -21,6 +21,7 @@ module Sunspot
 
     class <<self
       def for_value(value)
+        value = value.first if value.respond_to?(:first)
         NATIVE_TYPE_CACHE.each_pair do |native_type, type|
           return type if value.is_a?(native_type)
         end

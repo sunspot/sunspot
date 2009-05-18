@@ -123,6 +123,36 @@ describe 'indexer' do
       connection.should_receive(:add).with(hash_including(:"custom:test_s" => 'string'))
       session.index(post)
     end
+
+    it 'should index integer data' do
+      post(:custom => { :test => 1 })
+      connection.should_receive(:add).with(hash_including(:"custom:test_i" => '1'))
+      session.index(post)
+    end
+
+    it 'should index float data' do
+      post(:custom => { :test => 1.5 })
+      connection.should_receive(:add).with(hash_including(:"custom:test_f" => '1.5'))
+      session.index(post)
+    end
+
+    it 'should index time data' do
+      post(:custom => { :test => Time.parse('2009-05-18 18:05:00 -0400') })
+      connection.should_receive(:add).with(hash_including(:"custom:test_d" => '2009-05-18T22:05:00Z'))
+      session.index(post)
+    end
+
+    it 'should index boolean data' do
+      post(:custom => { :test => false })
+      connection.should_receive(:add).with(hash_including(:"custom:test_b" => 'false'))
+      session.index(post)
+    end
+
+    it 'should index multiple values for a field' do
+      post(:multi_custom => { :test => [1, 2, 3] })
+      connection.should_receive(:add).with(hash_including(:"multi_custom:test_i" => %w(1 2 3)))
+      session.index(post)
+    end
   end
 
   it 'should throw a NoMethodError only if a nonexistent type is defined' do

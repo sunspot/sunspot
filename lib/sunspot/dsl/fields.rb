@@ -28,8 +28,8 @@ module Sunspot
       end
 
       # TODO document
-      def dynamic(name)
-        @setup.add_dynamic_fields(Field::DynamicField.build(name))
+      def dynamic(name, options = {})
+        @setup.add_dynamic_fields(Field::DynamicField.build(name, options))
       end
 
       # method_missing is used to provide access to typed fields, because
