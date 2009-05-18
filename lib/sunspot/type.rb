@@ -105,7 +105,14 @@ module Sunspot
 
         def to_indexed(value)
           if value
-            time = value.respond_to?(:to_time) ? value.to_time : Time.parse(value.to_s)
+            time =
+              if value.respond_to?(:utc)
+                value
+              elsif %w(year mon mday).each { |method| value.respond_to?(method) }
+                Time.gm(value.year, value.mon, value.mday)
+              else
+                Time.parse(value.to_s)
+              end
             time.utc.xmlschema
           end
         end

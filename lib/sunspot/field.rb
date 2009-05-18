@@ -143,10 +143,15 @@ module Sunspot
 
       def build(custom_name, value)
         #TODO not here
-        type = case Array(value).first
-        when String
-          Type::StringType
-        end
+        value = value.first if value.respond_to?(:first)
+        type =
+          case value
+          when Integer then Type::IntegerType
+          when Float then Type::FloatType
+          when Date, Time then Type::TimeType
+          when TrueClass, FalseClass then Type::BooleanType
+          else Type::StringType
+          end
         DynamicFieldInstance.new(@name, custom_name, type, @data_extractor)
       end
 
