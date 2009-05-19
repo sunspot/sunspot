@@ -116,8 +116,6 @@ describe 'indexer' do
   end
 
   describe 'dynamic fields' do
-    #TODO all types, multiple values, virtuals
-
     it 'should index string data' do
       post(:custom => { :test => 'string' })
       connection.should_receive(:add).with(hash_including(:"custom:test_s" => 'string'))
@@ -149,8 +147,14 @@ describe 'indexer' do
     end
 
     it 'should index multiple values for a field' do
-      post(:multi_custom => { :test => [1, 2, 3] })
+      post(:custom_multi => { :test => [1, 2, 3] })
       connection.should_receive(:add).with(hash_including(:"multi_custom:test_i" => %w(1 2 3)))
+      session.index(post)
+    end
+
+    it 'should index virtual fields' do
+      post(:category_ids => [2, 4])
+      connection.should_receive(:add).with(hash_including(:"virtual_custom:2_b" => 'true', :"virtual_custom:4_b" => 'true'))
       session.index(post)
     end
   end

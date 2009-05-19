@@ -111,6 +111,7 @@ module Sunspot
       # ==== Returns
       #
       # Boolean:: true if the field allows multiple values; false if not
+      #
       def multiple?
         !!@multiple
       end
@@ -119,8 +120,14 @@ module Sunspot
     #TODO document
     class DynamicField
       class <<self
-        def build(name, options)
-          new(name, DataExtractor::AttributeExtractor.new(name), options)
+        def build(name, options, &block)
+          data_extractor =
+            if block
+              DataExtractor::VirtualExtractor.new(&block)
+            else
+              DataExtractor::AttributeExtractor.new(options.delete(:using) || name)
+            end
+          new(name, data_extractor, options)
         end
       end
 

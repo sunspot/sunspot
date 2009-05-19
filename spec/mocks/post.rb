@@ -29,12 +29,12 @@ class Post < BaseClass
     @custom ||= {}
   end
 
-  def multi_custom
-    @multi_custom ||= {}
+  def custom_multi
+    @custom_multi ||= {}
   end
 
   private
-  attr_writer :category_ids, :custom, :multi_custom
+  attr_writer :category_ids, :custom, :custom_multi
 end
 
 Sunspot.setup(Post) do
@@ -52,5 +52,10 @@ Sunspot.setup(Post) do
     post.category_ids.first
   end
   dynamic :custom
-  dynamic :multi_custom, :multiple => true
+  dynamic :multi_custom, :multiple => true, :using => :custom_multi
+  dynamic :virtual_custom do
+    category_ids.inject({}) do |hash, category_id|
+      hash.merge(category_id => true)
+    end
+  end
 end
