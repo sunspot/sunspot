@@ -27,11 +27,6 @@ module Sunspot
         end
       end
 
-      # TODO document
-      def dynamic(name, options = {}, &block)
-        @setup.add_dynamic_fields(Field::DynamicField.build(name, options, &block))
-      end
-
       # method_missing is used to provide access to typed fields, because
       # developers should be able to add new Sunspot::Type implementations
       # dynamically and have them recognized inside the Fields DSL. Like #text,

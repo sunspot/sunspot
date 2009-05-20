@@ -108,14 +108,6 @@ module Sunspot
       def cast(value)
         @type.cast(value)
       end
-
-      # ==== Returns
-      #
-      # Boolean:: true if the field allows multiple values; false if not
-      #
-      def multiple?
-        !!@multiple
-      end
     end
 
     #TODO document
