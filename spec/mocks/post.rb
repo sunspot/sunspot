@@ -25,16 +25,24 @@ class Post < BaseClass
     ids.map { |id| get(id) }.sort_by { |post| post.id } # this is so that results are not ordered by coincidence
   end
 
-  def custom
-    @custom ||= {}
+  def custom_string
+    @custom_string ||= {}
   end
 
-  def custom_multi
-    @custom_multi ||= {}
+  def custom_fl
+    @custom_fl ||= {}
+  end
+
+  def custom_time
+    @custom_time ||= {}
+  end
+
+  def custom_boolean
+    @custom_boolean ||= {}
   end
 
   private
-  attr_writer :category_ids, :custom, :custom_multi
+  attr_writer :category_ids, :custom_string, :custom_fl, :custom_time, :custom_boolean
 end
 
 Sunspot.setup(Post) do
@@ -51,11 +59,14 @@ Sunspot.setup(Post) do
   integer :primary_category_id do |post|
     post.category_ids.first
   end
-  dynamic :custom
-  dynamic :multi_custom, :multiple => true, :using => :custom_multi
-  dynamic :virtual_custom do
+
+  dynamic_string :custom_string
+  dynamic_float :custom_float, :multiple => true, :using => :custom_fl
+  dynamic_integer :custom_integer do
     category_ids.inject({}) do |hash, category_id|
-      hash.merge(category_id => true)
+      hash.merge(category_id => 1)
     end
   end
+  dynamic_time :custom_time
+  dynamic_boolean :custom_boolean
 end

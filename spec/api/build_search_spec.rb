@@ -158,58 +158,57 @@ describe 'Search' do
   end
 
   it 'should restrict by dynamic string field with equality restriction' do
-    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['custom\:test_s:string']))
+    connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['custom_string\:test_s:string']))
     session.search Post do
-      dynamic :custom do
+      dynamic :custom_string do
         with :test, 'string'
       end
     end
   end
 
   it 'should restrict by dynamic integer field with less than restriction' do
-    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom\:test_i:[* TO 1]']))
+    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_integer\:test_i:[* TO 1]']))
     session.search Post do
-      dynamic :custom do
+      dynamic :custom_integer do
         with(:test).less_than(1)
       end
     end
   end
 
   it 'should restrict by dynamic float field with between restriction' do
-    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom\:test_f:[2\.2 TO 3\.3]']))
+    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_float\:test_f:[2\.2 TO 3\.3]']))
     session.search Post do
-      dynamic :custom do
+      dynamic :custom_float do
         with(:test).between(2.2..3.3)
       end
     end
   end
 
   it 'should restrict by dynamic time field with any of restriction' do
-    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom\:test_d:(2009\-02\-10T14\:00\:00Z OR 2009\-02\-13T18\:00\:00Z)']))
+    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_time\:test_d:(2009\-02\-10T14\:00\:00Z OR 2009\-02\-13T18\:00\:00Z)']))
     session.search Post do
-      dynamic :custom do
+      dynamic :custom_time do
         with(:test).any_of([Time.parse('2009-02-10 14:00:00 UTC'),
                             Time.parse('2009-02-13 18:00:00 UTC')])
       end
     end
   end
 
-  it 'should restrict by dynamic time field using date with equality restriction' do
-    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom\:test_d:2009\-02\-10T00\:00\:00Z']))
+  it 'should restrict by dynamic boolean field with equality restriction' do
+    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_boolean\:test_b:false']))
     session.search Post do
-      dynamic :custom do
-        with :test, Date.parse('2009-02-10')
+      dynamic :custom_boolean do
+        with :test, false
       end
     end
   end
 
-  it 'should restrict by dynamic boolean field with equality restriction' do
-    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom\:test_b:false']))
-    session.search Post do
-      dynamic :custom do
-        with :test, false
+  it 'should throw an UnrecognizedFieldError if an unknown dynamic field is searched by' do
+    lambda do
+      session.search Post do
+        dynamic(:bogus) { with :some, 'value' }
       end
-    end
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'should paginate using default per_page when page not provided' do

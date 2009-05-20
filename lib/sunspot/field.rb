@@ -1,5 +1,6 @@
 module Sunspot
   module Field #:nodoc[all]
+    #TODO document, make sense of
     class FieldInstance
       # The name of the field as it is indexed in Solr. The indexed name
       # contains a suffix that contains information about the type as well as
@@ -120,21 +121,21 @@ module Sunspot
     #TODO document
     class DynamicField
       class <<self
-        def build(name, options, &block)
+        def build(name, type, options = {}, &block)
           data_extractor =
             if block
               DataExtractor::VirtualExtractor.new(&block)
             else
               DataExtractor::AttributeExtractor.new(options.delete(:using) || name)
             end
-          new(name, data_extractor, options)
+          new(name, type, data_extractor, options)
         end
       end
 
       attr_accessor :name
 
-      def initialize(name, data_extractor, options)
-        @name, @data_extractor = name, data_extractor
+      def initialize(name, type, data_extractor, options)
+        @name, @type, @data_extractor = name, type, data_extractor
         @multiple = !!options.delete(:multiple)
       end
 
@@ -142,32 +143,31 @@ module Sunspot
         pairs = {}
         if values = @data_extractor.value_for(model)
           values.each_pair do |custom_name, value|
-            type = Type.for_value(value)
-            pairs[indexed_name(custom_name, type).to_sym] = to_indexed(value, type)
+            pairs[indexed_name(custom_name).to_sym] = to_indexed(value)
           end
         end
         pairs
       end
 
       def build(custom_name, value)
-        DynamicFieldInstance.new(@name, custom_name, Type.for_value(value), @data_extractor)
+        DynamicFieldInstance.new(@name, custom_name, @type, @data_extractor)
       end
 
       private
 
-      def indexed_name(custom_name, type)
-        type.indexed_name("#{@name}:#{custom_name}")
+      def indexed_name(custom_name)
+        @type.indexed_name("#{@name}:#{custom_name}")
       end
 
-      def to_indexed(value, type)
+      def to_indexed(value)
         if value.is_a? Array
           if @multiple
-            value.map { |val| to_indexed(val, type) }
+            value.map { |val| to_indexed(val) }
           else
             raise ArgumentError, "#{name} is not a multiple-value field, so it cannot index values #{value.inspect}"
           end
         else
-          type.to_indexed(value)
+          @type.to_indexed(value)
         end
       end
     end

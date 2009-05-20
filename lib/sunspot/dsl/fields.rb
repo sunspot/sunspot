@@ -48,12 +48,16 @@ module Sunspot
       #
       def method_missing(method, *args, &block)
         begin
-          type = Type.const_get("#{Util.camel_case(method.to_s)}Type")
+          type = Type.const_get("#{Util.camel_case(method.to_s.sub(/^dynamic_/, ''))}Type")
         rescue(NameError)
           super(method.to_sym, *args, &block) and return
         end
         name = args.shift
-        @setup.add_fields(Field::StaticField.build(name, type, *args, &block))
+        if method.to_s =~ /^dynamic_/
+          @setup.add_dynamic_fields(Field::DynamicField.build(name, type, *args, &block))
+        else
+          @setup.add_fields(Field::StaticField.build(name, type, *args, &block))
+        end
       end
     end
   end
