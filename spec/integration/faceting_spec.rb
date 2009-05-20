@@ -36,4 +36,35 @@ describe 'search faceting' do
   test_field_type('Time', :published_at, :published_at, Time.mktime(2008, 02, 17, 17, 45, 04),
                                                         Time.mktime(2008, 07, 02, 03, 56, 22))
   test_field_type('Boolean', :featured, :featured, true, false)
+
+  context 'with dynamic field' do
+    before :all do
+      Sunspot.remove_all
+      2.times do
+        Sunspot.index(Post.new(:custom_string => { :test => 'value' }))
+      end
+      Sunspot.index(Post.new(:custom_string => { :test => 'other' }))
+      Sunspot.commit
+    end
+
+    before :each do
+      @search = Sunspot.search(Post) do
+        dynamic :custom_string do
+          facet :test
+        end
+      end
+    end
+
+    it 'should return value "value" with count 2' do
+      row = @search.dynamic_facet(:custom_string, :test).rows[0]
+      row.value.should == 'value'
+      row.count.should == 2
+    end
+
+    it 'should return value "other" with count 1' do
+      row = @search.dynamic_facet(:custom_string, :test).rows[1]
+      row.value.should == 'other'
+      row.count.should == 1
+    end
+  end
 end

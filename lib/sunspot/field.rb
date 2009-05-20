@@ -11,7 +11,7 @@ module Sunspot
       # String:: The field's indexed name
       #
       def indexed_name
-        Solr::Util.query_parser_escape("#{@type.indexed_name(@name)}#{'m' if @multiple}")
+        "#{@type.indexed_name(@name)}#{'m' if @multiple}"
       end
       
       # Convert a value to its representation for Solr indexing. This delegates
@@ -40,6 +40,20 @@ module Sunspot
         else
           @type.to_indexed(value)
         end
+      end
+
+      # Cast the value into the appropriate Ruby class for the field's type
+      #
+      # ==== Parameters
+      #
+      # value<String>:: Solr's representation of the value
+      #
+      # ==== Returns
+      #
+      # Object:: The cast value
+      #
+      def cast(value)
+        @type.cast(value)
       end
     end
 
@@ -93,20 +107,6 @@ module Sunspot
         else
           {}
         end
-      end
-
-      # Cast the value into the appropriate Ruby class for the field's type
-      #
-      # ==== Parameters
-      #
-      # value<String>:: Solr's representation of the value
-      #
-      # ==== Returns
-      #
-      # Object:: The cast value
-      #
-      def cast(value)
-        @type.cast(value)
       end
     end
 

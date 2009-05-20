@@ -96,6 +96,12 @@ describe 'retrieving search' do
     facet_values(result, :featured).should == [true, false]
   end
 
+  it 'should return dynamic string facet' do
+    stub_facet(:"custom_string:test_s", 'two' => 2, 'one' => 1)
+    result = session.search(Post) { dynamic(:custom_string) { facet(:test) }}
+    result.dynamic_facet(:custom_string, :test).rows.map { |row| row.value }.should == ['two', 'one']
+  end
+
   private
 
   def stub_results(*results)

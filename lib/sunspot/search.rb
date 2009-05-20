@@ -87,6 +87,15 @@ module Sunspot
         end
     end
 
+    # TODO document
+    def dynamic_facet(field_name, dynamic_name)
+      (@dynamic_facets_cache ||= {})[[field_name.to_sym, dynamic_name.to_sym]] ||=
+        begin
+          field = @query.dynamic_field(field_name).build(dynamic_name)
+          Facet.new(@solr_result.field_facets(field.indexed_name), field)
+        end
+    end
+
     private
 
     # 

@@ -78,7 +78,7 @@ module Sunspot
       # String:: Boolean phrase for restriction in the positive
       #
       def to_positive_boolean_phrase
-        "#{@field.indexed_name}:#{to_solr_conditional}"
+        "#{Solr::Util.query_parser_escape(@field.indexed_name)}:#{to_solr_conditional}"
       end
 
       # 
@@ -129,7 +129,7 @@ module Sunspot
         unless @value.nil?
           super
         else
-          "-#{@field.indexed_name}:[* TO *]"
+          "-#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]"
         end
       end
 
@@ -137,7 +137,7 @@ module Sunspot
         unless @value.nil?
           super
         else
-          "#{@field.indexed_name}:[* TO *]"
+          "#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]"
         end
       end
 
