@@ -87,11 +87,34 @@ module Sunspot
         end
     end
 
-    # TODO document
-    def dynamic_facet(field_name, dynamic_name)
-      (@dynamic_facets_cache ||= {})[[field_name.to_sym, dynamic_name.to_sym]] ||=
+    # 
+    # Get the facet object for a given dynamic field. This dynamic field will
+    # need to have been requested as a field facet inside the search block.
+    #
+    # ==== Parameters
+    #
+    # base_name<Symbol>::
+    #   Base name of the dynamic field definiton (as specified in the setup
+    #   block)
+    # dynamic_name<Symbol>::
+    #   Dynamic field name to facet on
+    # 
+    # ==== Returns
+    #
+    # Sunspot::Facet:: Facet object for given dynamic field
+    # 
+    # ==== Example
+    #
+    # search = Sunspot.search(Post) do
+    #   facet :custom, :cuisine
+    # end
+    # search.dynamic_facet(:custom, :cuisine)
+    #   #=> Facet for the dynamic field :cuisine in the :custom field definition
+    # 
+    def dynamic_facet(base_name, dynamic_name)
+      (@dynamic_facets_cache ||= {})[[base_name.to_sym, dynamic_name.to_sym]] ||=
         begin
-          field = @query.dynamic_field(field_name).build(dynamic_name)
+          field = @query.dynamic_field(base_name).build(dynamic_name)
           Facet.new(@solr_result.field_facets(field.indexed_name), field)
         end
     end

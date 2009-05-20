@@ -1,6 +1,6 @@
 === 0.8 ===
-* Restrict field names to \w
-* Dynamic fields
+* Include dynamic fields in high-level documentation
+* Order as a query component
 * Facet by type (?)
 === 0.9 ===
 * Switch to RSolr

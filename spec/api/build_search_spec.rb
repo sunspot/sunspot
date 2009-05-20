@@ -176,7 +176,7 @@ describe 'Search' do
   end
 
   it 'should restrict by dynamic float field with between restriction' do
-    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_float\:test_f:[2\.2 TO 3\.3]']))
+    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_float\:test_fm:[2\.2 TO 3\.3]']))
     session.search Post do
       dynamic :custom_float do
         with(:test).between(2.2..3.3)
@@ -199,6 +199,16 @@ describe 'Search' do
     session.search Post do
       dynamic :custom_boolean do
         with :test, false
+      end
+    end
+  end
+
+  it 'should negate a dynamic field restriction' do
+    pending 'negation for dynamic queries'
+    connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['-custom_string\:test_s:foo']))
+    session.search Post do
+      dynamic :custom_string do
+        without :test, 'foo'
       end
     end
   end

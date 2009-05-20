@@ -130,7 +130,7 @@ describe 'indexer' do
 
     it 'should index float data' do
       post(:custom_fl => { :test => 1.5 })
-      connection.should_receive(:add).with(hash_including(:"custom_float:test_f" => '1.5'))
+      connection.should_receive(:add).with(hash_including(:"custom_float:test_fm" => '1.5'))
       session.index(post)
     end
 
@@ -148,7 +148,7 @@ describe 'indexer' do
 
     it 'should index multiple values for a field' do
       post(:custom_fl => { :test => [1.0, 2.1, 3.2] })
-      connection.should_receive(:add).with(hash_including(:"custom_float:test_f" => %w(1.0 2.1 3.2)))
+      connection.should_receive(:add).with(hash_including(:"custom_float:test_fm" => %w(1.0 2.1 3.2)))
       session.index(post)
     end
   end

@@ -78,12 +78,36 @@ module Sunspot
       @components << Facets::FieldFacet.new(field(field_name))
     end
 
-    # TODO document
-    def dynamic_query(field_name)
+    # 
+    # Generate a DynamicQuery instance for the given base name.
+    # This gives you access to a subset of the Query API but the operations
+    # apply to dynamic fields inside the dynamic field definition specified
+    # by +base_name+.
+    # 
+    # ==== Parameters
+    # 
+    # base_name<Symbol>::
+    #   Base name of the dynamic field definition to use in the dynamic query
+    #   operations
+    #
+    # ==== Returns
+    #
+    # DynamicQuery::
+    #   Instance providing dynamic query functionality for the given field
+    #   definitions.
+    #
+    def dynamic_query(base_name)
       DynamicQuery.new(dynamic_field(field_name), self)
     end
 
-    # TODO document
+    # 
+    # Add a component to the query. Used by objects that proxy to the query
+    # object.
+    # 
+    # ==== Parameters
+    # 
+    # component<~to_params>:: Query component to add.
+    # 
     def add_component(component) #:nodoc:
       @components << component
     end
@@ -274,7 +298,11 @@ module Sunspot
       end
     end
 
-    # TODO document
+    # 
+    # Get the list of order parameters
+    # 
+    # TODO: Order should be a component.
+    # 
     def sort #:nodoc:
       @sort ||= []
     end

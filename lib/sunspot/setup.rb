@@ -32,7 +32,13 @@ module Sunspot
       @text_fields.concat(Array(fields))
     end
 
-    #TODO document
+    #
+    # Add dynamic fields
+    #
+    # ==== Parameters
+    # 
+    # fields<Array>:: Array of dynamic field objects
+    # 
     def add_dynamic_fields(fields)
       @dynamic_fields.concat(Array(fields))
     end
@@ -68,18 +74,26 @@ module Sunspot
     end
 
     # 
-    # Get all scope and text fields associated with this setup as well as all
-    # inherited fields
+    # Get all static, dynamic, and text fields associated with this setup as
+    # well as all inherited fields
     #
     # ==== Returns
     #
     # Array:: Collection of all text and scope fields associated with this setup
     #
     def all_fields
-      fields + text_fields + dynamic_fields
+      all_fields = []
+      all_fields.concat(fields).concat(text_fields).concat(dynamic_fields)
+      all_fields
     end
 
-    # TODO document
+    # 
+    # Get all dynamic fields for this and parent setups
+    # 
+    # ==== Returns
+    #
+    # Array:: Dynamic fields
+    #
     def dynamic_fields
       get_inheritable_collection(:dynamic_fields)
     end
@@ -90,6 +104,7 @@ module Sunspot
     # ==== Returns
     #
     # Sunspot::Indexer:: Indexer configured with this setup
+    #
     def indexer(connection)
       Indexer.new(connection, self)
     end
