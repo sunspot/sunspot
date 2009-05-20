@@ -79,9 +79,13 @@ module Sunspot
     end
 
     # TODO document
-    def add_dynamic_query(field_name)
-      @components << dynamic_query = DynamicQuery.new(dynamic_field(field_name), self)
-      dynamic_query
+    def dynamic_query(field_name)
+      DynamicQuery.new(dynamic_field(field_name), self)
+    end
+
+    # TODO document
+    def add_component(component) #:nodoc:
+      @components << component
     end
 
     #
@@ -110,7 +114,7 @@ module Sunspot
     #
     def order_by(field_name, direction = nil)
       direction ||= :asc
-      (@sort ||= []) << { field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }
+      sort << { field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }
     end
 
     # 
@@ -268,6 +272,11 @@ module Sunspot
       if options.has_key?(:page)
         paginate(options[:page], options[:per_page])
       end
+    end
+
+    # TODO document
+    def sort #:nodoc:
+      @sort ||= []
     end
 
     private

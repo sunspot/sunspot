@@ -50,7 +50,7 @@ module Sunspot
 
       #TODO document
       def dynamic(field_name, &block)
-        Scope.new(@query.add_dynamic_query(field_name)).instance_eval(&block)
+        Scope.new(@query.dynamic_query(field_name)).instance_eval(&block)
       end
     end
   end
