@@ -265,6 +265,16 @@ describe 'Search' do
     end
   end
 
+  it 'should allow faceting by dynamic string field' do
+    pending 'dynamic field faceting'
+    connection.should_receive(:query).with(anything, hash_including(:facets => { :fields => %w(custom:test_s) }))
+    session.search Post do
+      dynamic :custom do
+        facet :test
+      end
+    end
+  end
+
   it 'should build search for multiple types' do
     connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including)
     session.search(Post, Comment)
