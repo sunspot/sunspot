@@ -213,7 +213,7 @@ module Sunspot
     end
 
     def dynamic_field(field_name)
-      field = dynamic_fields_hash[field_name.to_sym] || raise (UnrecognizedFieldError, "No dynamic field configured for #{@types * ', '} with name #{field_name.inspect}")
+      field = dynamic_fields_hash[field_name.to_sym] || raise(UnrecognizedFieldError, "No dynamic field configured for #{@types * ', '} with name #{field_name.inspect}")
     end
 
     # 

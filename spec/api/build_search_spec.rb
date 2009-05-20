@@ -265,10 +265,9 @@ describe 'Search' do
   end
 
   it 'should allow faceting by dynamic string field' do
-    pending 'dynamic field faceting'
-    connection.should_receive(:query).with(anything, hash_including(:facets => { :fields => %w(custom:test_s) }))
+    connection.should_receive(:query).with(anything, hash_including(:facets => { :fields => %w(custom_string\:test_s) }))
     session.search Post do
-      dynamic :custom do
+      dynamic :custom_string do
         facet :test
       end
     end

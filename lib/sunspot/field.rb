@@ -141,7 +141,7 @@ module Sunspot
         pairs
       end
 
-      def build(custom_name, value)
+      def build(custom_name)
         DynamicFieldInstance.new(@name, custom_name, @type, @data_extractor)
       end
 

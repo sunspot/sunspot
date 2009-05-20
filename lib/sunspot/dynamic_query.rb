@@ -10,7 +10,11 @@ module Sunspot
       if restriction_type.is_a?(Symbol)
         restriction_type = Restriction[restriction_type]
       end
-      @components << restriction_type.new(@dynamic_field.build(field_name, value), value, negated)
+      @components << restriction_type.new(@dynamic_field.build(field_name), value, negated)
+    end
+
+    def add_field_facet(field_name)
+      @components << Facets::FieldFacet.new(@dynamic_field.build(field_name))
     end
 
     def to_params
