@@ -204,7 +204,6 @@ describe 'Search' do
   end
 
   it 'should negate a dynamic field restriction' do
-    pending 'negation for dynamic queries'
     connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['-custom_string\:test_s:foo']))
     session.search Post do
       dynamic :custom_string do

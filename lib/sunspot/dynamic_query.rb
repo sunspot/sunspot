@@ -38,6 +38,24 @@ module Sunspot
     end
 
     # 
+    # Add a negated restriction based on the dynamic field definition and
+    # dynamic name given.
+    # 
+    # ==== Parameters
+    # 
+    # dynamic_name<Symbol>::
+    #   Dynamic name to apply to the field in the restriction.
+    # restriction_type<Symbol,Class>::
+    #   Type of restriction to apply (e.g. Sunspot::Restriction::EqualTo), or
+    #   symbol shorthand (e.g. :equal_to)
+    # value::
+    #   Value to apply to the restriction.
+    # 
+    def add_negated_restriction(dynamic_name, restriction_type, value)
+      add_restriction(dynamic_name, restriction_type, value, true)
+    end
+
+    # 
     # Add a field facet based on the dynamic field definition and dynamic name
     # given.
     #
