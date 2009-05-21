@@ -289,6 +289,14 @@ describe 'Search' do
     end
   end
 
+  it 'should throw an ArgumentError if a bogus order direction is given' do
+    lambda do
+      session.search Post do
+        order_by :sort_title, :sideways
+      end
+    end.should raise_error(ArgumentError)
+  end
+
   it 'should request single field facet' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:facets => { :fields => %w(category_ids_im) }))
     session.search Post do

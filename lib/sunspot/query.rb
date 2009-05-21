@@ -1,4 +1,4 @@
-%w(dynamic_query field_facet restriction).each do |file|
+%w(dynamic_query field_facet restriction sort).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -141,8 +141,7 @@ module Sunspot
     # direction<Symbol>:: :asc or :desc (default :asc)
     #
     def order_by(field_name, direction = nil)
-      direction ||= :asc
-      sort << { field(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }
+      @components << Sort.new(field(field_name), direction)
     end
 
     # 
@@ -176,7 +175,6 @@ module Sunspot
       query_components << @keywords if @keywords
       query_components << types_phrase if types_phrase
       params[:q] = query_components.map { |component| "(#{component})"} * ' AND '
-      params[:sort] = @sort if @sort
       params[:start] = @start if @start
       params[:rows] = @rows if @rows
       for component in @components
@@ -300,15 +298,6 @@ module Sunspot
       if options.has_key?(:page)
         paginate(options[:page], options[:per_page])
       end
-    end
-
-    # 
-    # Get the list of order parameters
-    # 
-    # TODO: Order should be a component.
-    # 
-    def sort #:nodoc:
-      @sort ||= []
     end
 
     private
