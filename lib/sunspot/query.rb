@@ -1,4 +1,4 @@
-%w(dynamic_query field_facet restriction sort).each do |file|
+%w(dynamic_query field_facet pagination restriction sort).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -15,7 +15,7 @@ module Sunspot
 
     def initialize(types, configuration) #:nodoc:
       @types, @configuration = types, configuration
-      @rows = @configuration.pagination.default_per_page
+      @pagination = Pagination.new(@configuration)
       @components = []
     end
 
@@ -127,9 +127,7 @@ module Sunspot
     #   Sunspot.config.pagination.default_per_page
     #
     def paginate(page, per_page = nil)
-      per_page ||= @configuration.pagination.default_per_page
-      @start = (page - 1) * per_page
-      @rows = per_page
+      @pagination = Pagination.new(@configuration, page, per_page)
     end
 
     # 
@@ -175,9 +173,7 @@ module Sunspot
       query_components << @keywords if @keywords
       query_components << types_phrase if types_phrase
       params[:q] = query_components.map { |component| "(#{component})"} * ' AND '
-      params[:start] = @start if @start
-      params[:rows] = @rows if @rows
-      for component in @components
+      for component in [@pagination].concat(@components)
         Util.deep_merge!(params, component.to_params)
       end
       params
@@ -192,11 +188,7 @@ module Sunspot
     # Integer:: Page number
     #
     def page #:nodoc:
-      if @start && @rows
-        @start / @rows + 1
-      else
-        1
-      end
+      @pagination.page
     end
 
     #
@@ -208,7 +200,7 @@ module Sunspot
     # Integer:: Rows per page
     #
     def per_page #:nodoc:
-      @rows
+      @pagination.per_page
     end
 
     # 
