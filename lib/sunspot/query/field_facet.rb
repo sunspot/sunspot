@@ -1,5 +1,5 @@
 module Sunspot
-  module Facets
+  class Query
     #
     # Encapsulates a query component representing a field facet. Users create
     # instances using DSL::Query#facet

@@ -12,11 +12,11 @@ module Sunspot
         @field_name, @query, @negative = field_name, query, negative
       end
 
-      Sunspot::Restriction.names.each do |class_name|
+      Sunspot::Query::Restriction.names.each do |class_name|
         method_name = Util.snake_case(class_name)
         module_eval(<<-RUBY, __FILE__, __LINE__ + 1)
           def #{method_name}(value)
-            @query.add_restriction(@field_name, Sunspot::Restriction::#{class_name}, value, @negative)
+            @query.add_restriction(@field_name, Sunspot::Query::Restriction::#{class_name}, value, @negative)
           end
         RUBY
       end

@@ -2,8 +2,8 @@ gem 'solr-ruby'
 require 'solr'
 require File.join(File.dirname(__FILE__), 'light_config')
 
-%w(adapters restriction configuration setup field data_extractor facets indexer
-   query dynamic_query search facet facet_row session type util dsl).each do |filename|
+%w(adapters configuration setup field data_extractor indexer
+   query search facet facet_row session type util dsl).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 

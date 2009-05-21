@@ -21,7 +21,7 @@ module Sunspot
       #
       # ==== Returns
       #
-      # Sunspot::DSL::Restriction::
+      # Sunspot::DSL::Query::Restriction::
       #   Restriction DSL object (if only one argument is passed)
       #
       # ==== Examples
@@ -42,7 +42,7 @@ module Sunspot
         if value == NONE
           DSL::Restriction.new(field_name.to_sym, @query, false)
         else
-          @query.add_restriction(field_name, Sunspot::Restriction::EqualTo, value, false)
+          @query.add_restriction(field_name, Sunspot::Query::Restriction::EqualTo, value, false)
         end
       end
 
@@ -91,7 +91,7 @@ module Sunspot
           if value == NONE
             DSL::Restriction.new(field_name.to_sym, @query, true)
           else
-            @query.add_negated_restriction(field_name, Sunspot::Restriction::EqualTo, value)
+            @query.add_negated_restriction(field_name, Sunspot::Query::Restriction::EqualTo, value)
           end
         else
           instances = args

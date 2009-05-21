@@ -1,3 +1,7 @@
+%w(dynamic_query field_facet restriction).each do |file|
+  require File.join(File.dirname(__FILE__), 'query', file)
+end
+
 module Sunspot
   # 
   # This class encapsulates a query that is to be sent to Solr. The query is
@@ -22,7 +26,7 @@ module Sunspot
     #
     # field_name<Symbol>:: Name of the field to which the restriction applies
     # restriction_type<Class,Symbol>::
-    #   Subclass of Sunspot::Restriction::Base, or snake_cased name as symbol
+    #   Subclass of Sunspot::Query::Restriction::Base, or snake_cased name as symbol
     #   (e.g., +:equal_to+)
     # value<Object>::
     #   Value against which the restriction applies (e.g. less_than(2) has a
@@ -47,7 +51,7 @@ module Sunspot
     #
     # field_name<Symbol>:: Name of the field to which the restriction applies
     # restriction_type<Class>::
-    #   Subclass of Sunspot::Restriction::Base to instantiate
+    #   Subclass of Sunspot::Query::Restriction::Base to instantiate
     # value<Object>::
     #   Value against which the restriction applies (e.g. less_than(2) has a
     #   value of 2)
@@ -64,7 +68,7 @@ module Sunspot
     # instance<Object>:: instance to exclude from results
     #
     def exclude_instance(instance)
-      @components << Sunspot::Restriction::SameAs.new(instance, true)
+      @components << Restriction::SameAs.new(instance, true)
     end
 
     # 
@@ -75,7 +79,7 @@ module Sunspot
     # field_name<Symbol>:: Name of the field on which to get a facet
     #
     def add_field_facet(field_name)
-      @components << Facets::FieldFacet.new(field(field_name))
+      @components << FieldFacet.new(field(field_name))
     end
 
     # 
