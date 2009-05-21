@@ -122,7 +122,7 @@ me so I can rectify the situation!
 1. solr-ruby
 2. Java
 
-Sunspot has been tested with MRI 1.8.6 and YARV 1.9.1.
+Sunspot has been tested with MRI 1.8.6, YARV 1.9.1, and JRuby 1.2.0
 
 == Bugs
 
