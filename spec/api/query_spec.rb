@@ -82,4 +82,48 @@ describe Sunspot::Query do
     @search.query.add_field_facet(:category_ids)
     @connection.should_receive(:query).with('(type:Post)', hash_including(:facets => { :fields => %w(category_ids_im) }))
   end
+
+  it 'should restrict by dynamic string field with equality restriction' do
+    @search.query.dynamic_query(:custom_string).add_restriction(:test, :equal_to, 'string')
+    @connection.should_receive(:query).with('(type:Post)', hash_including(:filter_queries => ['custom_string\:test_s:string']))
+  end
+
+  it 'should restrict by dynamic integer field with less than restriction' do
+    @search.query.dynamic_query(:custom_integer).add_restriction(:test, :less_than, 1)
+    @connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_integer\:test_i:[* TO 1]']))
+  end
+
+  it 'should restrict by dynamic float field with between restriction' do
+    @search.query.dynamic_query(:custom_float).add_restriction(:test, :between, 2.2..3.3)
+    @connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_float\:test_fm:[2\.2 TO 3\.3]']))
+  end
+
+  it 'should restrict by dynamic time field with any of restriction' do
+    @search.query.dynamic_query(:custom_time).add_restriction(:test, :any_of,
+                                                              [Time.parse('2009-02-10 14:00:00 UTC'),
+                                                               Time.parse('2009-02-13 18:00:00 UTC')])
+    @connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_time\:test_d:(2009\-02\-10T14\:00\:00Z OR 2009\-02\-13T18\:00\:00Z)']))
+  end
+
+  it 'should restrict by dynamic boolean field with equality restriction' do
+    @search.query.dynamic_query(:custom_boolean).add_restriction(:test, :equal_to, false)
+    @connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['custom_boolean\:test_b:false']))
+  end
+
+  it 'should negate a dynamic field restriction' do
+    @search.query.dynamic_query(:custom_string).add_negated_restriction(:test, :equal_to, 'foo')
+    @connection.should_receive(:query).with(anything, hash_including(:filter_queries => ['-custom_string\:test_s:foo']))
+  end
+
+  it 'should order by a dynamic field' do
+    @search.query.dynamic_query(:custom_integer).order_by(:test, :desc)
+    @connection.should_receive(:query).with(anything, hash_including(:sort => [{ :"custom_integer:test_i" => :descending }]))
+  end
+
+  it 'should order by a dynamic field and static field, with given precedence' do
+    @search.query.dynamic_query(:custom_integer).order_by(:test, :desc)
+    @search.query.order_by(:sort_title, :asc)
+    @connection.should_receive(:query).with(anything, hash_including(:sort => [{ :"custom_integer:test_i" => :descending },
+                                                                               { :sort_title_s => :ascending}]))
+  end
 end
