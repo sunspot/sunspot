@@ -220,6 +220,16 @@ describe 'Search' do
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
+  it 'should throw a NoMethodError if pagination is attempted in a dynamic query' do
+    lambda do
+      session.search Post do
+        dynamic :custom_string do
+          paginate 3, 10
+        end
+      end
+    end.should raise_error(NoMethodError)
+  end
+
   it 'should paginate using default per_page when page not provided' do
     connection.should_receive(:query).with('(type:Post)', hash_including(:rows => 30))
     session.search Post
