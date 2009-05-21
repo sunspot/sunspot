@@ -34,7 +34,7 @@ module Sunspot
       if restriction_type.is_a?(Symbol)
         restriction_type = Restriction[restriction_type]
       end
-      @query.add_component(restriction_type.new(@dynamic_field.build(field_name), value, negated))
+      @query.add_component(restriction_type.new(@dynamic_field.build(dynamic_name), value, negated))
     end
 
     # 
@@ -46,7 +46,7 @@ module Sunspot
     # dynamic_name<Symbol>:: Dynamic name to facet on
     # 
     def add_field_facet(dynamic_name)
-      @query.add_component(Facets::FieldFacet.new(@dynamic_field.build(field_name)))
+      @query.add_component(Facets::FieldFacet.new(@dynamic_field.build(dynamic_name)))
     end
 
     # 
@@ -58,7 +58,7 @@ module Sunspot
     # direction<Symbol>:: Direction in which to order (:asc, :desc)
     # 
     def order_by(dynamic_name, direction)
-      @query.sort << { @dynamic_field.build(field_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }
+      @query.sort << { @dynamic_field.build(dynamic_name).indexed_name.to_sym => (direction.to_s == 'asc' ? :ascending : :descending) }
     end
   end
 end

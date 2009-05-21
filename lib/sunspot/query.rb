@@ -97,7 +97,7 @@ module Sunspot
     #   definitions.
     #
     def dynamic_query(base_name)
-      DynamicQuery.new(dynamic_field(field_name), self)
+      DynamicQuery.new(dynamic_field(base_name), self)
     end
 
     # 
