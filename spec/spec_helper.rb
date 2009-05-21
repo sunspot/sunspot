@@ -1,9 +1,16 @@
 require 'rubygems'
-gem 'ruby-debug', '~>0.10'
 gem 'mislav-will_paginate', '~> 2.3'
 gem 'rspec', '~> 1.1'
-
-require 'ruby-debug'
+begin
+  gem 'ruby-debug', '~>0.10'
+  require 'ruby-debug'
+rescue Gem::LoadError
+  module Kernel
+    def debugger
+      raise("debugger is not available")
+    end
+  end
+end
 require 'spec'
 require 'will_paginate'
 require 'will_paginate/collection'

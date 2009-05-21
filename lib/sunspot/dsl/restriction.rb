@@ -13,7 +13,7 @@ module Sunspot
       end
 
       Sunspot::Query::Restriction.names.each do |class_name|
-        method_name = Util.snake_case(class_name)
+        method_name = Util.snake_case(class_name.to_s)
         module_eval(<<-RUBY, __FILE__, __LINE__ + 1)
           def #{method_name}(value)
             @query.add_restriction(@field_name, Sunspot::Query::Restriction::#{class_name}, value, @negative)
