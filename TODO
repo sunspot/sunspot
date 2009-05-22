@@ -1,7 +1,4 @@
-=== 0.8 ===
-* Include dynamic fields in high-level documentation
-* Order as a query component
-* Facet by type (?)
 === 0.9 ===
+* Facet by type (?)
 * Switch to RSolr
 * Query-based faceting (?)

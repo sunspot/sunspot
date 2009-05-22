@@ -1,6 +1,31 @@
-== 0.0.5 TBD
+== 0.8.0 2009-05-22
+* Access query API directly; instantiate search without running it
+* Dynamic fields
+* Search blocks can be evaluated in calling context
+
+== 0.7.3 2009-05-06
+* Better exception handling when class doesn't have adapter/setup
+
+== 0.7.2 2009-04-29
+* Dirty sessions
+
+== 0.7.1 2009-04-29
+* Removed extlib dependency from gemspec
+
+== 0.7.0 2009-04-28
+* Less magic in the DSL
+* Restrict by empty values
 * Negative scoping using without() method
 * Exclusion by object identity using without(instance)
+* Support for faceting
+* Explicit commits
+* Boolean field type
+* Attribute field flexibility
+* Virtual field blocks can be evaluated in calling context
+* Order available by multiple fields
+* New adapter API
+* Got rid of builder API
+* Full documentation
 
 == 0.0.2 2009-02-14
 * Run sunspot's built-in Solr instance using
