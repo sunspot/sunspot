@@ -1,5 +1,5 @@
 begin
-  gem 'technicalpickles-jeweler', '~> 0.8.1'
+  gem 'technicalpickles-jeweler', '~> 1.0'
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = 'sunspot_rails'
@@ -15,6 +15,6 @@ begin
     s.add_development_dependency 'rspec', '~> 1.2'
     s.add_development_dependency 'rspec-rails', '~> 1.2'
     s.add_development_dependency 'ruby-debug', '~> 0.10'
-    s.add_development_dependency 'technicalpickles-jeweler', '~> 0.8'
+    s.add_development_dependency 'technicalpickles-jeweler', '~> 1.0'
   end
 end
