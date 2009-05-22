@@ -57,15 +57,15 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000051">field_name</a></li>
-              <li><a href="#M000052">rows</a></li>
+              <li><a href="#M000049">field_name</a></li>
+              <li><a href="#M000050">rows</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000051'>
-                <a name='M000051'>      </a>
+              <div class='public-instance method' id='method-M000049'>
+                <a name='M000049'>      </a>
                 <div class='synopsis'>
                   <span class='name'>field_name</span>
                   <span class='arguments'>()</span>
@@ -82,14 +82,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000051-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000049-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000051-source'><span class="ruby-comment cmt"># File lib/sunspot/facet.rb, line 20</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">field_name</span>&#x000A;      <span class="ruby-ivar">@field</span>.<span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000049-source'><span class="ruby-comment cmt"># File lib/sunspot/facet.rb, line 20</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">field_name</span>&#x000A;      <span class="ruby-ivar">@field</span>.<span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000052'>
-                <a name='M000052'>      </a>
+              <div class='public-instance method' id='method-M000050'>
+                <a name='M000050'>      </a>
                 <div class='synopsis'>
                   <span class='name'>rows</span>
                   <span class='arguments'>()</span>
@@ -107,10 +107,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000052-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000050-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000052-source'><span class="ruby-comment cmt"># File lib/sunspot/facet.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rows</span>&#x000A;      <span class="ruby-ivar">@rows</span> <span class="ruby-operator">||=</span>&#x000A;        <span class="ruby-ivar">@facet_values</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">facet_value</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-constant">FacetRow</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">facet_value</span>, <span class="ruby-ivar">@field</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000050-source'><span class="ruby-comment cmt"># File lib/sunspot/facet.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rows</span>&#x000A;      <span class="ruby-ivar">@rows</span> <span class="ruby-operator">||=</span>&#x000A;        <span class="ruby-ivar">@facet_values</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">facet_value</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-constant">FacetRow</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">facet_value</span>, <span class="ruby-ivar">@field</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

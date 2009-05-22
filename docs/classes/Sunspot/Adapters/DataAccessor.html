@@ -49,9 +49,9 @@
             storage. Subclasses must implement the load method, which takes an id (the
             value returned by InstanceAdapter#id, as a string), and returns the
             instance referenced by that ID. Optionally, it can also override the <a
-            href="DataAccessor.html#M000015">load_all</a> method, which takes an array
+            href="DataAccessor.html#M000016">load_all</a> method, which takes an array
             of IDs and returns an array of instances in the order given. <a
-            href="DataAccessor.html#M000015">load_all</a> need only be implemented if
+            href="DataAccessor.html#M000016">load_all</a> need only be implemented if
             it can be done more efficiently than simply iterating over the IDs and
             calling load on each individually.
             </p>
@@ -62,50 +62,16 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000016">create</a></li>
               <li><a href="#M000017">register</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000015">load_all</a></li>
+              <li><a href="#M000016">load_all</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000016'>
-                <a name='M000016'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>create</span>
-                  <span class='arguments'>(clazz)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Create a <a href="DataAccessor.html">DataAccessor</a> for the given class,
-                  searching registered adapters for the best match. See InstanceAdapter#adapt
-                  for discussion of inheritence.
-                  </p>
-                  <h4>Parameters</h4>
-                  <table>
-                  <tr><td valign="top">clazz<Class>:</td><td>Class to create <a href="DataAccessor.html">DataAccessor</a> for
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Returns</h4>
-                  <table>
-                  <tr><td valign="top">DataAccessor:</td><td><a href="DataAccessor.html">DataAccessor</a> implementation which provides
-                  access to given class
-                  
-                  </td></tr>
-                  </table>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000016-source'><span class="ruby-comment cmt"># File lib/sunspot/adapters.rb, line 181</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>(<span class="ruby-identifier">clazz</span>)&#x000A;          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">for</span>(<span class="ruby-identifier">clazz</span>).<span class="ruby-identifier">new</span>(<span class="ruby-identifier">clazz</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
               <div class='public-class method' id='method-M000017'>
                 <a name='M000017'>      </a>
                 <div class='synopsis'>
@@ -133,12 +99,12 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000017-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000017-source'><span class="ruby-comment cmt"># File lib/sunspot/adapters.rb, line 196</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">data_accessor</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;          <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">clazz</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">classes</span>&#x000A;            <span class="ruby-identifier">data_accessors</span>[<span class="ruby-identifier">clazz</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">data_accessor</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000017-source'><span class="ruby-comment cmt"># File lib/sunspot/adapters.rb, line 213</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">data_accessor</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;          <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">clazz</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">classes</span>&#x000A;            <span class="ruby-identifier">data_accessors</span>[<span class="ruby-identifier">clazz</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">data_accessor</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000015'>
-                <a name='M000015'>      </a>
+              <div class='public-instance method' id='method-M000016'>
+                <a name='M000016'>      </a>
                 <div class='synopsis'>
                   <span class='name'>load_all</span>
                   <span class='arguments'>(ids)</span>
@@ -163,10 +129,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000015-source'><span class="ruby-comment cmt"># File lib/sunspot/adapters.rb, line 163</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_all</span>(<span class="ruby-identifier">ids</span>)&#x000A;        <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">id</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000016-source'><span class="ruby-comment cmt"># File lib/sunspot/adapters.rb, line 180</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_all</span>(<span class="ruby-identifier">ids</span>)&#x000A;        <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">id</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

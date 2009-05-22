@@ -32,7 +32,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Fri May 08 10:11:10 -0400 2009</span>
+          <span class='datetime'>Fri May 22 13:34:43 -0400 2009</span>
         </div>
       </div>
       <div id='content'>
@@ -50,7 +50,7 @@
             gem, which provides a low-level interface for Solr interaction; <a
             href="../classes/Sunspot.html">Sunspot</a> provides a simple, intuitive,
             expressive DSL backed by powerful features for indexing objects and
-            searching against them.
+            searching for them.
             </p>
             <p>
             <a href="../classes/Sunspot.html">Sunspot</a> is designed to be easily
@@ -123,14 +123,34 @@
             See <a href="../classes/Sunspot.html#M000001">Sunspot.setup</a> for more
             information.
             </p>
+            <p>
+            Note that in order for a class to be searchable, it must have an adapter
+            registered for itself or one of its subclasses. Adapters allow <a
+            href="../classes/Sunspot.html">Sunspot</a> to load objects out of
+            persistent storage, and to determine their primary key for indexing. <a
+            href="http://github.com/outoftime/sunspot_rails">Sunspot::Rails</a> comes
+            with an adapter for ActiveRecord objects, but for other types of models you
+            will need to define your own. See <a
+            href="../classes/Sunspot/Adapters.html">Sunspot::Adapters</a> for more
+            information.
+            </p>
             <h3>Search for objects:</h3>
             <pre>search = Sunspot.search Post do&#x000A;  keywords 'great pizza'&#x000A;  with :author_name, 'Mark Twain'&#x000A;  with(:blog_id).any_of [2, 14]&#x000A;  with(:category_ids).all_of [4, 10]&#x000A;  with(:published_at).less_than Time.now&#x000A;  without :title, 'Bad Title'&#x000A;  without bad_instance # specifically exclude this instance from results&#x000A;&#x000A;  paginate :page =&gt; 3, :per_page =&gt; 15&#x000A;  order_by :average_rating, :desc&#x000A;&#x000A;  facet :blog_id&#x000A;end</pre>
             <p>
-            See <a href="../classes/Sunspot.html#M000005">Sunspot.search</a> for more
+            See <a href="../classes/Sunspot.html#M000006">Sunspot.search</a> for more
             information.
             </p>
             <h3>Get data from search:</h3>
             <pre>search.results&#x000A;search.total&#x000A;search.page&#x000A;search.per_page&#x000A;search.facet(:blog_id)</pre>
+            <h3>Building searches manually:</h3>
+            <p>
+            The search DSL is great for building searches from fairly static
+            parameters, but a highly dynamic search might want to leverage an
+            intermediate approach (such as an application of the Builder pattern). For
+            these cases, <a href="../classes/Sunspot.html">Sunspot</a> exposes direct
+            access to the Query object:
+            </p>
+            <pre>search = Sunspot.new_search(Post)&#x000A;search.query.keywords = 'great pizza'&#x000A;search.query.add_restriction(:author_name, :equal_to, 'Mark Twain')&#x000A;search.query.add_restriction(:title, :equal_to, 'Bad Title', true) # negate the restriction&#x000A;search.query.exclude_instance(bad_instance)&#x000A;search.query.paginate(3, 15)&#x000A;search.query.order_by(:average_rating, :desc)&#x000A;search.query.add_field_facet(:blog_id)&#x000A;search.execute!</pre>
             <h2>About the API documentation</h2>
             <p>
             All of the methods documented in the RDoc are considered part of
@@ -148,6 +168,10 @@
             
             </li>
             </ol>
+            <p>
+            <a href="../classes/Sunspot.html">Sunspot</a> has been tested with MRI
+            1.8.6, YARV 1.9.1, and JRuby 1.2.0
+            </p>
             <h2>Bugs</h2>
             <p>
             Please submit bug reports to <a
@@ -155,6 +179,8 @@
             </p>
             <h2>Further Reading</h2>
             <p>
+            <a href="../classes/Sunspot.html">Sunspot</a> Discussion: <a
+            href="http://groups.google.com/group/ruby-sunspot">groups.google.com/group/ruby-sunspot</a>
             Posts about <a href="../classes/Sunspot.html">Sunspot</a> from my tumblog:
             <a href="http://outofti.me/tagged/sunspot">outofti.me/tagged/sunspot</a>
             </p>
@@ -162,34 +188,10 @@
             <p>
             Mat Brown <mat@patch.com>
             </p>
-            <h2>LICENSE:</h2>
+            <h2>License</h2>
             <p>
-            (The MIT License)
-            </p>
-            <p>
-            Copyright &#169; 2008-2009 Mat Brown
-            </p>
-            <p>
-            Permission is hereby granted, free of charge, to any person obtaining a
-            copy of this software and associated documentation files (the
-            &#8216;Software&#8217;), to deal in the Software without restriction,
-            including without limitation the rights to use, copy, modify, merge,
-            publish, distribute, sublicense, and/or sell copies of the Software, and to
-            permit persons to whom the Software is furnished to do so, subject to the
-            following conditions:
-            </p>
-            <p>
-            The above copyright notice and this permission notice shall be included in
-            all copies or substantial portions of the Software.
-            </p>
-            <p>
-            THE SOFTWARE IS PROVIDED &#8216;AS IS&#8217;, WITHOUT WARRANTY OF ANY KIND,
-            EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-            MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-            NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-            DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-            OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-            USE OR OTHER DEALINGS IN THE SOFTWARE.
+            <a href="../classes/Sunspot.html">Sunspot</a> is distributed under the MIT
+            License, copyright &#169; 2008-2009 Mat Brown
             </p>
           </div>
           <div id='section'>

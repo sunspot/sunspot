@@ -37,19 +37,22 @@
         </ol>
         <div class='parent'>
           Parent:
-          <strong>Object</strong>
+          <strong><a href="Scope.html">Sunspot::DSL::Scope</a></strong>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             <p>
-            This class presents a <a href="../DSL.html">DSL</a> for constructing
-            queries using the <a href="../../Sunspot.html#M000005">Sunspot.search</a>
-            method. Methods of this class are available inside the search block.
+            This class presents a DSL for constructing queries using the <a
+            href="../../Sunspot.html#M000006">Sunspot.search</a> method. Methods of
+            this class are available inside the search block. Methods that take field
+            names as arguments are implemented in the superclass <a
+            href="Scope.html">Sunspot::DSL::Scope</a>, as that DSL is also available in
+            the dynamic() block.
             </p>
             <p>
-            See <a href="../../Sunspot.html#M000005">Sunspot.search</a> for usage
+            See <a href="../../Sunspot.html#M000006">Sunspot.search</a> for usage
             examples
             </p>
           </div>
@@ -57,58 +60,46 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000027">facet</a></li>
-              <li><a href="#M000022">keywords</a></li>
-              <li><a href="#M000026">order_by</a></li>
-              <li><a href="#M000025">paginate</a></li>
-              <li><a href="#M000023">with</a></li>
-              <li><a href="#M000024">without</a></li>
+              <li><a href="#M000020">dynamic</a></li>
+              <li><a href="#M000018">keywords</a></li>
+              <li><a href="#M000019">paginate</a></li>
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>NONE</td>
-                    <td>=</td>
-                    <td class='context-item-value'>Object.new</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000027'>
-                <a name='M000027'>      </a>
+              <div class='public-instance method' id='method-M000020'>
+                <a name='M000020'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>facet</span>
-                  <span class='arguments'>(*field_names)</span>
+                  <span class='name'>dynamic</span>
+                  <span class='arguments'>(base_name, &amp;block)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Request facets on the given field names. See <a
-                  href="../Search.html#M000050">Sunspot::Search#facet</a> and <a
-                  href="../Facet.html">Sunspot::Facet</a> for information on what is
-                  returned.
+                  Apply restrictions, facets, and ordering to dynamic field instances. The
+                  block API is implemented by <a href="Scope.html">Sunspot::DSL::Scope</a>,
+                  which is a superclass of the <a href="Query.html">Query</a> DSL (thus
+                  providing a subset of the API, in particular only methods that refer to
+                  particular fields).
                   </p>
                   <h4>Parameters</h4>
                   <table>
-                  <tr><td valign="top">field_names...<Symbol>:</td><td>fields for which to return field facets
+                  <tr><td valign="top">base_name<Symbol>:</td><td>The base name for the dynamic field definition
                   
                   </td></tr>
                   </table>
+                  <h4>Example</h4>
+                  <pre>Sunspot.search Post do&#x000A;  dynamic :custom do&#x000A;    with :cuisine, 'Pizza'&#x000A;    facet :atmosphere&#x000A;    order_by :chef_name&#x000A;  end&#x000A;end</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000027-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000020-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 169</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">facet</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">field_names</span>)&#x000A;        <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">field_name</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">field_names</span>&#x000A;          <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_field_facet</span>(<span class="ruby-identifier">field_name</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000020-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 73</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dynamic</span>(<span class="ruby-identifier">base_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@query</span>.<span class="ruby-identifier">dynamic_query</span>(<span class="ruby-identifier">base_name</span>)).<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000022'>
-                <a name='M000022'>      </a>
+              <div class='public-instance method' id='method-M000018'>
+                <a name='M000018'>      </a>
                 <div class='synopsis'>
                   <span class='name'>keywords</span>
                   <span class='arguments'>(keywords)</span>
@@ -117,7 +108,7 @@
                   <p>
                   Specify a phrase that should be searched as fulltext. Only <tt>text</tt>
                   fields are searched - see <a
-                  href="Fields.html#M000028">DSL::Fields.text</a>
+                  href="Fields.html#M000021">DSL::Fields.text</a>
                   </p>
                   <p>
                   Note that the keywords are passed directly to Solr unadulterated. The
@@ -133,42 +124,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000022-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keywords</span>(<span class="ruby-identifier">keywords</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">keywords</span> = <span class="ruby-identifier">keywords</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keywords</span>(<span class="ruby-identifier">keywords</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">keywords</span> = <span class="ruby-identifier">keywords</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000026'>
-                <a name='M000026'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>order_by</span>
-                  <span class='arguments'>(field_name, direction = nil)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Specify the order that results should be returned in. This method can be
-                  called multiple times; precedence will be in the order given.
-                  </p>
-                  <h4>Parameters</h4>
-                  <table>
-                  <tr><td valign="top">field_name<Symbol>:</td><td>the field to use for ordering
-                  
-                  </td></tr>
-                  <tr><td valign="top">direction<Symbol>:</td><td>:asc or :desc (default :asc)
-                  
-                  </td></tr>
-                  </table>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 159</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_by</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">direction</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">order_by</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">direction</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000025'>
-                <a name='M000025'>      </a>
+              <div class='public-instance method' id='method-M000019'>
+                <a name='M000019'>      </a>
                 <div class='synopsis'>
                   <span class='name'>paginate</span>
                   <span class='arguments'>(options = {})</span>
@@ -180,7 +143,7 @@
                   </p>
                   <p>
                   Note that Solr searches are <em>always</em> paginated. Not calling <a
-                  href="Query.html#M000025">paginate</a> is the equivalent of calling:
+                  href="Query.html#M000019">paginate</a> is the equivalent of calling:
                   </p>
                   <pre>paginate(:page =&gt; 1, :per_page =&gt; Sunspot.config.pagination.default_per_page)</pre>
                   <h4>Options (options)</h4>
@@ -189,112 +152,16 @@
                   
                   </td></tr>
                   <tr><td valign="top">:per_page<Integer>:</td><td>How many results to return per page. The default is the value in <tt><a
-                  href="../../Sunspot.html#M000012">Sunspot.config</a>.pagination.default_per_page</tt>
+                  href="../../Sunspot.html#M000013">Sunspot.config</a>.pagination.default_per_page</tt>
                   
                   </td></tr>
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000019-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 144</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-identifier">page</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:page</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;paginate requires a :page argument&quot;</span>)&#x000A;        <span class="ruby-identifier">per_page</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:per_page</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;unknown argument #{options.keys.first.inspect} passed to paginate&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span>, <span class="ruby-identifier">per_page</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000023'>
-                <a name='M000023'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>with</span>
-                  <span class='arguments'>(field_name, value = NONE)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Build a positive restriction. With one argument, this method returns
-                  another <a href="../DSL.html">DSL</a> object which presents methods for
-                  attaching various restriction types. With two arguments, acts as a
-                  shorthand for creating an equality restriction.
-                  </p>
-                  <h4>Parameters</h4>
-                  <table>
-                  <tr><td valign="top">field_name<Symbol>:</td><td>Name of the field on which to place the restriction
-                  
-                  </td></tr>
-                  <tr><td valign="top">value<Symbol>:</td><td>If passed, creates an equality restriction with this value
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Returns</h4>
-                  <table>
-                  <tr><td valign="top">Sunspot::DSL::Restriction:</td><td><a href="Restriction.html">Restriction</a> <a href="../DSL.html">DSL</a>
-                  object (if only one argument is passed)
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Examples</h4>
-                  <p>
-                  An equality restriction:
-                  </p>
-                  <pre>Sunspot.search do&#x000A;  with(:blog_id, 1)&#x000A;end</pre>
-                  <p>
-                  Other restriction types:
-                  </p>
-                  <pre>Sunspot.search(Post) do&#x000A;  with(:average_rating).greater_than(3.0)&#x000A;end</pre>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000023-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000023-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 65</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">with</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">value</span> = <span class="ruby-constant">NONE</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-constant">NONE</span>&#x000A;          <span class="ruby-constant">DSL</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-ivar">@query</span>, <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_restriction</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span><span class="ruby-operator">::</span><span class="ruby-constant">EqualTo</span>, <span class="ruby-identifier">value</span>, <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000024'>
-                <a name='M000024'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>without</span>
-                  <span class='arguments'>(*args)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Build a negative restriction (exclusion). This method can take three forms:
-                  equality exclusion, exclusion by another restriction, or identity
-                  exclusion. The first two forms work the same way as the <a
-                  href="Query.html#M000023">with</a> method; the third excludes a specific
-                  instance from the search results.
-                  </p>
-                  <h4>Parameters (exclusion by field value)</h4>
-                  <table>
-                  <tr><td valign="top">field_name<Symbol>:</td><td>Name of the field on which to place the exclusion
-                  
-                  </td></tr>
-                  <tr><td valign="top">value<Symbol>:</td><td>If passed, creates an equality exclusion with this value
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Parameters (exclusion by identity)</h4>
-                  <table>
-                  <tr><td valign="top">args<Object>&#8230;:</td><td>One or more instances that should be excluded from the results
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Examples</h4>
-                  <p>
-                  An equality exclusion:
-                  </p>
-                  <pre>Sunspot.search(Post) do&#x000A;  without(:blog_id, 1)&#x000A;end</pre>
-                  <p>
-                  Other restriction types:
-                  </p>
-                  <pre>Sunspot.search(Post) do&#x000A;  without(:average_rating).greater_than(3.0)&#x000A;end</pre>
-                  <p>
-                  Exclusion by identity:
-                  </p>
-                  <pre>Sunspot.search(Post) do&#x000A;  without(some_post_instance)&#x000A;end</pre>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 110</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">without</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>, <span class="ruby-constant">Symbol</span>&#x000A;          <span class="ruby-identifier">field_name</span> = <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">:</span> <span class="ruby-constant">NONE</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-constant">NONE</span>&#x000A;            <span class="ruby-constant">DSL</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-ivar">@query</span>, <span class="ruby-keyword kw">true</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_restriction</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span><span class="ruby-operator">::</span><span class="ruby-constant">EqualTo</span>, <span class="ruby-identifier">value</span>, <span class="ruby-keyword kw">true</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">instances</span> = <span class="ruby-identifier">args</span>&#x000A;          <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">instance</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">flatten</span>&#x000A;            <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_component</span>(<span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span><span class="ruby-operator">::</span><span class="ruby-constant">SameAs</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">instance</span>, <span class="ruby-keyword kw">true</span>))&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000019-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 46</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-identifier">page</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:page</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;paginate requires a :page argument&quot;</span>)&#x000A;        <span class="ruby-identifier">per_page</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:per_page</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;unknown argument #{options.keys.first.inspect} passed to paginate&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span>, <span class="ruby-identifier">per_page</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

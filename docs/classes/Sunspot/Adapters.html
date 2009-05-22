@@ -40,25 +40,46 @@
         <div id='text'>
           <div id='description'>
             <p>
-            <a href="../Sunspot.html">Sunspot</a> provides an adapter architecture that
-            allows applications or plugin developers to define adapters for any type of
-            object. An adapter is composed of two classes, an <a
-            href="Adapters/InstanceAdapter.html">InstanceAdapter</a> and a <a
-            href="Adapters/DataAccessor.html">DataAccessor</a>. Note that an adapter
-            does not need to provide both classes - <a
-            href="Adapters/InstanceAdapter.html">InstanceAdapter</a> is only needed if
-            you wish to index instances of the class, and <a
-            href="Adapters/DataAccessor.html">DataAccessor</a> is only needed if you
-            wish to retrieve instances of this class in search results. Of course, both
-            will be the case most of the time.
+            <a href="../Sunspot.html">Sunspot</a> works by saving references to the
+            primary key (or natural ID) of each indexed object, and then retrieving the
+            objects from persistent storage when their IDs are referenced in search
+            results. In order for <a href="../Sunspot.html">Sunspot</a> to know what an
+            object&#8217;s primary key is, and how to retrieve objects from persistent
+            storage given a primary key, an adapter must be registered for that
+            object&#8217;s class or one of its superclasses (for instance, an adapter
+            registered for ActiveRecord::Base would be used for all ActiveRecord
+            models).
             </p>
             <p>
-            See <a
+            To provide <a href="../Sunspot.html">Sunspot</a> with this ability,
+            adapters must have two roles:
+            </p>
+            <table>
+            <tr><td valign="top">Data accessor:</td><td>A subclass of <a
+            href="Adapters/DataAccessor.html">Sunspot::Adapters::DataAccessor</a>, this
+            object is instantiated with a particular class and must respond to the
+            load() method, which returns an object from persistent storage given that
+            object&#8217;s primary key. It can also optionally implement the load_all()
+            method, which returns a collection of objects given a collection of primary
+            keys, if that can be done more efficiently than calling load() on each key.
+            
+            </td></tr>
+            <tr><td valign="top">Instance adapter:</td><td>A subclass of <a
+            href="Adapters/InstanceAdapter.html">Sunspot::Adapters::InstanceAdapter</a>,
+            this object is instantiated with a particular instance. Its only job is to
+            tell <a href="../Sunspot.html">Sunspot</a> what the object&#8217;s primary
+            key is, by implementing the id() method.
+            
+            </td></tr>
+            </table>
+            <p>
+            <a href="Adapters.html">Adapters</a> are registered by registering their
+            two components, telling <a href="../Sunspot.html">Sunspot</a> that they are
+            available for one or more classes, and all of their subclasses. See <a
             href="Adapters/DataAccessor.html#M000017">Sunspot::Adapters::DataAccessor.register</a>
             and <a
-            href="Adapters/InstanceAdapter.html#M000014">Sunspot::Adapters::InstanceAdapter.register</a>
-            for information on how to enable an adapter for use by <a
-            href="../Sunspot.html">Sunspot</a>.
+            href="Adapters/InstanceAdapter.html#M000015">Sunspot::Adapters::InstanceAdapter.register</a>
+            for the details.
             </p>
             <p>
             See spec/mocks/mock_adapter.rb for an example of how adapter classes should
