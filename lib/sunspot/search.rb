@@ -5,9 +5,14 @@ module Sunspot
   # Instances of Search are returned by the Sunspot.search method.
   #
   class Search
+    # Objects of this class are returned by the #raw_results method.
     RawResult = Struct.new(:class_name, :primary_key)
 
-    attr_reader :query # Sunspot::Query:: Query information for this search
+    # Query information for this search. If you wish to build the query without
+    # using the search DSL, this method allows you to access the query API
+    # directly. See Sunspot#new_search for how to construct the search object
+    # in this case.
+    attr_reader :query 
 
     def initialize(connection, query) #:nodoc:
       @connection = connection
@@ -105,11 +110,13 @@ module Sunspot
     # 
     # ==== Example
     #
-    # search = Sunspot.search(Post) do
-    #   facet :custom, :cuisine
-    # end
-    # search.dynamic_facet(:custom, :cuisine)
-    #   #=> Facet for the dynamic field :cuisine in the :custom field definition
+    #   search = Sunspot.search(Post) do
+    #     dynamic :custom do
+    #       facet :cuisine
+    #     end
+    #   end
+    #   search.dynamic_facet(:custom, :cuisine)
+    #     #=> Facet for the dynamic field :cuisine in the :custom field definition
     # 
     def dynamic_facet(base_name, dynamic_name)
       (@dynamic_facets_cache ||= {})[[base_name.to_sym, dynamic_name.to_sym]] ||=

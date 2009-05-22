@@ -1,15 +1,32 @@
 module Sunspot
-  # Sunspot provides an adapter architecture that allows applications or plugin
-  # developers to define adapters for any type of object. An adapter is composed
-  # of two classes, an InstanceAdapter and a DataAccessor. Note that an adapter
-  # does not need to provide both classes - InstanceAdapter is only needed if
-  # you wish to index instances of the class, and DataAccessor is only needed if
-  # you wish to retrieve instances of this class in search results. Of course,
-  # both will be the case most of the time.
+  # 
+  # Sunspot works by saving references to the primary key (or natural ID) of
+  # each indexed object, and then retrieving the objects from persistent storage
+  # when their IDs are referenced in search results. In order for Sunspot to
+  # know what an object's primary key is, and how to retrieve objects from
+  # persistent storage given a primary key, an adapter must be registered for
+  # that object's class or one of its superclasses (for instance, an adapter
+  # registered for ActiveRecord::Base would be used for all ActiveRecord
+  # models).
   #
-  # See Sunspot::Adapters::DataAccessor.register and
-  # Sunspot::Adapters::InstanceAdapter.register for information on how to enable
-  # an adapter for use by Sunspot.
+  # To provide Sunspot with this ability, adapters must have two roles:
+  #
+  # Data accessor::
+  #   A subclass of Sunspot::Adapters::DataAccessor, this object is instantiated
+  #   with a particular class and must respond to the #load() method, which
+  #   returns an object from persistent storage given that object's primary key.
+  #   It can also optionally implement the #load_all() method, which returns
+  #   a collection of objects given a collection of primary keys, if that can be
+  #   done more efficiently than calling #load() on each key.
+  # Instance adapter::
+  #   A subclass of Sunspot::Adapters::InstanceAdapter, this object is
+  #   instantiated with a particular instance. Its only job is to tell Sunspot
+  #   what the object's primary key is, by implementing the #id() method.
+  #
+  # Adapters are registered by registering their two components, telling Sunspot
+  # that they are available for one or more classes, and all of their
+  # subclasses. See Sunspot::Adapters::DataAccessor.register and
+  # Sunspot::Adapters::InstanceAdapter.register for the details.
   #
   # See spec/mocks/mock_adapter.rb for an example of how adapter classes should
   # be implemented.
@@ -178,7 +195,7 @@ module Sunspot
         # DataAccessor::
         #   DataAccessor implementation which provides access to given class
         #
-        def create(clazz)
+        def create(clazz) #:nodoc:
           self.for(clazz).new(clazz)
         end
 

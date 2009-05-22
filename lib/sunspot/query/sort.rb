@@ -3,7 +3,7 @@ module Sunspot
     # 
     # The Sort class is a query component representing a sort by a given field.
     # 
-    class Sort
+    class Sort #:nodoc:
       ASCENDING = Set.new([:asc, :ascending])
       DESCENDING = Set.new([:desc, :descending])
 

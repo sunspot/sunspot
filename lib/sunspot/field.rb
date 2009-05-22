@@ -17,7 +17,7 @@ module Sunspot
   # DynamicField objects act only as definitions, and spawn DynamicFieldInstance
   # objects to play the instance role.
   # 
-  module Field #:nodoc[all]
+  module Field #:nodoc: all
     #
     # The FieldInstance module encapsulates functionality associated with
     # acting as a concrete instance of a field for the purposes of search.
@@ -93,7 +93,7 @@ module Sunspot
       def build(name, type, options = {}, &block)
         data_extractor =
           if block
-            DataExtractor::VirtualExtractor.new(&block)
+            DataExtractor::BlockExtractor.new(&block)
           else
             DataExtractor::AttributeExtractor.new(options.delete(:using) || name)
           end

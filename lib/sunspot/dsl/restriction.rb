@@ -1,5 +1,5 @@
 module Sunspot
-  module DSL
+  module DSL #:nodoc:
     # 
     # This class presents an API for building restrictions in the query DSL. The
     # methods exposed are the snake-cased names of the classes defined in the
@@ -7,7 +7,7 @@ module Sunspot
     # take a single argument, which is the value to be applied to the
     # restriction.
     #
-    class Restriction
+    class Restriction #:nodoc:
       def initialize(field_name, query, negative)
         @field_name, @query, @negative = field_name, query, negative
       end

@@ -5,7 +5,7 @@ http://outoftime.github.com/sunspot
 Sunspot is a Ruby library for expressive, powerful interaction with the Solr search engine.
 Sunspot is built on top of the solr-ruby gem, which provides a low-level interface for Solr
 interaction; Sunspot provides a simple, intuitive, expressive DSL backed by powerful
-features for indexing objects and searching against them.
+features for indexing objects and searching for them.
 
 Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
 objects such as the filesystem.
@@ -64,6 +64,13 @@ integrating Sunspot into Rails drop-in easy.
   end
 
 See Sunspot.setup for more information.
+
+Note that in order for a class to be searchable, it must have an adapter
+registered for itself or one of its subclasses. Adapters allow Sunspot to load
+objects out of persistent storage, and to determine their primary key for
+indexing. {Sunspot::Rails}[http://github.com/outoftime/sunspot_rails] comes with
+an adapter for ActiveRecord objects, but for other types of models you will need
+to define your own. See Sunspot::Adapters for more information.
 
 === Search for objects:
   

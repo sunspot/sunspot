@@ -1,9 +1,11 @@
 module Sunspot
-  module DSL
+  module DSL #:nodoc:
     #
     # This class presents a DSL for constructing queries using the
     # Sunspot.search method. Methods of this class are available inside the
-    # search block.
+    # search block. Methods that take field names as arguments are implemented
+    # in the superclass Sunspot::DSL::Scope, as that DSL is also available in
+    # the #dynamic() block.
     #
     # See Sunspot.search for usage examples
     #
@@ -50,8 +52,9 @@ module Sunspot
 
       #
       # Apply restrictions, facets, and ordering to dynamic field instances.
-      # The block API is the same as in the main query block, although in this
-      # case only restrictions, facets, and ordering are allowed.
+      # The block API is implemented by Sunspot::DSL::Scope, which is a
+      # superclass of the Query DSL (thus providing a subset of the API, in
+      # particular only methods that refer to particular fields).
       # 
       # ==== Parameters
       # 
@@ -59,11 +62,11 @@ module Sunspot
       #
       # ==== Example
       #
-      #   Sunspot.search(Post) do
+      #   Sunspot.search Post do
       #     dynamic :custom do
-      #       with(:cuisine, 'Pizza')
-      #       facet(:atmosphere)
-      #       order_by(:chef_name)
+      #       with :cuisine, 'Pizza'
+      #       facet :atmosphere
+      #       order_by :chef_name
       #     end
       #   end
       #

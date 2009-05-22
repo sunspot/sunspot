@@ -1,6 +1,11 @@
 module Sunspot
   class Query
-    class Pagination
+    # 
+    # A query component that holds information about pagination. Unlike other
+    # query components, this one is mutable, because the query itself holds a
+    # reference to it and updates it if pagination is changed.
+    #
+    class Pagination #:nodoc:
       attr_reader :page, :per_page
 
       def initialize(configuration, page = nil, per_page = nil)

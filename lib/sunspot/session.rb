@@ -61,7 +61,7 @@ module Sunspot
     end
 
     #
-    # See Sunspot.commit!
+    # See Sunspot.commit
     #
     def commit
       @updates = 0

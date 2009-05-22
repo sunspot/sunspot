@@ -1,5 +1,5 @@
 module Sunspot
-  module DSL
+  module DSL #:nodoc:
     # The Fields class provides a DSL for specifying field definitions in the
     # Sunspot.setup block. As well as the #text method, which creates fulltext
     # fields, uses #method_missing to allow definition of typed fields. The

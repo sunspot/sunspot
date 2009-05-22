@@ -6,9 +6,14 @@ module Sunspot
   # 
   # This class encapsulates a query that is to be sent to Solr. The query is
   # constructed in the block passed to the Sunspot.search method, using the
-  # Sunspot::DSL::Query interface. Instances of Query, as well as all of the
-  # components it contains, respond to the #to_params method, which returns
-  # a hash of parameters in the format recognized by the solr-ruby API.
+  # Sunspot::DSL::Query interface. It can also be accessed directly by calling
+  # #query on a Search object (presumably a not-yet-run one created using
+  # Sunspot#new_search), which might be more suitable than the DSL when an
+  # intermediate object has responsibility for building the query dynamically.
+  #--
+  # Instances of Query, as well as all of the components it contains, respond to
+  # the #to_params method, which returns a hash of parameters in the format
+  # recognized by the solr-ruby API.
   #
   class Query
     attr_writer :keywords # <String> full-text keyword boolean phrase

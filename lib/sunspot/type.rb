@@ -100,11 +100,11 @@ module Sunspot
     module TimeType
 
       class <<self
-        def indexed_name(name)
+        def indexed_name(name) #:nodoc:
         "#{name}_d"
         end
 
-        def to_indexed(value)
+        def to_indexed(value) #:nodoc:
           if value
             time =
               if value.respond_to?(:utc)
@@ -118,7 +118,7 @@ module Sunspot
           end
         end
 
-        def cast(string)
+        def cast(string) #:nodoc:
           Time.xmlschema(string)
         end
       end
@@ -130,17 +130,17 @@ module Sunspot
     #
     module BooleanType
       class <<self
-        def indexed_name(name)
+        def indexed_name(name) #:nodoc:
         "#{name}_b"
         end
 
-        def to_indexed(value)
+        def to_indexed(value) #:nodoc:
           unless value.nil?
             value ? 'true' : 'false'
           end
         end
 
-        def cast(string)
+        def cast(string) #:nodoc:
           case string
           when 'true'
             true
