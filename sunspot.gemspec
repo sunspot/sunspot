@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot}
-  s.version = "0.8.0"
+  s.version = "0.8.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown"]
-  s.date = %q{2009-05-22}
+  s.date = %q{2009-05-26}
   s.default_executable = %q{sunspot-solr}
   s.description = %q{Library for expressive, powerful interaction with the Solr search engine}
   s.email = %q{mat@patch.com}
