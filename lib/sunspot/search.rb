@@ -20,9 +20,13 @@ module Sunspot
     end
 
     #
-    # Execute the search on the Solr instance and store the results
+    # Execute the search on the Solr instance and store the results. If you
+    # use Sunspot#search() to construct your searches, there is no need to call
+    # this method as it has already been called. If you use
+    # Sunspot#new_search(), you will need to call this method after building the
+    # query.
     #
-    def execute! #:nodoc:
+    def execute!
       params = @query.to_params
       @solr_result = @connection.query(params.delete(:q), params)
       self
