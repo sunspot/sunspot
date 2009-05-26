@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../../files/lib/sunspot/query/restriction_rb.html">lib/sunspot/query/restriction.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.0/lib/sunspot/query/restriction.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.1/lib/sunspot/query/restriction.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -52,37 +52,37 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000042">to_negative_boolean_phrase</a></li>
-              <li><a href="#M000041">to_positive_boolean_phrase</a></li>
+              <li><a href="#M000043">to_negative_boolean_phrase</a></li>
+              <li><a href="#M000042">to_positive_boolean_phrase</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000043'>
+                <a name='M000043'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_negative_boolean_phrase</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/sunspot/query/restriction.rb, line 137</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_negative_boolean_phrase</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-keyword kw">super</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
               <div class='public-instance method' id='method-M000042'>
                 <a name='M000042'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>to_negative_boolean_phrase</span>
+                  <span class='name'>to_positive_boolean_phrase</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/sunspot/query/restriction.rb, line 137</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_negative_boolean_phrase</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-keyword kw">super</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000041'>
-                <a name='M000041'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>to_positive_boolean_phrase</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/sunspot/query/restriction.rb, line 129</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_positive_boolean_phrase</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-keyword kw">super</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;-#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/sunspot/query/restriction.rb, line 129</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_positive_boolean_phrase</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-keyword kw">super</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;-#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

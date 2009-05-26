@@ -32,27 +32,27 @@
         <ol class='paths'>
           <li>
             <a href="../../files/lib/sunspot/query/sort_rb.html">lib/sunspot/query/sort.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.0/lib/sunspot/query/sort.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.1/lib/sunspot/query/sort.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/query/restriction_rb.html">lib/sunspot/query/restriction.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.0/lib/sunspot/query/restriction.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.1/lib/sunspot/query/restriction.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/query/pagination_rb.html">lib/sunspot/query/pagination.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.0/lib/sunspot/query/pagination.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.1/lib/sunspot/query/pagination.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/query/dynamic_query_rb.html">lib/sunspot/query/dynamic_query.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.0/lib/sunspot/query/dynamic_query.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.1/lib/sunspot/query/dynamic_query.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/query/field_facet_rb.html">lib/sunspot/query/field_facet.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.0/lib/sunspot/query/field_facet.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.1/lib/sunspot/query/field_facet.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/query_rb.html">lib/sunspot/query.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.0/lib/sunspot/query.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.1/lib/sunspot/query.rb">view online</a>)
           </li>
           <li>
             <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
@@ -82,15 +82,15 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000035">add_field_facet</a></li>
-              <li><a href="#M000033">add_negated_restriction</a></li>
-              <li><a href="#M000032">add_restriction</a></li>
-              <li><a href="#M000039">build</a></li>
-              <li><a href="#M000040">dynamic_field</a></li>
-              <li><a href="#M000036">dynamic_query</a></li>
-              <li><a href="#M000034">exclude_instance</a></li>
-              <li><a href="#M000038">order_by</a></li>
-              <li><a href="#M000037">paginate</a></li>
+              <li><a href="#M000036">add_field_facet</a></li>
+              <li><a href="#M000034">add_negated_restriction</a></li>
+              <li><a href="#M000033">add_restriction</a></li>
+              <li><a href="#M000040">build</a></li>
+              <li><a href="#M000041">dynamic_field</a></li>
+              <li><a href="#M000037">dynamic_query</a></li>
+              <li><a href="#M000035">exclude_instance</a></li>
+              <li><a href="#M000039">order_by</a></li>
+              <li><a href="#M000038">paginate</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -112,8 +112,8 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000035'>
-                <a name='M000035'>      </a>
+              <div class='public-instance method' id='method-M000036'>
+                <a name='M000036'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_field_facet</span>
                   <span class='arguments'>(field_name)</span>
@@ -131,14 +131,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 86</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_field_facet</span>(<span class="ruby-identifier">field_name</span>)&#x000A;      <span class="ruby-ivar">@components</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">FieldFacet</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 86</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_field_facet</span>(<span class="ruby-identifier">field_name</span>)&#x000A;      <span class="ruby-ivar">@components</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">FieldFacet</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000033'>
-                <a name='M000033'>      </a>
+              <div class='public-instance method' id='method-M000034'>
+                <a name='M000034'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_negated_restriction</span>
                   <span class='arguments'>(field_name, restriction_type, value)</span>
@@ -164,14 +164,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 64</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_negated_restriction</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">restriction_type</span>, <span class="ruby-identifier">value</span>)&#x000A;      <span class="ruby-identifier">add_restriction</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">restriction_type</span>, <span class="ruby-identifier">value</span>, <span class="ruby-keyword kw">true</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 64</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_negated_restriction</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">restriction_type</span>, <span class="ruby-identifier">value</span>)&#x000A;      <span class="ruby-identifier">add_restriction</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">restriction_type</span>, <span class="ruby-identifier">value</span>, <span class="ruby-keyword kw">true</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000032'>
-                <a name='M000032'>      </a>
+              <div class='public-instance method' id='method-M000033'>
+                <a name='M000033'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_restriction</span>
                   <span class='arguments'>(field_name, restriction_type, value, negated = false)</span>
@@ -194,20 +194,20 @@
                   
                   </td></tr>
                   <tr><td valign="top">negated:</td><td>Whether this restriction should be negated (use <a
-                  href="Query.html#M000033">add_negated_restriction</a>)
+                  href="Query.html#M000034">add_negated_restriction</a>)
                   
                   </td></tr>
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 42</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_restriction</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">restriction_type</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">negated</span> = <span class="ruby-keyword kw">false</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">restriction_type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)&#x000A;        <span class="ruby-identifier">restriction_type</span> = <span class="ruby-constant">Restriction</span>[<span class="ruby-identifier">restriction_type</span>]&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@components</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">restriction</span> = <span class="ruby-identifier">restriction_type</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>), <span class="ruby-identifier">value</span>, <span class="ruby-identifier">negated</span>)&#x000A;      <span class="ruby-identifier">restriction</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 42</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_restriction</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">restriction_type</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">negated</span> = <span class="ruby-keyword kw">false</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">restriction_type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)&#x000A;        <span class="ruby-identifier">restriction_type</span> = <span class="ruby-constant">Restriction</span>[<span class="ruby-identifier">restriction_type</span>]&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@components</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">restriction</span> = <span class="ruby-identifier">restriction_type</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>), <span class="ruby-identifier">value</span>, <span class="ruby-identifier">negated</span>)&#x000A;      <span class="ruby-identifier">restriction</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000039'>
-                <a name='M000039'>      </a>
+              <div class='public-instance method' id='method-M000040'>
+                <a name='M000040'>      </a>
                 <div class='synopsis'>
                   <span class='name'>build</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -225,27 +225,27 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 157</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(<span class="ruby-identifier">dsl</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 157</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(<span class="ruby-identifier">dsl</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000040'>
-                <a name='M000040'>      </a>
+              <div class='public-instance method' id='method-M000041'>
+                <a name='M000041'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dynamic_field</span>
                   <span class='arguments'>(field_name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 242</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dynamic_field</span>(<span class="ruby-identifier">field_name</span>)&#x000A;      <span class="ruby-identifier">field</span> = <span class="ruby-identifier">dynamic_fields_hash</span>[<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">UnrecognizedFieldError</span>, <span class="ruby-node">&quot;No dynamic field configured for #{@types * ', '} with name #{field_name.inspect}&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 242</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dynamic_field</span>(<span class="ruby-identifier">field_name</span>)&#x000A;      <span class="ruby-identifier">field</span> = <span class="ruby-identifier">dynamic_fields_hash</span>[<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">UnrecognizedFieldError</span>, <span class="ruby-node">&quot;No dynamic field configured for #{@types * ', '} with name #{field_name.inspect}&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000036'>
-                <a name='M000036'>      </a>
+              <div class='public-instance method' id='method-M000037'>
+                <a name='M000037'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dynamic_query</span>
                   <span class='arguments'>(base_name)</span>
@@ -273,14 +273,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 108</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dynamic_query</span>(<span class="ruby-identifier">base_name</span>)&#x000A;      <span class="ruby-constant">DynamicQuery</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">dynamic_field</span>(<span class="ruby-identifier">base_name</span>), <span class="ruby-keyword kw">self</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 108</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dynamic_query</span>(<span class="ruby-identifier">base_name</span>)&#x000A;      <span class="ruby-constant">DynamicQuery</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">dynamic_field</span>(<span class="ruby-identifier">base_name</span>), <span class="ruby-keyword kw">self</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000034'>
-                <a name='M000034'>      </a>
+              <div class='public-instance method' id='method-M000035'>
+                <a name='M000035'>      </a>
                 <div class='synopsis'>
                   <span class='name'>exclude_instance</span>
                   <span class='arguments'>(instance)</span>
@@ -297,14 +297,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 75</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exclude_instance</span>(<span class="ruby-identifier">instance</span>)&#x000A;      <span class="ruby-ivar">@components</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Restriction</span><span class="ruby-operator">::</span><span class="ruby-constant">SameAs</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">instance</span>, <span class="ruby-keyword kw">true</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 75</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exclude_instance</span>(<span class="ruby-identifier">instance</span>)&#x000A;      <span class="ruby-ivar">@components</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Restriction</span><span class="ruby-operator">::</span><span class="ruby-constant">SameAs</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">instance</span>, <span class="ruby-keyword kw">true</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000038'>
-                <a name='M000038'>      </a>
+              <div class='public-instance method' id='method-M000039'>
+                <a name='M000039'>      </a>
                 <div class='synopsis'>
                   <span class='name'>order_by</span>
                   <span class='arguments'>(field_name, direction = nil)</span>
@@ -324,14 +324,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 146</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_by</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">direction</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@components</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>), <span class="ruby-identifier">direction</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 146</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_by</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">direction</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@components</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Sort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>), <span class="ruby-identifier">direction</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000037'>
-                <a name='M000037'>      </a>
+              <div class='public-instance method' id='method-M000038'>
+                <a name='M000038'>      </a>
                 <div class='synopsis'>
                   <span class='name'>paginate</span>
                   <span class='arguments'>(page, per_page = nil)</span>
@@ -352,10 +352,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 134</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span>, <span class="ruby-identifier">per_page</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@pagination</span>.<span class="ruby-identifier">page</span>, <span class="ruby-ivar">@pagination</span>.<span class="ruby-identifier">per_page</span> = <span class="ruby-identifier">page</span>, <span class="ruby-identifier">per_page</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/sunspot/query.rb, line 134</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span>, <span class="ruby-identifier">per_page</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@pagination</span>.<span class="ruby-identifier">page</span>, <span class="ruby-ivar">@pagination</span>.<span class="ruby-identifier">per_page</span> = <span class="ruby-identifier">page</span>, <span class="ruby-identifier">per_page</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
