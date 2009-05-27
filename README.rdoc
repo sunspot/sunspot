@@ -144,7 +144,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 
 == Contributors
 
-Mat Brown &lt;mat@patch.com&gt;
+Mat Brown (mat@patch.com)
 
 == License
 
