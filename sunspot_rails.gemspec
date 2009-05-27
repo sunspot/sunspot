@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot_rails}
-  s.version = "0.9.6"
+  s.version = "0.9.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown"]
@@ -35,12 +35,14 @@ Gem::Specification.new do |s|
      "spec/mock_app/app/models/post.rb",
      "spec/mock_app/app/models/post_with_auto.rb",
      "spec/mock_app/config/boot.rb",
+     "spec/mock_app/config/database.yml",
      "spec/mock_app/config/environment.rb",
      "spec/mock_app/config/environments/development.rb",
      "spec/mock_app/config/environments/test.rb",
      "spec/mock_app/config/initializers/new_rails_defaults.rb",
      "spec/mock_app/config/initializers/session_store.rb",
      "spec/mock_app/config/routes.rb",
+     "spec/mock_app/config/sunspot.yml",
      "spec/model_lifecycle_spec.rb",
      "spec/model_spec.rb",
      "spec/request_lifecycle_spec.rb",
