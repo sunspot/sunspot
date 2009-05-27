@@ -47,6 +47,9 @@ end
 
 Sunspot.setup(Post) do
   text :title, :body
+  text :backwards_title do
+    title.reverse if title
+  end
   string :title
   integer :blog_id
   integer :category_ids, :multiple => true
