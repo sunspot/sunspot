@@ -20,11 +20,16 @@ module SolrFlags extend OptiFlagSet
     description 'Solr data directory'
   end
 
+  optional_flag 's' do
+    description 'Solr home (should contain conf/ directory)'
+  end
+
   and_process!
 end
 
 port = ARGV.flags.p || '8983'
 data_dir = File.expand_path(ARGV.flags.d || File.join(Dir.tmpdir, 'solr_data'))
+home = File.expand_path(ARGV.flags.s) if ARGV.flags.s
 
 Daemons.run_proc('sunspot-solr') do
   FileUtils.cd(working_directory) do
@@ -32,7 +37,9 @@ Daemons.run_proc('sunspot-solr') do
       args = ['java']
       args << "-Djetty.port=#{port}" if port
       args << "-Dsolr.data.dir=#{data_dir}" if data_dir
+      args << "-Dsolr.solr.home=#{home}" if home
       args << '-jar' << 'start.jar'
+      STDERR.puts(args * ' ')
       Kernel.exec(*args)
     end
   end
