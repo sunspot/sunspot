@@ -33,9 +33,9 @@ In order to start the packaged Solr installation, run:
 
 If you don't specify a data directory, your Solr index will be stored in your operating system's temporary directory.
 
-If you specify a solr home, the directory must contain a `conf` directory, which
-should contain at least `schema.xml` and `solrconfig.xml`. Be sure to copy the
-`schema.xml` out of the Sunspot gem's <code>solr/solr/conf</code> directory.
+If you specify a solr home, the directory must contain a +conf+ directory, which
+should contain at least +schema.xml+ and +solrconfig.xml+. Be sure to copy the
++schema.xml+ out of the Sunspot gem's <code>solr/solr/conf</code> directory.
 Sunspot relies on the field name patterns defined in the packaged `schema.xml`,
 so those cannot be modified.
 
