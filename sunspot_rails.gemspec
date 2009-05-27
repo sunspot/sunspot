@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot_rails}
-  s.version = "0.9.7"
+  s.version = "0.9.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown"]
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
      "lib/sunspot/rails/configuration.rb",
      "lib/sunspot/rails/request_lifecycle.rb",
      "lib/sunspot/rails/searchable.rb",
+     "lib/sunspot/rails/tasks.rb",
      "rails/init.rb",
      "spec/mock_app/app/controllers/application.rb",
      "spec/mock_app/app/controllers/application_controller.rb",
@@ -47,9 +48,7 @@ Gem::Specification.new do |s|
      "spec/model_spec.rb",
      "spec/request_lifecycle_spec.rb",
      "spec/schema.rb",
-     "spec/spec_helper.rb",
-     "tasks/sunspot.rake",
-     "tasks/sunspot_rails_tasks.rake"
+     "spec/spec_helper.rb"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/outoftime/sunspot_rails}
