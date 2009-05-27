@@ -16,4 +16,4 @@ task :environment do
   require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'))
 end
 
-FileList['dev_tasks/*.rake', 'tasks/*.rake'].each { |file| load(file) }
+FileList['dev_tasks/*.rake', 'lib/sunspot/rails/tasks.rb'].each { |file| load(file) }

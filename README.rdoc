@@ -52,6 +52,12 @@ Create the file <code>config/sunspot.yml</code> and set it up for your environme
     solr:
       port: 8981
 
+Rails doesn't automatically load rake tasks from plugins installed as gems
+(https://rails.lighthouseapp.com/projects/8994/tickets/59). If you installed
+Sunspot::Rails as a gem, add the following line to your project's Rakefile:
+
+  require 'sunspot/rails/tasks'
+
 To start up a Solr instance, issue the following:
 
   rake sunspot:solr:start
