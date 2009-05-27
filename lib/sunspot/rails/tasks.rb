@@ -6,10 +6,18 @@ namespace :sunspot do
     task :start => :environment do
       data_path = File.join(::Rails.root, 'solr', 'data', ::Rails.env)
       pid_path = File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
+      solr_home =
+        if %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
+          File.join(::Rails.root, 'solr')
+        end
       [data_path, pid_path].each { |path| FileUtils.mkdir_p(path) }
       port = Sunspot::Rails.configuration.port
       FileUtils.cd(File.join(pid_path)) do
-        system(Escape.shell_command(['sunspot-solr', 'start', '--', '-p', port.to_s, '-d', data_path]))
+        command = ['sunspot-solr', 'start', '--', '-p', port.to_s, '-d', data_path]
+        if solr_home
+          command << '-s' << solr_home
+        end
+        system(Escape.shell_command(command))
       end
     end
 

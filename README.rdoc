@@ -58,6 +58,14 @@ Sunspot::Rails as a gem, add the following line to your project's Rakefile:
 
   require 'sunspot/rails/tasks'
 
+If you wish to make modifications to the Solr schema, you can create a custom
+Solr home in your project directory. In order to do so, create the directory
+<code>RAILS_ROOT/solr/conf</code>, and copy in the contents of the Solr gem's
+<code>solr/solr/conf</code> directory. If the files are in the right place,
+Sunspot::Rails will detect them and tell Solr to use your local configurations.
+Use caution when modifying <code>schema.xml</code> - Sunspot relies on the
+field naming scheme in the packaged schema file.
+
 To start up a Solr instance, issue the following:
 
   rake sunspot:solr:start
