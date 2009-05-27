@@ -1,4 +1,6 @@
 === 0.9 ===
+* Instantiated facets!
+* Direct access to adapter
 * Facet by type (?)
 * Switch to RSolr
 * Query-based faceting (?)

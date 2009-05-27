@@ -140,6 +140,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 
 Sunspot Discussion: http://groups.google.com/group/ruby-sunspot
 Posts about Sunspot from my tumblog: http://outofti.me/tagged/sunspot
+Read about it on Linux Magazine: http://www.linux-mag.com/id/7341
 
 == Contributors
 
