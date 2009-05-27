@@ -14,7 +14,7 @@ begin
                        'MIT-LICENSE',
                        'rails/*',
                        'spec/*.rb',
-                       'spec/mock_app/{app,lib,db,vendor,config}/**/*.rb',
+                       'spec/mock_app/{app,lib,db,vendor,config}/**/*',
                        'spec/mock_app/{tmp,log,solr}']
     s.add_dependency 'rails', '~> 2.1'
     s.add_dependency 'escape', '>= 0.0.4'
