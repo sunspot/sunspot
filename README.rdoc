@@ -33,11 +33,12 @@ In order to start the packaged Solr installation, run:
 
 If you don't specify a data directory, your Solr index will be stored in your operating system's temporary directory.
 
-If you specify a solr home, the directory must contain a +conf+ directory, which
-should contain at least +schema.xml+ and +solrconfig.xml+. Be sure to copy the
-+schema.xml+ out of the Sunspot gem's <code>solr/solr/conf</code> directory.
-Sunspot relies on the field name patterns defined in the packaged `schema.xml`,
-so those cannot be modified.
+If you specify a solr home, the directory must contain a <code>conf</code>
+directory, which should contain at least <code>schema.xml</code> and
+<code>solrconfig.xml</code>. Be sure to copy the <code>schema.xml</code> out of
+the Sunspot gem's <code>solr/solr/conf</code> directory. Sunspot relies on the
+field name patterns defined in the packaged <code>schema.xml</code>, so those
+cannot be modified.
 
 You can also run your own instance of Solr wherever you'd like; just copy the solr/config/schema.xml file out of the gem's solr into your installation.
 You can change the URL at which Sunspot accesses Solr with:
