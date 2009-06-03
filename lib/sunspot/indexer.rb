@@ -19,11 +19,7 @@ module Sunspot
     # model<Object>:: the model to index
     #
     def add(model)
-      hash = static_hash_for(model)
-      for field in @setup.all_fields
-        hash.merge!(field.pairs_for(model))
-      end
-      @connection.add(hash)
+      @connection.add(Array(model).map { |m| prepare(m) })
     end
 
     # 
@@ -43,6 +39,17 @@ module Sunspot
     protected
 
     # 
+    # Convert documents into hash of indexed properties
+    #
+    def prepare(model)
+      hash = static_hash_for(model)
+      for field in @setup.all_fields
+        hash.merge!(field.pairs_for(model))
+      end
+      hash
+    end
+
+    # 
     # All indexed documents index and store the +id+ and +type+ fields.
     # This method constructs the document hash containing those key-value
     # pairs.
@@ -51,6 +58,7 @@ module Sunspot
       { :id => Adapters::InstanceAdapter.adapt(model).index_id,
         :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }}
     end
+
 
     class <<self
       # 
