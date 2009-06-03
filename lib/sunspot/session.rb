@@ -47,9 +47,7 @@ module Sunspot
     def index(*objects)
       objects.flatten!
       @updates += objects.length
-      for object in objects
-        indexer_for(object).add(object)
-      end
+      indexer_for(objects.first).add(objects)
     end
 
     # 
