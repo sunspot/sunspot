@@ -152,7 +152,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 == Contributors
 
 Mat Brown (mat@patch.com)
-Peer Allan
+Peer Allan (peer.allan@gmail.com)
 
 == License
 
