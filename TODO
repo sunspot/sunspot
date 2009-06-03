@@ -1,6 +1,11 @@
 === 0.9 ===
+* Descriptive error messages during indexing
+* Date type
+* High-endian fields
+* Add omitNorms to typed fields
 * Instantiated facets!
 * Direct access to adapter
-* Facet by type (?)
+* sunspot-configure-solr
 * Switch to RSolr
+* Facet by type (?)
 * Query-based faceting (?)
