@@ -44,10 +44,20 @@ module Sunspot
     #
     # See Sunspot.index
     #
+    #--
+    # FIXME The fact that we have to break this out by class and index each
+    #       class separately is artificial, imposed by the fact that indexers
+    #       are initialized with a particular setup, and are responsible for
+    #       sending add messages to Solr. It might be worth considering a
+    #       singleton indexer (per session) and have the indexer itself find
+    #       the appropriate setup to use for each object.
+    #
     def index(*objects)
       objects.flatten!
       @updates += objects.length
-      indexer_for(objects.first).add(objects)
+      objects.group_by { |object| object.class }.each_pair do |clazz, objs|
+        indexer_for(objs.first).add(objs)
+      end
     end
 
     # 

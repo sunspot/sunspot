@@ -3,7 +3,7 @@ class Comment < BaseClass
   @@comments = [nil]
 
   attr_reader :id
-  attr_accessor :author_name, :published_at, :body
+  attr_accessor :author_name, :published_at, :body, :average_rating
 
   def initialize(attrs = {})
     @id = @@id += 1

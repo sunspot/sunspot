@@ -7,9 +7,19 @@ describe 'indexer' do
       session.index post
     end
 
-    it "should index the array of objects supplied" do
-      connection.should_receive(:add).with([hash_including(:id => "Post #{post.id}", :type => ['Post', 'BaseClass']),hash_including(:id => "Post #{post.id}", :type => ['Post', 'BaseClass'])])
-      session.index [post,post]
+    it 'should index the array of objects supplied' do
+      posts = Array.new(2) { Post.new }
+      connection.should_receive(:add).with([hash_including(:id => "Post #{posts.first.id}", :type => ['Post', 'BaseClass']),
+                                            hash_including(:id => "Post #{posts.last.id}", :type => ['Post', 'BaseClass'])])
+      session.index posts
+    end
+
+    it 'should index an array containing more than one type of object' do
+      post1, comment, post2 = objects = [Post.new, Comment.new, Post.new]
+      connection.should_receive(:add).with([hash_including(:id => "Post #{post1.id}", :type => ['Post', 'BaseClass']),
+                                            hash_including(:id => "Post #{post2.id}", :type => ['Post', 'BaseClass'])])
+      connection.should_receive(:add).with([hash_including(:id => "Comment #{comment.id}", :type => ['Comment', 'BaseClass'])])
+      session.index objects
     end
 
     it 'should index text' do
@@ -21,7 +31,7 @@ describe 'indexer' do
     it 'should index text via a virtual field' do
       post :title => 'backwards'
       connection.should_receive(:add).with([hash_including(:backwards_title_text => 'backwards'.reverse)])
-      session.index(post)
+      session.index post
     end
 
     it 'should correctly index a string attribute field' do
