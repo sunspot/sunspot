@@ -143,22 +143,35 @@ module Sunspot #:nodoc:
         # 
         # Completely rebuild the index for this class. First removes all
         # instances from the index, then loads records and save them. If the
-        # +batch+ argument is passed, records will be retrieved from the
+        # +batch_size+ argument is passed, records will be retrieved from the
         # database in batches of that size (recommended for larger data sets).
         #
         # ==== Parameters
         #
-        # batch<Integer>:: Batch size with which to load records. Default is none.
+        # batch_size<Integer>:: Batch size with which to load records. Default is none.
         #
-        def reindex(batch = nil)
+        def reindex(batch_size = nil)
           remove_all_from_index
-          unless batch
+          unless batch_size
             Sunspot.index(all)
           else
-            offset = 0
-            while(offset < count)
-              Sunspot.index(all(:offset => offset, :limit => batch))
-              offset += batch
+            counter = 1
+            if self.respond_to?(:find_in_batches)
+              self.find_in_batches(:batch_size => batch_size) do |batch| 
+                benchmark batch_size, counter do
+                  Sunspot.index(batch)
+                end
+                counter += 1
+              end
+            else
+              offset = 0
+              while(offset < count)
+                benchmark batch_size, counter do
+                  Sunspot.index(all(:offset => offset, :limit => batch_size))
+                end
+                offset += batch_size
+                counter += 1
+              end
             end
           end
         end
@@ -206,6 +219,20 @@ module Sunspot #:nodoc:
         def searchable?
           true
         end
+        
+        protected
+        
+        # 
+        # Does some logging for benchmarking indexing performance
+        #
+        def benchmark(batch_size, counter,  &block)
+          start = Time.now
+          logger.info("[#{Time.now}] Start Indexing")
+          yield
+          elapsed = Time.now-start
+          logger.info("[#{Time.now}] Completed Indexing. Rows indexed #{counter * batch_size}. Rows/sec: #{batch_size/elapsed.to_f} (Elapsed: #{elapsed} sec.)")
+        end
+        
       end
 
       module InstanceMethods
