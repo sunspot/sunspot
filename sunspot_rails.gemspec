@@ -2,18 +2,20 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot_rails}
-  s.version = "0.9.9"
+  s.version = "0.9.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown"]
-  s.date = %q{2009-05-27}
+  s.date = %q{2009-06-03}
   s.description = %q{Rails integration for the Sunspot Solr search library}
   s.email = %q{mat@patch.com}
   s.extra_rdoc_files = [
-    "README.rdoc"
+    "LICENSE",
+     "README.rdoc"
   ]
   s.files = [
-    "MIT-LICENSE",
+    "LICENSE",
+     "MIT-LICENSE",
      "MIT-LICENSE",
      "README.rdoc",
      "Rakefile",
