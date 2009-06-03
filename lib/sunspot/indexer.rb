@@ -19,12 +19,7 @@ module Sunspot
     # model<Object>:: the model to index
     #
     def add(model)
-      if model.is_a?(Array)
-        docs = model.map { |m| prepare(m) }
-      else
-        docs = [prepare(model)]
-      end
-      @connection.add(docs)
+      @connection.add(Array(model).map { |m| prepare(m) })
     end
 
     # 
@@ -44,7 +39,7 @@ module Sunspot
     protected
 
     # 
-    # Need to prep to documents for passing to the connection add
+    # Convert documents into hash of indexed properties
     #
     def prepare(model)
       hash = static_hash_for(model)
