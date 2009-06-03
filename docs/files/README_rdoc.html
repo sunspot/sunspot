@@ -28,11 +28,11 @@
         <div class='name'>README.rdoc</div>
         <div class='paths'>
           README.rdoc
-          (<a href="http://github.com/outoftime/sunspot/tree/v0.8.1/README.rdoc">view online</a>)
+          (<a href="http://github.com/outoftime/sunspot/tree/v0.8.3/README.rdoc">view online</a>)
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Wed May 27 10:18:28 -0400 2009</span>
+          <span class='datetime'>Wed Jun 03 17:05:40 -0400 2009</span>
         </div>
       </div>
       <div id='content'>
@@ -98,10 +98,20 @@
             <p>
             In order to start the packaged Solr installation, run:
             </p>
-            <pre>sunspot-solr start -- [-d /path/to/data/directory] [-p port]</pre>
+            <pre>sunspot-solr start -- [-d /path/to/data/directory] [-p port] [-s path/to/solr/home]</pre>
             <p>
             If you don&#8217;t specify a data directory, your Solr index will be stored
             in your operating system&#8217;s temporary directory.
+            </p>
+            <p>
+            If you specify a solr home, the directory must contain a <tt>conf</tt>
+            directory, which should contain at least <tt>schema.xml</tt> and
+            <tt>solrconfig.xml</tt>. Be sure to copy the <tt>schema.xml</tt> out of the
+            <a href="../classes/Sunspot.html">Sunspot</a> gem&#8217;s
+            <tt>solr/solr/conf</tt> directory. <a
+            href="../classes/Sunspot.html">Sunspot</a> relies on the field name
+            patterns defined in the packaged <tt>schema.xml</tt>, so those cannot be
+            modified.
             </p>
             <p>
             You can also run your own instance of Solr wherever you&#8217;d like; just
@@ -194,7 +204,7 @@
             </ul>
             <h2>Contributors</h2>
             <p>
-            Mat Brown (mat@patch.com)
+            Mat Brown (mat@patch.com) Peer Allan
             </p>
             <h2>License</h2>
             <p>
