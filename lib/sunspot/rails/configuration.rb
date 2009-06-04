@@ -1,10 +1,10 @@
 module Sunspot #:nodoc:
   module Rails #:nodoc:
-    # 
+    #
     # Sunspot::Rails is configured via the config/sunspot.yml file, which
     # contains properties keyed by environment name. A sample sunspot.yml file
     # would look like:
-    # 
+    #
     #   development:
     #     solr:
     #       hostname: localhost
@@ -14,12 +14,18 @@ module Sunspot #:nodoc:
     #       hostname: localhost
     #       port: 8983
     #
+    #   production:
+    #     solr:
+    #       hostname: localhost
+    #       port: 8983
+    #       path: /solr/myindex
+    #
     # Sunspot::Rails uses the configuration to set up the Solr connection, as
     # well as for starting Solr with the appropriate port using the
     # <code>rake sunspot:solr:start</code> task.
     #
     class Configuration
-      # 
+      #
       # The host name at which to connect to Solr. Default 'localhost'.
       #
       # ==== Returns
@@ -27,13 +33,13 @@ module Sunspot #:nodoc:
       # String:: host name
       #
       def hostname
-        @hostname ||= 
+        @hostname ||=
           if user_configuration.has_key?('solr')
             user_configuration['solr']['hostname']
           end || 'localhost'
       end
 
-      # 
+      #
       # The port at which to connect to Solr. Default 8983.
       #
       # ==== Returns
@@ -47,9 +53,23 @@ module Sunspot #:nodoc:
           end || 8983
       end
 
+      #
+      # The URL to call if you are running Solr with multicore. Default '/solr'.
+      #
+      # ==== Returns
+      #
+      # String:: path
+      #
+      def path
+        @path ||=
+          if user_configuration.has_key?('solr')
+            "#{user_configuration['solr']['path'] || '/solr'}"
+          end
+      end
+
       private
 
-      # 
+      #
       # Memoized hash of configuration options for the current Rails environment
       # as specified in config/sunspot.yml
       #
@@ -63,7 +83,8 @@ module Sunspot #:nodoc:
             path = File.join(::Rails.root, 'config', 'sunspot.yml')
             if File.exist?(path)
               File.open(path) do |file|
-                YAML.load(file)[::Rails.env]
+                # only changed this to allow me to test the path attribute
+                YAML.load(file)[RAILS_ENV]
               end
             end
           end

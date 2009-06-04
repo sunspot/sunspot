@@ -6,3 +6,8 @@ development:
   solr:
     hostname: localhost
     port: 8981
+path_test:
+  solr:
+    hostname: localhost
+    port: 8981
+    path: /solr/path_test

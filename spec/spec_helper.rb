@@ -14,6 +14,13 @@ def load_schema
   $stdout = stdout
 end
 
+def silence_stderr(&block)
+  stderr = $stderr
+  $stderr = StringIO.new
+  yield
+  $stderr = stderr
+end
+
 Spec::Runner.configure do |config|
   config.before(:each) do
     Sunspot.remove_all
