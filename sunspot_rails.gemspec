@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot_rails}
-  s.version = "0.9.10"
+  s.version = "0.9.11"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown"]
-  s.date = %q{2009-06-03}
+  s.date = %q{2009-06-04}
   s.description = %q{Rails integration for the Sunspot Solr search library}
   s.email = %q{mat@patch.com}
   s.extra_rdoc_files = [
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "lib/sunspot/rails/searchable.rb",
      "lib/sunspot/rails/tasks.rb",
      "rails/init.rb",
+     "spec/configuration_spec.rb",
      "spec/mock_app/app/controllers/application.rb",
      "spec/mock_app/app/controllers/application_controller.rb",
      "spec/mock_app/app/controllers/posts_controller.rb",
@@ -60,6 +61,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Rails integration for the Sunspot Solr search library}
   s.test_files = [
     "spec/spec_helper.rb",
+     "spec/configuration_spec.rb",
      "spec/model_lifecycle_spec.rb",
      "spec/schema.rb",
      "spec/model_spec.rb",
