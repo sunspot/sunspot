@@ -238,6 +238,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 
 Mat Brown (mat@patch.com)
 Peer Allan (peer.allan@gmail.com)
+Michael Moen (michael@underpantsgnome.com)
 
 == License
 
