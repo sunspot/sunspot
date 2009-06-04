@@ -142,38 +142,35 @@ module Sunspot #:nodoc:
 
         # 
         # Completely rebuild the index for this class. First removes all
-        # instances from the index, then loads records and save them. If the
+        # instances from the index, then loads records and save them. The
         # +batch_size+ argument is passed, records will be retrieved from the
         # database in batches of that size (recommended for larger data sets).
         #
         # ==== Parameters
         #
-        # batch_size<Integer>:: Batch size with which to load records. Default is none.
+        # batch_size<Integer>:: Batch size with which to load records. Passing
+        #                       'nil' will skip batches.  Default is 500.
+        # batch_commit<Boolean>:: Flag singaling if a commit should be done after
+        #                         after each batch is indexed, default is 'true'
         #
-        def reindex(batch_size = nil)
+        def reindex(batch_size = 500, batch_commit = true)
           remove_all_from_index
           unless batch_size
             Sunspot.index(all)
           else
+            record_count = count(:order => primary_key)
             counter = 1
-            if self.respond_to?(:find_in_batches)
-              self.find_in_batches(:batch_size => batch_size) do |batch| 
-                benchmark batch_size, counter do
-                  Sunspot.index(batch)
-                end
-                counter += 1
+            offset = 0
+            while(offset < record_count)
+              benchmark batch_size, counter do
+                Sunspot.index(all(:offset => offset, :limit => batch_size, :order => primary_key))
               end
-            else
-              offset = 0
-              while(offset < count)
-                benchmark batch_size, counter do
-                  Sunspot.index(all(:offset => offset, :limit => batch_size))
-                end
-                offset += batch_size
-                counter += 1
-              end
+              offset += batch_size
+              counter += 1
+              Sunspot.commit if batch_commit
             end
           end
+          Sunspot.commit
         end
 
         # 
