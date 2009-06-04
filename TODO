@@ -6,6 +6,9 @@
 * Instantiated facets!
 * Direct access to adapter
 * sunspot-configure-solr
+* Text fields allow multiple
+* Don't allow ordering on multiple-allowed fields
+* Transactions
 * Switch to RSolr
 * Facet by type (?)
 * Query-based faceting (?)
