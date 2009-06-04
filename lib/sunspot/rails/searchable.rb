@@ -143,8 +143,11 @@ module Sunspot #:nodoc:
         # 
         # Completely rebuild the index for this class. First removes all
         # instances from the index, then loads records and save them. The
-        # +batch_size+ argument is passed, records will be retrieved from the
-        # database in batches of that size (recommended for larger data sets).
+        # +batch_size+ argument specifies how many records to load out of the
+        # database at a time. The default batch size is 500; if nil is passed,
+        # records will not be indexed in batches. By default, a commit is issued
+        # after each batch; passing +false+ for +batch_commit+ will disable
+        # this, and only issue a commit at the end of the process.
         #
         # ==== Parameters
         #
@@ -156,7 +159,7 @@ module Sunspot #:nodoc:
         def reindex(batch_size = 500, batch_commit = true)
           remove_all_from_index
           unless batch_size
-            Sunspot.index(all)
+            Sunspot.index!(all)
           else
             record_count = count(:order => primary_key)
             counter = 1
@@ -165,12 +168,12 @@ module Sunspot #:nodoc:
               benchmark batch_size, counter do
                 Sunspot.index(all(:offset => offset, :limit => batch_size, :order => primary_key))
               end
+              Sunspot.commit if batch_commit
               offset += batch_size
               counter += 1
-              Sunspot.commit if batch_commit
             end
+            Sunspot.commit unless batch_commit
           end
-          Sunspot.commit
         end
 
         # 
