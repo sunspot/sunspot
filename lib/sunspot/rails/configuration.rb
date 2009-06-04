@@ -54,7 +54,8 @@ module Sunspot #:nodoc:
       end
 
       #
-      # The URL to call if you are running Solr with multicore. Default '/solr'.
+      # The path to the Solr servlet (useful if you are running multicore).
+      # Default '/solr'.
       #
       # ==== Returns
       #
@@ -83,8 +84,7 @@ module Sunspot #:nodoc:
             path = File.join(::Rails.root, 'config', 'sunspot.yml')
             if File.exist?(path)
               File.open(path) do |file|
-                # only changed this to allow me to test the path attribute
-                YAML.load(file)[RAILS_ENV]
+                YAML.load(file)[::Rails.env]
               end
             end
           end
