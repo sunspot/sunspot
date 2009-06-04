@@ -173,32 +173,10 @@ describe 'ActiveRecord mixin' do
     end
     
     describe "using batch sizes" do
-      
       it 'should index with a batch size' do
         Post.reindex(1)
         Sunspot.commit
         Post.search.results.to_set.should == @posts.to_set
-      end
-      
-      it "should look for find_in_batches" do
-        pending "Have to figure out how to remove stubs for Class Methods so this will work"
-        Post.stub!(:respond_to?).with(:to_ary).and_return(false)
-        Post.should_receive(:respond_to?).with(:find_in_batches).and_return(true)
-        Post.reindex(100)
-      end
-
-      it "should use find_in_batches" do
-        pending "Have to figure out how to remove stubs for Class Methods so this will work"
-        Post.should_receive(:find_in_batches).with(:batch_size => 100).and_return([])
-        Post.reindex(100)
-      end
-      
-      it "should find all with the batch size and offset if it can't use find_by_batches" do
-        pending "Have to figure out how to remove stubs for Class Methods so this will work"
-        Post.stub!(:respond_to?).with(:to_ary).and_return(false)
-        Post.stub!(:respond_to?).with(:find_in_batches).and_return(false)
-        Post.should_receive(:all).with(:offset => 0, :limit => 100).and_return([])
-        Post.reindex(100)
       end
     end
   end
