@@ -158,7 +158,29 @@ describe 'ActiveRecord mixin' do
     end
 
     it 'should index all instances' do
+      Post.reindex(:batch_size => nil)
+      Sunspot.commit
+      Post.search.results.to_set.should == @posts.to_set
+    end
+
+    it 'should remove all currently indexed instances' do
+      old_post = Post.create!
+      old_post.index!
+      old_post.destroy
       Post.reindex
+      Sunspot.commit
+      Post.search.results.to_set.should == @posts.to_set
+    end
+    
+  end
+
+  describe 'reindex() with real data' do
+    before :each do
+      @posts = Array.new(2) { Post.create }
+    end
+
+    it 'should index all instances' do
+      Post.reindex(:batch_size => nil)
       Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
@@ -173,11 +195,78 @@ describe 'ActiveRecord mixin' do
     end
     
     describe "using batch sizes" do
-      it 'should index with a batch size' do
-        Post.reindex(1)
+      it 'should index with a specified batch size' do
+        Post.reindex(:batch_size => 1)
         Sunspot.commit
         Post.search.results.to_set.should == @posts.to_set
       end
     end
+    
   end
+  
+  describe "redindex()" do
+  
+    before(:each) do
+      @posts = Array.new(10) { Post.create }
+    end
+
+    describe "when not using batches" do
+      
+      it "should select all if the batch_size is nil" do
+        Post.should_receive(:all).with(:include => []).and_return([])
+        Post.reindex(:batch_size => nil)
+      end
+
+      it "should search for models with includes" do
+        Post.should_receive(:all).with(:include => :author).and_return([])
+        Post.reindex(:batch_size => nil, :include => :author)
+      end
+    
+    end
+
+    describe "when using batches" do
+      
+      it "should use the default options" do
+        Post.should_receive(:all).with do |params|
+          params[:limit].should == 500
+          params[:include].should == []
+        end.and_return(@posts)
+        Post.reindex
+      end
+
+      it "should count the number of records to index" do
+        Post.should_receive(:count).and_return(10)
+        Post.reindex
+      end
+
+      it "should override the batch_size" do
+        Post.should_receive(:all).with do |params|
+          params[:limit].should == 20
+          @posts
+        end.and_return(@posts)
+        Post.reindex(:batch_size => 20)
+      end
+
+      it "should set the include option" do
+        Post.should_receive(:all).with do |params|
+          params[:include].should == [{:author => :address}]
+          @posts
+        end.and_return(@posts)
+        Post.reindex(:include => [{:author => :address}])
+      end
+
+      it "should commit after indexing each batch" do
+        Sunspot.should_receive(:commit).twice
+        Post.reindex(:batch_size => 5)
+      end
+
+      it "should commit after indexing everything" do
+        Sunspot.should_receive(:commit).once
+        Post.reindex(:batch_commit => false)
+      end
+      
+    end
+  end
+  
+
 end

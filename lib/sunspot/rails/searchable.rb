@@ -147,32 +147,53 @@ module Sunspot #:nodoc:
         # database at a time. The default batch size is 500; if nil is passed,
         # records will not be indexed in batches. By default, a commit is issued
         # after each batch; passing +false+ for +batch_commit+ will disable
-        # this, and only issue a commit at the end of the process.
+        # this, and only issue a commit at the end of the process. If associated
+        # objects need to indexed also, you can specify +include+ in format 
+        # accepted by ActiveRecord to improve your sql select performance
         #
-        # ==== Parameters
+        # ==== Options (passed as a hash)
         #
         # batch_size<Integer>:: Batch size with which to load records. Passing
         #                       'nil' will skip batches.  Default is 500.
-        # batch_commit<Boolean>:: Flag singaling if a commit should be done after
+        # batch_commit<Boolean>:: Flag signalling if a commit should be done after
         #                         after each batch is indexed, default is 'true'
+        # include<Mixed>:: include option to be passed to the ActiveRecord find,
+        #                  used for including associated objects that need to be
+        #                  indexed with the parent object, accepts all formats
+        #                  ActiveRecord.find does
         #
-        def reindex(batch_size = 500, batch_commit = true)
+        # ==== Examples
+        #   
+        #   # reindex in batches of 500, commit after each
+        #   Post.reindex 
+        #
+        #   # index all rows at once the commit
+        #   Post.reindex(:batch_size => nil) 
+        #
+        #   # reindex in batches of 500, commit when all batches complete
+        #   Post.reindex(:batch_commit => false) 
+        #
+        #   # include the associated +author+ object when loading to index
+        #   Post.reindex(:include => :author) 
+        #
+        def reindex(opts={})
+          options = { :batch_size => 500, :batch_commit => true, :include => []}.merge(opts)
           remove_all_from_index
-          unless batch_size
-            Sunspot.index!(all)
+          unless options[:batch_size]
+            Sunspot.index!(all(:include => options[:include]))
           else
             record_count = count(:order => primary_key)
             counter = 1
             offset = 0
             while(offset < record_count)
-              benchmark batch_size, counter do
-                Sunspot.index(all(:offset => offset, :limit => batch_size, :order => primary_key))
+              benchmark options[:batch_size], counter do
+                Sunspot.index(all(:include => options[:include], :offset => offset, :limit => options[:batch_size], :order => primary_key))
               end
-              Sunspot.commit if batch_commit
-              offset += batch_size
+              Sunspot.commit if options[:batch_commit]
+              offset += options[:batch_size]
               counter += 1
             end
-            Sunspot.commit unless batch_commit
+            Sunspot.commit unless options[:batch_commit]
           end
         end
 
