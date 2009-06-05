@@ -204,7 +204,7 @@ describe 'ActiveRecord mixin' do
     
   end
   
-  describe "redindex()" do
+  describe "reindex()" do
   
     before(:each) do
       @posts = Array.new(10) { Post.create }

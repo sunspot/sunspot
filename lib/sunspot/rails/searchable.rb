@@ -160,14 +160,14 @@ module Sunspot #:nodoc:
         # include<Mixed>:: include option to be passed to the ActiveRecord find,
         #                  used for including associated objects that need to be
         #                  indexed with the parent object, accepts all formats
-        #                  ActiveRecord.find does
+        #                  ActiveRecord::Base.find does
         #
         # ==== Examples
         #   
         #   # reindex in batches of 500, commit after each
         #   Post.reindex 
         #
-        #   # index all rows at once the commit
+        #   # index all rows at once, then commit
         #   Post.reindex(:batch_size => nil) 
         #
         #   # reindex in batches of 500, commit when all batches complete
