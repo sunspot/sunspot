@@ -6,7 +6,7 @@ module Sunspot
   class Setup #:nodoc:
     def initialize(clazz)
       @class_name = clazz.name
-      @fields, @text_fields, @dynamic_fields = [], [], []
+      @fields, @text_fields, @dynamic_fields = {}, {}, {}
       @dsl = DSL::Fields.new(self)
     end
 
@@ -18,7 +18,9 @@ module Sunspot
     # fields<Array>:: Array of Sunspot::Field objects
     #
     def add_fields(fields)
-      @fields.concat(Array(fields))
+      Array(fields).each do |field|
+        @fields[field.indexed_name] = field
+      end
     end
 
     # 
@@ -29,7 +31,9 @@ module Sunspot
     # fields<Array>:: Array of Sunspot::Field objects
     #
     def add_text_fields(fields)
-      @text_fields.concat(Array(fields))
+      Array(fields).each do |field|
+        @text_fields[field.indexed_name] = field
+      end
     end
 
     #
@@ -40,7 +44,9 @@ module Sunspot
     # fields<Array>:: Array of dynamic field objects
     # 
     def add_dynamic_fields(fields)
-      @dynamic_fields.concat(Array(fields))
+      Array(fields).each do |field|
+        @dynamic_fields[[field.name, field.type]] = field
+      end
     end
 
     # 
@@ -58,7 +64,7 @@ module Sunspot
     # Array:: Collection of all fields associated with this setup
     #
     def fields
-      get_inheritable_collection(:fields)
+      collection_from_inheritable_hash(:fields)
     end
 
     # 
@@ -70,7 +76,7 @@ module Sunspot
     # Array:: Collection of all text fields associated with this setup
     #
     def text_fields
-      get_inheritable_collection(:text_fields)
+      collection_from_inheritable_hash(:text_fields)
     end
 
     # 
@@ -95,7 +101,7 @@ module Sunspot
     # Array:: Dynamic fields
     #
     def dynamic_fields
-      get_inheritable_collection(:dynamic_fields)
+      collection_from_inheritable_hash(:dynamic_fields)
     end
 
     # 
@@ -133,12 +139,18 @@ module Sunspot
       Setup.for(clazz.superclass)
     end
 
+    def get_inheritable_hash(name)
+      hash = instance_variable_get(:"@#{name}")
+      parent.get_inheritable_hash(name).each_pair do |key, value|
+        hash[key] = value unless hash.has_key?(key)
+      end if parent
+      hash
+    end
+
     private
 
-    def get_inheritable_collection(name)
-      collection = instance_variable_get(:"@#{name}").dup
-      collection.concat(parent.send(name)) if parent
-      collection
+    def collection_from_inheritable_hash(name)
+      get_inheritable_hash(name).values
     end
 
     class <<self

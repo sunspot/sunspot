@@ -136,11 +136,11 @@ module Sunspot
       #
       # Hash:: a single key-value pair with the field name and value
       #
-      def pairs_for(model)
+      def populate_document(document, model)
         unless (value = @data_extractor.value_for(model)).nil?
-          { indexed_name.to_sym => to_indexed(value) }
-        else
-          {}
+          for scalar_value in Array(to_indexed(value))
+            document.add_field(indexed_name.to_sym, scalar_value)
+          end
         end
       end
     end
@@ -163,6 +163,7 @@ module Sunspot
       extend Buildable
 
       attr_accessor :name # Base name of the dynamic field.
+      attr_accessor :type # Type of the field
 
       def initialize(name, type, data_extractor, options)
         @name, @type, @data_extractor = name, type, data_extractor
@@ -184,15 +185,15 @@ module Sunspot
       #   Key-value pairs representing field names and values to be indexed.
       #
       # 
-      def pairs_for(model)
-        pairs = {}
+      def populate_document(document, model)
         if values = @data_extractor.value_for(model)
           values.each_pair do |dynamic_name, value|
             field_instance = build(dynamic_name)
-            pairs[field_instance.indexed_name.to_sym] = field_instance.to_indexed(value)
+            for scalar_value in Array(field_instance.to_indexed(value))
+              document.add_field(field_instance.indexed_name.to_sym, scalar_value)
+            end
           end
         end
-        pairs
       end
 
       # 

@@ -1,5 +1,5 @@
-gem 'solr-ruby'
-require 'solr'
+gem 'mwmitchell-rsolr'
+require 'rsolr'
 require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(adapters configuration setup field data_extractor indexer

@@ -26,7 +26,7 @@ module Sunspot
     # Remove the given model from the Solr index
     #
     def remove(model)
-      @connection.delete(Adapters::InstanceAdapter.adapt(model).index_id)
+      @connection.delete_by_id(Adapters::InstanceAdapter.adapt(model).index_id)
     end
 
     # 
@@ -42,11 +42,11 @@ module Sunspot
     # Convert documents into hash of indexed properties
     #
     def prepare(model)
-      hash = static_hash_for(model)
+      document = document_for(model)
       for field in @setup.all_fields
-        hash.merge!(field.pairs_for(model))
+        field.populate_document(document, model)
       end
-      hash
+      document
     end
 
     # 
@@ -54,9 +54,11 @@ module Sunspot
     # This method constructs the document hash containing those key-value
     # pairs.
     #
-    def static_hash_for(model)
-      { :id => Adapters::InstanceAdapter.adapt(model).index_id,
-        :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }}
+    def document_for(model)
+      RSolr::Message::Document.new(
+        :id => Adapters::InstanceAdapter.adapt(model).index_id,
+        :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }
+      )
     end
 
 
