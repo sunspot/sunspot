@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot}
-  s.version = "0.8.3"
+  s.version = "0.8.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown"]
-  s.date = %q{2009-06-03}
+  s.date = %q{2009-06-09}
   s.default_executable = %q{sunspot-solr}
   s.description = %q{Library for expressive, powerful interaction with the Solr search engine}
   s.email = %q{mat@patch.com}
@@ -64,6 +64,7 @@ Gem::Specification.new do |s|
      "solr/solr/conf/synonyms.txt",
      "solr/start.jar",
      "solr/webapps/solr.war",
+     "spec/api/adapters_spec.rb",
      "spec/api/build_search_spec.rb",
      "spec/api/indexer_spec.rb",
      "spec/api/query_spec.rb",
@@ -76,6 +77,7 @@ Gem::Specification.new do |s|
      "spec/integration/scoped_search_spec.rb",
      "spec/integration/spec_helper.rb",
      "spec/integration/test_pagination.rb",
+     "spec/mocks/adapters.rb",
      "spec/mocks/base_class.rb",
      "spec/mocks/comment.rb",
      "spec/mocks/mock_adapter.rb",
@@ -103,6 +105,7 @@ Gem::Specification.new do |s|
      "spec/integration/dynamic_fields_spec.rb",
      "spec/integration/test_pagination.rb",
      "spec/mocks/base_class.rb",
+     "spec/mocks/adapters.rb",
      "spec/mocks/mock_adapter.rb",
      "spec/mocks/user.rb",
      "spec/mocks/post.rb",
@@ -110,6 +113,7 @@ Gem::Specification.new do |s|
      "spec/api/search_retrieval_spec.rb",
      "spec/api/spec_helper.rb",
      "spec/api/session_spec.rb",
+     "spec/api/adapters_spec.rb",
      "spec/api/build_search_spec.rb",
      "spec/api/indexer_spec.rb",
      "spec/api/query_spec.rb"
