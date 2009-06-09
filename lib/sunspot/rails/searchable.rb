@@ -182,7 +182,7 @@ module Sunspot #:nodoc:
           unless options[:batch_size]
             Sunspot.index!(all(:include => options[:include]))
           else
-            record_count = count(:order => primary_key)
+            record_count = count
             counter = 1
             offset = 0
             while(offset < record_count)
