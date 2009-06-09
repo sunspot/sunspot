@@ -33,6 +33,8 @@ module Sunspot
       # * #to_solr_conditional
       #
       class Base #:nodoc:
+        include RSolr::Char
+
         def initialize(field, value, negative = false)
           @field, @value, @negative = field, value, negative
         end
@@ -49,7 +51,7 @@ module Sunspot
         # Hash:: Representation of this restriction as solr-ruby parameters
         #
         def to_params
-          { :filter_queries => [to_boolean_phrase] }
+          { :fq => [to_boolean_phrase] }
         end
 
         # 
@@ -79,7 +81,7 @@ module Sunspot
         # String:: Boolean phrase for restriction in the positive
         #
         def to_positive_boolean_phrase
-          "#{Solr::Util.query_parser_escape(@field.indexed_name)}:#{to_solr_conditional}"
+          "#{escape(@field.indexed_name)}:#{to_solr_conditional}"
         end
 
         # 
@@ -117,7 +119,7 @@ module Sunspot
         # String:: Solr API representation of given value
         #
         def solr_value(value = @value)
-          Solr::Util.query_parser_escape(@field.to_indexed(value))
+          escape(@field.to_indexed(value))
         end
       end
 
@@ -130,7 +132,7 @@ module Sunspot
           unless @value.nil?
             super
           else
-            "-#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]"
+            "-#{escape(@field.indexed_name)}:[* TO *]"
           end
         end
 
@@ -138,7 +140,7 @@ module Sunspot
           unless @value.nil?
             super
           else
-            "#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]"
+            "#{escape(@field.indexed_name)}:[* TO *]"
           end
         end
 
@@ -215,7 +217,7 @@ module Sunspot
 
         def to_positive_boolean_phrase
           adapter = Adapters::InstanceAdapter.adapt(@object)
-          "id:#{Solr::Util.query_parser_escape(adapter.index_id)}"
+          "id:#{escape(adapter.index_id)}"
         end
       end
     end

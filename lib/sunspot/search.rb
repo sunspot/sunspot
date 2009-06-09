@@ -28,7 +28,7 @@ module Sunspot
     #
     def execute!
       params = @query.to_params
-      @solr_result = @connection.query(params.delete(:q), params)
+      @solr_result = @connection.select(params)
       self
     end
 

@@ -1,4 +1,4 @@
-%w(dynamic_query field_facet pagination restriction sort).each do |file|
+%w(dynamic_query field_facet pagination restriction sort sort_composite).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -22,6 +22,7 @@ module Sunspot
       @types, @configuration = types, configuration
       @components = []
       @components << @pagination = Pagination.new(@configuration)
+      @components << @sort = SortComposite.new
     end
 
     # 
@@ -144,7 +145,7 @@ module Sunspot
     # direction<Symbol>:: :asc or :desc (default :asc)
     #
     def order_by(field_name, direction = nil)
-      @components << Sort.new(field(field_name), direction)
+      add_sort(Sort.new(field(field_name), direction))
     end
 
     # 
@@ -239,8 +240,14 @@ module Sunspot
       fields_hash[field_name.to_sym] || raise(UnrecognizedFieldError, "No field configured for #{@types * ', '} with name '#{field_name}'")
     end
 
+    #TODO document
     def dynamic_field(field_name)
       field = dynamic_fields_hash[field_name.to_sym] || raise(UnrecognizedFieldError, "No dynamic field configured for #{@types * ', '} with name #{field_name.inspect}")
+    end
+
+    #TODO document
+    def add_sort(sort) #:nodoc:
+      @sort << sort
     end
 
     # 

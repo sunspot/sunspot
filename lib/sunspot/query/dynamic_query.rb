@@ -79,7 +79,7 @@ module Sunspot
       # direction<Symbol>:: Direction in which to order (:asc, :desc)
       # 
       def order_by(dynamic_name, direction)
-        @query.add_component(Sort.new(@dynamic_field.build(dynamic_name), direction))
+        @query.add_sort(Sort.new(@dynamic_field.build(dynamic_name), direction))
       end
     end
   end
