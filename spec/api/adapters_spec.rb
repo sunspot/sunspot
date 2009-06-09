@@ -1,7 +1,4 @@
-_dir_ = File.dirname(__FILE__)
-
-require File.join(_dir_, 'spec_helper')
-require File.join(_dir_, 'fixtures', 'adapters')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe Sunspot::Adapters::InstanceAdapter do
   it "finds adapter by superclass" do
