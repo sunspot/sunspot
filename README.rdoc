@@ -29,7 +29,7 @@ objects such as the filesystem.
 
 In order to start the packaged Solr installation, run:
 
-  sunspot-solr start -- [-d /path/to/data/directory] [-p port] [-s path/to/solr/home]
+  sunspot-solr start -- [-d /path/to/data/directory] [-p port] [-s path/to/solr/home] [--pid-dir=path/to/pid/dir]
 
 If you don't specify a data directory, your Solr index will be stored in your operating system's temporary directory.
 
