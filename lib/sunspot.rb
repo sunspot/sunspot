@@ -385,7 +385,7 @@ module Sunspot
     # static data between tests, but probably nowhere else.
     #
     def reset!
-      @session = nil
+      @session = Session.new(session.config)
     end
 
     private
