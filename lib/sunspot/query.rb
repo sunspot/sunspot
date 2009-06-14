@@ -314,7 +314,7 @@ module Sunspot
     #
     def types_phrase
       if @types.nil? || @types.empty? then "type:[* TO *]"
-      elsif @types.length == 1 then "type:\"#{escaped_types.first}\""
+      elsif @types.length == 1 then "type:#{escaped_types.first}"
       else "type:(#{escaped_types * ' OR '})"
       end
     end
