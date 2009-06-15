@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot}
-  s.version = "0.8.7"
+  s.version = "0.8.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown"]
-  s.date = %q{2009-06-10}
+  s.date = %q{2009-06-15}
   s.default_executable = %q{sunspot-solr}
   s.description = %q{Library for expressive, powerful interaction with the Solr search engine}
   s.email = %q{mat@patch.com}
@@ -71,6 +71,7 @@ Gem::Specification.new do |s|
      "spec/api/search_retrieval_spec.rb",
      "spec/api/session_spec.rb",
      "spec/api/spec_helper.rb",
+     "spec/api/sunspot_spec.rb",
      "spec/integration/dynamic_fields_spec.rb",
      "spec/integration/faceting_spec.rb",
      "spec/integration/keyword_search_spec.rb",
@@ -115,6 +116,7 @@ Gem::Specification.new do |s|
      "spec/api/session_spec.rb",
      "spec/api/adapters_spec.rb",
      "spec/api/build_search_spec.rb",
+     "spec/api/sunspot_spec.rb",
      "spec/api/indexer_spec.rb",
      "spec/api/query_spec.rb"
   ]
