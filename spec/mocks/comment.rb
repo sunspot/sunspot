@@ -1,28 +1,30 @@
-class Comment < BaseClass
-  @@id = 0
-  @@comments = [nil]
+module Namespaced
+  class Comment < BaseClass
+    @@id = 0
+    @@comments = [nil]
 
-  attr_reader :id
-  attr_accessor :author_name, :published_at, :body, :average_rating
+    attr_reader :id
+    attr_accessor :author_name, :published_at, :body, :average_rating
 
-  def initialize(attrs = {})
-    @id = @@id += 1
-    @@comments << self
-    attrs.each_pair { |attribute, value| self.send("#{attribute}=", value) }
+    def initialize(attrs = {})
+      @id = @@id += 1
+      @@comments << self
+      attrs.each_pair { |attribute, value| self.send("#{attribute}=", value) }
+    end
+
+    def self.get(id)
+      @@comments[id]
+    end
+
+    def self.get_all(ids)
+      ids.map { |id| get(id) }.sort_by { |post| post.id } # this is so that results are not ordered by coincidence
+    end
   end
 
-  def self.get(id)
-    @@posts[id]
+  Sunspot.setup(Comment) do
+    text :author_name, :body
+    string :author_name
+    time :published_at
+    integer :average_rating
   end
-
-  def self.get_all(ids)
-    ids.map { |id| get(id) }.sort_by { |post| post.id } # this is so that results are not ordered by coincidence
-  end
-end
-
-Sunspot.setup(Comment) do
-  text :author_name, :body
-  string :author_name
-  time :published_at
-  integer :average_rating
 end

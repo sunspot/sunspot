@@ -11,6 +11,8 @@ describe 'keyword search' do
     @posts << Post.new(:title => 'The toast abbreviates the recovering spirit',
                        :body => 'Does the wind interpret the buffer?')
     Sunspot.index!(*@posts)
+    @comment = Namespaced::Comment.new(:body => 'Hey there where ya goin, not exactly knowin, who says you have to call just one place toast.')
+    Sunspot.index!(@comment)
   end
 
   it 'matches a single keyword out of a single field' do
@@ -28,5 +30,13 @@ describe 'keyword search' do
     results = Sunspot.search(Post) { keywords 'toast wind' }.results
     [0, 2].each { |i| results.should include(@posts[i]) }
     [1].each { |i| results.should_not include(@posts[i]) }
+  end
+
+  it 'matches multiple types' do
+    results = Sunspot.search(Post, Namespaced::Comment) do
+      keywords 'toast'
+    end.results
+    [@posts[0], @posts[2], @comment].each  { |obj| results.should include(obj) }
+    results.should_not include(@posts[1])
   end
 end

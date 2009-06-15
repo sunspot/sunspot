@@ -35,7 +35,7 @@ end
 port     = ARGV.flags.p || '8983'
 data_dir = File.expand_path(ARGV.flags.d || File.join(Dir.tmpdir, 'solr_data'))
 home     = File.expand_path(ARGV.flags.s) if ARGV.flags.s
-pid_dir  = File.expand_path(ARGV.flags.pd) || working_directory
+pid_dir  = File.expand_path(ARGV.flags.pd || working_directory)
 
 options = { :dir_mode => :normal, :dir => pid_dir }
 

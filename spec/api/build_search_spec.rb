@@ -320,23 +320,28 @@ describe 'Search' do
     end
   end
 
+  it 'should properly escape namespaced type names' do
+    connection.should_receive(:query).with('(type:Namespaced\:\:Comment)', hash_including)
+    session.search(Namespaced::Comment)
+  end
+
   it 'should build search for multiple types' do
-    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including)
-    session.search(Post, Comment)
+    connection.should_receive(:query).with('(type:(Post OR Namespaced\:\:Comment))', hash_including)
+    session.search(Post, Namespaced::Comment)
   end
 
   it 'should allow search on fields common to all types' do
-    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including(:filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'])).twice
+    connection.should_receive(:query).with('(type:(Post OR Namespaced\:\:Comment))', hash_including(:filter_queries => ['published_at_d:1983\-07\-08T09\:00\:00Z'])).twice
     time = Time.parse('1983-07-08 05:00:00 -0400')
-    session.search Post, Comment, :conditions => { :published_at => time }
-    session.search Post, Comment do
+    session.search Post, Namespaced::Comment, :conditions => { :published_at => time }
+    session.search Post, Namespaced::Comment do
       with :published_at, time
     end
   end
 
   it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field not common to all types' do
     lambda do
-      session.search Post, Comment do
+      session.search Post, Namespaced::Comment do
         with :blog_id, 1
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
@@ -344,15 +349,15 @@ describe 'Search' do
 
   it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field configured differently between types' do
     lambda do
-      session.search Post, Comment do
+      session.search Post, Namespaced::Comment do
         with :average_rating, 2.2 # this is a float in Post but an integer in Comment
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'should ignore condition if field is not common to all types' do
-    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_not_including(:filter_queries))
-    session.search Post, Comment, :conditions => { :blog_id => 1 }
+    connection.should_receive(:query).with('(type:(Post OR Namespaced\:\:Comment))', hash_not_including(:filter_queries))
+    session.search Post, Namespaced::Comment, :conditions => { :blog_id => 1 }
   end
 
   it 'should allow building search using block argument rather than instance_eval' do

@@ -323,7 +323,7 @@ module Sunspot
     # Wraps each type in quotes to escape names of the form Namespace::Class
     #
     def escaped_types
-      @types.map { |t| "\"#{t}\""}
+      @types.map { |t| Solr::Util.query_parser_escape(t.name)}
     end
 
     # 
