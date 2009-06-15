@@ -347,7 +347,7 @@ module Sunspot
     # classes...<Class>::
     #   classes for which to remove all instances from the index
     def remove_all!(*classes)
-      session.remove_all(*classes)
+      session.remove_all!(*classes)
     end
 
     #
@@ -385,7 +385,7 @@ module Sunspot
     # static data between tests, but probably nowhere else.
     #
     def reset!
-      @session = nil
+      @session = Session.new(session.config)
     end
 
     private
