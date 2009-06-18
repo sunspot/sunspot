@@ -55,7 +55,7 @@ module Sunspot
     def index(*objects)
       objects.flatten!
       @updates += objects.length
-      objects.group_by { |object| object.class }.each_pair do |clazz, objs|
+      objects.group_by { |object| object.class }.to_hash.each_pair do |clazz, objs|
         indexer_for(objs.first).add(objs)
       end
     end
