@@ -8,6 +8,8 @@
 * sunspot-configure-solr
 * Text fields allow multiple
 * Don't allow ordering on multiple-allowed fields
+* Expose delete by ID
+* Support composite IDs
 * Transactions
 * Switch to RSolr
 * Facet by type (?)
