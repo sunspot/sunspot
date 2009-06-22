@@ -30,10 +30,18 @@ describe 'retrieving search' do
   it 'should return raw results without loading instances' do
     post_1, post_2 = Array.new(2) { Post.new }
     stub_results(post_1, post_2)
-    %w(load load_all).each { |message| MockAdapter::DataAccessor.should_not_receive(message) }
+    MockAdapter::DataAccessor.should_not_receive(:new)
     session.search(Post, :page => 1).raw_results.map do |raw_result|
       [raw_result.class_name, raw_result.primary_key]
     end.should == [['Post', post_1.id.to_s], ['Post', post_2.id.to_s]]
+  end
+  
+  it 'should load results with integer-ids to avoid conflicts with sluggable finders' do
+    stub_results(post = Post.new)
+    mock_adapter = mock()
+    mock_adapter.should_receive(:load_all).with([post.id]).and_return([post])
+    MockAdapter::DataAccessor.should_receive(:new).at_least(1).and_return( mock_adapter )
+    session.search(Post).results.should == [post]
   end
 
   it 'should return total' do

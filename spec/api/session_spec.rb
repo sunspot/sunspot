@@ -17,7 +17,7 @@ describe 'Session' do
       Sunspot.search(Post)
     end
 
-    it 'should open a connection with custom host' do
+    xit 'should open a connection with custom host' do
       Solr::Connection.stub!(:new).with('http://127.0.0.1:8981/solr').and_return(connection)
       Sunspot.config.solr.url = 'http://127.0.0.1:8981/solr'
       Sunspot.index(Post.new)

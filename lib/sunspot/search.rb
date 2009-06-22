@@ -146,7 +146,7 @@ module Sunspot
         type_id_hash
       end.inject([]) do |results, pair|
         type_name, ids = pair
-        results.concat(Adapters::DataAccessor.create(Util.full_const_get(type_name)).load_all(ids))
+        results.concat(Adapters::DataAccessor.create(Util.full_const_get(type_name)).load_all(ids.map(&:to_i)))
       end.sort_by do |result|
         hit_ids.index(Adapters::InstanceAdapter.adapt(result).index_id)
       end
