@@ -33,21 +33,6 @@ module Sunspot #:nodoc:
         def load(id)
           @clazz.find(id)
         end
-
-        # 
-        # Get a collection of ActiveRecord instances out of the database by ID
-        #
-        # ==== Parameters
-        #
-        # ids<Array>:: Database IDs of models to retrieve
-        #
-        # ==== Returns
-        #
-        # Array:: Collection of ActiveRecord models
-        #
-        def load(ids)
-          @clazz.find(ids)
-        end
       end
     end
   end
