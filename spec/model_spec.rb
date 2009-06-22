@@ -103,6 +103,13 @@ describe 'ActiveRecord mixin' do
         with :title, 'Bogus Post'
       end.results.should be_empty
     end
+    
+    it 'should find ActiveRecord objects with an integer, not a string' do
+      Post.should_receive(:find).with( @post.id.to_i ).and_return( @post )
+      Post.search do
+        with :title, 'Test Post'
+      end.results.should == [@post]
+    end
   end
 
   describe 'search_ids()' do
@@ -268,5 +275,4 @@ describe 'ActiveRecord mixin' do
     end
   end
   
-
 end

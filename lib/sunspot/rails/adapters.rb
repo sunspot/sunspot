@@ -31,7 +31,7 @@ module Sunspot #:nodoc:
         # ActiveRecord::Base:: ActiveRecord model
         # 
         def load(id)
-          @clazz.find(id)
+          @clazz.find(id.to_i)
         end
       end
     end
