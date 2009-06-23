@@ -7,7 +7,7 @@ begin
     s.email = 'mat@patch.com'
     s.homepage = 'http://github.com/outoftime/sunspot_rails'
     s.description = 'Rails integration for the Sunspot Solr search library'
-    s.authors = ['Mat Brown']
+    s.authors = ['Mat Brown', 'Peer Allan', 'Michael Moen', 'Benjamin Krause']
     s.files = FileList['[A-Z]*',
                        '{lib,tasks,dev_tasks}/**/*',
                        'install.rb',
