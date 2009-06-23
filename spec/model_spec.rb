@@ -105,7 +105,7 @@ describe 'ActiveRecord mixin' do
     end
     
     it 'should find ActiveRecord objects with an integer, not a string' do
-      Post.should_receive(:find).with( @post.id.to_i ).and_return( @post )
+      Post.should_receive(:find).with([@post.id.to_i]).and_return([@post])
       Post.search do
         with :title, 'Test Post'
       end.results.should == [@post]

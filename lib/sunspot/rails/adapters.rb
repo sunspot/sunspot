@@ -45,8 +45,8 @@ module Sunspot #:nodoc:
         #
         # Array:: Collection of ActiveRecord models
         #
-        def load(ids)
-          @clazz.find(ids)
+        def load_all(ids)
+          @clazz.find(ids.map { |id| id.to_i })
         end
       end
     end
