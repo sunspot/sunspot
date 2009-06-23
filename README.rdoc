@@ -155,6 +155,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 * Mat Brown (mat@patch.com)
 * Peer Allan (peer.allan@gmail.com)
 * Dmitriy Dzema (dima@dzema.name)
+* Benjamin Krause (bk@benjaminkrause.com)
 
 == License
 
