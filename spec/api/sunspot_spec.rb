@@ -8,7 +8,7 @@ describe Sunspot do
 
       Sunspot.send(:session).should_not == old_session
     end
-    xit "should keep keep configuration" do
+    it "should keep keep configuration" do
       Sunspot.config.solr.url = "http://localhost:9999/path/solr"
 
       config_before_reset = Sunspot.config
