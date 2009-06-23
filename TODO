@@ -8,6 +8,7 @@
 * sunspot-configure-solr
 * Text fields allow multiple
 * Don't allow ordering on multiple-allowed fields
+* Detect Ranges in short-form #with()
 * Expose delete by ID
 * Support composite IDs
 * Transactions
