@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'search faceting' do
   def self.test_field_type(name, attribute, field, value1, value2)
     context "with field of type #{name}" do

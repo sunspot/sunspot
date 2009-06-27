@@ -105,25 +105,27 @@ describe 'retrieving search' do
   private
 
   def stub_results(*results)
-    total_hits = if results.last.is_a?(Integer) then results.pop
-                 else results.length
-                 end
-    response = mock('response')
-    response.stub!(:hits).and_return(results.map { |result| { 'id' => "#{result.class.name} #{result.id}" }})
-    response.stub!(:total_hits).and_return(total_hits)
-    connection.stub!(:query).and_return(response)
+    count =
+      if results.last.is_a?(Integer) then results.pop
+      else results.length
+      end
+    response = {
+      'response' => {
+        'docs' => results.map { |result| { 'id' => "#{result.class.name} #{result.id}" }},
+        'numFound' => count
+      }
+    }
+    connection.stub!(:select).and_return(response)
   end
 
   def stub_facet(name, values)
-    response = mock('response')
-    facets = values.map do |data, count|
-      value = Solr::Response::Standard::FacetValue.new
-      value.name = data
-      value.value = count
-      value
-    end.sort_by { |value| -value.value }
-    response.stub!(:field_facets).with(name.to_s).and_return(facets)
-    connection.stub!(:query).and_return(response)
+    connection.stub!(:select).and_return(
+      'facet_counts' => {
+        'facet_fields' => {
+          name.to_s => values.to_a.sort_by { |value, count| -count }.flatten
+        }
+      }
+    )
   end
 
   def facet_values(result, field_name)

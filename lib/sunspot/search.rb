@@ -43,7 +43,7 @@ module Sunspot
     #
     def results
       @results ||= if @query.page && defined?(WillPaginate::Collection)
-        WillPaginate::Collection.create(@query.page, @query.per_page, @solr_result.total_hits) do |pager|
+        WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
           pager.replace(result_objects)
         end
       else
@@ -62,7 +62,7 @@ module Sunspot
     # Array:: Ordered collection of raw results
     #
     def raw_results
-      @raw_results ||= hit_ids.map { |hit_id| RawResult.new(*hit_id.match(/([^ ]+) (.+)/)[1..2]) }
+      @raw_results ||= doc_ids.map { |hit_id| RawResult.new(*hit_id.match(/([^ ]+) (.+)/)[1..2]) }
     end
 
     # 
@@ -73,7 +73,7 @@ module Sunspot
     # Integer:: Total matching documents
     #
     def total
-      @total ||= @solr_result.total_hits
+      @total ||= solr_response['numFound']
     end
 
     # 
@@ -92,7 +92,7 @@ module Sunspot
       (@facets_cache ||= {})[field_name.to_sym] ||=
         begin
           field = @query.field(field_name)
-          Facet.new(@solr_result.field_facets(field.indexed_name), field)
+          Facet.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
         end
     end
 
@@ -126,11 +126,15 @@ module Sunspot
       (@dynamic_facets_cache ||= {})[[base_name.to_sym, dynamic_name.to_sym]] ||=
         begin
           field = @query.dynamic_field(base_name).build(dynamic_name)
-          Facet.new(@solr_result.field_facets(field.indexed_name), field)
+          Facet.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
         end
     end
 
     private
+
+    def solr_response
+      @solr_response ||= @solr_result['response']
+    end
 
     # 
     # Collection of instantiated result objects corresponding to the results
@@ -148,12 +152,12 @@ module Sunspot
         type_name, ids = pair
         results.concat(Adapters::DataAccessor.create(Util.full_const_get(type_name)).load_all(ids))
       end.sort_by do |result|
-        hit_ids.index(Adapters::InstanceAdapter.adapt(result).index_id)
+        doc_ids.index(Adapters::InstanceAdapter.adapt(result).index_id)
       end
     end
 
-    def hit_ids
-      @hit_ids ||= @solr_result.hits.map { |hit| hit['id'] }
+    def doc_ids
+      @doc_ids ||= solr_response['docs'].map { |doc| doc['id'] }
     end
   end
 end

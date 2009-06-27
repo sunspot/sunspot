@@ -1,56 +1,99 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe 'Session' do
-  context 'using singleton session' do
+shared_examples_for 'all sessions' do
+  context '#index()' do
     before :each do
-      Sunspot.reset!
-      connection.should_receive(:add).twice
-      connection.should_receive(:commit).twice
-      connection.should_receive(:query)
+      @session.index(Post.new)
     end
 
-    it 'should open connection with defaults if nothing specified' do
-      Solr::Connection.stub!(:new).with('http://localhost:8983/solr').and_return(connection)
-      Sunspot.index(Post.new)
-      Sunspot.index!(Post.new)
-      Sunspot.commit
-      Sunspot.search(Post)
-    end
-
-    it 'should open a connection with custom host' do
-      Solr::Connection.stub!(:new).with('http://127.0.0.1:8981/solr').and_return(connection)
-      Sunspot.config.solr.url = 'http://127.0.0.1:8981/solr'
-      Sunspot.index(Post.new)
-      Sunspot.index!(Post.new)
-      Sunspot.commit
-      Sunspot.search(Post)
+    it 'should add document to connection' do
+      connection.should have(1).adds
     end
   end
 
-  context 'using custom session' do
+  context '#index!()' do
     before :each do
-      connection.should_receive(:add).twice
-      connection.should_receive(:commit).twice
-      connection.should_receive(:query)
+      @session.index!(Post.new)
+    end
+
+    it 'should add document to connection' do
+      connection.should have(1).adds
+    end
+
+    it 'should commit' do
+      connection.should have(1).commits
+    end
+  end
+
+  context '#commit()' do
+    before :each do
+      @session.commit
+    end
+
+    it 'should commit' do
+      connection.should have(1).commits
+    end
+  end
+
+  context '#search()' do
+    before :each do
+      @session.search(Post)
+    end
+
+    it 'should search' do
+      connection.should have(1).searches
+    end
+  end
+end
+
+describe 'Session' do
+  before :each do
+    @connection_factory = Mock::ConnectionFactory.new
+    Sunspot::Session.connection_class = @connection_factory
+  end
+
+  after :each do
+    Sunspot::Session.connection_class = nil
+  end
+
+  context 'singleton session' do
+    before :each do
+      Sunspot.reset!
+      @session = Sunspot
+    end
+
+    it_should_behave_like 'all sessions'
+
+    it 'should open connection with defaults if nothing specified' do
+      Sunspot.commit
+      connection.adapter.opts[:url].should == 'http://127.0.0.1:8983/solr'
     end
 
     it 'should open a connection with custom host' do
-      Solr::Connection.stub!(:new).with('http://127.0.0.1:8982/solr').and_return(connection)
+      Sunspot.config.solr.url = 'http://127.0.0.1:8981/solr'
+      Sunspot.commit
+      connection.adapter.opts[:url].should == 'http://127.0.0.1:8981/solr'
+    end
+  end
+
+  context 'custom session' do
+    before :each do
+      @session = Sunspot::Session.new
+    end
+
+    it_should_behave_like 'all sessions'
+
+    it 'should open a connection with custom host' do
       session = Sunspot::Session.new do |config|
         config.solr.url = 'http://127.0.0.1:8982/solr'
       end
-      session.index(Post.new)
-      session.index!(Post.new)
       session.commit
-      session.search(Post)
+      connection.adapter.opts[:url].should == 'http://127.0.0.1:8982/solr'
     end
   end
 
   context 'dirty sessions' do
     before :each do
-      connection.stub!(:add)
-      connection.stub!(:commit)
-      Solr::Connection.stub!(:new).and_return(connection)
       @session = Sunspot::Session.new
     end
 
@@ -85,18 +128,18 @@ describe 'Session' do
     end
 
     it 'should not commit when commit_if_dirty called on clean session' do
-      connection.should_not_receive(:commit)
       @session.commit_if_dirty
+      connection.should have(0).commits
     end
 
     it 'should commit when commit_if_dirty called on dirty session' do
-      connection.should_receive(:commit)
       @session.index(Post.new)
       @session.commit_if_dirty
+      connection.should have(1).commits
     end
   end
 
   def connection
-    @connection ||= mock('Connection').as_null_object
+    @connection_factory.instance
   end
 end

@@ -1,9 +1,25 @@
 module Mock
-  class Connection
-    attr_reader :adds
+  class ConnectionFactory
+    def new(adapter = nil, opts = nil)
+      if @instance
+        raise('Factory can only create an instance once!')
+      else
+        @instance = Connection.new(adapter, opts)
+      end
+    end
 
-    def initialize
-      @adds, @deletes, @deletes_by_query = Array.new(3) { [] }
+    def instance
+      @instance ||= Connection.new
+    end
+  end
+
+  class Connection
+    attr_reader :adds, :commits, :searches
+    attr_accessor :adapter, :opts
+
+    def initialize(adapter = nil, opts = nil)
+      @adapter, @opts = adapter, opts
+      @adds, @deletes, @deletes_by_query, @commits, @searches = Array.new(5) { [] }
     end
 
     def add(documents)
@@ -18,8 +34,12 @@ module Mock
       @deletes_by_query << query
     end
 
+    def commit
+      @commits << Time.now
+    end
+
     def select(params)
-      @last_search = params
+      @searches << @last_search = params
     end
 
     def has_add_with?(*documents)

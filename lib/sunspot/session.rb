@@ -8,6 +8,14 @@ module Sunspot
   # again here.
   #
   class Session
+    class <<self
+      attr_writer :connection_class
+      
+      def connection_class
+        @connection_class ||= RSolr::Connection
+      end
+    end
+
     attr_reader :config
 
     # 
@@ -163,7 +171,9 @@ module Sunspot
     # Solr::Connection:: The connection for this session
     #
     def connection
-      @connection ||= Solr::Connection.new(config.solr.url)
+      @connection ||= self.class.connection_class.new(
+        RSolr::Adapter::HTTP.new(:url => config.solr.url)
+      )
     end
   end
 end

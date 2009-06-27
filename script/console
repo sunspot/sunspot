@@ -2,4 +2,7 @@
 require 'irb'
 require 'rubygems'
 require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot')
+def test_env!
+  require File.join(File.dirname(__FILE__), '..', 'spec', 'integration', 'spec_helper')
+end
 IRB.start

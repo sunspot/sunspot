@@ -20,7 +20,7 @@ module Sunspot
       def build #:nodoc:
         LightConfig.build do
           solr do
-            url 'http://localhost:8983/solr'
+            url 'http://127.0.0.1:8983/solr'
           end
           pagination do
             default_per_page 30

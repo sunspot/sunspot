@@ -1,8 +1,8 @@
 module Sunspot
   # This class encapsulates a facet row (value) for a facet.
   class FacetRow
-    def initialize(facet_value, field) #:nodoc:
-      @facet_value, @field = facet_value, field
+    def initialize(pair, field) #:nodoc:
+      @pair, @field = pair, field
     end
 
     # The value associated with the facet. This will be cast according to the
@@ -17,7 +17,7 @@ module Sunspot
     # Object:: The value associated with the row, cast to the appropriate type
     #
     def value
-      @value ||= @field.cast(@facet_value.name)
+      @value ||= @field.cast(@pair[0])
     end
 
     # The number of documents matching the search parameters that have this
@@ -28,7 +28,7 @@ module Sunspot
     # Integer:: Document count for this value
     #
     def count
-      @count ||= @facet_value.value
+      @count ||= @pair[1]
     end
   end
 end

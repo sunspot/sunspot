@@ -312,119 +312,136 @@ describe 'Search' do
     connection.should have_last_search_with(:sort => 'custom_integer:test_i desc, sort_title_s asc')
   end
 
-#  it 'should throw an ArgumentError if a bogus order direction is given' do
-#    lambda do
-#      session.search Post do
-#        order_by :sort_title, :sideways
-#      end
-#    end.should raise_error(ArgumentError)
-#  end
-#
-#  it 'should request single field facet' do
-#    connection.should_receive(:query).with('(type:Post)', hash_including(:facets => { :fields => %w(category_ids_im) }))
-#    session.search Post do
-#      facet :category_ids
-#    end
-#  end
-#
-#  it 'should request multiple field facets' do
-#    connection.should_receive(:query).with('(type:Post)', hash_including(:facets => { :fields => %w(category_ids_im blog_id_i) }))
-#    session.search Post do
-#      facet :category_ids, :blog_id
-#    end
-#  end
-#
-#  it 'should allow faceting by dynamic string field' do
-#    connection.should_receive(:query).with(anything, hash_including(:facets => { :fields => %w(custom_string:test_s) }))
-#    session.search Post do
-#      dynamic :custom_string do
-#        facet :test
-#      end
-#    end
-#  end
-#
-#  it 'should build search for multiple types' do
-#    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including)
-#    session.search(Post, Comment)
-#  end
-#
-#  it 'should allow search on fields common to all types' do
-#    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_including(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])).twice
-#    time = Time.parse('1983-07-08 05:00:00 -0400')
-#    session.search Post, Comment, :conditions => { :published_at => time }
-#    session.search Post, Comment do
-#      with :published_at, time
-#    end
-#  end
-#
-#  it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field not common to all types' do
-#    lambda do
-#      session.search Post, Comment do
-#        with :blog_id, 1
-#      end
-#    end.should raise_error(Sunspot::UnrecognizedFieldError)
-#  end
-#
-#  it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field configured differently between types' do
-#    lambda do
-#      session.search Post, Comment do
-#        with :average_rating, 2.2 # this is a float in Post but an integer in Comment
-#      end
-#    end.should raise_error(Sunspot::UnrecognizedFieldError)
-#  end
-#
-#  it 'should ignore condition if field is not common to all types' do
-#    connection.should_receive(:query).with('(type:(Post OR Comment))', hash_not_including(:fq))
-#    session.search Post, Comment, :conditions => { :blog_id => 1 }
-#  end
-#
-#  it 'should allow building search using block argument rather than instance_eval' do
-#    connection.should_receive(:query).with('(type:Post)', hash_including(:fq => ['blog_id_i:1']))
-#    @blog_id = 1
-#    session.search Post do |query|
-#      query.with(:blog_id, @blog_id)
-#    end
-#  end
-#
-#  it 'should raise Sunspot::UnrecognizedFieldError for nonexistant fields in block scope' do
-#    lambda do
-#      session.search Post do
-#        with :bogus, 'Field'
-#      end
-#    end.should raise_error(Sunspot::UnrecognizedFieldError)
-#  end
-#
-#  it 'should raise NoMethodError if bogus operator referenced' do
-#    lambda do
-#      session.search Post do
-#        with(:category_ids).resembling :bogus_condition
-#      end
-#    end.should raise_error(NoMethodError)
-#  end
-#
-#  it 'should raise ArgumentError if no :page argument given to paginate' do
-#    lambda do
-#      session.search Post do
-#        paginate
-#      end
-#    end.should raise_error(ArgumentError)
-#  end
-#
-#  it 'should raise ArgumentError if bogus argument given to paginate' do
-#    lambda do
-#      session.search Post do
-#        paginate :page => 4, :ugly => :puppy
-#      end
-#    end.should raise_error(ArgumentError)
-#  end
-#
-#  it 'should raise ArgumentError if more than two arguments passed to scope method' do
-#    lambda do
-#      session.search Post do
-#        with(:category_ids, 4, 5)
-#      end
-#    end.should raise_error(ArgumentError)
-#  end
+  it 'should throw an ArgumentError if a bogus order direction is given' do
+    lambda do
+      session.search Post do
+        order_by :sort_title, :sideways
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  it 'should not turn faceting on if no facet requested' do
+    session.search(Post)
+    connection.should_not have_last_search_with('facet')
+  end
+
+  it 'should turn faceting on if facet is requested' do
+    session.search Post do
+      facet :category_ids
+    end
+    connection.should have_last_search_with('facet' => 'true')
+  end
+
+  it 'should request single field facet' do
+    session.search Post do
+      facet :category_ids
+    end
+    connection.should have_last_search_with(:"facet.field" => %w(category_ids_im))
+  end
+
+  it 'should request multiple field facets' do
+    session.search Post do
+      facet :category_ids, :blog_id
+    end
+    connection.should have_last_search_with(:"facet.field" => %w(category_ids_im blog_id_i))
+  end
+
+  it 'should allow faceting by dynamic string field' do
+    session.search Post do
+      dynamic :custom_string do
+        facet :test
+      end
+    end
+    connection.should have_last_search_with(:"facet.field" => %w(custom_string:test_s))
+  end
+
+  it 'should build search for multiple types' do
+    session.search(Post, Comment)
+    connection.should have_last_search_with(:q => '(type:(Post OR Comment))')
+  end
+
+  it 'should allow search on fields common to all types with DSL' do
+    time = Time.parse('1983-07-08 05:00:00 -0400')
+    session.search Post, Comment do
+      with :published_at, time
+    end
+    connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
+  end
+
+  it 'should allow search on fields common to all types with conditions' do
+    time = Time.parse('1983-07-08 05:00:00 -0400')
+    session.search Post, Comment, :conditions => { :published_at => time }
+    connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
+  end
+
+  it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field not common to all types' do
+    lambda do
+      session.search Post, Comment do
+        with :blog_id, 1
+      end
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
+  it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field configured differently between types' do
+    lambda do
+      session.search Post, Comment do
+        with :average_rating, 2.2 # this is a float in Post but an integer in Comment
+      end
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
+  it 'should ignore condition if field is not common to all types' do
+    session.search Post, Comment, :conditions => { :blog_id => 1 }
+    connection.should_not have_last_search_with(:fq)
+  end
+
+  it 'should allow building search using block argument rather than instance_eval' do
+    @blog_id = 1
+    session.search Post do |query|
+      query.with(:blog_id, @blog_id)
+    end
+    connection.should have_last_search_with(:fq => ['blog_id_i:1'])
+  end
+
+  it 'should raise Sunspot::UnrecognizedFieldError for nonexistant fields in block scope' do
+    lambda do
+      session.search Post do
+        with :bogus, 'Field'
+      end
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
+  it 'should raise NoMethodError if bogus operator referenced' do
+    lambda do
+      session.search Post do
+        with(:category_ids).resembling :bogus_condition
+      end
+    end.should raise_error(NoMethodError)
+  end
+
+  it 'should raise ArgumentError if no :page argument given to paginate' do
+    lambda do
+      session.search Post do
+        paginate
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  it 'should raise ArgumentError if bogus argument given to paginate' do
+    lambda do
+      session.search Post do
+        paginate :page => 4, :ugly => :puppy
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  it 'should raise ArgumentError if more than two arguments passed to scope method' do
+    lambda do
+      session.search Post do
+        with(:category_ids, 4, 5)
+      end
+    end.should raise_error(ArgumentError)
+  end
 
   private
 

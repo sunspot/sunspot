@@ -25,7 +25,7 @@ module Sunspot
         DIRECTIONS[@direction] || 
           raise(
             ArgumentError,
-            "Unknown sort direction #{@direction}. Acceptable input is: #{(ASCENDING + DESCENDING).map { |input| input.inspect } * ', '}"
+            "Unknown sort direction #{@direction}. Acceptable input is: #{DIRECTIONS.keys.map { |input| input.inspect } * ', '}"
         )
       end
     end

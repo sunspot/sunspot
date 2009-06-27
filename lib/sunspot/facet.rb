@@ -1,3 +1,5 @@
+require 'enumerator'
+
 module Sunspot
   #
   # The facet class encapsulates the information returned by Solr for a
@@ -29,8 +31,12 @@ module Sunspot
     # 
     def rows
       @rows ||=
-        @facet_values.map do |facet_value|
-          FacetRow.new(facet_value, @field)
+        begin
+          rows = []
+          @facet_values.each_slice(2) do |pair|
+            rows << FacetRow.new(pair, @field)
+          end
+          rows
         end
     end
   end

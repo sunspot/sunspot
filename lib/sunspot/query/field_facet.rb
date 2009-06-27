@@ -14,7 +14,7 @@ module Sunspot
       # Hash:: solr-ruby params for this field facet
       #
       def to_params
-        { :facets => { :fields => [@field.indexed_name] }}
+        { :"facet.field" => [@field.indexed_name], 'facet' => 'true' }
       end
     end
   end
