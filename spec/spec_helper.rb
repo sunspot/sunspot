@@ -23,7 +23,9 @@ end
 require 'sunspot'
 
 require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
-Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each { |file| require file }
+Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each do |file|
+  require file unless File.basename(file) == 'mock_record.rb'
+end
 
 def without_class(clazz)
   Object.class_eval { remove_const(clazz.name.to_sym) }

@@ -1,11 +1,8 @@
 class MockRecord
-  IDS = Hash.new do |h, k|
-    h[k] ||= 0
-  end
+  IDS = Hash.new { |h, k| h[k] = 0 }
+  INSTANCES = Hash.new { |h, k| h[k] = {} }
 
-  INSTANCES = Hash.new do |h, k|
-    h[k] ||= {}
-  end
+  attr_reader :id
 
   def initialize(attrs = {})
     attrs.each_pair do |name, value|
@@ -15,11 +12,17 @@ class MockRecord
     INSTANCES[self.class.name.to_sym][@id] = self
   end
 
-  def get(id)
-    IDS[self.class.name.to_sym][id]
+  def self.inherited(base)
+    base.extend(ClassMethods)
   end
 
-  def get_all(ids)
-    ids.map { |id| get(id) }.sort_by { |instance| instance.id }
+  module ClassMethods
+    def get(id)
+      INSTANCES[self.name.to_sym][id]
+    end
+
+    def get_all(ids)
+      ids.map { |id| get(id) }.sort_by { |instance| instance.id }
+    end
   end
 end
