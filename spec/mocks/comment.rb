@@ -1,4 +1,4 @@
-class Comment < BaseClass
+class Comment < MockRecord
   @@id = 0
   @@comments = [nil]
 

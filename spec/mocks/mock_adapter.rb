@@ -18,5 +18,5 @@ module MockAdapter
   end
 end
 
-Sunspot::Adapters::DataAccessor.register(MockAdapter::DataAccessor, BaseClass)
-Sunspot::Adapters::InstanceAdapter.register(MockAdapter::InstanceAdapter, BaseClass)
+Sunspot::Adapters::DataAccessor.register(MockAdapter::DataAccessor, MockRecord)
+Sunspot::Adapters::InstanceAdapter.register(MockAdapter::InstanceAdapter, MockRecord)

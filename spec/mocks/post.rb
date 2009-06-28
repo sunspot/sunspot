@@ -1,4 +1,4 @@
-class Post < BaseClass
+class Post < MockRecord
   @@id = 0
   @@posts = [nil]
 

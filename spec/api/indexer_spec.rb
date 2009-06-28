@@ -9,7 +9,7 @@ describe 'indexer' do
 
     it 'should index type' do
       session.index post
-      connection.should have_add_with(:type => ['Post', 'BaseClass'])
+      connection.should have_add_with(:type => ['Post', 'MockRecord'])
     end
 
     it 'should index the array of objects supplied' do
@@ -25,10 +25,10 @@ describe 'indexer' do
       post1, comment, post2 = objects = [Post.new, Comment.new, Post.new]
       session.index objects
       connection.should have_add_with(
-        { :id => "Post #{post1.id}", :type => ['Post', 'BaseClass'] },
-        { :id => "Post #{post2.id}", :type => ['Post', 'BaseClass'] }
+        { :id => "Post #{post1.id}", :type => ['Post', 'MockRecord'] },
+        { :id => "Post #{post2.id}", :type => ['Post', 'MockRecord'] }
       )
-      connection.should have_add_with(:id => "Comment #{comment.id}", :type => ['Comment', 'BaseClass'])
+      connection.should have_add_with(:id => "Comment #{comment.id}", :type => ['Comment', 'MockRecord'])
     end
 
     it 'should index text' do
@@ -92,7 +92,7 @@ describe 'indexer' do
     end
 
     it 'should correctly index a field that is defined on a superclass' do
-      Sunspot.setup(BaseClass) { string :author_name }
+      Sunspot.setup(MockRecord) { string :author_name }
       session.index(post(:author_name => 'Mat Brown'))
       connection.should have_add_with(:author_name_s => 'Mat Brown')
     end

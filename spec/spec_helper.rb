@@ -22,7 +22,7 @@ else
 end
 require 'sunspot'
 
-require File.join(File.dirname(__FILE__), 'mocks', 'base_class.rb')
+require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each { |file| require file }
 
 def without_class(clazz)

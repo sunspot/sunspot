@@ -1,14 +1,14 @@
 === 0.9 ===
+* Instantiated facets!
+* Support most simple facet parameters
 * Descriptive error messages during indexing
 * Date type
 * High-endian fields
 * Add omitNorms to typed fields
-* Instantiated facets!
 * Direct access to adapter
 * sunspot-configure-solr
 * Text fields allow multiple
 * Don't allow ordering on multiple-allowed fields
-* Transactions
-* Switch to RSolr
+* Batches
 * Facet by type (?)
 * Query-based faceting (?)
