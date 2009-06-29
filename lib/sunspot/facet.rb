@@ -9,6 +9,8 @@ module Sunspot
   # on Solr's faceting capabilities.
   #
   class Facet
+    attr_reader :field
+
     def initialize(facet_values, field) #:nodoc:
       @facet_values, @field = facet_values, field
     end
@@ -34,10 +36,16 @@ module Sunspot
         begin
           rows = []
           @facet_values.each_slice(2) do |pair|
-            rows << FacetRow.new(pair, @field)
+            rows << new_row(pair)
           end
           rows
         end
+    end
+
+    private
+
+    def new_row(pair)
+      FacetRow.new(pair, self)
     end
   end
 end

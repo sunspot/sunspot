@@ -1,5 +1,6 @@
 class MockRecord
   IDS = Hash.new { |h, k| h[k] = 0 }
+  QUERY_COUNTS = Hash.new { |h, k| h[k] = 0 }
   INSTANCES = Hash.new { |h, k| h[k] = {} }
 
   attr_reader :id
@@ -18,11 +19,23 @@ class MockRecord
 
   module ClassMethods
     def get(id)
-      INSTANCES[self.name.to_sym][id]
+      QUERY_COUNTS[self.name.to_sym] += 1
+      get_instance(id)
     end
 
     def get_all(ids)
-      ids.map { |id| get(id) }.sort_by { |instance| instance.id }
+      QUERY_COUNTS[self.name.to_sym] += 1
+      ids.map { |id| get_instance(id) }.sort_by { |instance| instance.id }
+    end
+
+    def query_count
+      QUERY_COUNTS[self.name.to_sym]
+    end
+
+    private
+
+    def get_instance(id)
+      INSTANCES[self.name.to_sym][id]
     end
   end
 end

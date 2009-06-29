@@ -114,6 +114,7 @@ module Sunspot
 
       attr_accessor :name # The public-facing name of the field
       attr_accessor :type # The Type of the field
+      attr_accessor :reference # Model class that the value of this field refers to
 
       def initialize(name, type, data_extractor, options = {}) #:nodoc
         unless name.to_s =~ /^\w+$/
@@ -121,6 +122,12 @@ module Sunspot
         end
         @name, @type, @data_extractor = name.to_sym, type, data_extractor
         @multiple = !!options.delete(:multiple)
+        @reference =
+          if (reference = options.delete(:references)).respond_to?(:name)
+            reference.name
+          elsif reference.respond_to?(:to_sym)
+            reference.to_sym
+          end
         raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
       end
 
@@ -219,6 +226,7 @@ module Sunspot
     # 
     class DynamicFieldInstance
       include FieldInstance
+      attr_reader :reference
 
       def initialize(base_name, dynamic_name, type, data_extractor, multiple)
         @base_name, @dynamic_name, @type, @data_extractor, @multiple =

@@ -92,7 +92,8 @@ module Sunspot
       (@facets_cache ||= {})[field_name.to_sym] ||=
         begin
           field = @query.field(field_name)
-          Facet.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
+          facet_class = field.reference ? InstantiatedFacet : Facet
+          facet_class.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
         end
     end
 

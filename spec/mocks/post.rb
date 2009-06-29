@@ -32,7 +32,7 @@ Sunspot.setup(Post) do
     title.reverse if title
   end
   string :title
-  integer :blog_id
+  integer :blog_id, :references => Blog
   integer :category_ids, :multiple => true
   float :average_rating, :using => :ratings_average
   time :published_at

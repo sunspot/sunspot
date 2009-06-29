@@ -102,6 +102,22 @@ describe 'retrieving search' do
     result.dynamic_facet(:custom_string, :test).rows.map { |row| row.value }.should == ['two', 'one']
   end
 
+  it 'should return instantiated facet values' do
+    blogs = Array.new(2) { Blog.new }
+    stub_facet(:blog_id_i, blogs[0].id.to_s => 2, blogs[1].id.to_s => 1)
+    result = session.search(Post) { facet(:blog_id) }
+    result.facet(:blog_id).rows.map { |row| row.instance }.should == blogs
+  end
+
+  it 'should only query the persistent store once for an instantiated facet' do
+    query_count = Blog.query_count
+    blogs = Array.new(2) { Blog.new }
+    stub_facet(:blog_id_i, blogs[0].id.to_s => 2, blogs[1].id.to_s => 1)
+    result = session.search(Post) { facet(:blog_id) }
+    result.facet(:blog_id).rows.each { |row| row.instance }
+    (Blog.query_count - query_count).should == 1
+  end
+
   private
 
   def stub_results(*results)

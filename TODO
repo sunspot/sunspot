@@ -1,6 +1,6 @@
 === 0.9 ===
-* Instantiated facets!
 * Support most simple facet parameters
+* Intelligently decide whether to instantiate all facet rows at once
 * Descriptive error messages during indexing
 * Date type
 * High-endian fields
