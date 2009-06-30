@@ -54,6 +54,7 @@ describe 'Session' do
 
   after :each do
     Sunspot::Session.connection_class = nil
+    Sunspot.reset!
   end
 
   context 'singleton session' do

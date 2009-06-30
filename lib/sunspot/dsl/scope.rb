@@ -120,16 +120,34 @@ module Sunspot
         @query.order_by(field_name, direction)
       end
 
-      # Request facets on the given field names. See Sunspot::Search#facet and
-      # Sunspot::Facet for information on what is returned.
+      # Request facets on the given field names. If the last argument is a hash,
+      # the given options will be applied to all specified fields. See
+      # Sunspot::Search#facet and Sunspot::Facet for information on what is
+      # returned.
       #
       # ==== Parameters
       #
       # field_names...<Symbol>:: fields for which to return field facets
       #
+      # ==== Options
+      #
+      # :sort<Symbol>::
+      #   Either :count (values matching the most terms first) or :index (lexical)
+      # :limit<Integer>::
+      #   The maximum number of facet rows to return
+      # :minimum_count<Integer>::
+      #   The minimum count a facet row must have to be returned
+      # :zeros<Boolean>::
+      #   Return facet rows for which there are no matches (equivalent to
+      #   :minimum_count => 0). Default is false.
+      #
       def facet(*field_names)
+        options = 
+          if field_names.last.is_a?(Hash)
+            field_names.pop
+          end
         for field_name in field_names
-          @query.add_field_facet(field_name)
+          @query.add_field_facet(field_name, options)
         end
       end
     end

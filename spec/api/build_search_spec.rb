@@ -346,6 +346,56 @@ describe 'Search' do
     connection.should have_last_search_with(:"facet.field" => %w(category_ids_im blog_id_i))
   end
 
+  it 'should set facet sort by count' do
+    session.search Post do
+      facet :category_ids, :sort => :count
+    end
+    connection.should have_last_search_with(:"f.category_ids_im.sort" => 'true')
+  end
+
+  it 'should set facet sort by index' do
+    session.search Post do
+      facet :category_ids, :sort => :index
+    end
+    connection.should have_last_search_with(:"f.category_ids_im.sort" => 'false')
+  end
+
+  it 'should throw ArgumentError if bogus facet sort provided' do
+    lambda do
+      session.search Post do
+        facet :category_ids, :sort => :sideways
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  it 'should set the facet limit' do
+    session.search Post do
+      facet :category_ids, :limit => 10
+    end
+    connection.should have_last_search_with(:"f.category_ids_im.limit" => 10)
+  end
+
+  it 'should set the facet minimum count' do
+    session.search Post do
+      facet :category_ids, :minimum_count => 5
+    end
+    connection.should have_last_search_with(:"f.category_ids_im.mincount" => 5)
+  end
+
+  it 'should set the facet minimum count to zero if zeros are allowed' do
+    session.search Post do
+      facet :category_ids, :zeros => true
+    end
+    connection.should have_last_search_with(:"f.category_ids_im.mincount" => 0)
+  end
+
+  it 'should set the facet minimum count to one by default' do
+    session.search Post do
+      facet :category_ids
+    end
+    connection.should have_last_search_with(:"f.category_ids_im.mincount" => 1)
+  end
+
   it 'should allow faceting by dynamic string field' do
     session.search Post do
       dynamic :custom_string do

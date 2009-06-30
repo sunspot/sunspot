@@ -84,8 +84,8 @@ module Sunspot
     #
     # field_name<Symbol>:: Name of the field on which to get a facet
     #
-    def add_field_facet(field_name)
-      @components << FieldFacet.new(field(field_name))
+    def add_field_facet(field_name, options = nil)
+      @components << FieldFacet.new(field(field_name), options || {})
     end
 
     # 
