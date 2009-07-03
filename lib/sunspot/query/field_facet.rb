@@ -34,7 +34,7 @@ module Sunspot
       private
 
       def param_key(name)
-        :"f.#{@field.indexed_name}.#{name}"
+        :"f.#{@field.indexed_name}.facet.#{name}"
       end
     end
   end
