@@ -121,13 +121,21 @@ module Sunspot
           raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
         end
         @name, @type, @data_extractor = name.to_sym, type, data_extractor
-        @multiple = !!options.delete(:multiple)
-        @reference =
-          if (reference = options.delete(:references)).respond_to?(:name)
-            reference.name
-          elsif reference.respond_to?(:to_sym)
-            reference.to_sym
+        #FIXME seems like this could be done more elegantly
+        @attributes = {}
+        if @type == Sunspot::Type::TextType
+          if options.has_key?(:boost)
+            @attributes[:boost] = options.delete(:boost)
           end
+        else
+          @multiple = !!options.delete(:multiple)
+          @reference =
+            if (reference = options.delete(:references)).respond_to?(:name)
+              reference.name
+            elsif reference.respond_to?(:to_sym)
+              reference.to_sym
+            end
+        end
         raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
       end
 
@@ -143,10 +151,10 @@ module Sunspot
       #
       # Hash:: a single key-value pair with the field name and value
       #
-      def populate_document(document, model)
+      def populate_document(document, model) #:nodoc:
         unless (value = @data_extractor.value_for(model)).nil?
           for scalar_value in Array(to_indexed(value))
-            document.add_field(indexed_name.to_sym, scalar_value)
+            document.add_field(indexed_name.to_sym, scalar_value, @attributes)
           end
         end
       end

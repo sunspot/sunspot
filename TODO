@@ -1,5 +1,6 @@
 === 0.9 ===
-* Support most simple facet parameters
+* Support date facet parameters
+* Text fields allow multiple
 * Intelligently decide whether to instantiate all facet rows at once
 * Descriptive error messages during indexing
 * Date type
@@ -7,7 +8,6 @@
 * Add omitNorms to typed fields
 * Direct access to adapter
 * sunspot-configure-solr
-* Text fields allow multiple
 * Don't allow ordering on multiple-allowed fields
 * Batches
 * Facet by type (?)

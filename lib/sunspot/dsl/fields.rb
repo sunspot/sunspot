@@ -22,8 +22,16 @@ module Sunspot
       # names...<Symbol>:: One or more field names
       #
       def text(*names, &block)
+        options = names.pop if names.last.is_a?(Hash)
         for name in names
-          @setup.add_text_fields(Field::StaticField.build(name, Type::TextType, &block))
+          @setup.add_text_fields(
+            Field::StaticField.build(
+              name,
+              Type::TextType,
+              options || {},
+              &block
+            )
+          )
         end
       end
 

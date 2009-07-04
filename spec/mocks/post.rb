@@ -27,7 +27,8 @@ class Post < MockRecord
 end
 
 Sunspot.setup(Post) do
-  text :title, :body
+  text :title, :boost => 2
+  text :body
   text :backwards_title do
     title.reverse if title
   end
