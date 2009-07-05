@@ -1,0 +1,22 @@
+!!! XML
+%schema{ :name => 'sunspot', :version => 0.9 }
+  %types
+    %fieldtype{ :name => 'text', :class => 'solr.TextField', :positionIncrementGap => 100 }
+      %analyzer
+        %tokenizer{ :class => 'solr.StandardTokenizerFactory' }
+        %filter{ :class => 'solr.StandardFilterFactory' }
+        %filter{ :class => 'solr.LowerCaseFilterFactory' }
+    - types.each_pair do |name, clazz|
+      %fieldtype{ :name => name, :class => "solr.#{clazz}", :omitNorms => 'true' }/
+  %fields
+    %field{ :name => 'id', :type => 'string', :indexed => 'true', :stored => 'true', :multiValued => 'false' }/
+    %field{ :name => 'type', :type => 'string', :indexed => 'true', :stored => 'true', :multiValued => 'true' }/
+    %field{ :name => 'text', :type => 'text', :indexed => 'true', :stored => 'false', :multiValued => 'true' }/
+    %dynamicField{ :name => '*_text', :type => 'text', :indexed => 'true', :stored => 'false', :multiValued => 'true' }/
+    - { '' => 'false', 'm' => 'true' }.each_pair do |multi_suffix, multi|
+      - fields.each_pair do |type_suffix, type|
+        %dynamicField{ :name => "*_#{type_suffix}#{multi_suffix}", :type => type, :indexed => 'true', :stored => 'false', :multiValued => multi }/
+  %uniqueKey id
+  %defaultSearchField text
+  %solrQueryParser{ :defaultOperator => 'AND' }/
+  %copyField{ :source => '*_text', :dest => 'text' }/

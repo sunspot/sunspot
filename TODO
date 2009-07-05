@@ -1,10 +1,11 @@
 === 0.9 ===
 * Support date facet parameters
 * Text fields allow multiple
+* Stored fields
 * Intelligently decide whether to instantiate all facet rows at once
 * Descriptive error messages during indexing
 * Date type
-* High-endian fields
+* Conjunctions
 * Add omitNorms to typed fields
 * Direct access to adapter
 * sunspot-configure-solr
