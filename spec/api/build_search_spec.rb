@@ -402,6 +402,13 @@ describe 'Search' do
                      Time.parse('2009-07-01 00:00:00 -0400'))
     end
 
+    it 'should not send date facet parameters if time range is not specified' do
+      session.search Post do |query|
+        query.facet :published_at
+      end
+      connection.should_not have_last_search_with(:"facet.date")
+    end
+
     it 'should set the facet to a date facet' do
       session.search Post do |query|
         query.facet :published_at, :time_range => @time_range
@@ -451,6 +458,14 @@ describe 'Search' do
       lambda do
         session.search Post do |query|
           query.facet :published_at, :time_range => @time_range, :time_other => :bogus
+        end
+      end.should raise_error(ArgumentError)
+    end
+
+    it 'should not allow date faceting on a non-date field' do
+      lambda do
+        session.search Post do |query|
+          query.facet :blog_id, :time_range => @time_range
         end
       end.should raise_error(ArgumentError)
     end

@@ -97,4 +97,25 @@ describe 'search faceting' do
       search.facet(:title).rows.map { |row| row.value }.should == %w(four three two one)
     end
   end
+
+  context 'date facets' do
+    before :all do
+      Sunspot.remove_all
+      time = Time.utc(2009, 7, 8)
+      Sunspot.index!(
+        (0..2).map { |i| Post.new(:published_at => time + i*60*60*16) }
+      )
+    end
+
+    it 'should return time ranges' do
+      time = Time.utc(2009, 7, 8)
+      search = Sunspot.search(Post) do
+        facet :published_at, :time_range => time..(time + 60*60*24*2), :sort => :count
+      end
+      search.facet(:published_at).rows.first.value.should == (time..(time + 60*60*24))
+      search.facet(:published_at).rows.first.count.should == 2
+      search.facet(:published_at).rows.last.value.should == ((time + 60*60*24)..(time + 60*60*24*2))
+      search.facet(:published_at).rows.last.count.should == 1
+    end
+  end
 end

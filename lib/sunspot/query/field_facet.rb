@@ -12,6 +12,12 @@ module Sunspot
 
         def build(field, options)
           if options.has_key?(:time_range)
+            unless field.type == Type::TimeType
+              raise(
+                ArgumentError,
+                ":time_range key can only be specified for time fields"
+              )
+            end
             DateFieldFacet.new(field, options)
           else
             FieldFacet.new(field, options)
