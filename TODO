@@ -11,5 +11,6 @@
 * sunspot-configure-solr
 * Don't allow ordering on multiple-allowed fields
 * Batches
+* Support random sort
 * Facet by type (?)
 * Query-based faceting (?)

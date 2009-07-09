@@ -92,9 +92,28 @@ module Sunspot
       (@facets_cache ||= {})[field_name.to_sym] ||=
         begin
           field = @query.field(field_name)
-          facet_class = field.reference ? InstantiatedFacet : Facet
-          facet_class.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
+          date_facet(field) ||
+            begin
+              facet_class = field.reference ? InstantiatedFacet : Facet
+              facet_class.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
+            end
         end
+    end
+
+    def date_facet(field)
+      if field.type == Type::TimeType
+        if @solr_result['facet_counts'].has_key?('facet_dates')
+          if facet_result = @solr_result['facet_counts']['facet_dates'][field.indexed_name]
+            DateFacet.new(facet_result, field)
+          end
+        end
+      end
+    end
+
+    def raw_facet(field) #XXX move into private
+      if field.type == Type::TimeType
+        @solr_result['facet_counts']['facet_dates'][field.indexed_name]
+      end || @solr_result['facet_counts']['facet_fields'][field.indexed_name]
     end
 
     # 

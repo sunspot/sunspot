@@ -4,7 +4,7 @@ require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(adapters configuration setup field data_extractor indexer
    query search facet facet_row instantiated_facet instantiated_facet_row
-   session type util dsl).each do |filename|
+   date_facet date_facet_row session type util dsl).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 

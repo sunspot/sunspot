@@ -96,6 +96,16 @@ describe 'retrieving search' do
     facet_values(result, :featured).should == [true, false]
   end
 
+  it 'should return date range facet' do
+    stub_date_facet(:published_at_d, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
+    start_time = Time.utc(2009, 7, 7, 4)
+    end_time = start_time + 2*24*60*60
+    result = session.search(Post) { facet(:published_at, :time_range => start_time..end_time) }
+    facet = result.facet(:published_at)
+    facet.rows.first.value.should == (start_time..(start_time+24*60*60))
+    facet.rows.last.value.should == ((start_time+24*60*60)..end_time)
+  end
+
   it 'should return dynamic string facet' do
     stub_facet(:"custom_string:test_s", 'two' => 2, 'one' => 1)
     result = session.search(Post) { dynamic(:custom_string) { facet(:test) }}
@@ -139,6 +149,16 @@ describe 'retrieving search' do
       'facet_counts' => {
         'facet_fields' => {
           name.to_s => values.to_a.sort_by { |value, count| -count }.flatten
+        }
+      }
+    )
+  end
+
+  def stub_date_facet(name, gap, values)
+    connection.stub!(:select).and_return(
+      'facet_counts' => {
+        'facet_dates' => {
+          name.to_s => { 'gap' => "+#{gap}SECONDS" }.merge(values)
         }
       }
     )

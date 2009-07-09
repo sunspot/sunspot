@@ -67,7 +67,7 @@ module Sunspot
       # dynamic_name<Symbol>:: Dynamic name to facet on
       # 
       def add_field_facet(dynamic_name, options = nil)
-        @query.add_component(FieldFacet.new(@dynamic_field.build(dynamic_name), options || {}))
+        @query.add_component(FieldFacet.build(@dynamic_field.build(dynamic_name), options || {}))
       end
 
       # 

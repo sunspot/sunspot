@@ -396,6 +396,66 @@ describe 'Search' do
     connection.should have_last_search_with(:"f.category_ids_im.facet.mincount" => 1)
   end
 
+  describe 'with date faceting' do
+    before :each do
+      @time_range = (Time.parse('2009-06-01 00:00:00 -0400')..
+                     Time.parse('2009-07-01 00:00:00 -0400'))
+    end
+
+    it 'should set the facet to a date facet' do
+      session.search Post do |query|
+        query.facet :published_at, :time_range => @time_range
+      end
+      connection.should have_last_search_with(:"facet.date" => ['published_at_d'])
+    end
+
+    it 'should set the facet start and end' do
+      session.search Post do |query|
+        query.facet :published_at, :time_range => @time_range
+      end
+      connection.should have_last_search_with(
+        :"f.published_at_d.facet.date.start" => '2009-06-01T04:00:00Z',
+        :"f.published_at_d.facet.date.end" => '2009-07-01T04:00:00Z'
+      )
+    end
+
+    it 'should default the time interval to 1 day' do
+      session.search Post do |query|
+        query.facet :published_at, :time_range => @time_range
+      end
+      connection.should have_last_search_with(:"f.published_at_d.facet.date.gap" => "+86400SECONDS")
+    end
+
+    it 'should use custom time interval' do
+      session.search Post do |query|
+        query.facet :published_at, :time_range => @time_range, :time_interval => 3600
+      end
+      connection.should have_last_search_with(:"f.published_at_d.facet.date.gap" => "+3600SECONDS")
+    end
+
+    it 'should allow computation of one other time' do
+      session.search Post do |query|
+        query.facet :published_at, :time_range => @time_range, :time_other => :before
+      end
+      connection.should have_last_search_with(:"f.published_at_d.facet.date.other" => %w(before))
+    end
+
+    it 'should allow computation of two other times' do
+      session.search Post do |query|
+        query.facet :published_at, :time_range => @time_range, :time_other => [:before, :after]
+      end
+      connection.should have_last_search_with(:"f.published_at_d.facet.date.other" => %w(before after))
+    end
+
+    it 'should not allow computation of bogus other time' do
+      lambda do
+        session.search Post do |query|
+          query.facet :published_at, :time_range => @time_range, :time_other => :bogus
+        end
+      end.should raise_error(ArgumentError)
+    end
+  end
+
   it 'should allow faceting by dynamic string field' do
     session.search Post do
       dynamic :custom_string do
