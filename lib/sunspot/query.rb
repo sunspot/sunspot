@@ -361,8 +361,8 @@ module Sunspot
       @dynamic_fields_hash ||=
         begin
           dynamic_fields_hash = @types.inject({}) do |hash, type|
-            Setup.for(type).dynamic_fields.each do |field|
-              (hash[field.name.to_sym] ||= {})[type.name] = field
+            Setup.for(type).dynamic_field_factories.each do |field_factory|
+              (hash[field_factory.name.to_sym] ||= {})[type.name] = field_factory
             end
             hash
           end

@@ -43,8 +43,8 @@ module Sunspot
     #
     def prepare(model)
       document = document_for(model)
-      for field in @setup.all_fields
-        field.populate_document(document, model)
+      for field_factory in @setup.all_field_factories
+        field_factory.populate_document(document, model)
       end
       document
     end

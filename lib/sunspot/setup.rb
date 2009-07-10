@@ -6,46 +6,46 @@ module Sunspot
   class Setup #:nodoc:
     def initialize(clazz)
       @class_name = clazz.name
-      @fields, @text_fields, @dynamic_fields = {}, {}, {}
+      @field_factories, @text_field_factories, @dynamic_field_factories = {}, {}, {}
       @dsl = DSL::Fields.new(self)
     end
 
     # 
-    # Add fields for scope/ordering
+    # Add field_factories for scope/ordering
     # 
     # ==== Parameters
     #
-    # fields<Array>:: Array of Sunspot::Field objects
+    # field_factories<Array>:: Array of Sunspot::Field objects
     #
-    def add_fields(fields)
-      Array(fields).each do |field|
-        @fields[field.indexed_name] = field
+    def add_field_factories(field_factories)
+      Array(field_factories).each do |field|
+        @field_factories[field.signature] = field
       end
     end
 
     # 
-    # Add fields for fulltext search
+    # Add field_factories for fulltext search
     #
     # ==== Parameters
     #
-    # fields<Array>:: Array of Sunspot::Field objects
+    # field_factories<Array>:: Array of Sunspot::Field objects
     #
-    def add_text_fields(fields)
-      Array(fields).each do |field|
-        @text_fields[field.indexed_name] = field
+    def add_text_field_factories(field_factories)
+      Array(field_factories).each do |field|
+        @text_field_factories[field.signature] = field
       end
     end
 
     #
-    # Add dynamic fields
+    # Add dynamic field_factories
     #
     # ==== Parameters
     # 
-    # fields<Array>:: Array of dynamic field objects
+    # field_factories<Array>:: Array of dynamic field objects
     # 
-    def add_dynamic_fields(fields)
-      Array(fields).each do |field|
-        @dynamic_fields[[field.name, field.type]] = field
+    def add_dynamic_field_factories(field_factories)
+      Array(field_factories).each do |field|
+        @dynamic_field_factories[field.signature] = field
       end
     end
 
@@ -56,52 +56,60 @@ module Sunspot
       @dsl.instance_eval(&block)
     end
 
-    # 
-    # Get the fields associated with this setup as well as all inherited fields
-    #
-    # ==== Returns
-    #
-    # Array:: Collection of all fields associated with this setup
-    #
     def fields
-      collection_from_inheritable_hash(:fields)
+      field_factories.map { |field_factory| field_factory.build }
     end
 
-    # 
-    # Get the text fields associated with this setup as well as all inherited
-    # text fields
-    #
-    # ==== Returns
-    #
-    # Array:: Collection of all text fields associated with this setup
-    #
     def text_fields
-      collection_from_inheritable_hash(:text_fields)
+      text_field_factories.map { |field_factory| text_field_factory.build }
     end
 
     # 
-    # Get all static, dynamic, and text fields associated with this setup as
-    # well as all inherited fields
+    # Get the field_factories associated with this setup as well as all inherited field_factories
     #
     # ==== Returns
     #
-    # Array:: Collection of all text and scope fields associated with this setup
+    # Array:: Collection of all field_factories associated with this setup
     #
-    def all_fields
-      all_fields = []
-      all_fields.concat(fields).concat(text_fields).concat(dynamic_fields)
-      all_fields
+    def field_factories
+      collection_from_inheritable_hash(:field_factories)
     end
 
     # 
-    # Get all dynamic fields for this and parent setups
+    # Get the text field_factories associated with this setup as well as all inherited
+    # text field_factories
+    #
+    # ==== Returns
+    #
+    # Array:: Collection of all text field_factories associated with this setup
+    #
+    def text_field_factories
+      collection_from_inheritable_hash(:text_field_factories)
+    end
+
+    # 
+    # Get all static, dynamic, and text field_factories associated with this setup as
+    # well as all inherited field_factories
+    #
+    # ==== Returns
+    #
+    # Array:: Collection of all text and scope field_factories associated with this setup
+    #
+    def all_field_factories
+      all_field_factories = []
+      all_field_factories.concat(field_factories).concat(text_field_factories).concat(dynamic_field_factories)
+      all_field_factories
+    end
+
+    # 
+    # Get all dynamic field_factories for this and parent setups
     # 
     # ==== Returns
     #
-    # Array:: Dynamic fields
+    # Array:: Dynamic field_factories
     #
-    def dynamic_fields
-      collection_from_inheritable_hash(:dynamic_fields)
+    def dynamic_field_factories
+      collection_from_inheritable_hash(:dynamic_field_factories)
     end
 
     # 

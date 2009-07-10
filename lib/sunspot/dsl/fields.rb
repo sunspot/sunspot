@@ -24,8 +24,8 @@ module Sunspot
       def text(*names, &block)
         options = names.pop if names.last.is_a?(Hash)
         for name in names
-          @setup.add_text_fields(
-            Field::StaticField.build(
+          @setup.add_text_field_factories(
+            FieldFactory::Static.new(
               name,
               Type::TextType,
               options || {},
@@ -57,9 +57,9 @@ module Sunspot
         end
         name = args.shift
         if method.to_s =~ /^dynamic_/
-          @setup.add_dynamic_fields(Field::DynamicField.build(name, type, *args, &block))
+          @setup.add_dynamic_field_factories(FieldFactory::Dynamic.new(name, type, *args, &block))
         else
-          @setup.add_fields(Field::StaticField.build(name, type, *args, &block))
+          @setup.add_field_factories(FieldFactory::Static.new(name, type, *args, &block))
         end
       end
     end

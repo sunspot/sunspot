@@ -3,6 +3,7 @@ module Sunspot
   class DateFacet < Facet
     def initialize(facet_values, field)
       @gap = facet_values.delete('gap')[/\+(\d+)SECONDS/,1].to_i
+      %w(start end).each { |key| facet_values.delete(key) }
       super(facet_values.to_a.flatten, field)
     end
 
