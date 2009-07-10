@@ -480,14 +480,19 @@ describe 'Search' do
     connection.should have_last_search_with(:"facet.field" => %w(custom_string:test_s))
   end
 
+  it 'should properly escape namespaced type names' do
+    session.search(Namespaced::Comment)
+    connection.should have_last_search_with(:q => '(type:Namespaced\:\:Comment)')
+  end
+
   it 'should build search for multiple types' do
-    session.search(Post, Comment)
-    connection.should have_last_search_with(:q => '(type:(Post OR Comment))')
+    session.search(Post, Namespaced::Comment)
+    connection.should have_last_search_with(:q => '(type:(Post OR Namespaced\:\:Comment))')
   end
 
   it 'should allow search on fields common to all types with DSL' do
     time = Time.parse('1983-07-08 05:00:00 -0400')
-    session.search Post, Comment do
+    session.search Post, Namespaced::Comment do
       with :published_at, time
     end
     connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
@@ -495,13 +500,13 @@ describe 'Search' do
 
   it 'should allow search on fields common to all types with conditions' do
     time = Time.parse('1983-07-08 05:00:00 -0400')
-    session.search Post, Comment, :conditions => { :published_at => time }
+    session.search Post, Namespaced::Comment, :conditions => { :published_at => time }
     connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
   end
 
   it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field not common to all types' do
     lambda do
-      session.search Post, Comment do
+      session.search Post, Namespaced::Comment do
         with :blog_id, 1
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
@@ -509,14 +514,14 @@ describe 'Search' do
 
   it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field configured differently between types' do
     lambda do
-      session.search Post, Comment do
+      session.search Post, Namespaced::Comment do
         with :average_rating, 2.2 # this is a float in Post but an integer in Comment
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'should ignore condition if field is not common to all types' do
-    session.search Post, Comment, :conditions => { :blog_id => 1 }
+    session.search Post, Namespaced::Comment, :conditions => { :blog_id => 1 }
     connection.should_not have_last_search_with(:fq)
   end
 

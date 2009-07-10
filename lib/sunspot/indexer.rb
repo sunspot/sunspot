@@ -6,6 +6,8 @@ module Sunspot
   # subclasses).
   #
   class Indexer #:nodoc:
+    include RSolr::Char
+
     def initialize(connection, setup)
       @connection, @setup = connection, setup
     end
@@ -33,7 +35,7 @@ module Sunspot
     # Delete all documents of the class indexed by this indexer from Solr.
     #
     def remove_all
-      @connection.delete_by_query("type:#{@setup.clazz.name}")
+      @connection.delete_by_query("type:#{escape(@setup.clazz.name)}")
     end
 
     protected

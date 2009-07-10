@@ -3,3 +3,5 @@ sunspot-solr.pid
 coverage
 pkg
 /doc
+.DS_Store
+

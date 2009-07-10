@@ -1,15 +1,16 @@
 === 0.9 ===
-* Text fields allow multiple
 * Stored fields
 * Intelligently decide whether to instantiate all facet rows at once
 * Descriptive error messages during indexing
 * Date type
 * Conjunctions
-* Add omitNorms to typed fields
 * Direct access to adapter
 * sunspot-configure-solr
 * Don't allow ordering on multiple-allowed fields
 * Batches
 * Support random sort
+* Detect Ranges in short-form #with()
+* Expose delete by ID
+* Support composite IDs
 * Facet by type (?)
 * Query-based faceting (?)

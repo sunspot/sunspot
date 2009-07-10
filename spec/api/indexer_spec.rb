@@ -22,13 +22,13 @@ describe 'indexer' do
     end
 
     it 'should index an array containing more than one type of object' do
-      post1, comment, post2 = objects = [Post.new, Comment.new, Post.new]
+      post1, comment, post2 = objects = [Post.new, Namespaced::Comment.new, Post.new]
       session.index objects
       connection.should have_add_with(
         { :id => "Post #{post1.id}", :type => ['Post', 'MockRecord'] },
         { :id => "Post #{post2.id}", :type => ['Post', 'MockRecord'] }
       )
-      connection.should have_add_with(:id => "Comment #{comment.id}", :type => ['Comment', 'MockRecord'])
+      connection.should have_add_with(:id => "Namespaced::Comment #{comment.id}", :type => ['Namespaced::Comment', 'MockRecord'])
     end
 
     it 'should index text' do
@@ -138,6 +138,11 @@ describe 'indexer' do
     it 'should be able to remove everything of a given class from the index' do
       session.remove_all(Post)
       connection.should have_delete_by_query("type:Post")
+    end
+
+    it 'should correctly escape namespaced classes when removing everything from the index' do
+      connection.should_receive(:delete_by_query).with('type:Namespaced\:\:Comment')
+      session.remove_all(Namespaced::Comment)
     end
   end
 

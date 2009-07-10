@@ -16,6 +16,8 @@ module Sunspot
   # recognized by the solr-ruby API.
   #
   class Query
+    include RSolr::Char
+
     attr_writer :keywords # <String> full-text keyword boolean phrase
 
     def initialize(types, configuration) #:nodoc:
@@ -321,9 +323,16 @@ module Sunspot
     #
     def types_phrase
       if @types.nil? || @types.empty? then "type:[* TO *]"
-      elsif @types.length == 1 then "type:#{@types.first}"
-      else "type:(#{@types * ' OR '})"
+      elsif @types.length == 1 then "type:#{escaped_types.first}"
+      else "type:(#{escaped_types * ' OR '})"
       end
+    end
+
+    #
+    # Wraps each type in quotes to escape names of the form Namespace::Class
+    #
+    def escaped_types
+      @types.map { |t| escape(t.name)}
     end
 
     # 

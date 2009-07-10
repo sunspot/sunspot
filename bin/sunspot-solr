@@ -24,14 +24,22 @@ module SolrFlags extend OptiFlagSet
     description 'Solr home (should contain conf/ directory)'
   end
 
+  optional_flag 'pd' do
+    long_form 'pid-dir'
+    description 'Directory for pid files'
+  end
+
   and_process!
 end
 
-port = ARGV.flags.p || '8983'
+port     = ARGV.flags.p || '8983'
 data_dir = File.expand_path(ARGV.flags.d || File.join(Dir.tmpdir, 'solr_data'))
-home = File.expand_path(ARGV.flags.s) if ARGV.flags.s
+home     = File.expand_path(ARGV.flags.s) if ARGV.flags.s
+pid_dir  = File.expand_path(ARGV.flags.pd || working_directory)
 
-Daemons.run_proc('sunspot-solr') do
+options = { :dir_mode => :normal, :dir => pid_dir }
+
+Daemons.run_proc('sunspot-solr', options) do
   FileUtils.cd(working_directory) do
     FileUtils.cd(solr_home) do
       args = ['java']

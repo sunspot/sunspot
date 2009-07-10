@@ -117,11 +117,12 @@ module Sunspot
         #
         def for(clazz) #:nodoc:
           original_class_name = clazz.name
-          while clazz != Object
-            class_name = clazz.name.to_sym
+          clazz.ancestors.each do |ancestor_class|
+            next if ancestor_class.name.nil? || ancestor_class.name.empty?
+            class_name = ancestor_class.name.to_sym
             return instance_adapters[class_name] if instance_adapters[class_name]
-            clazz = clazz.superclass
           end
+
           raise(Sunspot::NoAdapterError,
                 "No adapter is configured for #{original_class_name} or its superclasses. See the documentation for Sunspot::Adapters")
         end
@@ -226,14 +227,21 @@ module Sunspot
         #
         # ==== Returns
         #
-        # Class:: Implementation of DataAccessor, or nil if none found
+        # Class:: Implementation of DataAccessor
+        #
+        # ==== Raises
+        #
+        # Sunspot::NoAdapterError:: If no data accessor exists for the given class
         #
         def for(clazz) #:nodoc:
-          while clazz != Object
-            class_name = clazz.name.to_sym
+          original_class_name = clazz.name
+          clazz.ancestors.each do |ancestor_class|
+            next if ancestor_class.name.nil? || ancestor_class.name.empty?
+            class_name = ancestor_class.name.to_sym
             return data_accessors[class_name] if data_accessors[class_name]
-            clazz = clazz.superclass
           end
+          raise(Sunspot::NoAdapterError,
+                "No data accessor is configured for #{original_class_name} or its superclasses. See the documentation for Sunspot::Adapters")
         end
 
         protected
