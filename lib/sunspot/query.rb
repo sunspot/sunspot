@@ -178,7 +178,10 @@ module Sunspot
     def to_params #:nodoc:
       params = {}
       query_components = []
-      query_components << @keywords if @keywords
+      if @keywords
+        query_components << @keywords
+        params[:fl] = '* score'
+      end
       query_components << types_phrase if types_phrase
       params[:q] = query_components.map { |component| "(#{component})"} * ' AND '
       for component in @components

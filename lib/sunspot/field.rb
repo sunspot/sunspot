@@ -79,6 +79,7 @@ module Sunspot
         elsif reference.respond_to?(:to_sym)
           reference.to_sym
         end
+      @stored = !!options.delete(:stored)
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
 
@@ -91,7 +92,7 @@ module Sunspot
     # String:: The field's indexed name
     #
     def indexed_name
-      "#{super}#{'m' if @multiple}"
+      "#{super}#{'m' if @multiple}#{'s' if @stored}"
     end
   end
 end

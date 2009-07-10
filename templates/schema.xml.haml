@@ -14,8 +14,9 @@
     %field{ :name => 'text', :type => 'text', :indexed => 'true', :stored => 'false', :multiValued => 'true' }/
     %dynamicField{ :name => '*_text', :type => 'text', :indexed => 'true', :stored => 'false', :multiValued => 'true' }/
     - { '' => 'false', 'm' => 'true' }.each_pair do |multi_suffix, multi|
-      - fields.each_pair do |type_suffix, type|
-        %dynamicField{ :name => "*_#{type_suffix}#{multi_suffix}", :type => type, :indexed => 'true', :stored => 'false', :multiValued => multi }/
+      - { '' => 'false', 's' => 'true' }.each_pair do |stored_suffix, stored|
+        - fields.each_pair do |type_suffix, type|
+          %dynamicField{ :name => "*_#{type_suffix}#{multi_suffix}#{stored_suffix}", :type => type, :indexed => 'true', :stored => stored, :multiValued => multi }/
   %uniqueKey id
   %defaultSearchField text
   %solrQueryParser{ :defaultOperator => 'AND' }/

@@ -51,9 +51,9 @@ describe 'indexer' do
       connection.should have_add_with(:backwards_title_text => 'backwards'.reverse)
     end
 
-    it 'should correctly index a string attribute field' do
+    it 'should correctly index a stored string attribute field' do
       session.index(post(:title => 'A Title'))
-      connection.should have_add_with(:title_s => 'A Title')
+      connection.should have_add_with(:title_ss => 'A Title')
     end
 
     it 'should correctly index an integer attribute field' do

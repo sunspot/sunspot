@@ -17,7 +17,7 @@ describe Sunspot::Query do
   it 'should add equality restriction' do
     @search.query.add_restriction(:title, :equal_to, 'My Pet Post')
     @search.execute!
-    @connection.should have_last_search_with(:fq => ['title_s:My\ Pet\ Post'])
+    @connection.should have_last_search_with(:fq => ['title_ss:My\ Pet\ Post'])
   end
 
   it 'should add less than restriction' do
@@ -53,7 +53,7 @@ describe Sunspot::Query do
   it 'should negate restriction' do
     @search.query.add_negated_restriction(:title, :equal_to, 'Bad Post')
     @search.execute!
-    @connection.should have_last_search_with(:fq => ['-title_s:Bad\ Post'])
+    @connection.should have_last_search_with(:fq => ['-title_ss:Bad\ Post'])
   end
 
   it 'should exclude instance' do

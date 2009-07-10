@@ -1,6 +1,5 @@
 === 0.9 ===
 * Stored fields
-* Intelligently decide whether to instantiate all facet rows at once
 * Descriptive error messages during indexing
 * Date type
 * Conjunctions
@@ -14,3 +13,5 @@
 * Support composite IDs
 * Facet by type (?)
 * Query-based faceting (?)
+=== 0.10 ===
+* Intelligently decide whether to instantiate all facet rows at once

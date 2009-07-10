@@ -32,7 +32,7 @@ Sunspot.setup(Post) do
   text :backwards_title do
     title.reverse if title
   end
-  string :title
+  string :title, :stored => true
   integer :blog_id, :references => Blog
   integer :category_ids, :multiple => true
   float :average_rating, :using => :ratings_average
@@ -43,6 +43,9 @@ Sunspot.setup(Post) do
   end
   integer :primary_category_id do |post|
     post.category_ids.first
+  end
+  time :last_indexed_at, :stored => true do
+    Time.now
   end
 
   dynamic_string :custom_string

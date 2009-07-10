@@ -27,13 +27,29 @@ describe 'retrieving search' do
     end
   end
 
-  it 'should return raw results without loading instances' do
+  it 'should return hits without loading instances' do
     post_1, post_2 = Array.new(2) { Post.new }
     stub_results(post_1, post_2)
     %w(load load_all).each { |message| MockAdapter::DataAccessor.should_not_receive(message) }
-    session.search(Post, :page => 1).raw_results.map do |raw_result|
-      [raw_result.class_name, raw_result.primary_key]
+    session.search(Post, :page => 1).hits.map do |hit|
+      [hit.class_name, hit.primary_key]
     end.should == [['Post', post_1.id.to_s], ['Post', post_2.id.to_s]]
+  end
+
+  it 'should attach score to hits' do
+    stub_full_results('instance' => Post.new, 'score' => 1.23)
+    session.search(Post).hits.first.score.should == 1.23
+  end
+
+  it 'should return stored field values in hits' do
+    stub_full_results('instance' => Post.new, 'title_ss' => 'Title')
+    session.search(Post).hits.first.stored[:title].should == 'Title'
+  end
+
+  it 'should typecast stored field values in hits' do
+    time = Time.utc(2008, 7, 8, 2, 45)
+    stub_full_results('instance' => Post.new, 'last_indexed_at_ds' => time.xmlschema)
+    session.search(Post).hits.first.stored[:last_indexed_at].should == time
   end
 
   it 'should return total' do
@@ -42,7 +58,7 @@ describe 'retrieving search' do
   end
 
   it 'should return field name for facet' do
-    stub_facet(:title_s, {})
+    stub_facet(:title_ss, {})
     result = session.search Post do
       facet :title
     end
@@ -50,7 +66,7 @@ describe 'retrieving search' do
   end
 
   it 'should return string facet' do
-    stub_facet(:title_s, 'Author 1' => 2, 'Author 2' => 1)
+    stub_facet(:title_ss, 'Author 1' => 2, 'Author 2' => 1)
     result = session.search Post do
       facet :title
     end
@@ -58,7 +74,7 @@ describe 'retrieving search' do
   end
 
   it 'should return counts for facet' do
-    stub_facet(:title_s, 'Author 1' => 2, 'Author 2' => 1)
+    stub_facet(:title_ss, 'Author 1' => 2, 'Author 2' => 1)
     result = session.search Post do
       facet :title
     end
@@ -130,18 +146,34 @@ describe 'retrieving search' do
 
   private
 
-  def stub_results(*results)
+  def stub_full_results(*results)
     count =
       if results.last.is_a?(Integer) then results.pop
       else results.length
       end
+    docs = results.map do |result|
+      instance = result.delete('instance')
+      result.merge('id' => "#{instance.class.name} #{instance.id}")
+    end
     response = {
       'response' => {
-        'docs' => results.map { |result| { 'id' => "#{result.class.name} #{result.id}" }},
+        'docs' => docs,
         'numFound' => count
       }
     }
     connection.stub!(:select).and_return(response)
+  end
+
+  def stub_results(*results)
+    stub_full_results(
+      *results.map do |result|
+        if result.is_a?(Integer)
+          result
+        else
+          { 'instance' => result }
+        end
+      end
+    )
   end
 
   def stub_facet(name, values)

@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'search', 'hit')
+
 module Sunspot
   # 
   # This class encapsulates the results of a Solr search. It provides access
@@ -5,9 +7,6 @@ module Sunspot
   # Instances of Search are returned by the Sunspot.search method.
   #
   class Search
-    # Objects of this class are returned by the #raw_results method.
-    RawResult = Struct.new(:class_name, :primary_key)
-
     # Query information for this search. If you wish to build the query without
     # using the search DSL, this method allows you to access the query API
     # directly. See Sunspot#new_search for how to construct the search object
@@ -61,9 +60,10 @@ module Sunspot
     #
     # Array:: Ordered collection of raw results
     #
-    def raw_results
-      @raw_results ||= doc_ids.map { |hit_id| RawResult.new(*hit_id.match(/([^ ]+) (.+)/)[1..2]) }
+    def hits
+      @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, self) }
     end
+    alias_method :raw_results, :hits
 
     # 
     # The total number of documents matching the query parameters
@@ -91,7 +91,7 @@ module Sunspot
     def facet(field_name)
       (@facets_cache ||= {})[field_name.to_sym] ||=
         begin
-          field = @query.field(field_name)
+          field = self.field(field_name)
           date_facet(field) ||
             begin
               facet_class = field.reference ? InstantiatedFacet : Facet
@@ -150,6 +150,10 @@ module Sunspot
         end
     end
 
+    def field(name)
+      @query.field(name)
+    end
+
     private
 
     def solr_response
@@ -165,8 +169,8 @@ module Sunspot
     # Array:: Collection of instantiated result objects
     #
     def result_objects
-      raw_results.inject({}) do |type_id_hash, raw_result|
-        (type_id_hash[raw_result.class_name] ||= []) << raw_result.primary_key
+      hits.inject({}) do |type_id_hash, hit|
+        (type_id_hash[hit.class_name] ||= []) << hit.primary_key
         type_id_hash
       end.inject([]) do |results, pair|
         type_name, ids = pair

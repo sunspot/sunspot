@@ -13,16 +13,26 @@ describe 'Search' do
     connection.should have_last_search_with(:q => '(keyword search) AND (type:Post)')
   end
 
+  it 'should request score when keywords used' do
+    session.search Post, :keywords => 'keyword search'
+    connection.should have_last_search_with(:fl => '* score')
+  end
+
+  it 'should not request score when keywords not used' do
+    session.search Post
+    connection.should_not have_last_search_with(:fl)
+  end
+
   it 'should scope by exact match with a string from DSL' do
     session.search Post do
       with :title, 'My Pet Post'
     end
-    connection.should have_last_search_with(:fq => ['title_s:My\ Pet\ Post'])
+    connection.should have_last_search_with(:fq => ['title_ss:My\ Pet\ Post'])
   end
 
   it 'should scope by exact match with a string from options' do
     session.search Post, :conditions => { :title => 'My Pet Post' }
-    connection.should have_last_search_with(:fq => ['title_s:My\ Pet\ Post'])
+    connection.should have_last_search_with(:fq => ['title_ss:My\ Pet\ Post'])
   end
 
   it 'should ignore nonexistant fields in hash scope' do
@@ -89,7 +99,7 @@ describe 'Search' do
     session.search Post do
       without :title, 'Bad Post'
     end
-    connection.should have_last_search_with(:fq => ['-title_s:Bad\ Post'])
+    connection.should have_last_search_with(:fq => ['-title_ss:Bad\ Post'])
   end
 
   it 'should scope by not less than match with float' do
