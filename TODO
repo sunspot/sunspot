@@ -1,5 +1,4 @@
 === 0.9 ===
-* Support date facet parameters
 * Text fields allow multiple
 * Stored fields
 * Intelligently decide whether to instantiate all facet rows at once

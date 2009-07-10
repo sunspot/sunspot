@@ -36,9 +36,14 @@ describe 'indexer' do
       connection.should have_add_with(:title_text => 'A Title', :body_text => 'A Post')
     end
 
-    it 'should index with boost' do
+    it 'should index text with boost' do
       session.index(post(:title => 'A Title'))
       connection.adds.last.first.field_by_name(:title_text).attrs[:boost].should == 2
+    end
+
+    it 'should index multiple values for a text field' do
+      session.index(post(:body => %w(some title)))
+      connection.should have_add_with(:body_text => %w(some title))
     end
 
     it 'should index text via a virtual field' do
