@@ -17,7 +17,12 @@ module Sunspot
         unless name.to_s =~ /^\w+$/
           raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
         end
-        @field = Field.new(name, type, options)
+        @field =
+          if type == Type::TextType
+            FulltextField.new(name, options)
+          else
+            AttributeField.new(name, type, options)
+          end
       end
 
       def build
@@ -50,7 +55,7 @@ module Sunspot
       end
 
       def build(dynamic_name)
-        Field.new("#{@name}:#{dynamic_name}", @type, @options.dup)
+        AttributeField.new("#{@name}:#{dynamic_name}", @type, @options.dup)
       end
 
       def populate_document(document, model)

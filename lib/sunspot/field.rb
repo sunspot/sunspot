@@ -5,35 +5,10 @@ module Sunspot
     attr_accessor :reference # Model class that the value of this field refers to
     attr_accessor :attributes
 
-    def initialize(name, type, options = {}) #:nodoc
+    def initialize(name, type) #:nodoc
+      debugger if type.is_a?(Hash)
       @name, @type = name.to_sym, type
       @attributes = {}
-      if type == Sunspot::Type::TextType
-        if options.has_key?(:boost)
-          @attributes[:boost] = options.delete(:boost)
-        end
-      else
-        @multiple = !!options.delete(:multiple)
-        @reference =
-          if (reference = options.delete(:references)).respond_to?(:name)
-            reference.name
-          elsif reference.respond_to?(:to_sym)
-            reference.to_sym
-          end
-      end
-      raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
-    end
-
-    # The name of the field as it is indexed in Solr. The indexed name
-    # contains a suffix that contains information about the type as well as
-    # whether the field allows multiple values for a document.
-    #
-    # ==== Returns
-    #
-    # String:: The field's indexed name
-    #
-    def indexed_name
-      "#{@type.indexed_name(name)}#{'m' if @multiple}"
     end
 
     # Convert a value to its representation for Solr indexing. This delegates
@@ -76,6 +51,47 @@ module Sunspot
     #
     def cast(value)
       @type.cast(value)
+    end
+
+    def indexed_name
+      @type.indexed_name(@name)
+    end
+  end
+
+  class FulltextField < Field
+    def initialize(name, options = {})
+      super(name, Type::TextType)
+      if options.has_key?(:boost)
+        @attributes[:boost] = options.delete(:boost)
+      end
+      @multiple = true
+      raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
+    end
+  end
+
+  class AttributeField < Field
+    def initialize(name, type, options = {})
+      super(name, type)
+      @multiple = !!options.delete(:multiple)
+      @reference =
+        if (reference = options.delete(:references)).respond_to?(:name)
+          reference.name
+        elsif reference.respond_to?(:to_sym)
+          reference.to_sym
+        end
+      raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
+    end
+
+    # The name of the field as it is indexed in Solr. The indexed name
+    # contains a suffix that contains information about the type as well as
+    # whether the field allows multiple values for a document.
+    #
+    # ==== Returns
+    #
+    # String:: The field's indexed name
+    #
+    def indexed_name
+      "#{super}#{'m' if @multiple}"
     end
   end
 end

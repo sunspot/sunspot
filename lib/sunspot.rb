@@ -2,9 +2,9 @@ gem 'mwmitchell-rsolr'
 require 'rsolr'
 require File.join(File.dirname(__FILE__), 'light_config')
 
-%w(adapters configuration setup field field_factory data_extractor indexer
+%w(util adapters configuration setup field field_factory data_extractor indexer
    query search facet facet_row instantiated_facet instantiated_facet_row
-   date_facet date_facet_row session type util dsl).each do |filename|
+   date_facet date_facet_row session type dsl).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 

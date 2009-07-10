@@ -17,10 +17,9 @@ module Sunspot
     #
     # field_factories<Array>:: Array of Sunspot::Field objects
     #
-    def add_field_factories(field_factories)
-      Array(field_factories).each do |field|
-        @field_factories[field.signature] = field
-      end
+    def add_field_factory(name, type, options = {}, &block)
+      field_factory = FieldFactory::Static.new(name, type, options, &block)
+      @field_factories[field_factory.signature] = field_factory
     end
 
     # 
@@ -30,10 +29,9 @@ module Sunspot
     #
     # field_factories<Array>:: Array of Sunspot::Field objects
     #
-    def add_text_field_factories(field_factories)
-      Array(field_factories).each do |field|
-        @text_field_factories[field.signature] = field
-      end
+    def add_text_field_factory(name, options = {}, &block)
+      field_factory = FieldFactory::Static.new(name, Type::TextType, options, &block)
+      @text_field_factories[name] = field_factory
     end
 
     #
@@ -43,10 +41,9 @@ module Sunspot
     # 
     # field_factories<Array>:: Array of dynamic field objects
     # 
-    def add_dynamic_field_factories(field_factories)
-      Array(field_factories).each do |field|
-        @dynamic_field_factories[field.signature] = field
-      end
+    def add_dynamic_field_factory(name, type, options = {}, &block)
+      field_factory = FieldFactory::Dynamic.new(name, type, options, &block)
+      @dynamic_field_factories[field_factory.signature] = field_factory
     end
 
     # 
