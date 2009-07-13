@@ -23,8 +23,8 @@ module Sunspot
       #
       # keywords<String>:: phrase to perform fulltext search on
       #
-      def keywords(keywords)
-        @query.keywords = keywords
+      def keywords(keywords, options = {})
+        @query.set_keywords(keywords, options)
       end
 
       # Paginate your search. This works the same way as WillPaginate's

@@ -3,7 +3,7 @@ module Sunspot
     class BaseQuery
       include RSolr::Char
 
-      attr_accessor :keywords
+      attr_writer :keywords
 
       def initialize(setup)
         @setup = setup
@@ -15,14 +15,18 @@ module Sunspot
           params[:q] = @keywords
           params[:fl] = '* score'
           params[:fq] = types_phrase
-          params[:qf] = @setup.text_fields.map do |text_field|
-            text_field.indexed_name
-          end.join(' ')
+          params[:qf] = text_field_names.join(' ')
           params[:defType] = 'dismax'
         else
           params[:q] = types_phrase
         end
         params
+      end
+
+      def keyword_options=(options)
+        if options
+          @text_field_names = options.delete(:fields)
+        end
       end
 
       private
@@ -52,6 +56,20 @@ module Sunspot
       def escaped_types
         @escaped_types ||=
           @setup.type_names.map { |name| escape(name)}
+      end
+
+      def text_field_names
+        text_fields =
+          if @text_field_names
+            @text_field_names.map do |field_name|
+              @setup.text_field(field_name.to_sym)
+            end
+          else
+            @setup.text_fields
+          end
+        text_fields.map do |text_field|
+          text_field.indexed_name
+        end
       end
     end
   end

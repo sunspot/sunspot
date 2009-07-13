@@ -1,5 +1,4 @@
 === 0.9 ===
-* Specify fields for keyword search
 * Fix field lookup for #hits
 * Descriptive error messages during indexing
 * Date type

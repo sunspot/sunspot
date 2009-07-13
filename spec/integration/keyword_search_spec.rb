@@ -40,6 +40,13 @@ describe 'keyword search' do
       [@posts[0], @posts[2], @comment].each  { |obj| results.should include(obj) }
       results.should_not include(@posts[1])
     end
+
+    it 'matches keywords from only the fields specified' do
+      results = Sunspot.search(Post) do
+        keywords 'moron', :fields => [:title]
+      end.results
+      results.should == [@posts[1]]
+    end
   end
 
   describe 'with field boost' do

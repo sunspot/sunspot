@@ -112,7 +112,12 @@ module Sunspot
     end
 
     def keywords=(keywords)
+      set_keywords(keywords)
+    end
+
+    def set_keywords(keywords, options = {})
       @base_query.keywords = keywords
+      @base_query.keyword_options = options
     end
 
     # 

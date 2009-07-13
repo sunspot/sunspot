@@ -34,6 +34,13 @@ describe 'Search' do
     connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_text title_text)
   end
 
+  it 'should search only specified text fields when specified' do
+    session.search Post do
+      keywords 'keyword search', :fields => [:title, :body]
+    end
+    connection.searches.last[:qf].split(' ').sort.should == %w(body_text title_text)
+  end
+
   it 'should request score when keywords used' do
     session.search Post, :keywords => 'keyword search'
     connection.should have_last_search_with(:fl => '* score')
