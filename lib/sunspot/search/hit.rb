@@ -16,7 +16,7 @@ module Sunspot
           @stored_values.inject({}) do |stored, (indexed_field_name, value)|
             unless SPECIAL_KEYS.include?(indexed_field_name)
               field_name = indexed_field_name.sub(/_[^_]+$/, '').to_sym
-              field = @search.field(field_name)
+              field = Sunspot::Setup.for(@class_name).field(field_name)
               stored[field_name] = field.cast(value)
             end
             stored

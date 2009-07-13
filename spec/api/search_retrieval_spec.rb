@@ -46,6 +46,11 @@ describe 'retrieving search' do
     session.search(Post).hits.first.stored[:title].should == 'Title'
   end
 
+  it 'should return stored field values for searches against multiple types' do
+    stub_full_results('instance' => Post.new, 'title_ss' => 'Title')
+    session.search(Post, Namespaced::Comment).hits.first.stored[:title].should == 'Title'
+  end
+
   it 'should typecast stored field values in hits' do
     time = Time.utc(2008, 7, 8, 2, 45)
     stub_full_results('instance' => Post.new, 'last_indexed_at_ds' => time.xmlschema)

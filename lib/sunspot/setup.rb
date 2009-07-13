@@ -220,7 +220,13 @@ module Sunspot
       #   Setup instance associated with the given class or its nearest ancestor
       #   
       def for(clazz) #:nodoc:
-        setups[clazz.name.to_sym] || self.for(clazz.superclass) if clazz
+        class_name =
+          if clazz.respond_to?(:name)
+            clazz.name
+          else
+            clazz
+          end
+        setups[class_name.to_sym] || self.for(clazz.superclass) if clazz
       end
 
       protected
