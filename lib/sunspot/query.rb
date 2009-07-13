@@ -1,4 +1,4 @@
-%w(base_query dynamic_query field_facet pagination restriction sort sort_composite).each do |file|
+%w(base_query connective dynamic_query field_facet pagination restriction sort sort_composite).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -65,6 +65,16 @@ module Sunspot
     #
     def add_negated_restriction(field_name, restriction_type, value)
       add_restriction(field_name, restriction_type, value, true)
+    end
+
+    #TODO document
+    def add_disjunction
+      @components << disjunction = Connective::Disjunction.new(@setup)
+      disjunction
+    end
+
+    def add_conjunction
+      self
     end
 
     #

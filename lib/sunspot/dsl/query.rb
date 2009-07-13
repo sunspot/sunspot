@@ -9,7 +9,7 @@ module Sunspot
     #
     # See Sunspot.search for usage examples
     #
-    class Query < Scope
+    class Query < FieldQuery
       # Specify a phrase that should be searched as fulltext. Only +text+
       # fields are searched - see DSL::Fields.text
       #
@@ -71,7 +71,7 @@ module Sunspot
       #   end
       #
       def dynamic(base_name, &block)
-        Scope.new(@query.dynamic_query(base_name)).instance_eval(&block)
+        FieldQuery.new(@query.dynamic_query(base_name)).instance_eval(&block)
       end
     end
   end

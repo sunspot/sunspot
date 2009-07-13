@@ -205,7 +205,9 @@ describe 'Search' do
     session.search Post do
       without post1, post2
     end
-    connection.should have_last_search_with(:fq => ["-id:Post\\ #{post1.id}", "-id:Post\\ #{post2.id}"])
+    connection.should have_last_search_with(
+      :fq => ["-id:Post\\ #{post1.id}", "-id:Post\\ #{post2.id}"]
+    )
   end
 
   it 'should exclude multiple objects passed as array by object identity' do
@@ -213,7 +215,48 @@ describe 'Search' do
     session.search Post do
       without posts
     end
-    connection.should have_last_search_with(:fq => ["-id:Post\\ #{posts.first.id}", "-id:Post\\ #{posts.last.id}"])
+    connection.should have_last_search_with(
+      :fq => ["-id:Post\\ #{posts.first.id}", "-id:Post\\ #{posts.last.id}"]
+    )
+  end
+
+  it 'should create a disjunction between two restrictions' do
+    session.search Post do
+      any_of do
+        with :category_ids, 1
+        with :blog_id, 2
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '(category_ids_im:1 OR blog_id_i:2)'
+    )
+  end
+
+  it 'should create a conjunction inside of a disjunction' do
+    session.search Post do
+      any_of do
+        with :blog_id, 2
+        all_of do
+          with :category_ids, 1
+          with(:average_rating).greater_than(3.0)
+        end
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '(blog_id_i:2 OR (category_ids_im:1 AND average_rating_f:[3\.0 TO *]))'
+    )
+  end
+
+  it 'should do nothing special if #all_of called from the top level' do
+    session.search Post do
+      all_of do
+        with :blog_id, 2
+        with :category_ids, 1
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => ['blog_id_i:2', 'category_ids_im:1']
+    )
   end
 
   it 'should restrict by dynamic string field with equality restriction' do
