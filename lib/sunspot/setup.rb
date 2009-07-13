@@ -149,17 +149,6 @@ module Sunspot
     end
 
     # 
-    # Factory method for an Indexer object configured to use this setup
-    #
-    # ==== Returns
-    #
-    # Sunspot::Indexer:: Indexer configured with this setup
-    #
-    def indexer(connection)
-      Indexer.new(connection, self)
-    end
-
-    # 
     # Return the class associated with this setup.
     #
     # ==== Returns

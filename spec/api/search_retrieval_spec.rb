@@ -15,16 +15,20 @@ describe 'retrieving search' do
     session.search(Post).results.should == [post_2, post_1]
   end
 
-  it 'should return search total as attribute of results if pagination is provided' do
-    stub_results(Post.new, 4)
-    session.search(Post, :page => 1).results.total_entries.should == 4
-  end
+  if ENV['USE_WILL_PAGINATE']
 
-  it 'should return vanilla array if pagination is provided but WillPaginate is not available' do
-    stub_results(Post.new)
-    without_class(WillPaginate) do
+    it 'should return search total as attribute of results if pagination is provided' do
+      stub_results(Post.new, 4)
+      session.search(Post, :page => 1).results.total_entries.should == 4
+    end
+
+  else
+
+    it 'should return vanilla array if pagination is provided but WillPaginate is not available' do
+      stub_results(Post.new)
       session.search(Post, :page => 1).results.should_not respond_to(:total_entries)
     end
+
   end
 
   it 'should return hits without loading instances' do

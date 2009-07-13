@@ -195,7 +195,7 @@ describe 'indexer' do
   end
 
   it 'should throw an ArgumentError if an attempt is made to index an object that has no configuration' do
-    lambda { session.index(Time.now) }.should raise_error(Sunspot::NoSetupError)
+    lambda { session.index(Blog.new) }.should raise_error(Sunspot::NoSetupError)
   end
 
   it 'should throw an ArgumentError if single-value field tries to index multiple values' do

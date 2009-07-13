@@ -58,20 +58,10 @@ module Sunspot
     #
     # See Sunspot.index
     #
-    #--
-    # FIXME The fact that we have to break this out by class and index each
-    #       class separately is artificial, imposed by the fact that indexers
-    #       are initialized with a particular setup, and are responsible for
-    #       sending add messages to Solr. It might be worth considering a
-    #       singleton indexer (per session) and have the indexer itself find
-    #       the appropriate setup to use for each object.
-    #
     def index(*objects)
       objects.flatten!
       @updates += objects.length
-      objects.group_by { |object| object.class }.to_hash.each_pair do |clazz, objs|
-        indexer_for(objs.first).add(objs)
-      end
+      indexer.add(objects)
     end
 
     # 
@@ -97,7 +87,7 @@ module Sunspot
       objects.flatten!
       @updates += objects.length
       for object in objects
-        indexer_for(object).remove(object)
+        indexer.remove(object)
       end
     end
 
@@ -120,7 +110,7 @@ module Sunspot
       else
         @updates += classes.length
         for clazz in classes
-          Setup.for(clazz).indexer(connection).remove_all
+          indexer.remove_all(clazz)
         end
       end
     end
@@ -150,25 +140,6 @@ module Sunspot
     private
 
     # 
-    # Get the Setup object for the given object's class.
-    #
-    # ==== Parameters
-    #
-    # object<Object>:: The object whose setup is to be retrieved
-    #
-    # ==== Returns
-    #
-    # Sunspot::Setup:: The setup for the object's class
-    #
-    def setup_for(object)
-      Setup.for(object.class) || raise(NoSetupError, "Sunspot is not configured for #{object.class.inspect}")
-    end
-
-    def indexer_for(object)
-      setup_for(object).indexer(connection)
-    end
-
-    # 
     # Retrieve the Solr connection for this session, creating one if it does not
     # already exist.
     #
@@ -180,6 +151,10 @@ module Sunspot
       @connection ||= self.class.connection_class.new(
         RSolr::Adapter::HTTP.new(:url => config.solr.url)
       )
+    end
+
+    def indexer
+      @indexer ||= Indexer.new(connection)
     end
   end
 end

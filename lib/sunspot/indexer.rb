@@ -8,8 +8,8 @@ module Sunspot
   class Indexer #:nodoc:
     include RSolr::Char
 
-    def initialize(connection, setup)
-      @connection, @setup = connection, setup
+    def initialize(connection)
+      @connection = connection
     end
 
     # 
@@ -34,18 +34,18 @@ module Sunspot
     # 
     # Delete all documents of the class indexed by this indexer from Solr.
     #
-    def remove_all
-      @connection.delete_by_query("type:#{escape(@setup.clazz.name)}")
+    def remove_all(clazz)
+      @connection.delete_by_query("type:#{escape(clazz.name)}")
     end
 
-    protected
+    private
 
     # 
     # Convert documents into hash of indexed properties
     #
     def prepare(model)
       document = document_for(model)
-      for field_factory in @setup.all_field_factories
+      for field_factory in setup_for(model).all_field_factories
         field_factory.populate_document(document, model)
       end
       document
@@ -61,6 +61,21 @@ module Sunspot
         :id => Adapters::InstanceAdapter.adapt(model).index_id,
         :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }
       )
+    end
+
+    # 
+    # Get the Setup object for the given object's class.
+    #
+    # ==== Parameters
+    #
+    # object<Object>:: The object whose setup is to be retrieved
+    #
+    # ==== Returns
+    #
+    # Sunspot::Setup:: The setup for the object's class
+    #
+    def setup_for(object)
+      Setup.for(object.class) || raise(NoSetupError, "Sunspot is not configured for #{object.class.inspect}")
     end
 
 

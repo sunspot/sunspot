@@ -1,5 +1,4 @@
 require 'rubygems'
-gem 'mislav-will_paginate', '~> 2.3'
 gem 'rspec', '~> 1.1'
 begin
   gem 'ruby-debug', '~>0.10'
@@ -11,9 +10,13 @@ rescue Gem::LoadError
     end
   end
 end
+require 'time'
 require 'spec'
-require 'will_paginate'
-require 'will_paginate/collection'
+if ENV['USE_WILL_PAGINATE']
+  gem 'mislav-will_paginate', '~> 2.3'
+  require 'will_paginate'
+  require 'will_paginate/collection'
+end
 
 unless gem_name = ENV['SUNSPOT_TEST_GEM']
   $:.unshift(File.dirname(__FILE__) + '/../lib')
