@@ -42,16 +42,18 @@ describe 'keyword search' do
     end
   end
 
-  describe 'with boosted fields' do
+  describe 'with field boost' do
     before :all do
       Sunspot.remove_all
-      @posts = [:title, :body].map { |field| Post.new(field => 'Have another eggplant') }
-      Sunspot.index!(@posts)
+      @posts = [:title, :body].map { |field| Post.new(field => 'rhinoceros') }
+      Sunspot.index!(*@posts)
     end
 
-    it 'returns matches on higher-boosted fields first' do
-      results = Sunspot.search(Post) { keywords 'eggplant' }.results
-      results.should == @posts
+    it 'should assign a higher boost to the result matching the higher-boosted field' do
+      search = Sunspot.search(Post) { keywords 'rhinoceros' }
+      search.hits.map { |hit| hit.primary_key }.should ==
+        @posts.map { |post| post.id.to_s }
+      search.hits.first.score.should > search.hits.last.score
     end
   end
 end

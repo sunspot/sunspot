@@ -1,4 +1,4 @@
-%w(dynamic_query field_facet pagination restriction sort sort_composite).each do |file|
+%w(base_query dynamic_query field_facet pagination restriction sort sort_composite).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -16,13 +16,10 @@ module Sunspot
   # recognized by the solr-ruby API.
   #
   class Query
-    include RSolr::Char
-
-    attr_writer :keywords # <String> full-text keyword boolean phrase
-
     def initialize(types, configuration) #:nodoc:
       @types, @configuration = types, configuration
       @components = []
+      @components << @base_query = BaseQuery.new(types)
       @components << @pagination = Pagination.new(@configuration)
       @components << @sort = SortComposite.new
     end
@@ -112,6 +109,10 @@ module Sunspot
       DynamicQuery.new(dynamic_field(base_name), self)
     end
 
+    def keywords=(keywords)
+      @base_query.keywords = keywords
+    end
+
     # 
     # Add a component to the query. Used by objects that proxy to the query
     # object.
@@ -178,12 +179,6 @@ module Sunspot
     def to_params #:nodoc:
       params = {}
       query_components = []
-      if @keywords
-        query_components << @keywords
-        params[:fl] = '* score'
-      end
-      query_components << types_phrase if types_phrase
-      params[:q] = query_components.map { |component| "(#{component})"} * ' AND '
       for component in @components
         Util.deep_merge!(params, component.to_params)
       end
@@ -310,33 +305,6 @@ module Sunspot
     end
 
     private
-
-    # 
-    # Boolean phrase that restricts results to objects of the type(s) under
-    # query. If this is an open query (no types specified) then it sends a
-    # no-op phrase because Solr requires that the :q parameter not be empty.
-    #
-    # TODO don't send a noop if we have a keyword phrase
-    # TODO this should be sent as a filter query when possible, especially
-    #      if there is a single type, so that Solr can cache it
-    #
-    # ==== Returns
-    #
-    # String:: Boolean phrase for type restriction
-    #
-    def types_phrase
-      if @types.nil? || @types.empty? then "type:[* TO *]"
-      elsif @types.length == 1 then "type:#{escaped_types.first}"
-      else "type:(#{escaped_types * ' OR '})"
-      end
-    end
-
-    #
-    # Wraps each type in quotes to escape names of the form Namespace::Class
-    #
-    def escaped_types
-      @types.map { |t| escape(t.name)}
-    end
 
     # 
     # Return a hash of field names to field objects, containing all fields

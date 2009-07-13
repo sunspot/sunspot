@@ -58,7 +58,7 @@ module Sunspot
     end
 
     def text_fields
-      text_field_factories.map { |field_factory| text_field_factory.build }
+      text_field_factories.map { |text_field_factory| text_field_factory.build }
     end
 
     # 

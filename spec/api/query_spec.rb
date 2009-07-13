@@ -11,7 +11,7 @@ describe Sunspot::Query do
   it 'should perform keyword search' do
     @search.query.keywords = 'keyword search'
     @search.execute!
-    @connection.should have_last_search_with(:q => '(keyword search) AND (type:Post)')
+    @connection.should have_last_search_with(:q => 'keyword search')
   end
 
   it 'should add equality restriction' do

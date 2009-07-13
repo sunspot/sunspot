@@ -5,12 +5,33 @@ describe 'Search' do
     session.search Post do
       keywords 'keyword search'
     end
-    connection.should have_last_search_with(:q => '(keyword search) AND (type:Post)')
+    connection.should have_last_search_with(:q => 'keyword search')
   end
 
   it 'should search by keywords from options' do
     session.search Post, :keywords => 'keyword search'
-    connection.should have_last_search_with(:q => '(keyword search) AND (type:Post)')
+    connection.should have_last_search_with(:q => 'keyword search')
+  end
+
+  it 'should set default query parser to dismax when keywords used' do
+    session.search Post do
+      keywords 'keyword search'
+    end
+    connection.should have_last_search_with(:defType => 'dismax')
+  end
+
+  it 'should search types in filter query if keywords used' do
+    session.search Post do
+      keywords 'keyword search'
+    end
+    connection.should have_last_search_with(:fq => 'type:Post')
+  end
+
+  it 'should search all text fields for searched class' do
+    session.search Post do
+      keywords 'keyword search'
+    end
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_text title_text)
   end
 
   it 'should request score when keywords used' do
@@ -492,12 +513,12 @@ describe 'Search' do
 
   it 'should properly escape namespaced type names' do
     session.search(Namespaced::Comment)
-    connection.should have_last_search_with(:q => '(type:Namespaced\:\:Comment)')
+    connection.should have_last_search_with(:q => 'type:Namespaced\:\:Comment')
   end
 
   it 'should build search for multiple types' do
     session.search(Post, Namespaced::Comment)
-    connection.should have_last_search_with(:q => '(type:(Post OR Namespaced\:\:Comment))')
+    connection.should have_last_search_with(:q => 'type:(Post OR Namespaced\:\:Comment)')
   end
 
   it 'should allow search on fields common to all types with DSL' do
