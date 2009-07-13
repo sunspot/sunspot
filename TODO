@@ -1,5 +1,4 @@
 === 0.9 ===
-* Direct access to adapter
 * sunspot-configure-solr
 * Don't allow ordering on multiple-allowed fields
 * Batches

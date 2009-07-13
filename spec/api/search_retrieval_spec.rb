@@ -57,6 +57,14 @@ describe 'retrieving search' do
     session.search(Post).hits.first.stored[:last_indexed_at].should == time
   end
 
+  it 'should allow access to the data accessor' do
+    stub_results(posts = Post.new)
+    search = session.search Post do
+      data_accessor_for(Post).custom_title = 'custom title'
+    end
+    search.results.first.title.should == 'custom title'
+  end
+
   it 'should return total' do
     stub_results(Post.new, Post.new, 4)
     session.search(Post, :page => 1).total.should == 4

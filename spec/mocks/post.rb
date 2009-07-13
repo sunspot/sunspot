@@ -1,5 +1,6 @@
 class Post < MockRecord
-  attr_accessor :title, :body, :blog_id, :published_at, :ratings_average, :author_name, :featured, :expire_date
+  attr_accessor :title, :body, :blog_id, :published_at, :ratings_average,
+                :author_name, :featured, :expire_date
   alias_method :featured?, :featured
 
   def category_ids

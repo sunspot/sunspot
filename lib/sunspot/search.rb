@@ -17,6 +17,11 @@ module Sunspot
       @connection, @setup, @query = connection, setup, query
     end
 
+    def build(&block)
+      Util.instance_eval_or_call(dsl, &block)
+      self
+    end
+
     #
     # Execute the search on the Solr instance and store the results. If you
     # use Sunspot#search() to construct your searches, there is no need to call
@@ -153,6 +158,11 @@ module Sunspot
       @setup.field(name)
     end
 
+    def data_accessor_for(clazz)
+      (@data_accessors ||= {})[clazz.name.to_sym] ||=
+        Adapters::DataAccessor.create(clazz)
+    end
+
     private
 
     def solr_response
@@ -173,7 +183,8 @@ module Sunspot
         type_id_hash
       end.inject([]) do |results, pair|
         type_name, ids = pair
-        results.concat(Adapters::DataAccessor.create(Util.full_const_get(type_name)).load_all(ids))
+        data_accessor = data_accessor_for(Util.full_const_get(type_name))
+        results.concat(data_accessor.load_all(ids))
       end.sort_by do |result|
         doc_ids.index(Adapters::InstanceAdapter.adapt(result).index_id)
       end
@@ -181,6 +192,10 @@ module Sunspot
 
     def doc_ids
       @doc_ids ||= solr_response['docs'].map { |doc| doc['id'] }
+    end
+
+    def dsl
+      DSL::Search.new(self)
     end
   end
 end
