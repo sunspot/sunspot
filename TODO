@@ -1,7 +1,4 @@
 === 0.9 ===
-* Fix field lookup for #hits
-* Descriptive error messages during indexing
-* Date type
 * Conjunctions
 * Direct access to adapter
 * sunspot-configure-solr
@@ -11,6 +8,7 @@
 * Detect Ranges in short-form #with()
 * Expose delete by ID
 * Support composite IDs
+* Descriptive error messages during indexing
 * Facet by type (?)
 * Query-based faceting (?)
 === 0.10 ===

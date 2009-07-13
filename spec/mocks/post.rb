@@ -1,5 +1,5 @@
 class Post < MockRecord
-  attr_accessor :title, :body, :blog_id, :published_at, :ratings_average, :author_name, :featured
+  attr_accessor :title, :body, :blog_id, :published_at, :ratings_average, :author_name, :featured, :expire_date
   alias_method :featured?, :featured
 
   def category_ids
@@ -37,6 +37,7 @@ Sunspot.setup(Post) do
   integer :category_ids, :multiple => true
   float :average_rating, :using => :ratings_average
   time :published_at
+  date :expire_date
   boolean :featured, :using => :featured?
   string :sort_title do
     title.downcase.sub(/^(a|an|the)\W+/, '') if title

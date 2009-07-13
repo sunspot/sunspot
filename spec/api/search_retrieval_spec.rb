@@ -103,12 +103,31 @@ describe 'retrieving search' do
   end
 
   it 'should return time facet' do
-    stub_facet(:published_at_d, '2009-04-07T20:25:23Z' => 3, '2009-04-07T20:26:19Z' => 1)
+    stub_facet(
+      :published_at_d,
+      '2009-04-07T20:25:23Z' => 3,
+      '2009-04-07T20:26:19Z' => 1
+    )
     result = session.search Post do
       facet :published_at
     end
-    facet_values(result, :published_at).should == [Time.gm(2009, 04, 07, 20, 25, 23),
-                                                   Time.gm(2009, 04, 07, 20, 26, 19)]
+    facet_values(result, :published_at).should ==
+      [Time.gm(2009, 04, 07, 20, 25, 23),
+       Time.gm(2009, 04, 07, 20, 26, 19)]
+  end
+
+  it 'should return date facet' do
+    stub_facet(
+      :expire_date_d,
+      '2009-07-13T00:00:00Z' => 3,
+      '2009-04-01T00:00:00Z' => 1
+    )
+    result = session.search(Post) do
+      facet :expire_date
+    end
+    facet_values(result, :expire_date).should ==
+      [Date.new(2009, 07, 13),
+       Date.new(2009, 04, 01)]
   end
 
   it 'should return boolean facet' do

@@ -72,8 +72,15 @@ describe 'indexer' do
     end
 
     it 'should correctly index a time field' do
-      session.index(post(:published_at => Time.parse('1983-07-08 05:00:00 -0400')))
+      session.index(
+        post(:published_at => Time.parse('1983-07-08 05:00:00 -0400'))
+      )
       connection.should have_add_with(:published_at_d => '1983-07-08T09:00:00Z')
+    end
+
+    it 'should correctly index a date field' do
+      session.index(post(:expire_date => Date.new(2009, 07, 13)))
+      connection.should have_add_with(:expire_date_d => '2009-07-13T00:00:00Z')
     end
 
     it 'should correctly index a boolean field' do

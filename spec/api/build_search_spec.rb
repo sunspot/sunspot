@@ -73,7 +73,19 @@ describe 'Search' do
     session.search Post do
       with :published_at, time
     end
-    connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
+    connection.should have_last_search_with(
+      :fq => ['published_at_d:1983\-07\-08T09\:00\:00Z']
+    )
+  end
+
+  it 'should scope by exact match with date' do
+    date = Date.new(1983, 7, 8)
+    session.search Post do
+      with :expire_date, date
+    end
+    connection.should have_last_search_with(
+      :fq => ['expire_date_d:1983\-07\-08T00\:00\:00Z']
+    )
   end
   
   it 'should scope by exact match with boolean' do

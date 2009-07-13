@@ -109,8 +109,6 @@ module Sunspot
             time =
               if value.respond_to?(:utc)
                 value
-              elsif %w(year mon mday).each { |method| value.respond_to?(method) }
-                Time.gm(value.year, value.mon, value.mday)
               else
                 Time.parse(value.to_s)
               end
@@ -120,6 +118,32 @@ module Sunspot
 
         def cast(string) #:nodoc:
           Time.xmlschema(string)
+        end
+      end
+    end
+
+    module DateType
+      class <<self
+        def indexed_name(name) #:nodoc:
+          "#{name}_d"
+        end
+
+        def to_indexed(value) #:nodoc:
+          if value
+            time = 
+              if %w(year mon mday).all? { |method| value.respond_to?(method) }
+                Time.utc(value.year, value.mon, value.mday)
+              else
+                date = Date.parse(value.to_s)
+                Time.utc(date.year, date.mon, date.mday)
+              end
+            time.utc.xmlschema
+          end
+        end
+
+        def cast(string)
+          time = Time.xmlschema(string)
+          Date.new(time.year, time.mon, time.mday)
         end
       end
     end
