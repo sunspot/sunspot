@@ -1,5 +1,6 @@
 === 0.9 ===
-* Stored fields
+* Specify fields for keyword search
+* Fix field lookup for #hits
 * Descriptive error messages during indexing
 * Date type
 * Conjunctions

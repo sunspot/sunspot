@@ -5,8 +5,8 @@ module Sunspot
 
       attr_accessor :keywords
 
-      def initialize(types)
-        @types = types
+      def initialize(setup)
+        @setup = setup
       end
 
       def to_params
@@ -15,7 +15,9 @@ module Sunspot
           params[:q] = @keywords
           params[:fl] = '* score'
           params[:fq] = types_phrase
-          params[:qf] = text_field_names.join(' ')
+          params[:qf] = @setup.text_fields.map do |text_field|
+            text_field.indexed_name
+          end.join(' ')
           params[:defType] = 'dismax'
         else
           params[:q] = types_phrase
@@ -39,8 +41,7 @@ module Sunspot
       # String:: Boolean phrase for type restriction
       #
       def types_phrase
-        if @types.nil? || @types.empty? then "type:[* TO *]"
-        elsif @types.length == 1 then "type:#{escaped_types.first}"
+        if escaped_types.length == 1 then "type:#{escaped_types.first}"
         else "type:(#{escaped_types * ' OR '})"
         end
       end
@@ -49,16 +50,8 @@ module Sunspot
       # Wraps each type in quotes to escape names of the form Namespace::Class
       #
       def escaped_types
-        @types.map { |t| escape(t.name)}
-      end
-
-      #XXX do this in field composite class
-      def text_field_names
-        @types.inject([]) do |fields, type|
-          fields.concat(
-            Setup.for(type).text_fields.map { |field| field.indexed_name.to_s }
-          )
-        end
+        @escaped_types ||=
+          @setup.type_names.map { |name| escape(name)}
       end
     end
   end

@@ -1,7 +1,10 @@
 module Sunspot
   module FieldFactory
     class Abstract
+      attr_reader :name
+
       def initialize(name, options = {}, &block)
+        @name = name.to_sym
         @data_extractor =
           if block
             DataExtractor::BlockExtractor.new(&block)
@@ -50,8 +53,7 @@ module Sunspot
 
       def initialize(name, type, options = {}, &block)
         super(name, options, &block)
-        @name, @type, @options =
-          name, type, options
+        @type, @options = type, options
       end
 
       def build(dynamic_name)

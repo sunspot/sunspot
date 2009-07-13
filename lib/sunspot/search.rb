@@ -13,9 +13,8 @@ module Sunspot
     # in this case.
     attr_reader :query 
 
-    def initialize(connection, query) #:nodoc:
-      @connection = connection
-      @query = query
+    def initialize(connection, setup, query) #:nodoc:
+      @connection, @setup, @query = connection, setup, query
     end
 
     #
@@ -145,13 +144,13 @@ module Sunspot
     def dynamic_facet(base_name, dynamic_name)
       (@dynamic_facets_cache ||= {})[[base_name.to_sym, dynamic_name.to_sym]] ||=
         begin
-          field = @query.dynamic_field(base_name).build(dynamic_name)
+          field = @setup.dynamic_field_factory(base_name).build(dynamic_name)
           Facet.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
         end
     end
 
     def field(name)
-      @query.field(name)
+      @setup.field(name)
     end
 
     private

@@ -5,9 +5,16 @@ module Sunspot
   #
   class Setup #:nodoc:
     def initialize(clazz)
+      @clazz = clazz
       @class_name = clazz.name
-      @field_factories, @text_field_factories, @dynamic_field_factories = {}, {}, {}
+      @field_factories, @text_field_factories, @dynamic_field_factories,
+        @field_factories_cache, @text_field_factories_cache,
+        @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
       @dsl = DSL::Fields.new(self)
+    end
+
+    def type_names
+      [@class_name]
     end
 
     # 
@@ -20,6 +27,7 @@ module Sunspot
     def add_field_factory(name, type, options = {}, &block)
       field_factory = FieldFactory::Static.new(name, type, options, &block)
       @field_factories[field_factory.signature] = field_factory
+      @field_factories_cache[field_factory.name] = field_factory
     end
 
     # 
@@ -32,6 +40,7 @@ module Sunspot
     def add_text_field_factory(name, options = {}, &block)
       field_factory = FieldFactory::Static.new(name, Type::TextType, options, &block)
       @text_field_factories[name] = field_factory
+      @text_field_factories_cache[field_factory.name] = field_factory
     end
 
     #
@@ -44,6 +53,7 @@ module Sunspot
     def add_dynamic_field_factory(name, type, options = {}, &block)
       field_factory = FieldFactory::Dynamic.new(name, type, options, &block)
       @dynamic_field_factories[field_factory.signature] = field_factory
+      @dynamic_field_factories_cache[field_factory.name] = field_factory
     end
 
     # 
@@ -51,6 +61,35 @@ module Sunspot
     #
     def setup(&block)
       @dsl.instance_eval(&block)
+    end
+
+    def field(field_name)
+      if field_factory = @field_factories_cache[field_name.to_sym]
+        field_factory.build
+      else
+        raise(
+          UnrecognizedFieldError,
+          "No text field configured for #{@clazz.name} with name '#{field_name}'"
+        )
+      end
+    end
+
+    def text_field(field_name)
+      if field_factory = @text_field_factories_cache[field_name.to_sym]
+        field_factory.build
+      else
+        raise(
+          UnrecognizedFieldError,
+          "No text field configured for #{@clazz.name} with name '#{field_name}'"
+        )
+      end
+    end
+
+    def dynamic_field_factory(field_name)
+      @dynamic_field_factories_cache[field_name.to_sym] || raise(
+        UnrecognizedFieldError,
+        "No text field configured for #{@clazz.name} with name '#{field_name}'"
+      )
     end
 
     def fields

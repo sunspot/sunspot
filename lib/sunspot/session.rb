@@ -35,7 +35,13 @@ module Sunspot
     #
     def new_search(*types)
       types.flatten!
-      Search.new(connection, Query.new(types, @config))
+      setup =
+        if types.length == 1
+          Setup.for(types.first)
+        else
+          CompositeSetup.for(types)
+        end
+      Search.new(connection, setup, Query.new(setup, @config))
     end
 
     #
