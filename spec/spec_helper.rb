@@ -1,21 +1,27 @@
-require 'rubygems'
-gem 'rspec', '~> 1.1'
+using_gems = false
 begin
-  gem 'ruby-debug', '~>0.10'
-  require 'ruby-debug'
-rescue Gem::LoadError
-  module Kernel
-    def debugger
-      raise("debugger is not available")
+  require 'spec'
+  begin
+    require 'ruby-debug'
+  rescue LoadError
+    module Kernel
+      def debugger
+        STDERR.puts('Debugger is not available')
+      end
     end
   end
-end
-require 'time'
-require 'spec'
-if ENV['USE_WILL_PAGINATE']
-  gem 'mislav-will_paginate', '~> 2.3'
-  require 'will_paginate'
-  require 'will_paginate/collection'
+  if ENV['USE_WILL_PAGINATE']
+    require 'will_paginate'
+    require 'will_paginate/collection'
+  end
+rescue LoadError => e
+  require 'rubygems'
+  if using_gems
+    raise(e)
+  else
+    using_gems = true
+    retry
+  end
 end
 
 unless gem_name = ENV['SUNSPOT_TEST_GEM']

@@ -143,7 +143,7 @@ module Sunspot
 
         def cast(string)
           time = Time.xmlschema(string)
-          Date.new(time.year, time.mon, time.mday)
+          Date.civil(time.year, time.mon, time.mday)
         end
       end
     end

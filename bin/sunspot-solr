@@ -1,11 +1,19 @@
 #!/usr/bin/env ruby
-require 'rubygems'
-gem 'daemons', '~> 1.0'
-gem 'optiflag', '~> 0.6.5'
-require 'fileutils'
-require 'tmpdir'
-require 'daemons'
-require 'optiflag'
+using_gems = false
+begin
+  require 'fileutils'
+  require 'tmpdir'
+  require 'daemons'
+  require 'optiflag'
+rescue LoadError => e
+  if using_gems
+    raise(e)
+  else
+    using_gems = true
+    require 'rubygems'
+    retry
+  end
+end
 
 working_directory = FileUtils.pwd
 solr_home = File.join(File.dirname(__FILE__), '..', 'solr')

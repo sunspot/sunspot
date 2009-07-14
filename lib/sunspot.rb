@@ -1,5 +1,12 @@
-gem 'mwmitchell-rsolr'
-require 'rsolr'
+begin
+  require 'time'
+  require 'date'
+  require 'rsolr'
+rescue LoadError
+  require 'rubygems'
+  require 'rsolr'
+end
+
 require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(util adapters configuration setup composite_setup field field_factory

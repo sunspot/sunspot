@@ -10,7 +10,7 @@ begin
     s.description = 'Library for expressive, powerful interaction with the Solr search engine'
     s.authors = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause']
     s.files = FileList['[A-Z]*', '{bin,lib,spec,tasks}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/conf/*', 'solr/start.jar']
-    s.add_dependency 'solr-ruby', '>= 0.0.6'
+    s.add_dependency 'mwmichell-rsolr', '>= 0.8.9'
     s.add_dependency 'daemons', '~> 1.0'
     s.add_dependency 'optiflag', '~> 0.6.5'
     s.add_development_dependency 'rspec', '~> 1.1'
