@@ -12,6 +12,9 @@ module Sunspot
       }
 
       def initialize(field, direction = nil)
+        if field.multiple?
+          raise(ArgumentError, "#{field.name} cannot be used for ordering because it is a multiple-value field")
+        end
         @field, @direction = field, (direction || :asc).to_sym
       end
 

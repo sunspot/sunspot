@@ -56,6 +56,10 @@ module Sunspot
     def indexed_name
       @type.indexed_name(@name)
     end
+
+    def multiple?
+      !!@multiple
+    end
   end
 
   class FulltextField < Field

@@ -1,5 +1,4 @@
 === 0.9 ===
-* Don't allow ordering on multiple-allowed fields
 * Batches
 * Support random sort
 * Detect Ranges in short-form #with()

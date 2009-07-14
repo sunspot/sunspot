@@ -413,6 +413,14 @@ describe 'Search' do
     end.should raise_error(ArgumentError)
   end
 
+  it 'should not allow ordering by multiple-value fields' do
+    lambda do
+      session.search Post do
+        order_by :category_ids
+      end
+    end.should raise_error(ArgumentError)
+  end
+
   it 'should not turn faceting on if no facet requested' do
     session.search(Post)
     connection.should_not have_last_search_with('facet')
