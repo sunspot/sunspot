@@ -405,6 +405,13 @@ describe 'Search' do
     connection.should have_last_search_with(:sort => 'custom_integer:test_i desc, sort_title_s asc')
   end
 
+  it 'should order by random' do
+    session.search Post do
+      order_by_random
+    end
+    connection.searches.last[:sort].should =~ /^random_\d+ asc$/
+  end
+
   it 'should throw an ArgumentError if a bogus order direction is given' do
     lambda do
       session.search Post do

@@ -172,4 +172,17 @@ describe 'scoped_search' do
       search.results.should == @posts
     end
   end
+
+  describe 'ordering by random' do
+    it 'should order randomly (run this test again if it fails)' do
+      Sunspot.remove_all
+      Sunspot.index!(Array.new(100) { Post.new })
+      result_sets = Array.new(2) do
+        Sunspot.search(Post) { order_by_random }.results.map do |result|
+          result.id
+        end
+      end
+      result_sets[0].should_not == result_sets[1]
+    end
+  end
 end

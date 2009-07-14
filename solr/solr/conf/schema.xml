@@ -8,6 +8,7 @@
         <filter class='solr.LowerCaseFilterFactory' />
       </analyzer>
     </fieldtype>
+    <fieldtype class='solr.RandomSortField' name='rand'></fieldtype>
     <fieldtype class='solr.BoolField' name='boolean' omitNorms='true' />
     <fieldtype class='solr.SortableFloatField' name='sfloat' omitNorms='true' />
     <fieldtype class='solr.DateField' name='date' omitNorms='true' />
@@ -19,6 +20,7 @@
     <field indexed='true' multiValued='true' name='type' stored='true' type='string' />
     <field indexed='true' multiValued='true' name='text' stored='false' type='text' />
     <dynamicField indexed='true' multiValued='true' name='*_text' stored='false' type='text' />
+    <dynamicField indexed='true' name='random_*' stored='false' type='rand' />
     <dynamicField indexed='true' multiValued='false' name='*_b' stored='false' type='boolean' />
     <dynamicField indexed='true' multiValued='false' name='*_f' stored='false' type='sfloat' />
     <dynamicField indexed='true' multiValued='false' name='*_d' stored='false' type='date' />

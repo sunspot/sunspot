@@ -168,6 +168,10 @@ module Sunspot
       add_sort(Sort.new(@setup.field(field_name), direction))
     end
 
+    def order_by_random
+      add_sort(Sort.new(RandomField.new))
+    end
+
     # 
     # Build the query using the DSL block passed into Sunspot.search
     #

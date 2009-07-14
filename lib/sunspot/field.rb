@@ -99,4 +99,14 @@ module Sunspot
       "#{super}#{'m' if @multiple}#{'s' if @stored}"
     end
   end
+
+  class RandomField
+    def multiple?
+      false
+    end
+
+    def indexed_name
+      "random_#{rand(1<<16)}"
+    end
+  end
 end

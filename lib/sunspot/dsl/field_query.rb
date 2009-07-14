@@ -13,6 +13,10 @@ module Sunspot
         @query.order_by(field_name, direction)
       end
 
+      def order_by_random
+        @query.order_by_random
+      end
+
       # Request facets on the given field names. If the last argument is a hash,
       # the given options will be applied to all specified fields. See
       # Sunspot::Search#facet and Sunspot::Facet for information on what is

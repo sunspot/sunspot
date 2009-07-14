@@ -1,5 +1,4 @@
 === 0.9 ===
-* Support random sort
 * Detect Ranges in short-form #with()
 * Expose delete by ID
 * Support composite IDs
