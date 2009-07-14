@@ -137,6 +137,12 @@ module Sunspot
       commit if dirty?
     end
 
+    def batch
+      indexer.start_batch
+      yield
+      indexer.flush_batch
+    end
+
     private
 
     # 

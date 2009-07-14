@@ -21,7 +21,12 @@ module Sunspot
     # model<Object>:: the model to index
     #
     def add(model)
-      @connection.add(Array(model).map { |m| prepare(m) })
+      documents = Array(model).map { |m| prepare(m) }
+      if @batch.nil?
+        add_documents(documents)
+      else
+        @batch.concat(documents)
+      end
     end
 
     # 
@@ -38,6 +43,15 @@ module Sunspot
       @connection.delete_by_query("type:#{escape(clazz.name)}")
     end
 
+    def start_batch
+      @batch = []
+    end
+
+    def flush_batch
+      add_documents(@batch)
+      @batch = nil
+    end
+
     private
 
     # 
@@ -49,6 +63,10 @@ module Sunspot
         field_factory.populate_document(document, model)
       end
       document
+    end
+
+    def add_documents(documents)
+      @connection.add(documents)
     end
 
     # 

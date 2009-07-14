@@ -359,6 +359,10 @@ module Sunspot
       session.remove_all!(*classes)
     end
 
+    def batch(&block)
+      session.batch(&block)
+    end
+
     #
     # True if documents have been added, updated, or removed since the last
     # commit.
