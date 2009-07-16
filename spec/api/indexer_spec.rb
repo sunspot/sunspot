@@ -12,6 +12,11 @@ describe 'indexer' do
       connection.should have_add_with(:type => ['Post', 'MockRecord'])
     end
 
+    it 'should index class name' do
+      session.index post
+      connection.should have_add_with(:class_name => 'Post')
+    end
+
     it 'should index the array of objects supplied' do
       posts = Array.new(2) { Post.new }
       session.index posts
@@ -123,6 +128,17 @@ describe 'indexer' do
     it 'should remove an object from the index' do
       session.remove(post)
       connection.should have_delete("Post #{post.id}")
+    end
+
+    it 'should remove an object by type and id' do
+      session.remove_by_id(Post, 1)
+      connection.should have_delete('Post 1')
+    end
+
+    it 'should remove an object by type and id and immediately commit' do
+      connection.should_receive(:delete_by_id).with('Post 1').ordered
+      connection.should_receive(:commit).ordered
+      session.remove_by_id!(Post, 1)
     end
 
     it 'should remove an object from the index and immediately commit' do

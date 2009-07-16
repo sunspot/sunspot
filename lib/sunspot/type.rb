@@ -174,5 +174,21 @@ module Sunspot
         end
       end
     end
+
+    module ClassType
+      class <<self
+        def indexed_name(name)
+          'class_name'
+        end
+
+        def to_indexed(value)
+          value.name
+        end
+
+        def cast(string)
+          Sunspot::Util.full_const_get(string)
+        end
+      end
+    end
   end
 end

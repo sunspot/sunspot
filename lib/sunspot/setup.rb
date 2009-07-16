@@ -11,6 +11,7 @@ module Sunspot
         @field_factories_cache, @text_field_factories_cache,
         @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
       @dsl = DSL::Fields.new(self)
+      add_field_factory(:class, Type::ClassType)
     end
 
     def type_names

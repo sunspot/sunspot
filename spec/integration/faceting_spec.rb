@@ -118,4 +118,21 @@ describe 'search faceting' do
       search.facet(:published_at).rows.last.count.should == 1
     end
   end
+
+  context 'class facets' do
+    before :all do
+      Sunspot.remove_all
+      Sunspot.index!(Post.new, Post.new, Namespaced::Comment.new)
+    end
+
+    it 'should return classes' do
+      search = Sunspot.search(Post, Namespaced::Comment) do
+        facet(:class, :sort => :count)
+      end
+      search.facet(:class).rows.first.value.should == Post
+      search.facet(:class).rows.first.count.should == 2
+      search.facet(:class).rows.last.value.should == Namespaced::Comment
+      search.facet(:class).rows.last.count.should == 1
+    end
+  end
 end

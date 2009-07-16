@@ -36,6 +36,12 @@ module Sunspot
       @connection.delete_by_id(Adapters::InstanceAdapter.adapt(model).index_id)
     end
 
+    def remove_by_id(class_name, id)
+      @connection.delete_by_id(
+        Adapters::InstanceAdapter.index_id_for(class_name, id)
+      )
+    end
+
     # 
     # Delete all documents of the class indexed by this indexer from Solr.
     #

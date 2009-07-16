@@ -1,7 +1,4 @@
 === 0.9 ===
-* Expose delete by ID
-* Descriptive error messages during indexing
-* Facet by type (?)
 * Query-based faceting (?)
 === 0.10 ===
 * Intelligently decide whether to instantiate all facet rows at once

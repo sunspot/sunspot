@@ -61,7 +61,7 @@ module Sunspot
       # String:: ID for use in Solr
       #
       def index_id #:nodoc:
-        "#{@instance.class.name} #{id}"
+        InstanceAdapter.index_id_for(@instance.class.name, id)
       end
 
       class <<self
@@ -125,6 +125,10 @@ module Sunspot
 
           raise(Sunspot::NoAdapterError,
                 "No adapter is configured for #{original_class_name} or its superclasses. See the documentation for Sunspot::Adapters")
+        end
+
+        def index_id_for(class_name, id)
+          "#{class_name} #{id}"
         end
 
         protected

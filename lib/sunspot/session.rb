@@ -99,6 +99,21 @@ module Sunspot
       commit
     end
 
+    def remove_by_id(clazz, id)
+      class_name =
+        if clazz.is_a?(Class)
+          clazz.name
+        else
+          clazz.to_s
+        end
+      indexer.remove_by_id(class_name, id)
+    end
+
+    def remove_by_id!(clazz, id)
+      remove_by_id(clazz, id)
+      commit
+    end
+
     #
     # See Sunspot.remove_all
     #

@@ -17,7 +17,8 @@
   </types>
   <fields>
     <field indexed='true' multiValued='false' name='id' stored='true' type='string' />
-    <field indexed='true' multiValued='true' name='type' stored='true' type='string' />
+    <field indexed='true' multiValued='true' name='type' stored='false' type='string' />
+    <field indexed='true' multiValued='false' name='class_name' stored='false' type='string' />
     <field indexed='true' multiValued='true' name='text' stored='false' type='text' />
     <dynamicField indexed='true' multiValued='true' name='*_text' stored='false' type='text' />
     <dynamicField indexed='true' name='random_*' stored='false' type='rand' />

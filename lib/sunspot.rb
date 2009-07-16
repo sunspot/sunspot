@@ -328,6 +328,14 @@ module Sunspot
       session.remove!(*objects)
     end
 
+    def remove_by_id(clazz, id)
+      session.remove_by_id(clazz, id)
+    end
+
+    def remove_by_id!(clazz, id)
+      session.remove_by_id!(clazz, id)
+    end
+
     # Remove all objects of the given classes from the index. There isn't much
     # use for this in general operations but it can be useful for maintenance,
     # testing, etc. If no arguments are passed, remove everything from the
