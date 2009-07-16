@@ -1,5 +1,5 @@
 module Sunspot
-  class Query
+  module Query
     module Restriction #:nodoc:
       class <<self
         #

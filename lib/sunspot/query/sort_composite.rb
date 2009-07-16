@@ -1,5 +1,5 @@
 module Sunspot
-  class Query
+  module Query
     class SortComposite
       def initialize
         @sorts = []

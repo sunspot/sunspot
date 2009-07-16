@@ -109,6 +109,13 @@ describe 'Search' do
     connection.should have_last_search_with(:fq => ['average_rating_f:[3\.0 TO *]'])
   end
 
+  it 'should scope by short-form between match with integers' do
+    session.search Post do
+      with :blog_id, 2..4
+    end
+    connection.should have_last_search_with(:fq => ['blog_id_i:[2 TO 4]'])
+  end
+
   it 'should scope by between match with float' do
     session.search Post do
       with(:average_rating).between 2.0..4.0
@@ -154,6 +161,13 @@ describe 'Search' do
       without(:average_rating).greater_than 3.0
     end
     connection.should have_last_search_with(:fq => ['-average_rating_f:[3\.0 TO *]'])
+  end
+  
+  it 'should scope by not between match with shorthand' do
+    session.search Post do
+      without(:blog_id, 2..4)
+    end
+    connection.should have_last_search_with(:fq => ['-blog_id_i:[2 TO 4]'])
   end
 
   it 'should scope by not between match with float' do
@@ -259,6 +273,31 @@ describe 'Search' do
     )
   end
 
+  it 'should create a disjunction with negated restrictions' do
+    session.search Post do
+      any_of do
+        with :category_ids, 1
+        without(:average_rating).greater_than(3.0)
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '(category_ids_im:1 OR -average_rating_f:[3\.0 TO *])'
+    )
+  end
+
+  it 'should create a disjunction with instance exclusion' do
+    post = Post.new
+    session.search Post do
+      any_of do
+        without(post)
+        with(:category_ids, 1)
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => "(-id:Post\\ #{post.id} OR category_ids_im:1)"
+    )
+  end
+
   it 'should restrict by dynamic string field with equality restriction' do
     session.search Post do
       dynamic :custom_string do
@@ -312,6 +351,20 @@ describe 'Search' do
       end
     end
     connection.should have_last_search_with(:fq => ['-custom_string\:test_s:foo'])
+  end
+
+  it 'should search by a dynamic field inside a disjunction' do
+    session.search Post do
+      any_of do
+        dynamic :custom_string do
+          with :test, 'foo'
+        end
+        with :title, 'bar'
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '(custom_string\:test_s:foo OR title_ss:bar)'
+    )
   end
 
   it 'should throw an UnrecognizedFieldError if an unknown dynamic field is searched by' do

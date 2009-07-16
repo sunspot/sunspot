@@ -49,7 +49,7 @@ module Sunspot
         if value == NONE
           DSL::Restriction.new(field_name.to_sym, @query, false)
         else
-          @query.add_restriction(field_name, Sunspot::Query::Restriction::EqualTo, value, false)
+          @query.add_shorthand_restriction(field_name, value)
         end
       end
 
@@ -98,7 +98,7 @@ module Sunspot
           if value == NONE
             DSL::Restriction.new(field_name.to_sym, @query, true)
           else
-            @query.add_negated_restriction(field_name, Sunspot::Query::Restriction::EqualTo, value)
+            @query.add_negated_shorthand_restriction(field_name, value)
           end
         else
           instances = args
@@ -114,6 +114,30 @@ module Sunspot
 
       def all_of(&block)
         Util.instance_eval_or_call(Scope.new(@query.add_conjunction), &block)
+      end
+
+      #
+      # Apply restrictions, facets, and ordering to dynamic field instances.
+      # The block API is implemented by Sunspot::DSL::Scope, which is a
+      # superclass of the Query DSL (thus providing a subset of the API, in
+      # particular only methods that refer to particular fields).
+      # 
+      # ==== Parameters
+      # 
+      # base_name<Symbol>:: The base name for the dynamic field definition
+      #
+      # ==== Example
+      #
+      #   Sunspot.search Post do
+      #     dynamic :custom do
+      #       with :cuisine, 'Pizza'
+      #       facet :atmosphere
+      #       order_by :chef_name
+      #     end
+      #   end
+      #
+      def dynamic(base_name, &block)
+        FieldQuery.new(@query.dynamic_query(base_name)).instance_eval(&block)
       end
     end
   end

@@ -1,21 +1,11 @@
 module Sunspot
-  class Query
+  module Query
     #TODO document
     module Connective
-      class Abstract
+      class Abstract < Scope
         def initialize(setup)
           @setup = setup
           @components = []
-        end
-
-        def add_restriction(field_name, restriction_type, value, negated = false)
-          if restriction_type.is_a?(Symbol)
-            restriction_type = Restriction[restriction_type]
-          end
-          @components << restriction = restriction_type.new(
-            @setup.field(field_name), value, negated
-          )
-          restriction
         end
 
         def add_conjunction
@@ -32,6 +22,10 @@ module Sunspot
             component.to_boolean_phrase
           end
           "(#{component_phrases.join(" #{connector} ")})"
+        end
+
+        def add_component(component)
+          @components << component
         end
       end
 

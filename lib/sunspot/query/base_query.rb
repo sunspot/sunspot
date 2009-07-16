@@ -1,5 +1,5 @@
 module Sunspot
-  class Query
+  module Query
     class BaseQuery
       include RSolr::Char
 

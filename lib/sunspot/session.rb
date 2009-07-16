@@ -41,7 +41,7 @@ module Sunspot
         else
           CompositeSetup.for(types)
         end
-      Search.new(connection, setup, Query.new(setup, @config))
+      Search.new(connection, setup, Query::Query.new(setup, @config))
     end
 
     #

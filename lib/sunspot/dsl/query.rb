@@ -49,30 +49,6 @@ module Sunspot
         raise ArgumentError, "unknown argument #{options.keys.first.inspect} passed to paginate" unless options.empty?
         @query.paginate(page, per_page)
       end
-
-      #
-      # Apply restrictions, facets, and ordering to dynamic field instances.
-      # The block API is implemented by Sunspot::DSL::Scope, which is a
-      # superclass of the Query DSL (thus providing a subset of the API, in
-      # particular only methods that refer to particular fields).
-      # 
-      # ==== Parameters
-      # 
-      # base_name<Symbol>:: The base name for the dynamic field definition
-      #
-      # ==== Example
-      #
-      #   Sunspot.search Post do
-      #     dynamic :custom do
-      #       with :cuisine, 'Pizza'
-      #       facet :atmosphere
-      #       order_by :chef_name
-      #     end
-      #   end
-      #
-      def dynamic(base_name, &block)
-        FieldQuery.new(@query.dynamic_query(base_name)).instance_eval(&block)
-      end
     end
   end
 end

@@ -3,11 +3,15 @@ begin
   require 'spec'
   begin
     require 'ruby-debug'
-  rescue LoadError
-    module Kernel
-      def debugger
-        STDERR.puts('Debugger is not available')
+  rescue LoadError => e
+    if using_gems
+      module Kernel
+        def debugger
+          STDERR.puts('Debugger is not available')
+        end
       end
+    else
+      raise(e)
     end
   end
   if ENV['USE_WILL_PAGINATE']
