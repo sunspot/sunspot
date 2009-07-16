@@ -1,7 +1,4 @@
 === 0.9 ===
-* Better coverage for Connectives (negation, dynamic fields, etc.)
-* DRY up Query, DynamicQuery, Connective
-* Detect Arrays in short-form #with()
 * Expose delete by ID
 * Descriptive error messages during indexing
 * Facet by type (?)

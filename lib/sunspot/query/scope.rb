@@ -48,8 +48,11 @@ module Sunspot
 
       def add_shorthand_restriction(field_name, value, negated = false) #:nodoc:
         restriction_type =
-          if value.is_a?(Range)
+          case value
+          when Range
             Restriction::Between
+          when Array
+            Restriction::AnyOf
           else
             Restriction::EqualTo
           end

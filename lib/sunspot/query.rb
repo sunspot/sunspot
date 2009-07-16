@@ -167,16 +167,7 @@ module Sunspot
         if options.has_key?(:conditions)
           options[:conditions].each_pair do |field_name, value|
             begin
-              restriction_type =
-                case value
-                when Array
-                  Restriction::AnyOf
-                when Range
-                  Restriction::Between
-                else
-                  Restriction::EqualTo
-                end
-              add_restriction(field_name, restriction_type, value)
+              add_shorthand_restriction(field_name, value)
             rescue UnrecognizedFieldError
               # ignore fields we don't recognize
             end

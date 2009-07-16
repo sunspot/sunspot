@@ -135,6 +135,13 @@ describe 'Search' do
     connection.should have_last_search_with(:fq => ['category_ids_im:(2 OR 7 OR 12)'])
   end
 
+  it 'should scope by short-form any-of match with integers' do
+    session.search Post do
+      with :category_ids, [2, 7, 12]
+    end
+    connection.should have_last_search_with(:fq => ['category_ids_im:(2 OR 7 OR 12)'])
+  end
+
   it 'should scope by all match with integer' do
     session.search Post do
       with(:category_ids).all_of [2, 7, 12]
