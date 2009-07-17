@@ -38,13 +38,24 @@ module Sunspot
       #   Return facet rows for which there are no matches (equivalent to
       #   :minimum_count => 0). Default is false.
       #
-      def facet(*field_names)
-        options = 
-          if field_names.last.is_a?(Hash)
-            field_names.pop
+      def facet(*field_names, &block)
+        if block
+          if field_names.length != 1
+            raise(
+              ArgumentError,
+              "wrong number of arguments (#{field_names.length} for 1)"
+            )
           end
-        for field_name in field_names
-          @query.add_field_facet(field_name, options)
+          name = field_names.first
+          DSL::QueryFacet.new(@query.add_query_facet(name)).instance_eval(&block)
+        else
+          options = 
+            if field_names.last.is_a?(Hash)
+              field_names.pop
+            end
+          for field_name in field_names
+            @query.add_field_facet(field_name, options)
+          end
         end
       end
     end

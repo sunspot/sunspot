@@ -169,9 +169,14 @@ module Sunspot
     # Solr::Connection:: The connection for this session
     #
     def connection
-      @connection ||= self.class.connection_class.new(
-        RSolr::Adapter::HTTP.new(:url => config.solr.url)
-      )
+      @connection ||=
+        begin
+          connection = self.class.connection_class.new(
+            RSolr::Adapter::HTTP.new(:url => config.solr.url)
+          )
+          connection.adapter.connector.adapter_name = config.http_client
+          connection
+        end
     end
 
     def indexer

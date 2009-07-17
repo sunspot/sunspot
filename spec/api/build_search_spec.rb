@@ -497,7 +497,7 @@ describe 'Search' do
     session.search Post do
       facet :category_ids
     end
-    connection.should have_last_search_with('facet' => 'true')
+    connection.should have_last_search_with(:facet => 'true')
   end
 
   it 'should request single field facet' do
@@ -634,6 +634,127 @@ describe 'Search' do
       lambda do
         session.search Post do |query|
           query.facet :blog_id, :time_range => @time_range
+        end
+      end.should raise_error(ArgumentError)
+    end
+  end
+
+  describe 'with query faceting' do
+    it 'should turn faceting on' do
+      session.search Post do
+        facet :foo do
+          row :bar do
+            with(:average_rating).between(4.0..5.0)
+          end
+        end
+      end
+      connection.should have_last_search_with(:facet => 'true')
+    end
+
+    it 'should facet by query' do
+      session.search Post do
+        facet :foo do
+          row :bar do
+            with(:average_rating).between(4.0..5.0)
+          end
+        end
+      end
+      connection.should have_last_search_with(:"facet.query" => 'average_rating_f:[4\.0 TO 5\.0]')
+    end
+
+    it 'should request multiple query facets' do
+      session.search Post do
+        facet :foo do
+          row :bar do
+            with(:average_rating).between(3.0..4.0)
+          end
+          row :baz do
+            with(:average_rating).between(4.0..5.0)
+          end
+        end
+      end
+      connection.should have_last_search_with(
+        :"facet.query" => [
+          'average_rating_f:[3\.0 TO 4\.0]',
+          'average_rating_f:[4\.0 TO 5\.0]'
+        ]
+      )
+    end
+
+    it 'should request query facet with multiple conditions' do
+      session.search Post do
+        facet :foo do
+          row :bar do
+            with(:category_ids, 1)
+            with(:blog_id, 2)
+          end
+        end
+      end
+      connection.should have_last_search_with(
+        :"facet.query" => '(category_ids_im:1 AND blog_id_i:2)'
+      )
+    end
+
+    it 'should request query facet with disjunction' do
+      session.search Post do
+        facet :foo do
+          row :bar do
+            any_of do
+              with(:category_ids, 1)
+              with(:blog_id, 2)
+            end
+          end
+        end
+      end
+      connection.should have_last_search_with(
+        :"facet.query" => '(category_ids_im:1 OR blog_id_i:2)'
+      )
+    end
+
+    it 'should request query facet with internal dynamic field' do
+      session.search Post do
+        facet :test do
+          row 'foo' do
+            dynamic :custom_string do
+              with :test, 'foo'
+            end
+          end
+        end
+      end
+      connection.should have_last_search_with(
+        :"facet.query" => 'custom_string\:test_s:foo'
+      )
+    end
+
+    it 'should request query facet with external dynamic field' do
+      session.search Post do
+        dynamic :custom_string do
+          facet :test do
+            row 'foo' do
+              with :test, 'foo'
+            end
+          end
+        end
+      end
+      connection.should have_last_search_with(
+        :"facet.query" => 'custom_string\:test_s:foo'
+      )
+    end
+
+    it 'should not allow 0 arguments to facet method with block' do
+      lambda do
+        session.search Post do
+          facet do
+          end
+        end
+      end.should raise_error(ArgumentError)
+    end
+
+    it 'should not allow more than 1 argument to facet method with block' do
+      lambda do
+        session.search Post do
+          facet :foo, :bar do
+          end
         end
       end.should raise_error(ArgumentError)
     end

@@ -9,7 +9,7 @@ module Sunspot
         end
 
         def add_conjunction
-          @components << conjunction = Conjunction.new(@setup)
+          @components << conjunction = Conjunction.new(setup)
           conjunction
         end
 
@@ -18,10 +18,14 @@ module Sunspot
         end
 
         def to_boolean_phrase
-          component_phrases = @components.map do |component|
-            component.to_boolean_phrase
+          if @components.length == 1
+            @components.first.to_boolean_phrase
+          else
+            component_phrases = @components.map do |component|
+              component.to_boolean_phrase
+            end
+            "(#{component_phrases.join(" #{connector} ")})"
           end
-          "(#{component_phrases.join(" #{connector} ")})"
         end
 
         def add_component(component)

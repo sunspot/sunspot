@@ -65,7 +65,7 @@ module Sunspot
 
       #TODO document
       def add_disjunction
-        @components << disjunction = Connective::Disjunction.new(@setup)
+        add_component(disjunction = Connective::Disjunction.new(setup))
         disjunction
       end
 
@@ -103,13 +103,17 @@ module Sunspot
       #   definitions.
       #
       def dynamic_query(base_name)
-        DynamicQuery.new(@setup.dynamic_field_factory(base_name), self)
+        DynamicQuery.new(setup.dynamic_field_factory(base_name), self)
       end
 
       private
 
       def build_field(field_name)
-        @setup.field(field_name)
+        setup.field(field_name)
+      end
+
+      def setup
+        @setup
       end
     end
   end

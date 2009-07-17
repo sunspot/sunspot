@@ -34,7 +34,7 @@ module Sunspot
       # Hash:: solr-ruby params for this field facet
       #
       def to_params
-        params = { :"facet.field" => [@field.indexed_name], 'facet' => 'true' }
+        params = { :"facet.field" => [@field.indexed_name], :facet => 'true' }
         params[param_key(:sort)] = 
           case @options[:sort]
           when :count then 'true'

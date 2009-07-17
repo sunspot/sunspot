@@ -59,6 +59,7 @@ module Sunspot
       def build(dynamic_name)
         AttributeField.new("#{@name}:#{dynamic_name}", @type, @options.dup)
       end
+      alias_method :field, :build
 
       def populate_document(document, model)
         if values = @data_extractor.value_for(model)

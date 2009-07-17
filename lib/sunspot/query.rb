@@ -1,4 +1,5 @@
-%w(base_query scope field_query connective dynamic_query field_facet pagination restriction sort sort_composite).each do |file|
+%w(base_query scope field_query connective dynamic_query field_facet query_facet
+   query_facet_row pagination restriction sort sort_composite).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -17,9 +18,12 @@ module Sunspot
   #
   module Query
     class Query < FieldQuery
+      attr_reader :query_facets
+
       def initialize(setup, configuration) #:nodoc:
         @setup, @configuration = setup, configuration
         @components = []
+        @query_facets = {}
         @components << @base_query = BaseQuery.new(setup)
         @components << @pagination = Pagination.new(@configuration)
         @components << @sort = SortComposite.new
@@ -62,6 +66,10 @@ module Sunspot
 
       def order_by_random
         add_sort(Sort.new(RandomField.new))
+      end
+
+      def query_facet(name)
+        @query_facets[name.to_sym]
       end
 
       # 

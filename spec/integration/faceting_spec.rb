@@ -135,4 +135,35 @@ describe 'search faceting' do
       search.facet(:class).rows.last.count.should == 1
     end
   end
+
+  context 'query facets' do
+    before :all do
+      Sunspot.remove_all
+      Sunspot.index!(
+        [1.1, 1.2, 3.2, 3.4, 3.9, 4.1].map do |rating|
+          Post.new(:ratings_average => rating)
+        end
+      )
+    end
+
+    it 'should return specified facets' do
+      search = Sunspot.search(Post) do
+        facet :rating_range do
+          for rating in [1.0, 2.0, 3.0, 4.0]
+            range = rating..(rating + 1.0)
+            row range do
+              with :average_rating, rating..(rating + 1.0)
+            end
+          end
+        end
+      end
+      facet = search.facet(:rating_range)
+      facet.rows[0].value.should == (3.0..4.0)
+      facet.rows[0].count.should == 3
+      facet.rows[1].value.should == (1.0..2.0)
+      facet.rows[1].count.should == 2
+      facet.rows[2].value.should == (4.0..5.0)
+      facet.rows[2].count.should == 1
+    end
+  end
 end

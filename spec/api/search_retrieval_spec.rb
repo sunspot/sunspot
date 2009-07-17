@@ -164,6 +164,46 @@ describe 'retrieving search' do
     facet.rows.last.value.should == ((start_time+24*60*60)..end_time)
   end
 
+  it 'should return query facet' do
+    stub_query_facet(
+      'average_rating_f:[3\.0 TO 5\.0]' => 3,
+      'average_rating_f:[1\.0 TO 3\.0]' => 1
+    )
+    search = session.search(Post) do
+      facet :average_rating do
+        row 3.0..5.0 do
+          with :average_rating, 3.0..5.0
+        end
+        row 1.0..3.0 do
+          with :average_rating, 1.0..3.0
+        end
+      end
+    end
+    facet = search.facet(:average_rating)
+    facet.rows.first.value.should == (3.0..5.0)
+    facet.rows.first.count.should == 3
+    facet.rows.last.value.should == (1.0..3.0)
+    facet.rows.last.count.should == 1
+  end
+
+  it 'should return query facet specified in dynamic call' do
+    stub_query_facet(
+      'custom_string\:test_s:(foo OR bar)' => 3
+    )
+    search = session.search(Post) do
+      dynamic :custom_string do
+        facet :test do
+          row :foo_bar do
+            with :test, %w(foo bar)
+          end
+        end
+      end
+    end
+    facet = search.facet(:test)
+    facet.rows.first.value.should == :foo_bar
+    facet.rows.first.count.should == 3
+  end
+
   it 'should return dynamic string facet' do
     stub_facet(:"custom_string:test_s", 'two' => 2, 'one' => 1)
     result = session.search(Post) { dynamic(:custom_string) { facet(:test) }}
@@ -235,6 +275,12 @@ describe 'retrieving search' do
           name.to_s => { 'gap' => "+#{gap}SECONDS" }.merge(values)
         }
       }
+    )
+  end
+
+  def stub_query_facet(values)
+    connection.stub!(:select).and_return(
+      'facet_counts' => { 'facet_queries' => values }
     )
   end
 

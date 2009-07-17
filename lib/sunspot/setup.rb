@@ -70,7 +70,7 @@ module Sunspot
       else
         raise(
           UnrecognizedFieldError,
-          "No text field configured for #{@clazz.name} with name '#{field_name}'"
+          "No field configured for #{@clazz.name} with name '#{field_name}'"
         )
       end
     end
@@ -89,7 +89,7 @@ module Sunspot
     def dynamic_field_factory(field_name)
       @dynamic_field_factories_cache[field_name.to_sym] || raise(
         UnrecognizedFieldError,
-        "No text field configured for #{@clazz.name} with name '#{field_name}'"
+        "No dynamic field configured for #{@clazz.name} with name '#{field_name}'"
       )
     end
 

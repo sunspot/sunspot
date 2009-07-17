@@ -34,9 +34,13 @@ module Sunspot
       end
 
       private
-
-      def build_field(field_name)
-        @dynamic_field.build(field_name)
+      
+      def setup
+        @dynamic_field
+      end
+      
+      def query_facets
+        @query.query_facets
       end
     end
   end

@@ -12,6 +12,13 @@ module Sunspot
         add_component(FieldFacet.build(build_field(field_name), options || {}))
       end
 
+      #TODO document
+      def add_query_facet(name)
+        add_component(facet = QueryFacet.new(name, setup))
+        query_facets[name.to_sym] = facet
+        facet
+      end
+
       # 
       # Set result ordering.
       #
