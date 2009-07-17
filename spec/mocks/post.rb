@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'blog')
+
 class Post < MockRecord
   attr_accessor :title, :body, :blog_id, :published_at, :ratings_average,
                 :author_name, :featured, :expire_date

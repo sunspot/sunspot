@@ -73,18 +73,6 @@ module Sunspot
       end
 
       # 
-      # Build the query using the DSL block passed into Sunspot.search
-      #
-      # ==== Returns
-      #
-      # Sunspot::Query:: self
-      #
-      def build(&block)
-        Util.instance_eval_or_call(dsl, &block)
-        self
-      end
-
-      # 
       # Representation of this query as solr-ruby parameters. Constructs the hash
       # by deep-merging scope and facet parameters, adding in various other
       # parameters from instance data.
@@ -128,17 +116,6 @@ module Sunspot
       #
       def per_page #:nodoc:
         @pagination.per_page
-      end
-
-      # 
-      # Get a DSL instance for building this query.
-      #
-      # ==== Returns
-      #
-      # Sunspot::DSL::Query:: DSL instance
-      #
-      def dsl #:nodoc:
-        @dsl ||= DSL::Query.new(self)
       end
 
       #TODO document

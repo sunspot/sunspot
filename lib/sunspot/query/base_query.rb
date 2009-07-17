@@ -61,7 +61,7 @@ module Sunspot
       def text_field_names
         text_fields =
           if @text_field_names
-            @text_field_names.map do |field_name|
+            Array(@text_field_names).map do |field_name|
               @setup.text_field(field_name.to_sym)
             end
           else

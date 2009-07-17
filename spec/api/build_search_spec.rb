@@ -793,6 +793,30 @@ describe 'Search' do
     connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
   end
 
+  it 'should allow search on dynamic fields common to all types' do
+    session.search Post, Namespaced::Comment do
+      dynamic :custom_string do
+        with(:test, 'test')
+      end
+    end
+    connection.should have_last_search_with(:fq => ['custom_string\\:test_s:test'])
+  end
+
+  it 'should combine all text fields' do
+    session.search Post, Namespaced::Comment do
+      keywords 'keywords'
+    end
+    connection.searches.last[:qf].split(' ').sort.should == 
+      %w(author_name_text backwards_title_text body_text title_text)
+  end
+
+  it 'should allow specification of a text field that only exists in one type' do
+    session.search Post, Namespaced::Comment do
+      keywords 'keywords', :fields => :author_name
+    end
+    connection.searches.last[:qf].should == 'author_name_text'
+  end
+
   it 'should raise Sunspot::UnrecognizedFieldError if search scoped to field not common to all types' do
     lambda do
       session.search Post, Namespaced::Comment do
@@ -805,6 +829,14 @@ describe 'Search' do
     lambda do
       session.search Post, Namespaced::Comment do
         with :average_rating, 2.2 # this is a float in Post but an integer in Comment
+      end
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
+  it 'should raise Sunspot::UnrecognizedFieldError if a text field that does not exist for any type is specified' do
+    lambda do
+      session.search Post, Namespaced::Comment do
+        keywords 'fulltext', :fields => :bogus
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
@@ -826,6 +858,14 @@ describe 'Search' do
     lambda do
       session.search Post do
         with :bogus, 'Field'
+      end
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
+  it 'should raise Sunspot::UnrecognizedFieldError for nonexistant fields in keywords' do
+    lambda do
+      session.search Post do
+        keywords 'text', :fields => :bogus
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end

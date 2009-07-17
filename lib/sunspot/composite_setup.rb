@@ -16,7 +16,7 @@ module Sunspot
       @type_names ||= @types.map { |clazz| clazz.name }
     end
 
-    def text_field(name)
+    def text_field(field_name)
       text_fields_hash[field_name.to_sym] || raise(
         UnrecognizedFieldError,
         "No text field configured for #{@types * ', '} with name '#{field_name}'"
@@ -56,14 +56,6 @@ module Sunspot
 
     def text_fields
       @text_fields ||= text_fields_hash.values
-    end
-
-    def fields
-      @fields ||= fields_hash.values
-    end
-
-    def dynamic_fields
-      @dynamic_fields ||= fields_hash.values
     end
 
     private
