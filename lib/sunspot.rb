@@ -405,8 +405,14 @@ module Sunspot
     # Resets the singleton session. This is useful for clearing out all
     # static data between tests, but probably nowhere else.
     #
-    def reset!
-      @session = Session.new(session.config)
+    def reset!(keep_config = false)
+      config =
+        if keep_config
+          session.config
+        else
+          Configuration.build
+        end
+      @session = Session.new(config)
     end
 
     private
