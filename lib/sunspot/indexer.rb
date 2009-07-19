@@ -65,7 +65,11 @@ module Sunspot
     #
     def prepare(model)
       document = document_for(model)
-      for field_factory in setup_for(model).all_field_factories
+      setup = setup_for(model)
+      if boost = setup.document_boost_for(model)
+        document.attrs[:boost] = boost
+      end
+      for field_factory in setup.all_field_factories
         field_factory.populate_document(document, model)
       end
       document

@@ -57,6 +57,19 @@ module Sunspot
       @dynamic_field_factories_cache[field_factory.name] = field_factory
     end
 
+    def add_document_boost(attr_name, &block)
+      @document_boost_extractor =
+        if attr_name
+          if attr_name.respond_to?(:to_f)
+            DataExtractor::Constant.new(attr_name)
+          else
+            DataExtractor::AttributeExtractor.new(attr_name)
+          end
+        else
+          DataExtractor::BlockExtractor.new(&block)
+        end
+    end
+
     # 
     # Builder method for evaluating the setup DSL
     #
@@ -158,6 +171,12 @@ module Sunspot
     #
     def clazz
       Util.full_const_get(@class_name)
+    end
+
+    def document_boost_for(model)
+      if @document_boost_extractor
+        @document_boost_extractor.value_for(model)
+      end
     end
 
     protected

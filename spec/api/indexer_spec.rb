@@ -234,6 +234,21 @@ describe 'indexer' do
     end
   end
 
+  it 'should index document level boost using block' do
+    session.index(post(:ratings_average => 4.0))
+    connection.adds.last.first.attrs[:boost].should == 1.25
+  end
+
+  it 'should index document level boost using attribute' do
+    session.index(Namespaced::Comment.new(:boost => 1.5))
+    connection.adds.last.first.attrs[:boost].should == 1.5
+  end
+
+  it 'should index document level boost defined statically' do
+    session.index(Photo.new)
+    connection.adds.last.first.attrs[:boost].should == 0.75
+  end
+
   it 'should throw a NoMethodError only if a nonexistent type is defined' do
     lambda { Sunspot.setup(Post) { string :author_name }}.should_not raise_error
     lambda { Sunspot.setup(Post) { bogus :journey }}.should raise_error(NoMethodError)

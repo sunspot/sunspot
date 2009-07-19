@@ -39,6 +39,10 @@ module Sunspot
         end
       end
 
+      def boost(attr_name = nil, &block)
+        @setup.add_document_boost(attr_name, &block)
+      end
+
       # method_missing is used to provide access to typed fields, because
       # developers should be able to add new Sunspot::Type implementations
       # dynamically and have them recognized inside the Fields DSL. Like #text,

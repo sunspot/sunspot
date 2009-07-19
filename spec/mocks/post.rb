@@ -61,4 +61,10 @@ Sunspot.setup(Post) do
   end
   dynamic_time :custom_time
   dynamic_boolean :custom_boolean
+
+  boost do
+    if ratings_average
+      1 + (ratings_average - 3.0) / 4.0
+    end
+  end
 end

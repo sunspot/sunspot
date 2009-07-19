@@ -56,9 +56,26 @@ describe 'keyword search' do
       Sunspot.index!(*@posts)
     end
 
-    it 'should assign a higher boost to the result matching the higher-boosted field' do
+    it 'should assign a higher score to the result matching the higher-boosted field' do
       search = Sunspot.search(Post) { keywords 'rhinoceros' }
       search.hits.map { |hit| hit.primary_key }.should ==
+        @posts.map { |post| post.id.to_s }
+      search.hits.first.score.should > search.hits.last.score
+    end
+  end
+
+  describe 'with document boost' do
+    before :all do
+      Sunspot.remove_all
+      @posts = [4.0, 2.0].map do |rating|
+        Post.new(:title => 'Test', :ratings_average => rating)
+      end
+      Sunspot.index!(*@posts)
+    end
+
+    it 'should assign a higher score to the higher-boosted document' do
+      search = Sunspot.search(Post) { keywords 'test' }
+      search.hits.map { |hit| hit.primary_key }.should == 
         @posts.map { |post| post.id.to_s }
       search.hits.first.score.should > search.hits.last.score
     end
