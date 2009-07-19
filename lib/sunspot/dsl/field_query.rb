@@ -1,5 +1,10 @@
 module Sunspot
   module DSL
+    # 
+    # Provides an API for areas of the query DSL that operate on specific
+    # fields. This functionality is provided by the query DSL and the dynamic
+    # query DSL.
+    #
     class FieldQuery < Scope
       # Specify the order that results should be returned in. This method can
       # be called multiple times; precedence will be in the order given.
@@ -13,6 +18,10 @@ module Sunspot
         @query.order_by(field_name, direction)
       end
 
+      # 
+      # Order results randomly. This will (generally) return the results in a
+      # different order each time a search is called.
+      #
       def order_by_random
         @query.order_by_random
       end

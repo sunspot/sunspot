@@ -328,10 +328,26 @@ module Sunspot
       session.remove!(*objects)
     end
 
+    # 
+    # Remove an object from the index using its class name and primary key.
+    # Useful if you know this information and want to remove an object without
+    # instantiating it from persistent storage
+    #
+    # ==== Parameters
+    #
+    # clazz<Class>:: Class of the object, or class name as a string or symbol
+    # id::
+    #   Primary key of the object. This should be the same id that would be
+    #   returned by the class's instance adapter.
+    #
     def remove_by_id(clazz, id)
       session.remove_by_id(clazz, id)
     end
 
+    # 
+    # Remove an object by class name and primary key, and immediately commit.
+    # See #remove_by_id and #commit
+    #
     def remove_by_id!(clazz, id)
       session.remove_by_id!(clazz, id)
     end
@@ -367,6 +383,23 @@ module Sunspot
       session.remove_all!(*classes)
     end
 
+    # 
+    # Process all adds in a batch. Any Sunspot adds initiated inside the block
+    # will be sent in bulk when the block finishes. Useful if your application
+    # initiates index adds from various places in code as part of a single
+    # operation; doing a batch add will give better performance.
+    #
+    # ==== Example
+    #
+    #   Sunspot.batch do
+    #     post = Post.new
+    #     Sunspot.add(post)
+    #     comment = Comment.new
+    #     Sunspot.add(comment)
+    #   end
+    #
+    # Sunspot will send both the post and the comment in a single request.
+    #
     def batch(&block)
       session.batch(&block)
     end
@@ -404,6 +437,12 @@ module Sunspot
     # 
     # Resets the singleton session. This is useful for clearing out all
     # static data between tests, but probably nowhere else.
+    #
+    # ==== Parameters
+    #
+    # keep_config<Boolean>::
+    #   Whether to retain the configuration used by the current singleton
+    #   session. Default false.
     #
     def reset!(keep_config = false)
       config =

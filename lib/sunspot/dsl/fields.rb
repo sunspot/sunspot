@@ -17,9 +17,16 @@ module Sunspot
       # the only fields searched in fulltext searches. If a block is passed,
       # create a virtual field; otherwise create an attribute field.
       #
+      # If options are passed, they will be applied to all the given fields.
+      #
       # ==== Parameters
       #
       # names...<Symbol>:: One or more field names
+      #
+      # ==== Options
+      #
+      # :boost<Float>::
+      #   Boost that should be applied to this field for keyword search
       #
       def text(*names, &block)
         options = names.pop if names.last.is_a?(Hash)
