@@ -9,13 +9,19 @@ module Sunspot
   #
   class Session
     class <<self
-      attr_writer :connection_class
+      attr_writer :connection_class #:nodoc:
       
-      def connection_class
+      # 
+      # For testing purposes
+      #
+      def connection_class #:nodoc:
         @connection_class ||= RSolr::Connection
       end
     end
 
+    # 
+    # Sunspot::Configuration object for this session
+    #
     attr_reader :config
 
     # 
@@ -99,6 +105,9 @@ module Sunspot
       commit
     end
 
+    # 
+    # See Sunspot.remove_by_id
+    #
     def remove_by_id(clazz, id)
       class_name =
         if clazz.is_a?(Class)
@@ -109,6 +118,9 @@ module Sunspot
       indexer.remove_by_id(class_name, id)
     end
 
+    # 
+    # See Sunspot.remove_by_id!
+    #
     def remove_by_id!(clazz, id)
       remove_by_id(clazz, id)
       commit
@@ -152,6 +164,9 @@ module Sunspot
       commit if dirty?
     end
 
+    # 
+    # See Sunspot.batch
+    #
     def batch
       indexer.start_batch
       yield

@@ -4,7 +4,8 @@ module Sunspot
   # 
   # This class encapsulates the results of a Solr search. It provides access
   # to search results, total result count, facets, and pagination information.
-  # Instances of Search are returned by the Sunspot.search method.
+  # Instances of Search are returned by the Sunspot.search and
+  # Sunspot.new_search methods.
   #
   class Search
     # Query information for this search. If you wish to build the query without
@@ -15,11 +16,6 @@ module Sunspot
 
     def initialize(connection, setup, query) #:nodoc:
       @connection, @setup, @query = connection, setup, query
-    end
-
-    def build(&block)
-      Util.instance_eval_or_call(dsl, &block)
-      self
     end
 
     #
@@ -55,14 +51,13 @@ module Sunspot
     end
 
     # 
-    # Access raw results without instantiating objects from persistent storage.
-    # This may be useful if you are using search as an intermediate step in data
-    # retrieval. Returns an ordered collection of objects that respond to
-    # #class_name and #primary_key
+    # Access raw Solr result information. Returns a collection of Hit objects
+    # that contain the class name, primary key, keyword relevance score (if
+    # applicable), and any stored fields.
     #
     # ==== Returns
     #
-    # Array:: Ordered collection of raw results
+    # Array:: Ordered collection of Hit objects
     #
     def hits
       @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, self) }
@@ -97,7 +92,7 @@ module Sunspot
         begin
           query_facet(field_name) ||
             begin
-              field = self.field(field_name)
+              field = field(field_name)
               date_facet(field) ||
                 begin
                   facet_class = field.reference ? InstantiatedFacet : Facet
@@ -105,33 +100,6 @@ module Sunspot
                 end
             end
         end
-    end
-
-    def date_facet(field)
-      if field.type == Type::TimeType
-        if @solr_result['facet_counts'].has_key?('facet_dates')
-          if facet_result = @solr_result['facet_counts']['facet_dates'][field.indexed_name]
-            DateFacet.new(facet_result, field)
-          end
-        end
-      end
-    end
-
-    def query_facet(name)
-      if query_facet = @query.query_facet(name.to_sym)
-        if @solr_result['facet_counts'].has_key?('facet_queries')
-          QueryFacet.new(
-            query_facet,
-            @solr_result['facet_counts']['facet_queries']
-          )
-        end
-      end
-    end
-
-    def raw_facet(field) #XXX move into private
-      if field.type == Type::TimeType
-        @solr_result['facet_counts']['facet_dates'][field.indexed_name]
-      end || @solr_result['facet_counts']['facet_fields'][field.indexed_name]
     end
 
     # 
@@ -168,13 +136,26 @@ module Sunspot
         end
     end
 
-    def field(name)
-      @setup.field(name)
-    end
-
+    # 
+    # Get the data accessor that will be used to load a particular class out of
+    # persistent storage. Data accessors can implement any methods that may be
+    # useful for refining how data is loaded out of storage. When building a
+    # search manually (e.g., using the Sunspot#new_search method), this should
+    # be used before calling #execute(). Use the
+    # Sunspot::DSL::Search#data_accessor_for method when building searches using
+    # the block DSL.
+    #
     def data_accessor_for(clazz)
       (@data_accessors ||= {})[clazz.name.to_sym] ||=
         Adapters::DataAccessor.create(clazz)
+    end
+
+    # 
+    # Build this search using a DSL block.
+    #
+    def build(&block) #:nodoc:
+      Util.instance_eval_or_call(dsl, &block)
+      self
     end
 
     private
@@ -210,6 +191,37 @@ module Sunspot
 
     def dsl
       DSL::Search.new(self)
+    end
+
+    def raw_facet(field)
+      if field.type == Type::TimeType
+        @solr_result['facet_counts']['facet_dates'][field.indexed_name]
+      end || @solr_result['facet_counts']['facet_fields'][field.indexed_name]
+    end
+
+    def date_facet(field)
+      if field.type == Type::TimeType
+        if @solr_result['facet_counts'].has_key?('facet_dates')
+          if facet_result = @solr_result['facet_counts']['facet_dates'][field.indexed_name]
+            DateFacet.new(facet_result, field)
+          end
+        end
+      end
+    end
+
+    def query_facet(name)
+      if query_facet = @query.query_facet(name.to_sym)
+        if @solr_result['facet_counts'].has_key?('facet_queries')
+          QueryFacet.new(
+            query_facet,
+            @solr_result['facet_counts']['facet_queries']
+          )
+        end
+      end
+    end
+
+    def field(name)
+      @setup.field(name)
     end
   end
 end

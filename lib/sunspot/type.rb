@@ -122,6 +122,12 @@ module Sunspot
       end
     end
 
+    # 
+    # The DateType encapsulates dates (without time information). Internally,
+    # Solr does not have a date-only type, so this type indexes data using
+    # Solr's DateField type (which is actually date/time), midnight UTC of the
+    # indexed date.
+    #
     module DateType
       class <<self
         def indexed_name(name) #:nodoc:

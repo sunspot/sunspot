@@ -12,7 +12,12 @@ rescue LoadError => e
 end
 
 module Sunspot
-  class Schema
+  # 
+  # Object that encapsulates schema information for building a Solr schema.xml
+  # file. This class is used by the schema:compile task as well as the
+  # sunspot-configure-solr executable.
+  #
+  class Schema #:nodoc:all
     FieldType = Struct.new(:name, :class_name, :suffix)
     FieldVariant = Struct.new(:attribute, :suffix)
 
@@ -39,10 +44,16 @@ module Sunspot
       @filters = DEFAULT_FILTERS.dup
     end
 
+    # 
+    # Attribute field types defined in the schema
+    #
     def types
       FIELD_TYPES
     end
 
+    # 
+    # DynamicField instances representing all the available types and variants
+    #
     def dynamic_fields
       fields = []
       for field_variants in variant_combinations
@@ -53,6 +64,9 @@ module Sunspot
       fields
     end
 
+    # 
+    # Which tokenizer to use for text fields
+    #
     def tokenizer=(tokenizer)
       @tokenizer = 
         if tokenizer =~ /\./
@@ -62,6 +76,9 @@ module Sunspot
         end
     end
 
+    # 
+    # Add a filter for text field tokenization
+    #
     def add_filter(filter)
       @filters <<
         if filter =~ /\./
@@ -71,6 +88,9 @@ module Sunspot
         end
     end
 
+    # 
+    # Return an XML representation of this schema using the Haml template
+    #
     def to_xml
       template = File.read(
         File.join(
@@ -87,6 +107,9 @@ module Sunspot
 
     private
 
+    #
+    # All of the possible combinations of variants
+    #
     def variant_combinations
       combinations = []
       0.upto(2 ** FIELD_VARIANTS.length - 1) do |b|
@@ -98,20 +121,34 @@ module Sunspot
       combinations
     end
 
+    # 
+    # Represents a dynamic field (in the Solr schema sense, not the Sunspot
+    # sense).
+    #
     class DynamicField
       def initialize(type, field_variants)
         @type, @field_variants = type, field_variants
       end
 
+      # 
+      # Name of the field in the schema
+      #
       def name
         variant_suffixes = @field_variants.map { |variant| variant.suffix }.join
         "*_#{@type.suffix}#{variant_suffixes}"
       end
 
+      # 
+      # Name of the type as defined in the schema
+      #
       def type
         @type.name
       end
 
+      # 
+      # Implement magic methods to ask if a field is of a particular variant.
+      # Returns "true" if the field is of that variant and "false" otherwise.
+      #
       def method_missing(name, *args, &block)
         if name.to_s =~ /\?$/ && args.empty?
           if @field_variants.any? { |variant| "#{variant.attribute}?" == name.to_s }
