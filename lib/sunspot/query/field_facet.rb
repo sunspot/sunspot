@@ -10,6 +10,15 @@ module Sunspot
       class <<self
         protected :new
 
+        # 
+        # Return the appropriate FieldFacet instance for the field and options.
+        # If a :time_range option is specified, and the field type is TimeType,
+        # build a DateFieldFacet. Otherwise, build a normal FieldFacet.
+        #
+        # ==== Returns
+        #
+        # FieldFacet:: FieldFacet instance of appropriate class.
+        #
         def build(field, options)
           if options.has_key?(:time_range)
             unless field.type == Type::TimeType
@@ -53,14 +62,25 @@ module Sunspot
 
       private
 
+      # 
+      # Given a facet parameter name, return the appropriate Solr parameter for
+      # this facet.
+      #
+      # ==== Returns
+      #
+      # Symbol:: Solr query parameter key
+      #
       def param_key(name)
         :"f.#{@field.indexed_name}.facet.#{name}"
       end
     end
 
-    class DateFieldFacet < FieldFacet
+    class DateFieldFacet < FieldFacet #:nodoc:
       ALLOWED_OTHER = Set.new(%w(before after between none all))
 
+      # 
+      # Convert the facet to date params.
+      #
       def to_params
         super.merge(
           :"facet.date" => [@field.indexed_name],
@@ -73,18 +93,43 @@ module Sunspot
 
       private
 
+      # 
+      # Start time for facet range
+      #
+      # ==== Returns
+      #
+      # Time:: Start time
+      #
       def start_time
         @options[:time_range].first
       end
 
+      # 
+      # End time for facet range
+      #
+      # ==== Returns
+      #
+      # Time:: End time
+      #
       def end_time
         @options[:time_range].last
       end
 
+      # 
+      # Time interval that each facet row should cover. Default is 1 day.
+      #
+      # ===== Returns
+      #
+      # Integer:: Time interval in seconds
+      #
       def interval
         @options[:time_interval] || 86400
       end
 
+      # 
+      # Other time ranges to create facet rows for. Allowed values are defined
+      # in ALLOWED_OTHER constant.
+      #
       def others
         if others = @options[:time_other]
           Array(others).map do |other|

@@ -291,8 +291,8 @@ module Sunspot
     #     query.with(:blog_id, @current_blog.id)
     #   end
     #
-    # See Sunspot::DSL::Scope and Sunspot::DSL::Query for the full API presented
-    # inside the block.
+    # See Sunspot::DSL::Search, Sunspot::DSL::Scope, Sunspot::DSL::FieldQuery
+    # and Sunspot::DSL::Query for the full API presented inside the block.
     #
     def search(*types, &block)
       session.search(*types, &block)

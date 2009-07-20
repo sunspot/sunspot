@@ -1,23 +1,26 @@
 module Sunspot
   module Query
-    #TODO document
-    module Connective
+    module Connective #:nodoc:
+      # 
+      # Base class for connectives (conjunctions and disjunctions).
+      #
       class Abstract < Scope
-        def initialize(setup)
+        def initialize(setup) #:nodoc:
           @setup = setup
           @components = []
         end
 
-        def add_conjunction
-          @components << conjunction = Conjunction.new(setup)
-          conjunction
-        end
-
-        def to_params
+        # 
+        # Connective as solr params.
+        #
+        def to_params #:nodoc:
           { :fq => to_boolean_phrase }
         end
 
-        def to_boolean_phrase
+        # 
+        # Express the connective as a Lucene boolean phrase.
+        #
+        def to_boolean_phrase #:nodoc:
           if @components.length == 1
             @components.first.to_boolean_phrase
           else
@@ -28,12 +31,30 @@ module Sunspot
           end
         end
 
-        def add_component(component)
+        # 
+        # Add a component to the connective. All components must implement the
+        # #to_boolean_phrase method.
+        #
+        def add_component(component) #:nodoc:
           @components << component
         end
       end
 
+      # 
+      # Disjunctions combine their components with an OR operator.
+      #
       class Disjunction < Abstract
+        # 
+        # Add a conjunction to the disjunction. This overrides the method in
+        # the Scope class since scopes are implicitly conjunctive and thus
+        # can return themselves as a conjunction. Inside a disjunction, however,
+        # a conjunction must explicitly be created.
+        #
+        def add_conjunction
+          @components << conjunction = Conjunction.new(setup)
+          conjunction
+        end
+
         private
 
         def connector
@@ -41,6 +62,9 @@ module Sunspot
         end
       end
 
+      # 
+      # Conjunctions combine their components with an AND operator.
+      #
       class Conjunction < Abstract
         private
 

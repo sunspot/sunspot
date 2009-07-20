@@ -39,6 +39,17 @@ module Sunspot
         end
       end
 
+      # 
+      # Specify a document-level boost. As with fields, you have the option of
+      # passing an attribute name which will be called on each model, or a block
+      # to be evaluated in the model's context. As well as these two options,
+      # this method can also take a constant number, meaning that all indexed
+      # documents of this class will have the specified boost.
+      #
+      # ==== Parameters
+      #
+      # attr_name<Symbol,~.to_f>:: Attribute name to call or a numeric constant
+      #
       def boost(attr_name = nil, &block)
         @setup.add_document_boost(attr_name, &block)
       end

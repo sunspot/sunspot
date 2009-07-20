@@ -1,5 +1,10 @@
 module Sunspot
   module Query
+    # 
+    # The Scope class encapsulates a set of restrictions that scope search
+    # results (as well as query facets rows). This class's API is exposed by
+    # Query::Query and Query::QueryFacetRow.
+    # 
     class Scope
       # 
       # Add a restriction to the query.
@@ -46,29 +51,29 @@ module Sunspot
         add_restriction(field_name, restriction_type, value, true)
       end
 
-      def add_shorthand_restriction(field_name, value, negated = false) #:nodoc:
-        restriction_type =
-          case value
-          when Range
-            Restriction::Between
-          when Array
-            Restriction::AnyOf
-          else
-            Restriction::EqualTo
-          end
-        add_restriction(field_name, restriction_type, value, negated)
-      end
-
-      def add_negated_shorthand_restriction(field_name, value)
-        add_shorthand_restriction(field_name, value, true)
-      end
-
-      #TODO document
+      # 
+      # Add a disjunction to the scope. The disjunction can then take a set of
+      # restrictions, which are combined with OR semantics.
+      #
+      # ==== Returns
+      #
+      # Connective::Disjunction:: New disjunction
+      #
       def add_disjunction
         add_component(disjunction = Connective::Disjunction.new(setup))
         disjunction
       end
 
+      # 
+      # Add a conjunction to the scope. In most cases, this will simply return
+      # the Scope object itself, since scopes by default combine their
+      # restrictions with OR semantics. The Connective::Disjunction class
+      # overrides this method to return a Connective::Conjunction.
+      #
+      # ==== Returns
+      #
+      # Scope:: Self or another scope with conjunctive semantics.
+      #
       def add_conjunction
         self
       end
@@ -106,12 +111,52 @@ module Sunspot
         DynamicQuery.new(setup.dynamic_field_factory(base_name), self)
       end
 
+      # 
+      # Determine which restriction type to add based on the type of the value.
+      # Used to interpret query conditions passed as a hash, as well as the
+      # short-form DSL::Scope#with method.
+      #
+      # ==== Parameters
+      #
+      # field_name<Symbol>:: Name of the field on which to apply the restriction
+      # value<Object,Array,Range>:: Value to which to apply to the restriction
+      #--
+      # negated<Boolean>:: Whether to negate the restriction.
+      #
+      def add_shorthand_restriction(field_name, value, negated = false) #:nodoc:
+        restriction_type =
+          case value
+          when Range
+            Restriction::Between
+          when Array
+            Restriction::AnyOf
+          else
+            Restriction::EqualTo
+          end
+        add_restriction(field_name, restriction_type, value, negated)
+      end
+
+      # 
+      # Add a negated shorthand restriction. See #add_shorthand_restriction
+      #
+      def add_negated_shorthand_restriction(field_name, value)
+        add_shorthand_restriction(field_name, value, true)
+      end
+
       private
 
+      # 
+      # Build a field with the given field name. Subclasses may override this
+      # method.
+      #
       def build_field(field_name)
         setup.field(field_name)
       end
 
+      # 
+      # Return a setup object which can return a field object given a name.
+      # Subclasses may override this method.
+      #
       def setup
         @setup
       end

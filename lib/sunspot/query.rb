@@ -4,21 +4,21 @@
 end
 
 module Sunspot
-  # 
-  # This class encapsulates a query that is to be sent to Solr. The query is
-  # constructed in the block passed to the Sunspot.search method, using the
-  # Sunspot::DSL::Query interface. It can also be accessed directly by calling
-  # #query on a Search object (presumably a not-yet-run one created using
-  # Sunspot#new_search), which might be more suitable than the DSL when an
-  # intermediate object has responsibility for building the query dynamically.
-  #--
-  # Instances of Query, as well as all of the components it contains, respond to
-  # the #to_params method, which returns a hash of parameters in the format
-  # recognized by the solr-ruby API.
-  #
-  module Query
+  module Query #:nodoc:
+    # 
+    # This class encapsulates a query that is to be sent to Solr. The query is
+    # constructed in the block passed to the Sunspot.search method, using the
+    # Sunspot::DSL::Query interface. It can also be accessed directly by calling
+    # #query on a Search object (presumably a not-yet-run one created using
+    # Sunspot#new_search), which might be more suitable than the DSL when an
+    # intermediate object has responsibility for building the query dynamically.
+    #--
+    # Instances of Query, as well as all of the components it contains, respond to
+    # the #to_params method, which returns a hash of parameters in the format
+    # recognized by the solr-ruby API.
+    #
     class Query < FieldQuery
-      attr_reader :query_facets
+      attr_reader :query_facets #:nodoc:
 
       def initialize(setup, configuration) #:nodoc:
         @setup, @configuration = setup, configuration
@@ -29,13 +29,12 @@ module Sunspot
         @components << @sort = SortComposite.new
       end
 
+      # 
+      # Set the keywords for this query. Keywords are parsed with Solr's dismax
+      # handler.
+      #
       def keywords=(keywords)
         set_keywords(keywords)
-      end
-
-      def set_keywords(keywords, options = {})
-        @base_query.keywords = keywords
-        @base_query.keyword_options = options
       end
 
       # 
@@ -64,12 +63,12 @@ module Sunspot
         @pagination.page, @pagination.per_page = page, per_page
       end
 
+      # 
+      # Add random ordering to the search. This can be added after other
+      # field-based sorts if desired.
+      #
       def order_by_random
         add_sort(Sort.new(RandomField.new))
-      end
-
-      def query_facet(name)
-        @query_facets[name.to_sym]
       end
 
       # 
@@ -118,9 +117,28 @@ module Sunspot
         @pagination.per_page
       end
 
-      #TODO document
+      # 
+      # Get the query facet with the given name. Used by the Search object to
+      # match query facet results with the requested query facets.
+      #
+      def query_facet(name) #:nodoc:
+        @query_facets[name.to_sym]
+      end
+
+      # 
+      # Add a Sort object into this query's sort composite.
+      #
       def add_sort(sort) #:nodoc:
         @sort << sort
+      end
+
+      # 
+      # Set the keywords for this query, along with keyword options. See
+      # Query::BaseQuery for information on what the options do.
+      #
+      def set_keywords(keywords, options = {}) #:nodoc:
+        @base_query.keywords = keywords
+        @base_query.keyword_options = options
       end
 
       # 

@@ -1,5 +1,15 @@
 module Sunspot
-  module FieldFactory
+  # 
+  # The FieldFactory module contains classes for generating fields. FieldFactory
+  # implementation classes should implement a #build method, although the arity
+  # of the method depends on the type of factory. They also must implement a
+  # #populate_document method, which extracts field data from a given model and
+  # adds it into the RSolr document for indexing.
+  #
+  module FieldFactory #:nodoc:all
+    # 
+    # Base class for field factories.
+    #
     class Abstract
       attr_reader :name
 
@@ -14,6 +24,11 @@ module Sunspot
       end
     end
 
+    # 
+    # A StaticFieldFactory generates normal static fields. Each factory instance
+    # contains an eager-initialized field instance, which is returned by the
+    # #build method.
+    #
     class Static < Abstract
       def initialize(name, type, options = {}, &block)
         super(name, options, &block)
@@ -28,10 +43,17 @@ module Sunspot
           end
       end
 
+      # 
+      # Return the field instance built by this factory
+      #
       def build
         @field
       end
 
+      # 
+      # Extract the encapsulated field's data from the given model and add it
+      # into the RSolr document for indexing.
+      #
       def populate_document(document, model) #:nodoc:
         unless (value = @data_extractor.value_for(model)).nil?
           for scalar_value in Array(@field.to_indexed(value))
@@ -43,11 +65,18 @@ module Sunspot
         end
       end
 
+      # 
+      # A unique signature identifying this field by name and type.
+      #
       def signature
         [@field.name, @field.type]
       end
     end
 
+    # 
+    # DynamicFieldFactories create dynamic field instances based on dynamic
+    # configuration.
+    #
     class Dynamic < Abstract
       attr_accessor :name, :type
 
@@ -56,11 +85,22 @@ module Sunspot
         @type, @options = type, options
       end
 
+      #
+      # Build a field based on the dynamic name given.
+      #
       def build(dynamic_name)
         AttributeField.new("#{@name}:#{dynamic_name}", @type, @options.dup)
       end
+      # 
+      # This alias allows a DynamicFieldFactory to be used in place of a Setup
+      # or CompositeSetup instance by query components.
+      #
       alias_method :field, :build
 
+      # 
+      # Generate dynamic fields based on hash returned by data accessor and
+      # add the field data to the document.
+      #
       def populate_document(document, model)
         if values = @data_extractor.value_for(model)
           values.each_pair do |dynamic_name, value|
@@ -75,6 +115,9 @@ module Sunspot
         end
       end
 
+      # 
+      # Unique signature identifying this dynamic field based on name and type
+      #
       def signature
         [@name, @type]
       end

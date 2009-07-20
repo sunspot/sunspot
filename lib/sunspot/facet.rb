@@ -3,7 +3,7 @@ require 'enumerator'
 module Sunspot
   #
   # The facet class encapsulates the information returned by Solr for a
-  # particular facet request.
+  # field facet request.
   #
   # See http://wiki.apache.org/solr/SolrFacetingOverview for more information
   # on Solr's faceting capabilities.

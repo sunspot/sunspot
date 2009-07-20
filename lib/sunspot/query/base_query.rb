@@ -1,6 +1,10 @@
 module Sunspot
   module Query
-    class BaseQuery
+    #
+    # Encapsulates information common to all queries - in particular, keywords
+    # and types.
+    #
+    class BaseQuery #:nodoc:
       include RSolr::Char
 
       attr_writer :keywords
@@ -9,6 +13,12 @@ module Sunspot
         @setup = setup
       end
 
+      # 
+      # Generate params for the base query. If keywords are specified, build
+      # params for a dismax query, request all stored fields plus the score,
+      # and put the types in a filter query. If keywords are not specified,
+      # put the types query in the q parameter.
+      #
       def to_params
         params = {}
         if @keywords
@@ -23,6 +33,9 @@ module Sunspot
         params
       end
 
+      # 
+      # Set keyword options
+      #
       def keyword_options=(options)
         if options
           @text_field_names = options.delete(:fields)
@@ -35,10 +48,6 @@ module Sunspot
       # Boolean phrase that restricts results to objects of the type(s) under
       # query. If this is an open query (no types specified) then it sends a
       # no-op phrase because Solr requires that the :q parameter not be empty.
-      #
-      # TODO don't send a noop if we have a keyword phrase
-      # TODO this should be sent as a filter query when possible, especially
-      #      if there is a single type, so that Solr can cache it
       #
       # ==== Returns
       #
@@ -58,6 +67,11 @@ module Sunspot
           @setup.type_names.map { |name| escape(name)}
       end
 
+      # 
+      # Returns the names of text fields that should be queried in a keyword
+      # search. If specific fields are requested, use those; otherwise use the
+      # union of all fields configured for the types under search.
+      #
       def text_field_names
         text_fields =
           if @text_field_names
