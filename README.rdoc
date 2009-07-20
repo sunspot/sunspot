@@ -3,7 +3,7 @@
 http://outoftime.github.com/sunspot
 
 Sunspot is a Ruby library for expressive, powerful interaction with the Solr search engine.
-Sunspot is built on top of the solr-ruby gem, which provides a low-level interface for Solr
+Sunspot is built on top of the RSolr gem, which provides a low-level interface for Solr
 interaction; Sunspot provides a simple, intuitive, expressive DSL backed by powerful
 features for indexing objects and searching for them.
 
@@ -19,6 +19,7 @@ objects such as the filesystem.
 * Intuitive DSL for scoping searches, with all the usual boolean operators available
 * Intuitive interface for requesting facets on indexed fields
 * Extensible adapter architecture for easy integration of other ORMs or non-model classes
+* Refine search using field facets, date range facets, or ultra-powerful query facets
 * Full compatibility with will_paginate
 * Ordering
 
@@ -87,6 +88,10 @@ to define your own. See Sunspot::Adapters for more information.
     with(:blog_id).any_of [2, 14]
     with(:category_ids).all_of [4, 10]
     with(:published_at).less_than Time.now
+    any_of do
+      with(:expired_at).greater_than(Time.now)
+      with(:expired_at, nil)
+    end
     without :title, 'Bad Title'
     without bad_instance # specifically exclude this instance from results
 
@@ -106,23 +111,6 @@ See Sunspot.search for more information.
   search.per_page
   search.facet(:blog_id)
 
-=== Building searches manually:
-
-The search DSL is great for building searches from fairly static parameters,
-but a highly dynamic search might want to leverage an intermediate approach
-(such as an application of the Builder pattern). For these cases, Sunspot
-exposes direct access to the Query object:
-
-  search = Sunspot.new_search(Post)
-  search.query.keywords = 'great pizza'
-  search.query.add_restriction(:author_name, :equal_to, 'Mark Twain')
-  search.query.add_restriction(:title, :equal_to, 'Bad Title', true) # negate the restriction
-  search.query.exclude_instance(bad_instance)
-  search.query.paginate(3, 15)
-  search.query.order_by(:average_rating, :desc)
-  search.query.add_field_facet(:blog_id)
-  search.execute! 
-
 == About the API documentation
 
 All of the methods documented in the RDoc are considered part of Sunspot's
@@ -133,7 +121,7 @@ me so I can rectify the situation!
 
 == Dependencies
 
-1. solr-ruby
+1. RSolr
 2. Java
 
 Sunspot has been tested with MRI 1.8.6 and 1.8.7, REE 1.8.6, YARV 1.9.1, and
