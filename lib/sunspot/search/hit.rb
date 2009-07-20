@@ -17,6 +17,8 @@ module Sunspot
       #
       attr_reader :score
 
+      attr_writer :instance #:nodoc:
+
       def initialize(raw_hit, search) #:nodoc:
         @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
         @score = raw_hit['score']
@@ -42,6 +44,18 @@ module Sunspot
             field = Sunspot::Setup.for(@class_name).field(field_name)
             field.cast(@stored_values[field.indexed_name])
           end
+      end
+
+      # 
+      # Retrieve the instance associated with this hit. This is lazy-loaded, but
+      # the first time it is called on any hit, all the hits for the search will
+      # load their instances using the adapter's #load_all method.
+      #
+      def instance
+        if @instance.nil?
+          @search.populate_hits!
+        end
+        @instance
       end
     end
   end

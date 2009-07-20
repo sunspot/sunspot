@@ -34,10 +34,29 @@ describe 'retrieving search' do
   it 'should return hits without loading instances' do
     post_1, post_2 = Array.new(2) { Post.new }
     stub_results(post_1, post_2)
-    %w(load load_all).each { |message| MockAdapter::DataAccessor.should_not_receive(message) }
-    session.search(Post, :page => 1).hits.map do |hit|
+    %w(load load_all).each do |message|
+      MockAdapter::DataAccessor.should_not_receive(message)
+    end
+    session.search(Post).hits.map do |hit|
       [hit.class_name, hit.primary_key]
     end.should == [['Post', post_1.id.to_s], ['Post', post_2.id.to_s]]
+  end
+
+  it 'should return instance from hit' do
+    posts = Array.new(2) { Post.new }
+    stub_results(*posts)
+    session.search(Post).hits.first.instance.should == posts.first
+  end
+
+  it 'should hydrate all hits when an instance is requested from a hit' do
+    posts = Array.new(2) { Post.new }
+    stub_results(*posts)
+    search = session.search(Post)
+    search.hits.first.instance
+    %w(load load_all).each do |message|
+      MockAdapter::DataAccessor.should_not_receive(message)
+    end
+    search.hits.last.instance.should == posts.last
   end
 
   it 'should attach score to hits' do

@@ -43,10 +43,10 @@ module Sunspot
     def results
       @results ||= if @query.page && defined?(WillPaginate::Collection)
         WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
-          pager.replace(result_objects)
+          pager.replace(hits.map { |hit| hit.instance })
         end
       else
-        result_objects
+        hits.map { |hit| hit.instance }
       end
     end
 
@@ -158,31 +158,26 @@ module Sunspot
       self
     end
 
+    def populate_hits! #:nodoc:
+      type_hit_hash = Hash.new { |h, k| h[k] = [] }
+      id_hit_hash = {}
+      for hit in hits
+        type_hit_hash[hit.class_name] << hit
+        id_hit_hash[hit.primary_key] = hit
+      end
+      type_hit_hash.each_pair do |class_name, hits|
+        ids = hits.map { |hit| hit.primary_key }
+        for instance in data_accessor_for(Util.full_const_get(class_name)).load_all(ids)
+          hit = id_hit_hash[Adapters::InstanceAdapter.adapt(instance).id.to_s]
+          hit.instance = instance
+        end
+      end
+    end
+
     private
 
     def solr_response
       @solr_response ||= @solr_result['response']
-    end
-
-    # 
-    # Collection of instantiated result objects corresponding to the results
-    # returned by Solr.
-    #
-    # ==== Returns
-    #
-    # Array:: Collection of instantiated result objects
-    #
-    def result_objects
-      hits.inject({}) do |type_id_hash, hit|
-        (type_id_hash[hit.class_name] ||= []) << hit.primary_key
-        type_id_hash
-      end.inject([]) do |results, pair|
-        type_name, ids = pair
-        data_accessor = data_accessor_for(Util.full_const_get(type_name))
-        results.concat(data_accessor.load_all(ids))
-      end.sort_by do |result|
-        doc_ids.index(Adapters::InstanceAdapter.adapt(result).index_id)
-      end
     end
 
     def doc_ids
