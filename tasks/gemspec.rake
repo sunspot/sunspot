@@ -18,7 +18,7 @@ begin
     s.add_development_dependency 'ruby-debug', '~> 0.10'
     s.extra_rdoc_files = ['README.rdoc']
     s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
-                      '--title' << 'Sunspot - Pure-Ruby Solr Search and Indexing - API Documentation' <<
+                      '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation' <<
                       '--main' << 'README.rdoc'
 
   end
