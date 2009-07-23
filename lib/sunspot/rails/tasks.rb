@@ -4,6 +4,9 @@ namespace :sunspot do
   namespace :solr do
     desc 'Start the Solr instance'
     task :start => :environment do
+      if RUBY_PLATFORM =~ /w(in)?32$/
+        abort('This command does not work on Windows. Please use rake sunspot:solr:run to run Solr in the foreground.')
+      end
       data_path = File.join(::Rails.root, 'solr', 'data', ::Rails.env)
       pid_path = File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
       solr_home =
@@ -21,7 +24,7 @@ namespace :sunspot do
       end
     end
 
-    desc 'Run the Solr instance in the foreground. Windows users must use this task to run Solr'
+    desc 'Run the Solr instance in the foreground'
     task :run => :environment do
       data_path = File.join(::Rails.root, 'solr', 'data', ::Rails.env)
       solr_home =
@@ -31,6 +34,9 @@ namespace :sunspot do
       FileUtils.mkdir_p(data_path)
       port = Sunspot::Rails.configuration.port
       command = ['sunspot-solr', 'run', '--', '-p', port.to_s, '-d', data_path]
+      if RUBY_PLATFORM =~ /w(in)?32$/
+        command.first << '.bat'
+      end
       if solr_home
         command << '-s' << solr_home
       end
