@@ -3,7 +3,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = 'sunspot'
-    s.executables = 'sunspot-solr'
+    s.executables = ['sunspot-solr', 'sunspot-configure-solr']
     s.summary = 'Library for expressive, powerful interaction with the Solr search engine'
     s.email = 'mat@patch.com'
     s.homepage = 'http://github.com/outoftime/sunspot'
