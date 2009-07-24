@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Query::Restriction::EqualTo [Sunspot - Pure-Ruby Solr Search and Indexing - API Documentation]</title>
+    <title>: Sunspot::Query::Restriction::EqualTo [Sunspot 0.9.2 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../../files/lib/sunspot/query/restriction_rb.html">lib/sunspot/query/restriction.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.3/lib/sunspot/query/restriction.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.9.2/lib/sunspot/query/restriction.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -52,37 +52,37 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000043">to_negative_boolean_phrase</a></li>
-              <li><a href="#M000042">to_positive_boolean_phrase</a></li>
+              <li><a href="#M000020">to_negative_boolean_phrase</a></li>
+              <li><a href="#M000019">to_positive_boolean_phrase</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000043'>
-                <a name='M000043'>      </a>
+              <div class='public-instance method' id='method-M000020'>
+                <a name='M000020'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_negative_boolean_phrase</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000020-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/sunspot/query/restriction.rb, line 137</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_negative_boolean_phrase</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-keyword kw">super</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000020-source'><span class="ruby-comment cmt"># File lib/sunspot/query/restriction.rb, line 139</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_negative_boolean_phrase</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-keyword kw">super</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;#{escape(@field.indexed_name)}:[* TO *]&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000042'>
-                <a name='M000042'>      </a>
+              <div class='public-instance method' id='method-M000019'>
+                <a name='M000019'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_positive_boolean_phrase</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000019-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/sunspot/query/restriction.rb, line 129</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_positive_boolean_phrase</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-keyword kw">super</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;-#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000019-source'><span class="ruby-comment cmt"># File lib/sunspot/query/restriction.rb, line 131</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_positive_boolean_phrase</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@value</span>.<span class="ruby-identifier">nil?</span>&#x000A;            <span class="ruby-keyword kw">super</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;-#{escape(@field.indexed_name)}:[* TO *]&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

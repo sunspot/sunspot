@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Adapters::InstanceAdapter [Sunspot - Pure-Ruby Solr Search and Indexing - API Documentation]</title>
+    <title>: Sunspot::Adapters::InstanceAdapter [Sunspot 0.9.2 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/sunspot/adapters_rb.html">lib/sunspot/adapters.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.3/lib/sunspot/adapters.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.9.2/lib/sunspot/adapters.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -56,14 +56,28 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000015">register</a></li>
+              <li><a href="#M000040">index_id_for</a></li>
+              <li><a href="#M000039">register</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000015'>
-                <a name='M000015'>      </a>
+              <div class='public-class method' id='method-M000040'>
+                <a name='M000040'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>index_id_for</span>
+                  <span class='arguments'>(class_name, id)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/sunspot/adapters.rb, line 130</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index_id_for</span>(<span class="ruby-identifier">class_name</span>, <span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-node">&quot;#{class_name} #{id}&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000039'>
+                <a name='M000039'>      </a>
                 <div class='synopsis'>
                   <span class='name'>register</span>
                   <span class='arguments'>(instance_adapter, *classes)</span>
@@ -86,10 +100,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000015-source'><span class="ruby-comment cmt"># File lib/sunspot/adapters.rb, line 96</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">instance_adapter</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;          <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">clazz</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">classes</span>&#x000A;            <span class="ruby-identifier">instance_adapters</span>[<span class="ruby-identifier">clazz</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">instance_adapter</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/sunspot/adapters.rb, line 96</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">instance_adapter</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;          <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">clazz</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">classes</span>&#x000A;            <span class="ruby-identifier">instance_adapters</span>[<span class="ruby-identifier">clazz</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">instance_adapter</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

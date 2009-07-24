@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Configuration [Sunspot - Pure-Ruby Solr Search and Indexing - API Documentation]</title>
+    <title>: Sunspot::Configuration [Sunspot 0.9.2 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../files/lib/sunspot/configuration_rb.html">lib/sunspot/configuration.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.8.3/lib/sunspot/configuration.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.9.2/lib/sunspot/configuration.rb">view online</a>)
           </li>
         </ol>
       </div>
@@ -45,11 +45,17 @@
             objects. Available properties are:
             </p>
             <table>
-            <tr><td valign="top"><a href="../Sunspot.html#M000013">Sunspot.config</a>.solr.url:</td><td>The URL at which to connect to Solr (default: &#8216;<a
+            <tr><td valign="top"><a href="../Sunspot.html#M000016">Sunspot.config</a>.http_client:</td><td>The client to use for HTTP communication with Solr. Available options are
+            :net_http, which is the default and uses Ruby&#8217;s built-in pure-Ruby
+            HTTP library; and :curb, which uses Ruby&#8217;s libcurl bindings and
+            requires installation of the &#8216;curb&#8217; gem.
+            
+            </td></tr>
+            <tr><td valign="top"><a href="../Sunspot.html#M000016">Sunspot.config</a>.solr.url:</td><td>The URL at which to connect to Solr (default: &#8216;<a
             href="http://localhost:8983/solr">localhost:8983/solr</a>&#8217;)
             
             </td></tr>
-            <tr><td valign="top"><a href="../Sunspot.html#M000013">Sunspot.config</a>.pagination.default_per_page:</td><td>Solr always paginates its results. This sets Sunspot&#8217;s default result
+            <tr><td valign="top"><a href="../Sunspot.html#M000016">Sunspot.config</a>.pagination.default_per_page:</td><td>Solr always paginates its results. This sets Sunspot&#8217;s default result
             count per page if it is not explicitly specified in the query.
             
             </td></tr>
