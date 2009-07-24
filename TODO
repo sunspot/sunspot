@@ -1,4 +1,9 @@
-=== 0.9 ===
-* Query-based faceting (?)
+=== 0.9.X ===
+* Deal with empty facet queries
+* Passing an integer into the second argument of dynamic_facet() when multiple facets are requested gives the wrong value
 === 0.10 ===
+* Highlighting
+* LocalSolr
+* Text field restrictions
+* Prefixes
 * Intelligently decide whether to instantiate all facet rows at once
