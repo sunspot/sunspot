@@ -153,6 +153,51 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'connectives' do
+    before :each do
+      Sunspot.remove_all
+      @posts = [
+        Post.new(:title => 'Yes', :blog_id => 1, :category_ids => [1, 2]),
+        Post.new(:title => 'No', :blog_id => 1, :category_ids => [2, 3]),
+        Post.new(:title => 'No', :blog_id => 2, :category_ids => [3, 4]),
+        Post.new
+      ]
+      Sunspot.index!(@posts)
+    end
+
+    it 'should return results that match any restriction in a disjunction' do
+      Sunspot.search(Post) do
+        any_of do
+          with(:title, 'Yes')
+          with(:blog_id, 1)
+        end
+      end.results.should == @posts[0..1]
+    end
+
+    it 'should return results that match a nested conjunction in a disjunction' do
+      Sunspot.search(Post) do
+        any_of do
+          with(:title, 'Yes')
+          all_of do
+            with(:blog_id, 1)
+            with(:category_ids, 3)
+          end
+        end
+      end.results.should == @posts[0..1]
+    end
+
+    it 'should return results that match a conjunction with a negated restriction' do
+      pending 'working connectives with negated restrictions'
+      search = Sunspot.search(Post) do
+        any_of do
+          with(:title, 'Yes')
+          without(:blog_id, 1)
+        end
+      end
+      search.results.should == [@posts[0], @posts[2], @posts[3]]
+    end
+  end
+
   describe 'multiple column ordering' do
     before do
       Sunspot.remove_all
