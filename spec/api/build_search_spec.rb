@@ -288,7 +288,85 @@ describe 'Search' do
       end
     end
     connection.should have_last_search_with(
-      :fq => '(category_ids_im:1 OR -average_rating_f:[3\.0 TO *])'
+      :fq => '-(-category_ids_im:1 AND average_rating_f:[3\.0 TO *])'
+    )
+  end
+
+  it 'should create a disjunction with nested conjunction with negated restrictions' do
+    session.search Post do
+      any_of do
+        with :category_ids, 1
+        all_of do
+          without(:average_rating).greater_than(3.0)
+          with(:blog_id, 1)
+        end
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '(category_ids_im:1 OR (-average_rating_f:[3\.0 TO *] AND blog_id_i:1))'
+    )
+  end
+
+  it 'should create a disjunction with nested conjunction with nested disjunction with negated restriction' do
+    session.search(Post) do
+      any_of do
+        with(:title, 'Yes')
+        all_of do
+          with(:blog_id, 1)
+          any_of do
+            with(:category_ids, 4)
+            without(:average_rating, 2.0)
+          end
+        end
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '(title_ss:Yes OR (blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_f:2\.0)))'
+    )
+  end
+
+  it 'should create a disjunction with a negated restriction and a nested disjunction in a conjunction with a negated restriction' do
+    session.search(Post) do
+      any_of do
+        without(:title, 'Yes')
+        all_of do
+          with(:blog_id, 1)
+          any_of do
+            with(:category_ids, 4)
+            without(:average_rating, 2.0)
+          end
+        end
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '-(title_ss:Yes AND -(blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_f:2\.0)))'
+    )
+  end
+
+  #
+  # This is important because if a disjunction could be nested in another
+  # disjunction, then the inner disjunction could denormalize (and thus
+  # become negated) after the outer disjunction denormalized (checking to
+  # see if the inner one is negated). Since conjunctions never need to
+  # denormalize, if a disjunction can only contain conjunctions or restrictions,
+  # we can guarantee that the negation state of a disjunction's components will
+  # not change when #to_params is called on them.
+  #
+  # Since disjunction is associative, this behavior has no effect on the actual
+  # logical semantics of the disjunction.
+  #
+  it 'should create a single disjunction when disjunctions nested' do
+    session.search(Post) do
+      any_of do
+        with(:title, 'Yes')
+        any_of do
+          with(:blog_id, 1)
+          with(:category_ids, 4)
+        end
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '(title_ss:Yes OR blog_id_i:1 OR category_ids_im:4)'
     )
   end
 
@@ -301,7 +379,7 @@ describe 'Search' do
       end
     end
     connection.should have_last_search_with(
-      :fq => "(-id:Post\\ #{post.id} OR category_ids_im:1)"
+      :fq => "-(id:Post\\ #{post.id} AND -category_ids_im:1)"
     )
   end
 
