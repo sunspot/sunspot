@@ -16,11 +16,11 @@
     <fieldtype class='solr.StrField' name='string' omitNorms='true' />
   </types>
   <fields>
-    <field indexed='true' multiValued='false' name='id' stored='true' type='string' />
+    <field indexed='true' multiValued='false' name='id' stored='false' type='string' />
     <field indexed='true' multiValued='true' name='type' stored='false' type='string' />
     <field indexed='true' multiValued='false' name='class_name' stored='false' type='string' />
-    <field indexed='true' multiValued='true' name='text' stored='false' type='text' />
-    <dynamicField indexed='true' multiValued='true' name='*_text' stored='false' type='text' />
+    <field indexed='true' multiValued='true' name='text' stored='true' type='text' />
+    <dynamicField indexed='true' multiValued='true' name='*_text' stored='true' type='text' />
     <dynamicField indexed='true' name='random_*' stored='false' type='rand' />
     <dynamicField indexed='true' multiValued='false' name='*_b' stored='false' type='boolean' />
     <dynamicField indexed='true' multiValued='false' name='*_f' stored='false' type='sfloat' />

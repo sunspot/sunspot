@@ -1,5 +1,5 @@
 %w(base_query scope field_query connective dynamic_query field_facet query_facet
-   query_facet_row pagination restriction sort sort_composite).each do |file|
+   query_facet_row pagination restriction sort sort_composite highlighting).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -27,6 +27,7 @@ module Sunspot
         @components << @base_query = BaseQuery.new(setup)
         @components << @pagination = Pagination.new(@configuration)
         @components << @sort = SortComposite.new
+        @components << @highlighting = Highlighting.new
       end
 
       # 

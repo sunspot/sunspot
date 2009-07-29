@@ -19,12 +19,27 @@ module Sunspot
 
       attr_writer :instance #:nodoc:
 
-      def initialize(raw_hit, search) #:nodoc:
+      def initialize(raw_hit, search, highlights = {}) #:nodoc:
         @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
         @score = raw_hit['score']
         @search = search
         @stored_values = raw_hit
         @stored_cache = {}
+        @highlights = []
+        if highlights && highlights.include?("#{@class_name} #{@primary_key}")
+          highlights["#{@class_name} #{@primary_key}"].each do |highlighted_field|
+            @highlights << Highlight.new(highlighted_field.first, highlighted_field.last)
+          end
+        end
+      end
+      
+      #
+      # Returns all highlights for this hit when called without parameters.
+      # When a field_name is provided, returns only the highlight for this field.
+      #
+      def highlights(field_name = nil)
+        return @highlights if field_name.nil?
+        @highlights.select{ |highlight| highlight.field_name == field_name.to_sym }.first
       end
 
       # 
