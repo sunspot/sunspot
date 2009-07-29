@@ -17,21 +17,21 @@
   </types>
   <fields>
     <field indexed='true' multiValued='false' name='id' stored='true' type='string' />
-    <field indexed='true' multiValued='true' name='type' stored='false' type='string' />
-    <field indexed='true' multiValued='false' name='class_name' stored='false' type='string' />
-    <field indexed='true' multiValued='true' name='text' stored='false' type='text' />
-    <dynamicField indexed='true' multiValued='true' name='*_text' stored='false' type='text' />
+    <field indexed='true' multiValued='true' name='type' stored='true' type='string' />
+    <field indexed='true' multiValued='false' name='class_name' stored='true' type='string' />
+    <field indexed='true' multiValued='true' name='text' stored='true' type='text' />
+    <dynamicField indexed='true' multiValued='true' name='*_text' stored='true' type='text' />
     <dynamicField indexed='true' name='random_*' stored='false' type='rand' />
     <dynamicField indexed='true' multiValued='false' name='*_b' stored='false' type='boolean' />
     <dynamicField indexed='true' multiValued='false' name='*_f' stored='false' type='sfloat' />
     <dynamicField indexed='true' multiValued='false' name='*_d' stored='false' type='date' />
     <dynamicField indexed='true' multiValued='false' name='*_i' stored='false' type='sint' />
-    <dynamicField indexed='true' multiValued='false' name='*_s' stored='false' type='string' />
+    <dynamicField indexed='true' multiValued='false' name='*_s' stored='true' type='string' />
     <dynamicField indexed='true' multiValued='true' name='*_bm' stored='false' type='boolean' />
     <dynamicField indexed='true' multiValued='true' name='*_fm' stored='false' type='sfloat' />
     <dynamicField indexed='true' multiValued='true' name='*_dm' stored='false' type='date' />
     <dynamicField indexed='true' multiValued='true' name='*_im' stored='false' type='sint' />
-    <dynamicField indexed='true' multiValued='true' name='*_sm' stored='false' type='string' />
+    <dynamicField indexed='true' multiValued='true' name='*_sm' stored='true' type='string' />
     <dynamicField indexed='true' multiValued='false' name='*_bs' stored='true' type='boolean' />
     <dynamicField indexed='true' multiValued='false' name='*_fs' stored='true' type='sfloat' />
     <dynamicField indexed='true' multiValued='false' name='*_ds' stored='true' type='date' />

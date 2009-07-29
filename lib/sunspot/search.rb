@@ -1,4 +1,6 @@
-require File.join(File.dirname(__FILE__), 'search', 'hit')
+%w(hit highlight).each do |file|
+  require File.join(File.dirname(__FILE__), 'search', file)
+end
 
 module Sunspot
   # 
@@ -63,6 +65,21 @@ module Sunspot
       @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, self) }
     end
     alias_method :raw_results, :hits
+    
+    #
+    # Access the highlighted search result returned by Solr. Only applies to keyword searches.
+    # Returns a collection of Highlight objects that contain the class name, primary key and 
+    # the highlight itself.
+    # For a non-keyword search there is a Highlight object for each result, but the actual highlight
+    # is nil. When there are no result, the highlights-collection is empty.
+    #
+    # === Returns
+    #
+    # Array:: Collection of Highlight objects
+    #
+    def highlights
+      @highlights ||= solr_highlighting.map { |highlight| Highlight.new(highlight) }
+    end
 
     # 
     # The total number of documents matching the query parameters
@@ -178,6 +195,10 @@ module Sunspot
 
     def solr_response
       @solr_response ||= @solr_result['response']
+    end
+    
+    def solr_highlighting
+      @solr_highlighting ||= @solr_result['highlighting']
     end
 
     def doc_ids
