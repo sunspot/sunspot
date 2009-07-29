@@ -136,15 +136,15 @@ module Sunspot
           unless @value.nil?
             super
           else
-            "-#{escape(@field.indexed_name)}:[* TO *]"
+            "#{escape(@field.indexed_name)}:[* TO *]"
           end
         end
 
-        def to_negated_boolean_phrase
-          unless @value.nil?
-            super
+        def negated?
+          if @value.nil?
+            !super
           else
-            "#{escape(@field.indexed_name)}:[* TO *]"
+            super
           end
         end
 
@@ -225,7 +225,7 @@ module Sunspot
         end
 
         def negate
-          SameAs.new(@object, !@negated)
+          SameAs.new(@object, !negated?)
         end
       end
     end

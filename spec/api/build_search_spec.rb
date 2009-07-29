@@ -383,6 +383,18 @@ describe 'Search' do
     )
   end
 
+  it 'should create a disjunction with empty restriction' do
+    session.search Post do
+      any_of do
+        with(:average_rating, nil)
+        with(:average_rating).greater_than(3.0)
+      end
+    end
+    connection.should have_last_search_with(
+      :fq => '-(average_rating_f:[* TO *] AND -average_rating_f:[3\.0 TO *])'
+    )
+  end
+
   it 'should restrict by dynamic string field with equality restriction' do
     session.search Post do
       dynamic :custom_string do
