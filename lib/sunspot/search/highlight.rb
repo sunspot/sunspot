@@ -29,10 +29,11 @@ module Sunspot
       # Returns the highlighted text with formatting according to the template given in &block.
       # When no block is given, <em> and </em> are used to surround the highlight.
       #
-      def format
-        highlighted = highlight.match(HIGHLIGHT_MATCHER).captures.first
-        result = block_given? ? yield(highlighted) : "<em>#{highlighted}</em>"
-        highlight.gsub(HIGHLIGHT_MATCHER, result)
+      def format(&block)
+        block ||= proc { |word| "<em>#{word}</em>" }
+        highlight.gsub(HIGHLIGHT_MATCHER) do
+          block.call(Regexp.last_match[1])
+        end
       end
       alias_method :formatted, :format
       
