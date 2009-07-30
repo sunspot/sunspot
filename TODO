@@ -4,7 +4,7 @@
 === 0.10 ===
 * Highlighting
   * Support all of Solrs highlighting configuration strings
-  * Ability to format the highlights at display-time -- highlight.format{|word| "<strong>#{word}<strong>"}
+  * Write API specs for highlighting
 * LocalSolr
 * Text field restrictions
 * Prefixes
