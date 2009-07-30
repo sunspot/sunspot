@@ -8,7 +8,11 @@ module Sunspot
       end
       
       def to_params
-        {:hl => 'on'}
+        {
+          'hl' => 'on',
+          'hl.simple.pre' => '@@@hl@@@',
+          'hl.simple.post' => '@@@endhl@@@'
+        }
       end
     end
   end
