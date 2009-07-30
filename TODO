@@ -3,8 +3,6 @@
 * Passing an integer into the second argument of dynamic_facet() when multiple facets are requested gives the wrong value
 === 0.10 ===
 * Highlighting
-  * Expose Highlights as strings from the Hit object
-  * Ability to get _all_ highlights for a hit, or just the one for :a_field
   * Support all of Solrs highlighting configuration strings
   * Ability to format the highlights at display-time -- highlight.format{|word| "<strong>#{word}<strong>"}
 * LocalSolr
