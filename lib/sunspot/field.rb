@@ -131,6 +131,31 @@ module Sunspot
     end
   end
 
+  #XXX Right now this doubles as a Field and a FieldFactory - good idea?
+  class CoordinatesField < Field
+    def initialize(name)
+      @data_extractor = DataExtractor::AttributeExtractor.new(name)
+    end
+
+    def populate_document(document, model)
+      if coordinates = @data_extractor.value_for(model)
+        # if %w(lat lng).all? { |method| coordinates.respond_to?(method) }
+        #   coordinates = [coordinates.lat, coordinates.lng]
+        # end
+        document.add_field(lat_indexed_name.to_sym, coordinates.first)
+        document.add_field(lng_indexed_name.to_sym, coordinates.last)
+      end
+    end
+
+    def lat_indexed_name
+      'lat'
+    end
+
+    def lng_indexed_name
+      'lng'
+    end
+  end
+
   # 
   # RandomField instances are used for random sorting.
   #

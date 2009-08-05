@@ -39,6 +39,10 @@ module Sunspot
         end
       end
 
+      def coordinates(name)
+        @setup.set_coordinates_field(name)
+      end
+
       # 
       # Specify a document-level boost. As with fields, you have the option of
       # passing an attribute name which will be called on each model, or a block

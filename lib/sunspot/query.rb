@@ -63,6 +63,12 @@ module Sunspot
         @pagination.page, @pagination.per_page = page, per_page
       end
 
+      def add_location_restriction(coordinates, miles)
+        @components << Restriction::Near.new(
+          @setup.coordinates_field, coordinates, miles
+        )
+      end
+
       # 
       # Add random ordering to the search. This can be added after other
       # field-based sorts if desired.

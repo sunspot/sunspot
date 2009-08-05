@@ -29,7 +29,9 @@ module Sunspot
       FieldType.new('sfloat', 'SortableFloat', 'f'),
       FieldType.new('date', 'Date', 'd'),
       FieldType.new('sint', 'SortableInt', 'i'),
-      FieldType.new('string', 'Str', 's')
+      FieldType.new('string', 'Str', 's'),
+      FieldType.new('sdouble', 'SortableDouble', 'e'),
+      FieldType.new('slong', 'SortableLong', 'l')
     ]
 
     FIELD_VARIANTS = [

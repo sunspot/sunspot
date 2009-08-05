@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'blog')
 
 class Post < MockRecord
   attr_accessor :title, :body, :blog_id, :published_at, :ratings_average,
-                :author_name, :featured, :expire_date
+                :author_name, :featured, :expire_date, :coordinates
   alias_method :featured?, :featured
 
   def category_ids
@@ -51,6 +51,7 @@ Sunspot.setup(Post) do
   time :last_indexed_at, :stored => true do
     Time.now
   end
+  coordinates :coordinates
 
   dynamic_string :custom_string
   dynamic_float :custom_float, :multiple => true, :using => :custom_fl

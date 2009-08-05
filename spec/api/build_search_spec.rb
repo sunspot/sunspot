@@ -199,6 +199,27 @@ describe 'Search' do
     connection.should have_last_search_with(:fq => ['-category_ids_im:(2 AND 7 AND 12)'])
   end
 
+  it 'should set query type to geo when geo search performed' do
+    session.search Post do
+      near [40.7, -73.5], 5
+    end
+    connection.should have_last_search_with(:qt => 'geo')
+  end
+
+  it 'should set lat and lng when geo search is performed' do
+    session.search Post do
+      near [40.7, -73.5], 5
+    end
+    connection.should have_last_search_with(:lat => 40.7, :long => -73.5)
+  end
+
+  it 'should set radius when geo search is performed' do
+    session.search Post do
+      near [40.7, -73.5], 5
+    end
+    connection.should have_last_search_with(:radius => 5)
+  end
+
   it 'should scope by empty field' do
     session.search Post do
       with :average_rating, nil

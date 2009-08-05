@@ -57,6 +57,10 @@ module Sunspot
       @dynamic_field_factories_cache[field_factory.name] = field_factory
     end
 
+    def set_coordinates_field(name)
+      @coordinates_field = CoordinatesField.new(name)
+    end
+
     def add_document_boost(attr_name, &block)
       @document_boost_extractor =
         if attr_name
@@ -148,6 +152,7 @@ module Sunspot
     def all_field_factories
       all_field_factories = []
       all_field_factories.concat(field_factories).concat(text_field_factories).concat(dynamic_field_factories)
+      all_field_factories << @coordinates_field if @coordinates_field
       all_field_factories
     end
 
@@ -160,6 +165,10 @@ module Sunspot
     #
     def dynamic_field_factories
       collection_from_inheritable_hash(:dynamic_field_factories)
+    end
+
+    def coordinates_field
+      @coordinates_field
     end
 
     # 

@@ -34,6 +34,12 @@
 
   <indexDefaults>
    <!-- Values here affect all index writers and act as a default unless overridden. -->
+    %arr{ :name => 'components' }
+      %str localsolr
+      %str facet
+      %str mlt
+      %str highlight
+      %str debug
     <useCompoundFile>false</useCompoundFile>
 
     <mergeFactor>10</mergeFactor>
@@ -693,4 +699,28 @@
     -->
   </admin>
 
+  <!-- configuration for LocalSolr -->
+  <updateRequestProcessorChain>
+    <processor class='com.pjaol.search.solr.update.LocalUpdateProcessorFactory'>
+      <str name='latField'>lat</str>
+      <str name='lngField'>lng</str>
+      <int name='startTier'>9</int>
+      <int name='endTier'>15</int>
+    </processor>
+    <processor class='solr.RunUpdateProcessorFactory'></processor>
+    <processor class='solr.LogUpdateProcessorFactory'></processor>
+  </updateRequestProcessorChain>
+  <searchComponent class='com.pjaol.search.solr.component.LocalSolrQueryComponent' name='localsolr'>
+    <str name='latField'>lat</str>
+    <str name='lngField'>lng</str>
+  </searchComponent>
+  <requestHandler class='org.apache.solr.handler.component.SearchHandler' name='geo'>
+    <arr name='components'>
+      <str>localsolr</str>
+      <str>facet</str>
+      <str>mlt</str>
+      <str>highlight</str>
+      <str>debug</str>
+    </arr>
+  </requestHandler>
 </config>

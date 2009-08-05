@@ -54,6 +54,11 @@ module Sunspot
         raise ArgumentError, "unknown argument #{options.keys.first.inspect} passed to paginate" unless options.empty?
         @query.paginate(page, per_page)
       end
+
+      #TODO document
+      def near(coordinates, miles)
+        @query.add_location_restriction(coordinates, miles)
+      end
     end
   end
 end
