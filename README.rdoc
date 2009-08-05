@@ -32,27 +32,9 @@ use:
 
   script/plugin install git://github.com/outoftime/sunspot_rails.git
 
-Create the file <code>config/sunspot.yml</code> and set it up for your environments. Here is a sample:
+Generate the file <code>config/sunspot.yml</code>:
 
-  common: &common
-    solr:
-      hostname: localhost
-      port: 8983
-
-  production:
-    <<: *common
-    solr:
-      path: /solr/myindex
-
-  development:
-    <<: *common
-    solr:
-      port: 8982
-
-  test:
-    <<: *common
-    solr:
-      port: 8981
+  script/generate sunspot
 
 Rails doesn't automatically load rake tasks from plugins installed as gems
 (https://rails.lighthouseapp.com/projects/8994/tickets/59). If you installed
