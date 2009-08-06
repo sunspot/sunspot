@@ -64,9 +64,7 @@ module Sunspot
       end
 
       def add_location_restriction(coordinates, miles)
-        @components << Restriction::Near.new(
-          @setup.coordinates_field, coordinates, miles
-        )
+        @components << Restriction::Near.new(coordinates, miles)
       end
 
       # 

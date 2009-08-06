@@ -142,17 +142,9 @@ module Sunspot
         # if %w(lat lng).all? { |method| coordinates.respond_to?(method) }
         #   coordinates = [coordinates.lat, coordinates.lng]
         # end
-        document.add_field(lat_indexed_name.to_sym, coordinates.first)
-        document.add_field(lng_indexed_name.to_sym, coordinates.last)
+        document.add_field(:lat, coordinates.first)
+        document.add_field(:long, coordinates.last)
       end
-    end
-
-    def lat_indexed_name
-      'lat'
-    end
-
-    def lng_indexed_name
-      'lng'
     end
   end
 

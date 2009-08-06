@@ -23,7 +23,7 @@
     <field indexed='true' multiValued='false' name='class_name' stored='false' type='string' />
     <field indexed='true' multiValued='true' name='text' stored='false' type='text' />
     <field indexed='true' name='lat' stored='true' type='sdouble'></field>
-    <field indexed='true' name='lng' stored='true' type='sdouble'></field>
+    <field indexed='true' name='long' stored='true' type='sdouble'></field>
     <dynamicField indexed='true' name='_local*' stored='false' type='sdouble'></dynamicField>
     <dynamicField indexed='true' multiValued='true' name='*_text' stored='false' type='text' />
     <dynamicField indexed='true' name='random_*' stored='false' type='rand' />

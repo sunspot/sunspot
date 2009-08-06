@@ -703,16 +703,16 @@
   <updateRequestProcessorChain>
     <processor class='com.pjaol.search.solr.update.LocalUpdateProcessorFactory'>
       <str name='latField'>lat</str>
-      <str name='lngField'>lng</str>
+      <str name='lngField'>long</str>
       <int name='startTier'>9</int>
-      <int name='endTier'>15</int>
+      <int name='endTier'>16</int>
     </processor>
     <processor class='solr.RunUpdateProcessorFactory'></processor>
     <processor class='solr.LogUpdateProcessorFactory'></processor>
   </updateRequestProcessorChain>
   <searchComponent class='com.pjaol.search.solr.component.LocalSolrQueryComponent' name='localsolr'>
     <str name='latField'>lat</str>
-    <str name='lngField'>lng</str>
+    <str name='lngField'>long</str>
   </searchComponent>
   <requestHandler class='org.apache.solr.handler.component.SearchHandler' name='geo'>
     <arr name='components'>

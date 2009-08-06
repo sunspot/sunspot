@@ -212,8 +212,8 @@ module Sunspot
       end
 
       class Near
-        def initialize(field, coordinates, radius)
-          @field, @coordinates, @radius = field, coordinates, radius
+        def initialize(coordinates, radius)
+          @coordinates, @radius = coordinates, radius
         end
         
         def negated?
