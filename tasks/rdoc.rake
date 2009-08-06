@@ -1,5 +1,6 @@
 gem 'mislav-hanna'
 require 'hanna/rdoctask'
+require 'jeweler'
 
 Rake::RDocTask.new(:doc) do |rdoc|
   version = Jeweler::VersionHelper.new(File.join(File.dirname(__FILE__), '..')).to_s
