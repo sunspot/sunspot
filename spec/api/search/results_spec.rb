@@ -1,0 +1,38 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
+describe 'search results', :type => :search do
+  it 'loads single result' do
+    post = Post.new
+    stub_results(post)
+    session.search(Post).results.should == [post]
+  end
+
+  it 'loads multiple results in order' do
+    post_1, post_2 = Post.new, Post.new
+    stub_results(post_1, post_2)
+    session.search(Post).results.should == [post_1, post_2]
+    stub_results(post_2, post_1)
+    session.search(Post).results.should == [post_2, post_1]
+  end
+
+  if ENV['USE_WILL_PAGINATE']
+
+    it 'returns search total as attribute of results' do
+      stub_results(Post.new, 4)
+      session.search(Post, :page => 1).results.total_entries.should == 4
+    end
+
+  else
+
+    it 'returns vanilla array if WillPaginate is not available' do
+      stub_results(Post.new)
+      session.search(Post, :page => 1).results.should_not respond_to(:total_entries)
+    end
+
+  end
+
+  it 'should return total' do
+    stub_results(Post.new, Post.new, 4)
+    session.search(Post, :page => 1).total.should == 4
+  end
+end

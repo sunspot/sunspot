@@ -1,0 +1,77 @@
+module SearchHelper
+  def stub_full_results(*results)
+    count =
+      if results.last.is_a?(Integer) then results.pop
+      else results.length
+      end
+    docs = results.map do |result|
+      instance = result.delete('instance')
+      result.merge('id' => "#{instance.class.name} #{instance.id}")
+    end
+    response = {
+      'response' => {
+        'docs' => docs,
+        'numFound' => count
+      }
+    }
+    connection.stub!(:select).and_return(response)
+  end
+
+  def stub_results(*results)
+    stub_full_results(
+      *results.map do |result|
+        if result.is_a?(Integer)
+          result
+        else
+          { 'instance' => result }
+        end
+      end
+    )
+  end
+
+  def stub_facet(name, values)
+    connection.stub!(:select).and_return(
+      'facet_counts' => {
+        'facet_fields' => {
+          name.to_s => values.to_a.sort_by { |value, count| -count }.flatten
+        }
+      }
+    )
+  end
+
+  def stub_date_facet(name, gap, values)
+    connection.stub!(:select).and_return(
+      'facet_counts' => {
+        'facet_dates' => {
+          name.to_s => { 'gap' => "+#{gap}SECONDS" }.merge(values)
+        }
+      }
+    )
+  end
+
+  def stub_query_facet(values)
+    connection.stub!(:select).and_return(
+      'facet_counts' => { 'facet_queries' => values }
+    )
+  end
+
+  def facet_values(result, field_name)
+    result.facet(field_name).rows.map { |row| row.value }
+  end
+
+  def facet_counts(result, field_name)
+    result.facet(field_name).rows.map { |row| row.count }
+  end
+
+  def config
+    @config ||= Sunspot::Configuration.build
+  end
+
+  def connection
+    @connection ||= mock('connection')
+  end
+
+  def session
+    @session ||= Sunspot::Session.new(config, connection)
+  end
+end
