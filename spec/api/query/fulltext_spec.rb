@@ -46,7 +46,7 @@ describe 'fulltext query', :type => :query do
     connection.should_not have_last_search_with(:fl)
   end
 
-  it 'search all text fields for all types under search' do
+  it 'searches all text fields for all types under search' do
     session.search Post, Namespaced::Comment do
       keywords 'keywords'
     end
@@ -61,7 +61,7 @@ describe 'fulltext query', :type => :query do
     connection.searches.last[:qf].should == 'author_name_text'
   end
 
-  it 'should raise Sunspot::UnrecognizedFieldError for nonexistant fields in keywords' do
+  it 'raises Sunspot::UnrecognizedFieldError for nonexistant fields in keywords' do
     lambda do
       session.search Post do
         keywords :text, :fields => :bogus
