@@ -1,0 +1,2 @@
+class SuperClass < MockRecord
+end

@@ -1,6 +1,7 @@
 require File.join(File.dirname(__FILE__), 'blog')
+require File.join(File.dirname(__FILE__), 'super_class')
 
-class Post < MockRecord
+class Post < SuperClass
   attr_accessor :title, :body, :blog_id, :published_at, :ratings_average,
                 :author_name, :featured, :expire_date, :coordinates
   alias_method :featured?, :featured
