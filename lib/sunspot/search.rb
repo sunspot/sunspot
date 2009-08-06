@@ -1,4 +1,6 @@
-require File.join(File.dirname(__FILE__), 'search', 'hit')
+%w(hit highlight).each do |file|
+  require File.join(File.dirname(__FILE__), 'search', file)
+end
 
 module Sunspot
   # 
@@ -60,7 +62,7 @@ module Sunspot
     # Array:: Ordered collection of Hit objects
     #
     def hits
-      @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, self) }
+      @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, self, solr_highlights) }
     end
     alias_method :raw_results, :hits
 
@@ -180,6 +182,10 @@ module Sunspot
 
     def solr_response
       @solr_response ||= @solr_result['response']
+    end
+    
+    def solr_highlights
+      @solr_highlighting ||= @solr_result['highlighting']
     end
 
     def doc_ids

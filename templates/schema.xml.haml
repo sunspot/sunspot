@@ -17,7 +17,7 @@
     %field{ :name => 'lat', :type => 'sdouble', :indexed => 'true', :stored => 'true' }
     %field{ :name => 'long', :type => 'sdouble', :indexed => 'true', :stored => 'true' }
     %dynamicField{ :name => '_local*', :type => 'sdouble', :indexed => 'true', :stored => 'false' }
-    %dynamicField{ :name => '*_text', :type => 'text', :indexed => 'true', :stored => 'false', :multiValued => 'true' }/
+    %dynamicField{ :name => '*_text', :type => 'text', :indexed => 'true', :stored => 'true', :multiValued => 'true' }/
     %dynamicField{ :name => 'random_*', :type => 'rand', :indexed => 'true', :stored => 'false' }/
     - for dynamic_field in schema.dynamic_fields
       %dynamicField{ :name => dynamic_field.name, :type => dynamic_field.type, :indexed => 'true', :stored => dynamic_field.stored?, :multiValued => dynamic_field.multiValued? }/

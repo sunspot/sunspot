@@ -1,5 +1,5 @@
 %w(base_query scope field_query connective dynamic_query field_facet query_facet
-   query_facet_row pagination restriction sort sort_composite).each do |file|
+   query_facet_row pagination restriction sort sort_composite highlighting).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -134,6 +134,9 @@ module Sunspot
       #
       def set_keywords(keywords, options = {}) #:nodoc:
         @base_query.keywords = keywords
+        if options.delete(:highlight)
+          @components << @highlight = Highlighting.new
+        end
         @base_query.keyword_options = options
       end
     end

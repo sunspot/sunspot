@@ -25,7 +25,7 @@
     <field indexed='true' name='lat' stored='true' type='sdouble'></field>
     <field indexed='true' name='long' stored='true' type='sdouble'></field>
     <dynamicField indexed='true' name='_local*' stored='false' type='sdouble'></dynamicField>
-    <dynamicField indexed='true' multiValued='true' name='*_text' stored='false' type='text' />
+    <dynamicField indexed='true' multiValued='true' name='*_text' stored='true' type='text' />
     <dynamicField indexed='true' name='random_*' stored='false' type='rand' />
     <dynamicField indexed='true' multiValued='false' name='*_b' stored='false' type='boolean' />
     <dynamicField indexed='true' multiValued='false' name='*_f' stored='false' type='sfloat' />
