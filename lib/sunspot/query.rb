@@ -30,14 +30,6 @@ module Sunspot
       end
 
       # 
-      # Set the keywords for this query. Keywords are parsed with Solr's dismax
-      # handler.
-      #
-      def keywords=(keywords)
-        set_keywords(keywords)
-      end
-
-      # 
       # Add a component to the query. Used by objects that proxy to the query
       # object.
       # 
@@ -59,11 +51,11 @@ module Sunspot
       #   How many rows to display per page. Default taken from
       #   Sunspot.config.pagination.default_per_page
       #
-      def paginate(page, per_page = nil)
+      def paginate(page, per_page = nil) #:nodoc:
         @pagination.page, @pagination.per_page = page, per_page
       end
 
-      def add_location_restriction(coordinates, miles)
+      def add_location_restriction(coordinates, miles) #:nodoc:
         @components << Restriction::Near.new(coordinates, miles)
       end
 
@@ -71,7 +63,7 @@ module Sunspot
       # Add random ordering to the search. This can be added after other
       # field-based sorts if desired.
       #
-      def order_by_random
+      def order_by_random #:nodoc:
         add_sort(Sort.new(RandomField.new))
       end
 
@@ -143,51 +135,6 @@ module Sunspot
       def set_keywords(keywords, options = {}) #:nodoc:
         @base_query.keywords = keywords
         @base_query.keyword_options = options
-      end
-
-      # 
-      # Pass in search options as a hash. This is not the preferred way of
-      # building a Sunspot search, but it is made available as experience shows
-      # Ruby developers like to pass in hashes. Probably nice for quick one-offs
-      # on the console, anyway.
-      #
-      # ==== Options (+options+)
-      #
-      # :keywords:: Keyword string for fulltext search
-      # :conditions::
-      #   Hash of key-value pairs, where keys are field names, and values are one
-      #   of scalar, Array, or Range. Scalars are evaluated as EqualTo
-      #   restrictions; Arrays are AnyOf restrictions, and Ranges are Between
-      #   restrictions.
-      # :order::
-      #   Order the search results. Either a string or array of strings of the
-      #   form "field_name direction"
-      # :page::
-      #   Page to use for pagination
-      # :per_page::
-      #   Number of results to show per page
-      #
-      def options=(options) #:nodoc:
-        if options.has_key?(:keywords)
-          self.keywords = options[:keywords]
-        end
-        if options.has_key?(:conditions)
-          options[:conditions].each_pair do |field_name, value|
-            begin
-              add_shorthand_restriction(field_name, value)
-            rescue UnrecognizedFieldError
-              # ignore fields we don't recognize
-            end
-          end
-        end
-        if options.has_key?(:order)
-          for order in Array(options[:order])
-            order_by(*order.split(' '))
-          end
-        end
-        if options.has_key?(:page)
-          paginate(options[:page], options[:per_page])
-        end
       end
     end
   end

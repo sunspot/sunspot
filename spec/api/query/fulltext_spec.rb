@@ -37,7 +37,9 @@ describe 'fulltext query', :type => :query do
   end
 
   it 'requests score when keywords used' do
-    session.search Post, :keywords => 'keyword search'
+    session.search Post do
+      keywords 'keyword search'
+    end
     connection.should have_last_search_with(:fl => '* score')
   end
 

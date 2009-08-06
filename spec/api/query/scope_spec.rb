@@ -1,21 +1,11 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe 'scoped query', :type => :query do
-  it 'scopes by exact match with a string from DSL' do
+  it 'scopes by exact match with a string' do
     session.search Post do
       with :title, 'My Pet Post'
     end
     connection.should have_last_search_with(:fq => ['title_ss:My\ Pet\ Post'])
-  end
-
-  it 'scopes by exact match with a string from options' do
-    session.search Post, :conditions => { :title => 'My Pet Post' }
-    connection.should have_last_search_with(:fq => ['title_ss:My\ Pet\ Post'])
-  end
-
-  it 'ignores nonexistant fields in hash scope' do
-    session.search Post, :conditions => { :bogus => 'Field' }
-    connection.should_not have_last_search_with(:fq)
   end
 
   it 'scopes by exact match with time' do
@@ -73,15 +63,10 @@ describe 'scoped query', :type => :query do
     connection.should have_last_search_with(:fq => ['average_rating_f:[2\.0 TO 4\.0]'])
   end
 
-  it 'scopes by any match with integer using DSL' do
+  it 'scopes by any match with integer' do
     session.search Post do
       with(:category_ids).any_of [2, 7, 12]
     end
-    connection.should have_last_search_with(:fq => ['category_ids_im:(2 OR 7 OR 12)'])
-  end
-
-  it 'scopes by any match with integer using options' do
-    session.search Post, :conditions => { :category_ids => [2, 7, 12] }
     connection.should have_last_search_with(:fq => ['category_ids_im:(2 OR 7 OR 12)'])
   end
 
@@ -190,17 +175,11 @@ describe 'scoped query', :type => :query do
     )
   end
 
-  it 'allows scoping on fields common to all types with DSL' do
+  it 'allows scoping on fields common to all types' do
     time = Time.parse('1983-07-08 05:00:00 -0400')
     session.search Post, Namespaced::Comment do
       with :published_at, time
     end
-    connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
-  end
-
-  it 'allows scoping on fields common to all types with conditions' do
-    time = Time.parse('1983-07-08 05:00:00 -0400')
-    session.search Post, Namespaced::Comment, :conditions => { :published_at => time }
     connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
   end
 

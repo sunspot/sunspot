@@ -54,10 +54,8 @@ module Sunspot
     # See Sunspot.search
     #
     def search(*types, &block)
-      options = types.last.is_a?(Hash) ? types.pop : {}
       search = new_search(*types)
       search.build(&block) if block
-      search.query.options = options
       search.execute!
     end
 

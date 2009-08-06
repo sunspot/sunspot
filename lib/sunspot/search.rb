@@ -145,15 +145,17 @@ module Sunspot
     # Sunspot::DSL::Search#data_accessor_for method when building searches using
     # the block DSL.
     #
-    def data_accessor_for(clazz)
+    def data_accessor_for(clazz) #:nodoc:
       (@data_accessors ||= {})[clazz.name.to_sym] ||=
         Adapters::DataAccessor.create(clazz)
     end
 
     # 
-    # Build this search using a DSL block.
+    # Build this search using a DSL block. This method can be called more than
+    # once on an unexecuted search (e.g., Sunspot.new_search) in order to build
+    # a search incrementally.
     #
-    def build(&block) #:nodoc:
+    def build(&block)
       Util.instance_eval_or_call(dsl, &block)
       self
     end
