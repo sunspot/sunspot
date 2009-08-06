@@ -27,7 +27,6 @@ module Sunspot
         @components << @base_query = BaseQuery.new(setup)
         @components << @pagination = Pagination.new(@configuration)
         @components << @sort = SortComposite.new
-        @components << @highlighting = Highlighting.new
       end
 
       # 
@@ -139,6 +138,9 @@ module Sunspot
       #
       def set_keywords(keywords, options = {}) #:nodoc:
         @base_query.keywords = keywords
+        if options.delete(:highlight)
+          @components << @highlight = Highlighting.new
+        end
         @base_query.keyword_options = options
       end
 

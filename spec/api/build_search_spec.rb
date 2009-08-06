@@ -545,7 +545,7 @@ describe 'Search' do
     connection.should have_last_search_with(:sort => 'custom_integer:test_i desc')
   end
 
-  it 'should order by a dynamic field and static field, with given precedence' do
+ it 'should order by a dynamic field and static field, with given precedence' do
     session.search Post do
       dynamic :custom_integer do
         order_by :test, :desc
@@ -857,6 +857,20 @@ describe 'Search' do
       end
     end
     connection.should have_last_search_with(:"facet.field" => %w(custom_string:test_s))
+  end
+
+  it 'should not send highlight parameter when highlight not requested' do
+    session.search(Post) do
+      keywords 'test'
+    end
+    connection.should_not have_last_search_with(:hl)
+  end
+
+  it 'should enable highlighting when highlighting requested as keywords argument' do
+    session.search(Post) do
+      keywords 'test', :highlight => true
+    end
+    connection.should have_last_search_with(:hl => 'on')
   end
 
   it 'should properly escape namespaced type names' do

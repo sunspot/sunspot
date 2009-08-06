@@ -4,14 +4,11 @@ module Sunspot
     # A query component that provides access to hit highlighting in Solr
     #
     class Highlighting #:nodoc:
-      def initialize
-      end
-      
       def to_params
         {
-          'hl' => 'on',
-          'hl.simple.pre' => '@@@hl@@@',
-          'hl.simple.post' => '@@@endhl@@@'
+          :hl => 'on',
+          :"hl.simple.pre" => '@@@hl@@@',
+          :"hl.simple.post" => '@@@endhl@@@'
         }
       end
     end
