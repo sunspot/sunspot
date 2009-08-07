@@ -15,6 +15,7 @@ module SearchHelper
       }
     }
     connection.stub!(:select).and_return(response)
+    response
   end
 
   def stub_results(*results)

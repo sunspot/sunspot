@@ -62,7 +62,7 @@ module Sunspot
     # Array:: Ordered collection of Hit objects
     #
     def hits
-      @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, self, solr_highlights) }
+      @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, highlights_for(doc), self) }
     end
     alias_method :raw_results, :hits
 
@@ -183,10 +183,6 @@ module Sunspot
     def solr_response
       @solr_response ||= @solr_result['response']
     end
-    
-    def solr_highlights
-      @solr_highlighting ||= @solr_result['highlighting']
-    end
 
     def doc_ids
       @doc_ids ||= solr_response['docs'].map { |doc| doc['id'] }
@@ -220,6 +216,12 @@ module Sunspot
             @solr_result['facet_counts']['facet_queries']
           )
         end
+      end
+    end
+
+    def highlights_for(doc)
+      if @solr_result['highlighting']
+        @solr_result['highlighting'][doc['id']]
       end
     end
 

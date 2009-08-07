@@ -19,18 +19,13 @@ module Sunspot
 
       attr_writer :instance #:nodoc:
 
-      def initialize(raw_hit, search, highlights = {}) #:nodoc:
+      def initialize(raw_hit, highlights, search) #:nodoc:
         @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
         @score = raw_hit['score']
         @search = search
         @stored_values = raw_hit
         @stored_cache = {}
-        @highlights = []
-        if highlights && highlights.include?("#{@class_name} #{@primary_key}")
-          highlights["#{@class_name} #{@primary_key}"].each do |highlighted_field|
-            @highlights << Highlight.new(highlighted_field.first, highlighted_field.last)
-          end
-        end
+        @highlights = highlights
       end
       
       #
@@ -38,8 +33,11 @@ module Sunspot
       # When a field_name is provided, returns only the highlight for this field.
       #
       def highlights(field_name = nil)
-        return @highlights if field_name.nil?
-        @highlights.select{ |highlight| highlight.field_name == field_name.to_sym }.first
+        if field_name.nil?
+          highlights_cache.values.flatten 
+        else
+          highlights_cache[field_name.to_sym]
+        end
       end
 
       # 
@@ -56,7 +54,7 @@ module Sunspot
       def stored(field_name)
         @stored_cache[field_name.to_sym] ||=
           begin
-            field = Sunspot::Setup.for(@class_name).field(field_name)
+            field = setup.field(field_name)
             field.cast(@stored_values[field.indexed_name])
           end
       end
@@ -71,6 +69,28 @@ module Sunspot
           @search.populate_hits!
         end
         @instance
+      end
+
+      private
+
+      def setup
+        @setup ||= Sunspot::Setup.for(@class_name)
+      end
+
+      def highlights_cache
+        @highlights_cache ||=
+          begin
+            cache = {}
+            if @highlights
+              @highlights.each_pair do |indexed_field_name, highlight_strings|
+                field_name = indexed_field_name.sub(/_[a-z]+$/, '').to_sym
+                cache[field_name] = highlight_strings.map do |highlight_string|
+                  Highlight.new(field_name, highlight_string)
+                end
+              end
+            end
+            cache
+          end
       end
     end
   end

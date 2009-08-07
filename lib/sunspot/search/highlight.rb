@@ -1,16 +1,8 @@
 module Sunspot
   class Search
     class Highlight
-      #
-      # The Regexp used to locate the highlighted words in a Highlight
-      #
-      HIGHLIGHT_MATCHER = /@@@hl@@@(.*)@@@endhl@@@/
+      HIGHLIGHT_MATCHER = /@@@hl@@@(.*?)@@@endhl@@@/
       
-      #
-      # Highlighted keywords associated with this hit. Nil if this hit is not
-      # from a keyword search.
-      #
-      attr_reader :highlight
       #
       # The name of the field in which the highlight appeared.
       #
@@ -31,12 +23,11 @@ module Sunspot
       #
       def format(&block)
         block ||= proc { |word| "<em>#{word}</em>" }
-        highlight.gsub(HIGHLIGHT_MATCHER) do
+        @highlight.gsub(HIGHLIGHT_MATCHER) do
           block.call(Regexp.last_match[1])
         end
       end
       alias_method :formatted, :format
-      
     end
   end
 end
