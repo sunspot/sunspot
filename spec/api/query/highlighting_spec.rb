@@ -14,4 +14,14 @@ describe 'highlighted fulltext queries', :type => :query do
     end
     connection.should have_last_search_with(:hl => 'on')
   end
+
+  it 'should set internal formatting' do
+    session.search(Post) do
+      keywords 'test', :highlight => true
+    end
+    connection.should have_last_search_with(
+      :"hl.simple.pre" => '@@@hl@@@',
+      :"hl.simple.post" => '@@@endhl@@@'
+    )
+  end
 end
