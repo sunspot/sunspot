@@ -151,4 +151,11 @@ describe 'connective in scope', :type => :query do
       :fq => '-(average_rating_f:[* TO *] AND -average_rating_f:[3\.0 TO *])'
     )
   end
+
+  it 'should ignore empty connectives' do
+    session.search Post do
+      any_of {}
+    end
+    connection.should_not have_last_search_with(:fq)
+  end
 end

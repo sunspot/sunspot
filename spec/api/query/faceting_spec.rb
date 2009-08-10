@@ -224,6 +224,34 @@ describe 'faceting' do
       )
     end
 
+    it 'ignores facet query with no rows' do
+      session.search Post do
+        facet(:foo) {}
+      end
+      connection.should_not have_last_search_with(:"facet.query")
+    end
+
+    it 'ignores facet query row with no restrictions' do
+      session.search Post do
+        facet :foo do
+          row(:bar) do
+            with(:blog_id, 1)
+          end
+          row(:baz) {}
+        end
+      end
+      connection.searches.last[:"facet.query"].should be_a(String)
+    end
+
+    it 'ignores facet query with only empty rows' do
+      session.search Post do
+        facet :foo do
+          row(:bar) {}
+        end
+      end
+      connection.should_not have_last_search_with(:"facet.query")
+    end
+
     it 'does not allow 0 arguments to facet method with block' do
       lambda do
         session.search Post do

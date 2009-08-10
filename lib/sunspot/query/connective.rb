@@ -14,25 +14,32 @@ module Sunspot
         # Connective as solr params.
         #
         def to_params #:nodoc:
-          { :fq => to_boolean_phrase }
+          if boolean_phrase = to_boolean_phrase
+            { :fq => to_boolean_phrase }
+          else
+            {}
+          end
         end
 
         # 
         # Express the connective as a Lucene boolean phrase.
         #
         def to_boolean_phrase #:nodoc:
-          phrase = if @components.length == 1
-            @components.first.to_boolean_phrase
-          else
-            component_phrases = @components.map do |component|
-              component.to_boolean_phrase
+          unless @components.empty?
+            phrase =
+              if @components.length == 1
+                @components.first.to_boolean_phrase
+              else
+                component_phrases = @components.map do |component|
+                  component.to_boolean_phrase
+                end
+                "(#{component_phrases.join(" #{connector} ")})"
+              end
+            if negated?
+              "-#{phrase}"
+            else
+              phrase
             end
-            "(#{component_phrases.join(" #{connector} ")})"
-          end
-          if negated?
-            "-#{phrase}"
-          else
-            phrase
           end
         end
 

@@ -50,11 +50,16 @@ module Sunspot
       #
       def to_params #:nodoc:
         components = @components.map { |component| component.to_boolean_phrase }
-        components = components.first if components.length == 1
-        {
-          :facet => 'true',
-          :"facet.query" => components
-        }
+        components.compact!
+        if components.empty?
+          {}
+        else
+          components = components.first if components.length == 1
+          {
+            :facet => 'true',
+            :"facet.query" => components
+          }
+        end
       end
 
       # 
