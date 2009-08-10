@@ -1,5 +1,6 @@
 %w(base_query scope field_query connective dynamic_query field_facet query_facet
-   query_facet_row pagination restriction sort sort_composite highlighting).each do |file|
+   query_facet_row local pagination restriction sort sort_composite
+   highlighting).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -56,7 +57,7 @@ module Sunspot
       end
 
       def add_location_restriction(coordinates, miles) #:nodoc:
-        @components << Restriction::Near.new(coordinates, miles)
+        @components << Local.new(coordinates, miles)
       end
 
       # 

@@ -211,25 +211,6 @@ module Sunspot
         end
       end
 
-      class Near
-        def initialize(coordinates, radius)
-          @coordinates, @radius = Util::Coordinates.new(coordinates), radius
-        end
-        
-        def negated?
-          false
-        end
-
-        def to_params
-          {
-            :qt => 'geo',
-            :lat => @coordinates.lat,
-            :long => @coordinates.lng,
-            :radius => @radius
-          }
-        end
-      end
-
       # 
       # Result must be the exact instance given (only useful when negated).
       #

@@ -58,7 +58,7 @@ module Sunspot
     end
 
     def set_coordinates_field(name)
-      @coordinates_field = CoordinatesField.new(name)
+      @coordinates_field_factory = FieldFactory::Coordinates.new(name)
     end
 
     def add_document_boost(attr_name, &block)
@@ -154,7 +154,7 @@ module Sunspot
     def all_field_factories
       all_field_factories = []
       all_field_factories.concat(field_factories).concat(text_field_factories).concat(dynamic_field_factories)
-      all_field_factories << @coordinates_field if @coordinates_field
+      all_field_factories << @coordinates_field_factory if @coordinates_field_factory
       all_field_factories
     end
 
