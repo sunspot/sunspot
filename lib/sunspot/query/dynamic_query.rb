@@ -14,7 +14,8 @@ module Sunspot
     # 
     class DynamicQuery < FieldQuery
       def initialize(dynamic_field_factory, query) #:nodoc:
-        @dynamic_field_factory, @query = dynamic_field_factory, query
+        super(dynamic_field_factory)
+        @query = query
       end
       
       # 
@@ -48,15 +49,6 @@ module Sunspot
       end
 
       private
-      
-      #
-      # DynamicFieldFactory implements the part of the Setup interface that we
-      # need, so methods in DynamicQuery's superclasses can rely on it without
-      # knowing what it is.
-      #
-      def setup
-        @dynamic_field_factory
-      end
       
       # 
       # So query facets can be added to the query from within dynamic queries

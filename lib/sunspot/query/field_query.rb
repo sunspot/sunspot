@@ -36,7 +36,7 @@ module Sunspot
       # QueryFacet:: The query facet object
       #
       def add_query_facet(name)
-        add_component(facet = QueryFacet.new(name, setup))
+        add_component(facet = QueryFacet.new(name, @setup))
         query_facets[name.to_sym] = facet
         facet
       end

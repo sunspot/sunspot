@@ -1,9 +1,5 @@
 === 0.9.X ===
 === 0.10 ===
-* Highlighting
-  * Support all of Solrs highlighting configuration strings
-  * Write API specs for highlighting
-* LocalSolr
 * Text field restrictions
 * Prefixes
 * Intelligently decide whether to instantiate all facet rows at once

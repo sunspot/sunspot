@@ -59,6 +59,14 @@ module Sunspot
       def near(coordinates, miles)
         @query.add_location_restriction(coordinates, miles)
       end
+
+      #TODO document
+      def text_fields(&block)
+        Sunspot::Util.instance_eval_or_call(
+          Scope.new(@query.add_text_fields_scope),
+          &block
+        )
+      end
     end
   end
 end

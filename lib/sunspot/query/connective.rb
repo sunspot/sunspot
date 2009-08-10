@@ -6,8 +6,8 @@ module Sunspot
       #
       class Abstract < Scope
         def initialize(setup, negated = false) #:nodoc:
-          @setup, @negated = setup, negated
-          @components = []
+          super(setup)
+          @negated = negated
         end
 
         # 
@@ -41,14 +41,6 @@ module Sunspot
               phrase
             end
           end
-        end
-
-        # 
-        # Add a component to the connective. All components must implement the
-        # #to_boolean_phrase method.
-        #
-        def add_component(component) #:nodoc:
-          @components << component
         end
 
         def negated?
@@ -89,7 +81,7 @@ module Sunspot
         # a conjunction must explicitly be created.
         #
         def add_conjunction
-          @components << conjunction = Conjunction.new(setup)
+          @components << conjunction = Conjunction.new(@setup)
           conjunction
         end
 

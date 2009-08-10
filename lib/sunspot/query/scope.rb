@@ -6,6 +6,11 @@ module Sunspot
     # Query::Query and Query::QueryFacetRow.
     # 
     class Scope
+      def initialize(setup)
+        @setup = setup
+        @components = []
+      end
+
       # 
       # Add a restriction to the query.
       # 
@@ -60,7 +65,7 @@ module Sunspot
       # Connective::Disjunction:: New disjunction
       #
       def add_disjunction
-        add_component(disjunction = Connective::Disjunction.new(setup))
+        add_component(disjunction = Connective::Disjunction.new(@setup))
         disjunction
       end
 
@@ -108,7 +113,7 @@ module Sunspot
       #   definitions.
       #
       def dynamic_query(base_name)
-        DynamicQuery.new(setup.dynamic_field_factory(base_name), self)
+        DynamicQuery.new(@setup.dynamic_field_factory(base_name), self)
       end
 
       # 
@@ -143,6 +148,29 @@ module Sunspot
         add_shorthand_restriction(field_name, value, true)
       end
 
+      # 
+      # Add a component to the connective. All components must implement the
+      # #to_boolean_phrase method.
+      #
+      def add_component(component) #:nodoc:
+        @components << component
+      end
+
+      # 
+      # Representation of this query as solr parameters.
+      #
+      # ==== Returns
+      #
+      # Hash:: Representation of query in Solr form
+      #
+      def to_params #:nodoc:
+        params = {}
+        for component in @components
+          Util.deep_merge!(params, component.to_params)
+        end
+        params
+      end
+
       private
 
       # 
@@ -150,15 +178,7 @@ module Sunspot
       # method.
       #
       def build_field(field_name)
-        setup.field(field_name)
-      end
-
-      # 
-      # Return a setup object which can return a field object given a name.
-      # Subclasses may override this method.
-      #
-      def setup
-        @setup
+        @setup.field(field_name)
       end
     end
   end

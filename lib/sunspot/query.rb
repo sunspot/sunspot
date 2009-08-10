@@ -22,24 +22,11 @@ module Sunspot
       attr_reader :query_facets #:nodoc:
 
       def initialize(setup, configuration) #:nodoc:
-        @setup, @configuration = setup, configuration
-        @components = []
+        super(setup)
         @query_facets = {}
         @components << @base_query = BaseQuery.new(setup)
-        @components << @pagination = Pagination.new(@configuration)
+        @components << @pagination = Pagination.new(configuration)
         @components << @sort = SortComposite.new
-      end
-
-      # 
-      # Add a component to the query. Used by objects that proxy to the query
-      # object.
-      # 
-      # ==== Parameters
-      # 
-      # component<~to_params>:: Query component to add.
-      # 
-      def add_component(component) #:nodoc:
-        @components << component
       end
 
       #
@@ -60,34 +47,17 @@ module Sunspot
         @components << Local.new(coordinates, miles)
       end
 
+      def add_text_fields_scope
+        @components << scope = Scope.new(TextFieldSetup.new(@setup))
+        scope
+      end
+
       # 
       # Add random ordering to the search. This can be added after other
       # field-based sorts if desired.
       #
       def order_by_random #:nodoc:
         add_sort(Sort.new(RandomField.new))
-      end
-
-      # 
-      # Representation of this query as solr-ruby parameters. Constructs the hash
-      # by deep-merging scope and facet parameters, adding in various other
-      # parameters from instance data.
-      #
-      # Note that solr-ruby takes the :q parameter as a separate argument; for
-      # the sake of consistency, the Query object ignores this fact (the Search
-      # object extracts it back out).
-      #
-      # ==== Returns
-      #
-      # Hash:: Representation of query in solr-ruby form
-      #
-      def to_params #:nodoc:
-        params = {}
-        query_components = []
-        for component in @components
-          Util.deep_merge!(params, component.to_params)
-        end
-        params
       end
 
       # 
