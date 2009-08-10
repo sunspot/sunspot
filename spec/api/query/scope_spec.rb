@@ -91,6 +91,13 @@ describe 'scoped query', :type => :query do
     connection.should have_last_search_with(:fq => ['category_ids_im:(2 AND 7 AND 12)'])
   end
 
+  it 'scopes by prefix match with string' do
+    session.search Post do
+      with(:title).starting_with('tes')
+    end
+    connection.should have_last_search_with(:fq => ['title_ss:tes*'])
+  end
+
   it 'scopes by not equal match with string' do
     session.search Post do
       without :title, 'Bad Post'

@@ -123,6 +123,20 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'prefix searching' do
+    before :each do
+      Sunspot.remove_all
+      @posts = ['test', 'test post', 'some test', 'bogus'].map do |title|
+        Post.new(:title => title)
+      end
+      Sunspot.index!(@posts)
+    end
+
+    it 'should return results whose prefix matches' do
+      Sunspot.search(Post) { with(:title).starting_with('test') }.results.should == @posts[0..1]
+    end
+  end
+
   describe 'exclusion by identity' do
     before do
       @posts = (1..5).map do |i|

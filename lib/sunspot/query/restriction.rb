@@ -214,6 +214,14 @@ module Sunspot
         end
       end
 
+      class StartingWith < Base
+        private
+
+        def to_solr_conditional
+          "#{solr_value(@value)}*"
+        end
+      end
+
       # 
       # Result must be the exact instance given (only useful when negated).
       #

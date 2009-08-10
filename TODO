@@ -1,6 +1,3 @@
 === 0.9.X ===
 === 0.10 ===
-* Text field restrictions
-* Prefixes
-* Intelligently decide whether to instantiate all facet rows at once
 * Fully support or remove support for time facet "other"
