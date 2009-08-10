@@ -2,8 +2,13 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe 'indexing fulltext fields' do
   it 'indexes text field' do
-    session.index(post(:title => 'A Title', :body => 'A Post'))
-    connection.should have_add_with(:title_text => 'A Title', :body_text => 'A Post')
+    session.index(post(:title => 'A Title'))
+    connection.should have_add_with(:title_text => 'A Title')
+  end
+
+  it 'indexes stored text field' do
+    session.index(post(:body => 'Test body'))
+    connection.should have_add_with(:body_texts => 'Test body')
   end
 
   it 'indexes text field with boost' do
@@ -13,7 +18,7 @@ describe 'indexing fulltext fields' do
 
   it 'indexes multiple values for a text field' do
     session.index(post(:body => %w(some title)))
-    connection.should have_add_with(:body_text => %w(some title))
+    connection.should have_add_with(:body_texts => %w(some title))
   end
 
   it 'indexes text via a block accessor' do

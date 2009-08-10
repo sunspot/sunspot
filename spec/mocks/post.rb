@@ -32,7 +32,7 @@ end
 
 Sunspot.setup(Post) do
   text :title, :boost => 2
-  text :body
+  text :body, :stored => true
   text :backwards_title do
     title.reverse if title
   end

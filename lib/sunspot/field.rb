@@ -3,12 +3,13 @@ module Sunspot
     attr_accessor :name # The public-facing name of the field
     attr_accessor :type # The Type of the field
     attr_accessor :reference # Model class that the value of this field refers to
-    attr_accessor :attributes
+    attr_reader :attributes
 
     # 
     #
-    def initialize(name, type) #:nodoc
+    def initialize(name, type, options = {}) #:nodoc
       @name, @type = name.to_sym, type
+      @stored = !!options.delete(:stored)
       @attributes = {}
     end
 
@@ -87,13 +88,19 @@ module Sunspot
   # to do otherwise). FulltextField instances always have the type TextType.
   #
   class FulltextField < Field #:nodoc:
+    attr_reader :boost
+
     def initialize(name, options = {})
-      super(name, Type::TextType)
-      if options.has_key?(:boost)
-        @attributes[:boost] = options.delete(:boost)
-      end
+      super(name, Type::TextType, options)
       @multiple = true
+      if boost = options.delete(:boost)
+        @attributes[:boost] = boost
+      end
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
+    end
+
+    def indexed_name
+      "#{super}#{'s' if @stored}"
     end
   end
 
@@ -106,7 +113,7 @@ module Sunspot
   #
   class AttributeField < Field #:nodoc:
     def initialize(name, type, options = {})
-      super(name, type)
+      super(name, type, options)
       @multiple = !!options.delete(:multiple)
       @reference =
         if (reference = options.delete(:references)).respond_to?(:name)
@@ -114,7 +121,6 @@ module Sunspot
         elsif reference.respond_to?(:to_sym)
           reference.to_sym
         end
-      @stored = !!options.delete(:stored)
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
 
