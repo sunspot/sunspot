@@ -160,5 +160,31 @@ module Sunspot
         destination
       end
     end
+
+    class Coordinates
+      def initialize(coords)
+        @coords = coords
+      end
+
+      def lat
+        if @coords.respond_to?(:[])
+          @coords[0]
+        else
+          @coords.lat
+        end.to_f
+      end
+
+      def lng
+        if @coords.respond_to?(:[])
+          @coords[1]
+        elsif @coords.respond_to?(:lng)
+          @coords.lng
+        elsif @coords.respond_to?(:lon)
+          @coords.lon
+        elsif @coords.respond_to?(:long)
+          @coords.long
+        end.to_f
+      end
+    end
   end
 end

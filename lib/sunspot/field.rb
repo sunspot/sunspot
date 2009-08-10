@@ -153,11 +153,9 @@ module Sunspot
 
     def populate_document(document, model)
       if coordinates = @data_extractor.value_for(model)
-        # if %w(lat lng).all? { |method| coordinates.respond_to?(method) }
-        #   coordinates = [coordinates.lat, coordinates.lng]
-        # end
-        document.add_field(:lat, coordinates.first)
-        document.add_field(:long, coordinates.last)
+        coordinates = Util::Coordinates.new(coordinates)
+        document.add_field(:lat, coordinates.lat)
+        document.add_field(:long, coordinates.lng)
       end
     end
   end

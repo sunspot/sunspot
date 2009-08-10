@@ -213,7 +213,7 @@ module Sunspot
 
       class Near
         def initialize(coordinates, radius)
-          @coordinates, @radius = coordinates, radius
+          @coordinates, @radius = Util::Coordinates.new(coordinates), radius
         end
         
         def negated?
@@ -223,16 +223,10 @@ module Sunspot
         def to_params
           {
             :qt => 'geo',
-            :lat => coordinates_pair.first,
-            :long => coordinates_pair.last,
+            :lat => @coordinates.lat,
+            :long => @coordinates.lng,
             :radius => @radius
           }
-        end
-
-        private
-
-        def coordinates_pair
-          @coordinates
         end
       end
 
