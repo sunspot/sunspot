@@ -124,8 +124,6 @@ module Sunspot
         #
         def solr_value(value = @value)
           solr_value = escape(@field.to_indexed(value))
-          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
-          solr_value
         end
       end
 
@@ -163,6 +161,12 @@ module Sunspot
       class LessThan < Base
         private
 
+        def solr_value(value = @value)
+          solr_value = super
+          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
+          solr_value
+        end
+
         def to_solr_conditional
           "[* TO #{solr_value}]"
         end
@@ -174,6 +178,12 @@ module Sunspot
       class GreaterThan < Base
         private
 
+        def solr_value(value = @value)
+          solr_value = super
+          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
+          solr_value
+        end
+
         def to_solr_conditional
           "[#{solr_value} TO *]"
         end
@@ -184,6 +194,12 @@ module Sunspot
       #
       class Between < Base
         private
+
+        def solr_value(value = @value)
+          solr_value = super
+          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
+          solr_value
+        end
 
         def to_solr_conditional
           first, last = [@value.first, @value.last].sort

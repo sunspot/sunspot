@@ -5,7 +5,7 @@ describe 'scoped query', :type => :query do
     session.search Post do
       with :title, 'My Pet Post'
     end
-    connection.should have_last_search_with(:fq => ['title_ss:"My\ Pet\ Post"'])
+    connection.should have_last_search_with(:fq => ['title_ss:My\ Pet\ Post'])
   end
 
   it 'scopes by exact match with time' do
@@ -40,6 +40,13 @@ describe 'scoped query', :type => :query do
       with(:average_rating).less_than 3.0
     end
     connection.should have_last_search_with(:fq => ['average_rating_f:[* TO 3\.0]'])
+  end
+
+  it 'should quote string with space in a less than match' do
+    session.search Post do
+      with(:title).less_than('test value')
+    end
+    connection.should have_last_search_with(:fq => ['title_ss:[* TO "test\ value"]'])
   end
 
   it 'scopes by greater than match with float' do
@@ -102,7 +109,7 @@ describe 'scoped query', :type => :query do
     session.search Post do
       without :title, 'Bad Post'
     end
-    connection.should have_last_search_with(:fq => ['-title_ss:"Bad\ Post"'])
+    connection.should have_last_search_with(:fq => ['-title_ss:Bad\ Post'])
   end
 
   it 'scopes by not less than match with float' do
