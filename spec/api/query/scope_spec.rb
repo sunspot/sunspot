@@ -5,7 +5,7 @@ describe 'scoped query', :type => :query do
     session.search Post do
       with :title, 'My Pet Post'
     end
-    connection.should have_last_search_with(:fq => ['title_ss:My\ Pet\ Post'])
+    connection.should have_last_search_with(:fq => ['title_ss:"My\ Pet\ Post"'])
   end
 
   it 'scopes by exact match with time' do
@@ -95,7 +95,7 @@ describe 'scoped query', :type => :query do
     session.search Post do
       without :title, 'Bad Post'
     end
-    connection.should have_last_search_with(:fq => ['-title_ss:Bad\ Post'])
+    connection.should have_last_search_with(:fq => ['-title_ss:"Bad\ Post"'])
   end
 
   it 'scopes by not less than match with float' do

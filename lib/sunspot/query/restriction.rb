@@ -123,7 +123,9 @@ module Sunspot
         # String:: Solr API representation of given value
         #
         def solr_value(value = @value)
-          escape(@field.to_indexed(value))
+          solr_value = escape(@field.to_indexed(value))
+          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
+          solr_value
         end
       end
 

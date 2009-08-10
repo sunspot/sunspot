@@ -85,7 +85,7 @@ describe 'scoped_search' do
     end
   end
 
-  test_field_type 'String', :title, :title, 'apple', 'banana', 'cherry', 'date', 'eggplant'
+  test_field_type 'String', :title, :title, 'apple pie', 'banana split', 'cherry tart', 'date pastry', 'eggplant a la mode'
   test_field_type 'Integer', :blog_id, :blog_id, -2, 0, 3, 12, 20
   test_field_type 'Float', :ratings_average, :average_rating, -2.5, 0.0, 3.2, 3.5, 16.0
   test_field_type 'Time', :published_at, :published_at, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
