@@ -75,11 +75,11 @@ module Sunspot
       def text_field_names
         text_fields =
           if @text_field_names
-            Array(@text_field_names).map do |field_name|
-              @setup.text_field(field_name.to_sym)
+            Array(@text_field_names).inject([]) do |fields, field_name|
+              fields.concat(@setup.text_fields(field_name.to_sym).to_a)
             end
           else
-            @setup.text_fields
+            @setup.all_text_fields
           end
         text_fields.map do |text_field|
           text_field.indexed_name

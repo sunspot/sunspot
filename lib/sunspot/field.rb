@@ -77,6 +77,14 @@ module Sunspot
     def multiple?
       !!@multiple
     end
+
+    def hash
+      indexed_name.hash
+    end
+
+    def ==(field)
+      indexed_name == field.indexed_name
+    end
   end
 
   # 

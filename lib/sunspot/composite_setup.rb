@@ -48,7 +48,7 @@ module Sunspot
     # UnrecognizedFieldError::
     #   If no field with that name is configured for any of the enclosed types.
     #
-    def text_field(field_name)
+    def text_fields(field_name)
       text_fields_hash[field_name.to_sym] || raise(
         UnrecognizedFieldError,
         "No text field configured for #{@types * ', '} with name '#{field_name}'"
@@ -104,8 +104,8 @@ module Sunspot
     #
     # Array:: Text fields configured for the enclosed types
     #
-    def text_fields
-      @text_fields ||= text_fields_hash.values
+    def all_text_fields
+      @text_fields ||= text_fields_hash.values.map { |set| set.to_a }.flatten
     end
 
     private
@@ -121,8 +121,8 @@ module Sunspot
     def text_fields_hash
       @text_fields_hash ||=
         setups.inject({}) do |hash, setup|
-          setup.text_fields.each do |text_field|
-            hash[text_field.name] ||= text_field
+          setup.all_text_fields.each do |text_field|
+            (hash[text_field.name] ||= Set.new) << text_field
           end
           hash
         end

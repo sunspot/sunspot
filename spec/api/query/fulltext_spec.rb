@@ -29,6 +29,13 @@ describe 'fulltext query', :type => :query do
     connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text)
   end
 
+  it 'searches both stored and unstored text fields' do
+    session.search Post, Namespaced::Comment do
+      keywords 'keyword search'
+    end
+    connection.searches.last[:qf].split(' ').sort.should == %w(author_name_text backwards_title_text body_text body_texts title_text)
+  end
+
   it 'searches only specified text fields when specified' do
     session.search Post do
       keywords 'keyword search', :fields => [:title, :body]
@@ -36,7 +43,7 @@ describe 'fulltext query', :type => :query do
     connection.searches.last[:qf].split(' ').sort.should == %w(body_texts title_text)
   end
 
-  it 'searches both unstored and stored text field with same name' do
+  it 'searches both unstored and stored text field with same name when specified' do
     session.search Post, Namespaced::Comment do
       keywords 'keyword search', :fields => [:body]
     end
@@ -53,14 +60,6 @@ describe 'fulltext query', :type => :query do
   it 'does not request score when keywords not used' do
     session.search Post
     connection.should_not have_last_search_with(:fl)
-  end
-
-  it 'searches all text fields for all types under search' do
-    session.search Post, Namespaced::Comment do
-      keywords 'keywords'
-    end
-    connection.searches.last[:qf].split(' ').sort.should == 
-      %w(author_name_text backwards_title_text body_texts title_text)
   end
 
   it 'allows specification of a text field that only exists in one type' do

@@ -92,15 +92,17 @@ module Sunspot
       end
     end
 
-    def text_field(field_name)
-      if field_factory = @text_field_factories_cache[field_name.to_sym]
-        field_factory.build
-      else
-        raise(
-          UnrecognizedFieldError,
-          "No text field configured for #{@clazz.name} with name '#{field_name}'"
-        )
-      end
+    def text_fields(field_name)
+      text_field = 
+        if field_factory = @text_field_factories_cache[field_name.to_sym]
+          field_factory.build
+        else
+          raise(
+            UnrecognizedFieldError,
+            "No text field configured for #{@clazz.name} with name '#{field_name}'"
+          )
+        end
+      [text_field]
     end
 
     def dynamic_field_factory(field_name)
@@ -114,7 +116,7 @@ module Sunspot
       field_factories.map { |field_factory| field_factory.build }
     end
 
-    def text_fields
+    def all_text_fields
       text_field_factories.map { |text_field_factory| text_field_factory.build }
     end
 
