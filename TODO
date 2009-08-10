@@ -1,5 +1,4 @@
 === 0.9.X ===
-* Automatically sort values passed into range queries
 === 0.10 ===
 * Highlighting
   * Support all of Solrs highlighting configuration strings

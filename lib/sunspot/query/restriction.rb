@@ -184,7 +184,8 @@ module Sunspot
         private
 
         def to_solr_conditional
-          "[#{solr_value(@value.first)} TO #{solr_value(@value.last)}]"
+          first, last = [@value.first, @value.last].sort
+          "[#{solr_value(first)} TO #{solr_value(last)}]"
         end
       end
 
