@@ -41,6 +41,9 @@ module Sunspot
     #
     def new_search(*types)
       types.flatten!
+      if types.empty?
+        raise(ArgumentError, "You must specify at least one type to search")
+      end
       setup =
         if types.length == 1
           Setup.for(types.first)
