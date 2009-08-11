@@ -1,4 +1,9 @@
 === 0.9 ===
+* Support most simple facet parameters
+* Intelligently decide whether to instantiate all facet rows at once
+* Add score to raw result objects
+* Support for stored fields; add to raw result objects
+* Support for spelling?
 * Descriptive error messages during indexing
 * Date type
 * High-endian fields
