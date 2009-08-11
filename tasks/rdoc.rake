@@ -1,13 +1,14 @@
 gem 'mislav-hanna'
 require 'hanna/rdoctask'
+require 'jeweler'
 
 Rake::RDocTask.new(:doc) do |rdoc|
   version = Jeweler::VersionHelper.new(File.join(File.dirname(__FILE__), '..')).to_s
-  rdoc.title = 'Sunspot - Pure-Ruby Solr Search and Indexing - API Documentation'
+  rdoc.title = "Sunspot #{version} - Solr-powered search for Ruby objects - API Documentation"
   rdoc.main = 'README.rdoc'
   rdoc.rdoc_files.include('README.rdoc', 'lib/sunspot.rb', 'lib/sunspot/**/*.rb')
   rdoc.rdoc_dir = 'doc'
-  rdoc.options << "--webcvs=http://github.com/outoftime/sunspot/tree/v#{version}/%s" << '--title' << 'Sunspot - Pure-Ruby Solr Search and Indexing - API Documentation'
+  rdoc.options << "--webcvs=http://github.com/outoftime/sunspot/tree/v#{version}/%s" << '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation'
 end
 
 namespace :doc do

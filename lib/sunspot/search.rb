@@ -1,22 +1,21 @@
+require File.join(File.dirname(__FILE__), 'search', 'hit')
+
 module Sunspot
   # 
   # This class encapsulates the results of a Solr search. It provides access
   # to search results, total result count, facets, and pagination information.
-  # Instances of Search are returned by the Sunspot.search method.
+  # Instances of Search are returned by the Sunspot.search and
+  # Sunspot.new_search methods.
   #
   class Search
-    # Objects of this class are returned by the #raw_results method.
-    RawResult = Struct.new(:class_name, :primary_key)
-
     # Query information for this search. If you wish to build the query without
     # using the search DSL, this method allows you to access the query API
     # directly. See Sunspot#new_search for how to construct the search object
     # in this case.
     attr_reader :query 
 
-    def initialize(connection, query) #:nodoc:
-      @connection = connection
-      @query = query
+    def initialize(connection, setup, query) #:nodoc:
+      @connection, @setup, @query = connection, setup, query
     end
 
     #
@@ -28,7 +27,7 @@ module Sunspot
     #
     def execute!
       params = @query.to_params
-      @solr_result = @connection.query(params.delete(:q), params)
+      @solr_result = @connection.select(params)
       self
     end
 
@@ -43,27 +42,27 @@ module Sunspot
     #
     def results
       @results ||= if @query.page && defined?(WillPaginate::Collection)
-        WillPaginate::Collection.create(@query.page, @query.per_page, @solr_result.total_hits) do |pager|
-          pager.replace(result_objects)
+        WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
+          pager.replace(hits.map { |hit| hit.instance })
         end
       else
-        result_objects
+        hits.map { |hit| hit.instance }
       end
     end
 
     # 
-    # Access raw results without instantiating objects from persistent storage.
-    # This may be useful if you are using search as an intermediate step in data
-    # retrieval. Returns an ordered collection of objects that respond to
-    # #class_name and #primary_key
+    # Access raw Solr result information. Returns a collection of Hit objects
+    # that contain the class name, primary key, keyword relevance score (if
+    # applicable), and any stored fields.
     #
     # ==== Returns
     #
-    # Array:: Ordered collection of raw results
+    # Array:: Ordered collection of Hit objects
     #
-    def raw_results
-      @raw_results ||= hit_ids.map { |hit_id| RawResult.new(*hit_id.match(/([^ ]+) (.+)/)[1..2]) }
+    def hits
+      @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, self) }
     end
+    alias_method :raw_results, :hits
 
     # 
     # The total number of documents matching the query parameters
@@ -73,7 +72,7 @@ module Sunspot
     # Integer:: Total matching documents
     #
     def total
-      @total ||= @solr_result.total_hits
+      @total ||= solr_response['numFound']
     end
 
     # 
@@ -91,8 +90,15 @@ module Sunspot
     def facet(field_name)
       (@facets_cache ||= {})[field_name.to_sym] ||=
         begin
-          field = @query.field(field_name)
-          Facet.new(@solr_result.field_facets(field.indexed_name), field)
+          query_facet(field_name) ||
+            begin
+              field = field(field_name)
+              date_facet(field) ||
+                begin
+                  facet_class = field.reference ? InstantiatedFacet : Facet
+                  facet_class.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
+                end
+            end
         end
     end
 
@@ -125,35 +131,92 @@ module Sunspot
     def dynamic_facet(base_name, dynamic_name)
       (@dynamic_facets_cache ||= {})[[base_name.to_sym, dynamic_name.to_sym]] ||=
         begin
-          field = @query.dynamic_field(base_name).build(dynamic_name)
-          Facet.new(@solr_result.field_facets(field.indexed_name), field)
+          field = @setup.dynamic_field_factory(base_name).build(dynamic_name)
+          Facet.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
         end
+    end
+
+    # 
+    # Get the data accessor that will be used to load a particular class out of
+    # persistent storage. Data accessors can implement any methods that may be
+    # useful for refining how data is loaded out of storage. When building a
+    # search manually (e.g., using the Sunspot#new_search method), this should
+    # be used before calling #execute(). Use the
+    # Sunspot::DSL::Search#data_accessor_for method when building searches using
+    # the block DSL.
+    #
+    def data_accessor_for(clazz)
+      (@data_accessors ||= {})[clazz.name.to_sym] ||=
+        Adapters::DataAccessor.create(clazz)
+    end
+
+    # 
+    # Build this search using a DSL block.
+    #
+    def build(&block) #:nodoc:
+      Util.instance_eval_or_call(dsl, &block)
+      self
+    end
+
+    def populate_hits! #:nodoc:
+      type_hit_hash = Hash.new { |h, k| h[k] = [] }
+      id_hit_hash = {}
+      for hit in hits
+        type_hit_hash[hit.class_name] << hit
+        id_hit_hash[hit.primary_key] = hit
+      end
+      type_hit_hash.each_pair do |class_name, hits|
+        ids = hits.map { |hit| hit.primary_key }
+        for instance in data_accessor_for(Util.full_const_get(class_name)).load_all(ids)
+          hit = id_hit_hash[Adapters::InstanceAdapter.adapt(instance).id.to_s]
+          hit.instance = instance
+        end
+      end
     end
 
     private
 
-    # 
-    # Collection of instantiated result objects corresponding to the results
-    # returned by Solr.
-    #
-    # ==== Returns
-    #
-    # Array:: Collection of instantiated result objects
-    #
-    def result_objects
-      raw_results.inject({}) do |type_id_hash, raw_result|
-        (type_id_hash[raw_result.class_name] ||= []) << raw_result.primary_key
-        type_id_hash
-      end.inject([]) do |results, pair|
-        type_name, ids = pair
-        results.concat(Adapters::DataAccessor.create(Util.full_const_get(type_name)).load_all(ids))
-      end.sort_by do |result|
-        hit_ids.index(Adapters::InstanceAdapter.adapt(result).index_id)
+    def solr_response
+      @solr_response ||= @solr_result['response']
+    end
+
+    def doc_ids
+      @doc_ids ||= solr_response['docs'].map { |doc| doc['id'] }
+    end
+
+    def dsl
+      DSL::Search.new(self)
+    end
+
+    def raw_facet(field)
+      if field.type == Type::TimeType
+        @solr_result['facet_counts']['facet_dates'][field.indexed_name]
+      end || @solr_result['facet_counts']['facet_fields'][field.indexed_name]
+    end
+
+    def date_facet(field)
+      if field.type == Type::TimeType
+        if @solr_result['facet_counts'].has_key?('facet_dates')
+          if facet_result = @solr_result['facet_counts']['facet_dates'][field.indexed_name]
+            DateFacet.new(facet_result, field)
+          end
+        end
       end
     end
 
-    def hit_ids
-      @hit_ids ||= @solr_result.hits.map { |hit| hit['id'] }
+    def query_facet(name)
+      if query_facet = @query.query_facet(name.to_sym)
+        if @solr_result['facet_counts'].has_key?('facet_queries')
+          QueryFacet.new(
+            query_facet,
+            @solr_result['facet_counts']['facet_queries']
+          )
+        end
+      end
+    end
+
+    def field(name)
+      @setup.field(name)
     end
   end
 end

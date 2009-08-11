@@ -1,12 +1,16 @@
+require 'enumerator'
+
 module Sunspot
   #
   # The facet class encapsulates the information returned by Solr for a
-  # particular facet request.
+  # field facet request.
   #
   # See http://wiki.apache.org/solr/SolrFacetingOverview for more information
   # on Solr's faceting capabilities.
   #
   class Facet
+    attr_reader :field
+
     def initialize(facet_values, field) #:nodoc:
       @facet_values, @field = facet_values, field
     end
@@ -29,9 +33,19 @@ module Sunspot
     # 
     def rows
       @rows ||=
-        @facet_values.map do |facet_value|
-          FacetRow.new(facet_value, @field)
+        begin
+          rows = []
+          @facet_values.each_slice(2) do |pair|
+            rows << new_row(pair)
+          end
+          rows
         end
+    end
+
+    private
+
+    def new_row(pair)
+      FacetRow.new(pair, self)
     end
   end
 end

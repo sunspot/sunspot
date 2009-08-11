@@ -1,3 +1,47 @@
+== 0.9.0 2009-07-21
+* Use Dismax parser for keyword search
+* Field and document boosting
+* Specify which fields to search in keyword search
+* Allow indexing of multiple values in text fields
+* Access keyword relevance score in Hit objects
+* Allow stored fields, retrieve stored values from Hit objects
+* Support more values in shorthand restrictions
+* Disjunctions and conjunctions
+* Random ordering
+* Control all options for field facets
+* Time range facets
+* Get referenced objects from facets on foreign keys
+* Facet by class
+* Batch indexing
+* New Date field type
+* Direct access to data accessors
+* Executable to configure production Solr instances
+* Replace solr-ruby with RSolr
+* Remove accidental ActiveSupport dependency
+
+== 0.8.9 2009-06-23
+* Fix OrderedHash bug in older versions of ActiveSupport
+
+== 0.8.8 2009-06-15
+* Escape type names to support namespaced classes
+* Fix bug with anonymous modules in Ruby 1.9
+
+== 0.8.7 2009-06-10
+* Add --pid-dir option for sunspot-solr executable
+
+== 0.8.5 2009-06-09
+* Added dependencies for sunspot-solr executable to gem dependencies
+* Search for adapters using class ancestors rather than superclasses
+
+== 0.8.3 2009-06-03
+* Index objects passed as a collection in a single HTTP request
+
+== 0.8.2 2009-05-27
+* Allow specification of Solr home when using sunspot-solr
+
+== 0.8.1 2009-05-26
+* Add Search#execute! to public API
+
 == 0.8.0 2009-05-22
 * Access query API directly; instantiate search without running it
 * Dynamic fields

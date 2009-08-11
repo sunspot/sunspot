@@ -17,14 +17,17 @@ module Sunspot
       # 
       # Build a positive restriction. With one argument, this method returns
       # another DSL object which presents methods for attaching various
-      # restriction types. With two arguments, acts as a shorthand for creating
-      # an equality restriction.
+      # restriction types. With two arguments, this creates a shorthand
+      # restriction: if the second argument is a scalar, an equality restriction
+      # is created; if it is a Range, a between restriction will be created; and
+      # if it is an Array, an any_of restriction will be created.
       #
       # ==== Parameters
       #
       # field_name<Symbol>:: Name of the field on which to place the restriction
-      # value<Symbol>::
-      #   If passed, creates an equality restriction with this value
+      # value<Object,Range,Array>::
+      #   If passed, creates an equality, range, or any-of restriction based on
+      #   the type of value passed.
       #
       # ==== Returns
       #
@@ -38,6 +41,18 @@ module Sunspot
       #   Sunspot.search do
       #     with(:blog_id, 1)
       #   end
+      #
+      # Restrict by range:
+      #
+      #   Sunspot.search do
+      #     with(:average_rating, 3.0..5.0)
+      #   end
+      #
+      # Restrict by a set of allowed values:
+      #
+      #   Sunspot.search do
+      #     with(:category_ids, [1, 5, 9])
+      #   end
       # 
       # Other restriction types:
       #
@@ -49,7 +64,7 @@ module Sunspot
         if value == NONE
           DSL::Restriction.new(field_name.to_sym, @query, false)
         else
-          @query.add_restriction(field_name, Sunspot::Query::Restriction::EqualTo, value, false)
+          @query.add_shorthand_restriction(field_name, value)
         end
       end
 
@@ -98,7 +113,7 @@ module Sunspot
           if value == NONE
             DSL::Restriction.new(field_name.to_sym, @query, true)
           else
-            @query.add_negated_restriction(field_name, Sunspot::Query::Restriction::EqualTo, value)
+            @query.add_negated_shorthand_restriction(field_name, value)
           end
         else
           instances = args
@@ -108,29 +123,70 @@ module Sunspot
         end
       end
 
-      # Specify the order that results should be returned in. This method can
-      # be called multiple times; precedence will be in the order given.
+      # 
+      # Create a disjunction, scoping the results to documents that match any
+      # of the enclosed restrictions.
       #
-      # ==== Parameters
+      # ==== Example
       #
-      # field_name<Symbol>:: the field to use for ordering
-      # direction<Symbol>:: :asc or :desc (default :asc)
+      #   Sunspot.search(Post) do
+      #     any_of do
+      #       with(:expired_at).greater_than Time.now
+      #       with :expired_at, nil
+      #     end
+      #   end
       #
-      def order_by(field_name, direction = nil)
-        @query.order_by(field_name, direction)
+      # This will return all documents who either have an expiration time in the
+      # future, or who do not have any expiration time at all.
+      #
+      def any_of(&block)
+        Util.instance_eval_or_call(Scope.new(@query.add_disjunction), &block)
       end
 
-      # Request facets on the given field names. See Sunspot::Search#facet and
-      # Sunspot::Facet for information on what is returned.
+      # 
+      # Create a conjunction, scoping the results to documents that match all of
+      # the enclosed restrictions. When called from the top level of a search
+      # block, this has no effect, but can be useful for grouping a conjunction
+      # inside a disjunction.
       #
+      # ==== Example
+      #
+      #   Sunspot.search(Post) do
+      #     any_of do
+      #       with(:blog_id, 1)
+      #       all_of do
+      #         with(:blog_id, 2)
+      #         with(:category_ids, 3)
+      #       end
+      #     end
+      #   end
+      #
+      def all_of(&block)
+        Util.instance_eval_or_call(Scope.new(@query.add_conjunction), &block)
+      end
+
+      #
+      # Apply restrictions, facets, and ordering to dynamic field instances.
+      # The block API is implemented by Sunspot::DSL::FieldQuery, which is a
+      # superclass of the Query DSL (thus providing a subset of the API, in
+      # particular only methods that refer to particular fields).
+      # 
       # ==== Parameters
+      # 
+      # base_name<Symbol>:: The base name for the dynamic field definition
       #
-      # field_names...<Symbol>:: fields for which to return field facets
+      # ==== Example
       #
-      def facet(*field_names)
-        for field_name in field_names
-          @query.add_field_facet(field_name)
-        end
+      #   Sunspot.search Post do
+      #     dynamic :custom do
+      #       with :cuisine, 'Pizza'
+      #       facet :atmosphere
+      #       order_by :chef_name
+      #     end
+      #   end
+      #
+      def dynamic(base_name, &block)
+        FieldQuery.new(@query.dynamic_query(base_name)).instance_eval(&block)
       end
     end
   end

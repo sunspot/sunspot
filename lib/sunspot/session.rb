@@ -8,6 +8,20 @@ module Sunspot
   # again here.
   #
   class Session
+    class <<self
+      attr_writer :connection_class #:nodoc:
+      
+      # 
+      # For testing purposes
+      #
+      def connection_class #:nodoc:
+        @connection_class ||= RSolr::Connection
+      end
+    end
+
+    # 
+    # Sunspot::Configuration object for this session
+    #
     attr_reader :config
 
     # 
@@ -27,7 +41,13 @@ module Sunspot
     #
     def new_search(*types)
       types.flatten!
-      Search.new(connection, Query.new(types, @config))
+      setup =
+        if types.length == 1
+          Setup.for(types.first)
+        else
+          CompositeSetup.for(types)
+        end
+      Search.new(connection, setup, Query::Query.new(setup, @config))
     end
 
     #
@@ -36,7 +56,7 @@ module Sunspot
     def search(*types, &block)
       options = types.last.is_a?(Hash) ? types.pop : {}
       search = new_search(*types)
-      search.query.build(&block) if block
+      search.build(&block) if block
       search.query.options = options
       search.execute!
     end
@@ -44,20 +64,10 @@ module Sunspot
     #
     # See Sunspot.index
     #
-    #--
-    # FIXME The fact that we have to break this out by class and index each
-    #       class separately is artificial, imposed by the fact that indexers
-    #       are initialized with a particular setup, and are responsible for
-    #       sending add messages to Solr. It might be worth considering a
-    #       singleton indexer (per session) and have the indexer itself find
-    #       the appropriate setup to use for each object.
-    #
     def index(*objects)
       objects.flatten!
       @updates += objects.length
-      objects.group_by { |object| object.class }.to_hash.each_pair do |clazz, objs|
-        indexer_for(objs.first).add(objs)
-      end
+      indexer.add(objects)
     end
 
     # 
@@ -83,7 +93,7 @@ module Sunspot
       objects.flatten!
       @updates += objects.length
       for object in objects
-        indexer_for(object).remove(object)
+        indexer.remove(object)
       end
     end
 
@@ -92,6 +102,27 @@ module Sunspot
     #
     def remove!(*objects)
       remove(*objects)
+      commit
+    end
+
+    # 
+    # See Sunspot.remove_by_id
+    #
+    def remove_by_id(clazz, id)
+      class_name =
+        if clazz.is_a?(Class)
+          clazz.name
+        else
+          clazz.to_s
+        end
+      indexer.remove_by_id(class_name, id)
+    end
+
+    # 
+    # See Sunspot.remove_by_id!
+    #
+    def remove_by_id!(clazz, id)
+      remove_by_id(clazz, id)
       commit
     end
 
@@ -106,7 +137,7 @@ module Sunspot
       else
         @updates += classes.length
         for clazz in classes
-          Setup.for(clazz).indexer(connection).remove_all
+          indexer.remove_all(clazz)
         end
       end
     end
@@ -133,26 +164,16 @@ module Sunspot
       commit if dirty?
     end
 
-    private
-
     # 
-    # Get the Setup object for the given object's class.
+    # See Sunspot.batch
     #
-    # ==== Parameters
-    #
-    # object<Object>:: The object whose setup is to be retrieved
-    #
-    # ==== Returns
-    #
-    # Sunspot::Setup:: The setup for the object's class
-    #
-    def setup_for(object)
-      Setup.for(object.class) || raise(NoSetupError, "Sunspot is not configured for #{object.class.inspect}")
+    def batch
+      indexer.start_batch
+      yield
+      indexer.flush_batch
     end
 
-    def indexer_for(object)
-      setup_for(object).indexer(connection)
-    end
+    private
 
     # 
     # Retrieve the Solr connection for this session, creating one if it does not
@@ -163,7 +184,18 @@ module Sunspot
     # Solr::Connection:: The connection for this session
     #
     def connection
-      @connection ||= Solr::Connection.new(config.solr.url)
+      @connection ||=
+        begin
+          connection = self.class.connection_class.new(
+            RSolr::Adapter::HTTP.new(:url => config.solr.url)
+          )
+          connection.adapter.connector.adapter_name = config.http_client
+          connection
+        end
+    end
+
+    def indexer
+      @indexer ||= Indexer.new(connection)
     end
   end
 end

@@ -1,5 +1,3 @@
-require 'rubygems'
-
 ENV['RUBYOPT'] = '-W1'
 
 task :environment do

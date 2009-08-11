@@ -1,22 +1,9 @@
-=== 0.9 ===
-* Support most simple facet parameters
+=== 0.9.X ===
+* Deal with empty facet queries
+* Passing an integer into the second argument of dynamic_facet() when multiple facets are requested gives the wrong value
+=== 0.10 ===
+* Highlighting
+* LocalSolr
+* Text field restrictions
+* Prefixes
 * Intelligently decide whether to instantiate all facet rows at once
-* Add score to raw result objects
-* Support for stored fields; add to raw result objects
-* Support for spelling?
-* Descriptive error messages during indexing
-* Date type
-* High-endian fields
-* Add omitNorms to typed fields
-* Instantiated facets!
-* Direct access to adapter
-* sunspot-configure-solr
-* Text fields allow multiple
-* Don't allow ordering on multiple-allowed fields
-* Detect Ranges in short-form #with()
-* Expose delete by ID
-* Support composite IDs
-* Transactions
-* Switch to RSolr
-* Facet by type (?)
-* Query-based faceting (?)

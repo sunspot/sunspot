@@ -1,5 +1,5 @@
 module Sunspot
-  class Query
+  module Query
     # 
     # A query component that holds information about pagination. Unlike other
     # query components, this one is mutable, because the query itself holds a

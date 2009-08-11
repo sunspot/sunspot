@@ -3,28 +3,33 @@ module Sunspot
     #
     # This class presents a DSL for constructing queries using the
     # Sunspot.search method. Methods of this class are available inside the
-    # search block. Methods that take field names as arguments are implemented
-    # in the superclass Sunspot::DSL::Scope, as that DSL is also available in
-    # the #dynamic() block.
+    # search block. Much of the DSL's functionality is implemented by this
+    # class's superclasses, Sunspot::DSL::FieldQuery and Sunspot::DSL::Scope
     #
     # See Sunspot.search for usage examples
     #
-    class Query < Scope
+    class Query < FieldQuery
       # Specify a phrase that should be searched as fulltext. Only +text+
       # fields are searched - see DSL::Fields.text
       #
-      # Note that the keywords are passed directly to Solr unadulterated. The
-      # advantage of this is that users can potentially use boolean logic to
-      # make advanced searches. The disadvantage is that syntax errors are
-      # possible. This may get better in a future version; suggestions are
-      # welcome.
+      # Keyword search is executed using Solr's dismax handler, which strikes
+      # a good balance between powerful and foolproof. In particular,
+      # well-matched quotation marks can be used to group phrases, and the
+      # + and - modifiers work as expected. All other special Solr boolean
+      # syntax is escaped, and mismatched quotes are ignored entirely.
       #
       # ==== Parameters
       #
       # keywords<String>:: phrase to perform fulltext search on
       #
-      def keywords(keywords)
-        @query.keywords = keywords
+      # ==== Options
+      #
+      # :fields<Array>::
+      #   List of fields that should be searched for keywords. Defaults to all
+      #   fields configured for the types under search.
+      #
+      def keywords(keywords, options = {})
+        @query.set_keywords(keywords, options)
       end
 
       # Paginate your search. This works the same way as WillPaginate's
@@ -48,30 +53,6 @@ module Sunspot
         per_page = options.delete(:per_page)
         raise ArgumentError, "unknown argument #{options.keys.first.inspect} passed to paginate" unless options.empty?
         @query.paginate(page, per_page)
-      end
-
-      #
-      # Apply restrictions, facets, and ordering to dynamic field instances.
-      # The block API is implemented by Sunspot::DSL::Scope, which is a
-      # superclass of the Query DSL (thus providing a subset of the API, in
-      # particular only methods that refer to particular fields).
-      # 
-      # ==== Parameters
-      # 
-      # base_name<Symbol>:: The base name for the dynamic field definition
-      #
-      # ==== Example
-      #
-      #   Sunspot.search Post do
-      #     dynamic :custom do
-      #       with :cuisine, 'Pizza'
-      #       facet :atmosphere
-      #       order_by :chef_name
-      #     end
-      #   end
-      #
-      def dynamic(base_name, &block)
-        Scope.new(@query.dynamic_query(base_name)).instance_eval(&block)
       end
     end
   end

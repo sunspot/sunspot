@@ -109,8 +109,6 @@ module Sunspot
             time =
               if value.respond_to?(:utc)
                 value
-              elsif %w(year mon mday).each { |method| value.respond_to?(method) }
-                Time.gm(value.year, value.mon, value.mday)
               else
                 Time.parse(value.to_s)
               end
@@ -120,6 +118,38 @@ module Sunspot
 
         def cast(string) #:nodoc:
           Time.xmlschema(string)
+        end
+      end
+    end
+
+    # 
+    # The DateType encapsulates dates (without time information). Internally,
+    # Solr does not have a date-only type, so this type indexes data using
+    # Solr's DateField type (which is actually date/time), midnight UTC of the
+    # indexed date.
+    #
+    module DateType
+      class <<self
+        def indexed_name(name) #:nodoc:
+          "#{name}_d"
+        end
+
+        def to_indexed(value) #:nodoc:
+          if value
+            time = 
+              if %w(year mon mday).all? { |method| value.respond_to?(method) }
+                Time.utc(value.year, value.mon, value.mday)
+              else
+                date = Date.parse(value.to_s)
+                Time.utc(date.year, date.mon, date.mday)
+              end
+            time.utc.xmlschema
+          end
+        end
+
+        def cast(string)
+          time = Time.xmlschema(string)
+          Date.civil(time.year, time.mon, time.mday)
         end
       end
     end
@@ -147,6 +177,22 @@ module Sunspot
           when 'false'
             false
           end
+        end
+      end
+    end
+
+    module ClassType
+      class <<self
+        def indexed_name(name)
+          'class_name'
+        end
+
+        def to_indexed(value)
+          value.name
+        end
+
+        def cast(string)
+          Sunspot::Util.full_const_get(string)
         end
       end
     end

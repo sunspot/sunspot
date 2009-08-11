@@ -1,0 +1,24 @@
+!!! XML
+%schema{ :name => 'sunspot', :version => 0.9 }
+  %types
+    %fieldtype{ :name => 'text', :class => 'solr.TextField', :positionIncrementGap => 100 }
+      %analyzer
+        %tokenizer{ :class => schema.tokenizer }/
+        - for filter in schema.filters
+          %filter{ :class => filter }/
+    %fieldtype{ :name => 'rand', :class => 'solr.RandomSortField' }
+    - schema.types.each do |type|
+      %fieldtype{ :name => type.name, :class => "solr.#{type.class_name}Field", :omitNorms => 'true' }/
+  %fields
+    %field{ :name => 'id', :type => 'string', :indexed => 'true', :stored => 'true', :multiValued => 'false' }/
+    %field{ :name => 'type', :type => 'string', :indexed => 'true', :stored => 'false', :multiValued => 'true' }/
+    %field{ :name => 'class_name', :type => 'string', :indexed => 'true', :stored => 'false', :multiValued => 'false' }/
+    %field{ :name => 'text', :type => 'text', :indexed => 'true', :stored => 'false', :multiValued => 'true' }/
+    %dynamicField{ :name => '*_text', :type => 'text', :indexed => 'true', :stored => 'false', :multiValued => 'true' }/
+    %dynamicField{ :name => 'random_*', :type => 'rand', :indexed => 'true', :stored => 'false' }/
+    - for dynamic_field in schema.dynamic_fields
+      %dynamicField{ :name => dynamic_field.name, :type => dynamic_field.type, :indexed => 'true', :stored => dynamic_field.stored?, :multiValued => dynamic_field.multiValued? }/
+  %uniqueKey id
+  %defaultSearchField text
+  %solrQueryParser{ :defaultOperator => 'AND' }/
+  %copyField{ :source => '*_text', :dest => 'text' }/

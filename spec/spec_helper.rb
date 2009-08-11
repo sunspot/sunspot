@@ -1,19 +1,32 @@
-require 'rubygems'
-gem 'mislav-will_paginate', '~> 2.3'
-gem 'rspec', '~> 1.1'
+using_gems = false
 begin
-  gem 'ruby-debug', '~>0.10'
-  require 'ruby-debug'
-rescue Gem::LoadError
-  module Kernel
-    def debugger
-      raise("debugger is not available")
+  require 'spec'
+  begin
+    require 'ruby-debug'
+  rescue LoadError => e
+    if using_gems
+      module Kernel
+        def debugger
+          STDERR.puts('Debugger is not available')
+        end
+      end
+    else
+      raise(e)
     end
   end
+  if ENV['USE_WILL_PAGINATE']
+    require 'will_paginate'
+    require 'will_paginate/collection'
+  end
+rescue LoadError => e
+  require 'rubygems'
+  if using_gems
+    raise(e)
+  else
+    using_gems = true
+    retry
+  end
 end
-require 'spec'
-require 'will_paginate'
-require 'will_paginate/collection'
 
 unless gem_name = ENV['SUNSPOT_TEST_GEM']
   $:.unshift(File.dirname(__FILE__) + '/../lib')
@@ -22,8 +35,10 @@ else
 end
 require 'sunspot'
 
-require File.join(File.dirname(__FILE__), 'mocks', 'base_class.rb')
-Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each { |file| require file }
+require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
+Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each do |file|
+  require file unless File.basename(file) == 'mock_record.rb'
+end
 
 def without_class(clazz)
   Object.class_eval { remove_const(clazz.name.to_sym) }

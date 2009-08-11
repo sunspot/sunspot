@@ -1,5 +1,5 @@
 module Sunspot
-  class Query
+  module Query
     module Restriction #:nodoc:
       class <<self
         #
@@ -26,15 +26,17 @@ module Sunspot
       # API for instances of this class.
       #
       # Implementations of this class must respond to #to_params and
-      # #to_negative_params. Instead of implementing those methods, they may
+      # #to_negated_params. Instead of implementing those methods, they may
       # choose to implement any of:
       #
-      # * #to_positive_boolean_phrase, and optionally #to_negative_boolean_phrase
+      # * #to_positive_boolean_phrase, and optionally #to_negated_boolean_phrase
       # * #to_solr_conditional
       #
       class Base #:nodoc:
-        def initialize(field, value, negative = false)
-          @field, @value, @negative = field, value, negative
+        include RSolr::Char
+
+        def initialize(field, value, negated = false)
+          @field, @value, @negated = field, value, negated
         end
 
         # 
@@ -49,19 +51,19 @@ module Sunspot
         # Hash:: Representation of this restriction as solr-ruby parameters
         #
         def to_params
-          { :filter_queries => [to_boolean_phrase] }
+          { :fq => [to_boolean_phrase] }
         end
 
         # 
         # Return the boolean phrase associated with this restriction object.
-        # Differentiates between positive and negative boolean phrases depending
+        # Differentiates between positive and negated boolean phrases depending
         # on whether this restriction is negated.
         #
         def to_boolean_phrase
-          unless negative?
+          unless negated?
             to_positive_boolean_phrase
           else
-            to_negative_boolean_phrase
+            to_negated_boolean_phrase
           end
         end
 
@@ -79,30 +81,34 @@ module Sunspot
         # String:: Boolean phrase for restriction in the positive
         #
         def to_positive_boolean_phrase
-          "#{Solr::Util.query_parser_escape(@field.indexed_name)}:#{to_solr_conditional}"
+          "#{escape(@field.indexed_name)}:#{to_solr_conditional}"
         end
 
         # 
-        # Boolean phrase representing this restriction in the negative. Subclasses
+        # Boolean phrase representing this restriction in the negated. Subclasses
         # may choose to implement this method, but it is not necessary, as the
         # base implementation delegates to #to_positive_boolean_phrase.
         #
         # ==== Returns
         #
-        # String:: Boolean phrase for restriction in the negative
+        # String:: Boolean phrase for restriction in the negated
         #
-        def to_negative_boolean_phrase
+        def to_negated_boolean_phrase
           "-#{to_positive_boolean_phrase}"
         end
-
-        protected
 
         # 
         # Whether this restriction should be negated from its original meaning
         #
-        def negative?
-          !!@negative
+        def negated? #:nodoc:
+          !!@negated
         end
+
+        def negate
+          self.class.new(@field, @value, !@negated)
+        end
+
+        protected
 
         # 
         # Return escaped Solr API representation of given value
@@ -117,7 +123,7 @@ module Sunspot
         # String:: Solr API representation of given value
         #
         def solr_value(value = @value)
-          Solr::Util.query_parser_escape(@field.to_indexed(value))
+          escape(@field.to_indexed(value))
         end
       end
 
@@ -130,15 +136,15 @@ module Sunspot
           unless @value.nil?
             super
           else
-            "-#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]"
+            "#{escape(@field.indexed_name)}:[* TO *]"
           end
         end
 
-        def to_negative_boolean_phrase
-          unless @value.nil?
-            super
+        def negated?
+          if @value.nil?
+            !super
           else
-            "#{Solr::Util.query_parser_escape(@field.indexed_name)}:[* TO *]"
+            super
           end
         end
 
@@ -209,13 +215,17 @@ module Sunspot
       # Result must be the exact instance given (only useful when negated).
       #
       class SameAs < Base
-        def initialize(object, negative = false)
-          @object, @negative = object, negative
+        def initialize(object, negated = false)
+          @object, @negated = object, negated
         end
 
         def to_positive_boolean_phrase
           adapter = Adapters::InstanceAdapter.adapt(@object)
-          "id:#{Solr::Util.query_parser_escape(adapter.index_id)}"
+          "id:#{escape(adapter.index_id)}"
+        end
+
+        def negate
+          SameAs.new(@object, !negated?)
         end
       end
     end

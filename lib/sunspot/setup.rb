@@ -5,42 +5,69 @@ module Sunspot
   #
   class Setup #:nodoc:
     def initialize(clazz)
+      @clazz = clazz
       @class_name = clazz.name
-      @fields, @text_fields, @dynamic_fields = [], [], []
+      @field_factories, @text_field_factories, @dynamic_field_factories,
+        @field_factories_cache, @text_field_factories_cache,
+        @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
       @dsl = DSL::Fields.new(self)
+      add_field_factory(:class, Type::ClassType)
+    end
+
+    def type_names
+      [@class_name]
     end
 
     # 
-    # Add fields for scope/ordering
+    # Add field_factories for scope/ordering
     # 
     # ==== Parameters
     #
-    # fields<Array>:: Array of Sunspot::Field objects
+    # field_factories<Array>:: Array of Sunspot::Field objects
     #
-    def add_fields(fields)
-      @fields.concat(Array(fields))
+    def add_field_factory(name, type, options = {}, &block)
+      field_factory = FieldFactory::Static.new(name, type, options, &block)
+      @field_factories[field_factory.signature] = field_factory
+      @field_factories_cache[field_factory.name] = field_factory
     end
 
     # 
-    # Add fields for fulltext search
+    # Add field_factories for fulltext search
     #
     # ==== Parameters
     #
-    # fields<Array>:: Array of Sunspot::Field objects
+    # field_factories<Array>:: Array of Sunspot::Field objects
     #
-    def add_text_fields(fields)
-      @text_fields.concat(Array(fields))
+    def add_text_field_factory(name, options = {}, &block)
+      field_factory = FieldFactory::Static.new(name, Type::TextType, options, &block)
+      @text_field_factories[name] = field_factory
+      @text_field_factories_cache[field_factory.name] = field_factory
     end
 
     #
-    # Add dynamic fields
+    # Add dynamic field_factories
     #
     # ==== Parameters
     # 
-    # fields<Array>:: Array of dynamic field objects
+    # field_factories<Array>:: Array of dynamic field objects
     # 
-    def add_dynamic_fields(fields)
-      @dynamic_fields.concat(Array(fields))
+    def add_dynamic_field_factory(name, type, options = {}, &block)
+      field_factory = FieldFactory::Dynamic.new(name, type, options, &block)
+      @dynamic_field_factories[field_factory.signature] = field_factory
+      @dynamic_field_factories_cache[field_factory.name] = field_factory
+    end
+
+    def add_document_boost(attr_name, &block)
+      @document_boost_extractor =
+        if attr_name
+          if attr_name.respond_to?(:to_f)
+            DataExtractor::Constant.new(attr_name)
+          else
+            DataExtractor::AttributeExtractor.new(attr_name)
+          end
+        else
+          DataExtractor::BlockExtractor.new(&block)
+        end
     end
 
     # 
@@ -50,63 +77,89 @@ module Sunspot
       @dsl.instance_eval(&block)
     end
 
-    # 
-    # Get the fields associated with this setup as well as all inherited fields
-    #
-    # ==== Returns
-    #
-    # Array:: Collection of all fields associated with this setup
-    #
+    def field(field_name)
+      if field_factory = @field_factories_cache[field_name.to_sym]
+        field_factory.build
+      else
+        raise(
+          UnrecognizedFieldError,
+          "No field configured for #{@clazz.name} with name '#{field_name}'"
+        )
+      end
+    end
+
+    def text_field(field_name)
+      if field_factory = @text_field_factories_cache[field_name.to_sym]
+        field_factory.build
+      else
+        raise(
+          UnrecognizedFieldError,
+          "No text field configured for #{@clazz.name} with name '#{field_name}'"
+        )
+      end
+    end
+
+    def dynamic_field_factory(field_name)
+      @dynamic_field_factories_cache[field_name.to_sym] || raise(
+        UnrecognizedFieldError,
+        "No dynamic field configured for #{@clazz.name} with name '#{field_name}'"
+      )
+    end
+
     def fields
-      get_inheritable_collection(:fields)
+      field_factories.map { |field_factory| field_factory.build }
     end
 
-    # 
-    # Get the text fields associated with this setup as well as all inherited
-    # text fields
-    #
-    # ==== Returns
-    #
-    # Array:: Collection of all text fields associated with this setup
-    #
     def text_fields
-      get_inheritable_collection(:text_fields)
+      text_field_factories.map { |text_field_factory| text_field_factory.build }
     end
 
     # 
-    # Get all static, dynamic, and text fields associated with this setup as
-    # well as all inherited fields
+    # Get the field_factories associated with this setup as well as all inherited field_factories
     #
     # ==== Returns
     #
-    # Array:: Collection of all text and scope fields associated with this setup
+    # Array:: Collection of all field_factories associated with this setup
     #
-    def all_fields
-      all_fields = []
-      all_fields.concat(fields).concat(text_fields).concat(dynamic_fields)
-      all_fields
+    def field_factories
+      collection_from_inheritable_hash(:field_factories)
     end
 
     # 
-    # Get all dynamic fields for this and parent setups
-    # 
+    # Get the text field_factories associated with this setup as well as all inherited
+    # text field_factories
+    #
     # ==== Returns
     #
-    # Array:: Dynamic fields
+    # Array:: Collection of all text field_factories associated with this setup
     #
-    def dynamic_fields
-      get_inheritable_collection(:dynamic_fields)
+    def text_field_factories
+      collection_from_inheritable_hash(:text_field_factories)
     end
 
     # 
-    # Factory method for an Indexer object configured to use this setup
+    # Get all static, dynamic, and text field_factories associated with this setup as
+    # well as all inherited field_factories
     #
     # ==== Returns
     #
-    # Sunspot::Indexer:: Indexer configured with this setup
+    # Array:: Collection of all text and scope field_factories associated with this setup
     #
-    def indexer(connection)
-      Indexer.new(connection, self)
+    def all_field_factories
+      all_field_factories = []
+      all_field_factories.concat(field_factories).concat(text_field_factories).concat(dynamic_field_factories)
+      all_field_factories
+    end
+
+    # 
+    # Get all dynamic field_factories for this and parent setups
+    # 
+    # ==== Returns
+    #
+    # Array:: Dynamic field_factories
+    #
+    def dynamic_field_factories
+      collection_from_inheritable_hash(:dynamic_field_factories)
     end
 
     # 
@@ -118,6 +171,12 @@ module Sunspot
     #
     def clazz
       Util.full_const_get(@class_name)
+    end
+
+    def document_boost_for(model)
+      if @document_boost_extractor
+        @document_boost_extractor.value_for(model)
+      end
     end
 
     protected
@@ -133,12 +192,18 @@ module Sunspot
       Setup.for(clazz.superclass)
     end
 
+    def get_inheritable_hash(name)
+      hash = instance_variable_get(:"@#{name}")
+      parent.get_inheritable_hash(name).each_pair do |key, value|
+        hash[key] = value unless hash.has_key?(key)
+      end if parent
+      hash
+    end
+
     private
 
-    def get_inheritable_collection(name)
-      collection = instance_variable_get(:"@#{name}").dup
-      collection.concat(parent.send(name)) if parent
-      collection
+    def collection_from_inheritable_hash(name)
+      get_inheritable_hash(name).values
     end
 
     class <<self
@@ -164,7 +229,13 @@ module Sunspot
       #   Setup instance associated with the given class or its nearest ancestor
       #   
       def for(clazz) #:nodoc:
-        setups[clazz.name.to_sym] || self.for(clazz.superclass) if clazz
+        class_name =
+          if clazz.respond_to?(:name)
+            clazz.name
+          else
+            clazz
+          end
+        setups[class_name.to_sym] || self.for(clazz.superclass) if clazz
       end
 
       protected

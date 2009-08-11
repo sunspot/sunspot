@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+using_gems = false
+begin
+  require 'fileutils'
+  require 'optiflag'
+  require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'schema')
+rescue LoadError => e
+  if using_gems
+    raise(e)
+  else
+    using_gems = true
+    require 'rubygems'
+    retry
+  end
+end
+
+module ConfigureSolrFlags extend OptiFlagSet
+  optional_flag 'tokenizer'
+  optional_flag 'extra_filters'
+  optional_flag 'dir'
+  and_process!
+end
+
+solr_directory = ARGV.flags.dir || FileUtils.pwd
+conf_directory = File.join(solr_directory, 'conf')
+schema_file = File.join(conf_directory, 'schema.xml')
+FileUtils.mkdir_p(conf_directory)
+
+schema = Sunspot::Schema.new
+schema.tokenizer = ARGV.flags.tokenizer if ARGV.flags.tokenizer
+if ARGV.flags.extra_filters
+  for filter in ARGV.flags.extra_filters.split(',')
+    schema.add_filter(filter)
+  end
+end
+
+if File.exist?(schema_file)
+  backup_file = File.join(conf_directory, "schema-#{File.mtime(schema_file).strftime('%Y%m%d%H%M%S')}.xml")
+  STDERR.puts("Backing up current schema file to #{File.expand_path(backup_file)}")
+  FileUtils.mv(schema_file, backup_file)
+end
+
+File.open(File.join(conf_directory, 'schema.xml'), 'w') do |file|
+  file << schema.to_xml
+end

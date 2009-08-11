@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'search faceting' do
   def self.test_field_type(name, attribute, field, value1, value2)
     context "with field of type #{name}" do
@@ -36,4 +38,132 @@ describe 'search faceting' do
   test_field_type('Time', :published_at, :published_at, Time.mktime(2008, 02, 17, 17, 45, 04),
                                                         Time.mktime(2008, 07, 02, 03, 56, 22))
   test_field_type('Boolean', :featured, :featured, true, false)
+
+  context 'facet options' do
+    before :all do
+      Sunspot.remove_all
+      facet_values = %w(zero one two three four)
+      facet_values.each_with_index do |value, i|
+        i.times { Sunspot.index(Post.new(:title => value, :blog_id => 1)) }
+      end
+      Sunspot.index(Post.new(:title => 'zero', :blog_id => 2))
+      Sunspot.commit
+    end
+
+    it 'should limit the number of facet rows' do
+      search = Sunspot.search(Post) do
+        facet :title, :limit => 3
+      end
+      search.facet(:title).should have(3).rows
+    end
+
+    it 'should not return zeros by default' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title
+      end
+      search.facet(:title).rows.map { |row| row.value }.should_not include('zero')
+    end
+
+    it 'should return zeros when specified' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :zeros => true
+      end
+      search.facet(:title).rows.map { |row| row.value }.should include('zero')
+    end
+
+    it 'should return a specified minimum count' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :minimum_count => 2
+      end
+      search.facet(:title).rows.map { |row| row.value }.should == %w(four three two)
+    end
+
+    it 'should order facets lexically' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :sort => :index
+      end
+      search.facet(:title).rows.map { |row| row.value }.should == %w(four one three two)
+    end
+
+    it 'should order facets by count' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :sort => :count
+      end
+      search.facet(:title).rows.map { |row| row.value }.should == %w(four three two one)
+    end
+  end
+
+  context 'date facets' do
+    before :all do
+      Sunspot.remove_all
+      time = Time.utc(2009, 7, 8)
+      Sunspot.index!(
+        (0..2).map { |i| Post.new(:published_at => time + i*60*60*16) }
+      )
+    end
+
+    it 'should return time ranges' do
+      time = Time.utc(2009, 7, 8)
+      search = Sunspot.search(Post) do
+        facet :published_at, :time_range => time..(time + 60*60*24*2), :sort => :count
+      end
+      search.facet(:published_at).rows.first.value.should == (time..(time + 60*60*24))
+      search.facet(:published_at).rows.first.count.should == 2
+      search.facet(:published_at).rows.last.value.should == ((time + 60*60*24)..(time + 60*60*24*2))
+      search.facet(:published_at).rows.last.count.should == 1
+    end
+  end
+
+  context 'class facets' do
+    before :all do
+      Sunspot.remove_all
+      Sunspot.index!(Post.new, Post.new, Namespaced::Comment.new)
+    end
+
+    it 'should return classes' do
+      search = Sunspot.search(Post, Namespaced::Comment) do
+        facet(:class, :sort => :count)
+      end
+      search.facet(:class).rows.first.value.should == Post
+      search.facet(:class).rows.first.count.should == 2
+      search.facet(:class).rows.last.value.should == Namespaced::Comment
+      search.facet(:class).rows.last.count.should == 1
+    end
+  end
+
+  context 'query facets' do
+    before :all do
+      Sunspot.remove_all
+      Sunspot.index!(
+        [1.1, 1.2, 3.2, 3.4, 3.9, 4.1].map do |rating|
+          Post.new(:ratings_average => rating)
+        end
+      )
+    end
+
+    it 'should return specified facets' do
+      search = Sunspot.search(Post) do
+        facet :rating_range do
+          for rating in [1.0, 2.0, 3.0, 4.0]
+            range = rating..(rating + 1.0)
+            row range do
+              with :average_rating, rating..(rating + 1.0)
+            end
+          end
+        end
+      end
+      facet = search.facet(:rating_range)
+      facet.rows[0].value.should == (3.0..4.0)
+      facet.rows[0].count.should == 3
+      facet.rows[1].value.should == (1.0..2.0)
+      facet.rows[1].count.should == 2
+      facet.rows[2].value.should == (4.0..5.0)
+      facet.rows[2].count.should == 1
+    end
+  end
 end

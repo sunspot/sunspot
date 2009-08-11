@@ -33,5 +33,15 @@ module Sunspot
         Util.instance_eval_or_call(object, &@block)
       end
     end
+
+    class Constant
+      def initialize(value)
+        @value = value
+      end
+
+      def value_for(object)
+        @value
+      end
+    end
   end
 end

@@ -153,6 +153,107 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'connectives' do
+    before :each do
+      Sunspot.remove_all
+    end
+
+    it 'should return results that match any restriction in a disjunction' do
+      posts = (1..3).map { |i| Post.new(:blog_id => i)}
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        any_of do
+          with(:blog_id, 1)
+          with(:blog_id, 2)
+        end
+      end.results.should == posts[0..1]
+    end
+
+    it 'should return results that match a nested conjunction in a disjunction' do
+      posts = [
+        Post.new(:title => 'No', :blog_id => 1),
+        Post.new(:title => 'Yes', :blog_id => 2),
+        Post.new(:title => 'Yes', :blog_id => 3),
+        Post.new(:title => 'No', :blog_id => 2)
+      ]
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        any_of do
+          with(:blog_id, 1)
+          all_of do
+            with(:blog_id, 2)
+            with(:title, 'Yes')
+          end
+        end
+      end.results.should == posts[0..1]
+    end
+
+    it 'should return results that match a conjunction with a negated restriction' do
+      posts = [
+        Post.new(:title => 'No', :blog_id => 1),
+        Post.new(:title => 'Yes', :blog_id => 2),
+        Post.new(:title => 'No', :blog_id => 2)
+      ]
+      Sunspot.index!(posts)
+      search = Sunspot.search(Post) do
+        any_of do
+          with(:blog_id, 1)
+          without(:title, 'No')
+        end
+      end
+      search.results.should == posts[0..1]
+    end
+
+    it 'should return results that match a conjunction with a disjunction with a conjunction with a negated restriction' do
+      posts = [
+        Post.new(:title => 'Yes', :ratings_average => 2.0),
+        Post.new(:blog_id => 1, :category_ids => [4], :ratings_average => 2.0),
+        Post.new(:blog_id => 1),
+        Post.new(:blog_id => 2),
+        Post.new(:blog_id => 1, :ratings_average => 2.0)
+      ]
+      Sunspot.index!(posts)
+      search = Sunspot.search(Post) do
+        any_of do
+          with(:title, 'Yes')
+          all_of do
+            with(:blog_id, 1)
+            any_of do
+              with(:category_ids, 4)
+              without(:average_rating, 2.0)
+            end
+          end
+        end
+      end
+      search.results.should == posts[0..2]
+    end
+
+    it 'should return results that match a disjunction with a negated restriction and a nested disjunction in a conjunction with a negated restriction' do
+      posts = [
+        Post.new,
+        Post.new(:title => 'Yes', :blog_id => 1, :category_ids => [4], :ratings_average => 2.0),
+        Post.new(:title => 'Yes', :blog_id => 1),
+        Post.new(:title => 'Yes'),
+        Post.new(:title => 'Yes', :category_ids => [4], :ratings_average => 2.0),
+        Post.new(:title => 'Yes', :blog_id => 1, :ratings_average => 2.0)
+      ]
+      Sunspot.index!(posts)
+      search = Sunspot.search(Post) do
+        any_of do
+          without(:title, 'Yes')
+          all_of do
+            with(:blog_id, 1)
+            any_of do
+              with(:category_ids, 4)
+              without(:average_rating, 2.0)
+            end
+          end
+        end
+      end
+      search.results.should == posts[0..2]
+    end
+  end
+
   describe 'multiple column ordering' do
     before do
       Sunspot.remove_all
@@ -170,6 +271,19 @@ describe 'scoped_search' do
         order_by :sort_title, :asc
       end
       search.results.should == @posts
+    end
+  end
+
+  describe 'ordering by random' do
+    it 'should order randomly (run this test again if it fails)' do
+      Sunspot.remove_all
+      Sunspot.index!(Array.new(100) { Post.new })
+      result_sets = Array.new(2) do
+        Sunspot.search(Post) { order_by_random }.results.map do |result|
+          result.id
+        end
+      end
+      result_sets[0].should_not == result_sets[1]
     end
   end
 end
