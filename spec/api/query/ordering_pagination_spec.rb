@@ -37,9 +37,22 @@ describe 'ordering and pagination' do
 
   it 'orders by random' do
     session.search Post do
-      order_by_random
+      order_by :random
     end
     connection.searches.last[:sort].should =~ /^random_\d+ asc$/
+  end
+
+  it 'orders by score' do
+    session.search Post do
+      order_by :score, :desc
+    end
+    connection.should have_last_search_with(:sort => 'score desc')
+  end
+
+  it 'orders by geo distance' do
+    session.search Post do
+      order_by :distance, :asc
+    end
   end
 
   it 'throws an ArgumentError if a bogus order direction is given' do

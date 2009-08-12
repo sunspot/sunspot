@@ -10,12 +10,13 @@ describe 'local search' do
       Post.new(:coordinates => [38.920303, -77.110934], :title => 'teacup'),
       Post.new(:coordinates => [47.661557, -122.349938])
     ]
+    @posts.each_with_index { |post, i| post.blog_id = @posts.length - i }
     Sunspot.index!(@posts)
   end
 
   it 'should find all the posts within a given radius' do
     search = Sunspot.search(Post) { near(ORIGIN, 20) }
-    search.results.should == @posts[0..2]
+    search.results.to_set.should == @posts[0..2].to_set
   end
 
   it 'should perform a radial search with fulltext matching' do
@@ -24,5 +25,21 @@ describe 'local search' do
       near(ORIGIN, 20)
     end
     search.results.should == [@posts[1]]
+  end
+
+  it 'should order by arbitrary field' do
+    search = Sunspot.search(Post) do
+      near(ORIGIN, 20)
+      order_by(:blog_id)
+    end
+    search.results.should == @posts[0..2].reverse
+  end
+
+  it 'should order by geo distance' do
+    search = Sunspot.search(Post) do
+      near(ORIGIN, 20)
+      order_by(:distance)
+    end
+    search.results.should == @posts[0..2]
   end
 end

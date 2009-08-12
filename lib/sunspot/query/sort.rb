@@ -54,6 +54,18 @@ module Sunspot
           "random_#{rand(1<<16)} #{direction_for_solr}"
         end
       end
+
+      class ScoreSort < Abstract
+        def to_param
+          "score #{direction_for_solr}"
+        end
+      end
+
+      class DistanceSort < Abstract
+        def to_param
+          "geo_distance #{direction_for_solr}"
+        end
+      end
     end
   end
 end
