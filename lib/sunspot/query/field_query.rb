@@ -50,7 +50,13 @@ module Sunspot
       # direction<Symbol>:: :asc or :desc (default :asc)
       #
       def order_by(field_name, direction = nil)
-        add_sort(Sort.new(build_field(field_name), direction))
+        sort =
+          if special = Sort.special(field_name)
+            special.new(direction)
+          else
+            Sort::FieldSort.new(build_field(field_name), direction)
+          end
+        add_sort(sort)
       end
     end
   end

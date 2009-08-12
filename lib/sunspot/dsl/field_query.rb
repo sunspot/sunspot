@@ -19,11 +19,10 @@ module Sunspot
       end
 
       # 
-      # Order results randomly. This will (generally) return the results in a
-      # different order each time a search is called.
+      # DEPRECATED Use <code>order_by(:random)</code>
       #
       def order_by_random
-        @query.order_by_random
+        @query.order_by(:random)
       end
 
       # Request facets on the given field names. If the last argument is a hash,

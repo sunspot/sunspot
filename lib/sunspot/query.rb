@@ -53,14 +53,6 @@ module Sunspot
       end
 
       # 
-      # Add random ordering to the search. This can be added after other
-      # field-based sorts if desired.
-      #
-      def order_by_random #:nodoc:
-        add_sort(Sort.new(RandomField.new))
-      end
-
-      # 
       # Page that this query will return (used by Sunspot::Search to expose
       # pagination)
       #
