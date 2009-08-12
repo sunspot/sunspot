@@ -121,28 +121,6 @@ describe 'faceting' do
       connection.should have_last_search_with(:"f.published_at_d.facet.date.gap" => "+3600SECONDS")
     end
 
-    it 'allows computation of one other time' do
-      session.search Post do |query|
-        query.facet :published_at, :time_range => @time_range, :time_other => :before
-      end
-      connection.should have_last_search_with(:"f.published_at_d.facet.date.other" => %w(before))
-    end
-
-    it 'allows computation of two other times' do
-      session.search Post do |query|
-        query.facet :published_at, :time_range => @time_range, :time_other => [:before, :after]
-      end
-      connection.should have_last_search_with(:"f.published_at_d.facet.date.other" => %w(before after))
-    end
-
-    it 'does not allow computation of bogus other time' do
-      lambda do
-        session.search Post do |query|
-          query.facet :published_at, :time_range => @time_range, :time_other => :bogus
-        end
-      end.should raise_error(ArgumentError)
-    end
-
     it 'does not allow date faceting on a non-date field' do
       lambda do
         session.search Post do |query|

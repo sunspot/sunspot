@@ -76,8 +76,6 @@ module Sunspot
     end
 
     class DateFieldFacet < FieldFacet #:nodoc:
-      ALLOWED_OTHER = Set.new(%w(before after between none all))
-
       # 
       # Convert the facet to date params.
       #
@@ -86,8 +84,7 @@ module Sunspot
           :"facet.date" => [@field.indexed_name],
           param_key('date.start') => start_time.utc.xmlschema,
           param_key('date.end') => end_time.utc.xmlschema,
-          param_key('date.gap') => "+#{interval}SECONDS",
-          param_key('date.other') => others
+          param_key('date.gap') => "+#{interval}SECONDS"
         )
       end
 
@@ -124,25 +121,6 @@ module Sunspot
       #
       def interval
         @options[:time_interval] || 86400
-      end
-
-      # 
-      # Other time ranges to create facet rows for. Allowed values are defined
-      # in ALLOWED_OTHER constant.
-      #
-      def others
-        if others = @options[:time_other]
-          Array(others).map do |other|
-            other = other.to_s
-            unless ALLOWED_OTHER.include?(other)
-              raise(
-                ArgumentError,
-                "#{other.inspect} is not a valid argument for :time_other"
-              )
-            end
-            other
-          end
-        end
       end
     end
   end

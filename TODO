@@ -1,4 +1,2 @@
 === 0.9.X ===
 === 0.10 ===
-* Add explicit sorting by score
-* Fully support or remove support for time facet "other"
