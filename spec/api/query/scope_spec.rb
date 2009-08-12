@@ -204,12 +204,11 @@ describe 'scoped query', :type => :query do
     connection.should have_last_search_with(:fq => ['published_at_d:1983\-07\-08T09\:00\:00Z'])
   end
 
-  it 'raises Sunspot::UnrecognizedFieldError if search scoped to field not common to all types' do
-    lambda do
-      session.search Post, Namespaced::Comment do
-        with :blog_id, 1
-      end
-    end.should raise_error(Sunspot::UnrecognizedFieldError)
+  it 'allows scoping on field not common to all types' do
+    session.search Post, Namespaced::Comment do
+      with :blog_id, 1
+    end
+    connection.should have_last_search_with(:fq => ['blog_id_i:1'])
   end
 
   it 'raises Sunspot::UnrecognizedFieldError if search scoped to field configured differently between types' do

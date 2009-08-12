@@ -82,9 +82,10 @@ module Sunspot
       indexed_name.hash
     end
 
-    def ==(field)
+    def eql?(field)
       indexed_name == field.indexed_name
     end
+    alias_method :==, :eql?
   end
 
   # 
