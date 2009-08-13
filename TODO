@@ -1,2 +1,8 @@
-=== 0.9.X ===
 === 0.10 ===
+* Support all operations in batches. Make it smart.
+  * Don't use more than one commits when one is equivalent
+  * Preserve adds/deletes that are done after last commit
+  * Don't do adds and deletes for the same document out of order
+  * Don't do more than one add for the same document
+  * Do use as few requests as possible within those constraints
+* Support phrase fields and query boost
