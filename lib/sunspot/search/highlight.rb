@@ -1,18 +1,19 @@
 module Sunspot
   class Search
+    # 
+    # A Highlight represents a single highlighted fragment of text from a
+    # document. Depending on the highlighting parameters used for search, there
+    # may be more than one Highlight object for a given field in a given result.
+    #
     class Highlight
-      HIGHLIGHT_MATCHER = /@@@hl@@@(.*?)@@@endhl@@@/
+      HIGHLIGHT_MATCHER = /@@@hl@@@(.*?)@@@endhl@@@/ #:nodoc:
       
       #
       # The name of the field in which the highlight appeared.
       #
       attr_reader :field_name
             
-      #
-      # Add a Highlight to the collection. The highlight is set to nil when Solr 
-      # returns an empty highlight. This occurs on non-keyword searches.
-      #
-      def initialize(field_name, highlight)
+      def initialize(field_name, highlight) #:nodoc:
         @field_name = field_name.to_sym
         @highlight = highlight.to_s.strip
       end
@@ -20,6 +21,10 @@ module Sunspot
       #
       # Returns the highlighted text with formatting according to the template given in &block.
       # When no block is given, <em> and </em> are used to surround the highlight.
+      #
+      # ==== Example
+      #
+      #   search.highlights(:body).first.format { |word| "<strong>#{word}</strong>" }
       #
       def format(&block)
         block ||= proc { |word| "<em>#{word}</em>" }

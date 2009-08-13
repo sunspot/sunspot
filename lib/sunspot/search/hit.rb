@@ -1,5 +1,12 @@
 module Sunspot
   class Search
+    # 
+    # Hit objects represent the raw information returned by Solr for a single
+    # document. As well as the primary key and class name, hit objects give
+    # access to stored field values, keyword relevance score, and geographical
+    # distance (for geographical search).
+    #
+    # TODO distance!
     class Hit
       SPECIAL_KEYS = Set.new(%w(id type score)) #:nodoc:
 

@@ -29,7 +29,7 @@ module Sunspot
     private
 
     # 
-    # Override the Facet#new_row method to return an InstantiateFacetRow
+    # Override the Facet#new_row method to return an InstantiatedFacetRow
     #
     def new_row(pair)
       InstantiatedFacetRow.new(pair, self)

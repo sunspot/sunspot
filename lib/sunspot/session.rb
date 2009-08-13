@@ -195,6 +195,10 @@ module Sunspot
         end
     end
 
+    # 
+    # Return an indexer pointing at this session's connection. One is created
+    # and saved for each sesion.
+    #
     def indexer
       @indexer ||= Indexer.new(connection)
     end
