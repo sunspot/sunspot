@@ -1,5 +1,7 @@
 module Sunspot
+  #
   # This class encapsulates a facet row (value) for a facet.
+  #
   class FacetRow
     def initialize(pair, facet) #:nodoc:
       @pair, @facet = pair, facet

@@ -5,7 +5,7 @@
 end
 
 module Sunspot
-  module Query #:nodoc:
+  module Query #:nodoc: all
     # 
     # This class encapsulates a query that is to be sent to Solr. The query is
     # constructed in the block passed to the Sunspot.search method, using the

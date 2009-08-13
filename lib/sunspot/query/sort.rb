@@ -1,9 +1,12 @@
 module Sunspot
   module Query
     # 
-    # The Sort class is a query component representing a sort by a given field.
+    # The classes in this module implement query components that build sort
+    # parameters for Solr. As well as regular sort on fields, there are several
+    # "special" sorts that allow ordering for metrics calculated during the
+    # search.
     # 
-    module Sort #:nodoc:
+    module Sort #:nodoc: all
       DIRECTIONS = {
         :asc => 'asc',
         :ascending => 'asc',
@@ -12,6 +15,13 @@ module Sunspot
       }
 
       class <<self
+        # 
+        # Certain field names are "special", referring to specific non-field
+        # sorts, which are generally by other metrics associated with hits.
+        #
+        # XXX I'm not entirely convinced it's a good idea to prevent anyone from
+        # ever sorting by a field named 'score', etc.
+        #
         def special(name)
           special_class_name = "#{Util.camel_case(name.to_s)}Sort"
           if const_defined?(special_class_name) && special_class_name != 'FieldSort'
@@ -20,6 +30,11 @@ module Sunspot
         end
       end
 
+      # 
+      # Base class for sorts. All subclasses should implement the #to_param
+      # method, which is a string that is then concatenated with other sort
+      # strings by the SortComposite to form the sort parameter.
+      #
       class Abstract
         def initialize(direction)
           @direction = (direction || :asc).to_sym
@@ -27,6 +42,9 @@ module Sunspot
 
         private
 
+        # 
+        # Translate fairly forgiving direction argument into solr direction
+        #
         def direction_for_solr
           DIRECTIONS[@direction] || 
             raise(
@@ -36,6 +54,10 @@ module Sunspot
         end
       end
 
+      # 
+      # A FieldSort is the usual kind of sort, by the value of a particular
+      # field, ascending or descending
+      #
       class FieldSort < Abstract
         def initialize(field, direction = nil)
           if field.multiple?
@@ -49,18 +71,30 @@ module Sunspot
         end
       end
 
+      # 
+      # A RandomSort uses Solr's random field functionality to sort results
+      # (usually) randomly.
+      #
       class RandomSort < Abstract
         def to_param
           "random_#{rand(1<<16)} #{direction_for_solr}"
         end
       end
 
+      # 
+      # A ScoreSort sorts by keyword relevance score. This is only useful when
+      # performing fulltext search.
+      #
       class ScoreSort < Abstract
         def to_param
           "score #{direction_for_solr}"
         end
       end
 
+      # 
+      # A DistanceSort sorts by distance from the origin coordinates of a
+      # geographical distance search.
+      #
       class DistanceSort < Abstract
         def to_param
           "geo_distance #{direction_for_solr}"

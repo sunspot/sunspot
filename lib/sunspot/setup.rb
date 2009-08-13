@@ -57,10 +57,20 @@ module Sunspot
       @dynamic_field_factories_cache[field_factory.name] = field_factory
     end
 
+    # 
+    # The coordinates field factory is used for populating the coordinate fields
+    # of documents during index, but does not actually generate fields (since
+    # the field names used in search are static).
+    #
     def set_coordinates_field(name)
       @coordinates_field_factory = FieldFactory::Coordinates.new(name)
     end
 
+    # 
+    # Add a document boost to documents at index time. Document boost can be
+    # static (the same for all documents of this class), or extracted on a per-
+    # document basis using either attribute or block extraction as per usual.
+    #
     def add_document_boost(attr_name, &block)
       @document_boost_extractor =
         if attr_name
@@ -81,6 +91,9 @@ module Sunspot
       @dsl.instance_eval(&block)
     end
 
+    # 
+    # Return the Field with the given (public-facing) name
+    #
     def field(field_name)
       if field_factory = @field_factories_cache[field_name.to_sym]
         field_factory.build
@@ -92,6 +105,11 @@ module Sunspot
       end
     end
 
+    # 
+    # Return one or more text fields with the given public-facing name. This
+    # implementation will always return a single field (in an array), but
+    # CompositeSetup objects might return more than one.
+    #
     def text_fields(field_name)
       text_field = 
         if field_factory = @text_field_factories_cache[field_name.to_sym]
@@ -105,6 +123,9 @@ module Sunspot
       [text_field]
     end
 
+    # 
+    # Return the DynamicFieldFactory with the given base name
+    #
     def dynamic_field_factory(field_name)
       @dynamic_field_factories_cache[field_name.to_sym] || raise(
         UnrecognizedFieldError,
@@ -112,10 +133,16 @@ module Sunspot
       )
     end
 
+    # 
+    # Return all attribute fields
+    #
     def fields
       field_factories.map { |field_factory| field_factory.build }
     end
 
+    # 
+    # Return all text fields
+    #
     def all_text_fields
       text_field_factories.map { |text_field_factory| text_field_factory.build }
     end

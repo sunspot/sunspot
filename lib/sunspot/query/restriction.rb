@@ -14,6 +14,10 @@ module Sunspot
           constants - %w(Base SameAs) #XXX this seems ugly
         end
 
+        # 
+        # Convenience method to access a restriction class by an underscored
+        # symbol or string
+        #
         def [](restriction_name)
           @types ||= {}
           @types[restriction_name.to_sym] ||= const_get(Sunspot::Util.camel_case(restriction_name.to_s))
@@ -104,6 +108,10 @@ module Sunspot
           !!@negated
         end
 
+        # 
+        # Return a new restriction that is the negated version of this one. It
+        # is used by disjunction denormalization.
+        #
         def negate
           self.class.new(@field, @value, !@negated)
         end
@@ -230,6 +238,10 @@ module Sunspot
         end
       end
 
+      # 
+      # Results must have a field with a value that begins with the argument.
+      # Most useful for strings, but in theory will work with anything.
+      #
       class StartingWith < Base
         private
 

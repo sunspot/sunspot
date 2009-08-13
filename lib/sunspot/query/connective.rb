@@ -43,10 +43,18 @@ module Sunspot
           end
         end
 
+        # 
+        # Connectives can be negated during the process of denormalization that
+        # is performed when a disjunction contains a negated component. This
+        # method conforms to the duck type for all boolean query components.
+        #
         def negated?
           @negated
         end
 
+        # 
+        # Returns a new connective that's a negated version of this one.
+        #
         def negate
           negated = self.class.new(@setup, !negated?)
           for component in @components
@@ -66,6 +74,9 @@ module Sunspot
           end
         end
 
+        # 
+        # Express this disjunction as a Lucene boolean phrase
+        #
         def to_boolean_phrase
           if @components.any? { |component| component.negated? }
             denormalize.to_boolean_phrase
@@ -85,6 +96,9 @@ module Sunspot
           conjunction
         end
 
+        # 
+        # No-op - this is already a disjunction
+        #
         def add_disjunction
           self
         end
@@ -95,6 +109,15 @@ module Sunspot
           'OR'
         end
 
+        # 
+        # If a disjunction contains negated components, it must be
+        # "denormalized", because the Lucene parser interprets any negated
+        # boolean phrase using AND semantics (this isn't a bug, it's just a
+        # subtlety of how Lucene parses queries). So, per DeMorgan's law we
+        # create a negated conjunction and add to it all of our components,
+        # negated themselves, which creates a query whose Lucene semantics are
+        # in line with our intentions.
+        #
         def denormalize
           denormalized = self.class.inverse.new(@setup, !negated?)
           for component in @components

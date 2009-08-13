@@ -9,7 +9,7 @@ module Sunspot
   # on Solr's faceting capabilities.
   #
   class Facet
-    attr_reader :field
+    attr_reader :field #:nodoc:
 
     def initialize(facet_values, field) #:nodoc:
       @facet_values, @field = facet_values, field

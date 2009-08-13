@@ -1,7 +1,7 @@
 module Sunspot
   module Query
     #
-    # A query component that provides access to hit highlighting in Solr
+    # A query component that builds parameters for requesting highlights
     #
     class Highlighting #:nodoc:
       def initialize(options)
