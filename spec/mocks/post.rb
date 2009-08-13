@@ -68,3 +68,6 @@ Sunspot.setup(Post) do
     end
   end
 end
+
+class PhotoPost < Post
+end

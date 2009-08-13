@@ -27,6 +27,16 @@ describe 'Search' do
     connection.should have_last_search_with(:fq => 'type:Post')
   end
 
+  it 'should search types in main query if keywords not used' do
+    session.search Post
+    connection.should have_last_search_with(:q => 'type:Post')
+  end
+
+  it 'should search type of subclass when superclass is configured' do
+    session.search PhotoPost
+    connection.should have_last_search_with(:q => 'type:PhotoPost')
+  end
+
   it 'should search all text fields for searched class' do
     session.search Post do
       keywords 'keyword search'

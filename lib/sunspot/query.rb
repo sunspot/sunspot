@@ -20,12 +20,12 @@ module Sunspot
     class Query < FieldQuery
       attr_reader :query_facets #:nodoc:
 
-      def initialize(setup, configuration) #:nodoc:
-        @setup, @configuration = setup, configuration
+      def initialize(types, setup, configuration) #:nodoc:
+        @setup = setup
         @components = []
         @query_facets = {}
-        @components << @base_query = BaseQuery.new(setup)
-        @components << @pagination = Pagination.new(@configuration)
+        @components << @base_query = BaseQuery.new(types, setup)
+        @components << @pagination = Pagination.new(configuration)
         @components << @sort = SortComposite.new
       end
 
