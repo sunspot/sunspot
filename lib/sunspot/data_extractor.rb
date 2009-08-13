@@ -34,6 +34,9 @@ module Sunspot
       end
     end
 
+    # 
+    # Constant data extractors simply return the same value for every object.
+    #
     class Constant
       def initialize(value)
         @value = value

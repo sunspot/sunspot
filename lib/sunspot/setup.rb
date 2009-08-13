@@ -211,6 +211,9 @@ module Sunspot
       Util.full_const_get(@class_name)
     end
 
+    # 
+    # Get the document boost for a given model
+    #
     def document_boost_for(model)
       if @document_boost_extractor
         @document_boost_extractor.value_for(model)
