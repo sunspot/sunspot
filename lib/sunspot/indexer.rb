@@ -49,8 +49,6 @@ module Sunspot
       @connection.delete_by_query("type:#{escape(clazz.name)}")
     end
 
-    private
-
     # 
     # Start batch processing
     #
@@ -65,6 +63,8 @@ module Sunspot
       add_documents(@batch)
       @batch = nil
     end
+
+    private
 
     # 
     # Convert documents into hash of indexed properties
