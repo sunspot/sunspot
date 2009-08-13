@@ -1,5 +1,4 @@
 begin
-  gem 'technicalpickles-jeweler', '~> 1.0.1'
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = 'sunspot'
