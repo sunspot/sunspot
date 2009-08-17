@@ -5,12 +5,7 @@ module Sunspot
     #
     class Highlighting #:nodoc:
       def initialize(options)
-        @options =
-          if options == true
-            {}
-          else
-            options
-          end
+        @options = options
       end
 
       def to_params

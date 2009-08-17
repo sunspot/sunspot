@@ -98,9 +98,17 @@ module Sunspot
       def set_keywords(keywords, options = {}) #:nodoc:
         @base_query.keywords = keywords
         if highlight_options = options.delete(:highlight)
-          @components << @highlight = Highlighting.new(highlight_options)
+          if highlight_options == true
+            set_highlight
+          else
+            set_highlight(highlight_options)
+          end
         end
         @base_query.keyword_options = options
+      end
+
+      def set_highlight(options = {})
+        @components << @highlight = Highlighting.new(options)
       end
     end
   end

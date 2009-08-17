@@ -27,7 +27,9 @@ describe 'highlighted fulltext queries', :type => :query do
 
   it 'should set maximum highlights per field' do
     session.search(Post) do
-      keywords 'test', :highlight => { :max_snippets => 3 }
+      keywords 'test' do
+        highlight :max_snippets => 3
+      end
     end
     connection.should have_last_search_with(
       :"hl.snippets" => 3
@@ -36,7 +38,9 @@ describe 'highlighted fulltext queries', :type => :query do
 
   it 'should set the maximum size' do
     session.search(Post) do
-      keywords 'text', :highlight => { :fragment_size => 200 }
+      keywords 'text' do
+        highlight :fragment_size => 200
+      end
     end
     connection.should have_last_search_with(
       :"hl.fragsize" => 200
@@ -45,7 +49,9 @@ describe 'highlighted fulltext queries', :type => :query do
 
   it 'enables merging of continuous fragments' do
     session.search(Post) do
-      keywords 'test', :highlight => { :merge_continuous_fragments => true }
+      keywords 'test' do
+        highlight :merge_continuous_fragments => true
+      end
     end
     connection.should have_last_search_with(
       :"hl.mergeContinuous" => 'true'
@@ -54,7 +60,9 @@ describe 'highlighted fulltext queries', :type => :query do
 
   it 'enables use of phrase highlighter' do #TODO figure out what the hell this means
     session.search(Post) do
-      keywords 'test', :highlight => { :phrase_highlighter => true }
+      keywords 'test' do
+        highlight :phrase_highlighter => true
+      end
     end
     connection.should have_last_search_with(
       :"hl.usePhraseHighlighter" => 'true'
@@ -63,13 +71,9 @@ describe 'highlighted fulltext queries', :type => :query do
 
   it 'requires field match if requested' do
     session.search(Post) do
-      keywords(
-        'test',
-        :highlight => {
-          :phrase_highlighter => true,
-          :require_field_match => true
-        }
-      )
+      keywords 'test' do
+        highlight :phrase_highlighter => true, :require_field_match => true
+      end
     end
     connection.should have_last_search_with(
       :"hl.requireFieldMatch" => 'true'

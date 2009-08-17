@@ -28,8 +28,11 @@ module Sunspot
       #   List of fields that should be searched for keywords. Defaults to all
       #   fields configured for the types under search.
       #
-      def keywords(keywords, options = {})
+      def keywords(keywords, options = {}, &block)
         @query.set_keywords(keywords, options)
+        if block
+          Util.instance_eval_or_call(Fulltext.new(@query), &block)
+        end
       end
 
       # Paginate your search. This works the same way as WillPaginate's
