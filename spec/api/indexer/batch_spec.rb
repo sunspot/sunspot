@@ -31,4 +31,16 @@ describe 'batch indexing', :type => :indexer do
     end
     connection.adds.first.first.field_by_name(:title_ss).should be_nil
   end
+
+  it 'should batch an add and a delete' do
+    pending 'batching all operations'
+    connection.should_not_receive(:add)
+    connection.should_not_receive(:remove)
+    posts = Array.new(2) { Post.new }
+    session.batch do
+      session.index(posts[0])
+      session.remove(posts[1])
+    end
+    connection.adds
+  end
 end

@@ -80,4 +80,25 @@ describe 'keyword search' do
       search.hits.first.score.should > search.hits.last.score
     end
   end
+
+  describe 'with phrase fields' do
+    before :each do
+      Sunspot.remove_all
+      @comments = [
+        Namespaced::Comment.new(:body => 'test text'),
+        Namespaced::Comment.new(:author_name => 'test text')
+      ]
+      Sunspot.index!(@comments)
+    end
+
+    it 'should assign a higher score to documents in which all words appear in the phrase field' do
+      hits = Sunspot.search(Namespaced::Comment) do
+        keywords 'test text' do
+          phrase_fields :body
+        end
+      end.hits
+      hits.first.instance.should == @comments.first
+      hits.first.score.should > hits.last.score
+    end
+  end
 end

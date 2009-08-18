@@ -5,4 +5,5 @@
   * Don't do adds and deletes for the same document out of order
   * Don't do more than one add for the same document
   * Do use as few requests as possible within those constraints
-* Support phrase fields and query boost
+* Boost for fields and phrase fields
+* Query boost
