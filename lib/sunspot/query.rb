@@ -110,6 +110,12 @@ module Sunspot
       def set_highlight(options = {})
         @components << @highlight = Highlighting.new(options)
       end
+
+      def set_phrase_fields(field_names)
+        @base_query.phrase_fields = field_names.inject([]) do |fields, field_name|
+          fields.concat(@setup.text_fields(field_name))
+        end
+      end
     end
   end
 end

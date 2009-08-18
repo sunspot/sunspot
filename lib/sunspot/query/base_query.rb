@@ -8,6 +8,7 @@ module Sunspot
       include RSolr::Char
 
       attr_writer :keywords
+      attr_writer :phrase_fields
 
       def initialize(types, setup)
         @types, @setup = types, setup
@@ -27,6 +28,9 @@ module Sunspot
           params[:fq] = types_phrase
           params[:qf] = text_field_names.join(' ')
           params[:defType] = 'dismax'
+          if @phrase_fields
+            params[:pf] = @phrase_fields.map { |field| field.indexed_name }
+          end
         else
           params[:q] = types_phrase
         end

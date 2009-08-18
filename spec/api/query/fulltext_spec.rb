@@ -62,6 +62,15 @@ describe 'fulltext query', :type => :query do
     connection.should_not have_last_search_with(:fl)
   end
 
+  it 'sets phrase fields' do
+    session.search Post do
+      keywords 'great pizza' do
+        phrase_fields :title
+      end
+    end
+    connection.should have_last_search_with(:pf => %w(title_text))
+  end
+
   it 'allows specification of a text field that only exists in one type' do
     session.search Post, Namespaced::Comment do
       keywords 'keywords', :fields => :author_name
