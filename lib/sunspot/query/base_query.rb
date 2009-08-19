@@ -26,7 +26,7 @@ module Sunspot
           params[:q] = @keywords
           params[:fl] = '* score'
           params[:fq] = types_phrase
-          params[:qf] = text_field_names.join(' ')
+          params[:qf] = query_fields
           params[:defType] = 'dismax'
           if @phrase_fields
             params[:pf] = @phrase_fields.map { |field| field.indexed_name }
@@ -37,13 +37,13 @@ module Sunspot
         params
       end
 
-      # 
-      # Set keyword options
-      #
-      def keyword_options=(options)
-        if options
-          @text_field_names = options.delete(:fields)
-        end
+      def add_fulltext_field(field_name, boost = nil)
+        @fulltext_fields ||= []
+        @fulltext_fields.concat(
+          @setup.text_fields(field_name).map do |field|
+            TextFieldBoost.new(field, boost)
+          end
+        )
       end
 
       private
@@ -76,18 +76,17 @@ module Sunspot
       # search. If specific fields are requested, use those; otherwise use the
       # union of all fields configured for the types under search.
       #
-      def text_field_names
-        text_fields =
-          if @text_field_names
-            Array(@text_field_names).inject([]) do |fields, field_name|
-              fields.concat(@setup.text_fields(field_name.to_sym).to_a)
-            end
-          else
-            @setup.all_text_fields
+      def query_fields
+        @query_fields ||=
+          begin
+            fulltext_fields =
+              @fulltext_fields || @setup.all_text_fields.map do |field|
+                TextFieldBoost.new(field)
+              end
+            fulltext_fields.map do |fulltext_field|
+              fulltext_field.to_boosted_field
+            end.join(' ')
           end
-        text_fields.map do |text_field|
-          text_field.indexed_name
-        end
       end
     end
   end

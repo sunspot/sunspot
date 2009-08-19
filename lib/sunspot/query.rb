@@ -1,6 +1,6 @@
 %w(base_query scope field_query connective dynamic_query field_facet query_facet
    query_facet_row local pagination restriction sort sort_composite
-   highlighting).each do |file|
+   text_field_boost highlighting).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -104,7 +104,15 @@ module Sunspot
             set_highlight(highlight_options)
           end
         end
-        @base_query.keyword_options = options
+        if fulltext_fields = options.delete(:fields)
+          Array(fulltext_fields).each do |field|
+            @base_query.add_fulltext_field(field)
+          end
+        end
+      end
+      
+      def add_fulltext_field(field_name, boost = nil)
+        @base_query.add_fulltext_field(field_name, boost)
       end
 
       def set_highlight(options = {})

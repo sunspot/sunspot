@@ -43,6 +43,15 @@ describe 'fulltext query', :type => :query do
     connection.searches.last[:qf].split(' ').sort.should == %w(body_texts title_text)
   end
 
+  it 'assigns boost to fields when specified' do
+    session.search Post do
+      keywords 'keyword search' do
+        fields :title => 2.0, :body => 0.75
+      end
+    end
+    connection.searches.last[:qf].split(' ').sort.should == %w(body_texts^0.75 title_text^2.0)
+  end
+
   it 'searches both unstored and stored text field with same name when specified' do
     session.search Post, Namespaced::Comment do
       keywords 'keyword search', :fields => [:body]
