@@ -81,7 +81,7 @@ describe 'keyword search' do
     end
   end
 
-  describe 'with phrase fields' do
+  describe 'with search-time boost' do
     before :each do
       Sunspot.remove_all
       @comments = [
@@ -95,6 +95,16 @@ describe 'keyword search' do
       hits = Sunspot.search(Namespaced::Comment) do
         keywords 'test text' do
           phrase_fields :body
+        end
+      end.hits
+      hits.first.instance.should == @comments.first
+      hits.first.score.should > hits.last.score
+    end
+
+    it 'should assign a higher score to documents in which the search terms appear in a boosted field' do
+      hits = Sunspot.search(Namespaced::Comment) do
+        keywords 'test' do
+          fields :body => 2.0, :author_name => 0.75
         end
       end.hits
       hits.first.instance.should == @comments.first

@@ -5,8 +5,12 @@ module Sunspot
         @query = query
       end
 
-      def fields(fields)
-        fields.each_pair do |field_name, boost|
+      def fields(*fields)
+        boosted_fields = fields.pop if fields.last.is_a?(Hash)
+        fields.each do |field_name|
+          @query.add_fulltext_field(field_name)
+        end
+        boosted_fields.each_pair do |field_name, boost|
           @query.add_fulltext_field(field_name, boost)
         end
       end
