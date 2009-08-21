@@ -5,6 +5,12 @@ module Sunspot
         @query = query
       end
 
+      def fields(fields)
+        fields.each_pair do |field_name, boost|
+          @query.add_fulltext_field(field_name, boost)
+        end
+      end
+
       def highlight(options = {})
         @query.set_highlight(options)
       end
