@@ -5,6 +5,13 @@ class MockRecord
 
   attr_reader :id
 
+  class <<self
+    def reset!
+      IDS[name.to_sym] = 0
+      INSTANCES[name.to_sym] = {}
+    end
+  end
+
   def initialize(attrs = {})
     attrs.each_pair do |name, value|
       send(:"#{name}=", value)

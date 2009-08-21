@@ -78,6 +78,10 @@ module Sunspot
         @instance
       end
 
+      def inspect
+        "#<Sunspot::Search::Hit:#{@class_name} #{@primary_key}>"
+      end
+
       private
 
       def setup

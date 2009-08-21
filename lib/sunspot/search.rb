@@ -163,16 +163,14 @@ module Sunspot
     end
 
     def populate_hits! #:nodoc:
-      type_hit_hash = Hash.new { |h, k| h[k] = [] }
-      id_hit_hash = {}
-      for hit in hits
-        type_hit_hash[hit.class_name] << hit
-        id_hit_hash[hit.primary_key] = hit
+      id_hit_hash = Hash.new { |h, k| h[k] = {} }
+      hits.each do |hit|
+        id_hit_hash[hit.class_name][hit.primary_key] = hit
       end
-      type_hit_hash.each_pair do |class_name, hits|
-        ids = hits.map { |hit| hit.primary_key }
-        for instance in data_accessor_for(Util.full_const_get(class_name)).load_all(ids)
-          hit = id_hit_hash[Adapters::InstanceAdapter.adapt(instance).id.to_s]
+      id_hit_hash.each_pair do |class_name, hits|
+        ids = hits.map { |id, hit| hit.primary_key }
+        data_accessor_for(Util.full_const_get(class_name)).load_all(ids).each do |instance|
+          hit = id_hit_hash[class_name][Adapters::InstanceAdapter.adapt(instance).id.to_s]
           hit.instance = instance
         end
       end

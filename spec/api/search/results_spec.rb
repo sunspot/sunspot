@@ -15,6 +15,16 @@ describe 'search results', :type => :search do
     session.search(Post).results.should == [post_2, post_1]
   end
 
+  # This is a reduction of a crazy bug I found in production where some hits
+  # were inexplicably not being populated.
+  it 'properly loads results of multiple classes that have the same primary key' do
+    Post.reset!
+    Namespaced::Comment.reset!
+    results = [Post.new, Namespaced::Comment.new]
+    stub_results(*results)
+    session.search(Post, Namespaced::Comment).results.should == results
+  end
+
   if ENV['USE_WILL_PAGINATE']
 
     it 'returns search total as attribute of results' do
