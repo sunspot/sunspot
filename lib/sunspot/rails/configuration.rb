@@ -62,14 +62,14 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def data_path
-        @path ||=
+        @data_path ||=
           if user_configuration.has_key?('solr')
-            "#{user_configuration['solr']['data_path'] || #{user_configuration['solr']['path'] || '/solr/data'}"
+            "#{user_configuration['solr']['data_path'] || user_configuration['solr']['path'] || '/solr/data'}"
           end
       end
 
       #
-      # The path to the Solr servlet (useful if you are running multicore).
+      # The path to the Solr pids
       # Default '/solr/pids'.
       #
       # ==== Returns
@@ -77,9 +77,36 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def pids_path
-        @path ||=
+        @pids_path ||=
           if user_configuration.has_key?('solr')
             "#{user_configuration['solr']['pids_path'] || '/solr/pids'}"
+          end
+      end
+
+      #
+      # The path to the Solr home directory
+      # Default nil (runs the solr with sunspot default settings).
+      #
+      # If you have a custom solr conf directory,
+      # change this to the directory above your solr conf files
+      #
+      # e.g. conf files in /solr/conf
+      #   solr_home: /solr
+      #
+      # ==== Returns
+      #
+      # String:: path
+      #
+      def solr_home
+        @solr_home ||=
+          if user_configuration.has_key?('solr')
+            if user_configuration['solr']['solr_home'].present?
+              user_configuration['solr']['solr_home']
+            elsif %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
+              File.join(::Rails.root, 'solr')
+            else
+              nil
+            else
           end
       end
 

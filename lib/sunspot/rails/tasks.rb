@@ -8,11 +8,8 @@ namespace :sunspot do
         abort('This command does not work on Windows. Please use rake sunspot:solr:run to run Solr in the foreground.')
       end
       data_path = Sunspot::Rails.configuration.data_path
-      pid_path = Sunspot::Rails.configuration.pids_path
-      solr_home =
-        if %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
-          File.join(::Rails.root, 'solr')
-        end
+      pids_path = Sunspot::Rails.configuration.pids_path
+      solr_home = Sunspot::Rails.configuration.solr_home
       [data_path, pid_path].each { |path| FileUtils.mkdir_p(path) }
       port = Sunspot::Rails.configuration.port
       FileUtils.cd(File.join(pid_path)) do
