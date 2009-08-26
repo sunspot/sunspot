@@ -55,16 +55,31 @@ module Sunspot #:nodoc:
 
       #
       # The path to the Solr servlet (useful if you are running multicore).
-      # Default '/solr'.
+      # Default '/solr/data'.
       #
       # ==== Returns
       #
       # String:: path
       #
-      def path
+      def data_path
         @path ||=
           if user_configuration.has_key?('solr')
-            "#{user_configuration['solr']['path'] || '/solr'}"
+            "#{user_configuration['solr']['data_path'] || #{user_configuration['solr']['path'] || '/solr/data'}"
+          end
+      end
+
+      #
+      # The path to the Solr servlet (useful if you are running multicore).
+      # Default '/solr/pids'.
+      #
+      # ==== Returns
+      #
+      # String:: path
+      #
+      def pids_path
+        @path ||=
+          if user_configuration.has_key?('solr')
+            "#{user_configuration['solr']['pids_path'] || '/solr/pids'}"
           end
       end
 
