@@ -54,8 +54,23 @@ module Sunspot #:nodoc:
       end
 
       #
-      # The path to the Solr data (useful if you are running multicore).
-      # Default '/solr/data'.
+      # The url path to the Solr servlet (useful if you are running multicore).
+      # Default '/solr'.
+      #
+      # ==== Returns
+      #
+      # String:: path
+      #
+      def path
+        @data_path ||=
+          if user_configuration.has_key?('solr')
+            "#{user_configuration['solr']['path'] || '/solr'}"
+          end
+      end
+
+      #
+      # The path to the Solr indexes. (Used by the rake tasks).
+      # Default RAILS_ROOT + '/solr/data/' + ENVIRONMENT
       #
       # ==== Returns
       #
@@ -64,13 +79,13 @@ module Sunspot #:nodoc:
       def data_path
         @data_path ||=
           if user_configuration.has_key?('solr')
-            "#{user_configuration['solr']['data_path'] || user_configuration['solr']['path'] || '/solr/data'}"
+            "#{user_configuration['solr']['data_path'] || File.join(::Rails.root, 'solr', 'data', ::Rails.env)}"
           end
       end
 
       #
       # The path to the Solr pids
-      # Default '/solr/pids'.
+      # Default RAILS_ROOT + '/solr/pids/' + ENVIRONMENT
       #
       # ==== Returns
       #
@@ -79,7 +94,7 @@ module Sunspot #:nodoc:
       def pids_path
         @pids_path ||=
           if user_configuration.has_key?('solr')
-            "#{user_configuration['solr']['pids_path'] || '/solr/pids'}"
+            "#{user_configuration['solr']['pids_path'] || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)}"
           end
       end
 
@@ -90,8 +105,8 @@ module Sunspot #:nodoc:
       # If you have a custom solr conf directory,
       # change this to the directory above your solr conf files
       #
-      # e.g. conf files in /solr/conf
-      #   solr_home: /solr
+      # e.g. conf files in RAILS_ROOT/solr/conf
+      #   solr_home: RAILS_ROOT/solr
       #
       # ==== Returns
       #
@@ -106,7 +121,7 @@ module Sunspot #:nodoc:
               File.join(::Rails.root, 'solr')
             else
               nil
-            else
+            end
           end
       end
 
