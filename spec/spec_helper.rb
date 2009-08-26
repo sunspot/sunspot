@@ -5,7 +5,7 @@ require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'
 
 require 'spec'
 require 'spec/rails'
-require 'ruby-debug'
+require 'ruby-debug' unless RUBY_VERSION =~ /1.9/
 
 def load_schema
   stdout = $stdout
