@@ -54,7 +54,7 @@ module Sunspot #:nodoc:
       end
 
       #
-      # The path to the Solr servlet (useful if you are running multicore).
+      # The path to the Solr data (useful if you are running multicore).
       # Default '/solr/data'.
       #
       # ==== Returns

@@ -23,11 +23,8 @@ namespace :sunspot do
 
     desc 'Run the Solr instance in the foreground'
     task :run => :environment do
-      data_path = File.join(::Rails.root, 'solr', 'data', ::Rails.env)
-      solr_home =
-        if %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
-          File.join(::Rails.root, 'solr')
-        end
+      data_path = Sunspot::Rails.configuration.data_path
+      solr_home = Sunspot::Rails.configuration.solr_home
       FileUtils.mkdir_p(data_path)
       port = Sunspot::Rails.configuration.port
       command = ['sunspot-solr', 'run', '--', '-p', port.to_s, '-d', data_path]
