@@ -8,7 +8,7 @@ namespace :sunspot do
         abort('This command does not work on Windows. Please use rake sunspot:solr:run to run Solr in the foreground.')
       end
       data_path = Sunspot::Rails.configuration.data_path
-      pids_path = Sunspot::Rails.configuration.pids_path
+      pid_path = Sunspot::Rails.configuration.pid_path
       solr_home = Sunspot::Rails.configuration.solr_home
       [data_path, pid_path].each { |path| FileUtils.mkdir_p(path) }
       port = Sunspot::Rails.configuration.port
@@ -39,7 +39,7 @@ namespace :sunspot do
 
     desc 'Stop the Solr instance'
     task :stop => :environment do
-      FileUtils.cd(File.join(Sunspot::Rails.configuration.pids_path)) do
+      FileUtils.cd(Sunspot::Rails.configuration.pid_path) do
         system(Escape.shell_command(['sunspot-solr', 'stop']))
       end
     end

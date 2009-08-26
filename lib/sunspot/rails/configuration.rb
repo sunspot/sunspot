@@ -91,10 +91,10 @@ module Sunspot #:nodoc:
       #
       # String:: path
       #
-      def pids_path
+      def pid_path
         @pids_path ||=
           if user_configuration.has_key?('solr')
-            "#{user_configuration['solr']['pids_path'] || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)}"
+            "#{user_configuration['solr']['pid_path'] || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)}"
           end
       end
 
