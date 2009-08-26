@@ -39,7 +39,7 @@ namespace :sunspot do
 
     desc 'Stop the Solr instance'
     task :stop => :environment do
-      FileUtils.cd(File.join(Sunspot::Rails.configuration.pids_path, ::Rails.env)) do
+      FileUtils.cd(File.join(Sunspot::Rails.configuration.pids_path)) do
         system(Escape.shell_command(['sunspot-solr', 'stop']))
       end
     end

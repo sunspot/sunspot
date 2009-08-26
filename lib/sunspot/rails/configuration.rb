@@ -62,7 +62,7 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def path
-        @data_path ||=
+        @path ||=
           if user_configuration.has_key?('solr')
             "#{user_configuration['solr']['path'] || '/solr'}"
           end
