@@ -29,7 +29,7 @@ module Sunspot
           params[:qf] = query_fields
           params[:defType] = 'dismax'
           if @phrase_fields
-            params[:pf] = @phrase_fields.map { |field| field.indexed_name }
+            params[:pf] = @phrase_fields.map { |field| field.to_boosted_field }.join(' ')
           end
         else
           params[:q] = types_phrase
@@ -40,6 +40,15 @@ module Sunspot
       def add_fulltext_field(field_name, boost = nil)
         @fulltext_fields ||= []
         @fulltext_fields.concat(
+          @setup.text_fields(field_name).map do |field|
+            TextFieldBoost.new(field, boost)
+          end
+        )
+      end
+
+      def add_phrase_field(field_name, boost = nil)
+        @phrase_fields ||= []
+        @phrase_fields.concat(
           @setup.text_fields(field_name).map do |field|
             TextFieldBoost.new(field, boost)
           end

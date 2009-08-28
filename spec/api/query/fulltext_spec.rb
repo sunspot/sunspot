@@ -52,6 +52,14 @@ describe 'fulltext query', :type => :query do
     connection.searches.last[:qf].split(' ').sort.should == %w(body_texts^0.75 title_text^2.0)
   end
 
+  it 'allows assignment of boosted and unboosted fields' do
+    session.search Post do
+      keywords 'keyword search' do
+        fields :body, :title => 2.0
+      end
+    end
+  end
+
   it 'searches both unstored and stored text field with same name when specified' do
     session.search Post, Namespaced::Comment do
       keywords 'keyword search', :fields => [:body]
@@ -77,7 +85,16 @@ describe 'fulltext query', :type => :query do
         phrase_fields :title
       end
     end
-    connection.should have_last_search_with(:pf => %w(title_text))
+    connection.should have_last_search_with(:pf => 'title_text')
+  end
+
+  it 'sets phrase fields with boost' do
+    session.search Post do
+      keywords 'great pizza' do
+        phrase_fields :title => 1.5
+      end
+    end
+    connection.should have_last_search_with(:pf => 'title_text^1.5')
   end
 
   it 'allows specification of a text field that only exists in one type' do

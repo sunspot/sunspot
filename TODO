@@ -1,11 +1,12 @@
+=== 0.9  ===
+* Support :only argument for field facets
+* Support strings and nil for pagination
+* Gracefully handle empty/blank keywords
 === 0.10 ===
+=== 0.11 ===
 * Support all operations in batches. Make it smart.
   * Don't use more than one commits when one is equivalent
   * Preserve adds/deletes that are done after last commit
   * Don't do adds and deletes for the same document out of order
   * Don't do more than one add for the same document
   * Do use as few requests as possible within those constraints
-* Boost for fields and phrase fields
-* Query boost
-* Support strings and nil for pagination
-* Gracefully handle empty/blank keywords
