@@ -33,10 +33,7 @@ module Sunspot #:nodoc:
       # String:: host name
       #
       def hostname
-        @hostname ||=
-          if user_configuration.has_key?('solr')
-            user_configuration['solr']['hostname']
-          end || 'localhost'
+        @hostname ||= (user_configuration_from_key('hostname') || 'localhost')
       end
 
       #
@@ -47,10 +44,7 @@ module Sunspot #:nodoc:
       # Integer:: port
       #
       def port
-        @port ||=
-          if user_configuration.has_key?('solr')
-            user_configuration['solr']['port']
-          end || 8983
+        @port ||= (user_configuration_from_key('port') || 8983).to_i
       end
 
       #
@@ -62,13 +56,38 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def path
-        @path ||=
-          if user_configuration.has_key?('solr')
-            "#{user_configuration['solr']['path'] || '/solr'}"
-          end
+        @path ||= (user_configuration_from_key('path') || '/solr')
+      end
+      
+      #
+      # Should the solr index receive a commit after each http-request.
+      # Default true
+      #
+      # ==== Returns
+      #
+      # Boolean:: bool
+      #
+      
+      def auto_commit_after_request?
+        @auto_commit_after_request ||= 
+          user_configuration_from_key('auto_commit_after_request') == false ? false : true
       end
 
       private
+      
+      # 
+      # return a specifc key from the user configuration in config/sunspot.yml
+      #
+      # ==== Returns
+      #
+      # 
+      def user_configuration_from_key( key )
+        if user_configuration.has_key?('solr')
+          user_configuration['solr'][key]
+        else
+          nil
+        end
+      end
 
       #
       # Memoized hash of configuration options for the current Rails environment
@@ -86,6 +105,8 @@ module Sunspot #:nodoc:
               File.open(path) do |file|
                 YAML.load(file)[::Rails.env]
               end
+            else
+              {}
             end
           end
       end
