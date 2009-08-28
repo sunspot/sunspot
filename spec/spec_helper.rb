@@ -27,6 +27,7 @@ rescue LoadError => e
     retry
   end
 end
+require 'ostruct'
 
 unless gem_name = ENV['SUNSPOT_TEST_GEM']
   $:.unshift(File.dirname(__FILE__) + '/../lib')
