@@ -115,6 +115,10 @@ module Sunspot
         @base_query.add_fulltext_field(field_name, boost)
       end
 
+      def add_phrase_field(field_name, boost = nil)
+        @base_query.add_phrase_field(field_name, boost)
+      end
+
       def set_highlight(options = {})
         @components << @highlight = Highlighting.new(options)
       end

@@ -85,7 +85,16 @@ describe 'fulltext query', :type => :query do
         phrase_fields :title
       end
     end
-    connection.should have_last_search_with(:pf => %w(title_text))
+    connection.should have_last_search_with(:pf => 'title_text')
+  end
+
+  it 'sets phrase fields with boost' do
+    session.search Post do
+      keywords 'great pizza' do
+        phrase_fields :title => 1.5
+      end
+    end
+    connection.should have_last_search_with(:pf => 'title_text^1.5')
   end
 
   it 'allows specification of a text field that only exists in one type' do
