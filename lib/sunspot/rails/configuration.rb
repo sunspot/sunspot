@@ -13,12 +13,14 @@ module Sunspot #:nodoc:
     #     solr:
     #       hostname: localhost
     #       port: 8983
-    #
+    #       log_level: OFF
     #   production:
     #     solr:
     #       hostname: localhost
     #       port: 8983
     #       path: /solr/myindex
+    #       log_level: WARNING
+    #     auto_commit_after_request: true
     #
     # Sunspot::Rails uses the configuration to set up the Solr connection, as
     # well as for starting Solr with the appropriate port using the
@@ -59,6 +61,19 @@ module Sunspot #:nodoc:
       def path
         @path ||= (user_configuration_from_key('solr', 'path') || '/solr')
       end
+
+      # 
+      # The default log_level that should be passed to solr. You can
+      # change the individual log_levels in the solr admin interface.
+      # Default 'INFO'.
+      #
+      # ==== Returns
+      #
+      # String:: log_level
+      #
+      def log_level
+        @log_level ||= (user_configuration_from_key('solr', 'log_level') || 'INFO')
+      end
       
       #
       # Should the solr index receive a commit after each http-request.
@@ -68,7 +83,6 @@ module Sunspot #:nodoc:
       #
       # Boolean:: bool
       #
-      
       def auto_commit_after_request?
         @auto_commit_after_request ||= 
           user_configuration_from_key('auto_commit_after_request') != false

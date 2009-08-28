@@ -20,6 +20,11 @@ describe Sunspot::Rails::Configuration, "default values" do
     config.port.should == 8983
   end
 
+  it "should handle the 'log_level' propery when not set" do
+    config = Sunspot::Rails::Configuration.new
+    config.log_level.should == 'INFO'
+  end
+
   it "should handle the 'auto_commit_after_request' propery when not set" do
     config = Sunspot::Rails::Configuration.new
     config.auto_commit_after_request?.should == true
@@ -44,6 +49,11 @@ describe Sunspot::Rails::Configuration, "user settings" do
   it "should handle the 'path' property when set" do
     config = Sunspot::Rails::Configuration.new
     config.path.should == '/solr/idx'
+  end
+  
+  it "should handle the 'log_level' propery when set" do
+    config = Sunspot::Rails::Configuration.new
+    config.log_level.should == 'WARNING'
   end
 
   it "should handle the 'auto_commit_after_request' propery when set" do
