@@ -91,7 +91,7 @@ describe 'keyword search' do
       Sunspot.index!(@comments)
     end
 
-    it 'should assign a higher score to documents in which all words appear in the phrase field' do
+    it 'assigns a higher score to documents in which all words appear in the phrase field' do
       hits = Sunspot.search(Namespaced::Comment) do
         keywords 'test text' do
           phrase_fields :body
@@ -101,10 +101,20 @@ describe 'keyword search' do
       hits.first.score.should > hits.last.score
     end
 
-    it 'should assign a higher score to documents in which the search terms appear in a boosted field' do
+    it 'assigns a higher score to documents in which the search terms appear in a boosted field' do
       hits = Sunspot.search(Namespaced::Comment) do
         keywords 'test' do
           fields :body => 2.0, :author_name => 0.75
+        end
+      end.hits
+      hits.first.instance.should == @comments.first
+      hits.first.score.should > hits.last.score
+    end
+    
+    it 'assigns a higher score to documents in which the search terms appear in a higher boosted phrase field' do
+      hits = Sunspot.search(Namespaced::Comment) do
+        keywords 'test text' do
+          phrase_fields :body => 2.0, :author_name => 0.75
         end
       end.hits
       hits.first.instance.should == @comments.first
