@@ -7,3 +7,5 @@
   * Do use as few requests as possible within those constraints
 * Boost for fields and phrase fields
 * Query boost
+* Support strings and nil for pagination
+* Gracefully handle empty/blank keywords
