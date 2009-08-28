@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown", "Peer Allan", "Michael Moen", "Benjamin Krause"]
-  s.date = %q{2009-07-23}
+  s.date = %q{2009-08-28}
   s.description = %q{Rails integration for the Sunspot Solr search library}
   s.email = %q{mat@patch.com}
   s.extra_rdoc_files = [
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
      "MIT-LICENSE",
      "README.rdoc",
      "Rakefile",
+     "TODO",
      "VERSION.yml",
      "dev_tasks/gemspec.rake",
      "dev_tasks/rdoc.rake",
@@ -57,6 +58,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/outoftime/sunspot_rails}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
+  s.rubyforge_project = %q{sunspot}
   s.rubygems_version = %q{1.3.2}
   s.summary = %q{Rails integration for the Sunspot Solr search library}
   s.test_files = [
