@@ -14,8 +14,9 @@ module Sunspot
     #
     class QueryFacet
       attr_reader :name #:nodoc:
+      attr_reader :field #:nodoc:
 
-      def initialize(name, setup) #:nodoc:
+      def initialize(name, setup = nil) #:nodoc:
         @name = name
         @setup = setup
         @components = []

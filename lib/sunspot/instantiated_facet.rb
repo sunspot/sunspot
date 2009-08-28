@@ -15,7 +15,7 @@ module Sunspot
     #
     def populate_instances! #:nodoc:
       ids = rows.map { |row| row.value }
-      reference_class = Sunspot::Util.full_const_get(@field.reference.to_s)
+      reference_class = Sunspot::Util.full_const_get(@facet_data.reference.to_s)
       accessor = Adapters::DataAccessor.create(reference_class)
       instance_map = accessor.load_all(ids).inject({}) do |map, instance|
         map[Adapters::InstanceAdapter.adapt(instance).id] = instance
@@ -24,6 +24,10 @@ module Sunspot
       for row in rows
         row.instance = instance_map[row.value]
       end
+    end
+
+    def rows
+      @facet_data.rows { |value, count| InstantiatedFacetRow.new(value, count, self) }
     end
 
     private

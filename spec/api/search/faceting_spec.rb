@@ -91,7 +91,7 @@ describe 'faceting', :type => :search do
     facet.rows.last.value.should == ((start_time+24*60*60)..end_time)
   end
 
-  it 'should return query facet' do
+  it 'returns query facet' do
     stub_query_facet(
       'average_rating_f:[3\.0 TO 5\.0]' => 3,
       'average_rating_f:[1\.0 TO 3\.0]' => 1
@@ -113,11 +113,38 @@ describe 'faceting', :type => :search do
     facet.rows.last.count.should == 1
   end
 
+  it 'returns limited field facet' do
+    stub_query_facet(
+      'category_ids_im:1' => 3,
+      'category_ids_im:3' => 1
+    )
+    search = session.search(Post) do
+      facet :category_ids, :only => [1, 3, 5]
+    end
+    facet = search.facet(:category_ids)
+    facet.rows.first.value.should == 1
+    facet.rows.first.count.should == 3
+    facet.rows.last.value.should == 3
+    facet.rows.last.count.should == 1
+  end
+
   it 'returns instantiated facet values' do
     blogs = Array.new(2) { Blog.new }
     stub_facet(:blog_id_i, blogs[0].id.to_s => 2, blogs[1].id.to_s => 1)
-    result = session.search(Post) { facet(:blog_id) }
-    result.facet(:blog_id).rows.map { |row| row.instance }.should == blogs
+    search = session.search(Post) { facet(:blog_id) }
+    search.facet(:blog_id).rows.map { |row| row.instance }.should == blogs
+  end
+
+  it 'returns instantiated facet values for limited field facet' do
+    blogs = Array.new(2) { Blog.new }
+    stub_query_facet(
+      "blog_id_i:#{blogs[0].id}" => 3,
+      "blog_id_i:#{blogs[1].id}" => 1
+    )
+    search = session.search(Post) do
+      facet(:blog_id, :only => blogs.map { |blog| blog.id })
+    end
+    search.facet(:blog_id).rows.map { |row| row.instance }.should == blogs
   end
 
   it 'only queries the persistent store once for an instantiated facet' do

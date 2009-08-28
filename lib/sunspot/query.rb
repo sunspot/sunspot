@@ -1,6 +1,6 @@
 %w(base_query scope field_query connective dynamic_query field_facet query_facet
-   query_facet_row local pagination restriction sort sort_composite
-   text_field_boost highlighting).each do |file|
+   query_facet_row query_field_facet local pagination restriction sort
+   sort_composite text_field_boost highlighting).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
