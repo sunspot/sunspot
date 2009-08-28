@@ -5,7 +5,9 @@ require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'
 
 require 'spec'
 require 'spec/rails'
+require 'rake'
 require 'ruby-debug'
+require 'sunspot/rails/tasks'
 
 def load_schema
   stdout = $stdout
