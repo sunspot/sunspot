@@ -28,6 +28,8 @@ module Sunspot
               )
             end
             DateFieldFacet.new(field, options)
+          elsif options.has_key?(:only)
+            QueryFieldFacet.new(field, options.delete(:only))
           else
             FieldFacet.new(field, options)
           end
