@@ -208,7 +208,8 @@ module Sunspot #:nodoc:
         #
         # Array:: Collection of IDs that exist in Solr but not in the database
         def index_orphans
-          indexed_ids = search_ids.to_set
+          count = self.count
+          indexed_ids = search_ids { paginate(:page => 1, :per_page => count) }.to_set
           all(:select => 'id').each do |object|
             indexed_ids.delete(object.id)
           end
