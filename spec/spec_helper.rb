@@ -24,10 +24,6 @@ def silence_stderr(&block)
 end
 
 Spec::Runner.configure do |config|
-  config.before(:suite) do
-    Rake::Task['sunspot:solr:start'].execute
-  end
-  
   config.before(:each) do
     Sunspot.remove_all
     Sunspot.commit

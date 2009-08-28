@@ -11,4 +11,4 @@ config_test:
     hostname: some.host
     port: 1234
     path: /solr/idx
-    auto_commit_after_request: false
+  auto_commit_after_request: false

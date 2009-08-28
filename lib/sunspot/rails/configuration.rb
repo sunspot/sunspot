@@ -25,6 +25,7 @@ module Sunspot #:nodoc:
     # <code>rake sunspot:solr:start</code> task.
     #
     class Configuration
+      attr_writer :user_configuration
       #
       # The host name at which to connect to Solr. Default 'localhost'.
       #
@@ -33,7 +34,7 @@ module Sunspot #:nodoc:
       # String:: host name
       #
       def hostname
-        @hostname ||= (user_configuration_from_key('hostname') || 'localhost')
+        @hostname ||= (user_configuration_from_key('solr', 'hostname') || 'localhost')
       end
 
       #
@@ -44,7 +45,7 @@ module Sunspot #:nodoc:
       # Integer:: port
       #
       def port
-        @port ||= (user_configuration_from_key('port') || 8983).to_i
+        @port ||= (user_configuration_from_key('solr', 'port') || 8983).to_i
       end
 
       #
@@ -56,7 +57,7 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def path
-        @path ||= (user_configuration_from_key('path') || '/solr')
+        @path ||= (user_configuration_from_key('solr', 'path') || '/solr')
       end
       
       #
@@ -70,22 +71,20 @@ module Sunspot #:nodoc:
       
       def auto_commit_after_request?
         @auto_commit_after_request ||= 
-          user_configuration_from_key('auto_commit_after_request') == false ? false : true
+          user_configuration_from_key('auto_commit_after_request') != false
       end
 
       private
       
       # 
-      # return a specifc key from the user configuration in config/sunspot.yml
+      # return a specific key from the user configuration in config/sunspot.yml
       #
       # ==== Returns
       #
       # 
-      def user_configuration_from_key( key )
-        if user_configuration.has_key?('solr')
-          user_configuration['solr'][key]
-        else
-          nil
+      def user_configuration_from_key( *keys )
+        keys.inject(user_configuration) do |hash, key|
+          hash[key] if hash
         end
       end
 
