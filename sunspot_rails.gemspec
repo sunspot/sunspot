@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot_rails}
-  s.version = "0.10.4"
+  s.version = "0.10.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown", "Peer Allan", "Michael Moen", "Benjamin Krause"]
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "VERSION.yml",
      "dev_tasks/gemspec.rake",
      "dev_tasks/rdoc.rake",
+     "dev_tasks/release.rake",
      "dev_tasks/todo.rake",
      "install.rb",
      "lib/sunspot/rails.rb",
