@@ -5,7 +5,9 @@ require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'
 
 require 'spec'
 require 'spec/rails'
+require 'rake'
 require 'ruby-debug'
+require 'sunspot/rails/tasks'
 
 def load_schema
   stdout = $stdout
@@ -22,6 +24,10 @@ def silence_stderr(&block)
 end
 
 Spec::Runner.configure do |config|
+  config.before(:suite) do
+    Rake::Task['sunspot:solr:start'].execute
+  end
+  
   config.before(:each) do
     Sunspot.remove_all
     Sunspot.commit

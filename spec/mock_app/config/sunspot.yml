@@ -6,8 +6,9 @@ development:
   solr:
     hostname: localhost
     port: 8981
-path_test:
+config_test:
   solr:
-    hostname: localhost
-    port: 8981
-    path: /solr/path_test
+    hostname: some.host
+    port: 1234
+    path: /solr/idx
+    auto_commit_after_request: false
