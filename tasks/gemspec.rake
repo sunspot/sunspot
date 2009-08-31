@@ -16,6 +16,7 @@ begin
     s.add_dependency 'haml', '~> 2.2'
     s.add_development_dependency 'rspec', '~> 1.1'
     s.add_development_dependency 'ruby-debug', '~> 0.10'
+    s.add_development_dependency 'technicalpickles-jeweler', '1.2.1'
     s.extra_rdoc_files = ['README.rdoc']
     s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                       '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation' <<
