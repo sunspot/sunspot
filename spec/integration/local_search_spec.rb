@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'local search' do
   ORIGIN = [40.6749113, -73.9648859]
   before :each do
@@ -15,30 +17,30 @@ describe 'local search' do
   end
 
   it 'should find all the posts within a given radius' do
-    search = Sunspot.search(Post) { near(ORIGIN, 20) }
+    search = Sunspot.search(Post) { |query| query.near(ORIGIN, 20) }
     search.results.to_set.should == @posts[0..2].to_set
   end
 
   it 'should perform a radial search with fulltext matching' do
-    search = Sunspot.search(Post) do
-      keywords 'teacup'
-      near(ORIGIN, 20)
+    search = Sunspot.search(Post) do |query|
+      query.keywords 'teacup'
+      query.near(ORIGIN, 20)
     end
     search.results.should == [@posts[1]]
   end
 
   it 'should order by arbitrary field' do
-    search = Sunspot.search(Post) do
-      near(ORIGIN, 20)
-      order_by(:blog_id)
+    search = Sunspot.search(Post) do |query|
+      query.near(ORIGIN, 20)
+      query.order_by(:blog_id)
     end
     search.results.should == @posts[0..2].reverse
   end
 
   it 'should order by geo distance' do
-    search = Sunspot.search(Post) do
-      near(ORIGIN, 20)
-      order_by(:distance)
+    search = Sunspot.search(Post) do |query|
+      query.near(ORIGIN, 20)
+      query.order_by(:distance)
     end
     search.results.should == @posts[0..2]
   end

@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot}
-  s.version = "0.9.5"
+  s.version = "0.9.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown", "Peer Allan", "Dmitriy Dzema", "Benjamin Krause"]
-  s.date = %q{2009-08-13}
+  s.date = %q{2009-08-28}
   s.description = %q{Library for expressive, powerful interaction with the Solr search engine}
   s.email = %q{mat@patch.com}
   s.executables = ["sunspot-solr", "sunspot-configure-solr"]
@@ -28,8 +28,6 @@ Gem::Specification.new do |s|
      "lib/sunspot/composite_setup.rb",
      "lib/sunspot/configuration.rb",
      "lib/sunspot/data_extractor.rb",
-     "lib/sunspot/date_facet.rb",
-     "lib/sunspot/date_facet_row.rb",
      "lib/sunspot/dsl.rb",
      "lib/sunspot/dsl/field_query.rb",
      "lib/sunspot/dsl/fields.rb",
@@ -39,6 +37,7 @@ Gem::Specification.new do |s|
      "lib/sunspot/dsl/scope.rb",
      "lib/sunspot/dsl/search.rb",
      "lib/sunspot/facet.rb",
+     "lib/sunspot/facet_data.rb",
      "lib/sunspot/facet_row.rb",
      "lib/sunspot/field.rb",
      "lib/sunspot/field_factory.rb",
@@ -54,12 +53,11 @@ Gem::Specification.new do |s|
      "lib/sunspot/query/pagination.rb",
      "lib/sunspot/query/query_facet.rb",
      "lib/sunspot/query/query_facet_row.rb",
+     "lib/sunspot/query/query_field_facet.rb",
      "lib/sunspot/query/restriction.rb",
      "lib/sunspot/query/scope.rb",
      "lib/sunspot/query/sort.rb",
      "lib/sunspot/query/sort_composite.rb",
-     "lib/sunspot/query_facet.rb",
-     "lib/sunspot/query_facet_row.rb",
      "lib/sunspot/schema.rb",
      "lib/sunspot/search.rb",
      "lib/sunspot/search/hit.rb",
@@ -121,6 +119,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/outoftime/sunspot}
   s.rdoc_options = ["--charset=UTF-8", "--webcvs=http://github.com/outoftime/sunspot/tree/master/%s", "--title", "Sunspot - Solr-powered search for Ruby objects - API Documentation", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
+  s.rubyforge_project = %q{sunspot}
   s.rubygems_version = %q{1.3.2}
   s.summary = %q{Library for expressive, powerful interaction with the Solr search engine}
   s.test_files = [
