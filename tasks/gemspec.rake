@@ -8,6 +8,7 @@ begin
     s.homepage = 'http://github.com/outoftime/sunspot'
     s.description = 'Library for expressive, powerful interaction with the Solr search engine'
     s.authors = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause']
+    s.rubyforge_project = 'sunspot'
     s.files = FileList['[A-Z]*', '{bin,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/conf/*', 'solr/start.jar']
     s.add_dependency 'mwmitchell-rsolr', '>= 0.8.9'
     s.add_dependency 'daemons', '~> 1.0'

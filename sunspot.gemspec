@@ -119,6 +119,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/outoftime/sunspot}
   s.rdoc_options = ["--charset=UTF-8", "--webcvs=http://github.com/outoftime/sunspot/tree/master/%s", "--title", "Sunspot - Solr-powered search for Ruby objects - API Documentation", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
+  s.rubyforge_project = %q{sunspot}
   s.rubygems_version = %q{1.3.2}
   s.summary = %q{Library for expressive, powerful interaction with the Solr search engine}
   s.test_files = [
