@@ -27,6 +27,8 @@ Gem::Specification.new do |s|
      "dev_tasks/rdoc.rake",
      "dev_tasks/release.rake",
      "dev_tasks/todo.rake",
+     "generators/sunspot/sunspot_generator.rb",
+     "generators/sunspot/templates/sunspot.yml",
      "install.rb",
      "lib/sunspot/rails.rb",
      "lib/sunspot/rails/adapters.rb",
