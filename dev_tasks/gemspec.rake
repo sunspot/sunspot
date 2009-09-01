@@ -11,6 +11,7 @@ begin
     s.rubyforge_project = 'sunspot'
     s.files = FileList['[A-Z]*',
                        '{lib,tasks,dev_tasks}/**/*',
+                       'generators/**/*',
                        'install.rb',
                        'MIT-LICENSE',
                        'rails/*',
