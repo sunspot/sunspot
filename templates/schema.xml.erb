@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema version="0.9" name="sunspot">
+  <types>
+    <fieldtype class="solr.TextField" positionIncrementGap="100" name="text">
+      <analyzer>
+        <tokenizer class="<%= tokenizer %>"/>
+        <%- filters.each do |filter| -%>
+        <filter class="<%= filter %>"/>
+        <%- end -%>
+      </analyzer>
+    </fieldtype>
+    <fieldtype class="solr.RandomSortField" name="rand"/>
+    <%- types.each do |type| -%>
+    <fieldtype name="<%= type.name %>" class="solr.<%= type.class_name  %>Field" omitNorms="true"/>
+    <%- end -%>
+  </types>
+  <fields>
+    <field type="string" stored="true" multiValued="false" name="id" indexed="true"/>
+    <field type="string" stored="false" multiValued="true" name="type" indexed="true"/>
+    <field type="string" stored="false" multiValued="false" name="class_name" indexed="true"/>
+    <field type="text" stored="false" multiValued="true" name="text" indexed="true"/>
+    <dynamicField type="text" stored="false" multiValued="true" name="*_text" indexed="true"/>
+    <dynamicField type="rand" stored="false" name="random_*" indexed="true"/>
+    <%- dynamic_fields.each do |dynamic_field| -%>
+    <dynamicField type="<%= dynamic_field.type %>" stored="<%= dynamic_field.stored? %>" multiValued="<%= dynamic_field.multiValued? %>" name="<%= dynamic_field.name %>" indexed="true"/>
+    <%- end -%>
+  </fields>
+  <uniqueKey>id</uniqueKey>
+  <defaultSearchField>text</defaultSearchField>
+  <solrQueryParser defaultOperator="AND"/>
+  <copyField dest="text" source="*_text"/>
+</schema>
