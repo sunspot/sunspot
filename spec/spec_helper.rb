@@ -30,3 +30,14 @@ Spec::Runner.configure do |config|
     load_schema
   end
 end
+
+module Spec
+  module Mocks
+    module Methods
+      def should_respond_to_and_receive(*args, &block)
+        respond_to?(args.first).should ==(true)
+        should_receive(*args, &block)
+      end
+    end
+  end
+end

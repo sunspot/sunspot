@@ -95,7 +95,8 @@ module Sunspot #:nodoc:
       #
       # ==== Returns
       #
-      # 
+      # Mixed:: requested_key or nil
+      #
       def user_configuration_from_key( *keys )
         keys.inject(user_configuration) do |hash, key|
           hash[key] if hash
