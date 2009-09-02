@@ -1,0 +1,10 @@
+== 0.11
+  * Update sunspot.yml
+    * add log_level support
+    * add solr_home support
+  * add bootstrap method to setup a new solr instance
+  
+== 0.12
+  * add a method to disable sunspot updates for certain values, e.g. 
+    if you just touch a record, sunspot shouldn't index the 
+  
