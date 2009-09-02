@@ -21,7 +21,7 @@ module Sunspot
         options ||= {}
         facet =
           if only = options.delete(:only)
-            query_facets[field_name.to_sym] = QueryFieldFacet.new(@setup.field(field_name), only) 
+            query_facets[field_name.to_sym] = QueryFieldFacet.new(@setup.field(field_name), only, options) 
           else
             FieldFacet.build(build_field(field_name), options)
           end
@@ -42,8 +42,8 @@ module Sunspot
       #
       # QueryFacet:: The query facet object
       #
-      def add_query_facet(name)
-        add_component(facet = QueryFacet.new(name, @setup))
+      def add_query_facet(name, options)
+        add_component(facet = QueryFacet.new(name, options, @setup))
         query_facets[name.to_sym] = facet
       end
 

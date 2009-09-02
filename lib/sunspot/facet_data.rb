@@ -106,13 +106,31 @@ module Sunspot
         @rows ||=
           begin
             rows = []
-            for row in  @outgoing_query_facet.rows
-              row_query = row.to_boolean_phrase
+            options = @outgoing_query_facet.options
+            minimum_count =
+              if options[:zeros] then 0
+              elsif options[:minimum_count] then options[:minimum_count]
+              else 1
+              end
+            for outgoing_row in  @outgoing_query_facet.rows
+              row_query = outgoing_row.to_boolean_phrase
               if @row_data.has_key?(row_query)
-                rows << yield(row.label, @row_data[row_query])
+                row = yield(outgoing_row.label, @row_data[row_query])
+                rows << row if row.count >= minimum_count
               end
             end
-            rows.sort! { |x, y| y.count <=> x.count }
+            if options[:sort] == :index || !options[:limit] && options[:sort] != :count
+              if rows.all? { |row| row.value.respond_to?(:<=>) }
+                rows.sort! { |x, y| x.value <=> y.value }
+              end
+            else
+              rows.sort! { |x, y| y.count <=> x.count }
+            end
+            if limit = options[:limit]
+              rows[0, limit]
+            else
+              rows
+            end
           end
       end
     end

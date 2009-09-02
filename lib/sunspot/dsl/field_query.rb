@@ -48,6 +48,12 @@ module Sunspot
       #
       def facet(*field_names, &block)
         if block
+          options =
+            if field_names.last.is_a?(Hash)
+              field_names.pop
+            else
+              {}
+            end
           if field_names.length != 1
             raise(
               ArgumentError,
@@ -55,7 +61,7 @@ module Sunspot
             )
           end
           name = field_names.first
-          DSL::QueryFacet.new(@query.add_query_facet(name)).instance_eval(&block)
+          DSL::QueryFacet.new(@query.add_query_facet(name, options)).instance_eval(&block)
         else
           options = 
             if field_names.last.is_a?(Hash)
