@@ -10,6 +10,11 @@ features for indexing objects and searching for them.
 Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
 objects such as the filesystem.
 
+This README is intended as a quick primer on what Sunspot is capable of; for
+detailed treatment of Sunspot's full feature range, check out the wiki:
+http://wiki.github.com/outoftime/sunspot
+
+
 === Features:
 
 * Define indexing strategy for each searchable class using intuitive block-based API
@@ -147,6 +152,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 * Peer Allan (peer.allan@gmail.com)
 * Dmitriy Dzema (dima@dzema.name)
 * Benjamin Krause (bk@benjaminkrause.com)
+* Collective Idea (info@collectiveidea.com)
 
 == License
 
