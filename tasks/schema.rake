@@ -1,5 +1,5 @@
 namespace :schema do
-  desc 'Compile schema from Haml template'
+  desc 'Generate schema from template'
   task :compile do
     require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'schema')
     File.open(

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema version="0.9" name="sunspot">
+  <types>
+    <fieldtype class="solr.TextField" positionIncrementGap="100" name="text">
+      <analyzer>
+        <tokenizer class="<%= tokenizer %>"/>
+        <%- filters.each do |filter| -%>
+        <filter class="<%= filter %>"/>
+        <%- end -%>
+      </analyzer>
+    </fieldtype>
+    <fieldtype class="solr.RandomSortField" name="rand"/>
+    <%- types.each do |type| -%>
+    <fieldtype name="<%= type.name %>" class="solr.<%= type.class_name  %>Field" omitNorms="true"/>
+    <%- end -%>
+  </types>
+  <fields>
+    <field name="id"         type="string"  indexed="true" stored="true"  multiValued="false" />
+    <field name="type"       type="string"  indexed="true" stored="false" multiValued="true" />
+    <field name="class_name" type="string"  indexed="true" stored="false" multiValued="false" />
+    <field name="text"       type="text"    indexed="true" stored="false" multiValued="true" />
+    <field name="lat"        type="sdouble" indexed="true" stored="true"  multiValued="false" />
+    <field name="long"       type="sdouble" indexed="true" stored="true"  multiValued="false" />
+    <dynamicField name="*_text"   type="text"    indexed="true" stored="false" multiValued="true" />
+    <dynamicField name="*_texts"  type="text"    indexed="true" stored="true"  multiValued="true" />
+    <dynamicField name="random_*" type="rand"    indexed="true" stored="false" multiValued="false" />
+    <dynamicField name="_local*" type="sdouble" indexed="true" stored="false" multiValued="false" />
+    <%- dynamic_fields.each do |dynamic_field| -%>
+    <dynamicField name="<%= dynamic_field.name %>" type="<%= dynamic_field.type %>" indexed="true" stored="<%= dynamic_field.stored? %>" multiValued="<%= dynamic_field.multiValued? %>" />
+    <%- end -%>
+  </fields>
+  <uniqueKey>id</uniqueKey>
+  <defaultSearchField>text</defaultSearchField>
+  <solrQueryParser defaultOperator="AND"/>
+  <copyField dest="text" source="*_text"/>
+</schema>

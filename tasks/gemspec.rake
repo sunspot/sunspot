@@ -13,7 +13,6 @@ begin
     s.add_dependency 'mwmitchell-rsolr', '>= 0.8.9'
     s.add_dependency 'daemons', '~> 1.0'
     s.add_dependency 'optiflag', '~> 0.6.5'
-    s.add_dependency 'haml', '~> 2.2'
     s.add_development_dependency 'rspec', '~> 1.1'
     s.add_development_dependency 'ruby-debug', '~> 0.10'
     s.add_development_dependency 'technicalpickles-jeweler', '1.2.1'
