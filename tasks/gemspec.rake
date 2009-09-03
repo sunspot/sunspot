@@ -25,6 +25,7 @@ TEXT
                       '--main' << 'README.rdoc'
 
   end
+
   Jeweler::RubyforgeTasks.new
 end
 
