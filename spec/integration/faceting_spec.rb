@@ -148,7 +148,7 @@ describe 'search faceting' do
 
     it 'should return specified facets' do
       search = Sunspot.search(Post) do
-        facet :rating_range do
+        facet :rating_range, :sort => :count do
           for rating in [1.0, 2.0, 3.0, 4.0]
             range = rating..(rating + 1.0)
             row range do
