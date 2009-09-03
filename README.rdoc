@@ -226,6 +226,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 - Michael Moen (michael@underpantsgnome.com)
 - Benjamin Krause (bk@benjaminkrause.com)
 - Adam Salter (adam@codebright.net)
+- Brandon Keepers (brandon@opensoul.org)
 
 == License
 
