@@ -1,5 +1,6 @@
 begin
   require 'jeweler'
+  require 'jeweler/rubyforge_tasks'
   Jeweler::Tasks.new do |s|
     s.name = 'sunspot'
     s.executables = ['sunspot-solr', 'sunspot-configure-solr']
@@ -24,4 +25,10 @@ TEXT
                       '--main' << 'README.rdoc'
 
   end
+  Jeweler::RubyforgeTasks.new
+end
+
+namespace :release do
+  desc "Release gem to RubyForge and GitHub"
+  task :all => [:"rubyforge:release:gem", :release]
 end
