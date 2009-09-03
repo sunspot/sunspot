@@ -30,7 +30,7 @@ module Sunspot
       #
       def keywords(keywords, options = {}, &block)
         fulltext_base_query = @query.set_keywords(keywords, options)
-        if block
+        if block && fulltext_base_query
           Util.instance_eval_or_call(
             Fulltext.new(fulltext_base_query),
             &block

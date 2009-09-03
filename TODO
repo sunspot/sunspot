@@ -1,9 +1,6 @@
 === 0.9  ===
 * Support strings and nil for pagination
 * Gracefully handle empty/blank keywords
-=== 0.10 ===
-* Refactor BaseQuery into a fulltext and non-fulltext version; DSL interacts
-  directly with FulltextBaseQuery
 === 0.11 ===
 * Support all operations in batches. Make it smart.
   * Don't use more than one commits when one is equivalent

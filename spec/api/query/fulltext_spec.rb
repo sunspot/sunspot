@@ -8,6 +8,33 @@ describe 'fulltext query', :type => :query do
     connection.should have_last_search_with(:q => 'keyword search')
   end
 
+  it 'ignores keywords if empty' do
+    session.search Post do
+      keywords ''
+    end
+    connection.should_not have_last_search_with(:defType => 'dismax')
+  end
+
+  it 'ignores keywords if nil' do
+    session.search Post do
+      keywords nil
+    end
+    connection.should_not have_last_search_with(:defType => 'dismax')
+  end
+
+  it 'ignores keywords with only whitespace' do
+    session.search Post do
+      keywords "  \t"
+    end
+    connection.should_not have_last_search_with(:defType => 'dismax')
+  end
+
+  it 'gracefully ignores keywords block if keywords ignored' do
+    session.search Post do
+      keywords(nil) { fields(:title) }
+    end
+  end
+
   it 'sets default query parser to dismax when keywords used' do
     session.search Post do
       keywords 'keyword search'

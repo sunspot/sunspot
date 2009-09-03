@@ -97,7 +97,10 @@ module Sunspot
       # Query::BaseQuery for information on what the options do.
       #
       def set_keywords(keywords, options = {}) #:nodoc:
-        @components[0] = @base_query = FulltextBaseQuery.new(keywords, options, @base_query.types, @setup)
+        if keywords.to_s =~ /\S/
+          @components[0] = @base_query =
+            FulltextBaseQuery.new(keywords, options, @base_query.types, @setup)
+        end
       end
     end
   end
