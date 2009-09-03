@@ -7,7 +7,7 @@ module Sunspot #:nodoc:
     class Server
       
       class << self
-        delegate :port, :to => :configuration
+        delegate :port, :solr_home, :to => :configuration
         
         # Name of the sunspot executable (shell script)
         SUNSPOT_EXECUTABLE = (RUBY_PLATFORM =~ /w(in)?32$/ ? 'sunspot-solr.bat' : 'sunspot-solr')
@@ -49,21 +49,37 @@ module Sunspot #:nodoc:
           execute( stop_command )
         end
         
-        
-        def solr_home
-          @@solr_home   ||= File.join( ::Rails.root, 'solr' )
-        end
-        
+        # 
+        # Directory to store solr config files
+        #
+        # ==== Returns
+        #
+        # String:: config_path
+        #
         def config_path
           @@config_path ||= File.join( solr_home, 'conf' )
         end
         
+        # 
+        # Directory to store lucene index data files
+        #
+        # ==== Returns
+        #
+        # String:: data_path
+        #
         def data_path
-          @@data_path   ||= File.join( solr_home, 'data', ::Rails.env )
+          @@data_path ||= File.join( solr_home, 'data', ::Rails.env )
         end
         
+        # 
+        # Directory to store pid files
+        #
+        # ==== Returns
+        #
+        # String:: pid_path
+        #
         def pid_path
-          @@pid_path    ||= File.join( solr_home, 'pids', ::Rails.env )
+          @@pid_path ||= File.join( solr_home, 'pids', ::Rails.env )
         end
         
         

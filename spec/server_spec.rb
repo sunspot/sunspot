@@ -6,6 +6,10 @@ describe Sunspot::Rails::Server do
   end
 
   describe "rake task commands" do
+    before(:each) do
+      Sunspot::Rails::Server.should_receive(:pid_path).and_return('/tmp')
+    end
+    
     it "should generate and execute the start command" do
       Sunspot::Rails::Server.should_receive(:start_command).and_return('sunspot-start')
       Sunspot::Rails::Server.should_respond_to_and_receive(:bootstrap_neccessary?).and_return(false)
@@ -37,6 +41,11 @@ describe Sunspot::Rails::Server do
       @sunspot_configuration.should_respond_to_and_receive(:port).and_return(1234)
       Sunspot::Rails::Server.port.should == 1234
     end
+    
+    it "should delegate the solr_home command to the configuration" do
+      @sunspot_configuration.should_respond_to_and_receive(:solr_home).and_return('/some/path')
+      Sunspot::Rails::Server.solr_home.should == '/some/path'
+    end
   end
 
   describe "protected methods" do
@@ -54,14 +63,20 @@ describe Sunspot::Rails::Server do
     it "should generate the run command" do
       Sunspot::Rails::Server.send(:run_command).should == [ 'sunspot-solr', 'run' ]
     end
+
+    it "should generate the path for config files" do
+      Sunspot::Rails::Server.should_receive(:solr_home).and_return('/solr/home')
+      Sunspot::Rails::Server.config_path.should == '/solr/home/conf'
+    end
   
-    it "should generate the path for solr_home"
+    it "should generate the path for the index data" do
+      Sunspot::Rails::Server.should_receive(:solr_home).and_return('/solr/home')
+      Sunspot::Rails::Server.data_path.should == '/solr/home/data/test'
+    end
 
-    it "should generate the path for configs"
-  
-    it "should generate the path for the index data"
-
-    it "should generate the path for pids"
-
+    it "should generate the path for pid files" do
+      Sunspot::Rails::Server.should_receive(:solr_home).and_return('/solr/home')
+      Sunspot::Rails::Server.pid_path.should == '/solr/home/pids/test'
+    end
   end
 end
