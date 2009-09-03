@@ -12,4 +12,5 @@ config_test:
     port: 1234
     path: /solr/idx
     log_level: WARNING
+    solr_home: /another/path/solr
   auto_commit_after_request: false

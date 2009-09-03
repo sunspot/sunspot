@@ -20,6 +20,7 @@ module Sunspot #:nodoc:
     #       port: 8983
     #       path: /solr/myindex
     #       log_level: WARNING
+    #       solr_home: /some/path
     #     auto_commit_after_request: true
     #
     # Sunspot::Rails uses the configuration to set up the Solr connection, as
