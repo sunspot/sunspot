@@ -75,6 +75,19 @@ module Sunspot #:nodoc:
         @log_level ||= (user_configuration_from_key('solr', 'log_level') || 'INFO')
       end
       
+      # 
+      # The solr home directory. Sunspot::Rails expects this directory
+      # to contain a config, data and pids directory. See 
+      # Sunspot::Rails::Server.bootstrap for more information.
+      #
+      # ==== Returns
+      #
+      # String:: solr_home
+      #
+      def solr_home
+        @solr_home ||= (user_configuration_from_key('solr', 'solr_home') || File.join( ::Rails.root, 'solr' ))
+      end
+      
       #
       # Should the solr index receive a commit after each http-request.
       # Default true
