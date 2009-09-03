@@ -20,6 +20,20 @@ describe 'ordering and pagination' do
     connection.should have_last_search_with(:rows => 15, :start => 45)
   end
 
+  it 'defaults to page 1 if no :page argument given' do
+    session.search Post do
+      paginate :per_page => 15
+    end
+    connection.should have_last_search_with(:rows => 15, :start => 0)
+  end
+
+  it 'paginates from string argument' do
+    session.search Post do
+      paginate :page => '3', :per_page => '15'
+    end
+    connection.should have_last_search_with(:rows => 15, :start => 30)
+  end
+
   it 'orders by a single field' do
     session.search Post do
       order_by :average_rating, :desc
@@ -67,14 +81,6 @@ describe 'ordering and pagination' do
     lambda do
       session.search Post do
         order_by :category_ids
-      end
-    end.should raise_error(ArgumentError)
-  end
-
-  it 'should raise ArgumentError if no :page argument given to paginate' do
-    lambda do
-      session.search Post do
-        paginate
       end
     end.should raise_error(ArgumentError)
   end

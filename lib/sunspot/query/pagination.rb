@@ -18,11 +18,11 @@ module Sunspot
       end
 
       def page=(page)
-        @page = page || 1
+        @page = (page || 1).to_i
       end
 
       def per_page=(per_page)
-        @per_page = per_page || @configuration.pagination.default_per_page
+        @per_page = (per_page || @configuration.pagination.default_per_page).to_i
       end
 
       private
