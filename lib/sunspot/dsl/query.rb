@@ -29,9 +29,12 @@ module Sunspot
       #   fields configured for the types under search.
       #
       def keywords(keywords, options = {}, &block)
-        @query.set_keywords(keywords, options)
+        fulltext_base_query = @query.set_keywords(keywords, options)
         if block
-          Util.instance_eval_or_call(Fulltext.new(@query), &block)
+          Util.instance_eval_or_call(
+            Fulltext.new(fulltext_base_query),
+            &block
+          )
         end
       end
 

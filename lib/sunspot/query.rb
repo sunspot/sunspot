@@ -1,6 +1,7 @@
-%w(base_query scope field_query connective dynamic_query field_facet query_facet
-   query_facet_row query_field_facet boost_query local pagination restriction
-   sort sort_composite text_field_boost highlighting).each do |file|
+%w(base_query fulltext_base_query scope field_query connective dynamic_query
+   field_facet query_facet query_facet_row query_field_facet boost_query local
+   pagination restriction sort sort_composite text_field_boost
+   highlighting).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -24,7 +25,7 @@ module Sunspot
       def initialize(types, setup, configuration) #:nodoc:
         super(setup)
         @query_facets = {}
-        @components << @base_query = BaseQuery.new(types, setup)
+        @components[0] = @base_query = BaseQuery.new(types, setup)
         @components << @pagination = Pagination.new(configuration)
         @components << @sort = SortComposite.new
       end
@@ -96,41 +97,7 @@ module Sunspot
       # Query::BaseQuery for information on what the options do.
       #
       def set_keywords(keywords, options = {}) #:nodoc:
-        @base_query.keywords = keywords
-        if highlight_options = options.delete(:highlight)
-          if highlight_options == true
-            set_highlight
-          else
-            set_highlight(highlight_options)
-          end
-        end
-        if fulltext_fields = options.delete(:fields)
-          Array(fulltext_fields).each do |field|
-            @base_query.add_fulltext_field(field)
-          end
-        end
-      end
-      
-      def add_fulltext_field(field_name, boost = nil)
-        @base_query.add_fulltext_field(field_name, boost)
-      end
-
-      def add_phrase_field(field_name, boost = nil)
-        @base_query.add_phrase_field(field_name, boost)
-      end
-
-      def set_highlight(options = {})
-        @components << @highlight = Highlighting.new(options)
-      end
-
-      def set_phrase_fields(field_names)
-        @base_query.phrase_fields = field_names.inject([]) do |fields, field_name|
-          fields.concat(@setup.text_fields(field_name))
-        end
-      end
-
-      def create_boost_query(factor)
-        @base_query.create_boost_query(factor)
+        @components[0] = @base_query = FulltextBaseQuery.new(keywords, options, @base_query.types, @setup)
       end
     end
   end

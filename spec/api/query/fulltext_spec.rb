@@ -23,7 +23,7 @@ describe 'fulltext query', :type => :query do
   end
 
   it 'searches all text fields for searched class' do
-    session.search Post do
+    search = session.search Post do
       keywords 'keyword search'
     end
     connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text)

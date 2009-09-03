@@ -2,7 +2,6 @@
 * Support strings and nil for pagination
 * Gracefully handle empty/blank keywords
 === 0.10 ===
-* Boost query
 * Refactor BaseQuery into a fulltext and non-fulltext version; DSL interacts
   directly with FulltextBaseQuery
 === 0.11 ===
