@@ -18,41 +18,26 @@ Sunspot::Rails has been tested with Rails versions 2.1, 2.2, and 2.3
 
 == Installation
 
-First, install the Sunspot and Sunspot::Rails gems:
+For recent versions of Rails, In your project's <code>config/environment.rb</code>, add the following gem dependencies:
+
+  config.gem 'outoftime-sunspot', :lib => 'sunspot',
+    :source => 'http://gems.github.com'
+  config.gem 'outoftime-sunspot_rails', :lib => 'sunspot/rails',
+    :source => 'http://gems.github.com'
+    
+Install the gems with:
+
+  rake gems:install
+
+If you are using an older version of Rails that doesn't support plugins-as-gems, install the gems manually and install the plugin:
 
   sudo gem install outoftime-sunspot outoftime-sunspot_rails --source=http://gems.github.com
-
-In your project's <code>config/environment.rb</code>, add the following gem dependencies:
-
-  config.gem 'outoftime-sunspot', :lib => 'sunspot'
-  config.gem 'outoftime-sunspot_rails', :lib => 'sunspot/rails'
-
-If you are using an older version of Rails that doesn't support plugins-as-gems,
-use:
-
+  
   script/plugin install git://github.com/outoftime/sunspot_rails.git
+  
+Generate the file <code>config/sunspot.yml</code>:
 
-Create the file <code>config/sunspot.yml</code> and set it up for your environments. Here is a sample:
-
-  common: &common
-    solr:
-      hostname: localhost
-      port: 8983
-
-  production:
-    <<: *common
-    solr:
-      path: /solr/myindex
-
-  development:
-    <<: *common
-    solr:
-      port: 8982
-
-  test:
-    <<: *common
-    solr:
-      port: 8981
+  script/generate sunspot
 
 Rails doesn't automatically load rake tasks from plugins installed as gems
 (https://rails.lighthouseapp.com/projects/8994/tickets/59). If you installed
@@ -240,6 +225,8 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 - Peer Allan (peer.allan@gmail.com)
 - Michael Moen (michael@underpantsgnome.com)
 - Benjamin Krause (bk@benjaminkrause.com)
+- Adam Salter (adam@codebright.net)
+- Brandon Keepers (brandon@opensoul.org)
 
 == License
 
