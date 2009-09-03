@@ -49,7 +49,7 @@ module Sunspot #:nodoc:
       end
 
       #
-      # The path to the Solr servlet (useful if you are running multicore).
+      # The url path to the Solr servlet (useful if you are running multicore).
       # Default '/solr'.
       #
       # ==== Returns
@@ -72,6 +72,63 @@ module Sunspot #:nodoc:
       def auto_commit_after_request?
         @auto_commit_after_request ||= 
           user_configuration_from_key('auto_commit_after_request') != false
+      end
+
+      #
+      # The path to the Solr indexes. (Used by the rake tasks).
+      # Default RAILS_ROOT + '/solr/data/' + ENVIRONMENT
+      #
+      # ==== Returns
+      #
+      # String:: path
+      #
+      def data_path
+        @data_path ||=
+          if user_configuration.has_key?('solr')
+            "#{user_configuration['solr']['data_path'] || File.join(::Rails.root, 'solr', 'data', ::Rails.env)}"
+          end
+      end
+
+      #
+      # The path to the Solr pids
+      # Default RAILS_ROOT + '/solr/pids/' + ENVIRONMENT
+      #
+      # ==== Returns
+      #
+      # String:: path
+      #
+      def pid_path
+        @pids_path ||=
+          if user_configuration.has_key?('solr')
+            "#{user_configuration['solr']['pid_path'] || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)}"
+          end
+      end
+
+      #
+      # The path to the Solr home directory
+      # Default nil (runs the solr with sunspot default settings).
+      #
+      # If you have a custom solr conf directory,
+      # change this to the directory above your solr conf files
+      #
+      # e.g. conf files in RAILS_ROOT/solr/conf
+      #   solr_home: RAILS_ROOT/solr
+      #
+      # ==== Returns
+      #
+      # String:: path
+      #
+      def solr_home
+        @solr_home ||=
+          if user_configuration.has_key?('solr')
+            if user_configuration['solr']['solr_home'].present?
+              user_configuration['solr']['solr_home']
+            elsif %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
+              File.join(::Rails.root, 'solr')
+            else
+              nil
+            end
+          end
       end
 
       private
