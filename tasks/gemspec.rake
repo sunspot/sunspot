@@ -3,10 +3,12 @@ begin
   Jeweler::Tasks.new do |s|
     s.name = 'sunspot'
     s.executables = ['sunspot-solr', 'sunspot-configure-solr']
-    s.summary = 'Library for expressive, powerful interaction with the Solr search engine'
     s.email = 'mat@patch.com'
     s.homepage = 'http://github.com/outoftime/sunspot'
-    s.description = 'Library for expressive, powerful interaction with the Solr search engine'
+    s.summary = 'Library for expressive, powerful interaction with the Solr search engine'
+    s.description = <<TEXT
+Sunspot is a library providing a powerful, all-ruby API for the Solr search engine. Sunspot manages the configuration of persistent Ruby classes for search and indexing and exposes Solr's most powerful features through a collection of DSLs. Complex search operations can be performed without hand-writing any boolean queries or building Solr parameters by hand.
+TEXT
     s.authors = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Brandon Keepers']
     s.rubyforge_project = 'sunspot'
     s.files = FileList['[A-Z]*', '{bin,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/conf/*', 'solr/start.jar']
