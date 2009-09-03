@@ -152,7 +152,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 * Peer Allan (peer.allan@gmail.com)
 * Dmitriy Dzema (dima@dzema.name)
 * Benjamin Krause (bk@benjaminkrause.com)
-* Collective Idea (info@collectiveidea.com)
+* Brandon Keepers (brandon@opensoul.org)
 
 == License
 
