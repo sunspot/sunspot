@@ -121,4 +121,28 @@ describe 'keyword search' do
       hits.first.score.should > hits.last.score
     end
   end
+
+  describe 'boost query' do
+    before :all do
+      Sunspot.remove_all
+      Sunspot.index!(
+        @posts = [
+          Post.new(:title => 'Rhino', :featured => true),
+          Post.new(:title => 'Rhino', :featured => false)
+        ]
+      )
+    end
+
+    it 'should assign a higher boost to the document matching the boost query' do
+      search = Sunspot.search(Post) do
+        keywords('rhino') do
+          boost(2.0) do
+            with(:featured, true)
+          end
+        end
+      end
+      search.results.should == @posts
+      search.hits[0].score.should > search.hits[1].score
+    end
+  end
 end

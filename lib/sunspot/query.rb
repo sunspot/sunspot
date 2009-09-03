@@ -1,6 +1,6 @@
 %w(base_query scope field_query connective dynamic_query field_facet query_facet
-   query_facet_row query_field_facet local pagination restriction sort
-   sort_composite text_field_boost highlighting).each do |file|
+   query_facet_row query_field_facet boost_query local pagination restriction
+   sort sort_composite text_field_boost highlighting).each do |file|
   require File.join(File.dirname(__FILE__), 'query', file)
 end
 
@@ -127,6 +127,10 @@ module Sunspot
         @base_query.phrase_fields = field_names.inject([]) do |fields, field_name|
           fields.concat(@setup.text_fields(field_name))
         end
+      end
+
+      def create_boost_query(factor)
+        @base_query.create_boost_query(factor)
       end
     end
   end

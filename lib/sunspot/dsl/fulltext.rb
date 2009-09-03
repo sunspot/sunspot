@@ -30,6 +30,13 @@ module Sunspot
           end
         end
       end
+
+      def boost(factor, &block)
+        Sunspot::Util.instance_eval_or_call(
+          Scope.new(@query.create_boost_query(factor)),
+          &block
+        )
+      end
     end
   end
 end

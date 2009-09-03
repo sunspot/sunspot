@@ -31,6 +31,9 @@ module Sunspot
           if @phrase_fields
             params[:pf] = @phrase_fields.map { |field| field.to_boosted_field }.join(' ')
           end
+          if @boost_query
+            params[:bq] = @boost_query.to_boolean_phrase
+          end
         else
           params[:q] = types_phrase
         end
@@ -53,6 +56,10 @@ module Sunspot
             TextFieldBoost.new(field, boost)
           end
         )
+      end
+
+      def create_boost_query(factor)
+        @boost_query ||= BoostQuery.new(factor, @setup)
       end
 
       private

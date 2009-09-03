@@ -97,6 +97,17 @@ describe 'fulltext query', :type => :query do
     connection.should have_last_search_with(:pf => 'title_text^1.5')
   end
 
+  it 'creates boost query' do
+    session.search Post do
+      keywords 'great pizza' do
+        boost 2.0 do
+          with(:average_rating).greater_than(2.0)
+        end
+      end
+    end
+    connection.should have_last_search_with(:bq => 'average_rating_f:[2\.0 TO *]^2.0')
+  end
+
   it 'allows specification of a text field that only exists in one type' do
     session.search Post, Namespaced::Comment do
       keywords 'keywords', :fields => :author_name
