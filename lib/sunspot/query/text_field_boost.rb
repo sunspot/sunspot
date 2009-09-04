@@ -1,6 +1,6 @@
 module Sunspot
   module Query
-    class TextFieldBoost
+    class TextFieldBoost #:nodoc:
       def initialize(field, boost = nil)
         @field, @boost = field, boost
       end

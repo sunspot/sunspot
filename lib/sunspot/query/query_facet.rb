@@ -12,7 +12,7 @@ module Sunspot
     # query facet rows, instead returning each requested row individually, keyed
     # by the boolean phrase used in the facet query.
     #
-    class QueryFacet
+    class QueryFacet #:nodoc:
       attr_reader :name #:nodoc:
       attr_reader :field #:nodoc:
       attr_reader :options #:nodoc:

@@ -7,7 +7,7 @@ module Sunspot
     # directly in field facets, build query facets that replicate field facet
     # behavior.
     #
-    class QueryFieldFacet < QueryFacet
+    class QueryFieldFacet < QueryFacet #:nodoc:
       def initialize(field, values, options)
         super(field.name, options)
         @field = field

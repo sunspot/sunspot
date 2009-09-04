@@ -6,7 +6,7 @@ module Sunspot
     # essentially a conjunction, with an extra instance variable containing
     # the boost that should be applied.
     #
-    class BoostQuery < Connective::Conjunction
+    class BoostQuery < Connective::Conjunction #:nodoc:
       def initialize(boost, setup)
         super(setup)
         @boost = boost

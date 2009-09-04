@@ -1,6 +1,6 @@
 module Sunspot
   module Query
-    class FulltextBaseQuery < BaseQuery
+    class FulltextBaseQuery < BaseQuery #:nodoc:
       def initialize(keywords, options, types, setup)
         super(types, setup)
         @keywords = keywords

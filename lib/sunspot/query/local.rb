@@ -6,7 +6,7 @@ module Sunspot
     # doesn't have any options - it just takes coordinates and a radius, and
     # generates the appropriate parameters.
     #
-    class Local
+    class Local #:nodoc:
       def initialize(coordinates, radius)
         @coordinates, @radius = Util::Coordinates.new(coordinates), radius
       end

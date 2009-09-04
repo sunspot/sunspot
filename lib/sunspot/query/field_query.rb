@@ -5,7 +5,7 @@ module Sunspot
     # operations on fields. It is subclassed by the Query::Query class and the
     # Query::DynamicQuery class.
     #
-    class FieldQuery < Scope
+    class FieldQuery < Scope #:nodoc:
       # 
       # Add a field facet. See Sunspot::Facet for more information.
       #
