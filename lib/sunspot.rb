@@ -222,18 +222,6 @@ module Sunspot
     #   Zero, one, or more types to search for. If no types are passed, all
     #   configured types will be searched.
     #
-    # ==== Options (last argument, optional)
-    #
-    # :keywords<String>:: Fulltext search string
-    # :conditions<Hash>::
-    #   Hash of key-value pairs to be used as restrictions. Keys are field
-    #   names. Scalar values are used as equality restrictions; arrays are used
-    #   as "any of" restrictions; and Ranges are used as range restrictions.
-    # :order<String>:: order field and direction (e.g., 'updated_at desc')
-    # :page<Integer>:: Page to start on for pagination
-    # :per_page<Integer>::
-    #   Number of results to use per page. Ignored if :page is not specified.
-    #
     # ==== Returns
     #
     # Sunspot::Search:: Object containing results, facets, count, etc.
@@ -242,9 +230,10 @@ module Sunspot
     # the following criteria:
     #
     # * They are not of type +text+.
-    # * They are defined for all of the classes being searched
-    # * They have the same data type for all of the classes being searched
+    # * They are defined for at least one of the classes being searched
+    # * They have the same data type for all of the classes being searched.
     # * They have the same multiple flag for all of the classes being searched.
+    # * They have the same stored flag for all of the classes being searched.
     #
     # The restrictions available are the constants defined in the
     # Sunspot::Restriction class. The standard restrictions are:

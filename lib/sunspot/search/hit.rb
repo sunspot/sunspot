@@ -6,7 +6,6 @@ module Sunspot
     # access to stored field values, keyword relevance score, and geographical
     # distance (for geographical search).
     #
-    # TODO distance!
     class Hit
       SPECIAL_KEYS = Set.new(%w(id type score)) #:nodoc:
 
@@ -23,12 +22,18 @@ module Sunspot
       # is not from a keyword search.
       #
       attr_reader :score
+      #
+      # For geographical searches, this is the distance between the search
+      # centerpoint and the document's location. Otherwise, it's nil.
+      # 
+      attr_reader :distance
 
       attr_writer :instance #:nodoc:
 
       def initialize(raw_hit, highlights, search) #:nodoc:
         @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
         @score = raw_hit['score']
+        @distance = raw_hit['geo_distance']
         @search = search
         @stored_values = raw_hit
         @stored_cache = {}
@@ -66,10 +71,6 @@ module Sunspot
           end
       end
 
-      def distance
-        @stored_values['geo_distance'].to_f if @stored_values.has_key?('geo_distance')
-      end
-
       # 
       # Retrieve the instance associated with this hit. This is lazy-loaded, but
       # the first time it is called on any hit, all the hits for the search will
@@ -82,7 +83,7 @@ module Sunspot
         @instance
       end
 
-      def inspect
+      def inspect #:nodoc:
         "#<Sunspot::Search::Hit:#{@class_name} #{@primary_key}>"
       end
 

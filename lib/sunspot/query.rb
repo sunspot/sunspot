@@ -94,7 +94,8 @@ module Sunspot
 
       # 
       # Set the keywords for this query, along with keyword options. See
-      # Query::BaseQuery for information on what the options do.
+      # Query::FulltextBaseQuery for information on what the options do. Returns
+      # a FulltextBaseQuery object.
       #
       def set_keywords(keywords, options = {}) #:nodoc:
         if keywords.to_s =~ /\S/

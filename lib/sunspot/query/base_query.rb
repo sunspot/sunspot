@@ -1,8 +1,9 @@
 module Sunspot
   module Query
     #
-    # Encapsulates information common to all queries - in particular, keywords
-    # and types.
+    # Encapsulates information common to all queries - in particular, types.
+    # Subclassed by FulltextBaseQuery, which puts the types in a filter query
+    # and sets up dismax search.
     #
     class BaseQuery #:nodoc:
       include RSolr::Char

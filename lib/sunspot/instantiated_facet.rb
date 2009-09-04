@@ -26,6 +26,9 @@ module Sunspot
       end
     end
 
+    # 
+    # A collection of InstantiatedFacetRow objects
+    #
     def rows
       @facet_data.rows { |value, count| InstantiatedFacetRow.new(value, count, self) }
     end
