@@ -28,7 +28,7 @@ end
 
 describe Sunspot::Rails::Configuration, "user settings" do
   before(:each) do
-    Rails.stub!(:env => 'config_test')
+    ::Rails.stub!(:env => 'config_test')
   end
 
   it "should handle the 'hostname' property when not set" do
