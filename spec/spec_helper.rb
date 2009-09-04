@@ -6,13 +6,13 @@ require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'
 require 'spec'
 require 'spec/rails'
 require 'rake'
-require 'ruby-debug' unless RUBY_VERSION =~ /1\.9/
+require 'ruby-debug' unless RUBY_VERSION > '1.9'
 require 'sunspot/rails/tasks'
 
 def load_schema
   stdout = $stdout
   $stdout = StringIO.new # suppress output while building the schema
-  load File.join(File.dirname(__FILE__), 'schema.rb')
+  load File.join(ENV['RAILS_ROOT'], 'db', 'schema.rb')
   $stdout = stdout
 end
 
