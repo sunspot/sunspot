@@ -1,4 +1,4 @@
-require 'spec_helper'
+require File.dirname(__FILE__) + '/spec_helper'
 
 describe 'request lifecycle', :type => :controller do
   before(:each) do
