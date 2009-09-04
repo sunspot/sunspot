@@ -175,6 +175,10 @@ module Sunspot
       end
     end
 
+    def inspect
+      "<Sunspot::Search:#{query.to_params.inspect}>"
+    end
+
     private
 
     def solr_response
