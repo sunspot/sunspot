@@ -83,10 +83,7 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def data_path
-        @data_path ||=
-          if user_configuration.has_key?('solr')
-            "#{user_configuration['solr']['data_path'] || File.join(::Rails.root, 'solr', 'data', ::Rails.env)}"
-          end
+        @data_path ||= user_configuration_from_key('solr', 'data_path') || File.join(::Rails.root, 'solr', 'data', ::Rails.env)
       end
 
       #
@@ -98,10 +95,7 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def pid_path
-        @pids_path ||=
-          if user_configuration.has_key?('solr')
-            "#{user_configuration['solr']['pid_path'] || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)}"
-          end
+        @pids_path ||= user_configuration_from_key('solr', 'pid_path') || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
       end
 
       #
@@ -120,12 +114,10 @@ module Sunspot #:nodoc:
       #
       def solr_home
         @solr_home ||=
-          if user_configuration.has_key?('solr')
-            if user_configuration['solr']['solr_home'].present?
-              user_configuration['solr']['solr_home']
-            elsif %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
-              File.join(::Rails.root, 'solr')
-            end
+          if user_configuration_from_key('solr', 'solr_home')
+            user_configuration_from_key('solr', 'solr_home')
+          elsif %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
+            File.join(::Rails.root, 'solr')
           end
       end
 
