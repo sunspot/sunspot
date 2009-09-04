@@ -66,6 +66,10 @@ module Sunspot
           end
       end
 
+      def distance
+        @stored_values['geo_distance'].to_f if @stored_values.has_key?('geo_distance')
+      end
+
       # 
       # Retrieve the instance associated with this hit. This is lazy-loaded, but
       # the first time it is called on any hit, all the hits for the search will
