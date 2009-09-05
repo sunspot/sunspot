@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.version = "0.10.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Mat Brown", "Peer Allan", "Michael Moen", "Benjamin Krause"]
-  s.date = %q{2009-09-01}
+  s.authors = ["Mat Brown", "Peer Allan", "Michael Moen", "Benjamin Krause", "Adam Salter", "Brandon Keepers"]
+  s.date = %q{2009-09-05}
   s.description = %q{Rails integration for the Sunspot Solr search library}
   s.email = %q{mat@patch.com}
   s.extra_rdoc_files = [
@@ -53,17 +53,17 @@ Gem::Specification.new do |s|
      "spec/mock_app/config/initializers/session_store.rb",
      "spec/mock_app/config/routes.rb",
      "spec/mock_app/config/sunspot.yml",
+     "spec/mock_app/db/schema.rb",
      "spec/model_lifecycle_spec.rb",
      "spec/model_spec.rb",
      "spec/request_lifecycle_spec.rb",
-     "spec/schema.rb",
      "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/outoftime/sunspot_rails}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{sunspot}
-  s.rubygems_version = %q{1.3.3}
+  s.rubygems_version = %q{1.3.5}
   s.summary = %q{Rails integration for the Sunspot Solr search library}
   s.test_files = [
     "spec/configuration_spec.rb",
@@ -80,10 +80,10 @@ Gem::Specification.new do |s|
      "spec/mock_app/config/initializers/new_rails_defaults.rb",
      "spec/mock_app/config/initializers/session_store.rb",
      "spec/mock_app/config/routes.rb",
+     "spec/mock_app/db/schema.rb",
      "spec/model_lifecycle_spec.rb",
      "spec/model_spec.rb",
      "spec/request_lifecycle_spec.rb",
-     "spec/schema.rb",
      "spec/spec_helper.rb"
   ]
 
