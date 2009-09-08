@@ -20,7 +20,7 @@ begin
                        'spec/mock_app/{tmp,log,solr}']
     s.add_dependency 'rails', '~> 2.1'
     s.add_dependency 'escape', '>= 0.0.4'
-    s.add_dependency 'outoftime-sunspot', '>= 0.8.2'
+    s.add_dependency 'outoftime-sunspot', '>= 0.9.7'
     s.add_development_dependency 'rspec', '~> 1.2'
     s.add_development_dependency 'rspec-rails', '~> 1.2'
     s.add_development_dependency 'ruby-debug', '~> 0.10'
