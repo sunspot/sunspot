@@ -1,6 +1,9 @@
 == 0.11
-* Added Sunspot::Rails::Server class to easily start/stop/run the sunspot server
+* Added Sunspot::Rails::Server class to  start/stop/run/bootstrap the solr server
 
+== 0.10.6
+* Added script/generate sunspot support to generate the required sunspot.yml
+  file [Brandon Keepers]
 == 0.10.5
 * Added a auto_commit_after_request option to sunspot.yml. Sunspot will not
   automatically commit any changes in solr if you set this value to false.

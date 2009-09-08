@@ -8,7 +8,7 @@ provides the following features:
 * Extend ActiveRecord for easy index configuration, search, and indexing
 * Automatically index ActiveRecord objects when they are saved, and remove them
   from the index when they are destroyed (can be disabled)
-* Automatically commit Solr changes at the end of each request
+* Automatically commit Solr changes at the end of each request (can be disabled)
 * Provide utility methods to find and fix orphaned documents and rebuild the
   Solr index for a given class
 * Provide rake tasks for starting and stopping the development Solr instance,
