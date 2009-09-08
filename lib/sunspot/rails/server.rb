@@ -57,7 +57,7 @@ module Sunspot #:nodoc:
         # String:: config_path
         #
         def config_path
-          @@config_path ||= File.join( solr_home, 'conf' )
+          File.join( solr_home, 'conf' )
         end
         
         # 
@@ -68,7 +68,7 @@ module Sunspot #:nodoc:
         # String:: data_path
         #
         def data_path
-          @@data_path ||= File.join( solr_home, 'data', ::Rails.env )
+          File.join( solr_home, 'data', ::Rails.env )
         end
         
         # 
@@ -79,16 +79,30 @@ module Sunspot #:nodoc:
         # String:: pid_path
         #
         def pid_path
-          @@pid_path ||= File.join( solr_home, 'pids', ::Rails.env )
+          File.join( solr_home, 'pids', ::Rails.env )
         end
         
-        
+        #
+        # Bootstrap a new solr_home by creating all required
+        # directories. 
+        #
+        # ==== Returns
+        #
+        # Boolean:: success
+        #
         def bootstrap
-          raise(RuntimeError, 'not implemented')
+          create_solr_directories and create_solr_configuration_files
         end
         
+        # 
+        # Check for bootstrap necessity
+        #
+        # ==== Returns
+        #
+        # Boolean:: neccessary
+        #
         def bootstrap_neccessary?
-          false
+          !File.directory?( solr_home ) or !File.exists?( File.join( config_path, 'solrconfig.xml' ) )
         end
         
         
@@ -145,7 +159,34 @@ module Sunspot #:nodoc:
           end
           success
         end
-
+        
+        # 
+        # Create new solr_home, config, log and pid directories
+        #
+        # ==== Returns
+        #
+        # Boolean:: success
+        #
+        def create_solr_directories
+          [ solr_home, config_path, data_path, pid_path ].each do |path|
+            FileUtils.mkdir_p( path )
+          end
+        end
+        
+        #
+        # Copy default solr configuration files from sunspot
+        # gem to the new solr_home/config directory
+        #
+        # ==== Returns
+        #
+        # Boolean:: success
+        #
+        def create_solr_configuration_files
+          Dir.glob( File.join( Sunspot::Configuration.solr_default_configuration_location, '*') ).each do |config_file|
+            FileUtils.cp( config_file, config_path )
+          end
+        end
+        
         #
         # access to the Sunspot::Rails::Configuration, defined in
         # sunspot.yml. Use Sunspot::Rails.configuration if you want

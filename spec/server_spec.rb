@@ -32,6 +32,23 @@ describe Sunspot::Rails::Server do
     end
   end
 
+  describe "bootstraping" do
+    before(:each) do
+      @temp_dir = File.join( Dir.tmpdir, 'solr_rspec', Time.now.to_i.to_s, rand(1000).to_s )
+      Sunspot::Rails::Server.should_receive(:solr_home).at_least(1).and_return( @temp_dir )
+    end
+    
+    it "should require bootstraping" do
+      Sunspot::Rails::Server.bootstrap_neccessary?.should == true
+    end
+    
+    it "should not require bootstrapping again" do
+      Sunspot::Rails::Server.bootstrap_neccessary?.should == true
+      Sunspot::Rails::Server.bootstrap
+      Sunspot::Rails::Server.bootstrap_neccessary?.should == false
+    end
+  end
+
   describe "delegate methods" do
     before(:each) do
       Sunspot::Rails::Server.should_receive(:configuration).and_return(@sunspot_configuration)
