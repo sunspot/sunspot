@@ -8,6 +8,7 @@ require 'spec/rails'
 require 'rake'
 require 'ruby-debug' unless RUBY_VERSION =~ /1\.9/
 require 'sunspot/rails/tasks'
+require 'sunspot/spec/extension'
 
 def load_schema
   stdout = $stdout
@@ -25,8 +26,10 @@ end
 
 Spec::Runner.configure do |config|
   config.before(:each) do
-    Sunspot.remove_all
-    Sunspot.commit
+    if integrate_sunspot?
+      Sunspot.remove_all
+      Sunspot.commit
+    end
     load_schema
   end
 end
