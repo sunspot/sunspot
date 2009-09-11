@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
      "generators/sunspot/sunspot_generator.rb",
      "generators/sunspot/templates/sunspot.yml",
      "install.rb",
+     "lib/sunspot.rb",
      "lib/sunspot/rails.rb",
      "lib/sunspot/rails/adapters.rb",
      "lib/sunspot/rails/configuration.rb",
