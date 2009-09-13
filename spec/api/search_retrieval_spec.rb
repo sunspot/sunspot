@@ -15,6 +15,16 @@ describe 'retrieving search' do
     session.search(Post).results.should == [post_2, post_1]
   end
 
+  # This is a reduction of a crazy bug I found in production where some hits
+  # were inexplicably not being populated.
+  it 'properly loads results of multiple classes that have the same primary key' do
+    Post.reset!
+    Namespaced::Comment.reset!
+    results = [Post.new, Namespaced::Comment.new]
+    stub_results(*results)
+    session.search(Post, Namespaced::Comment).results.should == results
+  end
+
   if ENV['USE_WILL_PAGINATE']
 
     it 'should return search total as attribute of results if pagination is provided' do
@@ -144,7 +154,7 @@ describe 'retrieving search' do
     end
     facet_values(result, :published_at).should ==
       [Time.gm(2009, 04, 07, 20, 25, 23),
-       Time.gm(2009, 04, 07, 20, 26, 19)]
+        Time.gm(2009, 04, 07, 20, 26, 19)]
   end
 
   it 'should return date facet' do
@@ -158,7 +168,7 @@ describe 'retrieving search' do
     end
     facet_values(result, :expire_date).should ==
       [Date.new(2009, 07, 13),
-       Date.new(2009, 04, 01)]
+        Date.new(2009, 04, 01)]
   end
 
   it 'should return boolean facet' do
@@ -223,6 +233,21 @@ describe 'retrieving search' do
     facet.rows.first.count.should == 3
   end
 
+  it 'returns limited field facet' do
+    stub_query_facet(
+      'category_ids_im:1' => 3,
+      'category_ids_im:3' => 1
+    )
+    search = session.search(Post) do
+      facet :category_ids, :only => [1, 3, 5]
+    end
+    facet = search.facet(:category_ids)
+    facet.rows.first.value.should == 1
+    facet.rows.first.count.should == 3
+    facet.rows.last.value.should == 3
+    facet.rows.last.count.should == 1
+  end
+
   it 'should return dynamic string facet' do
     stub_facet(:"custom_string:test_s", 'two' => 2, 'one' => 1)
     result = session.search(Post) { dynamic(:custom_string) { facet(:test) }}
@@ -234,6 +259,18 @@ describe 'retrieving search' do
     stub_facet(:blog_id_i, blogs[0].id.to_s => 2, blogs[1].id.to_s => 1)
     result = session.search(Post) { facet(:blog_id) }
     result.facet(:blog_id).rows.map { |row| row.instance }.should == blogs
+  end
+
+  it 'returns instantiated facet values for limited field facet' do
+    blogs = Array.new(2) { Blog.new }
+    stub_query_facet(
+      "blog_id_i:#{blogs[0].id}" => 3,
+      "blog_id_i:#{blogs[1].id}" => 1
+    )
+    search = session.search(Post) do
+      facet(:blog_id, :only => blogs.map { |blog| blog.id })
+    end
+    search.facet(:blog_id).rows.map { |row| row.instance }.should == blogs
   end
 
   it 'should only query the persistent store once for an instantiated facet' do
@@ -258,9 +295,9 @@ describe 'retrieving search' do
     end
     response = {
       'response' => {
-        'docs' => docs,
-        'numFound' => count
-      }
+      'docs' => docs,
+      'numFound' => count
+    }
     }
     connection.stub!(:select).and_return(response)
   end
@@ -268,11 +305,11 @@ describe 'retrieving search' do
   def stub_results(*results)
     stub_full_results(
       *results.map do |result|
-        if result.is_a?(Integer)
-          result
-        else
-          { 'instance' => result }
-        end
+      if result.is_a?(Integer)
+        result
+      else
+        { 'instance' => result }
+      end
       end
     )
   end
@@ -280,20 +317,20 @@ describe 'retrieving search' do
   def stub_facet(name, values)
     connection.stub!(:select).and_return(
       'facet_counts' => {
-        'facet_fields' => {
-          name.to_s => values.to_a.sort_by { |value, count| -count }.flatten
-        }
-      }
+      'facet_fields' => {
+      name.to_s => values.to_a.sort_by { |value, count| -count }.flatten
+    }
+    }
     )
   end
 
   def stub_date_facet(name, gap, values)
     connection.stub!(:select).and_return(
       'facet_counts' => {
-        'facet_dates' => {
-          name.to_s => { 'gap' => "+#{gap}SECONDS" }.merge(values)
-        }
-      }
+      'facet_dates' => {
+      name.to_s => { 'gap' => "+#{gap}SECONDS" }.merge(values)
+    }
+    }
     )
   end
 

@@ -9,8 +9,8 @@ module Sunspot
 
       attr_writer :keywords
 
-      def initialize(setup)
-        @setup = setup
+      def initialize(types, setup)
+        @types, @setup = types, setup
       end
 
       # 
@@ -64,7 +64,7 @@ module Sunspot
       #
       def escaped_types
         @escaped_types ||=
-          @setup.type_names.map { |name| escape(name)}
+          @types.map { |type| escape(type.name)}
       end
 
       # 

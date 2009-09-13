@@ -18,7 +18,14 @@ module Sunspot
       # FieldFacet:: The field facet object
       #
       def add_field_facet(field_name, options = nil)
-        add_component(FieldFacet.build(build_field(field_name), options || {}))
+        options ||= {}
+        facet =
+          if only = options.delete(:only)
+            query_facets[field_name.to_sym] = QueryFieldFacet.new(@setup.field(field_name), only) 
+          else
+            FieldFacet.build(build_field(field_name), options)
+          end
+        add_component(facet)
       end
 
       # 
@@ -38,7 +45,6 @@ module Sunspot
       def add_query_facet(name)
         add_component(facet = QueryFacet.new(name, setup))
         query_facets[name.to_sym] = facet
-        facet
       end
 
       # 

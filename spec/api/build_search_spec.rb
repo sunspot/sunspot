@@ -27,6 +27,16 @@ describe 'Search' do
     connection.should have_last_search_with(:fq => 'type:Post')
   end
 
+  it 'should search types in main query if keywords not used' do
+    session.search Post
+    connection.should have_last_search_with(:q => 'type:Post')
+  end
+
+  it 'should search type of subclass when superclass is configured' do
+    session.search PhotoPost
+    connection.should have_last_search_with(:q => 'type:PhotoPost')
+  end
+
   it 'should search all text fields for searched class' do
     session.search Post do
       keywords 'keyword search'
@@ -848,6 +858,27 @@ describe 'Search' do
         end
       end.should raise_error(ArgumentError)
     end
+  end
+
+  it 'builds query facets when passed :only argument to field facet declaration' do
+    session.search Post do
+      facet :category_ids, :only => [1, 3]
+    end
+    connection.should have_last_search_with(
+      :"facet.query" => ['category_ids_im:1', 'category_ids_im:3']
+    )
+  end
+
+  it 'converts limited query facet values to the correct type' do
+    session.search Post do
+      facet :published_at, :only => [Time.utc(2009, 8, 28, 15, 33), Time.utc(2008,8, 28, 15, 33)]
+    end
+    connection.should have_last_search_with(
+      :"facet.query" => [
+        'published_at_d:2009\-08\-28T15\:33\:00Z',
+        'published_at_d:2008\-08\-28T15\:33\:00Z'
+    ]
+    )
   end
 
   it 'should allow faceting by dynamic string field' do

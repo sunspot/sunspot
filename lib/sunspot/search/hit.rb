@@ -57,6 +57,10 @@ module Sunspot
         end
         @instance
       end
+
+      def inspect
+        "#<Sunspot::Search::Hit:#{@class_name} #{@primary_key}>"
+      end
     end
   end
 end

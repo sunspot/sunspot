@@ -90,15 +90,14 @@ module Sunspot
     def facet(field_name)
       (@facets_cache ||= {})[field_name.to_sym] ||=
         begin
-          query_facet(field_name) ||
+          facet_data = query_facet_data(field_name) ||
             begin
               field = field(field_name)
-              date_facet(field) ||
-                begin
-                  facet_class = field.reference ? InstantiatedFacet : Facet
-                  facet_class.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
-                end
+              date_facet_data(field) ||
+                FacetData::FieldFacetData.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
             end
+          facet_class = facet_data.reference ? InstantiatedFacet : Facet
+          facet_class.new(facet_data)
         end
     end
 
@@ -132,7 +131,7 @@ module Sunspot
       (@dynamic_facets_cache ||= {})[[base_name.to_sym, dynamic_name.to_sym]] ||=
         begin
           field = @setup.dynamic_field_factory(base_name).build(dynamic_name)
-          Facet.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
+          Facet.new(FacetData::FieldFacetData.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field))
         end
     end
 
@@ -159,16 +158,14 @@ module Sunspot
     end
 
     def populate_hits! #:nodoc:
-      type_hit_hash = Hash.new { |h, k| h[k] = [] }
-      id_hit_hash = {}
-      for hit in hits
-        type_hit_hash[hit.class_name] << hit
-        id_hit_hash[hit.primary_key] = hit
+      id_hit_hash = Hash.new { |h, k| h[k] = {} }
+      hits.each do |hit|
+        id_hit_hash[hit.class_name][hit.primary_key] = hit
       end
-      type_hit_hash.each_pair do |class_name, hits|
-        ids = hits.map { |hit| hit.primary_key }
-        for instance in data_accessor_for(Util.full_const_get(class_name)).load_all(ids)
-          hit = id_hit_hash[Adapters::InstanceAdapter.adapt(instance).id.to_s]
+      id_hit_hash.each_pair do |class_name, hits|
+        ids = hits.map { |id, hit| hit.primary_key }
+        data_accessor_for(Util.full_const_get(class_name)).load_all(ids).each do |instance|
+          hit = id_hit_hash[class_name][Adapters::InstanceAdapter.adapt(instance).id.to_s]
           hit.instance = instance
         end
       end
@@ -194,23 +191,23 @@ module Sunspot
       end || @solr_result['facet_counts']['facet_fields'][field.indexed_name]
     end
 
-    def date_facet(field)
+    def date_facet_data(field)
       if field.type == Type::TimeType
         if @solr_result['facet_counts'].has_key?('facet_dates')
           if facet_result = @solr_result['facet_counts']['facet_dates'][field.indexed_name]
-            DateFacet.new(facet_result, field)
+            FacetData::DateFacetData.new(facet_result, field)
           end
         end
       end
     end
 
-    def query_facet(name)
+    def query_facet_data(name)
       if query_facet = @query.query_facet(name.to_sym)
         if @solr_result['facet_counts'].has_key?('facet_queries')
-          QueryFacet.new(
-            query_facet,
-            @solr_result['facet_counts']['facet_queries']
-          )
+            FacetData::QueryFacetData.new(
+              query_facet,
+              @solr_result['facet_counts']['facet_queries']
+            )
         end
       end
     end
