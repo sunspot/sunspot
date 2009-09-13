@@ -1,5 +1,13 @@
 module Mock
   class ConnectionFactory
+    def connect(opts)
+      if @instance
+        raise('Factory can only create an instance once!')
+      else
+        @instance = Connection.new(opts.delete(:adapter), opts)
+      end
+    end
+
     def new(adapter = nil, opts = nil)
       if @instance
         raise('Factory can only create an instance once!')
