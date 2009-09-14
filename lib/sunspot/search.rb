@@ -84,11 +84,11 @@ module Sunspot
     # Sunspot::Facet object.
     #
     def facet(name)
-      (@facets_cache ||= {})[field_name.to_sym] ||=
+      (@facets_cache ||= {})[name.to_sym] ||=
         begin
-          facet_data = query_facet_data(field_name) ||
+          facet_data = query_facet_data(name) ||
             begin
-              field = field(field_name)
+              field = field(name)
               date_facet_data(field) ||
                 FacetData::FieldFacetData.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
             end
