@@ -29,6 +29,15 @@ describe 'local search' do
     search.results.should == [@posts[1]]
   end
 
+  it 'should filter by exact match' do
+    search = Sunspot.search(Post) do |query|
+      query.near(ORIGIN,20)
+      query.with(:blog_id, [5,6])
+      query.order_by(:distance)
+    end
+    search.results.count.should == 2
+  end
+  
   it 'should order by arbitrary field' do
     search = Sunspot.search(Post) do |query|
       query.near(ORIGIN, 20)
