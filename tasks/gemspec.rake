@@ -13,7 +13,7 @@ TEXT
     s.authors = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Brandon Keepers']
     s.rubyforge_project = 'sunspot'
     s.files = FileList['[A-Z]*', '{bin,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/conf/*', 'solr/start.jar']
-    s.add_dependency 'mwmitchell-rsolr', '>= 0.8.9'
+    s.add_dependency 'mwmitchell-rsolr', '= 0.9.1'
     s.add_dependency 'daemons', '~> 1.0'
     s.add_dependency 'optiflag', '~> 0.6.5'
     s.add_development_dependency 'rspec', '~> 1.1'
