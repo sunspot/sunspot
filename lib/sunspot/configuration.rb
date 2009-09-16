@@ -33,6 +33,17 @@ module Sunspot
           end
         end
       end
+      
+      # Location for the default solr configuration files,
+      # required for bootstrapping a new solr installation
+      #
+      # ==== Returns
+      #
+      # String:: Directory with default solr config files
+      #
+      def solr_default_configuration_location
+        File.join( File.dirname(__FILE__), '../../solr/solr/conf' )
+      end
     end
   end
 end
