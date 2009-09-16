@@ -147,7 +147,7 @@ module Sunspot
           end
         end
 
-        def cast(string)
+        def cast(string) #:nodoc:
           time = Time.xmlschema(string)
           Date.civil(time.year, time.mon, time.mday)
         end
@@ -183,15 +183,15 @@ module Sunspot
 
     module ClassType
       class <<self
-        def indexed_name(name)
+        def indexed_name(name) #:nodoc:
           'class_name'
         end
 
-        def to_indexed(value)
+        def to_indexed(value) #:nodoc:
           value.name
         end
 
-        def cast(string)
+        def cast(string) #:nodoc:
           Sunspot::Util.full_const_get(string)
         end
       end

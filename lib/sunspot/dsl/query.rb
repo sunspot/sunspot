@@ -18,6 +18,9 @@ module Sunspot
       # + and - modifiers work as expected. All other special Solr boolean
       # syntax is escaped, and mismatched quotes are ignored entirely.
       #
+      # This method can optionally take a block, which is evaluated by the
+      # Fulltext DSL class, and exposes several powerful dismax features.
+      #
       # ==== Parameters
       #
       # keywords<String>:: phrase to perform fulltext search on
@@ -27,6 +30,10 @@ module Sunspot
       # :fields<Array>::
       #   List of fields that should be searched for keywords. Defaults to all
       #   fields configured for the types under search.
+      # :highlight<Boolean,Array>::
+      #   If true, perform keyword highlighting on all searched fields. If an
+      #   array of field names, perform highlighting on the specified fields.
+      #   This can also be called from within the fulltext block.
       #
       def keywords(keywords, options = {}, &block)
         fulltext_base_query = @query.set_keywords(keywords, options)
@@ -48,9 +55,9 @@ module Sunspot
       #
       # ==== Options (options)
       #
-      # :page<Integer>:: The requested page (required)
+      # :page<Integer,String>:: The requested page. The default is 1.
       #
-      # :per_page<Integer>::
+      # :per_page<Integer,String>::
       #   How many results to return per page. The default is the value in
       #   +Sunspot.config.pagination.default_per_page+
       #
@@ -61,12 +68,34 @@ module Sunspot
         @query.paginate(page, per_page)
       end
 
-      #TODO document
+      # 
+      # Scope the search by geographical distance from a given point.
+      # +coordinates+ should either respond to #first and #last (e.g. a
+      # two-element array), or to #lat and one of #lng, #lon, or #long.
+      # +miles+ is the radius around the point for which to return documents.
+      #
       def near(coordinates, miles)
         @query.add_location_restriction(coordinates, miles)
       end
 
-      #TODO document
+      # 
+      # Apply scope-type restrictions on fulltext fields. In certain situations,
+      # it may be desirable to place logical restrictions on text fields.
+      # Remember that text fields are tokenized; your mileage may very.
+      #
+      # The block works exactly like a normal scope, except that the field names
+      # refer to text fields instead of attribute fields.
+      # 
+      # === Example
+      #
+      #   Sunspot.search(Post) do
+      #     text_fields do
+      #       with :body, nil
+      #     end
+      #   end
+      #
+      # This will return all documents that do not have a body.
+      #
       def text_fields(&block)
         Sunspot::Util.instance_eval_or_call(
           Scope.new(@query.add_text_fields_scope),

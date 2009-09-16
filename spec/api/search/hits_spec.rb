@@ -49,4 +49,14 @@ describe 'hits', :type => :search do
     stub_full_results('instance' => Post.new, 'last_indexed_at_ds' => time.xmlschema)
     session.search(Post).hits.first.stored(:last_indexed_at).should == time
   end
+
+  it 'should return geo distance' do
+    stub_full_results('instance' => Post.new, 'geo_distance' => '1.23')
+    session.search(Post).hits.first.distance.should == 1.23
+  end
+
+  it 'should return nil if no geo distance' do
+    stub_results(Post.new)
+    session.search(Post).hits.first.distance.should be_nil
+  end
 end

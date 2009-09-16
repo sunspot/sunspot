@@ -1,6 +1,12 @@
 module Sunspot
   module Query
-    class BoostQuery < Connective::Conjunction
+    # 
+    # Representation of a BoostQuery, which allows the searcher to specify a
+    # scope for which matching documents should have an extra boost. This is
+    # essentially a conjunction, with an extra instance variable containing
+    # the boost that should be applied.
+    #
+    class BoostQuery < Connective::Conjunction #:nodoc:
       def initialize(boost, setup)
         super(setup)
         @boost = boost

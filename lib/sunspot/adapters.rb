@@ -127,7 +127,7 @@ module Sunspot
                 "No adapter is configured for #{original_class_name} or its superclasses. See the documentation for Sunspot::Adapters")
         end
 
-        def index_id_for(class_name, id)
+        def index_id_for(class_name, id) #:nodoc:
           "#{class_name} #{id}"
         end
 

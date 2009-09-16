@@ -7,7 +7,7 @@ module Sunspot
   class InstantiatedFacetRow < FacetRow
     attr_writer :instance #:nodoc:
 
-    def initialize(value, count, facet)
+    def initialize(value, count, facet) #:nodoc:
       super(value, count)
       @facet = facet
     end

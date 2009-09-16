@@ -39,6 +39,11 @@ module Sunspot
         end
       end
 
+      # 
+      # Specify a method that returns the geographical coordinates associated
+      # with the document. The object returned must respond to #first and #last
+      # (e.g., a two-element Array); or to #lat and one of #lng, #lon, or #long
+      #
       def coordinates(name)
         @setup.set_coordinates_field(name)
       end

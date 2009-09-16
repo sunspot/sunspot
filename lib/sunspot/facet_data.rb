@@ -1,7 +1,15 @@
 require 'enumerator'
 
 module Sunspot
-  module FacetData
+  # 
+  # The FacetData classes encapsulate various sources of facet data (field
+  # facet, # date facet, query facet), presenting a polymorphic API to the Facet
+  # class.
+  #
+  module FacetData #:nodoc:all
+    # 
+    # Base class for facet data.
+    #
     class Abstract
       attr_reader :field #:nodoc:
 
@@ -22,8 +30,11 @@ module Sunspot
       end
     end
 
+    # 
+    # FieldFacetData encapsulates the data returned by field facets
+    #
     class FieldFacetData < Abstract
-      def initialize(facet_values, field) #:nodoc:
+      def initialize(facet_values, field)
         @facet_values, @field = facet_values, field
       end
 
@@ -56,7 +67,7 @@ module Sunspot
     end
 
     class DateFacetData < FieldFacetData
-      def initialize(facet_values, field) #:nodoc:
+      def initialize(facet_values, field)
         @gap = facet_values.delete('gap')[/\+(\d+)SECONDS/,1].to_i
         %w(start end).each { |key| facet_values.delete(key) }
         super(facet_values.to_a.flatten, field)
@@ -84,6 +95,9 @@ module Sunspot
       end
     end
 
+    # 
+    # QueryFacetData encapsulates the data returned by a query facet.
+    #
     class QueryFacetData < Abstract
       def initialize(outgoing_query_facet, row_data) #:nodoc:
         @outgoing_query_facet, @row_data = outgoing_query_facet, row_data

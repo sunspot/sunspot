@@ -1,5 +1,7 @@
-=== 0.9  ===
-* Support strings and nil for pagination
+=== 0.10 ===
+* Pass highlight fields into #highlight varargs
+* Allow boosting without field constraints
+* Allow coordinates to be specified with block in setup
 === 0.11 ===
 * Support all operations in batches. Make it smart.
   * Don't use more than one commits when one is equivalent

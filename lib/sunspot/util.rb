@@ -161,7 +161,7 @@ module Sunspot
       end
     end
 
-    class Coordinates
+    class Coordinates #:nodoc:
       def initialize(coords)
         @coords = coords
       end

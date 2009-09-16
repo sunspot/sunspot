@@ -7,10 +7,10 @@ module Sunspot
     #
     # See Query::Scope for the API provided.
     #
-    class QueryFacetRow < Connective::Conjunction
-      attr_reader :label #:nodoc:
+    class QueryFacetRow < Connective::Conjunction #:nodoc:
+      attr_reader :label
 
-      def initialize(label, setup) #:nodoc:
+      def initialize(label, setup)
         super(setup)
         @label = label
       end

@@ -27,11 +27,12 @@ module Sunspot
     # Sunspot#new_search(), you will need to call this method after building the
     # query.
     #
-    def execute!
+    def execute
       params = @query.to_params
       @solr_result = @connection.select(params)
       self
     end
+    alias_method :execute!, :execute #:nodoc: deprecated
 
     # 
     # Get the collection of results as instantiated objects. If WillPaginate is
@@ -78,23 +79,16 @@ module Sunspot
     end
 
     # 
-    # Get the facet object for the given field. This field will need to have
-    # been requested as a field facet inside the search block.
+    # Get the facet object for the given name. `name` can either be the name
+    # given to a query facet, or the field name of a field facet. Returns a
+    # Sunspot::Facet object.
     #
-    # ==== Parameters
-    #
-    # field_name<Symbol>:: field name for which to get the facet
-    #
-    # ==== Returns
-    #
-    # Sunspot::Facet:: Facet object for the given field
-    #
-    def facet(field_name)
-      (@facets_cache ||= {})[field_name.to_sym] ||=
+    def facet(name)
+      (@facets_cache ||= {})[name.to_sym] ||=
         begin
-          facet_data = query_facet_data(field_name) ||
+          facet_data = query_facet_data(name) ||
             begin
-              field = field(field_name)
+              field = field(name)
               date_facet_data(field) ||
                 FacetData::FieldFacetData.new(@solr_result['facet_counts']['facet_fields'][field.indexed_name], field)
             end
@@ -156,11 +150,24 @@ module Sunspot
     # once on an unexecuted search (e.g., Sunspot.new_search) in order to build
     # a search incrementally.
     #
+    # === Example
+    #
+    #   search = Sunspot.new_search(Post)
+    #   search.build do
+    #     with(:published_at).less_than Time.now
+    #   end
+    #   search.execute!
+    #
     def build(&block)
       Util.instance_eval_or_call(dsl, &block)
       self
     end
 
+    # 
+    # Populate the Hit objects with their instances. This is invoked the first
+    # time any hit has its instance requested, and all hits are loaded as a
+    # batch.
+    #
     def populate_hits! #:nodoc:
       id_hit_hash = Hash.new { |h, k| h[k] = {} }
       hits.each do |hit|
@@ -173,6 +180,10 @@ module Sunspot
           hit.instance = instance
         end
       end
+    end
+
+    def inspect #:nodoc:
+      "<Sunspot::Search:#{query.to_params.inspect}>"
     end
 
     private

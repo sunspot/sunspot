@@ -1,6 +1,6 @@
 module Sunspot
   module Query
-    module Connective #:nodoc:
+    module Connective #:nodoc:all
       # 
       # Base class for connectives (conjunctions and disjunctions).
       #

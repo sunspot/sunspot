@@ -7,7 +7,7 @@ module Sunspot
     # take a single argument, which is the value to be applied to the
     # restriction.
     #
-    class Restriction #:nodoc:
+    class Restriction
       def initialize(field_name, query, negative)
         @field_name, @query, @negative = field_name, query, negative
       end

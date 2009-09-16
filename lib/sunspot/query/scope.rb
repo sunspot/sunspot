@@ -5,7 +5,7 @@ module Sunspot
     # results (as well as query facets rows). This class's API is exposed by
     # Query::Query and Query::QueryFacetRow.
     # 
-    class Scope
+    class Scope #:nodoc:
       def initialize(setup)
         @setup = setup
         @components = []

@@ -6,7 +6,7 @@
 end
 
 module Sunspot
-  module Query #:nodoc: all
+  module Query #:nodoc:
     # 
     # This class encapsulates a query that is to be sent to Solr. The query is
     # constructed in the block passed to the Sunspot.search method, using the
@@ -19,7 +19,7 @@ module Sunspot
     # the #to_params method, which returns a hash of parameters in the format
     # recognized by the solr-ruby API.
     #
-    class Query < FieldQuery
+    class Query < FieldQuery #:nodoc:
       attr_reader :query_facets #:nodoc:
 
       def initialize(types, setup, configuration) #:nodoc:
@@ -94,7 +94,8 @@ module Sunspot
 
       # 
       # Set the keywords for this query, along with keyword options. See
-      # Query::BaseQuery for information on what the options do.
+      # Query::FulltextBaseQuery for information on what the options do. Returns
+      # a FulltextBaseQuery object.
       #
       def set_keywords(keywords, options = {}) #:nodoc:
         if keywords.to_s =~ /\S/
