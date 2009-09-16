@@ -1,0 +1,4 @@
+* Fix final status output for reindex
+* Add batch-per-request option
+* Optionally yield from reindex
+* Access to all searchable classes
