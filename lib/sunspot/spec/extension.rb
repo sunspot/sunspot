@@ -27,7 +27,7 @@ module Sunspot
         end
 
         def integrate_sunspot?
-          self.sunspot_integration || false
+          !!self.sunspot_integration
         end
       end
     end
