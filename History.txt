@@ -1,9 +1,12 @@
 == 0.11
 * Added Sunspot::Rails::Server class to  start/stop/run/bootstrap the solr server
+* Added log_level key to sunspot.yml, see java docs for valid values (http://java.sun.com/j2se/1.5.0/docs/api/java/util/logging/Level.html)
+* Added log_file key to sunspot.yml. This defaults to RAILS_ROOT/log/solr_<environment>.log.
 
 == 0.10.6
 * Added script/generate sunspot support to generate the required sunspot.yml
   file [Brandon Keepers]
+  
 == 0.10.5
 * Added a auto_commit_after_request option to sunspot.yml. Sunspot will not
   automatically commit any changes in solr if you set this value to false.

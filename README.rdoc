@@ -205,6 +205,35 @@ remove those documents from the index, use +clean_index_orphans+. Note that
 neither of these operations should be needed if Sunspot and Sunspot::Rails are
 used as intended.
 
+
+== Testing Solr integration using RSpec
+
+To disable the sunspot-solr integration for your active record models, add the
+following line to your spec_helper.rb
+
+require 'sunspot/spec/extension'
+
+This will disable all automatic after_save/after_destroy solr-requests generated
+via the #searchable method. This will not disable/mock explicit calls in your code.
+
+If you want to test the sunspot-solr integration with active record, you can 
+reenable the after_save/after_destroy hooks by adding 'integrate_sunspot' in your
+examples.
+
+  describe Searches do
+    integrate_sunspot
+    
+    before(:each) do
+      @movie = Factory.create :movie
+    end
+    
+    it "should find a movie" do
+      Movie.search { keywords @movie.title }.first.should == @movie
+    end
+  end
+
+
+
 == Further Reading
 
 Reading the {Sunspot documentation}[http://outoftime.github.com/sunspot/docs] is

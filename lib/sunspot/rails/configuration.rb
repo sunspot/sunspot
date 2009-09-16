@@ -76,6 +76,17 @@ module Sunspot #:nodoc:
         @log_level ||= (user_configuration_from_key('solr', 'log_level') || 'INFO')
       end
       
+      #
+      # The log directory for solr logfiles
+      #
+      # ==== Returns
+      # 
+      # String:: log_dir
+      #
+      def log_file
+        @log_file ||= (user_configuration_from_key('solr', 'log_file') || default_log_file_location )
+      end
+      
       # 
       # The solr home directory. Sunspot::Rails expects this directory
       # to contain a config, data and pids directory. See 
@@ -103,6 +114,18 @@ module Sunspot #:nodoc:
       end
       
       private
+      
+      #
+      # Logging in rails_root/log as solr_<environment>.log as a 
+      # default.
+      #
+      # ===== Returns
+      #
+      # String:: default_log_file_location
+      #
+      def default_log_file_location
+        File.join(::Rails.root, 'log', "solr_" + ::Rails.env + ".log")
+      end
       
       # 
       # return a specific key from the user configuration in config/sunspot.yml

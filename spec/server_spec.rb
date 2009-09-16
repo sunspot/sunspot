@@ -54,23 +54,37 @@ describe Sunspot::Rails::Server do
       Sunspot::Rails::Server.should_receive(:configuration).and_return(@sunspot_configuration)
     end
 
-    it "should delegate the port command to the configuration" do
+    it "should delegate the port method to the configuration" do
       @sunspot_configuration.should_respond_to_and_receive(:port).and_return(1234)
       Sunspot::Rails::Server.port.should == 1234
     end
     
-    it "should delegate the solr_home command to the configuration" do
+    it "should delegate the solr_home method to the configuration" do
       @sunspot_configuration.should_respond_to_and_receive(:solr_home).and_return('/some/path')
       Sunspot::Rails::Server.solr_home.should == '/some/path'
     end
+    
+    it "should delegate the log_level method to the configuration" do
+      @sunspot_configuration.should_respond_to_and_receive(:log_level).and_return('LOG_LEVEL')
+      Sunspot::Rails::Server.log_level.should == 'LOG_LEVEL'
+    end
+
+    it "should delegate the log_dir method to the configuration" do
+      @sunspot_configuration.should_respond_to_and_receive(:log_file).and_return('log_file')
+      Sunspot::Rails::Server.log_file.should =~ /log_file/
+    end
+
   end
 
   describe "protected methods" do
     it "should generate the start command" do
-      Sunspot::Rails::Server.should_receive(:port).and_return('1')
-      Sunspot::Rails::Server.should_receive(:solr_home).and_return('home')
-      Sunspot::Rails::Server.should_receive(:data_path).and_return('data')
-      Sunspot::Rails::Server.send(:start_command).should == [ 'sunspot-solr', 'start', '--', '-p', '1', '-d', 'data', '-s', 'home' ]
+      Sunspot::Rails::Server.should_respond_to_and_receive(:port).and_return('1')
+      Sunspot::Rails::Server.should_respond_to_and_receive(:solr_home).and_return('home')
+      Sunspot::Rails::Server.should_respond_to_and_receive(:data_path).and_return('data')
+      Sunspot::Rails::Server.should_respond_to_and_receive(:log_level).and_return('LOG')
+      Sunspot::Rails::Server.should_respond_to_and_receive(:log_file).and_return('log_file')
+      Sunspot::Rails::Server.send(:start_command).should == \
+          [ 'sunspot-solr', 'start', '--', '-p', '1', '-d', 'data', '-s', 'home', '-l', 'LOG', '-lf', 'log_file' ]
     end
   
     it "should generate the stop command" do

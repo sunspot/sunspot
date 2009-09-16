@@ -18,11 +18,15 @@ describe Sunspot::Rails::Configuration, "default values" do
     @config.port.should == 8983
   end
 
-  it "should handle the 'log_level' propery when not set" do
+  it "should handle the 'log_level' property when not set" do
     @config.log_level.should == 'INFO'
   end
   
-  it "should handle the 'solr_home' propery when not set" do
+  it "should handle the 'log_file' property" do
+    @config.log_file.should =~ /log\/solr_test.log/
+  end
+  
+  it "should handle the 'solr_home' property when not set" do
     Rails.should_receive(:root).at_least(1).and_return('/some/path')
     @config.solr_home.should == '/some/path/solr'
   end

@@ -1,19 +1,18 @@
-common: &common
+production:
   solr:
     hostname: localhost
     port: 8983
-
-production:
-  <<: *common
-  solr:
-    path: /solr/myindex
+    log_level: WARNING
 
 development:
-  <<: *common
   solr:
+    hostname: localhost
     port: 8982
+    log_level: INFO
 
 test:
-  <<: *common
   solr:
+    hostname: localhost
     port: 8981
+    log_level: WARNING
+    

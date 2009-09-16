@@ -7,7 +7,7 @@ module Sunspot #:nodoc:
     class Server
       
       class << self
-        delegate :port, :solr_home, :to => :configuration
+        delegate :log_file, :log_level, :port, :solr_home, :to => :configuration
         
         # Name of the sunspot executable (shell script)
         SUNSPOT_EXECUTABLE = (RUBY_PLATFORM =~ /w(in)?32$/ ? 'sunspot-solr.bat' : 'sunspot-solr')
@@ -116,7 +116,7 @@ module Sunspot #:nodoc:
         # Array:: sunspot_start_command
         #
         def start_command
-          [ SUNSPOT_EXECUTABLE, 'start', '--', '-p', port.to_s, '-d', data_path, '-s', solr_home ]
+          [ SUNSPOT_EXECUTABLE, 'start', '--', '-p', port.to_s, '-d', data_path, '-s', solr_home, '-l', log_level, '-lf', log_file ]
         end
 
         #
@@ -141,6 +141,18 @@ module Sunspot #:nodoc:
           [ SUNSPOT_EXECUTABLE, 'run' ]
         end
         
+        #
+        # access to the Sunspot::Rails::Configuration, defined in
+        # sunspot.yml. Use Sunspot::Rails.configuration if you want
+        # to access the configuration directly.
+        #
+        # ==== returns
+        #
+        # Sunspot::Rails::Configuration:: configuration
+        #
+        def configuration
+          Sunspot::Rails.configuration
+        end
         
         private 
         
@@ -185,19 +197,6 @@ module Sunspot #:nodoc:
           Dir.glob( File.join( Sunspot::Configuration.solr_default_configuration_location, '*') ).each do |config_file|
             FileUtils.cp( config_file, config_path )
           end
-        end
-        
-        #
-        # access to the Sunspot::Rails::Configuration, defined in
-        # sunspot.yml. Use Sunspot::Rails.configuration if you want
-        # to access the configuration directly.
-        #
-        # ==== returns
-        #
-        # Sunspot::Rails::Configuration:: configuration
-        #
-        def configuration
-          Sunspot::Rails.configuration
         end
       end
     end
