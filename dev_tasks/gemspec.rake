@@ -5,7 +5,7 @@ begin
     s.name = 'sunspot_rails'
     s.summary = 'Rails integration for the Sunspot Solr search library'
     s.email = 'mat@patch.com'
-    s.homepage = 'http://github.com/outoftime/sunspot_rails'
+    s.homepage = 'http://github.com/benjaminkrause/sunspot_rails'
     s.description = 'Rails integration for the Sunspot Solr search library'
     s.authors = ['Mat Brown', 'Peer Allan', 'Michael Moen', 'Benjamin Krause', 'Adam Salter', 'Brandon Keepers']
     s.rubyforge_project = 'sunspot'
