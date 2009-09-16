@@ -1,5 +1,6 @@
 require 'sunspot'
 
+# if you're running as a gem, move this to an initializer
 Sunspot.config.solr.url = URI::HTTP.build(:host => Sunspot::Rails.configuration.hostname,
                                           :port => Sunspot::Rails.configuration.port,
                                           :path => Sunspot::Rails.configuration.path).to_s
