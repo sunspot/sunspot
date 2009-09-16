@@ -77,7 +77,7 @@ Daemons.run_proc('sunspot-solr', options) do
       args << "-Djetty.port=#{port}" if port
       args << "-Dsolr.data.dir=#{data_dir}" if data_dir
       args << "-Dsolr.solr.home=#{home}" if home
-      args << "-Djava.util.logging.config.file=#{logging_properties(log_file, log_level)}" if log_file and log_file != 'OFF'
+      args << "-Djava.util.logging.config.file=#{logging_properties(log_file, log_level)}" if log_file and log_level != 'OFF'
       args << '-jar' << 'start.jar'
       STDERR.puts(args * ' ')
       Kernel.exec(*args)
