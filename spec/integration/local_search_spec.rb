@@ -29,13 +29,13 @@ describe 'local search' do
     search.results.should == [@posts[1]]
   end
 
-  it 'should filter by exact match' do
+  it 'should perform a radial search with attribute scoping' do
+    pending 'local/scope workaround'
     search = Sunspot.search(Post) do |query|
       query.near(ORIGIN,20)
-      query.with(:blog_id, [5,6])
-      query.order_by(:distance)
+      query.with(:title, 'teacup')
     end
-    search.results.count.should == 2
+    search.results.should == [@posts[1]]
   end
   
   it 'should order by arbitrary field' do
