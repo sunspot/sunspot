@@ -17,7 +17,7 @@ module Sunspot
       # === Example
       #
       #   Sunspot.search(Post) do
-      #     fulltext 'search is cool' do
+      #     keywords 'search is cool' do
       #       fields(:body, :title => 2.0)
       #     end
       #   end
