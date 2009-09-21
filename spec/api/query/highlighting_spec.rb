@@ -15,7 +15,7 @@ describe 'highlighted fulltext queries', :type => :query do
     connection.should have_last_search_with(:hl => 'on')
   end
 
-  it 'should enable highlighting on multiple fields when highlighting requested as array of fields as keywords argument' do
+  it 'should enable highlighting on multiple fields when highlighting requested as array of fields via keywords argument' do
     session.search(Post) do
       keywords 'test', :highlight => [:title, :body]
     end
@@ -23,10 +23,30 @@ describe 'highlighted fulltext queries', :type => :query do
     connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_texts))
   end
 
-  it 'should raise UnrecognizedFieldError if try to highlight unexisting field' do
+  it 'should raise UnrecognizedFieldError if try to highlight unexisting field via keywords argument' do
     lambda {
       session.search(Post) do
         keywords 'test', :highlight => [:unknown_field]
+      end
+    }.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
+  it 'should enable highlighting on multiple fields when highlighting requested as list of fields via block call' do
+    session.search(Post) do
+      keywords 'test' do
+        highlight :title, :body
+      end
+    end
+
+    connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_texts))
+  end
+
+  it 'should raise UnrecognizedFieldError if try to highlight unexisting field via block call' do
+    lambda {
+      session.search(Post) do
+        keywords 'test' do
+          highlight :unknown_field
+        end
       end
     }.should raise_error(Sunspot::UnrecognizedFieldError)
   end
@@ -38,6 +58,18 @@ describe 'highlighted fulltext queries', :type => :query do
     connection.should have_last_search_with(
       :"hl.simple.pre" => '@@@hl@@@',
       :"hl.simple.post" => '@@@endhl@@@'
+    )
+  end
+
+  it 'should set options and hihglight fields' do
+    session.search(Post) do
+      keywords 'test' do
+        highlight :title, :max_snippets => 3
+      end
+    end
+    connection.should have_last_search_with(
+      :"hl.fl"       => %w(title_text),
+      :"hl.snippets" => 3
     )
   end
 

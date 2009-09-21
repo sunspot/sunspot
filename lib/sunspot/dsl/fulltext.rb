@@ -36,7 +36,12 @@ module Sunspot
       end
 
       # 
-      # Enable keyword highlighting for this search. Options are the following:
+      # Enable keyword highlighting for this search.
+      # Allow to pass a list of fields to highlight like this
+      #
+      #   highlight :title, :body
+      #
+      # Allow to pass options as hash. Options are the following:
       #
       # Full disclosure: I barely understand what these options actually do;
       # this documentation is pretty much just copied from the
@@ -56,8 +61,11 @@ module Sunspot
       #   this particular field (only has an effect if :phrase_highlighter is
       #   true as well)
       #
-      def highlight(options = {})
-        @query.set_highlight([], options)
+      def highlight(*args)
+        options = args.last.kind_of?(Hash) ? args.pop : {}
+        fields  = args
+
+        @query.set_highlight(fields, options)
       end
 
       # 
