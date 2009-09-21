@@ -4,7 +4,8 @@ module Sunspot
     # A query component that builds parameters for requesting highlights
     #
     class Highlighting #:nodoc:
-      def initialize(options)
+      def initialize(fields=[], options={})
+        @fields  = fields
         @options = options
       end
 
@@ -14,6 +15,9 @@ module Sunspot
           :"hl.simple.pre" => '@@@hl@@@',
           :"hl.simple.post" => '@@@endhl@@@'
         }
+        unless @fields.empty?
+          params[:"hl.fl"] = @fields.map { |field| field.indexed_name }
+        end
         if max_snippets = @options[:max_snippets]
           params[:"hl.snippets"] = max_snippets
         end

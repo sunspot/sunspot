@@ -57,7 +57,7 @@ module Sunspot
       #   true as well)
       #
       def highlight(options = {})
-        @query.set_highlight(options)
+        @query.set_highlight([], options)
       end
 
       # 

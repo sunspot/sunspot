@@ -15,6 +15,22 @@ describe 'highlighted fulltext queries', :type => :query do
     connection.should have_last_search_with(:hl => 'on')
   end
 
+  it 'should enable highlighting on multiple fields when highlighting requested as array of fields as keywords argument' do
+    session.search(Post) do
+      keywords 'test', :highlight => [:title, :body]
+    end
+
+    connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_texts))
+  end
+
+  it 'should raise UnrecognizedFieldError if try to highlight unexisting field' do
+    lambda {
+      session.search(Post) do
+        keywords 'test', :highlight => [:unknown_field]
+      end
+    }.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
   it 'should set internal formatting' do
     session.search(Post) do
       keywords 'test', :highlight => true
@@ -79,4 +95,5 @@ describe 'highlighted fulltext queries', :type => :query do
       :"hl.requireFieldMatch" => 'true'
     )
   end
+
 end

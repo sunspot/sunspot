@@ -4,13 +4,11 @@ module Sunspot
       def initialize(keywords, options, types, setup)
         super(types, setup)
         @keywords = keywords
+
         if highlight_options = options.delete(:highlight)
-          if highlight_options == true
-            set_highlight
-          else
-            set_highlight(highlight_options)
-          end
+          set_highlight(highlight_options == true ? [] : highlight_options)
         end
+
         if fulltext_fields = options.delete(:fields)
           Array(fulltext_fields).each do |field|
             add_fulltext_field(field)
@@ -58,11 +56,15 @@ module Sunspot
         @boost_query ||= BoostQuery.new(factor, @setup)
       end
 
-      def set_highlight(options = {})
-        @highlight = Highlighting.new(options)
+      def set_highlight(fields_symbols=[], options={})
+        @highlight = Highlighting.new(make_sunspot_fields(fields_symbols), options)
       end
 
       private
+
+      def make_sunspot_fields(symbols)
+        symbols.map { |field_symbol| @setup.text_fields(field_symbol) }.flatten
+      end # make_sunspot_fields(symbols)
 
       # 
       # Returns the names of text fields that should be queried in a keyword
