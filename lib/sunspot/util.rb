@@ -66,7 +66,7 @@ module Sunspot
       #
       def full_const_get(string)
         string.split('::').inject(Object) do |context, const_name|
-          context.const_get(const_name)
+          context.const_defined?(const_name) ? context.const_get(const_name) : context.const_missing(const_name)
         end
       end
 
