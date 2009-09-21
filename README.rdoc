@@ -155,6 +155,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 * Marcel de Graaf (marcel@slashdev.nl)
 * Brandon Keepers (brandon@opensoul.org)
 * Peter Berkenbosch (peterberkenbosch@me.com)
+* Brian Atkinson
 
 == License
 
