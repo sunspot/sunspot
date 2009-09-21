@@ -28,6 +28,9 @@ module Sunspot
           solr do
             url 'http://127.0.0.1:8983/solr'
           end
+          master_solr do
+            url nil
+          end
           pagination do
             default_per_page 30
           end
