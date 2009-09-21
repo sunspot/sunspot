@@ -142,18 +142,13 @@ module Sunspot #:nodoc:
       def log_file
         @log_file ||= (user_configuration_from_key('solr', 'log_file') || default_log_file_location )
       end
+
+      def data_path
+        @data_path ||= user_configuration_from_key('solr', 'data_path') || File.join(::Rails.root, 'solr', 'data', ::Rails.env)
+      end
       
-      # 
-      # The solr home directory. Sunspot::Rails expects this directory
-      # to contain a config, data and pids directory. See 
-      # Sunspot::Rails::Server.bootstrap for more information.
-      #
-      # ==== Returns
-      #
-      # String:: solr_home
-      #
-      def solr_home
-        @solr_home ||= (user_configuration_from_key('solr', 'solr_home') || File.join( ::Rails.root, 'solr' ))
+      def pid_path
+        @pids_path ||= user_configuration_from_key('solr', 'pid_path') || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
       end
       
       #
@@ -167,6 +162,24 @@ module Sunspot #:nodoc:
       def auto_commit_after_request?
         @auto_commit_after_request ||= 
           user_configuration_from_key('auto_commit_after_request') != false
+      end
+
+      # 
+      # The solr home directory. Sunspot::Rails expects this directory
+      # to contain a config, data and pids directory. See 
+      # Sunspot::Rails::Server.bootstrap for more information.
+      #
+      # ==== Returns
+      #
+      # String:: solr_home
+      #
+      def solr_home
+        @solr_home ||=
+          if user_configuration_from_key('solr', 'solr_home')
+            user_configuration_from_key('solr', 'solr_home')
+          elsif %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
+            File.join(::Rails.root, 'solr')
+          end
       end
       
       private

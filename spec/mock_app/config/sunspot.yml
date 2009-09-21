@@ -12,5 +12,7 @@ config_test:
     port: 1234
     path: /solr/idx
     log_level: WARNING
-    solr_home: /another/path/solr
+    data_path: /my_superior_path/data
+    pid_path: /my_superior_path/pids
+    solr_home: /my_superior_path
   auto_commit_after_request: false
