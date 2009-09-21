@@ -22,6 +22,15 @@ describe 'local query' do
     connection.should have_last_search_with(:radius => 5)
   end
 
+  it 'puts all scope parameters into :q parameter when geo search is performed' do
+    pending 'query structure refactor festivities'
+    session.search Post do
+      with :blog_id, 1
+      near [40.7, -73.5], 5
+    end
+    connection.should have_last_search_with(:q => 'type:Post AND blog_id_i:1')
+  end
+
   [
     [:lat, :lng],
     [:lat, :lon],
