@@ -36,12 +36,15 @@ module Sunspot
       end
 
       # 
-      # Enable keyword highlighting for this search.
-      # Allow to pass a list of fields to highlight like this
+      # Enable keyword highlighting for this search. By default, the fields 
+      # under search will be highlighted; you may also may pass one or more
+      # symbol arguments indicating fields to be highlighted (they don't even
+      # have to be the same fields you're searching).
       #
       #   highlight :title, :body
       #
-      # Allow to pass options as hash. Options are the following:
+      # You may also pass a hash of options as the last argument. Options are
+      # the following:
       #
       # Full disclosure: I barely understand what these options actually do;
       # this documentation is pretty much just copied from the

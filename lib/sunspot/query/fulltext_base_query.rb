@@ -56,15 +56,17 @@ module Sunspot
         @boost_query ||= BoostQuery.new(factor, @setup)
       end
 
-      def set_highlight(fields_symbols=[], options={})
-        @highlight = Highlighting.new(make_sunspot_fields(fields_symbols), options)
+      def set_highlight(field_names=[], options={})
+        @highlight = Highlighting.new(text_fields(field_names), options)
       end
 
       private
 
-      def make_sunspot_fields(symbols)
-        symbols.map { |field_symbol| @setup.text_fields(field_symbol) }.flatten
-      end # make_sunspot_fields(symbols)
+      def text_fields(field_names)
+        field_names.inject([]) do |fields, name|
+          fields.concat(@setup.text_fields(name))
+        end
+      end
 
       # 
       # Returns the names of text fields that should be queried in a keyword

@@ -1,5 +1,5 @@
 === 0.10 ===
-* Pass highlight fields into #highlight varargs
+* Wrap everything into :q parameter when local search performed
 * Allow boosting without field constraints
 * Allow coordinates to be specified with block in setup
 === 0.11 ===
