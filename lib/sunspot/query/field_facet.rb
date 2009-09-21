@@ -88,8 +88,7 @@ module Sunspot
           :"facet.date" => [@field.indexed_name],
           param_key('date.start') => start_time.utc.xmlschema,
           param_key('date.end') => end_time.utc.xmlschema,
-          param_key('date.gap') => "+#{interval}SECONDS",
-          param_key('date.other') => others
+          param_key('date.gap') => "+#{interval}SECONDS"
         )
       end
 
