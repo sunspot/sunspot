@@ -59,6 +59,53 @@ module Sunspot #:nodoc:
       def path
         @path ||= (user_configuration_from_key('solr', 'path') || '/solr')
       end
+
+      #
+      # The host name at which to connect to the master Solr instance. Defaults
+      # to the 'hostname' configuration option.
+      #
+      # ==== Returns
+      #
+      # String:: host name
+      #
+      def master_hostname
+        @master_hostname ||= (user_configuration_from_key('solr', 'master_hostname') || hostname)
+      end
+
+      #
+      # The port at which to connect to the master Solr instance. Defaults to
+      # the 'port' configuration option.
+      #
+      # ==== Returns
+      #
+      # Integer:: port
+      #
+      def master_port
+        @master_port ||= (user_configuration_from_key('solr', 'master_port') || port).to_i
+      end
+
+      #
+      # The path to the master Solr servlet (useful if you are running multicore).
+      # Defaults to the value of the 'path' configuration option.
+      #
+      # ==== Returns
+      #
+      # String:: path
+      #
+      def master_path
+        @master_path ||= (user_configuration_from_key('solr', 'master_path') || path)
+      end
+
+      #
+      # True if there is a master Solr instance configured, otherwise false.
+      #
+      # ==== Returns
+      #
+      # Boolean:: bool
+      #
+      def master?
+        master_hostname != hostname || master_port != port || master_path != path
+      end
       
       #
       # Should the solr index receive a commit after each http-request.
@@ -68,7 +115,6 @@ module Sunspot #:nodoc:
       #
       # Boolean:: bool
       #
-      
       def auto_commit_after_request?
         @auto_commit_after_request ||= 
           user_configuration_from_key('auto_commit_after_request') != false
