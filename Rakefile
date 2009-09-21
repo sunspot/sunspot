@@ -11,6 +11,9 @@ Spec::Rake::SpecTask.new(:spec) do |t|
 end
 
 task :environment do
+  if ENV['SUNSPOT_LIB']
+    $: << ENV['SUNSPOT_LIB']
+  end
   ENV['RAILS_ROOT'] ||= File.join(File.dirname(__FILE__), 'spec', 'mock_app')
   ENV['RAILS_ENV'] ||= 'test'
   require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'))
