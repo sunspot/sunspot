@@ -69,7 +69,7 @@ module SearchHelper
   end
 
   def connection
-    @connection ||= mock('connection')
+    @connection ||= Mock::Connection.new
   end
 
   def session
