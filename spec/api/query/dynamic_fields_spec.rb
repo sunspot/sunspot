@@ -7,7 +7,7 @@ describe 'dynamic field query', :type => :query do
         with :test, 'string'
       end
     end
-    connection.should have_last_search_with(:fq => ['custom_string\:test_s:string'])
+    connection.should have_last_search_including(:fq, 'custom_string\:test_s:string')
   end
 
   it 'restricts by dynamic integer field with less than restriction' do
@@ -16,7 +16,7 @@ describe 'dynamic field query', :type => :query do
         with(:test).less_than(1)
       end
     end
-    connection.should have_last_search_with(:fq => ['custom_integer\:test_i:[* TO 1]'])
+    connection.should have_last_search_including(:fq, 'custom_integer\:test_i:[* TO 1]')
   end
 
   it 'restricts by dynamic float field with between restriction' do
@@ -25,7 +25,7 @@ describe 'dynamic field query', :type => :query do
         with(:test).between(2.2..3.3)
       end
     end
-    connection.should have_last_search_with(:fq => ['custom_float\:test_fm:[2\.2 TO 3\.3]'])
+    connection.should have_last_search_including(:fq, 'custom_float\:test_fm:[2\.2 TO 3\.3]')
   end
 
   it 'restricts by dynamic time field with any of restriction' do
@@ -35,7 +35,7 @@ describe 'dynamic field query', :type => :query do
                             Time.parse('2009-02-13 18:00:00 UTC')])
       end
     end
-    connection.should have_last_search_with(:fq => ['custom_time\:test_d:(2009\-02\-10T14\:00\:00Z OR 2009\-02\-13T18\:00\:00Z)'])
+    connection.should have_last_search_including(:fq, 'custom_time\:test_d:(2009\-02\-10T14\:00\:00Z OR 2009\-02\-13T18\:00\:00Z)')
   end
 
   it 'restricts by dynamic boolean field with equality restriction' do
@@ -44,7 +44,7 @@ describe 'dynamic field query', :type => :query do
         with :test, false
       end
     end
-    connection.should have_last_search_with(:fq => ['custom_boolean\:test_b:false'])
+    connection.should have_last_search_including(:fq, 'custom_boolean\:test_b:false')
   end
 
   it 'negates a dynamic field restriction' do
@@ -53,7 +53,7 @@ describe 'dynamic field query', :type => :query do
         without :test, 'foo'
       end
     end
-    connection.should have_last_search_with(:fq => ['-custom_string\:test_s:foo'])
+    connection.should have_last_search_including(:fq, '-custom_string\:test_s:foo')
   end
 
   it 'scopes by a dynamic field inside a disjunction' do
@@ -65,8 +65,8 @@ describe 'dynamic field query', :type => :query do
         with :title, 'bar'
       end
     end
-    connection.should have_last_search_with(
-      :fq => '(custom_string\:test_s:foo OR title_ss:bar)'
+    connection.should have_last_search_including(
+      :fq, '(custom_string\:test_s:foo OR title_ss:bar)'
     )
   end
 
@@ -132,8 +132,9 @@ describe 'dynamic field query', :type => :query do
         end
       end
     end
-    connection.should have_last_search_with(
-      :"facet.query" => 'custom_string\:test_s:foo'
+    connection.should have_last_search_including(
+      :"facet.query",
+      'custom_string\:test_s:foo'
     )
   end
 
@@ -143,6 +144,6 @@ describe 'dynamic field query', :type => :query do
         with(:test, 'test')
       end
     end
-    connection.should have_last_search_with(:fq => ['custom_string\\:test_s:test'])
+    connection.should have_last_search_including(:fq, 'custom_string\\:test_s:test')
   end
 end

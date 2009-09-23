@@ -16,8 +16,9 @@ module Sunspot
     # in this case.
     attr_reader :query 
 
-    def initialize(connection, setup, query) #:nodoc:
+    def initialize(connection, setup, query, configuration) #:nodoc:
       @connection, @setup, @query = connection, setup, query
+      @query.paginate(1, configuration.pagination.default_per_page)
     end
 
     #
@@ -197,7 +198,7 @@ module Sunspot
     end
 
     def dsl
-      DSL::Search.new(self)
+      DSL::Search.new(self, @setup)
     end
 
     def raw_facet(field)

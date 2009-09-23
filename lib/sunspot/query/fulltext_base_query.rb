@@ -16,49 +16,6 @@ module Sunspot
         end
       end
 
-      def to_params
-        params = { :q => @keywords }
-        params[:fl] = '* score'
-        params[:fq] = types_phrase
-        params[:qf] = query_fields
-        params[:defType] = 'dismax'
-        if @phrase_fields
-          params[:pf] = @phrase_fields.map { |field| field.to_boosted_field }.join(' ')
-        end
-        if @boost_query
-          params[:bq] = @boost_query.to_boolean_phrase
-        end
-        if @highlight
-          Sunspot::Util.deep_merge!(params, @highlight.to_params)
-        end
-        params
-      end
-
-      def add_fulltext_field(field_name, boost = nil)
-        @fulltext_fields ||= []
-        @fulltext_fields.concat(
-          @setup.text_fields(field_name).map do |field|
-            TextFieldBoost.new(field, boost)
-          end
-        )
-      end
-
-      def add_phrase_field(field_name, boost = nil)
-        @phrase_fields ||= []
-        @phrase_fields.concat(
-          @setup.text_fields(field_name).map do |field|
-            TextFieldBoost.new(field, boost)
-          end
-        )
-      end
-
-      def create_boost_query(factor)
-        @boost_query ||= BoostQuery.new(factor, @setup)
-      end
-
-      def set_highlight(field_names=[], options={})
-        @highlight = Highlighting.new(text_fields(field_names), options)
-      end
 
       private
 

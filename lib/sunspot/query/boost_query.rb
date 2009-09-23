@@ -7,8 +7,8 @@ module Sunspot
     # the boost that should be applied.
     #
     class BoostQuery < Connective::Conjunction #:nodoc:
-      def initialize(boost, setup)
-        super(setup)
+      def initialize(boost)
+        super(false)
         @boost = boost
       end
 

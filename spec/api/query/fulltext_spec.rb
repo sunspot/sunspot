@@ -46,7 +46,7 @@ describe 'fulltext query', :type => :query do
     session.search Post do
       keywords 'keyword search'
     end
-    connection.should have_last_search_with(:fq => 'type:Post')
+    connection.should have_last_search_with(:fq => ['type:Post'])
   end
 
   it 'searches all text fields for searched class' do

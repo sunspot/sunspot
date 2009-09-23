@@ -5,7 +5,7 @@ describe 'scoping with text fields', :type => :query do
         with(:body, 'test')
       end
     end
-    connection.should have_last_search_with(:fq => ['body_texts:test'])
+    connection.should have_last_search_including(:fq, 'body_texts:test')
   end
 
   it 'should raise an UnrecognizedFieldError if differently configured text field is used' do

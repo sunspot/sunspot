@@ -6,7 +6,7 @@ describe 'query DSL', :type => :query do
     session.search Post do |query|
       query.with(:blog_id, @blog_id)
     end
-    connection.should have_last_search_with(:fq => ['blog_id_i:1'])
+    connection.should have_last_search_including(:fq, 'blog_id_i:1')
   end
 end
 

@@ -4,10 +4,51 @@ module Sunspot
       # 
       # Base class for connectives (conjunctions and disjunctions).
       #
-      class Abstract < Scope
-        def initialize(setup, negated = false) #:nodoc:
-          super(setup)
+      class Abstract
+        def initialize(negated = false) #:nodoc:
           @negated = negated
+          @components = []
+        end
+
+        def add_restriction(field, restriction_type, value, negated = false)
+          clazz =
+            if restriction_type.respond_to?(:new)
+              restriction_type
+            else
+              Restriction[restriction_type]
+            end
+          @components << restriction_type.new(field, value, negated)
+        end
+
+        def add_shorthand_restriction(field, value, negated = false)
+          restriction_type =
+            case value
+            when Array then Restriction::AnyOf
+            when Range then Restriction::Between
+            else Restriction::EqualTo
+            end
+          add_restriction(field, restriction_type, value, negated)
+        end
+
+        def add_negated_restriction(field, restriction_type, value)
+          add_restriction(field, restriction_type, value, true)
+        end
+
+        def add_negated_shorthand_restriction(field, value)
+          add_shorthand_restriction(field, value, true)
+        end
+
+        def add_conjunction
+          self
+        end
+
+        def add_disjunction
+          add_component(Disjunction.new)
+        end
+
+        def add_component(component)
+          @components << component
+          component
         end
 
         # 
@@ -56,7 +97,7 @@ module Sunspot
         # Returns a new connective that's a negated version of this one.
         #
         def negate
-          negated = self.class.new(@setup, !negated?)
+          negated = self.class.new(!negated?)
           for component in @components
             negated.add_component(component)
           end
@@ -92,8 +133,7 @@ module Sunspot
         # a conjunction must explicitly be created.
         #
         def add_conjunction
-          @components << conjunction = Conjunction.new(@setup)
-          conjunction
+          add_component(Conjunction.new)
         end
 
         # 
@@ -119,7 +159,7 @@ module Sunspot
         # in line with our intentions.
         #
         def denormalize
-          denormalized = self.class.inverse.new(@setup, !negated?)
+          denormalized = self.class.inverse.new(!negated?)
           for component in @components
             denormalized.add_component(component.negate)
           end

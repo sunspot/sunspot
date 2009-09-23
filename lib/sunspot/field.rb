@@ -145,4 +145,36 @@ module Sunspot
       "#{super}#{'m' if @multiple}#{'s' if @stored}"
     end
   end
+
+  class TypeField
+    class <<self
+      def instance
+        @instance ||= new
+      end
+    end
+
+    def indexed_name
+      'type'
+    end
+
+    def to_indexed(clazz)
+      clazz.name
+    end
+  end
+
+  class IdField
+    class <<self
+      def instance
+        @instance ||= new
+      end
+    end
+
+    def indexed_name
+      'id'
+    end
+
+    def to_indexed(id)
+      id.to_s
+    end
+  end
 end

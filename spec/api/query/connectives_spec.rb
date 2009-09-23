@@ -6,8 +6,8 @@ describe 'connective in scope', :type => :query do
         with :blog_id, 2
       end
     end
-    connection.should have_last_search_with(
-      :fq => '(category_ids_im:1 OR blog_id_i:2)'
+    connection.should have_last_search_including(
+      :fq, '(category_ids_im:1 OR blog_id_i:2)'
     )
   end
 
@@ -21,8 +21,9 @@ describe 'connective in scope', :type => :query do
         end
       end
     end
-    connection.should have_last_search_with(
-      :fq => '(blog_id_i:2 OR (category_ids_im:1 AND average_rating_f:[3\.0 TO *]))'
+    connection.should have_last_search_including(
+      :fq,
+      '(blog_id_i:2 OR (category_ids_im:1 AND average_rating_f:[3\.0 TO *]))'
     )
   end
 
@@ -36,8 +37,8 @@ describe 'connective in scope', :type => :query do
         end
       end
     end
-    connection.should have_last_search_with(
-      :fq => '(category_ids_im:1 OR (-average_rating_f:[3\.0 TO *] AND blog_id_i:1))'
+    connection.should have_last_search_including(
+      :fq, '(category_ids_im:1 OR (-average_rating_f:[3\.0 TO *] AND blog_id_i:1))'
     )
   end
 
@@ -48,8 +49,8 @@ describe 'connective in scope', :type => :query do
         with :category_ids, 1
       end
     end
-    connection.should have_last_search_with(
-      :fq => ['blog_id_i:2', 'category_ids_im:1']
+    connection.should have_last_search_including(
+      :fq, 'blog_id_i:2', 'category_ids_im:1'
     )
   end
 
@@ -60,8 +61,8 @@ describe 'connective in scope', :type => :query do
         without(:average_rating).greater_than(3.0)
       end
     end
-    connection.should have_last_search_with(
-      :fq => '-(-category_ids_im:1 AND average_rating_f:[3\.0 TO *])'
+    connection.should have_last_search_including(
+      :fq, '-(-category_ids_im:1 AND average_rating_f:[3\.0 TO *])'
     )
   end
 
@@ -78,8 +79,8 @@ describe 'connective in scope', :type => :query do
         end
       end
     end
-    connection.should have_last_search_with(
-      :fq => '-(title_ss:Yes AND -(blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_f:2\.0)))'
+    connection.should have_last_search_including(
+      :fq, '-(title_ss:Yes AND -(blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_f:2\.0)))'
     )
   end
   it 'creates a disjunction with nested conjunction with nested disjunction with negated restriction' do
@@ -95,8 +96,8 @@ describe 'connective in scope', :type => :query do
         end
       end
     end
-    connection.should have_last_search_with(
-      :fq => '(title_ss:Yes OR (blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_f:2\.0)))'
+    connection.should have_last_search_including(
+      :fq, '(title_ss:Yes OR (blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_f:2\.0)))'
     )
   end
 
@@ -122,8 +123,8 @@ describe 'connective in scope', :type => :query do
         end
       end
     end
-    connection.should have_last_search_with(
-      :fq => '(title_ss:Yes OR blog_id_i:1 OR category_ids_im:4)'
+    connection.should have_last_search_including(
+      :fq, '(title_ss:Yes OR blog_id_i:1 OR category_ids_im:4)'
     )
   end
 
@@ -135,8 +136,8 @@ describe 'connective in scope', :type => :query do
         with(:category_ids, 1)
       end
     end
-    connection.should have_last_search_with(
-      :fq => "-(id:Post\\ #{post.id} AND -category_ids_im:1)"
+    connection.should have_last_search_including(
+      :fq, "-(id:Post\\ #{post.id} AND -category_ids_im:1)"
     )
   end
 
@@ -147,8 +148,8 @@ describe 'connective in scope', :type => :query do
         with(:average_rating).greater_than(3.0)
       end
     end
-    connection.should have_last_search_with(
-      :fq => '-(average_rating_f:[* TO *] AND -average_rating_f:[3\.0 TO *])'
+    connection.should have_last_search_including(
+      :fq, '-(average_rating_f:[* TO *] AND -average_rating_f:[3\.0 TO *])'
     )
   end
 
@@ -156,6 +157,6 @@ describe 'connective in scope', :type => :query do
     session.search Post do
       any_of {}
     end
-    connection.should_not have_last_search_with(:fq)
+    connection.should_not have_last_search_including(:fq, '')
   end
 end

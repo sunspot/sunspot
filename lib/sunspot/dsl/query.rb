@@ -35,15 +35,37 @@ module Sunspot
       #   array of field names, perform highlighting on the specified fields.
       #   This can also be called from within the fulltext block.
       #
-      def keywords(keywords, options = {}, &block)
-        fulltext_base_query = @query.set_keywords(keywords, options)
-        if block && fulltext_base_query
-          Util.instance_eval_or_call(
-            Fulltext.new(fulltext_base_query),
-            &block
-          )
+      def fulltext(keywords, options = {}, &block)
+        if keywords && !(keywords.to_s =~ /^\s*$/)
+          fulltext_query = @query.set_fulltext(keywords)
+          if field_names = options.delete(:fields)
+            Array(field_names).each do |field_name|
+              fulltext_query.add_fulltext_fields(@setup.text_fields(field_name))
+            end
+          end
+          if highlight_field_names = options.delete(:highlight)
+            if highlight_field_names == true
+              fulltext_query.set_highlight
+            else
+              highlight_fields = []
+              Array(highlight_field_names).each do |field_name|
+                highlight_fields.concat(@setup.text_fields(field_name))
+              end
+              fulltext_query.set_highlight(highlight_fields)
+            end
+          end
+          if block && fulltext_query
+            Util.instance_eval_or_call(
+              Fulltext.new(fulltext_query, @setup),
+              &block
+            )
+          end
+          if fulltext_query.fulltext_fields.empty?
+            fulltext_query.add_fulltext_fields(@setup.all_text_fields)
+          end
         end
       end
+      alias_method :keywords, :fulltext
 
       # Paginate your search. This works the same way as WillPaginate's
       # paginate().
@@ -98,7 +120,7 @@ module Sunspot
       #
       def text_fields(&block)
         Sunspot::Util.instance_eval_or_call(
-          Scope.new(@query.add_text_fields_scope),
+          Scope.new(@scope, TextFieldSetup.new(@setup)),
           &block
         )
       end

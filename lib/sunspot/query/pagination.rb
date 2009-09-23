@@ -8,8 +8,7 @@ module Sunspot
     class Pagination #:nodoc:
       attr_reader :page, :per_page
 
-      def initialize(configuration, page = nil, per_page = nil)
-        @configuration = configuration
+      def initialize(page = nil, per_page = nil)
         self.page, self.per_page = page, per_page
       end
 
@@ -18,11 +17,11 @@ module Sunspot
       end
 
       def page=(page)
-        @page = (page || 1).to_i
+        @page = page.to_i if page
       end
 
       def per_page=(per_page)
-        @per_page = (per_page || @configuration.pagination.default_per_page).to_i
+        @per_page = per_page.to_i if per_page
       end
 
       private

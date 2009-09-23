@@ -5,8 +5,8 @@ module Sunspot
     # handler.
     #
     class Fulltext
-      def initialize(query) #:nodoc:
-        @query = query
+      def initialize(query, setup) #:nodoc:
+        @query, @setup = query, setup
       end
 
       # 
@@ -25,13 +25,15 @@ module Sunspot
       # This would search the :body field with default boost (1.0), and the :title
       # field with a boost of 2.0
       #
-      def fields(*fields)
-        boosted_fields = fields.pop if fields.last.is_a?(Hash)
-        fields.each do |field_name|
-          @query.add_fulltext_field(field_name)
+      def fields(*field_names)
+        boosted_fields = field_names.pop if field_names.last.is_a?(Hash)
+        field_names.each do |field_name|
+          @query.add_fulltext_fields(@setup.text_fields(field_name))
         end
-        boosted_fields.each_pair do |field_name, boost|
-          @query.add_fulltext_field(field_name, boost)
+        if boosted_fields
+          boosted_fields.each_pair do |field_name, boost|
+            @query.add_fulltext_fields(@setup.text_fields(field_name), boost)
+          end
         end
       end
 
@@ -66,7 +68,8 @@ module Sunspot
       #
       def highlight(*args)
         options = args.last.kind_of?(Hash) ? args.pop : {}
-        fields  = args
+        fields = []
+        args.each { |field_name| fields.concat(@setup.text_fields(field_name)) }
 
         @query.set_highlight(fields, options)
       end
@@ -79,11 +82,11 @@ module Sunspot
       def phrase_fields(*fields)
         boosted_fields = fields.pop if fields.last.is_a?(Hash)
         fields.each do |field_name|
-          @query.add_phrase_field(field_name)
+          @query.add_phrase_fields(@setup.text_fields(field_name))
         end
         if boosted_fields
           boosted_fields.each_pair do |field_name, boost|
-            @query.add_phrase_field(field_name, boost)
+            @query.add_phrase_fields(@setup.text_fields(field_name), boost)
           end
         end
       end
@@ -108,7 +111,7 @@ module Sunspot
       #
       def boost(factor, &block)
         Sunspot::Util.instance_eval_or_call(
-          Scope.new(@query.create_boost_query(factor)),
+          Scope.new(@query.create_boost_query(factor), @setup),
           &block
         )
       end

@@ -10,8 +10,8 @@ module Sunspot
     class Scope
       NONE = Object.new
 
-      def initialize(query) #:nodoc:
-        @query = query
+      def initialize(scope, setup) #:nodoc:
+        @scope, @setup = scope, setup
       end
 
       # 
@@ -62,9 +62,9 @@ module Sunspot
       #
       def with(field_name, value = NONE)
         if value == NONE
-          DSL::Restriction.new(field_name.to_sym, @query, false)
+          DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, false)
         else
-          @query.add_shorthand_restriction(field_name, value)
+          @scope.add_shorthand_restriction(@setup.field(field_name), value)
         end
       end
 
@@ -111,14 +111,18 @@ module Sunspot
           field_name = args[0]
           value = args.length > 1 ? args[1] : NONE
           if value == NONE
-            DSL::Restriction.new(field_name.to_sym, @query, true)
+            DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, true)
           else
-            @query.add_negated_shorthand_restriction(field_name, value)
+            @scope.add_negated_shorthand_restriction(@setup.field(field_name.to_sym), value)
           end
         else
           instances = args
           for instance in instances.flatten
-            @query.exclude_instance(instance)
+            @scope.add_negated_restriction(
+              IdField.instance,
+              Sunspot::Query::Restriction::EqualTo,
+              Sunspot::Adapters::InstanceAdapter.adapt(instance).index_id
+            )
           end
         end
       end
@@ -140,7 +144,7 @@ module Sunspot
       # future, or who do not have any expiration time at all.
       #
       def any_of(&block)
-        Util.instance_eval_or_call(Scope.new(@query.add_disjunction), &block)
+        Util.instance_eval_or_call(Scope.new(@scope.add_disjunction, @setup), &block)
       end
 
       # 
@@ -162,7 +166,7 @@ module Sunspot
       #   end
       #
       def all_of(&block)
-        Util.instance_eval_or_call(Scope.new(@query.add_conjunction), &block)
+        Util.instance_eval_or_call(Scope.new(@scope.add_conjunction, @setup), &block)
       end
 
       #
@@ -186,7 +190,10 @@ module Sunspot
       #   end
       #
       def dynamic(base_name, &block)
-        FieldQuery.new(@query.dynamic_query(base_name)).instance_eval(&block)
+        Sunspot::Util.instance_eval_or_call(
+          Scope.new(@scope, @setup.dynamic_field_factory(base_name)),
+          &block
+        )
       end
     end
   end

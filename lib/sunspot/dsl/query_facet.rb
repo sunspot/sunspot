@@ -5,8 +5,8 @@ module Sunspot
     # method.
     #
     class QueryFacet
-      def initialize(query_facet) #:nodoc:
-        @query_facet = query_facet
+      def initialize(query_facet, setup) #:nodoc:
+        @query_facet, @setup = query_facet, setup
       end
 
       # 
@@ -24,7 +24,7 @@ module Sunspot
       #   An object used to identify this facet row in the results.
       #
       def row(label, &block)
-        Scope.new(@query_facet.add_row(label)).instance_eval(&block)
+        Scope.new(@query_facet.add_row(label), @setup).instance_eval(&block)
       end
     end
   end

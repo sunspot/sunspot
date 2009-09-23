@@ -6,9 +6,9 @@ module Sunspot
     # Sunspot::DSL::Scope for the full API presented.
     #
     class Search < Query
-      def initialize(search) #:nodoc:
+      def initialize(search, setup) #:nodoc:
         @search = search
-        @query = search.query
+        super(search.query, setup)
       end
 
       # 

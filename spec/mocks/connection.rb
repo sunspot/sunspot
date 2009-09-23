@@ -82,10 +82,23 @@ module Mock
       return unless @last_search
       if params.respond_to?(:all?)
         params.all? do |key, value|
-          @last_search.has_key?(key) && @last_search[key] == value
+          if @last_search.has_key?(key)
+            @last_search[key] == value
+          end
         end
       else
         @last_search.has_key?(params)
+      end
+    end
+
+    def has_last_search_including?(key, *values)
+      return unless @last_search
+      if @last_search.has_key?(key)
+        if @last_search[key].is_a?(Array)
+          (@last_search[key] & values).length == values.length
+        elsif values.length == 1
+          @last_search[key] == values.first
+        end
       end
     end
   end
