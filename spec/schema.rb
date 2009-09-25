@@ -1,0 +1,1 @@
+mock_app/db/schema.rb
