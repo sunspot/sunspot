@@ -11,4 +11,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string :subdomain
     t.timestamps
   end
+
+  create_table :writers, :force => true, :primary_key => :writer_id do |t|
+    t.string :name
+    t.timestamps
+  end
+
 end

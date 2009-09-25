@@ -239,8 +239,19 @@ describe 'ActiveRecord mixin' do
         Post.should_receive(:all).with do |params|
           params[:limit].should == 500
           params[:include].should == []
+          params[:conditions].should == ['posts.id > ?', 0]
+          params[:order].should == 'id'
         end.and_return(@posts)
         Post.reindex
+      end
+
+      it "should set the conditions using the overridden table attributes" do
+        @posts = Array.new(10) { Author.create }
+        Author.should_receive(:all).with do |params|
+          params[:conditions].should == ['writers.writer_id > ?', 0]
+          params[:order].should == 'writer_id'
+        end.and_return(@posts)
+        Author.reindex
       end
 
       it "should count the number of records to index" do
