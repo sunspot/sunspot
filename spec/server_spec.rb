@@ -92,7 +92,13 @@ describe Sunspot::Rails::Server do
     end
   
     it "should generate the run command" do
-      Sunspot::Rails::Server.send(:run_command).should == [ 'sunspot-solr', 'run' ]
+      Sunspot::Rails::Server.should_respond_to_and_receive(:port).and_return('1')
+      Sunspot::Rails::Server.should_respond_to_and_receive(:solr_home).and_return('home')
+      Sunspot::Rails::Server.should_respond_to_and_receive(:data_path).and_return('data')
+      Sunspot::Rails::Server.should_respond_to_and_receive(:log_level).and_return('LOG')
+      Sunspot::Rails::Server.should_respond_to_and_receive(:log_file).and_return('log_file')
+      Sunspot::Rails::Server.send(:run_command).should == \
+          [ 'sunspot-solr', 'run', '--', '-p', '1', '-d', 'data', '-s', 'home', '-l', 'LOG', '-lf', 'log_file' ]
     end
 
     it "should generate the path for config files" do
