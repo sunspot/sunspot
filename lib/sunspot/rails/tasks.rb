@@ -20,5 +20,16 @@ namespace :sunspot do
       end
       Sunspot::Rails::Server.stop
     end
+
+    desc 'Reindex all solr models'
+    task :reindex => :environment do
+      all_files = Dir.glob(File.join(RAILS_ROOT, 'app', 'models', '*.rb'))
+      all_models = all_files.map { |path| File.basename(path, '.rb').camelize.constantize }
+      sunspot_models = all_models.select { |m| m < ActiveRecord::Base and m.searchable? }
+      
+      sunspot_models.each do |model|
+        model.reindex :batch_commit => false
+      end
+    end
   end
 end
