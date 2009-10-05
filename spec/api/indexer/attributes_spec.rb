@@ -48,6 +48,24 @@ describe 'indexing attribute fields', :type => :indexer do
     connection.should_not have_add_with(:featured_b)
   end
 
+  it 'should index latitude and longitude as a pair' do
+    session.index(post(:coordinates => [40.7, -73.5]))
+    connection.should have_add_with(:lat => 40.7, :long => -73.5)
+  end
+
+  [
+    [:lat, :lng],
+    [:lat, :lon],
+    [:lat, :long]
+  ].each do |lat_attr, lng_attr|
+    it "should index latitude and longitude from #{lat_attr.inspect}, #{lng_attr.inspect}" do
+      session.index(post(
+          :coordinates => OpenStruct.new(lat_attr => 40.7, lng_attr => -73.5)
+      ))
+      connection.should have_add_with(:lat => 40.7, :long => -73.5)
+    end
+  end
+
   it 'should correctly index an attribute field with block access' do
     session.index(post(:title => 'The Blog Post'))
     connection.should have_add_with(:sort_title_s => 'blog post')

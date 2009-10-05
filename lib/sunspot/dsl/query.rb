@@ -98,6 +98,16 @@ module Sunspot
       end
 
       # 
+      # Scope the search by geographical distance from a given point.
+      # +coordinates+ should either respond to #first and #last (e.g. a
+      # two-element array), or to #lat and one of #lng, #lon, or #long.
+      # +miles+ is the radius around the point for which to return documents.
+      #
+      def near(coordinates, miles)
+        @query.add_location_restriction(coordinates, miles)
+      end
+
+      # 
       # Apply scope-type restrictions on fulltext fields. In certain situations,
       # it may be desirable to place logical restrictions on text fields.
       # Remember that text fields are tokenized; your mileage may very.

@@ -22,16 +22,15 @@ describe 'local search' do
   end
 
   it 'should perform a radial search with fulltext matching' do
-    search = Sunspot.new_search(Post)
-    search.build do |query|
+    search = Sunspot.search(Post) do |query|
       query.keywords 'teacup'
       query.near(ORIGIN, 20)
     end
-    debugger
     search.results.should == [@posts[1]]
   end
 
   it 'should perform a radial search with attribute scoping' do
+    pending 'local/scope workaround'
     search = Sunspot.search(Post) do |query|
       query.near(ORIGIN,20)
       query.with(:title, 'teacup')

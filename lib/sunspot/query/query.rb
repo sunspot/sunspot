@@ -20,6 +20,10 @@ module Sunspot
         @fulltext = Dismax.new(keywords)
       end
 
+      def add_location_restriction(coordinates, radius)
+        @local = Local.new(coordinates, radius)
+      end
+
       def add_field_facet(field, options = {})
         facet = FieldFacet.build(field, options)
         if facet.is_a?(QueryFacet)

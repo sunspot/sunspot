@@ -25,22 +25,6 @@ module Sunspot
         params
       end
 
-      def to_boolean_phrase
-        boolean_param_phrase = "fl=\\* fl=score"
-        @fulltext_fields.each do |field|
-          boolean_param_phrase << " qf=#{field.to_boosted_field}"
-        end
-        if @phrase_fields
-          @phrase_fields.each do |field|
-            boolean_param_phrase << " pf=#{field.to_boosted_field}"
-          end
-        end
-        if @boost_query
-          boolean_param_phrase << " bq=#{@boost_query.to_boolean_phrase}"
-        end
-        %Q(_query_:"{!dismax #{boolean_param_phrase}}#{@keywords}")
-      end
-
       def create_boost_query(factor)
         @boost_query = BoostQuery.new(factor)
       end
