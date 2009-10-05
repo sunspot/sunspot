@@ -7,12 +7,16 @@ module Sunspot
     class Fulltext
       def initialize(query, setup) #:nodoc:
         @query, @setup = query, setup
+        @fields_added = false
       end
 
       # 
       # Specify which fields to search. Field names specified as arguments are
       # given default boost; field boosts can be specified by passing a hash of
       # field names keyed to boost values as the last argument.
+      #
+      # If you wish to boost certain fields without restricting which fields are
+      # searched, use #boost_fields
       #
       # === Example
       #
@@ -26,13 +30,18 @@ module Sunspot
       # field with a boost of 2.0
       #
       def fields(*field_names)
+        @fields_added = true
         boosted_fields = field_names.pop if field_names.last.is_a?(Hash)
         field_names.each do |field_name|
-          @query.add_fulltext_fields(@setup.text_fields(field_name))
+          @setup.text_fields(field_name).each do |field|
+            @query.add_fulltext_field(field, field.default_boost)
+          end
         end
         if boosted_fields
           boosted_fields.each_pair do |field_name, boost|
-            @query.add_fulltext_fields(@setup.text_fields(field_name), boost)
+            @setup.text_fields(field_name).each do |field|
+              @query.add_fulltext_field(field, boost)
+            end
           end
         end
       end
@@ -82,11 +91,15 @@ module Sunspot
       def phrase_fields(*fields)
         boosted_fields = fields.pop if fields.last.is_a?(Hash)
         fields.each do |field_name|
-          @query.add_phrase_fields(@setup.text_fields(field_name))
+          @setup.text_fields(field_name).each do |field|
+            @query.add_phrase_field(field)
+          end
         end
         if boosted_fields
           boosted_fields.each_pair do |field_name, boost|
-            @query.add_phrase_fields(@setup.text_fields(field_name), boost)
+            @setup.text_fields(field_name).each do |field|
+              @query.add_phrase_field(field, boost)
+            end
           end
         end
       end
@@ -114,6 +127,30 @@ module Sunspot
           Scope.new(@query.create_boost_query(factor), @setup),
           &block
         )
+      end
+
+      #
+      # Add boost to certain fields, without restricting which fields are
+      # searched.
+      #
+      # === Example
+      #
+      #   Sunspot.search(Post) do
+      #     keywords('pork sandwich') do
+      #       boost :title => 1.5
+      #     end
+      #   end
+      #
+      def boost_fields(boosts)
+        boosts.each_pair do |field_name, boost|
+          @setup.text_fields(field_name).each do |field|
+            @query.add_fulltext_field(field, boost)
+          end
+        end
+      end
+
+      def fields_added?
+        @fields_added
       end
     end
   end

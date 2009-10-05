@@ -124,6 +124,47 @@ describe 'fulltext query', :type => :query do
     connection.should have_last_search_with(:pf => 'title_text^1.5')
   end
 
+  it 'sets boost for certain fields without restricting fields' do
+    session.search Post do
+      keywords 'great pizza' do
+        boost_fields :title => 1.5
+      end
+    end
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text^1.5)
+  end
+
+  it 'sets default boost with default fields' do
+    session.search Photo do
+      keywords 'great pizza'
+    end
+    connection.should have_last_search_with(:qf => 'caption_text^1.5')
+  end
+
+  it 'sets default boost with fields specified in options' do
+    session.search Photo do
+      keywords 'great pizza', :fields => [:caption]
+    end
+    connection.should have_last_search_with(:qf => 'caption_text^1.5')
+  end
+
+  it 'sets default boost with fields specified in DSL' do
+    session.search Photo do
+      keywords 'great pizza' do
+        fields :caption
+      end
+    end
+    connection.should have_last_search_with(:qf => 'caption_text^1.5')
+  end
+
+  it 'overrides default boost when specified in DSL' do
+    session.search Photo do
+      keywords 'great pizza' do
+        fields :caption => 2.0
+      end
+    end
+    connection.should have_last_search_with(:qf => 'caption_text^2.0')
+  end
+
   it 'creates boost query' do
     session.search Post do
       keywords 'great pizza' do

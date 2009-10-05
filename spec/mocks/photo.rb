@@ -3,6 +3,6 @@ class Photo < MockRecord
 end
 
 Sunspot.setup(Photo) do
-  text :caption
+  text :caption, :default_boost => 1.5
   boost 0.75
 end

@@ -5,13 +5,13 @@ module Sunspot
 
       def initialize(keywords)
         @keywords = keywords
-        @fulltext_fields = []
+        @fulltext_fields = {}
       end
 
       def to_params
         params = { :q => @keywords }
         params[:fl] = '* score'
-        params[:qf] = @fulltext_fields.map { |field| field.to_boosted_field }.join(' ')
+        params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
         params[:defType] = 'dismax'
         if @phrase_fields
           params[:pf] = @phrase_fields.map { |field| field.to_boosted_field }.join(' ')
@@ -45,22 +45,13 @@ module Sunspot
         @boost_query = BoostQuery.new(factor)
       end
 
-      def add_fulltext_fields(fields, boost = nil)
-        @fulltext_fields ||= []
-        @fulltext_fields.concat(
-          fields.map do |field|
-            TextFieldBoost.new(field, boost)
-          end
-        )
+      def add_fulltext_field(field, boost = nil)
+        @fulltext_fields[field.indexed_name] = TextFieldBoost.new(field, boost)
       end
 
-      def add_phrase_fields(fields, boost = nil)
+      def add_phrase_field(field, boost = nil)
         @phrase_fields ||= []
-        @phrase_fields.concat(
-          fields.map do |field|
-            TextFieldBoost.new(field, boost)
-          end
-        )
+        @phrase_fields << TextFieldBoost.new(field, boost)
       end
 
       def set_highlight(fields=[], options={})
@@ -70,6 +61,10 @@ module Sunspot
           end
         end
         @highlight = Highlighting.new(fields, options)
+      end
+
+      def has_fulltext_field?(field)
+        @fulltext_fields.has_key?(field.indexed_name)
       end
     end
   end

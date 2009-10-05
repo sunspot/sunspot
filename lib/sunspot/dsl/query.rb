@@ -40,7 +40,9 @@ module Sunspot
           fulltext_query = @query.set_fulltext(keywords)
           if field_names = options.delete(:fields)
             Array(field_names).each do |field_name|
-              fulltext_query.add_fulltext_fields(@setup.text_fields(field_name))
+              @setup.text_fields(field_name).each do |field|
+                fulltext_query.add_fulltext_field(field, field.default_boost)
+              end
             end
           end
           if highlight_field_names = options.delete(:highlight)
@@ -55,13 +57,18 @@ module Sunspot
             end
           end
           if block && fulltext_query
+            fulltext_dsl = Fulltext.new(fulltext_query, @setup)
             Util.instance_eval_or_call(
-              Fulltext.new(fulltext_query, @setup),
+              fulltext_dsl,
               &block
             )
           end
-          if fulltext_query.fulltext_fields.empty?
-            fulltext_query.add_fulltext_fields(@setup.all_text_fields)
+          if !field_names && (!fulltext_dsl || !fulltext_dsl.fields_added?)
+            @setup.all_text_fields.each do |field|
+              unless fulltext_query.has_fulltext_field?(field)
+                fulltext_query.add_fulltext_field(field, field.default_boost)
+              end
+            end
           end
         end
       end
