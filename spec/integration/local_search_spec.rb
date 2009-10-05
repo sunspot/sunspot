@@ -22,6 +22,7 @@ describe 'local search' do
   end
 
   it 'should perform a radial search with fulltext matching' do
+    pending 'fix for LocalSolr facet query or subquery support'
     search = Sunspot.search(Post) do |query|
       query.keywords 'teacup'
       query.near(ORIGIN, 20)
@@ -30,7 +31,6 @@ describe 'local search' do
   end
 
   it 'should perform a radial search with attribute scoping' do
-    pending 'local/scope workaround'
     search = Sunspot.search(Post) do |query|
       query.near(ORIGIN,20)
       query.with(:title, 'teacup')

@@ -36,6 +36,7 @@ module Sunspot
   UnrecognizedRestrictionError = Class.new(Exception)
   NoAdapterError = Class.new(Exception)
   NoSetupError = Class.new(Exception)
+  IllegalSearchError = Class.new(Exception)
 
   class <<self
     # Configures indexing and search for a given class.

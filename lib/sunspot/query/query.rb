@@ -51,7 +51,18 @@ module Sunspot
       end
 
       def to_params
-        params = @scope.to_params
+        params = 
+          if @local
+            if @fulltext
+              raise(
+                IllegalSearchError,
+                "Can't perform search with both fulltext and geographical components due to LocalSolr limitations"
+              )
+            end
+            { :q => @scope.to_boolean_phrase }
+          else
+            @scope.to_params
+          end
         Sunspot::Util.deep_merge!(params, @fulltext.to_params) if @fulltext
         @field_facets.each do |facet|
           Sunspot::Util.deep_merge!(params, facet.to_params)

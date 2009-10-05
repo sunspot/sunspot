@@ -23,12 +23,20 @@ describe 'local query' do
   end
 
   it 'puts all scope parameters into :q parameter when geo search is performed' do
-    pending 'query structure refactor festivities'
     session.search Post do
       with :blog_id, 1
       near [40.7, -73.5], 5
     end
-    connection.should have_last_search_with(:q => 'type:Post AND blog_id_i:1')
+    connection.should have_last_search_with(:q => '(type:Post AND blog_id_i:1)')
+  end
+
+  it 'raises error if keywords specified in local search' do
+    lambda do
+      session.search Post do
+        keywords 'fail'
+        near [40.7, -73.5], 5
+      end
+    end.should raise_error(Sunspot::IllegalSearchError)
   end
 
   [
