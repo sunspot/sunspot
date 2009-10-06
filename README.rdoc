@@ -138,6 +138,35 @@ JRuby 1.2.0
 Please submit bug reports to
 http://outoftime.lighthouseapp.com/projects/20339-sunspot
 
+== Contribution Guidelines
+
+Contributions are very welcome - both new features, enhancements, and bug fixes.
+Bug reports with a failing regression test are also lovely. In order to keep the
+contribution process as organized and smooth as possible, please follow these
+guidelines:
+
+* Contributions should be submitted via Sunspot's Lighthouse account, with an
+  attached git patch. See below for how to create a git patch.
+* Patches should not make any changes in your patch to the gemspec task other
+  than adding/removing dependencies (e.g., changing the name, version, email,
+  description, etc.)
+* Patches should not include any changes to the gemspec itself.
+* Document any new methods, options, arguments, etc.
+* Write tests.
+* As much as possible, follow the coding and testing styles you see in existing
+  code. One could accuse me of being nitpicky about this, but consistent code is
+  easier to read, maintain, and enhance.
+* Don't make any massive changes to the structure of library or test code. If
+  you think something needs a huge refactor or rearrangement, shoot me a
+  message; trying to apply that kind of patch without warning opens the door to
+  a world of conflict hurt.
+
+Here's how to create a Git patch - assuming you're pulling from the canonical
+Sunspot repository at `upstream`:
+
+  git fetch upstream
+  git format-patch upstre
+
 == Further Reading
 
 * Sunspot Discussion: http://groups.google.com/group/ruby-sunspot
