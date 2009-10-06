@@ -15,7 +15,6 @@ TEXT
     s.files = FileList['[A-Z]*', '{bin,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/conf/*', 'solr/start.jar']
     s.add_dependency 'mwmitchell-rsolr', '= 0.9.6'
     s.add_dependency 'daemons', '~> 1.0'
-    s.add_dependency 'optiflag', '~> 0.6.5'
     s.add_development_dependency 'rspec', '~> 1.1'
     s.add_development_dependency 'ruby-debug', '~> 0.10'
     s.add_development_dependency 'technicalpickles-jeweler', '1.2.1'

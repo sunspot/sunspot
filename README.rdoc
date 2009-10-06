@@ -128,7 +128,6 @@ me so I can rectify the situation!
 
 1. RSolr
 2. Daemons
-3. OptiFlag
 4. Java
 
 Sunspot has been tested with MRI 1.8.6 and 1.8.7, REE 1.8.6, YARV 1.9.1, and

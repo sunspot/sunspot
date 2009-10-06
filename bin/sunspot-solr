@@ -4,8 +4,8 @@ begin
   require 'fileutils'
   require 'tempfile'
   require 'tmpdir'
+  require 'optparse'
   require 'daemons'
-  require 'optiflag'
 rescue LoadError => e
   if using_gems
     raise(e)
@@ -17,70 +17,67 @@ rescue LoadError => e
 end
 
 working_directory = FileUtils.pwd
-solr_home = File.join(File.dirname(__FILE__), '..', 'solr')
+solr_home = File.expand_path(File.join(File.dirname(__FILE__), '..', 'solr'))
 
-module SolrFlags extend OptiFlagSet
-  optional_flag 'p' do
-    description 'Port on which to run Solr (default 8983)'
-    long_form 'port'
+port      = '8983'
+data_dir  = File.expand_path(File.join(Dir.tmpdir, 'solr_data'))
+home      = nil
+pid_dir   = working_directory
+log_file  = nil
+log_level = 'OFF'
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: sunspot-solr start [options]"
+
+  opts.on '-p', '--port=PORT', 'Port on which to run Solr (default 8983)' do |p|
+    port = p
   end
 
-  optional_flag 'd' do
-    description 'Solr data directory'
+  opts.on '-d', '--data-directory=DIRECTORY', 'Solr data directory' do |d|
+    data_dir = File.expand_path(d)
   end
 
-  optional_flag 's' do
-    description 'Solr home (should contain conf/ directory)'
+  opts.on '-s', '--solr-home=HOME', 'Solr home directory (should contain conf/ directory)' do |s|
+    solr_home = File.expand_path(s)
   end
 
-  optional_flag 'pd' do
-    long_form 'pid-dir'
-    description 'Directory for pid files'
-  end
-  
-  optional_flag 'l' do
-    long_form 'log-level'
-    description 'log level to pass to solr'
-  end
-  
-  optional_flag 'lf' do
-    long_form 'log-file'
-    description 'location of the log files'
+  opts.on '--pid-dir=PID_DIR', 'Directory for pid files' do |pd|
+    pid_dir = File.expand_path(pd)
   end
 
-  and_process!
-end
+  opts.on '-l', '--log-level=LOG_LEVEL', 'Solr logging level' do |l|
+    log_level = l
+  end
 
-port      = ARGV.flags.p || '8983'
-data_dir  = File.expand_path(ARGV.flags.d || File.join(Dir.tmpdir, 'solr_data'))
-home      = File.expand_path(ARGV.flags.s) if ARGV.flags.s
-pid_dir   = File.expand_path(ARGV.flags.pd || working_directory)
-log_file  = ARGV.flags.lf || nil
-log_level = ARGV.flags.l || 'OFF'
+  opts.on '--log-file=LOG_FILE', 'Path to Solr log file' do |lf|
+    log_file = File.expand_path(lf)
+  end
+end.parse!
 
 options = { :dir_mode => :normal, :dir => pid_dir }
 
 def logging_properties( log_file, log_level )
   temp_file = Tempfile.new 'logging.properties'
-  temp_file << ".level = #{log_level}\n"
-  temp_file << "handlers = java.util.logging.FileHandler\n"
-  temp_file << "java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter\n"
-  temp_file << "java.util.logging.FileHandler.pattern   = #{log_file}\n"
+  temp_file << <<PROPERTIES
+.level = #{log_level}
+handlers = java.util.logging.FileHandler
+java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+java.util.logging.FileHandler.pattern   = #{log_file}
+PROPERTIES
   temp_file.flush
+  temp_file.close
   temp_file.path
 end
 
 Daemons.run_proc('sunspot-solr', options) do
-  FileUtils.cd(working_directory) do
-    FileUtils.cd(solr_home) do
-      args = ['java']
-      args << "-Djetty.port=#{port}" if port
-      args << "-Dsolr.data.dir=#{data_dir}" if data_dir
-      args << "-Dsolr.solr.home=#{home}" if home
-      args << "-Djava.util.logging.config.file=#{logging_properties(log_file, log_level)}" if log_file and log_level != 'OFF'
-      args << '-jar' << 'start.jar'
-      STDERR.puts(args * ' ')
-      Kernel.exec(*args)
-    end
+  FileUtils.cd(solr_home) do
+    args = ['java']
+    args << "-Djetty.port=#{port}" if port
+    args << "-Dsolr.data.dir=#{data_dir}" if data_dir
+    args << "-Dsolr.solr.home=#{home}" if home
+    args << "-Djava.util.logging.config.file=#{logging_properties(log_file, log_level)}" if log_file and log_level != 'OFF'
+    args << '-jar' << 'start.jar'
+    STDERR.puts(args * ' ')
+    Kernel.exec(*args)
   end
 end
