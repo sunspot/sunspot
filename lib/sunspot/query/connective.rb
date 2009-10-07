@@ -10,6 +10,9 @@ module Sunspot
           @components = []
         end
 
+        # 
+        # Add a restriction to the connective.
+        #
         def add_restriction(field, restriction_type, value, negated = false)
           clazz =
             if restriction_type.respond_to?(:new)
@@ -20,6 +23,10 @@ module Sunspot
           @components << restriction_type.new(field, value, negated)
         end
 
+        # 
+        # Add a shorthand restriction; the restriction type is determined by
+        # the value.
+        #
         def add_shorthand_restriction(field, value, negated = false)
           restriction_type =
             case value
@@ -30,22 +37,39 @@ module Sunspot
           add_restriction(field, restriction_type, value, negated)
         end
 
+        # 
+        # Add a negated restriction. The added restriction will match all
+        # documents who do not match the terms of the restriction.
+        #
         def add_negated_restriction(field, restriction_type, value)
           add_restriction(field, restriction_type, value, true)
         end
 
+        # 
+        # Add a negated shorthand restriction (see add_shorthand_restriction)
+        #
         def add_negated_shorthand_restriction(field, value)
           add_shorthand_restriction(field, value, true)
         end
 
+        # 
+        # Add a new conjunction and return it.
+        #
         def add_conjunction
-          self
+          add_component(Conjunction.new)
         end
 
+        # 
+        # Add a new disjunction and return it.
+        #
         def add_disjunction
           add_component(Disjunction.new)
         end
 
+        # 
+        # Add an arbitrary component to the conjunction, and return it.
+        # The component must respond to #to_boolean_phrase
+        #
         def add_component(component)
           @components << component
           component
@@ -175,6 +199,10 @@ module Sunspot
           def inverse
             Disjunction
           end
+        end
+
+        def add_conjunction
+          self
         end
 
         private

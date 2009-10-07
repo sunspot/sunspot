@@ -9,6 +9,9 @@ module Sunspot
         @options = options
       end
 
+      # 
+      # Return Solr highlighting params
+      #
       def to_params
         params = {
           :hl => 'on',

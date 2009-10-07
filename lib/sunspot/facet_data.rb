@@ -13,10 +13,17 @@ module Sunspot
     class Abstract
       attr_reader :field #:nodoc:
 
+      # 
+      # The class that the field references, if any.
+      #
       def reference
         @field.reference if @field
       end
 
+      # 
+      # Cast the given value to the field's type, if it has one; otherwise just
+      # return the string.
+      #
       def cast(value)
         if @field
           @field.cast(value)
@@ -25,6 +32,10 @@ module Sunspot
         end
       end
 
+      # 
+      # Given the raw facet row value, return what the Sunspot facet row object
+      # should present as the value. This can be overridden by subclasses.
+      #
       def row_value(value)
         cast(value)
       end
@@ -66,6 +77,9 @@ module Sunspot
       end
     end
 
+    # 
+    # DateFacetData encapsulates facet date for date-range facets.
+    #
     class DateFacetData < FieldFacetData
       def initialize(facet_values, field)
         @gap = facet_values.delete('gap')[/\+(\d+)SECONDS/,1].to_i
@@ -104,6 +118,9 @@ module Sunspot
         @field = @outgoing_query_facet.field
       end
 
+      # 
+      # Use the name defined by the user
+      #
       def name
         outgoing_query_facet.name
       end

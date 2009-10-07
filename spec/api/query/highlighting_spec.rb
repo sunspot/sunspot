@@ -15,6 +15,13 @@ describe 'highlighted fulltext queries', :type => :query do
     connection.should have_last_search_with(:hl => 'on')
   end
 
+  it 'should not set highlight fields parameter if highlight fields are not passed' do
+    session.search(Post) do
+      keywords 'test', :highlight => true, :fields => [:title]
+    end
+    connection.should_not have_last_search_with(:'hl.fl')
+  end
+
   it 'should enable highlighting on multiple fields when highlighting requested as array of fields via keywords argument' do
     session.search(Post) do
       keywords 'test', :highlight => [:title, :body]

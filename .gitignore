@@ -5,3 +5,4 @@ pkg
 /doc
 .DS_Store
 
+.yardoc
