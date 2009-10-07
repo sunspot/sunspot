@@ -413,6 +413,24 @@ module Sunspot
       session.commit_if_dirty
     end
     
+    #
+    # True if documents have been removed since the last commit.
+    #
+    # ==== Returns
+    #
+    # Boolean:: Whether there have been any deletes since the last commit
+    #
+    def delete_dirty?
+      session.delete_dirty?
+    end
+
+    # 
+    # Sends a commit if the session has deletes since the last commit (see #delete_dirty?).
+    #
+    def commit_if_delete_dirty
+      session.commit_if_delete_dirty
+    end
+    
     # Returns the configuration associated with the singleton session. See
     # Sunspot::Configuration for details.
     #
