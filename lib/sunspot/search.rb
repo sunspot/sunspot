@@ -29,6 +29,7 @@ module Sunspot
     # query.
     #
     def execute
+      reset
       params = @query.to_params
       @solr_result = @connection.select(params)
       self
@@ -226,6 +227,12 @@ module Sunspot
 
     def field(name)
       @setup.field(name)
+    end
+    
+    # Clear out all the cached ivars so the search can be called again.
+    def reset
+      @results = @hits = @total = @facets_cache = 
+        @dynamic_facets_cache = @solr_response = @doc_ids = nil
     end
   end
 end

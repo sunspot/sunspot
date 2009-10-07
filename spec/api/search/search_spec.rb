@@ -8,4 +8,16 @@ describe Sunspot::Search do
     end
     search.results.first.title.should == 'custom title'
   end
+  
+  it 'should re-execute search' do
+    post_1, post_2 = Post.new, Post.new
+    
+    stub_results(post_1)
+    search = session.search Post
+    search.results.should == [post_1]
+    
+    stub_results(post_2)
+    search.execute!
+    search.results.should == [post_2]
+  end
 end
