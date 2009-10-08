@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::FacetRow [Sunspot 0.9.2 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::FacetRow [Sunspot 0.10.0 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../files/lib/sunspot/facet_row_rb.html">lib/sunspot/facet_row.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.9.2/lib/sunspot/facet_row.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.0/lib/sunspot/facet_row.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -47,71 +47,22 @@
             This class encapsulates a facet row (value) for a facet.
             </p>
           </div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>public instance</h3>
-            <ol>
-              <li><a href="#M000076">count</a></li>
-              <li><a href="#M000075">value</a></li>
-            </ol>
-          </div>
           <div id='section'>
-            <div id='methods'>
-              <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000076'>
-                <a name='M000076'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>count</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  The number of documents matching the search parameters that have this value
-                  in the facet&#8217;s field.
-                  </p>
-                  <h4>Returns</h4>
-                  <table>
-                  <tr><td valign="top">Integer:</td><td>Document count for this value
-                  
-                  </td></tr>
-                  </table>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000076-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000076-source'><span class="ruby-comment cmt"># File lib/sunspot/facet_row.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">count</span>&#x000A;      <span class="ruby-ivar">@count</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@pair</span>[<span class="ruby-value">1</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000075'>
-                <a name='M000075'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>value</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  The value associated with the facet. This will be cast according to the
-                  field&#8217;s type; so, for an integer field, this method will return an
-                  integer, etc.
-                  </p>
-                  <p>
-                  Note that <strong><tt>Time</tt> fields will always return facet values in
-                  UTC</strong>.
-                  </p>
-                  <h4>Returns</h4>
-                  <table>
-                  <tr><td valign="top">Object:</td><td>The value associated with the row, cast to the appropriate type
-                  
-                  </td></tr>
-                  </table>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000075-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000075-source'><span class="ruby-comment cmt"># File lib/sunspot/facet_row.rb, line 19</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value</span>&#x000A;      <span class="ruby-ivar">@value</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@facet</span>.<span class="ruby-identifier">field</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-ivar">@pair</span>[<span class="ruby-value">0</span>])&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>count</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>value</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
               </div>
             </div>
           </div>

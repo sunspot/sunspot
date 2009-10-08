@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::DSL::Query [Sunspot 0.9.2 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::DSL::Query [Sunspot 0.10.0 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/sunspot/dsl/query_rb.html">lib/sunspot/dsl/query.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.9.2/lib/sunspot/dsl/query.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.0/lib/sunspot/dsl/query.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -60,24 +60,27 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000043">keywords</a></li>
-              <li><a href="#M000044">paginate</a></li>
+              <li><a href="#M000022">fulltext</a></li>
+              <li><a href="#M000023">keywords</a></li>
+              <li><a href="#M000025">near</a></li>
+              <li><a href="#M000024">paginate</a></li>
+              <li><a href="#M000026">text_fields</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000043'>
-                <a name='M000043'>      </a>
+              <div class='public-instance method' id='method-M000022'>
+                <a name='M000022'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>keywords</span>
-                  <span class='arguments'>(keywords, options = {})</span>
+                  <span class='name'>fulltext</span>
+                  <span class='arguments'>(keywords, options = {}, &amp;block)</span>
                 </div>
                 <div class='description'>
                   <p>
                   Specify a phrase that should be searched as fulltext. Only <tt>text</tt>
                   fields are searched - see <a
-                  href="Fields.html#M000049">DSL::Fields.text</a>
+                  href="Fields.html#M000033">DSL::Fields.text</a>
                   </p>
                   <p>
                   Keyword search is executed using Solr&#8217;s dismax handler, which strikes
@@ -85,6 +88,11 @@
                   quotation marks can be used to group phrases, and the + and - modifiers
                   work as expected. All other special Solr boolean syntax is escaped, and
                   mismatched quotes are ignored entirely.
+                  </p>
+                  <p>
+                  This method can optionally take a block, which is evaluated by the <a
+                  href="Fulltext.html">Fulltext</a> DSL class, and exposes several powerful
+                  dismax features.
                   </p>
                   <h4>Parameters</h4>
                   <table>
@@ -98,17 +106,56 @@
                   configured for the types under search.
                   
                   </td></tr>
+                  <tr><td valign="top">:highlight<Boolean,Array>:</td><td>If true, perform keyword highlighting on all searched fields. If an array
+                  of field names, perform highlighting on the specified fields. This can also
+                  be called from within the fulltext block.
+                  
+                  </td></tr>
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keywords</span>(<span class="ruby-identifier">keywords</span>, <span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">set_keywords</span>(<span class="ruby-identifier">keywords</span>, <span class="ruby-identifier">options</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000022-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fulltext</span>(<span class="ruby-identifier">keywords</span>, <span class="ruby-identifier">options</span> = {}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">keywords</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">keywords</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^\s*$/</span>)&#x000A;          <span class="ruby-identifier">fulltext_query</span> = <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">set_fulltext</span>(<span class="ruby-identifier">keywords</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">field_names</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:fields</span>)&#x000A;            <span class="ruby-constant">Array</span>(<span class="ruby-identifier">field_names</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;                <span class="ruby-identifier">fulltext_query</span>.<span class="ruby-identifier">add_fulltext_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">field</span>.<span class="ruby-identifier">default_boost</span>)&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">highlight_field_names</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:highlight</span>)&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">highlight_field_names</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">true</span>&#x000A;              <span class="ruby-identifier">fulltext_query</span>.<span class="ruby-identifier">set_highlight</span>&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">highlight_fields</span> = []&#x000A;              <span class="ruby-constant">Array</span>(<span class="ruby-identifier">highlight_field_names</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span><span class="ruby-operator">|</span>&#x000A;                <span class="ruby-identifier">highlight_fields</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>))&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;              <span class="ruby-identifier">fulltext_query</span>.<span class="ruby-identifier">set_highlight</span>(<span class="ruby-identifier">highlight_fields</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">fulltext_query</span>&#x000A;            <span class="ruby-identifier">fulltext_dsl</span> = <span class="ruby-constant">Fulltext</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">fulltext_query</span>, <span class="ruby-ivar">@setup</span>)&#x000A;            <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;              <span class="ruby-identifier">fulltext_dsl</span>,&#x000A;              <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;            )&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">field_names</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">fulltext_dsl</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-identifier">fulltext_dsl</span>.<span class="ruby-identifier">fields_added?</span>)&#x000A;            <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">all_text_fields</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">fulltext_query</span>.<span class="ruby-identifier">has_fulltext_field?</span>(<span class="ruby-identifier">field</span>)&#x000A;                <span class="ruby-identifier">fulltext_query</span>.<span class="ruby-identifier">add_fulltext_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">field</span>.<span class="ruby-identifier">default_boost</span>)&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000044'>
-                <a name='M000044'>      </a>
+              <div class='public-instance method' id='method-M000023'>
+                <a name='M000023'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>keywords</span>
+                  <span class='arguments'>(keywords, options = {}, &amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Alias for <a href="Query.html#M000022">fulltext</a>
+                  </p>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000025'>
+                <a name='M000025'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>near</span>
+                  <span class='arguments'>(coordinates, miles)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  <a href="Scope.html">Scope</a> the search by geographical distance from a
+                  given point. <tt>coordinates</tt> should either respond to first and last
+                  (e.g. a two-element array), or to lat and one of lng, lon, or long.
+                  <tt>miles</tt> is the radius around the point for which to return
+                  documents.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 106</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">near</span>(<span class="ruby-identifier">coordinates</span>, <span class="ruby-identifier">miles</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_location_restriction</span>(<span class="ruby-identifier">coordinates</span>, <span class="ruby-identifier">miles</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000024'>
+                <a name='M000024'>      </a>
                 <div class='synopsis'>
                   <span class='name'>paginate</span>
                   <span class='arguments'>(options = {})</span>
@@ -120,25 +167,54 @@
                   </p>
                   <p>
                   Note that Solr searches are <em>always</em> paginated. Not calling <a
-                  href="Query.html#M000044">paginate</a> is the equivalent of calling:
+                  href="Query.html#M000024">paginate</a> is the equivalent of calling:
                   </p>
                   <pre>paginate(:page =&gt; 1, :per_page =&gt; Sunspot.config.pagination.default_per_page)</pre>
                   <h4>Options (options)</h4>
                   <table>
-                  <tr><td valign="top">:page<Integer>:</td><td>The requested page (required)
+                  <tr><td valign="top">:page<Integer,String>:</td><td>The requested page. The default is 1.
                   
                   </td></tr>
-                  <tr><td valign="top">:per_page<Integer>:</td><td>How many results to return per page. The default is the value in <tt><a
+                  <tr><td valign="top">:per_page<Integer,String>:</td><td>How many results to return per page. The default is the value in <tt><a
                   href="../../Sunspot.html#M000016">Sunspot.config</a>.pagination.default_per_page</tt>
                   
                   </td></tr>
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 51</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-identifier">page</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:page</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;paginate requires a :page argument&quot;</span>)&#x000A;        <span class="ruby-identifier">per_page</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:per_page</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;unknown argument #{options.keys.first.inspect} passed to paginate&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span>, <span class="ruby-identifier">per_page</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 93</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-identifier">page</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:page</span>)&#x000A;        <span class="ruby-identifier">per_page</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:per_page</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;unknown argument #{options.keys.first.inspect} passed to paginate&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span>, <span class="ruby-identifier">per_page</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000026'>
+                <a name='M000026'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>text_fields</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Apply scope-type restrictions on fulltext fields. In certain situations, it
+                  may be desirable to place logical restrictions on text fields. Remember
+                  that text fields are tokenized; your mileage may very.
+                  </p>
+                  <p>
+                  The block works exactly like a normal scope, except that the field names
+                  refer to text fields instead of attribute fields.
+                  </p>
+                  <h3>Example</h3>
+                  <pre>Sunspot.search(Post) do&#x000A;  text_fields do&#x000A;    with :body, nil&#x000A;  end&#x000A;end</pre>
+                  <p>
+                  This will return all documents that do not have a body.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query.rb, line 128</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text_fields</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@scope</span>, <span class="ruby-constant">TextFieldSetup</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@setup</span>)),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

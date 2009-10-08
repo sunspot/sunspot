@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: README.rdoc [Sunspot 0.9.2 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>File: README.rdoc [Sunspot 0.10.0 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -28,11 +28,11 @@
         <div class='name'>README.rdoc</div>
         <div class='paths'>
           README.rdoc
-          (<a href="http://github.com/outoftime/sunspot/tree/v0.9.2/README.rdoc">view online</a>)
+          (<a href="http://github.com/outoftime/sunspot/tree/v0.10.0/README.rdoc">view online</a>)
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Tue Jul 21 09:42:45 -0400 2009</span>
+          <span class='datetime'>Thu Oct 08 15:07:41 -0400 2009</span>
         </div>
       </div>
       <div id='content'>
@@ -56,6 +56,12 @@
             <a href="../classes/Sunspot.html">Sunspot</a> is designed to be easily
             plugged in to any ORM, or even non-database-backed objects such as the
             filesystem.
+            </p>
+            <p>
+            This README is intended as a quick primer on what <a
+            href="../classes/Sunspot.html">Sunspot</a> is capable of; for detailed
+            treatment of Sunspot&#8217;s full feature range, check out the wiki: <a
+            href="http://wiki.github.com/outoftime/sunspot">wiki.github.com/outoftime/sunspot</a>
             </p>
             <h3>Features:</h3>
             <ul>
@@ -172,12 +178,6 @@
             <li>Daemons
             
             </li>
-            <li>OptiFlag
-            
-            </li>
-            <li>Haml
-            
-            </li>
             <li>Java
             
             </li>
@@ -191,6 +191,50 @@
             Please submit bug reports to <a
             href="http://outoftime.lighthouseapp.com/projects/20339-sunspot">outoftime.lighthouseapp.com/projects/20339-sunspot</a>
             </p>
+            <h2>Contribution Guidelines</h2>
+            <p>
+            Contributions are very welcome - both new features, enhancements, and bug
+            fixes. Bug reports with a failing regression test are also lovely. In order
+            to keep the contribution process as organized and smooth as possible,
+            please follow these guidelines:
+            </p>
+            <ul>
+            <li>Contributions should be submitted via Sunspot&#8217;s Lighthouse account,
+            with an attached git patch. See below for how to create a git patch.
+            
+            </li>
+            <li>Patches should not make any changes in your patch to the gemspec task other
+            than adding/removing dependencies (e.g., changing the name, version, email,
+            description, etc.)
+            
+            </li>
+            <li>Patches should not include any changes to the gemspec itself.
+            
+            </li>
+            <li>Document any new methods, options, arguments, etc.
+            
+            </li>
+            <li>Write tests.
+            
+            </li>
+            <li>As much as possible, follow the coding and testing styles you see in
+            existing code. One could accuse me of being nitpicky about this, but
+            consistent code is easier to read, maintain, and enhance.
+            
+            </li>
+            <li>Don&#8217;t make any massive changes to the structure of library or test
+            code. If you think something needs a huge refactor or rearrangement, shoot
+            me a message; trying to apply that kind of patch without warning opens the
+            door to a world of conflict hurt.
+            
+            </li>
+            </ul>
+            <p>
+            Here&#8217;s how to create a Git patch - assuming you&#8217;re pulling from
+            the canonical <a href="../classes/Sunspot.html">Sunspot</a> repository at
+            `upstream`:
+            </p>
+            <pre>git fetch upstream&#x000A;git format-patch upstre</pre>
             <h2>Further Reading</h2>
             <ul>
             <li><a href="../classes/Sunspot.html">Sunspot</a> Discussion: <a
@@ -221,6 +265,21 @@
             
             </li>
             <li>Benjamin Krause (bk@benjaminkrause.com)
+            
+            </li>
+            <li>Marcel de Graaf (marcel@slashdev.nl)
+            
+            </li>
+            <li>Brandon Keepers (brandon@opensoul.org)
+            
+            </li>
+            <li>Peter Berkenbosch (peterberkenbosch@me.com)
+            
+            </li>
+            <li>Brian Atkinson
+            
+            </li>
+            <li>Tom Coleman (tom@thesnail.org)
             
             </li>
             </ul>

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::DSL::Search [Sunspot 0.9.2 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::DSL::Search [Sunspot 0.10.0 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/sunspot/dsl/search_rb.html">lib/sunspot/dsl/search.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.9.2/lib/sunspot/dsl/search.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.0/lib/sunspot/dsl/search.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -54,14 +54,14 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000045">data_accessor_for</a></li>
+              <li><a href="#M000027">data_accessor_for</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000045'>
-                <a name='M000045'>      </a>
+              <div class='public-instance method' id='method-M000027'>
+                <a name='M000027'>      </a>
                 <div class='synopsis'>
                   <span class='name'>data_accessor_for</span>
                   <span class='arguments'>(clazz)</span>
@@ -76,10 +76,10 @@
                   <pre>Sunspot.search Post do&#x000A;  data_acccessor_for(Post).includes = [:blog, :comments]&#x000A;end</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000027-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/search.rb, line 25</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_accessor_for</span>(<span class="ruby-identifier">clazz</span>)&#x000A;        <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">data_accessor_for</span>(<span class="ruby-identifier">clazz</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/search.rb, line 25</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_accessor_for</span>(<span class="ruby-identifier">clazz</span>)&#x000A;        <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">data_accessor_for</span>(<span class="ruby-identifier">clazz</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Configuration [Sunspot 0.9.2 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Configuration [Sunspot 0.10.0 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../files/lib/sunspot/configuration_rb.html">lib/sunspot/configuration.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.9.2/lib/sunspot/configuration.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.0/lib/sunspot/configuration.rb">view online</a>)
           </li>
         </ol>
       </div>
@@ -61,7 +61,42 @@
             </td></tr>
             </table>
           </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000018">solr_default_configuration_location</a></li>
+            </ol>
+          </div>
           <div id='section'>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000018'>
+                <a name='M000018'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>solr_default_configuration_location</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Location for the default solr configuration files, required for
+                  bootstrapping a new solr installation
+                  </p>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">String:</td><td>Directory with default solr config files
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/sunspot/configuration.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_default_configuration_location</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'../../solr/solr/conf'</span> )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
