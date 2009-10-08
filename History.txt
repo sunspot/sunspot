@@ -1,26 +1,34 @@
-== 0.10.0 2009-09-04
-* Informative, non-firehose Search#inspect and Hit#inspect
-* Soften up #paginate options
-* Silently ignore keyword calls with nil/blank/whitespace keywords
-* Boost queries
-* Query facets support all facet options
-* Remove dependency on haml and use erb since it is only used to generate one file
-* Restrict field facet to a set of desired values
-* Phrase fields
-* Search-time field boost
-* Don't require that all searched types have a field
-* Remove support for :other option in time faceting
-* Remove order_by_random() method
+== 0.10.0 2009-10-08
+* Support for geographical search using LocalSolr
+* Support for keyword highlighting, with custom deferred formatting
+* New fulltext DSL for specifying advanced dismax options
+* Support boost queries
+* Support for search-time field boost
+* Support for phrase fields
 * Support for prefix queries
-* Quote values in range restrictions if they contain spaces
+* Set default search-time field boost in setup
+* Restrict field facet to a set of desired values
+* Query facets support all facet options
 * Allow scoping by text fields
+* Support executing searches repeatedly
+* Allow setting of Solr URL for integration tests in environment variable
+* Add support for master/slave configurations
+* Added logging options to sunspot-solr executable
+* Added default solr config file location to Sunspot::Configuration
+* Informative, non-firehose Search#inspect
+* No longer require arguments to #paginate
+* Silently ignore keyword calls with nil/blank/whitespace keywords
+* Don't require that all searched types have a referenced field
 * Correct backwards ranges
 * Raise descriptive error if no types passed to search
 * Handle empty query facets, query facet rows, and connectives
-* Text fields only stored when explicitly set
+* Quote values in range restrictions if they contain spaces
+* Fix bug in Sunspot::Util.full_const_get
+* Remove support for :other option in time faceting
+* Remove order_by_random() method
 * Removed options and Query from public API
-* Geographical search using LocalSolr
-* Keyword highlighting
+* Use built-in optparse instead of optiflag in bin/sunspot-solr
+* Remove dependency on haml and use erb since it is only used to generate one file
 
 == 0.9.0 2009-07-21
 * Use Dismax parser for keyword search
