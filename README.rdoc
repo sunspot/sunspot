@@ -184,6 +184,7 @@ Sunspot repository at `upstream`:
 * Brandon Keepers (brandon@opensoul.org)
 * Peter Berkenbosch (peterberkenbosch@me.com)
 * Brian Atkinson
+* Tom Coleman (tom@thesnail.org)
 
 == License
 
