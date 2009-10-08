@@ -10,18 +10,26 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown", "Peer Allan", "Michael Moen", "Benjamin Krause"]
   s.date = %q{2009-10-08}
-  s.description = %q{Rails integration for the Sunspot Solr search library}
+  s.description = %q{Sunspot::Rails is an extension to the Sunspot library for Solr search.
+Sunspot::Rails adds integration between Sunspot and ActiveRecord, including
+defining search and indexing related methods on ActiveRecord models themselves,
+running a Sunspot-compatible Solr instance for development and test
+environments, and automatically commit Solr index changes at the end of each
+Rails request.
+}
   s.email = %q{mat@patch.com}
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
   ]
   s.files = [
-    "LICENSE",
+    "History.txt",
+     "LICENSE",
      "MIT-LICENSE",
      "MIT-LICENSE",
      "README.rdoc",
      "Rakefile",
+     "TODO",
      "VERSION.yml",
      "dev_tasks/gemspec.rake",
      "dev_tasks/rdoc.rake",
@@ -33,12 +41,15 @@ Gem::Specification.new do |s|
      "lib/sunspot/rails/configuration.rb",
      "lib/sunspot/rails/request_lifecycle.rb",
      "lib/sunspot/rails/searchable.rb",
+     "lib/sunspot/rails/server.rb",
      "lib/sunspot/rails/tasks.rb",
+     "lib/sunspot/spec/extension.rb",
      "rails/init.rb",
      "spec/configuration_spec.rb",
      "spec/mock_app/app/controllers/application.rb",
      "spec/mock_app/app/controllers/application_controller.rb",
      "spec/mock_app/app/controllers/posts_controller.rb",
+     "spec/mock_app/app/models/author.rb",
      "spec/mock_app/app/models/blog.rb",
      "spec/mock_app/app/models/post.rb",
      "spec/mock_app/app/models/post_with_auto.rb",
@@ -51,12 +62,15 @@ Gem::Specification.new do |s|
      "spec/mock_app/config/initializers/session_store.rb",
      "spec/mock_app/config/routes.rb",
      "spec/mock_app/config/sunspot.yml",
+     "spec/mock_app/db/schema.rb",
      "spec/mock_app/db/test.db",
      "spec/model_lifecycle_spec.rb",
      "spec/model_spec.rb",
      "spec/request_lifecycle_spec.rb",
      "spec/schema.rb",
-     "spec/spec_helper.rb"
+     "spec/server_spec.rb",
+     "spec/spec_helper.rb",
+     "spec/sunspot_mocking_spec.rb"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/outoftime/sunspot_rails}
@@ -67,16 +81,20 @@ Gem::Specification.new do |s|
   s.summary = %q{Rails integration for the Sunspot Solr search library}
   s.test_files = [
     "spec/spec_helper.rb",
+     "spec/server_spec.rb",
      "spec/configuration_spec.rb",
      "spec/model_lifecycle_spec.rb",
      "spec/schema.rb",
      "spec/model_spec.rb",
+     "spec/sunspot_mocking_spec.rb",
      "spec/mock_app/app/controllers/posts_controller.rb",
      "spec/mock_app/app/controllers/application_controller.rb",
      "spec/mock_app/app/controllers/application.rb",
      "spec/mock_app/app/models/blog.rb",
      "spec/mock_app/app/models/post_with_auto.rb",
+     "spec/mock_app/app/models/author.rb",
      "spec/mock_app/app/models/post.rb",
+     "spec/mock_app/db/schema.rb",
      "spec/mock_app/config/environment.rb",
      "spec/mock_app/config/initializers/session_store.rb",
      "spec/mock_app/config/initializers/new_rails_defaults.rb",
