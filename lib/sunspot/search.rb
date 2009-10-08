@@ -193,18 +193,8 @@ module Sunspot
       @solr_response ||= @solr_result['response']
     end
 
-    def doc_ids
-      @doc_ids ||= solr_response['docs'].map { |doc| doc['id'] }
-    end
-
     def dsl
       DSL::Search.new(self, @setup)
-    end
-
-    def raw_facet(field)
-      if field.type == Type::TimeType
-        @solr_result['facet_counts']['facet_dates'][field.indexed_name]
-      end || @solr_result['facet_counts']['facet_fields'][field.indexed_name]
     end
 
     def date_facet_data(field)

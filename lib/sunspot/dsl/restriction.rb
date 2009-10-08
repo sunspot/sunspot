@@ -3,7 +3,7 @@ module Sunspot
     # 
     # This class presents an API for building restrictions in the query DSL. The
     # methods exposed are the snake-cased names of the classes defined in the
-    # Sunspot::Restriction module, with the exception of Base and SameAs. All
+    # Sunspot::Restriction module, with the exception of Base. All
     # methods take a single argument, which is the value to be applied to the
     # restriction.
     #

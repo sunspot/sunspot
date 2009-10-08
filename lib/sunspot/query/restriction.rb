@@ -11,7 +11,7 @@ module Sunspot
         # Array:: Collection of restriction class names
         #
         def names
-          constants - %w(Base SameAs) #XXX this seems ugly
+          constants - %w(Base) #XXX this seems ugly
         end
 
         # 
@@ -247,24 +247,6 @@ module Sunspot
 
         def to_solr_conditional
           "#{solr_value(@value)}*"
-        end
-      end
-
-      # 
-      # Result must be the exact instance given (only useful when negated).
-      #
-      class SameAs < Base
-        def initialize(object, negated = false)
-          @object, @negated = object, negated
-        end
-
-        def to_positive_boolean_phrase
-          adapter = Adapters::InstanceAdapter.adapt(@object)
-          "id:#{escape(adapter.index_id)}"
-        end
-
-        def negate
-          SameAs.new(@object, !negated?)
         end
       end
     end

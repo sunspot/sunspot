@@ -14,12 +14,6 @@ module Sunspot
         # Add a restriction to the connective.
         #
         def add_restriction(field, restriction_type, value, negated = false)
-          clazz =
-            if restriction_type.respond_to?(:new)
-              restriction_type
-            else
-              Restriction[restriction_type]
-            end
           @components << restriction_type.new(field, value, negated)
         end
 
@@ -73,17 +67,6 @@ module Sunspot
         def add_component(component)
           @components << component
           component
-        end
-
-        # 
-        # Connective as solr params.
-        #
-        def to_params #:nodoc:
-          if boolean_phrase = to_boolean_phrase
-            { :fq => to_boolean_phrase }
-          else
-            {}
-          end
         end
 
         # 
@@ -148,16 +131,6 @@ module Sunspot
           else
             super
           end
-        end
-
-        # 
-        # Add a conjunction to the disjunction. This overrides the method in
-        # the Scope class since scopes are implicitly conjunctive and thus
-        # can return themselves as a conjunction. Inside a disjunction, however,
-        # a conjunction must explicitly be created.
-        #
-        def add_conjunction
-          add_component(Conjunction.new)
         end
 
         # 

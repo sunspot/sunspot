@@ -196,10 +196,6 @@ module Sunspot
       collection_from_inheritable_hash(:dynamic_field_factories)
     end
 
-    def coordinates_field
-      @coordinates_field
-    end
-
     # 
     # Return the class associated with this setup.
     #
