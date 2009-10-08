@@ -1,6 +1,7 @@
 begin
   require 'jeweler'
   require 'jeweler/rubyforge_tasks'
+  require 'jeweler/gemcutter_tasks'
   Jeweler::Tasks.new do |s|
     s.name = 'sunspot'
     s.executables = ['sunspot-solr', 'sunspot-configure-solr']
@@ -26,9 +27,10 @@ TEXT
   end
 
   Jeweler::RubyforgeTasks.new
+  Jeweler::GemcutterTasks.new
 end
 
 namespace :release do
   desc "Release gem to RubyForge and GitHub"
-  task :all => [:"rubyforge:release:gem", :release]
+  task :all => [:release, :"rubyforge:release:gem", :"gemcutter:release"]
 end
