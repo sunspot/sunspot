@@ -75,11 +75,23 @@ end
           logical operators, negate them, or exclude individual objects from the
           results.
         <li>
+        <li>
+          Harness Solr's powerful Dismax fulltext tool kit, including
+          index-time and search-time field boost, phrase fields for
+          extra-precise scoring, and boost queries for custom 
+          search-time relevance calculation.
+        </li>
+        <li>
           Index subclasses, search for superclasses: Sunspot stores the entire
           class hierarchy for each object that's indexed.
         </li>
         <li>
-          Use field facets for powerful drill-down search.
+          Use field facets for easy, powerful drill-down search. If the field
+          contains foreign keys, automatically get access to the referenced
+          model in each facet row.
+        </li>
+        <li>
+          Use query facets to define search refinement on arbitrary filters.
         </li>
         <li>
           If you've got WillPaginate installed, use it seamlessly with Sunspot's
