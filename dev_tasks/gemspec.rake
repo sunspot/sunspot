@@ -17,7 +17,6 @@ begin
                        'spec/*.rb',
                        'spec/mock_app/{app,lib,db,vendor,config}/**/*',
                        'spec/mock_app/{tmp,log,solr}']
-    s.add_dependency 'rails', '~> 2.1'
     s.add_dependency 'escape', '>= 0.0.4'
     s.add_dependency 'sunspot', '~> 0.10.0' 
     s.add_development_dependency 'rspec', '~> 1.2'
@@ -25,4 +24,12 @@ begin
     s.add_development_dependency 'ruby-debug', '~> 0.10'
     s.add_development_dependency 'technicalpickles-jeweler', '~> 1.0'
   end
+
+  Jeweler::RubyforgeTasks.new
+  Jeweler::GemcutterTasks.new
+end
+
+namespace :release do
+  desc "Release gem to RubyForge and GitHub"
+  task :all => [:release, :"rubyforge:release:gem", :"gemcutter:release"]
 end
