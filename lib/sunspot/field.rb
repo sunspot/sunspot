@@ -147,7 +147,7 @@ module Sunspot
     end
   end
 
-  class TypeField
+  class TypeField #:nodoc:
     class <<self
       def instance
         @instance ||= new
@@ -163,7 +163,7 @@ module Sunspot
     end
   end
 
-  class IdField
+  class IdField #:nodoc:
     class <<self
       def instance
         @instance ||= new

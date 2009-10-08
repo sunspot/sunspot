@@ -4,6 +4,9 @@ module Sunspot
   # primary key stored in facet rows' values. The rows are hydrated lazily, but
   # all rows are hydrated the first time #instance is called on any of the rows.
   #
+  # Instatiated facets are possible for fields which are defined with a
+  # :references option.
+  #
   # The #rows method returns InstantiatedFacetRow objects.
   #
   class InstantiatedFacet < Facet

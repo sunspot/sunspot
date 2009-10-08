@@ -52,7 +52,13 @@ module Sunspot
       # symbol arguments indicating fields to be highlighted (they don't even
       # have to be the same fields you're searching).
       #
-      #   highlight :title, :body
+      # === Example
+      #
+      #   Sunspot.search(Post) do
+      #     keywords 'show me the highlighting' do
+      #       highlight :title, :body
+      #     end
+      #   end
       #
       # You may also pass a hash of options as the last argument. Options are
       # the following:
@@ -88,13 +94,18 @@ module Sunspot
       # documents for which all the fulltext keywords appear in close proximity
       # in one of the given fields. Excellent for titles, headlines, etc.
       #
-      def phrase_fields(*fields)
-        boosted_fields = fields.pop if fields.last.is_a?(Hash)
-        fields.each do |field_name|
-          @setup.text_fields(field_name).each do |field|
-            @query.add_phrase_field(field)
-          end
-        end
+      # Boosted fields are specified in a hash of field names to a boost, as
+      # with the #fields and #boost_fields methods.
+      #
+      # === Example
+      #
+      #   Sunspot.search(Post) do
+      #     keywords 'nothing reveals like relevance' do
+      #       phrase_fields :title => 2.0
+      #     end
+      #   end
+      #
+      def phrase_fields(boosted_fields)
         if boosted_fields
           boosted_fields.each_pair do |field_name, boost|
             @setup.text_fields(field_name).each do |field|
@@ -137,7 +148,7 @@ module Sunspot
       #
       #   Sunspot.search(Post) do
       #     keywords('pork sandwich') do
-      #       boost :title => 1.5
+      #       boost_fields :title => 1.5
       #     end
       #   end
       #
@@ -149,7 +160,7 @@ module Sunspot
         end
       end
 
-      def fields_added?
+      def fields_added? #:nodoc:
         @fields_added
       end
     end

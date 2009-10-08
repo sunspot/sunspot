@@ -26,7 +26,11 @@ module Sunspot
       # ==== Options
       #
       # :boost<Float>::
-      #   Boost that should be applied to this field for keyword search
+      #   Index-time boost that should be applied to this field for keyword search
+      # :default_boost<Float>::
+      #   Default search-time boost to apply to this field during keyword
+      #   search. Can be overriden with DSL::Fulltext#fields or
+      #   DSL::Fulltext#boost_fields method.
       #
       def text(*names, &block)
         options = names.pop if names.last.is_a?(Hash)

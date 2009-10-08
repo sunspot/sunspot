@@ -1,14 +1,14 @@
 module Sunspot
-  module DSL #:nodoc:
+  module DSL
     # 
     # This class presents an API for building restrictions in the query DSL. The
     # methods exposed are the snake-cased names of the classes defined in the
-    # Restriction module, with the exception of Base and SameAs. All methods
-    # take a single argument, which is the value to be applied to the
+    # Sunspot::Restriction module, with the exception of Base and SameAs. All
+    # methods take a single argument, which is the value to be applied to the
     # restriction.
     #
     class Restriction
-      def initialize(field_name, query, negative)
+      def initialize(field_name, query, negative) #:nodoc:
         @field_name, @scope, @negative = field_name, query, negative
       end
 

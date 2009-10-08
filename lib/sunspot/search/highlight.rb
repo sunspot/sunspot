@@ -20,7 +20,7 @@ module Sunspot
       
       #
       # Returns the highlighted text with formatting according to the template given in &block.
-      # When no block is given, <em> and </em> are used to surround the highlight.
+      # When no block is given, &lt;em&gt; and &lt;/em&gt; are used to surround the highlight.
       #
       # ==== Example
       #
