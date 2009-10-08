@@ -6,9 +6,6 @@ begin
     s.summary = 'Rails integration for the Sunspot Solr search library'
     s.email = 'mat@patch.com'
     s.homepage = 'http://github.com/outoftime/sunspot_rails'
-<<<<<<< v0.10.6-devel:dev_tasks/gemspec.rake
-    s.description = 'Rails integration for the Sunspot Solr search library'
-=======
     s.description = <<TEXT
 Sunspot::Rails is an extension to the Sunspot library for Solr search.
 Sunspot::Rails adds integration between Sunspot and ActiveRecord, including
@@ -17,7 +14,6 @@ running a Sunspot-compatible Solr instance for development and test
 environments, and automatically commit Solr index changes at the end of each
 Rails request.
 TEXT
->>>>>>> local:dev_tasks/gemspec.rake
     s.authors = ['Mat Brown', 'Peer Allan', 'Michael Moen', 'Benjamin Krause']
     s.rubyforge_project = 'sunspot'
     s.files = FileList['[A-Z]*',
