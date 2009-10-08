@@ -47,6 +47,7 @@ end
   		<h3>Search for them.</h3>
 {% highlight ruby %}
 Sunspot.search(Post) do
+  fulltext 'best pizza'
   with :blog_id, 1
   with(:published_at).less_than Time.now
   order_by :published_at, :desc
@@ -97,6 +98,9 @@ end
         </li>
         <li>
           Use query facets to define search refinement on arbitrary filters.
+        </li>
+        <li>
+          Perform geographical searches with LocalSolr support.
         </li>
         <li>
           If you've got WillPaginate installed, use it seamlessly with Sunspot's
