@@ -16,7 +16,7 @@ namespace :sunspot do
       [data_path, pid_path].each { |path| FileUtils.mkdir_p(path) }
       port = Sunspot::Rails.configuration.port
       FileUtils.cd(File.join(pid_path)) do
-        command = ['sunspot-solr', 'start', '--', '-p', port.to_s, '-d', data_path]
+        command = ['sunspot-solr', 'start', '-p', port.to_s, '-d', data_path]
         if solr_home
           command << '-s' << solr_home
         end
@@ -33,7 +33,7 @@ namespace :sunspot do
         end
       FileUtils.mkdir_p(data_path)
       port = Sunspot::Rails.configuration.port
-      command = ['sunspot-solr', 'run', '--', '-p', port.to_s, '-d', data_path]
+      command = ['sunspot-solr', 'run', '-p', port.to_s, '-d', data_path]
       if RUBY_PLATFORM =~ /w(in)?32$/
         command.first << '.bat'
       end
