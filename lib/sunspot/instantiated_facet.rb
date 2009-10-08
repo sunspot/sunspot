@@ -35,14 +35,5 @@ module Sunspot
     def rows
       @facet_data.rows { |value, count| InstantiatedFacetRow.new(value, count, self) }
     end
-
-    private
-
-    # 
-    # Override the Facet#new_row method to return an InstantiatedFacetRow
-    #
-    def new_row(pair)
-      InstantiatedFacetRow.new(pair, self)
-    end
   end
 end
