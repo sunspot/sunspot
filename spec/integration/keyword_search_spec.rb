@@ -94,7 +94,7 @@ describe 'keyword search' do
     it 'assigns a higher score to documents in which all words appear in the phrase field' do
       hits = Sunspot.search(Namespaced::Comment) do
         keywords 'test text' do
-          phrase_fields :body
+          phrase_fields :body => 2.0
         end
       end.hits
       hits.first.instance.should == @comments.first

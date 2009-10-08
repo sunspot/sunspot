@@ -109,10 +109,10 @@ describe 'fulltext query', :type => :query do
   it 'sets phrase fields' do
     session.search Post do
       keywords 'great pizza' do
-        phrase_fields :title
+        phrase_fields :title => 2.0
       end
     end
-    connection.should have_last_search_with(:pf => 'title_text')
+    connection.should have_last_search_with(:pf => 'title_text^2.0')
   end
 
   it 'sets phrase fields with boost' do
