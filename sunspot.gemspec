@@ -91,6 +91,11 @@ Gem::Specification.new do |s|
      "solr/solr/conf/solrconfig.xml",
      "solr/solr/conf/stopwords.txt",
      "solr/solr/conf/synonyms.txt",
+     "solr/solr/lib/geoapi-nogenerics-2.1-M2.jar",
+     "solr/solr/lib/gt2-referencing-2.3.1.jar",
+     "solr/solr/lib/jsr108-0.01.jar",
+     "solr/solr/lib/locallucene.jar",
+     "solr/solr/lib/localsolr.jar",
      "solr/start.jar",
      "solr/webapps/solr.war",
      "spec/api/adapters_spec.rb",
@@ -156,7 +161,7 @@ Gem::Specification.new do |s|
      "templates/schema.xml.erb"
   ]
   s.has_rdoc = true
-  s.homepage = %q{http://github.com/outoftime/sunspot}
+  s.homepage = %q{http://outoftime.github.com/sunspot}
   s.rdoc_options = ["--charset=UTF-8", "--webcvs=http://github.com/outoftime/sunspot/tree/master/%s", "--title", "Sunspot - Solr-powered search for Ruby objects - API Documentation", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{sunspot}
