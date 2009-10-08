@@ -38,5 +38,5 @@ end
 
 namespace :release do
   desc "Release gem to RubyForge and GitHub"
-  task :all => [:release, :"rubyforge:release:gem", :"gemcutter:release"]
+  task :all => [:"rubyforge:release:gem", :"gemcutter:release"]
 end
