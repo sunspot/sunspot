@@ -22,11 +22,12 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :searches
+    attr_reader :adds, :commits, :searches, :message
     attr_accessor :adapter, :opts
 
     def initialize(adapter = nil, opts = nil)
       @adapter, @opts = adapter, opts
+      @message = OpenStruct.new
       @adds, @deletes, @deletes_by_query, @commits, @searches = Array.new(5) { [] }
     end
 

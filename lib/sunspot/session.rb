@@ -188,7 +188,15 @@ module Sunspot
     def connection
       @connection ||=
         begin
-          self.class.connection_class.connect(:url => config.solr.url, :adapter => config.http_client)
+          connection = self.class.connection_class.connect(
+            :url => config.solr.url,
+            :adapter => config.http_client
+          )
+          connection.message.adapter =
+            RSolr::Message::Adapter.const_get(
+              Util.camel_case(config.xml_builder.to_s)
+            ).new
+          connection
         end
     end
 
