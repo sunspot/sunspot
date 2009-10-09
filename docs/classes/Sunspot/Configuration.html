@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Configuration [Sunspot 0.10.0 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Configuration [Sunspot 0.10.2 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../files/lib/sunspot/configuration_rb.html">lib/sunspot/configuration.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.0/lib/sunspot/configuration.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.2/lib/sunspot/configuration.rb">view online</a>)
           </li>
         </ol>
       </div>
@@ -49,6 +49,12 @@
             :net_http, which is the default and uses Ruby&#8217;s built-in pure-Ruby
             HTTP library; and :curb, which uses Ruby&#8217;s libcurl bindings and
             requires installation of the &#8216;curb&#8217; gem.
+            
+            </td></tr>
+            <tr><td valign="top"><a href="../Sunspot.html#M000016">Sunspot.config</a>.xml_builder:</td><td>The library use to build XML messages sent to Solr. As of this writing the
+            options are :builder and :libxml - the latter is faster but less portable,
+            as it is native code. Check the documentation for RSolr::Message::Adapter
+            for more information.
             
             </td></tr>
             <tr><td valign="top"><a href="../Sunspot.html#M000016">Sunspot.config</a>.solr.url:</td><td>The URL at which to connect to Solr (default: &#8216;<a
@@ -93,7 +99,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/sunspot/configuration.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_default_configuration_location</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'../../solr/solr/conf'</span> )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/sunspot/configuration.rb, line 54</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_default_configuration_location</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'../../solr/solr/conf'</span> )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
