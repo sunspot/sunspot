@@ -1,3 +1,9 @@
+== 0.10.2 2009-10-09
+* Add Sunspot.config.xml_builder option, which is passed to RSolr
+
+== 0.10.1 2009-10-08
+* Fix directory bugs in sunspot-solr executable
+
 == 0.10.0 2009-10-08
 * Support for geographical search using LocalSolr
 * Support for keyword highlighting, with custom deferred formatting
