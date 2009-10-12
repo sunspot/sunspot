@@ -27,8 +27,8 @@ end
 Spec::Runner.configure do |config|
   config.before(:each) do
     if integrate_sunspot?
-      Sunspot.remove_all
-      Sunspot.commit
+      Sunspot::Rails.session.remove_all
+      Sunspot::Rails.session.commit
     end
     load_schema
   end
