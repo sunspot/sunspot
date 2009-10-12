@@ -51,7 +51,7 @@ describe Sunspot::Rails::Server do
 
   describe "delegate methods" do
     before(:each) do
-      Sunspot::Rails::Server.should_receive(:configuration).and_return(@sunspot_configuration)
+      Sunspot::Rails::Server.should_receive(:configuration).at_least(1).and_return(@sunspot_configuration)
     end
 
     it "should delegate the port method to the configuration" do
@@ -84,7 +84,7 @@ describe Sunspot::Rails::Server do
       Sunspot::Rails::Server.should_respond_to_and_receive(:log_level).and_return('LOG')
       Sunspot::Rails::Server.should_respond_to_and_receive(:log_file).and_return('log_file')
       Sunspot::Rails::Server.send(:start_command).should == \
-          [ 'sunspot-solr', 'start', '--', '-p', '1', '-d', 'data', '-s', 'home', '-l', 'LOG', '-lf', 'log_file' ]
+          [ 'sunspot-solr', 'start', '-p', '1', '-d', 'data', '-s', 'home', '-l', 'LOG', '-lf', 'log_file' ]
     end
   
     it "should generate the stop command" do
@@ -98,6 +98,11 @@ describe Sunspot::Rails::Server do
     it "should generate the path for config files" do
       Sunspot::Rails::Server.should_receive(:solr_home).and_return('/solr/home')
       Sunspot::Rails::Server.config_path.should == '/solr/home/conf'
+    end
+    
+    it "should generate the path for custom libraries" do
+      Sunspot::Rails::Server.should_receive(:solr_home).and_return('/solr/home')
+      Sunspot::Rails::Server.lib_path.should == '/solr/home/lib'
     end
   
     it "should generate the path for the index data" do
