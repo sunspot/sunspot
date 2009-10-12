@@ -1,4 +1,5 @@
 == 0.11
+  * Reimplement master/slave using Sunspot::Rails session management
   * Update sunspot.yml
     * add log_level support
     * add solr_home support
