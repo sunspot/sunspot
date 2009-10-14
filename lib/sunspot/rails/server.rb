@@ -127,7 +127,7 @@ module Sunspot #:nodoc:
         # Array:: sunspot_start_command
         #
         def start_command
-          [ SUNSPOT_EXECUTABLE, 'start', '-p', port.to_s, '-d', data_path, '-s', solr_home, '-l', log_level, '-lf', log_file ]
+          [ SUNSPOT_EXECUTABLE, 'start', '-p', port.to_s, '-d', data_path, '-s', solr_home, '-l', log_level, '--log-file', log_file ]
         end
 
         #
