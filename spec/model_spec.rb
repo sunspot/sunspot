@@ -107,9 +107,17 @@ describe 'ActiveRecord mixin' do
     end
     
     it 'should find ActiveRecord objects with an integer, not a string' do
-      Post.should_receive(:find).with([@post.id.to_i]).and_return([@post])
+      Post.should_receive(:find).with([@post.id.to_i], anything()).and_return([@post])
       Post.search do
         with :title, 'Test Post'
+      end.results.should == [@post]
+    end
+    
+    it 'should use the include option on the data accessor when specified' do
+      Post.should_receive(:find).with(anything(), hash_including(:include => [:blog])).and_return([@post])
+      Post.search do
+        with :title, 'Test Post'
+        data_accessor_for(Post).include = [:blog]
       end.results.should == [@post]
     end
   end
