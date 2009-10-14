@@ -34,6 +34,9 @@ module Sunspot #:nodoc:
         #   Automatically remove models from the Solr index when they are
         #   destroyed. <b>Setting this option to +false+ is not recommended
         #   </b>(see the README).
+        # :ignore_attribute_changes_of<Array>::
+        #   Define attributes, that should not trigger a reindex of that
+        #   object. Usual suspects are update_at or counters.
         #
         # ==== Example
         #
