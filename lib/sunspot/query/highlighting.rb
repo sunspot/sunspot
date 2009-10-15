@@ -27,8 +27,8 @@ module Sunspot
         if fragment_size = @options[:fragment_size]
           params[:"hl.fragsize"] = fragment_size
         end
-        if @options[:merge_continuous_fragments]
-          params[:"hl.mergeContinuous"] = 'true'
+        if @options[:merge_contiguous_fragments]
+          params[:"hl.mergeContiguous"] = 'true'
         end
         if @options[:phrase_highlighter]
           params[:"hl.usePhraseHighlighter"] = 'true'

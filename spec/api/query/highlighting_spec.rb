@@ -105,11 +105,11 @@ describe 'highlighted fulltext queries', :type => :query do
   it 'enables merging of continuous fragments' do
     session.search(Post) do
       keywords 'test' do
-        highlight :merge_continuous_fragments => true
+        highlight :merge_contiguous_fragments => true
       end
     end
     connection.should have_last_search_with(
-      :"hl.mergeContinuous" => 'true'
+      :"hl.mergeContiguous" => 'true'
     )
   end
 
