@@ -8,6 +8,9 @@ module Sunspot
     #
     class Local #:nodoc:
       def initialize(coordinates, radius)
+        if radius < 1
+          raise ArgumentError, "LocalSolr does not seem to support a radius of less than 1 mile."
+        end
         @coordinates, @radius = Util::Coordinates.new(coordinates), radius
       end
 

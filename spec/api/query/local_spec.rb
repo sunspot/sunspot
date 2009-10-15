@@ -51,4 +51,12 @@ describe 'local query' do
       connection.should have_last_search_with(:lat => 40.7, :long => -73.5)
     end
   end
+
+  it 'raises ArgumentError if radius is less than 1' do
+    lambda do
+      session.search Post do
+        near [40, -70], 0.5
+      end
+    end.should raise_error(ArgumentError)
+  end
 end

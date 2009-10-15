@@ -1,5 +1,6 @@
 == 0.10.3 2009-10-15
 * Contiguous, not continuous
+* Fail fast if less-than-1 radius passed for local search
 
 == 0.10.2 2009-10-09
 * Add Sunspot.config.xml_builder option, which is passed to RSolr
