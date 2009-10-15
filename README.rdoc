@@ -30,8 +30,7 @@ http://wiki.github.com/outoftime/sunspot
 
 == Installation
 
-  gem sources -a http://gems.github.com
-  gem install outoftime-sunspot
+  gem install sunspot
 
 In order to start the packaged Solr installation, run:
 
