@@ -58,7 +58,7 @@ module Sunspot #:nodoc:
             extend ClassMethods
             include InstanceMethods
             
-            Sunspot::Rails::Util.sunspot_options[self] = options
+            Sunspot::Rails::Util.sunspot_options[self.to_s.underscore.to_sym] = options
             
             unless options[:auto_index] == false
               after_save do |searchable|

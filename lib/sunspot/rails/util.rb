@@ -9,9 +9,11 @@ module Sunspot #:nodoc:
         end
         
         def index_relevant_attribute_changed?( object )
-          ignore_attributes = (sunspot_options[object.class][:ignore_attribute_changes_of] || [])
+          class_key = object.class.to_s.underscore.to_sym
+          ignore_attributes = (sunspot_options[class_key][:ignore_attribute_changes_of] || [])
           !(object.changes.symbolize_keys.keys - ignore_attributes).blank?
         end
+        
       end
     end
   end
