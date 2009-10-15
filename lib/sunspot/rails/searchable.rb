@@ -58,11 +58,11 @@ module Sunspot #:nodoc:
             extend ClassMethods
             include InstanceMethods
             
-            self.sunspot_options = options
+            Sunspot::Rails::Util.sunspot_options[self] = options
             
             unless options[:auto_index] == false
               after_save do |searchable|
-                searchable.index if searchable.index_relevant_attribute_changed?
+                searchable.index if Sunspot::Rails::Util.index_relevant_attribute_changed?( searchable )
               end
             end
 
@@ -89,9 +89,6 @@ module Sunspot #:nodoc:
       end
 
       module ClassMethods
-        def self.extended(base)
-          base.class_inheritable_accessor :sunspot_options
-        end
         # 
         # Search for instances of this class in Solr. The block is delegated to
         # the Sunspot.search method - see the Sunspot documentation for the full
@@ -305,11 +302,6 @@ module Sunspot #:nodoc:
         #
         def remove_from_index!
           Sunspot::Rails.session.remove!(self)
-        end
-        
-        def index_relevant_attribute_changed?
-          ignore_attributes = (self.class.sunspot_options[:ignore_attribute_changes_of] || [])
-          !(self.changes.symbolize_keys.keys - ignore_attributes).blank?
         end
       end
     end
