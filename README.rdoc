@@ -20,10 +20,8 @@ Sunspot::Rails has been tested with Rails versions 2.1, 2.2, and 2.3
 
 For recent versions of Rails, In your project's <code>config/environment.rb</code>, add the following gem dependencies:
 
-  config.gem 'outoftime-sunspot', :lib => 'sunspot',
-    :source => 'http://gems.github.com'
-  config.gem 'outoftime-sunspot_rails', :lib => 'sunspot/rails',
-    :source => 'http://gems.github.com'
+  config.gem 'sunspot', :lib => 'sunspot'
+  config.gem 'sunspot_rails', :lib => 'sunspot/rails'
     
 Install the gems with:
 
@@ -31,7 +29,7 @@ Install the gems with:
 
 If you are using an older version of Rails that doesn't support plugins-as-gems, install the gems manually and install the plugin:
 
-  sudo gem install outoftime-sunspot outoftime-sunspot_rails --source=http://gems.github.com
+  sudo gem install sunspot sunspot_rails --source=http://gems.github.com
   
   script/plugin install git://github.com/outoftime/sunspot_rails.git
   
