@@ -32,18 +32,17 @@ describe Sunspot::Rails::Configuration, "default values" do
   end
 
   it "should handle the 'data_path' property when not set" do
-    config = Sunspot::Rails::Configuration.new
-    config.data_path.should == File.dirname(__FILE__) + '/mock_app/solr/data/test'
+    Rails.should_receive(:root).at_least(1).and_return('/some/path')
+    @config.data_path.should == '/some/path/solr/data/test'
   end
 
   it "should handle the 'pid_path' property when not set" do
-    config = Sunspot::Rails::Configuration.new
-    config.pid_path.should == File.dirname(__FILE__) + '/mock_app/solr/pids/test'
+    Rails.should_receive(:root).at_least(1).and_return('/some/path')
+    @config.pid_path.should == '/some/path/solr/pids/test'
   end
   
   it "should handle the 'solr_home' property when not set" do
-    config = Sunspot::Rails::Configuration.new
-    config.solr_home.should == nil
+    @config.solr_home.should_not == nil
   end
 
   it "should handle the 'auto_commit_after_request' propery when not set" do
@@ -54,16 +53,15 @@ end
 describe Sunspot::Rails::Configuration, "user settings" do
   before(:each) do
     ::Rails.stub!(:env => 'config_test')
+    @config = Sunspot::Rails::Configuration.new
   end
 
   it "should handle the 'hostname' property when set" do
-    config = Sunspot::Rails::Configuration.new
-    config.hostname.should == 'some.host'
+    @config.hostname.should == 'some.host'
   end
 
   it "should handle the 'port' property when set" do
-    config = Sunspot::Rails::Configuration.new
-    config.port.should == 1234
+    @config.port.should == 1234
   end
   
   it "should handle the 'path' property when set" do
@@ -75,22 +73,19 @@ describe Sunspot::Rails::Configuration, "user settings" do
   end
   
   it "should handle the 'solr_home' propery when set" do
-    @config.solr_home.should == '/another/path/solr'
+    @config.solr_home.should == '/my_superior_path'
   end
 
   it "should handle the 'data_path' property when set" do
-    config = Sunspot::Rails::Configuration.new
-    config.data_path.should == '/my_superior_path/data'
+    @config.data_path.should == '/my_superior_path/data'
   end
 
   it "should handle the 'pid_path' property when set" do
-    config = Sunspot::Rails::Configuration.new
-    config.pid_path.should == '/my_superior_path/pids'
+    @config.pid_path.should == '/my_superior_path/pids'
   end
   
   it "should handle the 'solr_home' property when set" do
-    config = Sunspot::Rails::Configuration.new
-    config.solr_home.should == '/my_superior_path'
+    @config.solr_home.should == '/my_superior_path'
   end
 
   it "should handle the 'auto_commit_after_request' propery when set" do

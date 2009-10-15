@@ -34,6 +34,9 @@ module Sunspot #:nodoc:
         #   Automatically remove models from the Solr index when they are
         #   destroyed. <b>Setting this option to +false+ is not recommended
         #   </b>(see the README).
+        # :ignore_attribute_changes_of<Array>::
+        #   Define attributes, that should not trigger a reindex of that
+        #   object. Usual suspects are update_at or counters.
         #
         # ==== Example
         #
@@ -54,10 +57,12 @@ module Sunspot #:nodoc:
           unless searchable?
             extend ClassMethods
             include InstanceMethods
-
+            
+            Sunspot::Rails::Util.sunspot_options[self.to_s.underscore.to_sym] = options
+            
             unless options[:auto_index] == false
               after_save do |searchable|
-                searchable.index
+                searchable.index if Sunspot::Rails::Util.index_relevant_attribute_changed?( searchable )
               end
             end
 

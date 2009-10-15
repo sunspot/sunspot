@@ -3,7 +3,7 @@ class PostWithAuto < ActiveRecord::Base
     'posts'
   end
 
-  searchable do
+  searchable :ignore_attribute_changes_of => [ :updated_at ] do
     string :title
   end
 end

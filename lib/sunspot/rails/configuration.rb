@@ -177,7 +177,7 @@ module Sunspot #:nodoc:
         @solr_home ||=
           if user_configuration_from_key('solr', 'solr_home')
             user_configuration_from_key('solr', 'solr_home')
-          elsif %w(solrconfig schema).all? { |file| File.exist?(File.join(::Rails.root, 'solr', 'conf', "#{file}.xml")) }
+          else
             File.join(::Rails.root, 'solr')
           end
       end

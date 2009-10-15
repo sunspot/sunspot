@@ -70,6 +70,17 @@ module Sunspot #:nodoc:
         def data_path
           File.join( solr_home, 'data', ::Rails.env )
         end
+
+        # 
+        # Directory to store custom libraries for solr
+        #
+        # ==== Returns
+        #
+        # String:: lib_path
+        #
+        def lib_path
+          File.join( solr_home, 'lib' )
+        end
         
         # 
         # Directory to store pid files
@@ -91,7 +102,7 @@ module Sunspot #:nodoc:
         # Boolean:: success
         #
         def bootstrap
-          create_solr_directories and create_solr_configuration_files
+          create_solr_directories and create_solr_configuration_files and copy_custom_solr_libraries
         end
         
         # 
@@ -116,7 +127,7 @@ module Sunspot #:nodoc:
         # Array:: sunspot_start_command
         #
         def start_command
-          [ SUNSPOT_EXECUTABLE, 'start', '--', '-p', port.to_s, '-d', data_path, '-s', solr_home, '-l', log_level, '-lf', log_file ]
+          [ SUNSPOT_EXECUTABLE, 'start', '-p', port.to_s, '-d', data_path, '-s', solr_home, '-l', log_level, '--log-file', log_file ]
         end
 
         #
@@ -180,8 +191,22 @@ module Sunspot #:nodoc:
         # Boolean:: success
         #
         def create_solr_directories
-          [ solr_home, config_path, data_path, pid_path ].each do |path|
+          [ solr_home, config_path, data_path, pid_path, lib_path ].each do |path|
             FileUtils.mkdir_p( path )
+          end
+        end
+        
+        #
+        # Copy custom solr libraries (like localsolr) to the
+        # lib directory
+        #
+        # ==== Returns
+        # 
+        # Boolean:: success
+        #
+        def copy_custom_solr_libraries
+          Dir.glob( File.join( Sunspot::Configuration.solr_default_configuration_location, '..', 'lib', '*.jar') ).each do |jar_file|
+            FileUtils.cp( jar_file, lib_path )
           end
         end
         

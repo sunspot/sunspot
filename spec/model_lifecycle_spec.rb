@@ -25,7 +25,7 @@ describe 'searchable with lifecycle' do
       PostWithAuto.search { with :title, 'Test 1' }.results.should == [@post]
     end
   end
-
+  
   describe 'on destroy' do
     before :each do
       @post = PostWithAuto.create
@@ -36,5 +36,18 @@ describe 'searchable with lifecycle' do
     it 'should automatically remove it from the index' do
       PostWithAuto.search_ids.should be_empty
     end
+  end
+end
+
+describe 'searchable with lifecycle - ignoring specific attributes' do
+  integrate_sunspot
+  
+  before(:each) do
+    @post = PostWithAuto.create
+  end
+  
+  it "should not reindex the object on an update_at change, because it is marked as to-ignore" do
+    Sunspot::Rails.session.should_not_receive(:index).with(@post)
+    @post.update_attribute :updated_at, 123.seconds.from_now
   end
 end

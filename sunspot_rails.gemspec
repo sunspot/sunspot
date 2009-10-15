@@ -10,7 +10,17 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown", "Peer Allan", "Michael Moen", "Benjamin Krause"]
   s.date = %q{2009-10-08}
+<<<<<<< HEAD
   s.description = %q{Rails integration for the Sunspot Solr search library}
+=======
+  s.description = %q{Sunspot::Rails is an extension to the Sunspot library for Solr search.
+Sunspot::Rails adds integration between Sunspot and ActiveRecord, including
+defining search and indexing related methods on ActiveRecord models themselves,
+running a Sunspot-compatible Solr instance for development and test
+environments, and automatically commit Solr index changes at the end of each
+Rails request.
+}
+>>>>>>> 5a1f661c4e676fcd795c2a11e0824137236daf1e
   s.email = %q{mat@patch.com}
   s.extra_rdoc_files = [
     "LICENSE",

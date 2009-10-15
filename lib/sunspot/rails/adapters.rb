@@ -19,6 +19,9 @@ module Sunspot #:nodoc:
       end
 
       class ActiveRecordDataAccessor < Sunspot::Adapters::DataAccessor
+        # options for the find
+        attr_accessor :include
+        
         # 
         # Get one ActiveRecord instance out of the database by ID
         #
@@ -31,7 +34,7 @@ module Sunspot #:nodoc:
         # ActiveRecord::Base:: ActiveRecord model
         # 
         def load(id)
-          @clazz.find(id.to_i)
+          @clazz.find(id.to_i, :include => (@include || []))
         end
 
         # 
@@ -46,7 +49,7 @@ module Sunspot #:nodoc:
         # Array:: Collection of ActiveRecord models
         #
         def load_all(ids)
-          @clazz.find(ids.map { |id| id.to_i })
+          @clazz.find(ids.map { |id| id.to_i }, :include => (@include || []))
         end
       end
     end
