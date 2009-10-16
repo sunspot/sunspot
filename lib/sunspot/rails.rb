@@ -26,6 +26,25 @@ module Sunspot #:nodoc:
             session
           end
       end
+
+      def master_session
+        @master_session ||=
+          if @configuration.has_master?
+            master_session = Sunspot::Session.new
+            master_session.config.solr.url = URI::HTTP.build(
+              :host => configuration.master_hostname,
+              :port => configuration.port,
+              :path => configuration.path
+            ).to_s
+            master_session
+          else
+            session
+          end
+      end
+
+      def reset
+        @master_session = @session = @configuration = nil
+      end
     end
   end
 end

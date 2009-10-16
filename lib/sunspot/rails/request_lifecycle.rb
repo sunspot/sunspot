@@ -9,7 +9,9 @@ module Sunspot #:nodoc:
       class <<self
         def included(base) #:nodoc:
           base.after_filter do
-            Sunspot::Rails.session.commit_if_dirty if Sunspot::Rails.configuration.auto_commit_after_request?
+            if Sunspot::Rails.configuration.auto_commit_after_request?
+              Sunspot::Rails.master_session.commit_if_dirty
+            end
           end
         end
       end

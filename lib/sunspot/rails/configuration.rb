@@ -21,11 +21,19 @@ module Sunspot #:nodoc:
     #       path: /solr/myindex
     #       log_level: WARNING
     #       solr_home: /some/path
+    #     master_solr:
+    #       hostname: localhost
+    #       port: 8982
+    #       path: /solr
     #     auto_commit_after_request: true
     #
     # Sunspot::Rails uses the configuration to set up the Solr connection, as
     # well as for starting Solr with the appropriate port using the
     # <code>rake sunspot:solr:start</code> task.
+    #
+    # If the <code>master_solr</code> configuration is present, Sunspot will use
+    # the Solr instance specified here for all write operations, and the Solr
+    # configured under <code>solr</code> for all read operations.
     #
     class Configuration
       attr_writer :user_configuration
@@ -106,8 +114,11 @@ module Sunspot #:nodoc:
       #
       # Boolean:: bool
       #
-      def master?
-        master_hostname != hostname || master_port != port || master_path != path
+      def has_master?
+        unless defined?(@has_master)
+          @has_master = !!user_configuration_from_key('master_solr')
+        end
+        @has_master
       end
 
       # 
