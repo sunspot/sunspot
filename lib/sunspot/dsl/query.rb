@@ -97,6 +97,26 @@ module Sunspot
         @query.paginate(page, per_page)
       end
 
+      # Adjust or reset the parameters passed to solr. The adjustment
+      # will take place just before talking to solr, after all other
+      # dsl-commands have modified the query parameters.
+      #
+      # Please bear in mind, that you are changing the parameters that
+      # will be passed to solr, and will not be checked for validity
+      # by sunspot.
+      #
+      # ==== Example
+      #
+      #   Sunspot.search(Post) do
+      #     adjust_solr_params do |params|
+      #       params[:q] += ' AND something_s:more'
+      #     end
+      #   end
+      # 
+      def adjust_solr_params( &block )
+        @query.set_solr_parameter_adjustment( block )
+      end
+
       # 
       # Scope the search by geographical distance from a given point.
       # +coordinates+ should either respond to #first and #last (e.g. a
