@@ -11,6 +11,8 @@ module Sunspot #:nodoc:
           base.after_filter do
             if Sunspot::Rails.configuration.auto_commit_after_request?
               Sunspot::Rails.master_session.commit_if_dirty
+            elsif Sunspot::Rails.configuration.auto_commit_after_delete_request?
+              Sunspot::Rails.master_session.commit_if_delete_dirty
             end
           end
         end

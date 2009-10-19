@@ -138,10 +138,28 @@ module Sunspot #:nodoc:
       # Should the solr index receive a commit after each http-request.
       # Default true
       #
+      # ==== Returns
+      # 
+      # Boolean: auto_commit_after_request?
+      #
       def auto_commit_after_request?
         @auto_commit_after_request ||= 
           user_configuration_from_key('auto_commit_after_request') != false
       end
+      
+      #
+      # As for #auto_commit_after_request? but only for deletes
+      # Default false
+      #
+      # ==== Returns
+      # 
+      # Boolean: auto_commit_after_delete_request?
+      #
+      def auto_commit_after_delete_request?
+        @auto_commit_after_delete_request ||= 
+          (user_configuration_from_key('auto_commit_after_delete_request') || false)
+      end
+      
       
       #
       # The log directory for solr logfiles
@@ -162,19 +180,6 @@ module Sunspot #:nodoc:
         @pids_path ||= user_configuration_from_key('solr', 'pid_path') || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
       end
       
-      #
-      # Should the solr index receive a commit after each http-request.
-      # Default true
-      #
-      # ==== Returns
-      #
-      # Boolean:: bool
-      #
-      def auto_commit_after_request?
-        @auto_commit_after_request ||= 
-          user_configuration_from_key('auto_commit_after_request') != false
-      end
-
       # 
       # The solr home directory. Sunspot::Rails expects this directory
       # to contain a config, data and pids directory. See 
