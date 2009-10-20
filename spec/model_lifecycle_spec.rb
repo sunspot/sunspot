@@ -6,7 +6,7 @@ describe 'searchable with lifecycle' do
   describe 'on create' do
     before :each do
       @post = PostWithAuto.create
-      Sunspot::Rails.session.commit
+      Sunspot.commit
     end
 
     it 'should automatically index' do
@@ -18,7 +18,7 @@ describe 'searchable with lifecycle' do
     before :each do
       @post = PostWithAuto.create
       @post.update_attributes(:title => 'Test 1')
-      Sunspot::Rails.session.commit
+      Sunspot.commit
     end
 
     it 'should automatically update index' do
@@ -30,7 +30,7 @@ describe 'searchable with lifecycle' do
     before :each do
       @post = PostWithAuto.create
       @post.destroy
-      Sunspot::Rails.session.commit
+      Sunspot.commit
     end
 
     it 'should automatically remove it from the index' do
@@ -47,7 +47,7 @@ describe 'searchable with lifecycle - ignoring specific attributes' do
   end
   
   it "should not reindex the object on an update_at change, because it is marked as to-ignore" do
-    Sunspot::Rails.session.should_not_receive(:index).with(@post)
+    Sunspot.should_not_receive(:index).with(@post)
     @post.update_attribute :updated_at, 123.seconds.from_now
   end
 end

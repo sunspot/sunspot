@@ -1,7 +1,10 @@
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_ROOT'] ||= File.join(File.dirname(__FILE__), 'mock_app')
 
-gem 'sunspot'
+if File.exist?(sunspot_lib = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'sunspot', 'lib')))
+  STDERR.puts("Using sunspot lib at #{sunspot_lib}")
+  $: << sunspot_lib
+end
 
 require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'))
 
@@ -29,8 +32,8 @@ end
 Spec::Runner.configure do |config|
   config.before(:each) do
     if integrate_sunspot?
-      Sunspot::Rails.session.remove_all
-      Sunspot::Rails.session.commit
+      Sunspot.remove_all
+      Sunspot.commit
     end
     load_schema
   end

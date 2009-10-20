@@ -4,6 +4,11 @@ require 'rake/rdoctask'
 
 task :default => :spec
 
+if File.exist?(sunspot_lib = File.expand_path(File.join(File.dirname(__FILE__), '..', 'sunspot', 'lib')))
+  STDERR.puts("Using sunspot lib at #{sunspot_lib}")
+  $: << sunspot_lib
+end
+
 desc 'Run all specs'
 Spec::Rake::SpecTask.new(:spec) do |t|
   t.spec_files = FileList['spec/*_spec.rb']

@@ -14,7 +14,7 @@ describe 'ActiveRecord mixin' do
     end
 
     it 'should index the model' do
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       Post.search.results.should == [@post]
     end
   end
@@ -42,7 +42,7 @@ describe 'ActiveRecord mixin' do
     end
 
     it 'should remove the model from the index' do
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       Post.search.results.should be_empty
     end
   end
@@ -61,8 +61,8 @@ describe 'ActiveRecord mixin' do
 
   describe 'remove_all_from_index' do
     before :each do
-      @posts = Array.new(10) { Post.create! }.each { |post| Sunspot::Rails.session.index(post) }
-      Sunspot::Rails.session.commit
+      @posts = Array.new(10) { Post.create! }.each { |post| Sunspot.index(post) }
+      Sunspot.commit
       Post.remove_all_from_index
     end
 
@@ -71,15 +71,15 @@ describe 'ActiveRecord mixin' do
     end
 
     it 'should remove all instances from the index' do
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       Post.search.results.should be_empty
     end
   end
 
   describe 'remove_all_from_index!' do
     before :each do
-      Array.new(10) { Post.create! }.each { |post| Sunspot::Rails.session.index(post) }
-      Sunspot::Rails.session.commit
+      Array.new(10) { Post.create! }.each { |post| Sunspot.index(post) }
+      Sunspot.commit
       Post.remove_all_from_index!
     end
 
@@ -125,7 +125,7 @@ describe 'ActiveRecord mixin' do
   describe 'search_ids()' do
     before :each do
       @posts = Array.new(2) { Post.create! }.each { |post| post.index }
-      Sunspot::Rails.session.commit
+      Sunspot.commit
     end
 
     it 'should return IDs' do
@@ -146,7 +146,7 @@ describe 'ActiveRecord mixin' do
   describe 'index_orphans()' do
     before :each do
       @posts = Array.new(2) { Post.create }.each { |post| post.index }
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       @posts.first.destroy
     end
 
@@ -158,13 +158,13 @@ describe 'ActiveRecord mixin' do
   describe 'clean_index_orphans()' do
     before :each do
       @posts = Array.new(2) { Post.create }.each { |post| post.index }
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       @posts.first.destroy
     end
 
     it 'should remove orphans from the index' do
       Post.clean_index_orphans
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       Post.search.results.should == [@posts.last]
     end
   end
@@ -176,7 +176,7 @@ describe 'ActiveRecord mixin' do
 
     it 'should index all instances' do
       Post.reindex(:batch_size => nil)
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
 
@@ -185,7 +185,7 @@ describe 'ActiveRecord mixin' do
       old_post.index!
       old_post.destroy
       Post.reindex
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
     
@@ -198,7 +198,7 @@ describe 'ActiveRecord mixin' do
 
     it 'should index all instances' do
       Post.reindex(:batch_size => nil)
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
 
@@ -207,14 +207,14 @@ describe 'ActiveRecord mixin' do
       old_post.index!
       old_post.destroy
       Post.reindex
-      Sunspot::Rails.session.commit
+      Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
     
     describe "using batch sizes" do
       it 'should index with a specified batch size' do
         Post.reindex(:batch_size => 1)
-        Sunspot::Rails.session.commit
+        Sunspot.commit
         Post.search.results.to_set.should == @posts.to_set
       end
     end
@@ -284,12 +284,12 @@ describe 'ActiveRecord mixin' do
       end
 
       it "should commit after indexing each batch" do
-        Sunspot::Rails.session.should_receive(:commit).twice
+        Sunspot.should_receive(:commit).twice
         Post.reindex(:batch_size => 5)
       end
 
       it "should commit after indexing everything" do
-        Sunspot::Rails.session.should_receive(:commit).once
+        Sunspot.should_receive(:commit).once
         Post.reindex(:batch_commit => false)
       end
       
