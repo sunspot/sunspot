@@ -97,6 +97,30 @@ module Sunspot
         @query.paginate(page, per_page)
       end
 
+      # <strong>Expert:</strong> Adjust or reset the parameters passed to Solr.
+      # The adjustment will take place just before sending the params to solr,
+      # after Sunspot builds the Solr params based on the methods called in the
+      # DSL.
+      #
+      # Under normal circumstances, using this method should not be necessary;
+      # if you find that it is, please consider submitting a feature request.
+      # Using this method requires knowledge of Sunspot's internal Solr schema
+      # and Solr query representations, which are not part of Sunspot's public
+      # API; they could change at any time. <strong>This method is unsupported
+      # and your mileage may vary.</strong>
+      #
+      # ==== Example
+      #
+      #   Sunspot.search(Post) do
+      #     adjust_solr_params do |params|
+      #       params[:q] += ' AND something_s:more'
+      #     end
+      #   end
+      # 
+      def adjust_solr_params( &block )
+        @query.set_solr_parameter_adjustment( block )
+      end
+
       # 
       # Scope the search by geographical distance from a given point.
       # +coordinates+ should either respond to #first and #last (e.g. a
