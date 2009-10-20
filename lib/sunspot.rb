@@ -323,7 +323,7 @@ module Sunspot
     #
     # objects...<Object>:: Objects to remove from the index
     #
-    def remove!
+    def remove!(*objects)
       session.remove!(*objects)
     end
 
