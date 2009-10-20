@@ -38,7 +38,16 @@ module Sunspot
   NoSetupError = Class.new(Exception)
   IllegalSearchError = Class.new(Exception)
 
+
   class <<self
+    # 
+    # Clients can inject a session proxy, allowing them to implement custom
+    # session-management logic while retaining the Sunspot singleton API as
+    # an available interface. The object assigned to this attribute must
+    # respond to all of the public methods of the Sunspot::Session class.
+    #
+    attr_writer :session
+
     # Configures indexing and search for a given class.
     #
     # ==== Parameters
