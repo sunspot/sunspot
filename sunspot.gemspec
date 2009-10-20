@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot}
-  s.version = "0.10.3"
+  s.version = "0.10.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown", "Peer Allan", "Dmitriy Dzema", "Benjamin Krause", "Marcel de Graaf", "Brandon Keepers", "Peter Berkenbosch", "Brian Atkinson", "Tom Coleman"]
-  s.date = %q{2009-10-15}
+  s.date = %q{2009-10-20}
   s.description = %q{Sunspot is a library providing a powerful, all-ruby API for the Solr search engine. Sunspot manages the configuration of persistent Ruby classes for search and indexing and exposes Solr's most powerful features through a collection of DSLs. Complex search operations can be performed without hand-writing any boolean queries or building Solr parameters by hand.
 }
   s.email = %q{mat@patch.com}
@@ -107,6 +107,7 @@ Gem::Specification.new do |s|
      "spec/api/indexer/removal_spec.rb",
      "spec/api/indexer/spec_helper.rb",
      "spec/api/indexer_spec.rb",
+     "spec/api/query/adjust_params_spec.rb",
      "spec/api/query/connectives_spec.rb",
      "spec/api/query/dsl_spec.rb",
      "spec/api/query/dynamic_fields_spec.rb",
@@ -212,6 +213,7 @@ Gem::Specification.new do |s|
      "spec/api/query/spec_helper.rb",
      "spec/api/query/faceting_spec.rb",
      "spec/api/query/connectives_spec.rb",
+     "spec/api/query/adjust_params_spec.rb",
      "spec/api/query/local_spec.rb",
      "spec/api/query/highlighting_spec.rb",
      "spec/api/query/ordering_pagination_spec.rb",
