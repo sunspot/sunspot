@@ -97,13 +97,17 @@ module Sunspot
         @query.paginate(page, per_page)
       end
 
-      # Adjust or reset the parameters passed to solr. The adjustment
-      # will take place just before talking to solr, after all other
-      # dsl-commands have modified the query parameters.
+      # <strong>Expert:</strong> Adjust or reset the parameters passed to Solr.
+      # The adjustment will take place just before sending the params to solr,
+      # after Sunspot builds the Solr params based on the methods called in the
+      # DSL.
       #
-      # Please bear in mind, that you are changing the parameters that
-      # will be passed to solr, and will not be checked for validity
-      # by sunspot.
+      # Under normal circumstances, using this method should not be necessary;
+      # if you find that it is, please consider submitting a feature request.
+      # Using this method requires knowledge of Sunspot's internal Solr schema
+      # and Solr query representations, which are not part of Sunspot's public
+      # API; they could change at any time. <strong>This method is unsupported
+      # and your mileage may vary.</strong>
       #
       # ==== Example
       #
