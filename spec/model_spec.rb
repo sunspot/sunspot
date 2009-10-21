@@ -120,6 +120,21 @@ describe 'ActiveRecord mixin' do
         data_accessor_for(Post).include = [:blog]
       end.results.should == [@post]
     end
+    
+    it 'should use the select option on the data accessor when specified' do
+      Post.should_receive(:find).with(anything(), hash_including(:select => 'title, published_at')).and_return([@post])
+      Post.search do
+        with :title, 'Test Post'
+        data_accessor_for(Post).select = [:title, :published_at]
+      end.results.should == [@post]
+    end
+    
+    it 'should not use the select option on the data accessor when not specified' do
+      Post.should_receive(:find).with(anything(), hash_not_including(:select)).and_return([@post])
+      Post.search do
+        with :title, 'Test Post'
+      end.results.should == [@post]
+    end
   end
 
   describe 'search_ids()' do

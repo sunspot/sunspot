@@ -20,7 +20,20 @@ module Sunspot #:nodoc:
 
       class ActiveRecordDataAccessor < Sunspot::Adapters::DataAccessor
         # options for the find
-        attr_accessor :include
+        attr_accessor :include, :select
+
+        #
+        # Set the fields to select from the database. This will be passed
+        # to ActiveRecord.
+        #
+        # ==== Parameters
+        #
+        # value<Mixed>:: String of comma-separated columns or array of columns
+        #
+        def select=(value)
+          value = value.join(', ') if value.respond_to?(:join)
+          @select = value
+        end
         
         # 
         # Get one ActiveRecord instance out of the database by ID
@@ -34,7 +47,7 @@ module Sunspot #:nodoc:
         # ActiveRecord::Base:: ActiveRecord model
         # 
         def load(id)
-          @clazz.find(id.to_i, :include => (@include || []))
+          @clazz.find(id.to_i, options_for_find)
         end
 
         # 
@@ -49,7 +62,16 @@ module Sunspot #:nodoc:
         # Array:: Collection of ActiveRecord models
         #
         def load_all(ids)
-          @clazz.find(ids.map { |id| id.to_i }, :include => (@include || []))
+          @clazz.find(ids.map { |id| id.to_i }, options_for_find)
+        end
+        
+        private
+        
+        def options_for_find
+          returning({}) do |options|
+            options[:include] = @include unless @include.blank?
+            options[:select]  =  @select unless  @select.blank?
+          end
         end
       end
     end
