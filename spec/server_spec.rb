@@ -98,7 +98,7 @@ describe Sunspot::Rails::Server do
       Sunspot::Rails::Server.should_respond_to_and_receive(:log_level).and_return('LOG')
       Sunspot::Rails::Server.should_respond_to_and_receive(:log_file).and_return('log_file')
       Sunspot::Rails::Server.send(:run_command).should == \
-          [ 'sunspot-solr', 'run', '--', '-p', '1', '-d', 'data', '-s', 'home', '-l', 'LOG', '-lf', 'log_file' ]
+          [ 'sunspot-solr', 'run', '-p', '1', '-d', 'data', '-s', 'home', '-l', 'LOG', '-lf', 'log_file' ]
     end
 
     it "should generate the path for config files" do
