@@ -29,7 +29,7 @@ module Sunspot #:nodoc:
 
       def master_session
         @master_session ||=
-          if @configuration.has_master?
+          if configuration.has_master?
             master_session = Sunspot::Session.new
             master_session.config.solr.url = URI::HTTP.build(
               :host => configuration.master_hostname,
