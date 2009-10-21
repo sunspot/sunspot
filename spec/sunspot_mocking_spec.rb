@@ -4,6 +4,7 @@ describe 'Sunspot Spec Integration - integrate sunspot' do
   integrate_sunspot
   
   it "should call sunspot" do
+    Sunspot::Rails.reset
     @post = PostWithAuto.create!
     Sunspot::Rails.session.commit
     PostWithAuto.search.results.should == [@post]
@@ -11,7 +12,7 @@ describe 'Sunspot Spec Integration - integrate sunspot' do
 end
 
 describe 'Sunspot Spec Integration - mock sunspot' do
-  it "should call sunspot" do
+  it "should not call sunspot" do
     Sunspot::Rails.session.remove_all
     Sunspot::Rails.session.commit
     @post = PostWithAuto.create!

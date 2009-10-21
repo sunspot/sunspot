@@ -43,7 +43,7 @@ module Sunspot #:nodoc:
       end
 
       def reset
-        @master_session = @session = @configuration = nil
+        @master_session = @configuration = nil
       end
     end
   end

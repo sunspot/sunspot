@@ -15,7 +15,7 @@ module Sunspot
         
         def mock_sunspot
           [ :index, :remove_from_index ].each do |method_name|
-            Sunspot::Rails.session.stub!(method_name)
+            Sunspot::Rails.master_session.stub!(method_name)
           end
         end
         
