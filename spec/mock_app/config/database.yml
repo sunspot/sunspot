@@ -1,4 +1,4 @@
 test: &test
   :adapter: sqlite3
-  :dbfile: db/test.db
+  :database: db/test.db
 development: *test
