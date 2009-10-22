@@ -49,10 +49,14 @@ module Sunspot
     #   If no field with that name is configured for any of the enclosed types.
     #
     def text_fields(field_name)
-      text_fields_hash[field_name.to_sym] || raise(
-        UnrecognizedFieldError,
-        "No text field configured for #{@types * ', '} with name '#{field_name}'"
-      )
+      if text_fields = text_fields_hash[field_name.to_sym]
+        text_fields.to_a
+      else
+        raise(
+          UnrecognizedFieldError,
+          "No text field configured for #{@types * ', '} with name '#{field_name}'"
+        )
+      end
     end
 
     # 

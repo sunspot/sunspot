@@ -48,6 +48,15 @@ describe 'highlighted fulltext queries', :type => :query do
     connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_texts))
   end
 
+  it 'should enable highlighting on multiple fields for multiple search types' do
+    session.search(Post, Namespaced::Comment) do
+      keywords 'test' do
+        highlight :body
+      end
+    end
+    connection.searches.last[:'hl.fl'].to_set.should == Set['body_text', 'body_texts']
+  end
+
   it 'should raise UnrecognizedFieldError if try to highlight unexisting field via block call' do
     lambda {
       session.search(Post) do

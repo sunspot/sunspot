@@ -1,3 +1,6 @@
+== 0.10.5 2009-10-22
+* Fix highlighting for multiple-model search
+
 == 0.10.4 2009-10-20
 * Add adjust_params method, allowing experts to manually edit Solr params
 * Track adds and deletes separately in session, and expose delete_dirty? method
