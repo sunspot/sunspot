@@ -19,12 +19,14 @@ end
 working_directory = FileUtils.pwd
 solr_install = File.expand_path(File.join(File.dirname(__FILE__), '..', 'solr'))
 
-port      = '8983'
-data_dir  = File.expand_path(File.join(Dir.tmpdir, 'solr_data'))
-solr_home = File.join(solr_install, 'solr')
-pid_dir   = working_directory
-log_file  = nil
-log_level = 'OFF'
+port        = '8983'
+data_dir    = File.expand_path(File.join(Dir.tmpdir, 'solr_data'))
+solr_home   = File.join(solr_install, 'solr')
+pid_dir     = working_directory
+log_file    = nil
+log_level   = 'OFF'
+min_memory  = '128m'
+max_memory  = '512m'
 
 OptionParser.new do |opts|
   opts.banner = "Usage: sunspot-solr start [options]"
@@ -52,6 +54,14 @@ OptionParser.new do |opts|
   opts.on '--log-file=LOG_FILE', 'Path to Solr log file' do |lf|
     log_file = File.expand_path(lf)
   end
+  
+  opts.on '--max-memory=MEMORY', 'Specify the maximum size of the memory allocation pool' do |mm|
+    max_memory = mm
+  end
+  
+  opts.on '--min-memory=MEMORY', 'Specify the initial size of the memory allocation pool' do |mm|
+    min_memory = mm
+  end
 end.parse!
 
 options = { :dir_mode => :normal, :dir => pid_dir }
@@ -72,6 +82,8 @@ end
 Daemons.run_proc('sunspot-solr', options) do
   FileUtils.cd(solr_install) do
     args = ['java']
+    args << "-Xms#{min_memory}"
+    args << "-Xmx#{max_memory}"
     args << "-Djetty.port=#{port}" if port
     args << "-Dsolr.data.dir=#{data_dir}" if data_dir
     args << "-Dsolr.solr.home=#{solr_home}" if solr_home
