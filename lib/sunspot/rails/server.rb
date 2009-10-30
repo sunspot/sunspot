@@ -7,7 +7,7 @@ module Sunspot #:nodoc:
     class Server
       
       class << self
-        delegate :log_file, :log_level, :port, :solr_home, :to => :configuration
+        delegate :log_file, :log_level, :port, :solr_home, :data_path, :pid_path, :to => :configuration
         
         # Name of the sunspot executable (shell script)
         SUNSPOT_EXECUTABLE = (RUBY_PLATFORM =~ /w(in)?32$/ ? 'sunspot-solr.bat' : 'sunspot-solr')
@@ -59,17 +59,6 @@ module Sunspot #:nodoc:
         def config_path
           File.join( solr_home, 'conf' )
         end
-        
-        # 
-        # Directory to store lucene index data files
-        #
-        # ==== Returns
-        #
-        # String:: data_path
-        #
-        def data_path
-          File.join( solr_home, 'data', ::Rails.env )
-        end
 
         # 
         # Directory to store custom libraries for solr
@@ -80,17 +69,6 @@ module Sunspot #:nodoc:
         #
         def lib_path
           File.join( solr_home, 'lib' )
-        end
-        
-        # 
-        # Directory to store pid files
-        #
-        # ==== Returns
-        #
-        # String:: pid_path
-        #
-        def pid_path
-          File.join( solr_home, 'pids', ::Rails.env )
         end
         
         #
