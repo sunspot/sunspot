@@ -34,6 +34,22 @@ module Sunspot
       #   If true, perform keyword highlighting on all searched fields. If an
       #   array of field names, perform highlighting on the specified fields.
       #   This can also be called from within the fulltext block.
+      # :minimum_match<Integer>::
+      #   The minimum number of search terms that a result must match. By
+      #   default, all search terms must match; if the number of search terms
+      #   is less than this number, the default behavior applies.
+      # :tie<Float>::
+      #   A tiebreaker coefficient for scores derived from subqueries that are
+      #   lower-scoring than the maximum score subquery. Typically a near-zero
+      #   value is useful. See
+      #   http://wiki.apache.org/solr/DisMaxRequestHandler#tie_.28Tie_breaker.29
+      #   for more information.
+      # :query_phrase_slop<Integer>::
+      #   The number of words that can appear between the words in a
+      #   user-entered phrase (i.e., keywords in quotes) and still match. For
+      #   instance, in a search for "\"great pizza\"" with a phrase slop of 1,
+      #   "great pizza" and "great big pizza" will match, but "great monster of
+      #   a pizza" will not. Default behavior is a query phrase slop of zero.
       #
       def fulltext(keywords, options = {}, &block)
         if keywords && !(keywords.to_s =~ /^\s*$/)
@@ -44,6 +60,15 @@ module Sunspot
                 fulltext_query.add_fulltext_field(field, field.default_boost)
               end
             end
+          end
+          if minimum_match = options.delete(:minimum_match)
+            fulltext_query.minimum_match = minimum_match.to_i
+          end
+          if tie = options.delete(:tie)
+            fulltext_query.tie = tie.to_f
+          end
+          if query_phrase_slop = options.delete(:query_phrase_slop)
+            fulltext_query.query_phrase_slop = query_phrase_slop.to_i
           end
           if highlight_field_names = options.delete(:highlight)
             if highlight_field_names == true

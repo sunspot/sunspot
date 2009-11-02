@@ -145,4 +145,87 @@ describe 'keyword search' do
       search.hits[0].score.should > search.hits[1].score
     end
   end
+
+  describe 'minimum match' do
+    before do
+      Sunspot.remove_all
+      @posts = [
+        Post.new(:title => 'Pepperoni Sausage Anchovies'),
+        Post.new(:title => 'Pepperoni Tomatoes Mushrooms')
+      ]
+      Sunspot.index!(@posts)
+      @search = Sunspot.search(Post) do
+        keywords 'pepperoni sausage extra cheese', :minimum_match => 2
+      end
+    end
+
+    it 'should match documents that contain the minimum_match number of search terms' do
+      @search.results.should include(@posts[0])
+    end
+
+    it 'should not match documents that do not contain the minimum_match number of search terms' do
+      @search.results.should_not include(@posts[1])
+    end
+  end
+
+  describe 'query phrase slop' do
+    before do
+      Sunspot.remove_all
+      @posts = [
+        Post.new(:title => 'One four'),
+        Post.new(:title => 'One three four'),
+        Post.new(:title => 'One two three four')
+      ]
+      Sunspot.index!(@posts)
+      @search = Sunspot.search(Post) do
+        keywords '"one four"', :query_phrase_slop => 1
+      end
+    end
+
+    it 'should match exact phrase' do
+      @search.results.should include(@posts[0])
+    end
+
+    it 'should match phrase divided by query phrase slop terms' do
+      @search.results.should include(@posts[1])
+    end
+
+    it 'should not match phrase divided by more than query phrase slop terms' do
+      @search.results.should_not include(@posts[2])
+    end
+  end
+
+  describe 'phrase field slop' do
+    before do
+      Sunspot.remove_all
+      @comments = [
+        Namespaced::Comment.new(:author_name => 'one four'),
+        Namespaced::Comment.new(:body => 'one four'),
+        Namespaced::Comment.new(:author_name => 'one three four'),
+        Namespaced::Comment.new(:body => 'one three four'),
+        Namespaced::Comment.new(:author_name => 'one two three four'),
+        Namespaced::Comment.new(:body => 'one two three four')
+      ]
+      Sunspot.index!(@comments)
+      @search = Sunspot.search(Namespaced::Comment) do
+        keywords 'one four' do
+          phrase_fields :author_name => 3.0
+          phrase_slop 1
+        end
+      end
+      @sorted_hits = @search.hits.sort_by { |hit| @comments.index(hit.instance) }
+    end
+
+    it 'should give phrase field boost to exact match' do
+      @sorted_hits[0].score.should > @sorted_hits[1].score
+    end
+
+    it 'should give phrase field boost to match within slop' do
+      @sorted_hits[2].score.should > @sorted_hits[3].score
+    end
+
+    it 'should not give phrase field boost to match beyond slop' do
+      @sorted_hits[4].score.should == @sorted_hits[5].score
+    end
+  end
 end

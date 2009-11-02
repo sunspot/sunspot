@@ -124,6 +124,15 @@ describe 'fulltext query', :type => :query do
     connection.should have_last_search_with(:pf => 'title_text^1.5')
   end
 
+  it 'sets phrase slop from DSL' do
+    session.search Post do
+      keywords 'great pizza' do
+        phrase_slop 2
+      end
+    end
+    connection.should have_last_search_with(:ps => 2)
+  end
+
   it 'sets boost for certain fields without restricting fields' do
     session.search Post do
       keywords 'great pizza' do
@@ -174,6 +183,48 @@ describe 'fulltext query', :type => :query do
       end
     end
     connection.should have_last_search_with(:bq => 'average_rating_f:[2\.0 TO *]^2.0')
+  end
+
+  it 'sends minimum match parameter from options' do
+    session.search Post do
+      keywords 'great pizza', :minimum_match => 2
+    end
+    connection.should have_last_search_with(:mm => 2)
+  end
+
+  it 'sends minimum match parameter from DSL' do
+    session.search Post do
+      keywords('great pizza') { minimum_match(2) }
+    end
+    connection.should have_last_search_with(:mm => 2)
+  end
+
+  it 'sends tiebreaker parameter from options' do
+    session.search Post do
+      keywords 'great pizza', :tie => 0.1
+    end
+    connection.should have_last_search_with(:tie => 0.1)
+  end
+
+  it 'sends tiebreaker parameter from DSL' do
+    session.search Post do
+      keywords('great pizza') { tie(0.1) }
+    end
+    connection.should have_last_search_with(:tie => 0.1)
+  end
+
+  it 'sends query phrase slop from options' do
+    session.search Post do
+      keywords 'great pizza', :query_phrase_slop => 2
+    end
+    connection.should have_last_search_with(:qs => 2)
+  end
+
+  it 'sends query phrase slop from DSL' do
+    session.search Post do
+      keywords('great pizza') { query_phrase_slop(2) }
+    end
+    connection.should have_last_search_with(:qs => 2)
   end
 
   it 'allows specification of a text field that only exists in one type' do

@@ -1,6 +1,8 @@
 module Sunspot
   module Query
     class Dismax
+      attr_writer :minimum_match, :phrase_slop, :query_phrase_slop, :tie
+
       def initialize(keywords)
         @keywords = keywords
         @fulltext_fields = {}
@@ -19,6 +21,18 @@ module Sunspot
         end
         if @boost_query
           params[:bq] = @boost_query.to_boolean_phrase
+        end
+        if @minimum_match
+          params[:mm] = @minimum_match
+        end
+        if @phrase_slop
+          params[:ps] = @phrase_slop
+        end
+        if @query_phrase_slop
+          params[:qs] = @query_phrase_slop
+        end
+        if @tie
+          params[:tie] = @tie
         end
         if @highlight
           Sunspot::Util.deep_merge!(params, @highlight.to_params)

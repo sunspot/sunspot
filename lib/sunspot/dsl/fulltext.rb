@@ -116,6 +116,17 @@ module Sunspot
       end
 
       # 
+      # The maximum number of words that can appear between search terms for a
+      # field to qualify for phrase field boost. See #query_phrase_slop for
+      # examples. Phrase slop is only meaningful if phrase fields are specified
+      # (see #phrase_fields), and it does not have an effect on which results
+      # are returned; only on what their respective boosts are.
+      #
+      def phrase_slop(slop)
+        @query.phrase_slop = slop
+      end
+
+      # 
       # Boost queries allow specification of an arbitrary scope for which
       # matching documents should receive an extra boost. The block is evaluated
       # in the usual scope DSL, and field names are attribute fields, not text
@@ -158,6 +169,37 @@ module Sunspot
             @query.add_fulltext_field(field, boost)
           end
         end
+      end
+      
+      #
+      # The minimum number of search terms that a result must match. By
+      # default, all search terms must match; if the number of search terms
+      # is less than this number, the default behavior applies.
+      #
+      def minimum_match(minimum_match)
+        @query.minimum_match = minimum_match
+      end
+
+      #
+      # The number of words that can appear between the words in a
+      # user-entered phrase (i.e., keywords in quotes) and still match. For
+      # instance, in a search for "\"great pizza\"" with a query phrase slop of
+      # 1, "great pizza" and "great big pizza" will match, but "great monster of
+      # a pizza" will not. Default behavior is a query phrase slop of zero.
+      #
+      def query_phrase_slop(slop)
+        @query.query_phrase_slop = slop
+      end
+
+      #
+      # A tiebreaker coefficient for scores derived from subqueries that are
+      # lower-scoring than the maximum score subquery. Typically a near-zero
+      # value is useful. See
+      # http://wiki.apache.org/solr/DisMaxRequestHandler#tie_.28Tie_breaker.29
+      # for more information.
+      #
+      def tie(tie)
+        @query.tie = tie
       end
 
       def fields_added? #:nodoc:

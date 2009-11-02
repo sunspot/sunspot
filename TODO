@@ -1,5 +1,4 @@
 === 0.10.x ===
-* Add support for :mm, :tie, :qs params
 * Support multiple boost queries
 * Allow "any" and "empty" options for facets
 * Allow exclusion of fields from fulltext search
