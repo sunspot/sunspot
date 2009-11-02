@@ -1,5 +1,4 @@
 === 0.10.x ===
-* Support multiple boost queries
 * Allow "any" and "empty" options for facets
 * Allow exclusion of fields from fulltext search
 * Allow coordinates to be specified with block in setup

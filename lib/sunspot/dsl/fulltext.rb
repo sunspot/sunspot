@@ -132,6 +132,9 @@ module Sunspot
       # in the usual scope DSL, and field names are attribute fields, not text
       # fields, as in other scope.
       #
+      # This method can be called more than once for different boost queries
+      # with different boosts.
+      #
       # === Example
       #
       #   Sunspot.search(Post) do

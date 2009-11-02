@@ -128,21 +128,35 @@ describe 'keyword search' do
       Sunspot.index!(
         @posts = [
           Post.new(:title => 'Rhino', :featured => true),
-          Post.new(:title => 'Rhino', :featured => false)
+          Post.new(:title => 'Rhino', :ratings_average => 3.3),
+          Post.new(:title => 'Rhino')
         ]
       )
     end
 
-    it 'should assign a higher boost to the document matching the boost query' do
-      search = Sunspot.search(Post) do
-        keywords('rhino') do
+    it 'should assign a higher score to the document matching the boost query' do
+      search = Sunspot.search(Post) do |query|
+        query.keywords('rhino') do
           boost(2.0) do
             with(:featured, true)
           end
         end
+        query.without(@posts[1])
+      end
+      search.results.should == [@posts[0], @posts[2]]
+      search.hits[0].score.should > search.hits[1].score
+    end
+
+    it 'should assign scores in order of multiple boost query match' do
+      search = Sunspot.search(Post) do
+        keywords 'rhino' do
+          boost(2.0) { with(:featured, true) }
+          boost(1.5) { with(:average_rating).greater_than(3.0) }
+        end
       end
       search.results.should == @posts
       search.hits[0].score.should > search.hits[1].score
+      search.hits[1].score.should > search.hits[2].score
     end
   end
 

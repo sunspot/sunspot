@@ -182,7 +182,26 @@ describe 'fulltext query', :type => :query do
         end
       end
     end
-    connection.should have_last_search_with(:bq => 'average_rating_f:[2\.0 TO *]^2.0')
+    connection.should have_last_search_with(:bq => ['average_rating_f:[2\.0 TO *]^2.0'])
+  end
+
+  it 'creates multiple boost queries' do
+    session.search Post do
+      keywords 'great pizza' do
+        boost(2.0) do
+          with(:average_rating).greater_than(2.0)
+        end
+        boost(1.5) do
+          with(:featured, true)
+        end
+      end
+    end
+    connection.should have_last_search_with(
+      :bq => [
+        'average_rating_f:[2\.0 TO *]^2.0',
+        'featured_b:true^1.5'
+      ]
+    )
   end
 
   it 'sends minimum match parameter from options' do
