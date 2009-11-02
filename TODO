@@ -1,11 +1,17 @@
-=== 0.10 ===
-* Wrap everything into :q parameter when local search performed
-* Allow boosting without field constraints
+=== 0.10.x ===
+* Add support for :mm, :tie, :qs params
+* Support multiple boost queries
+* Allow "any" and "empty" options for facets
+* Allow exclusion of fields from fulltext search
 * Allow coordinates to be specified with block in setup
-=== 0.11 ===
+* Allow calling of #highlight multiple times, with different params
+* Hit#highlights should always return non-nil array
+* Assumed inconsistency
 * Support all operations in batches. Make it smart.
   * Don't use more than one commits when one is equivalent
   * Preserve adds/deletes that are done after last commit
   * Don't do adds and deletes for the same document out of order
   * Don't do more than one add for the same document
   * Do use as few requests as possible within those constraints
+=== Future ===
+* Support Solr functions (e.g. dismax :bf)
