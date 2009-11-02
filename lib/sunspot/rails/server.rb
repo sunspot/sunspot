@@ -149,7 +149,7 @@ module Sunspot #:nodoc:
         # Array:: run_command
         #
         def run_command
-          [ SUNSPOT_EXECUTABLE, 'run' ]
+          [ SUNSPOT_EXECUTABLE, 'run', '-p', port.to_s, '-d', data_path, '-s', solr_home, '-l', log_level, '-lf', log_file ]
         end
         
         #

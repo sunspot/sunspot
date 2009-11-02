@@ -115,10 +115,7 @@ module Sunspot #:nodoc:
       # Boolean:: bool
       #
       def has_master?
-        unless defined?(@has_master)
-          @has_master = !!user_configuration_from_key('master_solr')
-        end
-        @has_master
+        @has_master = !!user_configuration_from_key('master_solr')
       end
 
       # 

@@ -14,6 +14,7 @@ describe 'Sunspot::Rails session' do
 
   def with_configuration(options)
     original_configuration = Sunspot::Rails.configuration
+    Sunspot::Rails.reset
     Sunspot::Rails.configuration = Sunspot::Rails::Configuration.new
     Sunspot::Rails.configuration.user_configuration = options
     yield
