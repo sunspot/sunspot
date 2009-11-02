@@ -10,8 +10,8 @@ module Sunspot
     class QueryFacetRow < Connective::Conjunction #:nodoc:
       attr_reader :label
 
-      def initialize(label, setup)
-        super(setup)
+      def initialize(label)
+        super()
         @label = label
       end
     end

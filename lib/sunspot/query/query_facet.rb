@@ -17,8 +17,8 @@ module Sunspot
       attr_reader :field #:nodoc:
       attr_reader :options #:nodoc:
 
-      def initialize(name, options, setup = nil) #:nodoc:
-        @name, @options, @setup = name, options, setup
+      def initialize(name, options = {}) #:nodoc:
+        @name, @options = name, options
         @components = []
       end
 
@@ -38,7 +38,7 @@ module Sunspot
       # QueryFacetRow:: QueryFacetRow object containing scope for this row
       #
       def add_row(label)
-        @components << row = QueryFacetRow.new(label, @setup)
+        @components << row = QueryFacetRow.new(label)
         row
       end
 
