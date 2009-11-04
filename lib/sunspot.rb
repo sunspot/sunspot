@@ -1,6 +1,7 @@
+require 'set'
+require 'time'
+require 'date'
 begin
-  require 'time'
-  require 'date'
   require 'rsolr'
 rescue LoadError
   require 'rubygems'
