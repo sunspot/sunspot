@@ -81,6 +81,26 @@ describe 'faceting', :type => :search do
     facet_values(result, :class).should == [Post, Namespaced::Comment]
   end
 
+  it 'should return special :any facet' do
+    stub_query_facet(
+      'category_ids_im:[* TO *]' => 3
+    )
+    search = session.search(Post) { facet(:category_ids, :extra => :any) }
+    row = search.facet(:category_ids).rows.first
+    row.value.should == :any
+    row.count.should == 3
+  end
+
+  it 'should return special :none facet' do
+    stub_query_facet(
+      '-category_ids_im:[* TO *]' => 3
+    )
+    search = session.search(Post) { facet(:category_ids, :extra => :none) }
+    row = search.facet(:category_ids).rows.first
+    row.value.should == :none
+    row.count.should == 3
+  end
+
   it 'should return date range facet' do
     stub_date_facet(:published_at_d, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
     start_time = Time.utc(2009, 7, 7, 4)

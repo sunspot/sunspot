@@ -46,6 +46,7 @@ describe 'search faceting' do
       facet_values.each_with_index do |value, i|
         i.times { Sunspot.index(Post.new(:title => value, :blog_id => 1)) }
       end
+      Sunspot.index(Post.new(:blog_id => 1))
       Sunspot.index(Post.new(:title => 'zero', :blog_id => 2))
       Sunspot.commit
     end
@@ -95,6 +96,24 @@ describe 'search faceting' do
         facet :title, :sort => :count
       end
       search.facet(:title).rows.map { |row| row.value }.should == %w(four three two one)
+    end
+
+    it 'should return :all facet' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :extra => :any
+      end
+      search.facet(:title).rows.first.value.should == :any
+      search.facet(:title).rows.first.count.should == 10
+    end
+
+    it 'should return :none facet' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :extra => :none
+      end
+      search.facet(:title).rows.first.value.should == :none
+      search.facet(:title).rows.first.count.should == 1
     end
   end
 

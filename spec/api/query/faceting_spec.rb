@@ -77,6 +77,28 @@ describe 'faceting' do
       end
       connection.should have_last_search_with(:"f.category_ids_im.facet.mincount" => 1)
     end
+
+    it 'sends a query facet for :any extra' do
+      session.search Post do
+        facet :category_ids, :extra => :any
+      end
+      connection.should have_last_search_with(:"facet.query" => "category_ids_im:[* TO *]")
+    end
+
+    it 'sends a query facet for :none extra' do
+      session.search Post do
+        facet :category_ids, :extra => :none
+      end
+      connection.should have_last_search_with(:"facet.query" => "-category_ids_im:[* TO *]")
+    end
+
+    it 'raises an ArgumentError if bogus extra is passed' do
+      lambda do
+        session.search Post do
+          facet :category_ids, :extra => :bogus
+        end
+      end.should raise_error(ArgumentError)
+    end
   end
 
   describe 'on time ranges' do

@@ -2,24 +2,23 @@ require 'enumerator'
 
 module Sunspot
   class Search
-    class FieldFacet
+    class FieldFacet < QueryFacet
       include FacetInstancePopulator
 
       def initialize(field, search)
-        @field, @search = field, search
-      end
-
-      def field_name
-        @field.name
+        super(field.name, search, {}, field)
       end
 
       def rows
         @rows ||=
           begin
-            data = @search.facet_response['facet_fields'][@field.indexed_name]
-            rows = []
-            data.each_slice(2) do |value, count|
-              rows << FacetRow.new(@field.cast(value), count, self)
+            rows = super
+            if @search.facet_response['facet_fields']
+              if data = @search.facet_response['facet_fields'][@field.indexed_name]
+                data.each_slice(2) do |value, count|
+                  rows << FacetRow.new(@field.cast(value), count, self)
+                end
+              end
             end
             rows
           end

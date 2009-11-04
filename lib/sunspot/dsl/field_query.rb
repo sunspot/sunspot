@@ -58,6 +58,12 @@ module Sunspot
       # :zeros<Boolean>::
       #   Return facet rows for which there are no matches (equivalent to
       #   :minimum_count => 0). Default is false.
+      # :extra<Symbol,Array>::
+      #   One or more of :any and :none. :any returns a facet row with a count
+      #   of all matching documents that have some value for this field. :none
+      #   returns a facet row with a count of all matching documents that have
+      #   no value for this field. The facet row(s) corresponding to the extras
+      #   have a value of the symbol passed.
       #
       def facet(*field_names, &block)
         options = Sunspot::Util.extract_options_from(field_names)
@@ -87,22 +93,47 @@ module Sunspot
           end
         else
           field_names.each do |field_name|
+            search_facet = nil
             field = @setup.field(field_name)
             facet =
               if options[:time_range]
-                unless [Sunspot::Type::DateType, Sunspot::Type::TimeType].include?(field.type)
+                unless field.type == Sunspot::Type::TimeType
                   raise(
                     ArgumentError,
                     ':time_range can only be specified for Date or Time fields'
                   )
                 end
-                @search.add_date_facet(field, options)
+                search_facet = @search.add_date_facet(field, options)
                 Sunspot::Query::DateFieldFacet.new(field, options)
               else
-                @search.add_field_facet(field)
+                search_facet = @search.add_field_facet(field)
                 Sunspot::Query::FieldFacet.new(field, options)
               end
             @query.add_field_facet(facet)
+            Array(options[:extra]).each do |extra|
+              extra_facet = Sunspot::Query::QueryFacet.new
+              case extra
+              when :any
+                extra_facet.add_negated_restriction(
+                  field,
+                  Sunspot::Query::Restriction::EqualTo,
+                  nil
+                )
+              when :none
+                extra_facet.add_restriction(
+                  field,
+                  Sunspot::Query::Restriction::EqualTo,
+                  nil
+                )
+              else
+                raise(
+                  ArgumentError,
+                  "Allowed values for :extra are :any and :none"
+                )
+              end
+              search_facet.add_row(extra, extra_facet.to_boolean_phrase)
+              @query.add_query_facet(extra_facet)
+            end
           end
         end
       end

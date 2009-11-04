@@ -1,4 +1,4 @@
-%w(facet_instance_populator field_facet date_facet query_facet facet_row hit
+%w(facet_instance_populator query_facet field_facet date_facet facet_row hit
    highlight).each do |file|
   require File.join(File.dirname(__FILE__), 'search', file)
 end
