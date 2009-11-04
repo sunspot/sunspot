@@ -682,9 +682,7 @@
   </queryResponseWriter> 
 
 
-  <!-- example of registering a query parser
   <queryParser name="lucene" class="org.apache.solr.search.LuceneQParserPlugin"/>
-  -->
 
   <!-- example of registering a custom function parser 
   <valueSourceParser name="myfunc" class="com.mycompany.MyValueSourceParser" />
@@ -715,6 +713,7 @@
     <str name='lngField'>long</str>
   </searchComponent>
   <requestHandler class='org.apache.solr.handler.component.SearchHandler' name='geo'>
+    <str name="defType">lucene</str>
     <arr name='components'>
       <str>localsolr</str>
       <str>facet</str>

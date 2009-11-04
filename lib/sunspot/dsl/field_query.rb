@@ -6,8 +6,8 @@ module Sunspot
     # query DSL.
     #
     class FieldQuery < Scope
-      def initialize(query, setup)
-        @query = query
+      def initialize(search, query, setup)
+        @search, @query = search, query
         super(query.scope, setup)
       end
 
@@ -60,37 +60,57 @@ module Sunspot
       #   :minimum_count => 0). Default is false.
       #
       def facet(*field_names, &block)
+        options = Sunspot::Util.extract_options_from(field_names)
+
         if block
-          options =
-            if field_names.last.is_a?(Hash)
-              field_names.pop
-            else
-              {}
-            end
           if field_names.length != 1
             raise(
               ArgumentError,
               "wrong number of arguments (#{field_names.length} for 1)"
             )
           end
-          name = field_names.first
-          DSL::QueryFacet.new(@query.add_query_facet(name, options), @setup).instance_eval(&block)
-        else
-          options = 
-            if field_names.last.is_a?(Hash)
-              field_names.pop
-            else
-              {}
+          search_facet = @search.add_query_facet(field_names.first, options)
+          Sunspot::Util.instance_eval_or_call(
+            QueryFacet.new(@query, @setup, search_facet),
+            &block
+          )
+        elsif options[:only]
+          field_names.each do |field_name|
+            field = @setup.field(field_name)
+            search_facet = @search.add_query_facet(field.name, options, field)
+            Array(options[:only]).each do |value|
+              facet = Sunspot::Query::QueryFacet.new
+              facet.add_restriction(field, Sunspot::Query::Restriction::EqualTo, value)
+              @query.add_query_facet(facet)
+              search_facet.add_row(value, facet.to_boolean_phrase)
             end
-          for field_name in field_names
-            @query.add_field_facet(@setup.field(field_name), options)
+          end
+        else
+          field_names.each do |field_name|
+            field = @setup.field(field_name)
+            facet =
+              if options[:time_range]
+                unless [Sunspot::Type::DateType, Sunspot::Type::TimeType].include?(field.type)
+                  raise(
+                    ArgumentError,
+                    ':time_range can only be specified for Date or Time fields'
+                  )
+                end
+                @search.add_date_facet(field, options)
+                Sunspot::Query::DateFieldFacet.new(field, options)
+              else
+                @search.add_field_facet(field)
+                Sunspot::Query::FieldFacet.new(field, options)
+              end
+            @query.add_field_facet(facet)
           end
         end
       end
 
       def dynamic(base_name, &block)
+        dynamic_field_factory = @setup.dynamic_field_factory(base_name)
         Sunspot::Util.instance_eval_or_call(
-          FieldQuery.new(@query, @setup.dynamic_field_factory(base_name)),
+          FieldQuery.new(@search, @query, dynamic_field_factory),
           &block
         )
       end

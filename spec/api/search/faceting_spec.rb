@@ -91,6 +91,16 @@ describe 'faceting', :type => :search do
     facet.rows.last.value.should == ((start_time+24*60*60)..end_time)
   end
 
+  it 'should return date range facet sorted by count' do
+    stub_date_facet(:published_at_d, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
+    start_time = Time.utc(2009, 7, 7, 4)
+    end_time = start_time + 2*24*60*60
+    result = session.search(Post) { facet(:published_at, :time_range => start_time..end_time, :sort => :count) }
+    facet = result.facet(:published_at)
+    facet.rows.first.value.should == ((start_time+24*60*60)..end_time)
+    facet.rows.last.value.should == (start_time..(start_time+24*60*60))
+  end
+
   it 'returns query facet' do
     stub_query_facet(
       'average_rating_f:[3\.0 TO 5\.0]' => 3,

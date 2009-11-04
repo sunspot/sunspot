@@ -8,7 +8,7 @@ module Sunspot
     class Search < Query
       def initialize(search, setup) #:nodoc:
         @search = search
-        super(search.query, setup)
+        super(search, search.query, setup)
       end
 
       # 

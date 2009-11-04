@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'faceting' do
   describe 'on fields' do
     it 'does not turn faceting on if no facet requested' do

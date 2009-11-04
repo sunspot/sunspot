@@ -5,9 +5,8 @@ module Sunspot
 
       def initialize(types)
         @scope = Scope.new
-        @field_facets = []
-        @query_facets = {}
         @sort = SortComposite.new
+        @components = []
         if types.length == 1
           @scope.add_restriction(TypeField.instance, Restriction::EqualTo, types.first)
         else
@@ -27,21 +26,18 @@ module Sunspot
         @local = Local.new(coordinates, radius)
       end
 
-      def add_field_facet(field, options = {})
-        facet = FieldFacet.build(field, options)
-        if facet.is_a?(QueryFacet)
-          @query_facets[field.name.to_sym] = facet
-        else
-          @field_facets << facet
-        end
-      end
-
-      def add_query_facet(name, options = {})
-        @query_facets[name.to_sym] = QueryFacet.new(name, options)
-      end
-
       def add_sort(sort)
         @sort << sort
+      end
+
+      def add_field_facet(facet)
+        @components << facet
+        facet
+      end
+
+      def add_query_facet(facet)
+        @components << facet
+        facet
       end
 
       def paginate(page, per_page)
@@ -67,15 +63,12 @@ module Sunspot
             @scope.to_params
           end
         Sunspot::Util.deep_merge!(params, @fulltext.to_params) if @fulltext
-        @field_facets.each do |facet|
-          Sunspot::Util.deep_merge!(params, facet.to_params)
-        end
-        @query_facets.values.each do |facet|
-          Sunspot::Util.deep_merge!(params, facet.to_params)
-        end
         Sunspot::Util.deep_merge!(params, @sort.to_params)
         Sunspot::Util.deep_merge!(params, @pagination.to_params) if @pagination
         Sunspot::Util.deep_merge!(params, @local.to_params) if @local
+        @components.each do |component|
+          Sunspot::Util.deep_merge!(params, component.to_params)
+        end
         @parameter_adjustment.call(params) if @parameter_adjustment
         params[:q] ||= '*:*'
         params
@@ -87,10 +80,6 @@ module Sunspot
 
       def per_page
         @pagination.per_page if @pagination
-      end
-
-      def query_facet(name)
-        @query_facets[name] if @query_facets
       end
     end
   end

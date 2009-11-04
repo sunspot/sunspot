@@ -87,6 +87,14 @@ module Sunspot
         end
       end
 
+      def extract_options_from(args)
+        if args.last.is_a?(Hash)
+          args.pop
+        else
+          {}
+        end
+      end
+
       # 
       # Perform a deep merge of hashes, returning the result as a new hash.
       # See #deep_merge_into for rules used to merge the hashes
