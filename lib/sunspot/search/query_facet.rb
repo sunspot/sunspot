@@ -27,30 +27,35 @@ module Sunspot
                 rows << FacetRow.new(requested_facet.label, count, self)
               end
             end
-            case @options[:sort] || (:count if @options[:limit])
-            when :count
-              rows.sort! { |lrow, rrow| rrow.count <=> lrow.count }
-            when :lexical
-              rows.sort! do |lrow, rrow|
-                if lrow.respond_to?(:<=>)
-                  lrow.value <=> rrow.value
-                elsif lrow.respond_to?(:first) && rrow.respond_to?(:first) && lrow.first.respond_to?(:<=>)
-                  lrow.first.value <=> rrow.first.value
-                else
-                  lrow.value.to_s <=> rrow.value.to_s
-                end
-              end
-            end
-            if @options[:limit]
-              rows.slice(0, @options[:limit])
-            else
-              rows
-            end
+            sort_rows!(rows)
           end
       end
 
       def add_row(label, boolean_phrase) #:nodoc:
         @requested_facets << RequestedFacet.new(label, boolean_phrase)
+      end
+
+      private
+
+      def sort_rows!(rows)
+        case @options[:sort] || (:count if @options[:limit])
+        when :count
+          rows.sort! { |lrow, rrow| rrow.count <=> lrow.count }
+        when :lexical
+          rows.sort! do |lrow, rrow|
+            if lrow.respond_to?(:<=>)
+              lrow.value <=> rrow.value
+            elsif lrow.respond_to?(:first) && rrow.respond_to?(:first) && lrow.first.respond_to?(:<=>)
+              lrow.first.value <=> rrow.first.value
+            else
+              lrow.value.to_s <=> rrow.value.to_s
+            end
+          end
+        end
+        if @options[:limit]
+          rows.slice!(@options[:limit], rows.length)
+        end
+        rows
       end
     end
   end

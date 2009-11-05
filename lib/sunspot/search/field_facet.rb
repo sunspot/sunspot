@@ -12,6 +12,7 @@ module Sunspot
         @rows ||=
           begin
             rows = super
+            has_query_facets = !rows.empty?
             if @search.facet_response['facet_fields']
               if data = @search.facet_response['facet_fields'][@field.indexed_name]
                 data.each_slice(2) do |value, count|
@@ -19,6 +20,7 @@ module Sunspot
                 end
               end
             end
+            sort_rows!(rows) if has_query_facets
             rows
           end
       end
