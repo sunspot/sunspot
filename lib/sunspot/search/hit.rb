@@ -64,11 +64,7 @@ module Sunspot
       #   The name of the field for which to retrieve the stored value.
       #
       def stored(field_name)
-        @stored_cache[field_name.to_sym] ||=
-          begin
-            field = setup.field(field_name)
-            field.cast(@stored_values[field.indexed_name])
-          end
+        @stored_cache[field_name.to_sym] ||= stored_value(field_name)
       end
 
       # 
@@ -107,6 +103,14 @@ module Sunspot
             end
             cache
           end
+      end
+
+      def stored_value(field_name)
+        setup.stored_fields(field_name).each do |field|
+          if value = @stored_values[field.indexed_name]
+            return field.cast(value)
+          end
+        end
       end
     end
   end

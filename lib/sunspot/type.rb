@@ -33,6 +33,10 @@ module Sunspot
         def to_indexed(value) #:nodoc:
           value.to_s if value
         end
+
+        def cast(text)
+          text
+        end
       end
     end
 

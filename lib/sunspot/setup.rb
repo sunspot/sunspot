@@ -10,6 +10,7 @@ module Sunspot
       @field_factories, @text_field_factories, @dynamic_field_factories,
         @field_factories_cache, @text_field_factories_cache,
         @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
+      @stored_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @dsl = DSL::Fields.new(self)
       add_field_factory(:class, Type::ClassType)
     end
@@ -19,16 +20,16 @@ module Sunspot
     end
 
     # 
-    # Add field_factories for scope/ordering
-    # 
-    # ==== Parameters
-    #
-    # field_factories<Array>:: Array of Sunspot::Field objects
+    # Add field factory for scope/ordering
     #
     def add_field_factory(name, type, options = {}, &block)
+      stored = options[:stored]
       field_factory = FieldFactory::Static.new(name, type, options, &block)
       @field_factories[field_factory.signature] = field_factory
       @field_factories_cache[field_factory.name] = field_factory
+      if stored
+        @stored_field_factories_cache[field_factory.name] << field_factory
+      end
     end
 
     # 
@@ -39,9 +40,13 @@ module Sunspot
     # field_factories<Array>:: Array of Sunspot::Field objects
     #
     def add_text_field_factory(name, options = {}, &block)
+      stored = options[:stored]
       field_factory = FieldFactory::Static.new(name, Type::TextType, options, &block)
       @text_field_factories[name] = field_factory
       @text_field_factories_cache[field_factory.name] = field_factory
+      if stored
+        @stored_field_factories_cache[field_factory.name] << field_factory
+      end
     end
 
     #
@@ -121,6 +126,16 @@ module Sunspot
           )
         end
       [text_field]
+    end
+
+    #
+    # Return one or more stored fields (can be either attribute or text fields)
+    # for the given name.
+    #
+    def stored_fields(field_name)
+      @stored_field_factories_cache[field_name.to_sym].map do |field_factory|
+        field_factory.build
+      end
     end
 
     # 
