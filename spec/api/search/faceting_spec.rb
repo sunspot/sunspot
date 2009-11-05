@@ -148,22 +148,28 @@ describe 'faceting', :type => :search do
       session.search(Post) do
         facet :average_rating, options do
           row(1) { with(:average_rating, 1.0..2.0) }
-          row(2) { with(:average_rating, 2.0..3.0) }
           row(3) { with(:average_rating, 3.0..4.0) }
+          row(2) { with(:average_rating, 2.0..3.0) }
+          row(4) { with(:average_rating, 4.0..5.0) }
         end
       end.facet(:average_rating).rows.map { |row| row.value }
     end
 
     before :each do
       stub_query_facet(
-        'average_rating_f:[1\.0 TO 2\.0]' => 1,
-        'average_rating_f:[2\.0 TO 3\.0]' => 2,
-        'average_rating_f:[3\.0 TO 4\.0]' => 0
+        'average_rating_f:[1\.0 TO 2\.0]' => 2,
+        'average_rating_f:[2\.0 TO 3\.0]' => 3,
+        'average_rating_f:[3\.0 TO 4\.0]' => 1,
+        'average_rating_f:[4\.0 TO 5\.0]' => 0
       )
     end
 
-    it 'sorts lexically by default if no limit is given' do
-      facet_values_from_options.should == [1, 2]
+    it 'sorts in order of specification if no limit is given' do
+      facet_values_from_options.should == [1, 3, 2]
+    end
+
+    it 'sorts lexically if lexical option is specified' do
+      facet_values_from_options(:sort => :index).should == [1, 2, 3]
     end
 
     it 'sorts by count by default if limit is given' do
@@ -171,7 +177,7 @@ describe 'faceting', :type => :search do
     end
 
     it 'sorts by count if count option is specified' do
-      facet_values_from_options(:sort => :count).should == [2, 1]
+      facet_values_from_options(:sort => :count).should == [2, 1, 3]
     end
 
     it 'sorts lexically if lexical option is specified even if limit is given' do
@@ -183,11 +189,11 @@ describe 'faceting', :type => :search do
     end
 
     it 'allows zero count if specified' do
-      facet_values_from_options(:zeros => true).should == [1, 2, 3]
+      facet_values_from_options(:zeros => true).should == [1, 3, 2, 4]
     end
 
     it 'sets minimum count' do
-      facet_values_from_options(:minimum_count => 2).should == [2]
+      facet_values_from_options(:minimum_count => 2).should == [1, 2]
     end
   end
 

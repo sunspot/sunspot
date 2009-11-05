@@ -41,7 +41,7 @@ module Sunspot
         case @options[:sort] || (:count if @options[:limit])
         when :count
           rows.sort! { |lrow, rrow| rrow.count <=> lrow.count }
-        when :lexical
+        when :index
           rows.sort! do |lrow, rrow|
             if lrow.respond_to?(:<=>)
               lrow.value <=> rrow.value
