@@ -5,9 +5,12 @@ module Sunspot
     # handler.
     #
     class Fulltext
+      attr_reader :exclude_fields #:nodoc:
+
       def initialize(query, setup) #:nodoc:
         @query, @setup = query, setup
         @fields_added = false
+        @exclude_fields = []
       end
 
       # 
@@ -44,6 +47,14 @@ module Sunspot
             end
           end
         end
+      end
+
+      # 
+      # Exclude the given fields from the search. All fields that are configured
+      # for the types under search and not listed here will be searched.
+      #
+      def exclude_fields(*field_names)
+        @exclude_fields.concat(field_names)
       end
 
       # 

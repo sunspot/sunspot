@@ -91,7 +91,9 @@ module Sunspot
           if !field_names && (!fulltext_dsl || !fulltext_dsl.fields_added?)
             @setup.all_text_fields.each do |field|
               unless fulltext_query.has_fulltext_field?(field)
-                fulltext_query.add_fulltext_field(field, field.default_boost)
+                unless fulltext_dsl && fulltext_dsl.exclude_fields.include?(field.name)
+                  fulltext_query.add_fulltext_field(field, field.default_boost)
+                end
               end
             end
           end

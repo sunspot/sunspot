@@ -70,6 +70,15 @@ describe 'fulltext query', :type => :query do
     connection.searches.last[:qf].split(' ').sort.should == %w(body_texts title_text)
   end
 
+  it 'excludes text fields when instructed' do
+    session.search Post do
+      keywords 'keyword search' do
+        exclude_fields :backwards_title
+      end
+    end
+    connection.searches.last[:qf].split(' ').sort.should == %w(body_texts title_text)
+  end
+
   it 'assigns boost to fields when specified' do
     session.search Post do
       keywords 'keyword search' do
