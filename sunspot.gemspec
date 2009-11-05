@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot}
-  s.version = "0.10.5"
+  s.version = "0.10.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mat Brown", "Peer Allan", "Dmitriy Dzema", "Benjamin Krause", "Marcel de Graaf", "Brandon Keepers", "Peter Berkenbosch", "Brian Atkinson", "Tom Coleman"]
-  s.date = %q{2009-10-22}
+  s.date = %q{2009-11-05}
   s.description = %q{Sunspot is a library providing a powerful, all-ruby API for the Solr search engine. Sunspot manages the configuration of persistent Ruby classes for search and indexing and exposes Solr's most powerful features through a collection of DSLs. Complex search operations can be performed without hand-writing any boolean queries or building Solr parameters by hand.
 }
   s.email = %q{mat@patch.com}
@@ -41,27 +41,21 @@ Gem::Specification.new do |s|
      "lib/sunspot/dsl/restriction.rb",
      "lib/sunspot/dsl/scope.rb",
      "lib/sunspot/dsl/search.rb",
-     "lib/sunspot/facet.rb",
-     "lib/sunspot/facet_data.rb",
-     "lib/sunspot/facet_row.rb",
      "lib/sunspot/field.rb",
      "lib/sunspot/field_factory.rb",
      "lib/sunspot/indexer.rb",
-     "lib/sunspot/instantiated_facet.rb",
-     "lib/sunspot/instantiated_facet_row.rb",
      "lib/sunspot/query.rb",
+     "lib/sunspot/query/abstract_field_facet.rb",
      "lib/sunspot/query/boost_query.rb",
      "lib/sunspot/query/connective.rb",
+     "lib/sunspot/query/date_field_facet.rb",
      "lib/sunspot/query/dismax.rb",
      "lib/sunspot/query/field_facet.rb",
-     "lib/sunspot/query/fulltext_base_query.rb",
      "lib/sunspot/query/highlighting.rb",
      "lib/sunspot/query/local.rb",
      "lib/sunspot/query/pagination.rb",
      "lib/sunspot/query/query.rb",
      "lib/sunspot/query/query_facet.rb",
-     "lib/sunspot/query/query_facet_row.rb",
-     "lib/sunspot/query/query_field_facet.rb",
      "lib/sunspot/query/restriction.rb",
      "lib/sunspot/query/scope.rb",
      "lib/sunspot/query/sort.rb",
@@ -69,8 +63,12 @@ Gem::Specification.new do |s|
      "lib/sunspot/query/text_field_boost.rb",
      "lib/sunspot/schema.rb",
      "lib/sunspot/search.rb",
+     "lib/sunspot/search/date_facet.rb",
+     "lib/sunspot/search/facet_row.rb",
+     "lib/sunspot/search/field_facet.rb",
      "lib/sunspot/search/highlight.rb",
      "lib/sunspot/search/hit.rb",
+     "lib/sunspot/search/query_facet.rb",
      "lib/sunspot/session.rb",
      "lib/sunspot/setup.rb",
      "lib/sunspot/text_field_setup.rb",
@@ -231,20 +229,20 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<mwmitchell-rsolr>, ["= 0.9.6"])
+      s.add_runtime_dependency(%q<rsolr>, ["= 0.9.6"])
       s.add_runtime_dependency(%q<daemons>, ["~> 1.0"])
       s.add_development_dependency(%q<rspec>, ["~> 1.1"])
       s.add_development_dependency(%q<ruby-debug>, ["~> 0.10"])
       s.add_development_dependency(%q<technicalpickles-jeweler>, ["= 1.2.1"])
     else
-      s.add_dependency(%q<mwmitchell-rsolr>, ["= 0.9.6"])
+      s.add_dependency(%q<rsolr>, ["= 0.9.6"])
       s.add_dependency(%q<daemons>, ["~> 1.0"])
       s.add_dependency(%q<rspec>, ["~> 1.1"])
       s.add_dependency(%q<ruby-debug>, ["~> 0.10"])
       s.add_dependency(%q<technicalpickles-jeweler>, ["= 1.2.1"])
     end
   else
-    s.add_dependency(%q<mwmitchell-rsolr>, ["= 0.9.6"])
+    s.add_dependency(%q<rsolr>, ["= 0.9.6"])
     s.add_dependency(%q<daemons>, ["~> 1.0"])
     s.add_dependency(%q<rspec>, ["~> 1.1"])
     s.add_dependency(%q<ruby-debug>, ["~> 0.10"])
