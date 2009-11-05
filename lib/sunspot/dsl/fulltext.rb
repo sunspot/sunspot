@@ -97,7 +97,7 @@ module Sunspot
         fields = []
         args.each { |field_name| fields.concat(@setup.text_fields(field_name)) }
 
-        @query.set_highlight(fields, options)
+        @query.add_highlight(fields, options)
       end
 
       # 

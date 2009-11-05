@@ -22,21 +22,33 @@ module Sunspot
           params[:"hl.fl"] = @fields.map { |field| field.indexed_name }
         end
         if max_snippets = @options[:max_snippets]
-          params[:"hl.snippets"] = max_snippets
+          params.merge!(make_params('snippets', max_snippets))
         end
         if fragment_size = @options[:fragment_size]
-          params[:"hl.fragsize"] = fragment_size
+          params.merge!(make_params('fragsize', fragment_size))
         end
         if @options[:merge_contiguous_fragments]
-          params[:"hl.mergeContiguous"] = 'true'
+          params.merge!(make_params('mergeContiguous', 'true'))
         end
         if @options[:phrase_highlighter]
-          params[:"hl.usePhraseHighlighter"] = 'true'
+          params.merge!(make_params('usePhraseHighlighter', 'true'))
           if @options[:require_field_match]
-            params[:"hl.requireFieldMatch"] = 'true'
+            params.merge!(make_params('requireFieldMatch', 'true'))
           end
         end
         params
+      end
+
+      private
+
+      def make_params(name, value)
+        if @fields.empty?
+          { :"hl.#{name}" => value }
+        else
+          @fields.inject({}) do |hash, field|
+            hash.merge!(:"f.#{field.indexed_name}.hl.#{name}" => value)
+          end
+        end
       end
     end
   end

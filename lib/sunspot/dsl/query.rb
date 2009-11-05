@@ -72,13 +72,13 @@ module Sunspot
           end
           if highlight_field_names = options.delete(:highlight)
             if highlight_field_names == true
-              fulltext_query.set_highlight
+              fulltext_query.add_highlight
             else
               highlight_fields = []
               Array(highlight_field_names).each do |field_name|
                 highlight_fields.concat(@setup.text_fields(field_name))
               end
-              fulltext_query.set_highlight(highlight_fields)
+              fulltext_query.add_highlight(highlight_fields)
             end
           end
           if block && fulltext_query

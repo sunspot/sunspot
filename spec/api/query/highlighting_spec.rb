@@ -77,15 +77,24 @@ describe 'highlighted fulltext queries', :type => :query do
     )
   end
 
-  it 'should set options and hihglight fields' do
+  it 'should set highlight fields from DSL' do
     session.search(Post) do
       keywords 'test' do
-        highlight :title, :max_snippets => 3
+        highlight :title
       end
     end
     connection.should have_last_search_with(
-      :"hl.fl"       => %w(title_text),
-      :"hl.snippets" => 3
+      :"hl.fl" => %w(title_text)
+    )
+  end
+
+  it 'should not set formatting params specific to fields if fields specified' do
+    session.search(Post) do
+      keywords 'test', :highlight => :body
+    end
+    connection.should have_last_search_with(
+      :"hl.simple.pre" => '@@@hl@@@',
+      :"hl.simple.post" => '@@@endhl@@@'
     )
   end
 
@@ -100,6 +109,18 @@ describe 'highlighted fulltext queries', :type => :query do
     )
   end
 
+  it 'should set max snippets specific to highlight fields' do
+    session.search(Post) do
+      keywords 'test' do
+        highlight :title, :max_snippets => 3
+      end
+    end
+    connection.should have_last_search_with(
+      :"hl.fl"       => %w(title_text),
+      :"f.title_text.hl.snippets" => 3
+    )
+  end
+
   it 'should set the maximum size' do
     session.search(Post) do
       keywords 'text' do
@@ -111,7 +132,18 @@ describe 'highlighted fulltext queries', :type => :query do
     )
   end
 
-  it 'enables merging of continuous fragments' do
+  it 'should set the maximum size for specific fields' do
+    session.search(Post) do
+      keywords 'text' do
+        highlight :title, :fragment_size => 200
+      end
+    end
+    connection.should have_last_search_with(
+      :"f.title_text.hl.fragsize" => 200
+    )
+  end
+
+  it 'enables merging of contiguous fragments' do
     session.search(Post) do
       keywords 'test' do
         highlight :merge_contiguous_fragments => true
@@ -122,7 +154,18 @@ describe 'highlighted fulltext queries', :type => :query do
     )
   end
 
-  it 'enables use of phrase highlighter' do #TODO figure out what the hell this means
+  it 'enables merging of contiguous fragments for specific fields' do
+    session.search(Post) do
+      keywords 'test' do
+        highlight :title, :merge_contiguous_fragments => true
+      end
+    end
+    connection.should have_last_search_with(
+      :"f.title_text.hl.mergeContiguous" => 'true'
+    )
+  end
+
+  it 'enables use of phrase highlighter' do
     session.search(Post) do
       keywords 'test' do
         highlight :phrase_highlighter => true
@@ -130,6 +173,17 @@ describe 'highlighted fulltext queries', :type => :query do
     end
     connection.should have_last_search_with(
       :"hl.usePhraseHighlighter" => 'true'
+    )
+  end
+
+  it 'enables use of phrase highlighter for specific fields' do
+    session.search(Post) do
+      keywords 'test' do
+        highlight :title, :phrase_highlighter => true
+      end
+    end
+    connection.should have_last_search_with(
+      :"f.title_text.hl.usePhraseHighlighter" => 'true'
     )
   end
 
@@ -144,4 +198,28 @@ describe 'highlighted fulltext queries', :type => :query do
     )
   end
 
+  it 'requires field match for specified field if requested' do
+    session.search(Post) do
+      keywords 'test' do
+        highlight :title, :phrase_highlighter => true, :require_field_match => true
+      end
+    end
+    connection.should have_last_search_with(
+      :"f.title_text.hl.requireFieldMatch" => 'true'
+    )
+  end
+
+  it 'sets field specific params for different fields if different params given' do
+    session.search(Post) do
+      keywords 'test' do
+        highlight :title, :max_snippets => 2
+        highlight :body, :max_snippets => 1
+      end
+    end
+    connection.should have_last_search_with(
+      :"hl.fl" => %w(title_text body_texts),
+      :"f.title_text.hl.snippets" => 2,
+      :"f.body_texts.hl.snippets" => 1
+    )
+  end
 end

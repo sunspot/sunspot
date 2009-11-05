@@ -1,7 +1,4 @@
 === 0.10.x ===
-* Allow exclusion of fields from fulltext search
-* Allow coordinates to be specified with block in setup
-* Allow calling of #highlight multiple times, with different params
 * Hit#highlights should always return non-nil array
 * Assumed inconsistency
 * Support all operations in batches. Make it smart.

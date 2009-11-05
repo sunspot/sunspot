@@ -7,6 +7,7 @@ module Sunspot
         @keywords = keywords
         @fulltext_fields = {}
         @boost_queries = []
+        @highlights = []
       end
 
       # 
@@ -37,8 +38,8 @@ module Sunspot
         if @tie
           params[:tie] = @tie
         end
-        if @highlight
-          Sunspot::Util.deep_merge!(params, @highlight.to_params)
+        @highlights.each do |highlight|
+          Sunspot::Util.deep_merge!(params, highlight.to_params)
         end
         params
       end
@@ -71,8 +72,8 @@ module Sunspot
       # Highlighting object won't pass field names at all, which means
       # the dismax's :qf parameter will be used by Solr.
       #
-      def set_highlight(fields=[], options={})
-        @highlight = Highlighting.new(fields, options)
+      def add_highlight(fields=[], options={})
+        @highlights << Highlighting.new(fields, options)
       end
 
       # 
