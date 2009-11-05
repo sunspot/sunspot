@@ -1,5 +1,4 @@
 === 0.10.x ===
-* Hit#highlights should always return non-nil array
 * Assumed inconsistency
 * Support all operations in batches. Make it smart.
   * Don't use more than one commits when one is equivalent

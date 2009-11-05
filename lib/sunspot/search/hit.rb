@@ -49,7 +49,7 @@ module Sunspot
           highlights_cache.values.flatten 
         else
           highlights_cache[field_name.to_sym]
-        end
+        end || []
       end
 
       # 

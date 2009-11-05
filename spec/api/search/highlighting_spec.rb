@@ -21,8 +21,8 @@ describe 'search with highlighting results', :type => :search do
     @search.hits.last.should have(2).highlights(:body)
   end
 
-  it 'returns nil if a given field does not have a highlight' do
-    @search.hits.first.highlights(:body).should be_nil
+  it 'returns an empty array if a given field does not have a highlight' do
+    @search.hits.first.highlights(:body).should == []
   end
 
   it 'should format hits with <em> by default' do
