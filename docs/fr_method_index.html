@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Methods [Sunspot 0.10.2 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>Methods [Sunspot 0.10.6 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <base target='docwin'>
@@ -4331,87 +4331,99 @@
         
         Element.addMethods();
         var search_index = [
-          { method: 'all_of', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000041"><span class="method_name">all_of</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
-          { method: 'any_of', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000040"><span class="method_name">any_of</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
-          { method: 'batch', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000080"><span class="method_name">batch</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'adjust_solr_params', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000027"><span class="method_name">adjust_solr_params</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
+          { method: 'all_of', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000043"><span class="method_name">all_of</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
+          { method: 'any_of', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000042"><span class="method_name">any_of</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
           { method: 'batch', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000013"><span class="method_name">batch</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'boost', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000046"><span class="method_name">boost</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
-          { method: 'boost', module: 'sunspot::dsl::fields', html: '<a href="classes/Sunspot/DSL/Fields.html#M000035"><span class="method_name">boost</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a>' },
-          { method: 'boost_fields', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000047"><span class="method_name">boost_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
-          { method: 'build', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000060"><span class="method_name">build</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'batch', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000093"><span class="method_name">batch</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'boost', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000050"><span class="method_name">boost</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'boost', module: 'sunspot::dsl::fields', html: '<a href="classes/Sunspot/DSL/Fields.html#M000037"><span class="method_name">boost</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a>' },
+          { method: 'boost_fields', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000051"><span class="method_name">boost_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'build', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000064"><span class="method_name">build</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'cast', module: 'sunspot::type::texttype', html: '<a href="classes/Sunspot/Type/TextType.html#M000055"><span class="method_name">cast</span> <span class="module_name">(Sunspot::Type::TextType)</span></a>' },
           { method: 'commit', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000004"><span class="method_name">commit</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'commit', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000071"><span class="method_name">commit</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'commit', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000082"><span class="method_name">commit</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'commit_if_delete_dirty', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000092"><span class="method_name">commit_if_delete_dirty</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'commit_if_delete_dirty', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000017"><span class="method_name">commit_if_delete_dirty</span> <span class="module_name">(Sunspot)</span></a>' },
           { method: 'commit_if_dirty', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000015"><span class="method_name">commit_if_dirty</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'commit_if_dirty', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000079"><span class="method_name">commit_if_dirty</span> <span class="module_name">(Sunspot::Session)</span></a>' },
-          { method: 'config', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000016"><span class="method_name">config</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'coordinates', module: 'sunspot::dsl::fields', html: '<a href="classes/Sunspot/DSL/Fields.html#M000034"><span class="method_name">coordinates</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a>' },
-          { method: 'data_accessor_for', module: 'sunspot::dsl::search', html: '<a href="classes/Sunspot/DSL/Search.html#M000027"><span class="method_name">data_accessor_for</span> <span class="module_name">(Sunspot::DSL::Search)</span></a>' },
+          { method: 'commit_if_dirty', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000090"><span class="method_name">commit_if_dirty</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'config', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000018"><span class="method_name">config</span> <span class="module_name">(Sunspot)</span></a>' },
+          { method: 'coordinates', module: 'sunspot::dsl::fields', html: '<a href="classes/Sunspot/DSL/Fields.html#M000036"><span class="method_name">coordinates</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a>' },
+          { method: 'data_accessor_for', module: 'sunspot::dsl::search', html: '<a href="classes/Sunspot/DSL/Search.html#M000030"><span class="method_name">data_accessor_for</span> <span class="module_name">(Sunspot::DSL::Search)</span></a>' },
+          { method: 'delete_dirty?', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000091"><span class="method_name">delete_dirty?</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'delete_dirty?', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000016"><span class="method_name">delete_dirty?</span> <span class="module_name">(Sunspot)</span></a>' },
           { method: 'dirty?', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000014"><span class="method_name">dirty?</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'dirty?', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000078"><span class="method_name">dirty?</span> <span class="module_name">(Sunspot::Session)</span></a>' },
-          { method: 'dynamic', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000042"><span class="method_name">dynamic</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
-          { method: 'dynamic', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000032"><span class="method_name">dynamic</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
-          { method: 'dynamic_facet', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000059"><span class="method_name">dynamic_facet</span> <span class="module_name">(Sunspot::Search)</span></a>' },
-          { method: 'execute', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000052"><span class="method_name">execute</span> <span class="module_name">(Sunspot::Search)</span></a>' },
-          { method: 'execute!', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000053"><span class="method_name">execute!</span> <span class="module_name">(Sunspot::Search)</span></a>' },
-          { method: 'facet', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000031"><span class="method_name">facet</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
-          { method: 'facet', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000058"><span class="method_name">facet</span> <span class="module_name">(Sunspot::Search)</span></a>' },
-          { method: 'field_name', module: 'sunspot::facet', html: '<a href="classes/Sunspot/Facet.html#M000050"><span class="method_name">field_name</span> <span class="module_name">(Sunspot::Facet)</span></a>' },
-          { method: 'fields', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000043"><span class="method_name">fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
-          { method: 'format', module: 'sunspot::search::highlight', html: '<a href="classes/Sunspot/Search/Highlight.html#M000064"><span class="method_name">format</span> <span class="module_name">(Sunspot::Search::Highlight)</span></a>' },
-          { method: 'formatted', module: 'sunspot::search::highlight', html: '<a href="classes/Sunspot/Search/Highlight.html#M000065"><span class="method_name">formatted</span> <span class="module_name">(Sunspot::Search::Highlight)</span></a>' },
-          { method: 'fulltext', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000022"><span class="method_name">fulltext</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
-          { method: 'highlight', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000044"><span class="method_name">highlight</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
-          { method: 'highlights', module: 'sunspot::search::hit', html: '<a href="classes/Sunspot/Search/Hit.html#M000061"><span class="method_name">highlights</span> <span class="module_name">(Sunspot::Search::Hit)</span></a>' },
-          { method: 'hits', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000055"><span class="method_name">hits</span> <span class="module_name">(Sunspot::Search)</span></a>' },
-          { method: 'index', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000069"><span class="method_name">index</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'dirty?', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000089"><span class="method_name">dirty?</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'dynamic', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000034"><span class="method_name">dynamic</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
+          { method: 'dynamic', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000044"><span class="method_name">dynamic</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
+          { method: 'dynamic_facet', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000063"><span class="method_name">dynamic_facet</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'exclude_fields', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000046"><span class="method_name">exclude_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'execute', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000056"><span class="method_name">execute</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'execute!', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000057"><span class="method_name">execute!</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'facet', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000033"><span class="method_name">facet</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
+          { method: 'facet', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000062"><span class="method_name">facet</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'field_name', module: 'sunspot::search::datefacet', html: '<a href="classes/Sunspot/Search/DateFacet.html#M000073"><span class="method_name">field_name</span> <span class="module_name">(Sunspot::Search::DateFacet)</span></a>' },
+          { method: 'fields', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000045"><span class="method_name">fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'format', module: 'sunspot::search::highlight', html: '<a href="classes/Sunspot/Search/Highlight.html#M000075"><span class="method_name">format</span> <span class="module_name">(Sunspot::Search::Highlight)</span></a>' },
+          { method: 'formatted', module: 'sunspot::search::highlight', html: '<a href="classes/Sunspot/Search/Highlight.html#M000076"><span class="method_name">formatted</span> <span class="module_name">(Sunspot::Search::Highlight)</span></a>' },
+          { method: 'fulltext', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000024"><span class="method_name">fulltext</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
+          { method: 'highlight', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000047"><span class="method_name">highlight</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'highlights', module: 'sunspot::search::hit', html: '<a href="classes/Sunspot/Search/Hit.html#M000069"><span class="method_name">highlights</span> <span class="module_name">(Sunspot::Search::Hit)</span></a>' },
+          { method: 'hits', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000059"><span class="method_name">hits</span> <span class="module_name">(Sunspot::Search)</span></a>' },
           { method: 'index', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000002"><span class="method_name">index</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'index!', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000070"><span class="method_name">index!</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'index', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000080"><span class="method_name">index</span> <span class="module_name">(Sunspot::Session)</span></a>' },
           { method: 'index!', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000003"><span class="method_name">index!</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'instance', module: 'sunspot::search::hit', html: '<a href="classes/Sunspot/Search/Hit.html#M000063"><span class="method_name">instance</span> <span class="module_name">(Sunspot::Search::Hit)</span></a>' },
-          { method: 'instance', module: 'sunspot::instantiatedfacetrow', html: '<a href="classes/Sunspot/InstantiatedFacetRow.html#M000048"><span class="method_name">instance</span> <span class="module_name">(Sunspot::InstantiatedFacetRow)</span></a>' },
-          { method: 'keywords', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000023"><span class="method_name">keywords</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
-          { method: 'load_all', module: 'sunspot::adapters::dataaccessor', html: '<a href="classes/Sunspot/Adapters/DataAccessor.html#M000020"><span class="method_name">load_all</span> <span class="module_name">(Sunspot::Adapters::DataAccessor)</span></a>' },
-          { method: 'method_missing', module: 'sunspot::dsl::fields', html: '<a href="classes/Sunspot/DSL/Fields.html#M000036"><span class="method_name">method_missing</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a>' },
-          { method: 'name', module: 'sunspot::facet', html: '<a href="classes/Sunspot/Facet.html#M000049"><span class="method_name">name</span> <span class="module_name">(Sunspot::Facet)</span></a>' },
-          { method: 'near', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000025"><span class="method_name">near</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
-          { method: 'new', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000066"><span class="method_name">new</span> <span class="module_name">(Sunspot::Session)</span></a>' },
-          { method: 'new', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000028"><span class="method_name">new</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
+          { method: 'index!', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000081"><span class="method_name">index!</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'inspect', module: 'sunspot::search::facetrow', html: '<a href="classes/Sunspot/Search/FacetRow.html#M000067"><span class="method_name">inspect</span> <span class="module_name">(Sunspot::Search::FacetRow)</span></a>' },
+          { method: 'instance', module: 'sunspot::search::facetrow', html: '<a href="classes/Sunspot/Search/FacetRow.html#M000066"><span class="method_name">instance</span> <span class="module_name">(Sunspot::Search::FacetRow)</span></a>' },
+          { method: 'instance', module: 'sunspot::search::hit', html: '<a href="classes/Sunspot/Search/Hit.html#M000071"><span class="method_name">instance</span> <span class="module_name">(Sunspot::Search::Hit)</span></a>' },
+          { method: 'keywords', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000025"><span class="method_name">keywords</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
+          { method: 'load_all', module: 'sunspot::adapters::dataaccessor', html: '<a href="classes/Sunspot/Adapters/DataAccessor.html#M000022"><span class="method_name">load_all</span> <span class="module_name">(Sunspot::Adapters::DataAccessor)</span></a>' },
+          { method: 'method_missing', module: 'sunspot::dsl::fields', html: '<a href="classes/Sunspot/DSL/Fields.html#M000038"><span class="method_name">method_missing</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a>' },
+          { method: 'minimum_match', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000052"><span class="method_name">minimum_match</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'near', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000028"><span class="method_name">near</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
+          { method: 'new', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000077"><span class="method_name">new</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'new', module: 'sunspot::search::datefacet', html: '<a href="classes/Sunspot/Search/DateFacet.html#M000072"><span class="method_name">new</span> <span class="module_name">(Sunspot::Search::DateFacet)</span></a>' },
           { method: 'new_search', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000005"><span class="method_name">new_search</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'new_search', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000067"><span class="method_name">new_search</span> <span class="module_name">(Sunspot::Session)</span></a>' },
-          { method: 'order_by', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000029"><span class="method_name">order_by</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
-          { method: 'order_by_random', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000030"><span class="method_name">order_by_random</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
-          { method: 'paginate', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000024"><span class="method_name">paginate</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
-          { method: 'phrase_fields', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000045"><span class="method_name">phrase_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
-          { method: 'raw_results', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000056"><span class="method_name">raw_results</span> <span class="module_name">(Sunspot::Search)</span></a>' },
-          { method: 'register', module: 'sunspot::adapters::dataaccessor', html: '<a href="classes/Sunspot/Adapters/DataAccessor.html#M000021"><span class="method_name">register</span> <span class="module_name">(Sunspot::Adapters::DataAccessor)</span></a>' },
-          { method: 'register', module: 'sunspot::adapters::instanceadapter', html: '<a href="classes/Sunspot/Adapters/InstanceAdapter.html#M000019"><span class="method_name">register</span> <span class="module_name">(Sunspot::Adapters::InstanceAdapter)</span></a>' },
+          { method: 'new_search', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000078"><span class="method_name">new_search</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'order_by', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000031"><span class="method_name">order_by</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
+          { method: 'order_by_random', module: 'sunspot::dsl::fieldquery', html: '<a href="classes/Sunspot/DSL/FieldQuery.html#M000032"><span class="method_name">order_by_random</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a>' },
+          { method: 'paginate', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000026"><span class="method_name">paginate</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
+          { method: 'phrase_fields', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000048"><span class="method_name">phrase_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'phrase_slop', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000049"><span class="method_name">phrase_slop</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'query_phrase_slop', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000053"><span class="method_name">query_phrase_slop</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'raw_results', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000060"><span class="method_name">raw_results</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'register', module: 'sunspot::adapters::instanceadapter', html: '<a href="classes/Sunspot/Adapters/InstanceAdapter.html#M000021"><span class="method_name">register</span> <span class="module_name">(Sunspot::Adapters::InstanceAdapter)</span></a>' },
+          { method: 'register', module: 'sunspot::adapters::dataaccessor', html: '<a href="classes/Sunspot/Adapters/DataAccessor.html#M000023"><span class="method_name">register</span> <span class="module_name">(Sunspot::Adapters::DataAccessor)</span></a>' },
           { method: 'remove', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000007"><span class="method_name">remove</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'remove', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000072"><span class="method_name">remove</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'remove', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000083"><span class="method_name">remove</span> <span class="module_name">(Sunspot::Session)</span></a>' },
           { method: 'remove!', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000008"><span class="method_name">remove!</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'remove!', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000073"><span class="method_name">remove!</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'remove!', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000084"><span class="method_name">remove!</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'remove_all', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000087"><span class="method_name">remove_all</span> <span class="module_name">(Sunspot::Session)</span></a>' },
           { method: 'remove_all', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000011"><span class="method_name">remove_all</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'remove_all', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000076"><span class="method_name">remove_all</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'remove_all!', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000088"><span class="method_name">remove_all!</span> <span class="module_name">(Sunspot::Session)</span></a>' },
           { method: 'remove_all!', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000012"><span class="method_name">remove_all!</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'remove_all!', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000077"><span class="method_name">remove_all!</span> <span class="module_name">(Sunspot::Session)</span></a>' },
           { method: 'remove_by_id', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000009"><span class="method_name">remove_by_id</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'remove_by_id', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000074"><span class="method_name">remove_by_id</span> <span class="module_name">(Sunspot::Session)</span></a>' },
-          { method: 'remove_by_id!', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000075"><span class="method_name">remove_by_id!</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'remove_by_id', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000085"><span class="method_name">remove_by_id</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'remove_by_id!', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000086"><span class="method_name">remove_by_id!</span> <span class="module_name">(Sunspot::Session)</span></a>' },
           { method: 'remove_by_id!', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000010"><span class="method_name">remove_by_id!</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'reset!', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000017"><span class="method_name">reset!</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'results', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000054"><span class="method_name">results</span> <span class="module_name">(Sunspot::Search)</span></a>' },
-          { method: 'row', module: 'sunspot::dsl::queryfacet', html: '<a href="classes/Sunspot/DSL/QueryFacet.html#M000037"><span class="method_name">row</span> <span class="module_name">(Sunspot::DSL::QueryFacet)</span></a>' },
-          { method: 'rows', module: 'sunspot::facet', html: '<a href="classes/Sunspot/Facet.html#M000051"><span class="method_name">rows</span> <span class="module_name">(Sunspot::Facet)</span></a>' },
-          { method: 'rows', module: 'sunspot::instantiatedfacet', html: '<a href="classes/Sunspot/InstantiatedFacet.html#M000081"><span class="method_name">rows</span> <span class="module_name">(Sunspot::InstantiatedFacet)</span></a>' },
-          { method: 'search', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000068"><span class="method_name">search</span> <span class="module_name">(Sunspot::Session)</span></a>' },
+          { method: 'reset!', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000019"><span class="method_name">reset!</span> <span class="module_name">(Sunspot)</span></a>' },
+          { method: 'results', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000058"><span class="method_name">results</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'row', module: 'sunspot::dsl::queryfacet', html: '<a href="classes/Sunspot/DSL/QueryFacet.html#M000039"><span class="method_name">row</span> <span class="module_name">(Sunspot::DSL::QueryFacet)</span></a>' },
+          { method: 'rows', module: 'sunspot::search::fieldfacet', html: '<a href="classes/Sunspot/Search/FieldFacet.html#M000065"><span class="method_name">rows</span> <span class="module_name">(Sunspot::Search::FieldFacet)</span></a>' },
+          { method: 'rows', module: 'sunspot::search::datefacet', html: '<a href="classes/Sunspot/Search/DateFacet.html#M000074"><span class="method_name">rows</span> <span class="module_name">(Sunspot::Search::DateFacet)</span></a>' },
+          { method: 'rows', module: 'sunspot::search::queryfacet', html: '<a href="classes/Sunspot/Search/QueryFacet.html#M000068"><span class="method_name">rows</span> <span class="module_name">(Sunspot::Search::QueryFacet)</span></a>' },
+          { method: 'search', module: 'sunspot::session', html: '<a href="classes/Sunspot/Session.html#M000079"><span class="method_name">search</span> <span class="module_name">(Sunspot::Session)</span></a>' },
           { method: 'search', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000006"><span class="method_name">search</span> <span class="module_name">(Sunspot)</span></a>' },
           { method: 'setup', module: 'sunspot', html: '<a href="classes/Sunspot.html#M000001"><span class="method_name">setup</span> <span class="module_name">(Sunspot)</span></a>' },
-          { method: 'solr_default_configuration_location', module: 'sunspot::configuration', html: '<a href="classes/Sunspot/Configuration.html#M000018"><span class="method_name">solr_default_configuration_location</span> <span class="module_name">(Sunspot::Configuration)</span></a>' },
-          { method: 'stored', module: 'sunspot::search::hit', html: '<a href="classes/Sunspot/Search/Hit.html#M000062"><span class="method_name">stored</span> <span class="module_name">(Sunspot::Search::Hit)</span></a>' },
-          { method: 'text', module: 'sunspot::dsl::fields', html: '<a href="classes/Sunspot/DSL/Fields.html#M000033"><span class="method_name">text</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a>' },
-          { method: 'text_fields', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000026"><span class="method_name">text_fields</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
-          { method: 'total', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000057"><span class="method_name">total</span> <span class="module_name">(Sunspot::Search)</span></a>' },
-          { method: 'with', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000038"><span class="method_name">with</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
-          { method: 'without', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000039"><span class="method_name">without</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
+          { method: 'solr_default_configuration_location', module: 'sunspot::configuration', html: '<a href="classes/Sunspot/Configuration.html#M000020"><span class="method_name">solr_default_configuration_location</span> <span class="module_name">(Sunspot::Configuration)</span></a>' },
+          { method: 'stored', module: 'sunspot::search::hit', html: '<a href="classes/Sunspot/Search/Hit.html#M000070"><span class="method_name">stored</span> <span class="module_name">(Sunspot::Search::Hit)</span></a>' },
+          { method: 'text', module: 'sunspot::dsl::fields', html: '<a href="classes/Sunspot/DSL/Fields.html#M000035"><span class="method_name">text</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a>' },
+          { method: 'text_fields', module: 'sunspot::dsl::query', html: '<a href="classes/Sunspot/DSL/Query.html#M000029"><span class="method_name">text_fields</span> <span class="module_name">(Sunspot::DSL::Query)</span></a>' },
+          { method: 'tie', module: 'sunspot::dsl::fulltext', html: '<a href="classes/Sunspot/DSL/Fulltext.html#M000054"><span class="method_name">tie</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a>' },
+          { method: 'total', module: 'sunspot::search', html: '<a href="classes/Sunspot/Search.html#M000061"><span class="method_name">total</span> <span class="module_name">(Sunspot::Search)</span></a>' },
+          { method: 'with', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000040"><span class="method_name">with</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
+          { method: 'without', module: 'sunspot::dsl::scope', html: '<a href="classes/Sunspot/DSL/Scope.html#M000041"><span class="method_name">without</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a>' },
         ]
         $(document).observe('dom:loaded', function() {
         	// Setup search-during-typing.
@@ -4474,87 +4486,99 @@
       </form>
       <ol class='methods' id='search-results' style='display: none'></ol>
       <ol class='methods' id='index-entries'>
-        <li><a href="classes/Sunspot/DSL/Scope.html#M000041"><span class="method_name">all_of</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Scope.html#M000040"><span class="method_name">any_of</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000080"><span class="method_name">batch</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Query.html#M000027"><span class="method_name">adjust_solr_params</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Scope.html#M000043"><span class="method_name">all_of</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Scope.html#M000042"><span class="method_name">any_of</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
         <li><a href="classes/Sunspot.html#M000013"><span class="method_name">batch</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000046"><span class="method_name">boost</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fields.html#M000035"><span class="method_name">boost</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000047"><span class="method_name">boost_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000060"><span class="method_name">build</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000093"><span class="method_name">batch</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000050"><span class="method_name">boost</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fields.html#M000037"><span class="method_name">boost</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000051"><span class="method_name">boost_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000064"><span class="method_name">build</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/Type/TextType.html#M000055"><span class="method_name">cast</span> <span class="module_name">(Sunspot::Type::TextType)</span></a></li>
         <li><a href="classes/Sunspot.html#M000004"><span class="method_name">commit</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000071"><span class="method_name">commit</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000082"><span class="method_name">commit</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000092"><span class="method_name">commit_if_delete_dirty</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot.html#M000017"><span class="method_name">commit_if_delete_dirty</span> <span class="module_name">(Sunspot)</span></a></li>
         <li><a href="classes/Sunspot.html#M000015"><span class="method_name">commit_if_dirty</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000079"><span class="method_name">commit_if_dirty</span> <span class="module_name">(Sunspot::Session)</span></a></li>
-        <li><a href="classes/Sunspot.html#M000016"><span class="method_name">config</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fields.html#M000034"><span class="method_name">coordinates</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Search.html#M000027"><span class="method_name">data_accessor_for</span> <span class="module_name">(Sunspot::DSL::Search)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000090"><span class="method_name">commit_if_dirty</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot.html#M000018"><span class="method_name">config</span> <span class="module_name">(Sunspot)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fields.html#M000036"><span class="method_name">coordinates</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Search.html#M000030"><span class="method_name">data_accessor_for</span> <span class="module_name">(Sunspot::DSL::Search)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000091"><span class="method_name">delete_dirty?</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot.html#M000016"><span class="method_name">delete_dirty?</span> <span class="module_name">(Sunspot)</span></a></li>
         <li><a href="classes/Sunspot.html#M000014"><span class="method_name">dirty?</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000078"><span class="method_name">dirty?</span> <span class="module_name">(Sunspot::Session)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Scope.html#M000042"><span class="method_name">dynamic</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000032"><span class="method_name">dynamic</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000059"><span class="method_name">dynamic_facet</span> <span class="module_name">(Sunspot::Search)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000052"><span class="method_name">execute</span> <span class="module_name">(Sunspot::Search)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000053"><span class="method_name">execute!</span> <span class="module_name">(Sunspot::Search)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000031"><span class="method_name">facet</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000058"><span class="method_name">facet</span> <span class="module_name">(Sunspot::Search)</span></a></li>
-        <li><a href="classes/Sunspot/Facet.html#M000050"><span class="method_name">field_name</span> <span class="module_name">(Sunspot::Facet)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000043"><span class="method_name">fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
-        <li><a href="classes/Sunspot/Search/Highlight.html#M000064"><span class="method_name">format</span> <span class="module_name">(Sunspot::Search::Highlight)</span></a></li>
-        <li><a href="classes/Sunspot/Search/Highlight.html#M000065"><span class="method_name">formatted</span> <span class="module_name">(Sunspot::Search::Highlight)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Query.html#M000022"><span class="method_name">fulltext</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000044"><span class="method_name">highlight</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
-        <li><a href="classes/Sunspot/Search/Hit.html#M000061"><span class="method_name">highlights</span> <span class="module_name">(Sunspot::Search::Hit)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000055"><span class="method_name">hits</span> <span class="module_name">(Sunspot::Search)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000069"><span class="method_name">index</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000089"><span class="method_name">dirty?</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000034"><span class="method_name">dynamic</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Scope.html#M000044"><span class="method_name">dynamic</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000063"><span class="method_name">dynamic_facet</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000046"><span class="method_name">exclude_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000056"><span class="method_name">execute</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000057"><span class="method_name">execute!</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000033"><span class="method_name">facet</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000062"><span class="method_name">facet</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/Search/DateFacet.html#M000073"><span class="method_name">field_name</span> <span class="module_name">(Sunspot::Search::DateFacet)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000045"><span class="method_name">fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/Search/Highlight.html#M000075"><span class="method_name">format</span> <span class="module_name">(Sunspot::Search::Highlight)</span></a></li>
+        <li><a href="classes/Sunspot/Search/Highlight.html#M000076"><span class="method_name">formatted</span> <span class="module_name">(Sunspot::Search::Highlight)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Query.html#M000024"><span class="method_name">fulltext</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000047"><span class="method_name">highlight</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/Search/Hit.html#M000069"><span class="method_name">highlights</span> <span class="module_name">(Sunspot::Search::Hit)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000059"><span class="method_name">hits</span> <span class="module_name">(Sunspot::Search)</span></a></li>
         <li><a href="classes/Sunspot.html#M000002"><span class="method_name">index</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000070"><span class="method_name">index!</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000080"><span class="method_name">index</span> <span class="module_name">(Sunspot::Session)</span></a></li>
         <li><a href="classes/Sunspot.html#M000003"><span class="method_name">index!</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Search/Hit.html#M000063"><span class="method_name">instance</span> <span class="module_name">(Sunspot::Search::Hit)</span></a></li>
-        <li><a href="classes/Sunspot/InstantiatedFacetRow.html#M000048"><span class="method_name">instance</span> <span class="module_name">(Sunspot::InstantiatedFacetRow)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Query.html#M000023"><span class="method_name">keywords</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
-        <li><a href="classes/Sunspot/Adapters/DataAccessor.html#M000020"><span class="method_name">load_all</span> <span class="module_name">(Sunspot::Adapters::DataAccessor)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fields.html#M000036"><span class="method_name">method_missing</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a></li>
-        <li><a href="classes/Sunspot/Facet.html#M000049"><span class="method_name">name</span> <span class="module_name">(Sunspot::Facet)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Query.html#M000025"><span class="method_name">near</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000066"><span class="method_name">new</span> <span class="module_name">(Sunspot::Session)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000028"><span class="method_name">new</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000081"><span class="method_name">index!</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Search/FacetRow.html#M000067"><span class="method_name">inspect</span> <span class="module_name">(Sunspot::Search::FacetRow)</span></a></li>
+        <li><a href="classes/Sunspot/Search/FacetRow.html#M000066"><span class="method_name">instance</span> <span class="module_name">(Sunspot::Search::FacetRow)</span></a></li>
+        <li><a href="classes/Sunspot/Search/Hit.html#M000071"><span class="method_name">instance</span> <span class="module_name">(Sunspot::Search::Hit)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Query.html#M000025"><span class="method_name">keywords</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
+        <li><a href="classes/Sunspot/Adapters/DataAccessor.html#M000022"><span class="method_name">load_all</span> <span class="module_name">(Sunspot::Adapters::DataAccessor)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fields.html#M000038"><span class="method_name">method_missing</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000052"><span class="method_name">minimum_match</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Query.html#M000028"><span class="method_name">near</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000077"><span class="method_name">new</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Search/DateFacet.html#M000072"><span class="method_name">new</span> <span class="module_name">(Sunspot::Search::DateFacet)</span></a></li>
         <li><a href="classes/Sunspot.html#M000005"><span class="method_name">new_search</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000067"><span class="method_name">new_search</span> <span class="module_name">(Sunspot::Session)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000029"><span class="method_name">order_by</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000030"><span class="method_name">order_by_random</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Query.html#M000024"><span class="method_name">paginate</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000045"><span class="method_name">phrase_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000056"><span class="method_name">raw_results</span> <span class="module_name">(Sunspot::Search)</span></a></li>
-        <li><a href="classes/Sunspot/Adapters/DataAccessor.html#M000021"><span class="method_name">register</span> <span class="module_name">(Sunspot::Adapters::DataAccessor)</span></a></li>
-        <li><a href="classes/Sunspot/Adapters/InstanceAdapter.html#M000019"><span class="method_name">register</span> <span class="module_name">(Sunspot::Adapters::InstanceAdapter)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000078"><span class="method_name">new_search</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000031"><span class="method_name">order_by</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/FieldQuery.html#M000032"><span class="method_name">order_by_random</span> <span class="module_name">(Sunspot::DSL::FieldQuery)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Query.html#M000026"><span class="method_name">paginate</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000048"><span class="method_name">phrase_fields</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000049"><span class="method_name">phrase_slop</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000053"><span class="method_name">query_phrase_slop</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000060"><span class="method_name">raw_results</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/Adapters/InstanceAdapter.html#M000021"><span class="method_name">register</span> <span class="module_name">(Sunspot::Adapters::InstanceAdapter)</span></a></li>
+        <li><a href="classes/Sunspot/Adapters/DataAccessor.html#M000023"><span class="method_name">register</span> <span class="module_name">(Sunspot::Adapters::DataAccessor)</span></a></li>
         <li><a href="classes/Sunspot.html#M000007"><span class="method_name">remove</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000072"><span class="method_name">remove</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000083"><span class="method_name">remove</span> <span class="module_name">(Sunspot::Session)</span></a></li>
         <li><a href="classes/Sunspot.html#M000008"><span class="method_name">remove!</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000073"><span class="method_name">remove!</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000084"><span class="method_name">remove!</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000087"><span class="method_name">remove_all</span> <span class="module_name">(Sunspot::Session)</span></a></li>
         <li><a href="classes/Sunspot.html#M000011"><span class="method_name">remove_all</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000076"><span class="method_name">remove_all</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000088"><span class="method_name">remove_all!</span> <span class="module_name">(Sunspot::Session)</span></a></li>
         <li><a href="classes/Sunspot.html#M000012"><span class="method_name">remove_all!</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000077"><span class="method_name">remove_all!</span> <span class="module_name">(Sunspot::Session)</span></a></li>
         <li><a href="classes/Sunspot.html#M000009"><span class="method_name">remove_by_id</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000074"><span class="method_name">remove_by_id</span> <span class="module_name">(Sunspot::Session)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000075"><span class="method_name">remove_by_id!</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000085"><span class="method_name">remove_by_id</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000086"><span class="method_name">remove_by_id!</span> <span class="module_name">(Sunspot::Session)</span></a></li>
         <li><a href="classes/Sunspot.html#M000010"><span class="method_name">remove_by_id!</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot.html#M000017"><span class="method_name">reset!</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000054"><span class="method_name">results</span> <span class="module_name">(Sunspot::Search)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/QueryFacet.html#M000037"><span class="method_name">row</span> <span class="module_name">(Sunspot::DSL::QueryFacet)</span></a></li>
-        <li><a href="classes/Sunspot/Facet.html#M000051"><span class="method_name">rows</span> <span class="module_name">(Sunspot::Facet)</span></a></li>
-        <li><a href="classes/Sunspot/InstantiatedFacet.html#M000081"><span class="method_name">rows</span> <span class="module_name">(Sunspot::InstantiatedFacet)</span></a></li>
-        <li><a href="classes/Sunspot/Session.html#M000068"><span class="method_name">search</span> <span class="module_name">(Sunspot::Session)</span></a></li>
+        <li><a href="classes/Sunspot.html#M000019"><span class="method_name">reset!</span> <span class="module_name">(Sunspot)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000058"><span class="method_name">results</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/QueryFacet.html#M000039"><span class="method_name">row</span> <span class="module_name">(Sunspot::DSL::QueryFacet)</span></a></li>
+        <li><a href="classes/Sunspot/Search/FieldFacet.html#M000065"><span class="method_name">rows</span> <span class="module_name">(Sunspot::Search::FieldFacet)</span></a></li>
+        <li><a href="classes/Sunspot/Search/DateFacet.html#M000074"><span class="method_name">rows</span> <span class="module_name">(Sunspot::Search::DateFacet)</span></a></li>
+        <li><a href="classes/Sunspot/Search/QueryFacet.html#M000068"><span class="method_name">rows</span> <span class="module_name">(Sunspot::Search::QueryFacet)</span></a></li>
+        <li><a href="classes/Sunspot/Session.html#M000079"><span class="method_name">search</span> <span class="module_name">(Sunspot::Session)</span></a></li>
         <li><a href="classes/Sunspot.html#M000006"><span class="method_name">search</span> <span class="module_name">(Sunspot)</span></a></li>
         <li><a href="classes/Sunspot.html#M000001"><span class="method_name">setup</span> <span class="module_name">(Sunspot)</span></a></li>
-        <li><a href="classes/Sunspot/Configuration.html#M000018"><span class="method_name">solr_default_configuration_location</span> <span class="module_name">(Sunspot::Configuration)</span></a></li>
-        <li><a href="classes/Sunspot/Search/Hit.html#M000062"><span class="method_name">stored</span> <span class="module_name">(Sunspot::Search::Hit)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Fields.html#M000033"><span class="method_name">text</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Query.html#M000026"><span class="method_name">text_fields</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
-        <li><a href="classes/Sunspot/Search.html#M000057"><span class="method_name">total</span> <span class="module_name">(Sunspot::Search)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Scope.html#M000038"><span class="method_name">with</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
-        <li><a href="classes/Sunspot/DSL/Scope.html#M000039"><span class="method_name">without</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
+        <li><a href="classes/Sunspot/Configuration.html#M000020"><span class="method_name">solr_default_configuration_location</span> <span class="module_name">(Sunspot::Configuration)</span></a></li>
+        <li><a href="classes/Sunspot/Search/Hit.html#M000070"><span class="method_name">stored</span> <span class="module_name">(Sunspot::Search::Hit)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fields.html#M000035"><span class="method_name">text</span> <span class="module_name">(Sunspot::DSL::Fields)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Query.html#M000029"><span class="method_name">text_fields</span> <span class="module_name">(Sunspot::DSL::Query)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Fulltext.html#M000054"><span class="method_name">tie</span> <span class="module_name">(Sunspot::DSL::Fulltext)</span></a></li>
+        <li><a href="classes/Sunspot/Search.html#M000061"><span class="method_name">total</span> <span class="module_name">(Sunspot::Search)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Scope.html#M000040"><span class="method_name">with</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
+        <li><a href="classes/Sunspot/DSL/Scope.html#M000041"><span class="method_name">without</span> <span class="module_name">(Sunspot::DSL::Scope)</span></a></li>
       </ol>
     </div>
   </body>
