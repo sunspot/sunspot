@@ -1,3 +1,16 @@
+== 0.10.6 2009-11-05
+* Support more dismax parameters
+* Support multiple boost queries
+* Allow "extra" facet rows
+* Allow exclusion of fulltext fields
+* Allow specification of per-field highlighting params
+* Specify coordinates using block extraction
+* Return empty array if no highlights available
+* Get stored text fields from hits
+* Update docs to reflect a requirement of at least one search type
+* added --max-memory and --min-memory parameters to sunspot-solr
+* LocalLucene and LocalSolr compatible with Java 1.5
+
 == 0.10.5 2009-10-22
 * Fix highlighting for multiple-model search
 
