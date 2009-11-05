@@ -211,7 +211,7 @@ module Sunspot
     # ==== Parameters
     #
     # types<Class>...::
-    #   Zero, one, or more types to search for. If no types are passed, all
+    #   One or more types to search for. If no types are passed, all
     #   configured types will be searched for.
     #
     # ==== Returns
@@ -230,7 +230,7 @@ module Sunspot
     # ==== Parameters
     #
     # types<Class>...::
-    #   Zero, one, or more types to search for. If no types are passed, all
+    #   One or more types to search for. If no types are passed, all
     #   configured types will be searched.
     #
     # ==== Returns
