@@ -125,9 +125,9 @@ me so I can rectify the situation!
 
 == Dependencies
 
-1. RSolr
-2. Daemons
-4. Java
+1. RSolr 0.9.6
+2. Daemons 1.x
+4. Java 1.5+
 
 Sunspot has been tested with MRI 1.8.6 and 1.8.7, REE 1.8.6, YARV 1.9.1, and
 JRuby 1.2.0
