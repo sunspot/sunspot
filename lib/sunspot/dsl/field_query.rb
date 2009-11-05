@@ -6,7 +6,7 @@ module Sunspot
     # query DSL.
     #
     class FieldQuery < Scope
-      def initialize(search, query, setup)
+      def initialize(search, query, setup) #:nodoc:
         @search, @query = search, query
         super(query.scope, setup)
       end

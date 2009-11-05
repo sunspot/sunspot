@@ -180,15 +180,15 @@ module Sunspot
       @facets[field.name] = FieldFacet.new(field, self, options)
     end
 
-    def add_date_facet(field, options)
+    def add_date_facet(field, options) #:nodoc:
       @facets[field.name] = DateFacet.new(field, self, options)
     end
 
-    def add_query_facet(name, options)
+    def add_query_facet(name, options) #:nodoc:
       @facets[name] = QueryFacet.new(name, self, options)
     end
 
-    def facet_response #:nodoc
+    def facet_response #:nodoc:
       @solr_result['facet_counts']
     end
 
