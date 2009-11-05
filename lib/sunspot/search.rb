@@ -207,10 +207,6 @@ module Sunspot
         @solr_result['highlighting'][doc['id']]
       end
     end
-
-    def field(name)
-      @setup.field(name)
-    end
     
     # Clear out all the cached ivars so the search can be called again.
     def reset
