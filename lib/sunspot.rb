@@ -1,6 +1,7 @@
 require 'set'
 require 'time'
 require 'date'
+require 'enumerator'
 begin
   require 'rsolr'
 rescue LoadError

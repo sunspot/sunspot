@@ -1,4 +1,4 @@
-%w(facet_instance_populator query_facet field_facet date_facet facet_row hit
+%w(query_facet field_facet date_facet facet_row hit
    highlight).each do |file|
   require File.join(File.dirname(__FILE__), 'search', file)
 end
@@ -176,16 +176,16 @@ module Sunspot
       "<Sunspot::Search:#{query.to_params.inspect}>"
     end
 
-    def add_field_facet(field) #:nodoc:
-      @facets[field.name] = FieldFacet.new(field, self)
+    def add_field_facet(field, options = {}) #:nodoc:
+      @facets[field.name] = FieldFacet.new(field, self, options)
     end
 
     def add_date_facet(field, options)
       @facets[field.name] = DateFacet.new(field, self, options)
     end
 
-    def add_query_facet(name, options, field = nil)
-      @facets[name] = QueryFacet.new(name, self, options, field)
+    def add_query_facet(name, options)
+      @facets[name] = QueryFacet.new(name, self, options)
     end
 
     def facet_response #:nodoc

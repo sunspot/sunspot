@@ -1,12 +1,11 @@
-require 'enumerator'
-
 module Sunspot
   class Search
     class FieldFacet < QueryFacet
-      include FacetInstancePopulator
+      alias_method :field_name, :name
 
-      def initialize(field, search)
-        super(field.name, search, {}, field)
+      def initialize(field, search, options) #:nodoc:
+        super(field.name, search, options)
+        @field = field
       end
 
       def rows
@@ -22,6 +21,21 @@ module Sunspot
             end
             rows
           end
+      end
+
+      def populate_instances #:nodoc:
+        if reference = @field.reference
+          values_hash = rows.inject({}) do |hash, row|
+            hash[row.value] = row
+            hash
+          end
+          instances = Adapters::DataAccessor.create(Sunspot::Util.full_const_get(reference)).load_all(
+            values_hash.keys
+          )
+          instances.each do |instance|
+            values_hash[Adapters::InstanceAdapter.adapt(instance).id].instance = instance
+          end
+        end
       end
     end
   end

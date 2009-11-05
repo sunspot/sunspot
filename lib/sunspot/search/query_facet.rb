@@ -3,13 +3,10 @@ module Sunspot
     class QueryFacet
       RequestedFacet = Struct.new(:label, :boolean_phrase) #:nodoc:
 
-      include FacetInstancePopulator
-
       attr_reader :name
-      alias_method :field_name, :name
 
-      def initialize(name, search, options, field = nil) #:nodoc:
-        @name, @search, @options, @field = name, search, options, field
+      def initialize(name, search, options) #:nodoc:
+        @name, @search, @options = name, search, options
         @requested_facets = []
       end
 
