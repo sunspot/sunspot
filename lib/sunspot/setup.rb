@@ -62,8 +62,8 @@ module Sunspot
     # of documents during index, but does not actually generate fields (since
     # the field names used in search are static).
     #
-    def set_coordinates_field(name)
-      @coordinates_field_factory = FieldFactory::Coordinates.new(name)
+    def set_coordinates_field(name = nil, &block)
+      @coordinates_field_factory = FieldFactory::Coordinates.new(name, &block)
     end
 
     # 

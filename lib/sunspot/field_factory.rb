@@ -123,10 +123,13 @@ module Sunspot
       end
     end
 
-    #XXX Right now this doubles as a Field and a FieldFactory - good idea?
     class Coordinates
-      def initialize(name)
-        @data_extractor = DataExtractor::AttributeExtractor.new(name)
+      def initialize(name = nil, &block)
+        if block
+          @data_extractor = DataExtractor::BlockExtractor.new(&block)
+        else
+          @data_extractor = DataExtractor::AttributeExtractor.new(name)
+        end
       end
 
       def populate_document(document, model)

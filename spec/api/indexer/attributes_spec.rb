@@ -66,6 +66,11 @@ describe 'indexing attribute fields', :type => :indexer do
     end
   end
 
+  it 'should index latitude and longitude from a block' do
+    session.index(Photo.new(:lat => 30, :lng => -60))
+    connection.should have_add_with(:lat => 30, :long => -60)
+  end
+
   it 'should correctly index an attribute field with block access' do
     session.index(post(:title => 'The Blog Post'))
     connection.should have_add_with(:sort_title_s => 'blog post')
