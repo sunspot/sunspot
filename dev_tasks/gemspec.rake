@@ -26,7 +26,7 @@ TEXT
                        'spec/mock_app/{app,lib,db,vendor,config}/**/*',
                        'spec/mock_app/{tmp,log,solr}']
     s.add_dependency 'escape', '>= 0.0.4'
-    s.add_dependency 'sunspot', '= 0.11.0' 
+    s.add_dependency 'sunspot', '= 0.10.6' 
     s.add_development_dependency 'rspec', '~> 1.2'
     s.add_development_dependency 'rspec-rails', '~> 1.2'
     s.add_development_dependency 'ruby-debug', '~> 0.10'
@@ -44,6 +44,12 @@ namespace :release do
     `git push origin v#{version}:v#{version}`
   end
 
+  task :commit_gemspec do
+    version = Jeweler::VersionHelper.new(File.join(File.dirname(__FILE__), '..')).to_s
+    `git add sunspot_rails.gemspec`
+    `git commit -m "Generate gemspec for v#{version}"`
+  end
+
   desc "Release gem to RubyForge and GitHub"
-  task :all => [:gemspec, :tag, :"rubyforge:release:gem", :"gemcutter:release"]
+  task :all => [:gemspec, :commit_gemspec, :tag, :"rubyforge:release:gem", :"gemcutter:release"]
 end
