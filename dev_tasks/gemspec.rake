@@ -26,7 +26,7 @@ TEXT
                        'spec/mock_app/{app,lib,db,vendor,config}/**/*',
                        'spec/mock_app/{tmp,log,solr}']
     s.add_dependency 'escape', '>= 0.0.4'
-    s.add_dependency 'sunspot', '= 0.10.5' 
+    s.add_dependency 'sunspot', '= 0.11.0' 
     s.add_development_dependency 'rspec', '~> 1.2'
     s.add_development_dependency 'rspec-rails', '~> 1.2'
     s.add_development_dependency 'ruby-debug', '~> 0.10'
