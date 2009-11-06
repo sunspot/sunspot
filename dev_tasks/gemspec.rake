@@ -38,6 +38,12 @@ TEXT
 end
 
 namespace :release do
+  task :tag do
+    version = Jeweler::VersionHelper.new(File.join(File.dirname(__FILE__), '..')).to_s
+    `git tag -a -m "Version #{version}" v#{version}`
+    `git push origin v#{version}:v#{version}`
+  end
+
   desc "Release gem to RubyForge and GitHub"
-  task :all => [:"rubyforge:release:gem", :"gemcutter:release"]
+  task :all => [:gemspec, :tag, :"rubyforge:release:gem", :"gemcutter:release"]
 end
