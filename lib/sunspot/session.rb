@@ -201,13 +201,13 @@ module Sunspot
       @connection ||=
         begin
           connection = self.class.connection_class.connect(
-            :url => config.solr.url,
-            :adapter => config.http_client
+            :url => config.solr.url#,
+            #:adapter => config.http_client
           )
-          connection.message.adapter =
-            RSolr::Message::Adapter.const_get(
-              Util.camel_case(config.xml_builder.to_s)
-            ).new
+          #connection.message.adapter =
+          #  RSolr::Message::Adapter.const_get(
+          #    Util.camel_case(config.xml_builder.to_s)
+          #  ).new
           connection
         end
     end
@@ -225,9 +225,9 @@ module Sunspot
         begin
           if config.master_solr.url && config.master_solr.url != config.solr.url
             master_connection = self.class.connection_class.new(
-              RSolr::Adapter::HTTP.new(:url => config.master_solr.url)
+              RSolr::Connection::NetHttp.new(:url => config.master_solr.url)
             )
-            master_connection.adapter.connector.adapter_name = config.http_client
+            #master_connection.adapter.connector.adapter_name = config.http_client
             master_connection
           else
             connection

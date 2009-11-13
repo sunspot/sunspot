@@ -125,7 +125,7 @@ me so I can rectify the situation!
 
 == Dependencies
 
-1. RSolr 0.9.6
+1. RSolr 0.10.1
 2. Daemons 1.x
 4. Java 1.5+
 
