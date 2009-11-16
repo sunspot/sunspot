@@ -1,3 +1,10 @@
+== 0.10.7 2009-11-16
+* Ignore boost_fields that don't apply
+* Ability to specify text_fields inside connectives
+* Fix bug with newlines in strings incorrectly being considered multi-value
+* Compatibility with RSolr 0.10.1
+* Remove commented-out code entirely
+
 == 0.10.6 2009-11-05
 * Support more dismax parameters
 * Support multiple boost queries

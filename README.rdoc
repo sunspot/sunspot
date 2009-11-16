@@ -184,6 +184,7 @@ Sunspot repository at `upstream`:
 * Peter Berkenbosch (peterberkenbosch@me.com)
 * Brian Atkinson
 * Tom Coleman (tom@thesnail.org)
+* Matt Mitchell (goodieboy@gmail.com)
 
 == License
 
