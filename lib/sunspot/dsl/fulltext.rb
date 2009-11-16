@@ -179,8 +179,12 @@ module Sunspot
       #
       def boost_fields(boosts)
         boosts.each_pair do |field_name, boost|
-          @setup.text_fields(field_name).each do |field|
-            @query.add_fulltext_field(field, boost)
+          begin
+            @setup.text_fields(field_name).each do |field|
+              @query.add_fulltext_field(field, boost)
+            end
+          rescue Sunspot::UnrecognizedFieldError
+            # We'll let this one slide.
           end
         end
       end

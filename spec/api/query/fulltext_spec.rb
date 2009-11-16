@@ -151,6 +151,15 @@ describe 'fulltext query', :type => :query do
     connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text^1.5)
   end
 
+  it 'ignores boost fields that do not apply' do
+    session.search Post do
+      keywords 'great pizza' do
+        boost_fields :bogus => 1.2, :title => 1.5
+      end
+    end
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text^1.5)
+  end
+
   it 'sets default boost with default fields' do
     session.search Photo do
       keywords 'great pizza'
