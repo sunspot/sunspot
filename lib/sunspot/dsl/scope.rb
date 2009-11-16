@@ -195,6 +195,31 @@ module Sunspot
           &block
         )
       end
+
+      # 
+      # Apply scope-type restrictions on fulltext fields. In certain situations,
+      # it may be desirable to place logical restrictions on text fields.
+      # Remember that text fields are tokenized; your mileage may very.
+      #
+      # The block works exactly like a normal scope, except that the field names
+      # refer to text fields instead of attribute fields.
+      # 
+      # === Example
+      #
+      #   Sunspot.search(Post) do
+      #     text_fields do
+      #       with :body, nil
+      #     end
+      #   end
+      #
+      # This will return all documents that do not have a body.
+      #
+      def text_fields(&block)
+        Sunspot::Util.instance_eval_or_call(
+          Scope.new(@scope, TextFieldSetup.new(@setup)),
+          &block
+        )
+      end
     end
   end
 end

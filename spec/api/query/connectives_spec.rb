@@ -153,6 +153,20 @@ describe 'connective in scope', :type => :query do
     )
   end
 
+  it 'creates a disjunction with some text field components' do
+    session.search Post do
+      any_of do
+        text_fields do
+          with(:title).starting_with('test')
+        end
+        with(:blog_id, 1)
+      end
+    end
+    connection.should have_last_search_including(
+      :fq, '(title_text:test* OR blog_id_i:1)'
+    )
+  end
+
   it 'should ignore empty connectives' do
     session.search Post do
       any_of {}
