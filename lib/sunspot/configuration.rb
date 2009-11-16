@@ -29,9 +29,6 @@ module Sunspot
       #
       def build #:nodoc:
         LightConfig.build do
-          http_client :net_http
-          xml_builder :builder
-
           solr do
             url 'http://127.0.0.1:8983/solr'
           end
