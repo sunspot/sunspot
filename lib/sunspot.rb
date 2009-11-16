@@ -161,7 +161,7 @@ module Sunspot
     #
     # ==== Example
     #
-    #   post1, post2 = Array(2) { Post.create }
+    #   post1, post2 = new Array(2) { Post.create }
     #   Sunspot.index(post1, post2)
     #
     # Note that indexed objects won't be reflected in search until a commit is

@@ -95,6 +95,18 @@ module Sunspot
         end
       end
 
+      #
+      # Ruby's treatment of Strings as Enumerables is heavily annoying. As far
+      # as I know the behavior of Kernel.Array() is otherwise fine.
+      #
+      def Array(object)
+        if object.is_a?(String)
+          [object]
+        else
+          super
+        end
+      end
+
       # 
       # Perform a deep merge of hashes, returning the result as a new hash.
       # See #deep_merge_into for rules used to merge the hashes

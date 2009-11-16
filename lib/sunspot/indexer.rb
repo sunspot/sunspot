@@ -21,7 +21,7 @@ module Sunspot
     # model<Object>:: the model to index
     #
     def add(model)
-      documents = Array(model).map { |m| prepare(m) }
+      documents = Util.Array(model).map { |m| prepare(m) }
       if @batch.nil?
         add_documents(documents)
       else

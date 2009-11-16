@@ -21,6 +21,11 @@ describe 'indexing attribute fields', :type => :indexer do
     connection.should have_add_with(:category_ids_im => ['3', '14'])
   end
 
+  it 'should not index a single-value field with newlines as multiple' do
+    session.index(post(:title => "Multi\nLine"))
+    connection.adds.last.first.field_by_name(:title_ss).value.should == "Multi\nLine"
+  end
+
   it 'should correctly index a time field' do
     session.index(
       post(:published_at => Time.parse('1983-07-08 05:00:00 -0400'))

@@ -84,7 +84,7 @@ module Sunspot
           field_names.each do |field_name|
             field = @setup.field(field_name)
             search_facet = @search.add_field_facet(field, options)
-            Array(options[:only]).each do |value|
+            Util.Array(options[:only]).each do |value|
               facet = Sunspot::Query::QueryFacet.new
               facet.add_restriction(field, Sunspot::Query::Restriction::EqualTo, value)
               @query.add_query_facet(facet)
@@ -110,7 +110,7 @@ module Sunspot
                 Sunspot::Query::FieldFacet.new(field, options)
               end
             @query.add_field_facet(facet)
-            Array(options[:extra]).each do |extra|
+            Util.Array(options[:extra]).each do |extra|
               extra_facet = Sunspot::Query::QueryFacet.new
               case extra
               when :any

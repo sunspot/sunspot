@@ -55,7 +55,7 @@ module Sunspot
         if keywords && !(keywords.to_s =~ /^\s*$/)
           fulltext_query = @query.set_fulltext(keywords)
           if field_names = options.delete(:fields)
-            Array(field_names).each do |field_name|
+            Util.Array(field_names).each do |field_name|
               @setup.text_fields(field_name).each do |field|
                 fulltext_query.add_fulltext_field(field, field.default_boost)
               end
@@ -75,7 +75,7 @@ module Sunspot
               fulltext_query.add_highlight
             else
               highlight_fields = []
-              Array(highlight_field_names).each do |field_name|
+              Util.Array(highlight_field_names).each do |field_name|
                 highlight_fields.concat(@setup.text_fields(field_name))
               end
               fulltext_query.add_highlight(highlight_fields)
