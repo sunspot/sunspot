@@ -14,7 +14,7 @@ TEXT
     s.authors = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Marcel de Graaf', 'Brandon Keepers', 'Peter Berkenbosch', 'Brian Atkinson', 'Tom Coleman']
     s.rubyforge_project = 'sunspot'
     s.files = FileList['[A-Z]*', '{bin,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/{conf,lib}/*', 'solr/start.jar']
-    s.add_dependency 'rsolr', '= 0.10.1'
+    s.add_dependency 'rsolr', '>= 0.9.6', '<= 0.10.1'
     s.add_dependency 'daemons', '~> 1.0'
     s.add_development_dependency 'rspec', '~> 1.1'
     s.add_development_dependency 'ruby-debug', '~> 0.10'

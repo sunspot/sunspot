@@ -1,4 +1,12 @@
 using_gems = false
+
+if rsolr_gem_version = ENV['RSOLR_GEM_VERSION']
+  STDERR.puts("Forcing RSolr gem version #{rsolr_gem_version}")
+  using_gems = true
+  require 'rubygems'
+  gem 'rsolr', rsolr_gem_version
+end
+
 begin
   require 'spec'
   begin
