@@ -94,7 +94,7 @@ module Sunspot
     def remove(*objects)
       objects.flatten!
       @deletes += objects.length
-      for object in objects
+      objects.each do |object|
         indexer.remove(object)
       end
     end
@@ -138,9 +138,7 @@ module Sunspot
         Indexer.remove_all(master_connection)
       else
         @deletes += classes.length
-        for clazz in classes
-          indexer.remove_all(clazz)
-        end
+        classes.each { |clazz| indexer.remove_all(clazz) }
       end
     end
 

@@ -47,8 +47,8 @@ module Sunspot
     #
     def dynamic_fields
       fields = []
-      for field_variants in variant_combinations
-        for type in FIELD_TYPES
+      variant_combinations.each do |field_variants|
+        FIELD_TYPES.each do |type|
           fields << DynamicField.new(type, field_variants)
         end
       end

@@ -34,7 +34,7 @@ module Sunspot
       #
       def text(*names, &block)
         options = names.pop if names.last.is_a?(Hash)
-        for name in names
+        names.each do |name|
           @setup.add_text_field_factory(
             name,
             options || {},

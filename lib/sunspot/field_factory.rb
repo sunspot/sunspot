@@ -56,7 +56,7 @@ module Sunspot
       #
       def populate_document(document, model) #:nodoc:
         unless (value = @data_extractor.value_for(model)).nil?
-          for scalar_value in Util.Array(@field.to_indexed(value))
+          Util.Array(@field.to_indexed(value)).each do |scalar_value|
             document.add_field(
               @field.indexed_name.to_sym,
               scalar_value, @field.attributes
@@ -105,7 +105,7 @@ module Sunspot
         if values = @data_extractor.value_for(model)
           values.each_pair do |dynamic_name, value|
             field_instance = build(dynamic_name)
-            for scalar_value in Util.Array(field_instance.to_indexed(value))
+            Util.Array(field_instance.to_indexed(value)).each do |scalar_value|
               document.add_field(
                 field_instance.indexed_name.to_sym,
                 scalar_value

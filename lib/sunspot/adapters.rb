@@ -94,7 +94,7 @@ module Sunspot
         #   One or more classes that this instance adapter adapts
         #
         def register(instance_adapter, *classes)
-          for clazz in classes
+          classes.each do |clazz|
             instance_adapters[clazz.name.to_sym] = instance_adapter
           end
         end
@@ -216,7 +216,7 @@ module Sunspot
         #   One or more classes that this data accessor providess access to
         #
         def register(data_accessor, *classes)
-          for clazz in classes
+          classes.each do |clazz|
             data_accessors[clazz.name.to_sym] = data_accessor
           end
         end

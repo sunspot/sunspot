@@ -117,7 +117,7 @@ module Sunspot
           end
         else
           instances = args
-          for instance in instances.flatten
+          instances.flatten.each do |instance|
             @scope.add_negated_restriction(
               IdField.instance,
               Sunspot::Query::Restriction::EqualTo,

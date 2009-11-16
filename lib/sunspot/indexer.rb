@@ -75,7 +75,7 @@ module Sunspot
       if boost = setup.document_boost_for(model)
         document.attrs[:boost] = boost
       end
-      for field_factory in setup.all_field_factories
+      setup.all_field_factories.each do |field_factory|
         field_factory.populate_document(document, model)
       end
       document

@@ -105,7 +105,7 @@ module Sunspot
         #
         def negate
           negated = self.class.new(!negated?)
-          for component in @components
+          @components.each do |component|
             negated.add_component(component)
           end
           negated
@@ -157,7 +157,7 @@ module Sunspot
         #
         def denormalize
           denormalized = self.class.inverse.new(!negated?)
-          for component in @components
+          @components.each do |component|
             denormalized.add_component(component.negate)
           end
           denormalized
