@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sunspot}
-  s.version = "0.10.6"
+  s.version = "0.10.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Mat Brown", "Peer Allan", "Dmitriy Dzema", "Benjamin Krause", "Marcel de Graaf", "Brandon Keepers", "Peter Berkenbosch", "Brian Atkinson", "Tom Coleman"]
-  s.date = %q{2009-11-16}
+  s.authors = ["Mat Brown", "Peer Allan", "Dmitriy Dzema", "Benjamin Krause", "Marcel de Graaf", "Brandon Keepers", "Peter Berkenbosch", "Brian Atkinson", "Tom Coleman", "Matt Mitchell"]
+  s.date = %q{2009-11-24}
   s.description = %q{Sunspot is a library providing a powerful, all-ruby API for the Solr search engine. Sunspot manages the configuration of persistent Ruby classes for search and indexing and exposes Solr's most powerful features through a collection of DSLs. Complex search operations can be performed without hand-writing any boolean queries or building Solr parameters by hand.
 }
   s.email = %q{mat@patch.com}
@@ -160,12 +160,11 @@ Gem::Specification.new do |s|
      "tasks/todo.rake",
      "templates/schema.xml.erb"
   ]
-  s.has_rdoc = true
   s.homepage = %q{http://outoftime.github.com/sunspot}
   s.rdoc_options = ["--charset=UTF-8", "--webcvs=http://github.com/outoftime/sunspot/tree/master/%s", "--title", "Sunspot - Solr-powered search for Ruby objects - API Documentation", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{sunspot}
-  s.rubygems_version = %q{1.3.2}
+  s.rubygems_version = %q{1.3.5}
   s.summary = %q{Library for expressive, powerful interaction with the Solr search engine}
   s.test_files = [
     "spec/spec_helper.rb",
@@ -231,20 +230,20 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rsolr>, [">= 0.9.6", "<= 0.10.1"])
+      s.add_runtime_dependency(%q<rsolr>, [">= 0.9.6"])
       s.add_runtime_dependency(%q<daemons>, ["~> 1.0"])
       s.add_development_dependency(%q<rspec>, ["~> 1.1"])
       s.add_development_dependency(%q<ruby-debug>, ["~> 0.10"])
       s.add_development_dependency(%q<technicalpickles-jeweler>, ["= 1.2.1"])
     else
-      s.add_dependency(%q<rsolr>, [">= 0.9.6", "<= 0.10.1"])
+      s.add_dependency(%q<rsolr>, [">= 0.9.6"])
       s.add_dependency(%q<daemons>, ["~> 1.0"])
       s.add_dependency(%q<rspec>, ["~> 1.1"])
       s.add_dependency(%q<ruby-debug>, ["~> 0.10"])
       s.add_dependency(%q<technicalpickles-jeweler>, ["= 1.2.1"])
     end
   else
-    s.add_dependency(%q<rsolr>, [">= 0.9.6", "<= 0.10.1"])
+    s.add_dependency(%q<rsolr>, [">= 0.9.6"])
     s.add_dependency(%q<daemons>, ["~> 1.0"])
     s.add_dependency(%q<rspec>, ["~> 1.1"])
     s.add_dependency(%q<ruby-debug>, ["~> 0.10"])
