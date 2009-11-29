@@ -4,7 +4,7 @@ module Sunspot
   # implementation classes should implement a #build method, although the arity
   # of the method depends on the type of factory. They also must implement a
   # #populate_document method, which extracts field data from a given model and
-  # adds it into the RSolr document for indexing.
+  # adds it into the Solr document for indexing.
   #
   module FieldFactory #:nodoc:all
     # 
@@ -52,14 +52,14 @@ module Sunspot
 
       # 
       # Extract the encapsulated field's data from the given model and add it
-      # into the RSolr document for indexing.
+      # into the Solr document for indexing.
       #
       def populate_document(document, model) #:nodoc:
         unless (value = @data_extractor.value_for(model)).nil?
           Util.Array(@field.to_indexed(value)).each do |scalar_value|
-            document.add_field(
-              @field.indexed_name.to_sym,
-              scalar_value, @field.attributes
+            document << Solr::Field.new(
+              @field.indexed_name.to_sym => scalar_value,
+              :boost => @field.boost
             )
           end
         end
@@ -106,9 +106,8 @@ module Sunspot
           values.each_pair do |dynamic_name, value|
             field_instance = build(dynamic_name)
             Util.Array(field_instance.to_indexed(value)).each do |scalar_value|
-              document.add_field(
-                field_instance.indexed_name.to_sym,
-                scalar_value
+              document << Solr::Field.new(
+                field_instance.indexed_name.to_sym => scalar_value
               )
             end
           end
@@ -135,8 +134,8 @@ module Sunspot
       def populate_document(document, model)
         if coordinates = @data_extractor.value_for(model)
           coordinates = Util::Coordinates.new(coordinates)
-          document.add_field(:lat, coordinates.lat)
-          document.add_field(:long, coordinates.lng)
+          document << Solr::Field.new(:lat => coordinates.lat)
+          document << Solr::Field.new(:long => coordinates.lng)
         end
       end
     end

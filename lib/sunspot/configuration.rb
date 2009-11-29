@@ -2,16 +2,6 @@ module Sunspot
   # The Sunspot::Configuration module provides a factory method for Sunspot
   # configuration objects. Available properties are:
   #
-  # Sunspot.config.http_client::
-  #   The client to use for HTTP communication with Solr. Available options are
-  #   :net_http, which is the default and uses Ruby's built-in pure-Ruby HTTP
-  #   library; and :curb, which uses Ruby's libcurl bindings and requires
-  #   installation of the 'curb' gem.
-  # Sunspot.config.xml_builder::
-  #   The library use to build XML messages sent to Solr. As of this writing the
-  #   options are :builder and :libxml - the latter is faster but less portable,
-  #   as it is native code. Check the documentation for RSolr::Message::Adapter
-  #   for more information.
   # Sunspot.config.solr.url::
   #   The URL at which to connect to Solr
   #   (default: 'http://localhost:8983/solr')

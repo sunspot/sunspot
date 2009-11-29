@@ -6,8 +6,6 @@ module Sunspot
   # subclasses).
   #
   class Indexer #:nodoc:
-    include RSolr::Char
-
     def initialize(connection)
       @connection = connection
     end
@@ -45,8 +43,12 @@ module Sunspot
     # 
     # Delete all documents of the class indexed by this indexer from Solr.
     #
-    def remove_all(clazz)
-      @connection.delete_by_query("type:#{escape(clazz.name)}")
+    def remove_all(clazz = nil)
+      if clazz
+        @connection.delete_by_query("type:#{escape(clazz.name)}")
+      else
+        @connection.delete_by_query("type:[* TO *]")
+      end
     end
 
     # 
@@ -73,7 +75,7 @@ module Sunspot
       document = document_for(model)
       setup = setup_for(model)
       if boost = setup.document_boost_for(model)
-        document.attrs[:boost] = boost
+        document.boost = boost
       end
       setup.all_field_factories.each do |field_factory|
         field_factory.populate_document(document, model)
@@ -91,7 +93,7 @@ module Sunspot
     # pairs.
     #
     def document_for(model)
-      RSolr::Message::Document.new(
+      Solr::Document.new(
         :id => Adapters::InstanceAdapter.adapt(model).index_id,
         :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }
       )
@@ -112,18 +114,8 @@ module Sunspot
       Setup.for(object.class) || raise(NoSetupError, "Sunspot is not configured for #{object.class.inspect}")
     end
 
-
-    class <<self
-      # 
-      # Delete all documents from the Solr index
-      #
-      # ==== Parameters
-      #
-      # connection<Solr::Connection>::
-      #   connection to which to send the delete request
-      def remove_all(connection)
-        connection.delete_by_query("type:[* TO *]")
-      end
+    def escape(string)
+      Solr::Util.query_parser_escape(string)
     end
   end
 end

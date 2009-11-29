@@ -14,7 +14,7 @@ module SearchHelper
         'numFound' => count
       }
     }
-    connection.stub!(:select).and_return(response)
+    connection.response = response
     response
   end
 
@@ -31,29 +31,27 @@ module SearchHelper
   end
 
   def stub_facet(name, values)
-    connection.stub!(:select).and_return(
+    connection.response = {
       'facet_counts' => {
         'facet_fields' => {
           name.to_s => values.to_a.sort_by { |value, count| -count }.flatten
         }
       }
-    )
+    }
   end
 
   def stub_date_facet(name, gap, values)
-    connection.stub!(:select).and_return(
+    connection.response = {
       'facet_counts' => {
         'facet_dates' => {
           name.to_s => { 'gap' => "+#{gap}SECONDS" }.merge(values)
         }
       }
-    )
+    }
   end
 
   def stub_query_facet(values)
-    connection.stub!(:select).and_return(
-      'facet_counts' => { 'facet_queries' => values }
-    )
+    connection.response = { 'facet_counts' => { 'facet_queries' => values } }
   end
 
   def facet_values(result, field_name)

@@ -3,14 +3,13 @@ module Sunspot
     attr_accessor :name # The public-facing name of the field
     attr_accessor :type # The Type of the field
     attr_accessor :reference # Model class that the value of this field refers to
-    attr_reader :attributes
+    attr_reader :boost
 
     # 
     #
     def initialize(name, type, options = {}) #:nodoc
       @name, @type = name.to_sym, type
       @stored = !!options.delete(:stored)
-      @attributes = {}
     end
 
     # Convert a value to its representation for Solr indexing. This delegates
@@ -97,14 +96,12 @@ module Sunspot
   # to do otherwise). FulltextField instances always have the type TextType.
   #
   class FulltextField < Field #:nodoc:
-    attr_reader :boost, :default_boost
+    attr_reader :default_boost
 
     def initialize(name, options = {})
       super(name, Type::TextType, options)
       @multiple = true
-      if boost = options.delete(:boost)
-        @attributes[:boost] = boost
-      end
+      @boost = options.delete(:boost)
       @default_boost = options.delete(:default_boost)
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end

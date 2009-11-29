@@ -1,10 +1,10 @@
 using_gems = false
 
-if rsolr_gem_version = ENV['RSOLR_GEM_VERSION']
-  STDERR.puts("Forcing RSolr gem version #{rsolr_gem_version}")
+if solr_ruby_gem_version = ENV['SOLR_RUBY_GEM_VERSION']
+  STDERR.puts("Forcing solr-ruby gem version #{solr_ruby_gem_version}")
   using_gems = true
   require 'rubygems'
-  gem 'rsolr', rsolr_gem_version
+  gem 'solr-ruby', solr_ruby_gem_version
 end
 
 begin
@@ -48,6 +48,7 @@ require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each do |file|
   require file unless File.basename(file) == 'mock_record.rb'
 end
+require File.join(File.dirname(__FILE__), 'ext')
 
 Spec::Runner.configure do |config|
   Dir.glob(File.join(File.dirname(__FILE__), 'helpers', '*_helper.rb')).each do |helper|

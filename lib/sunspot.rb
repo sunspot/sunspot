@@ -2,17 +2,18 @@ require 'set'
 require 'time'
 require 'date'
 require 'enumerator'
+require 'cgi'
 begin
-  require 'rsolr'
+  require 'solr'
 rescue LoadError
   require 'rubygems'
-  require 'rsolr'
+  require 'solr'
 end
 
 require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(util adapters configuration setup composite_setup text_field_setup field
-   field_factory data_extractor indexer query search session type
+   field_factory data_extractor indexer query request search session type
    dsl).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end

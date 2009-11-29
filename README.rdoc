@@ -2,10 +2,11 @@
 
 http://outoftime.github.com/sunspot
 
-Sunspot is a Ruby library for expressive, powerful interaction with the Solr search engine.
-Sunspot is built on top of the RSolr gem, which provides a low-level interface for Solr
-interaction; Sunspot provides a simple, intuitive, expressive DSL backed by powerful
-features for indexing objects and searching for them.
+Sunspot is a Ruby library for expressive, powerful interaction with the Solr
+search engine. Sunspot is built on top of the sunspot-ruby library, which
+provides a low-level interface for Solr interaction; Sunspot provides a simple,
+intuitive, expressive DSL backed by powerful features for indexing objects and
+searching for them.
 
 Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
 objects such as the filesystem.
@@ -17,16 +18,23 @@ http://wiki.github.com/outoftime/sunspot
 
 === Features:
 
-* Define indexing strategy for each searchable class using intuitive block-based API
-* Clean separation between keyword-searchable fields and fields for scoping/ordering
-* Define fields based on existing attributes or "virtual fields" for custom indexing
-* Indexes each object's entire superclass hierarchy, for easy searching for all objects inheriting from a parent class
-* Intuitive DSL for scoping searches, with all the usual boolean operators available
+* Define indexing strategy for each searchable class using intuitive block-based
+  API
+* Clean separation between keyword-searchable fields and fields for
+  scoping/ordering
+* Define fields based on existing attributes or "virtual fields" for custom
+  indexing
+* Indexes each object's entire superclass hierarchy, for easy searching for all
+  objects inheriting from a parent class
+* Intuitive DSL for scoping searches, with all the usual boolean operators
+  available
 * Intuitive interface for requesting facets on indexed fields
-* Extensible adapter architecture for easy integration of other ORMs or non-model classes
-* Refine search using field facets, date range facets, or ultra-powerful query facets
+* Extensible adapter architecture for easy integration of other ORMs or
+  non-model classes
+* Refine search using field facets, date range facets, or ultra-powerful
+  query facets
 * Full compatibility with will_paginate
-* Ordering
+* Ordering by field value, relevance, geographical distance, or random
 
 == Installation
 
@@ -36,7 +44,8 @@ In order to start the packaged Solr installation, run:
 
   sunspot-solr start -- [-d /path/to/data/directory] [-p port] [-s path/to/solr/home] [--pid-dir=path/to/pid/dir]
 
-If you don't specify a data directory, your Solr index will be stored in your operating system's temporary directory.
+If you don't specify a data directory, your Solr index will be stored in your
+operating system's temporary directory.
 
 If you specify a solr home, the directory must contain a <code>conf</code>
 directory, which should contain at least <code>schema.xml</code> and
@@ -125,8 +134,8 @@ me so I can rectify the situation!
 
 == Dependencies
 
-1. RSolr 0.10.1
-2. Daemons 1.x
+1. solr-ruby
+2. daemons
 4. Java 1.5+
 
 Sunspot has been tested with MRI 1.8.6 and 1.8.7, REE 1.8.6, YARV 1.9.1, and
@@ -146,8 +155,8 @@ guidelines:
 
 * Contributions should be submitted via Sunspot's Lighthouse account, with an
   attached git patch. See below for how to create a git patch.
-* Patches should not make any changes in your patch to the gemspec task other
-  than adding/removing dependencies (e.g., changing the name, version, email,
+* Patches should not make any changes to the gemspec task other than
+  adding/removing dependencies (e.g., changing the name, version, email,
   description, etc.)
 * Patches should not include any changes to the gemspec itself.
 * Document any new methods, options, arguments, etc.
@@ -164,7 +173,7 @@ Here's how to create a Git patch - assuming you're pulling from the canonical
 Sunspot repository at `upstream`:
 
   git fetch upstream
-  git format-patch upstre
+  git format-patch --stdout upstream/master.. > my-awesome.patch
 
 == Further Reading
 

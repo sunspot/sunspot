@@ -8,11 +8,11 @@ module Mock
       end
     end
 
-    def new(adapter = nil, opts = nil)
+    def new(url = nil)
       if @instance
         raise('Factory can only create an instance once!')
       else
-        @instance = Connection.new(adapter, opts)
+        @instance = Connection.new(url)
       end
     end
 
@@ -22,11 +22,11 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :searches, :message
-    attr_accessor :adapter, :opts
+    attr_reader :adds, :commits, :searches, :message, :url
+    attr_writer :response
 
-    def initialize(adapter = nil, opts = nil)
-      @adapter, @opts = adapter, opts
+    def initialize(url = nil)
+      @url = url
       @message = OpenStruct.new
       @adds, @deletes, @deletes_by_query, @commits, @searches = Array.new(5) { [] }
     end
@@ -47,8 +47,13 @@ module Mock
       @commits << Time.now
     end
 
-    def select(params)
-      @searches << @last_search = params
+    def send(request)
+      if Sunspot::Request::Select === request
+        @searches << @last_search = request.to_hash
+        OpenStruct.new(:data => @response || {})
+      else
+        raise ArgumentError, "Mock connection doesn't handle request type #{request.class.name}"
+      end
     end
 
     def has_add_with?(*documents)
@@ -58,8 +63,8 @@ module Mock
             if document.is_a?(Hash)
               document.all? do |field, value|
                 added.fields_by_name(field).map do |field|
-                  field.value
-                end == Array(value)
+                  field.value.to_s
+                end == Array(value).map { |v| v.to_s }
               end
             else
               !added.fields_by_name(document).empty?

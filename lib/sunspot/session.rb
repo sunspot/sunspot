@@ -15,7 +15,7 @@ module Sunspot
       # For testing purposes
       #
       def connection_class #:nodoc:
-        @connection_class ||= RSolr
+        @connection_class ||= Solr::Connection
       end
     end
 
@@ -29,11 +29,10 @@ module Sunspot
     # connection. Usually you will want to stick with the default arguments
     # when instantiating your own sessions.
     #
-    def initialize(config = Configuration.build, connection = nil, master_connection = nil)
+    def initialize(config = Configuration.build, connection = nil)
       @config = config
       yield(@config) if block_given?
       @connection = connection
-      @master_connection = master_connection
       @deletes = @adds = 0
     end
 
@@ -85,7 +84,7 @@ module Sunspot
     #
     def commit
       @adds = @deletes = 0
-      master_connection.commit
+      connection.commit
     end
 
     # 
@@ -135,7 +134,7 @@ module Sunspot
       classes.flatten!
       if classes.empty?
         @deletes += 1
-        Indexer.remove_all(master_connection)
+        indexer.remove_all
       else
         @deletes += classes.length
         classes.each { |clazz| indexer.remove_all(clazz) }
@@ -198,39 +197,11 @@ module Sunspot
     # Solr::Connection:: The connection for this session
     #
     def connection
-      @connection ||=
-        begin
-          connection = self.class.connection_class.connect(
-            :url => config.solr.url
-          )
-          connection
-        end
-    end
-
-    # 
-    # Retrieve the Solr connection to the master for this session, creating one
-    # if it does not already exist.
-    #
-    # ==== Returns
-    #
-    # Solr::Connection:: The connection for this session
-    #
-    def master_connection
-      @master_connection ||=
-        begin
-          if config.master_solr.url && config.master_solr.url != config.solr.url
-            master_connection = self.class.connection_class.new(
-              RSolr::Connection::NetHttp.new(:url => config.master_solr.url)
-            )
-            master_connection
-          else
-            connection
-          end
-        end
+      @connection ||= self.class.connection_class.new(config.solr.url)
     end
 
     def indexer
-      @indexer ||= Indexer.new(master_connection)
+      @indexer ||= Indexer.new(connection)
     end
   end
 end
