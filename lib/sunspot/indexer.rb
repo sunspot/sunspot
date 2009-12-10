@@ -55,6 +55,13 @@ module Sunspot
     end
 
     # 
+    # Remove all documents that match the scope given in the Query
+    #
+    def remove_by_scope(scope)
+      @connection.delete_by_query(scope.to_boolean_phrase)
+    end
+
+    # 
     # Start batch processing
     #
     def start_batch

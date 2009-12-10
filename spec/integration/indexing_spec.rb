@@ -20,4 +20,14 @@ describe 'indexing' do
     Sunspot.remove_by_id!(Post, post.id)
     Sunspot.search(Post) { with(:title, 'test post') }.results.should be_empty
   end
+
+  it 'removes documents by query' do
+    Sunspot.remove_all!
+    posts = [Post.new(:title => 'birds'), Post.new(:title => 'monkeys')]
+    Sunspot.index!(posts)
+    Sunspot.remove! do
+      with(:title, 'birds')
+    end
+    Sunspot.search(Post).should have(2).results
+  end
 end

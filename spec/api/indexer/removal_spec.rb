@@ -43,4 +43,11 @@ describe 'document removal', :type => :indexer do
     connection.should_receive(:delete_by_query).with('type:Namespaced\:\:Comment')
     session.remove_all(Namespaced::Comment)
   end
+
+  it 'should remove by query' do
+    session.remove(Post) do
+      with(:title, 'monkeys')
+    end
+    connection.should have_delete_by_query("(type:Post AND title_ss:monkeys)")
+  end
 end

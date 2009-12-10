@@ -41,16 +41,7 @@ module Sunspot
     #
     def new_search(*types)
       types.flatten!
-      if types.empty?
-        raise(ArgumentError, "You must specify at least one type to search")
-      end
-      setup =
-        if types.length == 1
-          Setup.for(types.first)
-        else
-          CompositeSetup.for(types)
-          end
-      Search.new(connection, setup, Query::Query.new(types), @config)
+      Search.new(connection, setup_for_types(types), Query::Query.new(types), @config)
     end
 
     #
@@ -90,11 +81,24 @@ module Sunspot
     # 
     # See Sunspot.remove
     #
-    def remove(*objects)
-      objects.flatten!
-      @deletes += objects.length
-      objects.each do |object|
-        indexer.remove(object)
+    def remove(*objects, &block)
+      if block
+        types = objects
+        conjunction = Query::Connective::Conjunction.new
+        if types.length == 1
+          conjunction.add_restriction(TypeField.instance, Query::Restriction::EqualTo, types.first)
+        else
+          conjunction.add_restriction(TypeField.instance, Query::Restriction::AnyOf, types)
+        end
+        dsl = DSL::Scope.new(conjunction, setup_for_types(types))
+        Util.instance_eval_or_call(dsl, &block)
+        indexer.remove_by_scope(conjunction)
+      else
+        objects.flatten!
+        @deletes += objects.length
+        objects.each do |object|
+          indexer.remove(object)
+        end
       end
     end
 
@@ -202,6 +206,17 @@ module Sunspot
 
     def indexer
       @indexer ||= Indexer.new(connection)
+    end
+
+    def setup_for_types(types)
+      if types.empty?
+        raise(ArgumentError, "You must specify at least one type to search")
+      end
+      if types.length == 1
+        Setup.for(types.first)
+      else
+        CompositeSetup.for(types)
+      end
     end
   end
 end

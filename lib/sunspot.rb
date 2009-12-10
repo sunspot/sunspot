@@ -304,18 +304,28 @@ module Sunspot
     # references to objects that do not exist, which will cause errors when
     # those objects are matched in search results.
     #
+    # If a block is passed, it is evaluated as a search scope; in this way,
+    # documents can be removed by an arbitrary query. In this case, the
+    # arguments to the method should be the classes to run the query on.
+    #
     # ==== Parameters
     #
     # objects...<Object>::
     #   Objects to remove from the index (may pass an array or varargs)
     #
-    # ==== Example
+    # ==== Example (remove a document)
     #
     #   post.destroy
     #   Sunspot.remove(post)
     #
-    def remove(*objects)
-      session.remove(*objects)
+    # ==== Example (remove by query)
+    #
+    #   Sunspot.remove(Post) do
+    #     with(:created_at).less_than(Time.now - 14.days)
+    #   end
+    #
+    def remove(*objects, &block)
+      session.remove(*objects, &block)
     end
 
     # 

@@ -22,7 +22,7 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :searches, :message, :url
+    attr_reader :adds, :commits, :searches, :message, :url, :deletes_by_query
     attr_writer :response
 
     def initialize(url = nil)
