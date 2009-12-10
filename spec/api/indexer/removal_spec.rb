@@ -12,13 +12,13 @@ describe 'document removal', :type => :indexer do
   end
 
   it 'removes an object by type and id and immediately commits' do
-    connection.should_receive(:delete_by_id).with('Post 1').ordered
+    connection.should_receive(:delete).with('Post 1').ordered
     connection.should_receive(:commit).ordered
     session.remove_by_id!(Post, 1)
   end
 
   it 'removes an object from the index and immediately commits' do
-    connection.should_receive(:delete_by_id).ordered
+    connection.should_receive(:delete).ordered
     connection.should_receive(:commit).ordered
     session.remove!(post)
   end

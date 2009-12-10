@@ -35,7 +35,7 @@ module Mock
       @adds << Array(documents)
     end
 
-    def delete_by_id(*ids)
+    def delete(*ids)
       @deletes << ids
     end
 

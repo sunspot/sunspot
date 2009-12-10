@@ -31,11 +31,14 @@ module Sunspot
     # Remove the given model from the Solr index
     #
     def remove(model)
-      @connection.delete_by_id(Adapters::InstanceAdapter.adapt(model).index_id)
+      @connection.delete(Adapters::InstanceAdapter.adapt(model).index_id)
     end
 
+    # 
+    # Remove the model from the Solr index by specifying the class and ID
+    #
     def remove_by_id(class_name, id)
-      @connection.delete_by_id(
+      @connection.delete(
         Adapters::InstanceAdapter.index_id_for(class_name, id)
       )
     end
