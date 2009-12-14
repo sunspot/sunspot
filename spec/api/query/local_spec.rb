@@ -42,7 +42,8 @@ describe 'local query' do
   [
     [:lat, :lng],
     [:lat, :lon],
-    [:lat, :long]
+    [:lat, :long],
+    [:latitude, :longitude]
   ].each do |lat_attr, lng_attr|
     it "sets coordinates using #{lat_attr.inspect}, #{lng_attr.inspect}" do
       session.search Post do

@@ -189,8 +189,10 @@ module Sunspot
       def lat
         if @coords.respond_to?(:[])
           @coords[0]
-        else
+        elsif @coords.respond_to?(:lat)
           @coords.lat
+        else
+          @coords.latitude
         end.to_f
       end
 
@@ -203,6 +205,8 @@ module Sunspot
           @coords.lon
         elsif @coords.respond_to?(:long)
           @coords.long
+        elsif @coords.respond_to?(:longitude)
+          @coords.longitude
         end.to_f
       end
     end

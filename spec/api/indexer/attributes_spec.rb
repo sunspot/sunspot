@@ -61,7 +61,8 @@ describe 'indexing attribute fields', :type => :indexer do
   [
     [:lat, :lng],
     [:lat, :lon],
-    [:lat, :long]
+    [:lat, :long],
+    [:latitude, :longitude]
   ].each do |lat_attr, lng_attr|
     it "should index latitude and longitude from #{lat_attr.inspect}, #{lng_attr.inspect}" do
       session.index(post(
