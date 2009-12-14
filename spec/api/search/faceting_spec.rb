@@ -9,6 +9,14 @@ describe 'faceting', :type => :search do
     result.facet(:title).field_name.should == :title
   end
 
+  it 'returns facet specified by string' do
+    stub_facet(:title_ss, {})
+    result = session.search Post do
+      facet :title
+    end
+    result.facet('title').field_name.should == :title
+  end
+
   it 'returns string facet' do
     stub_facet(:title_ss, 'Author 1' => 2, 'Author 2' => 1)
     result = session.search Post do

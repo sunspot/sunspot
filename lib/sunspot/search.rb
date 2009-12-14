@@ -88,7 +88,7 @@ module Sunspot
     # Sunspot::Facet object.
     #
     def facet(name)
-      @facets[name]
+      @facets[name.to_sym] if name
     end
 
     # 
