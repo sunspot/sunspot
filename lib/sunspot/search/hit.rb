@@ -28,7 +28,7 @@ module Sunspot
       # 
       attr_reader :distance
 
-      attr_writer :instance #:nodoc:
+      attr_writer :result #:nodoc:
 
       def initialize(raw_hit, highlights, search) #:nodoc:
         @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
@@ -52,6 +52,14 @@ module Sunspot
         end || []
       end
 
+      #
+      # Return the first highlight found for a given field, or nil if there is
+      # none.
+      #
+      def highlight(field_name)
+        highlights(field_name).first
+      end
+
       # 
       # Retrieve stored field value. For any attribute field configured with
       # :stored => true, the Hit object will contain the stored value for
@@ -72,12 +80,13 @@ module Sunspot
       # the first time it is called on any hit, all the hits for the search will
       # load their instances using the adapter's #load_all method.
       #
-      def instance
-        if @instance.nil?
+      def result
+        if @result.nil?
           @search.populate_hits
         end
-        @instance
+        @result
       end
+      alias_method :instance, :result
 
       def inspect #:nodoc:
         "#<Sunspot::Search::Hit:#{@class_name} #{@primary_key}>"

@@ -51,18 +51,7 @@ module Sunspot
     # WillPaginate::Collection or Array:: Instantiated result objects
     #
     def results
-      @results ||=
-        begin
-          results = hits.map { |hit| hit.instance }
-          results.compact!
-          if @query.page && defined?(WillPaginate::Collection)
-            WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
-              pager.replace(results)
-            end
-          else
-            results
-          end
-        end
+      @results ||= maybe_will_paginate(verified_hits.map { |hit| hit.instance })
     end
 
     # 
@@ -86,9 +75,12 @@ module Sunspot
       if options[:verify]
         verified_hits
       else
-        @hits ||= solr_response['docs'].map do |doc|
-          Hit.new(doc, highlights_for(doc), self)
-        end
+        @hits ||=
+          maybe_will_paginate(
+            solr_response['docs'].map do |doc|
+              Hit.new(doc, highlights_for(doc), self)
+            end
+          )
       end
     end
     alias_method :raw_results, :hits
@@ -187,9 +179,9 @@ module Sunspot
       end
       id_hit_hash.each_pair do |class_name, hits|
         ids = hits.map { |id, hit| hit.primary_key }
-        data_accessor_for(Util.full_const_get(class_name)).load_all(ids).each do |instance|
-          hit = id_hit_hash[class_name][Adapters::InstanceAdapter.adapt(instance).id.to_s]
-          hit.instance = instance
+        data_accessor_for(Util.full_const_get(class_name)).load_all(ids).each do |result|
+          hit = id_hit_hash[class_name][Adapters::InstanceAdapter.adapt(result).id.to_s]
+          hit.result = result
         end
       end
     end
@@ -231,12 +223,22 @@ module Sunspot
     end
 
     def verified_hits
-      @verified_hits ||= hits.select { |hit| hit.instance }
+      @verified_hits ||= maybe_will_paginate(hits.select { |hit| hit.instance })
+    end
+
+    def maybe_will_paginate(collection)
+      if defined?(WillPaginate::Collection)
+        WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
+          pager.replace(collection)
+        end
+      else
+        collection
+      end
     end
     
     # Clear out all the cached ivars so the search can be called again.
     def reset
-      @results = @hits = @total = @solr_response = @doc_ids = nil
+      @results = @hits = @verified_hits = @total = @solr_response = @doc_ids = nil
     end
   end
 end

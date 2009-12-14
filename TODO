@@ -1,8 +1,7 @@
 === 1.0 ===
-* Assumed inconsistency
-* Working local + keyword search
 * Built-in session proxies; #thread_local_sessions! method
 * Support 1.4, retaining 1.3 support if/as much as possible
+* Working local + keyword search
 * Facet filter exclusion
 
 === Future ===
