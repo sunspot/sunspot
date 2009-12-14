@@ -10,7 +10,7 @@ module Sunspot
         @requested_facets = []
       end
 
-      def rows
+      def rows(options = {})
         @rows ||=
           begin
             data = @search.facet_response['facet_queries']

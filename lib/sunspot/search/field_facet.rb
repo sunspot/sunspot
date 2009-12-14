@@ -1,5 +1,9 @@
 module Sunspot
   class Search
+    # 
+    # A FieldFacet is a facet whose rows are all values for a certain field, in
+    # contrast to a QueryFacet, whose rows represent arbitrary queries.
+    #
     class FieldFacet < QueryFacet
       alias_method :field_name, :name
 
@@ -8,23 +12,46 @@ module Sunspot
         @field = field
       end
 
-      def rows
-        @rows ||=
-          begin
-            rows = super
-            has_query_facets = !rows.empty?
-            if @search.facet_response['facet_fields']
-              if data = @search.facet_response['facet_fields'][@field.indexed_name]
-                data.each_slice(2) do |value, count|
-                  rows << FacetRow.new(@field.cast(value), count, self)
+      # 
+      # Get the rows returned for this facet.
+      #
+      # ==== Options (options)
+      #
+      # :verify::
+      #   Only return rows for which the referenced object exists in the data
+      #   store. This option is ignored unless the field associated with this
+      #   facet is configured with a :references argument.
+      #
+      # ==== Returns
+      #
+      # Array:: Array of FacetRow objects
+      #
+      def rows(options = {})
+        if options[:verify]
+          verified_rows
+        else
+          @rows ||=
+            begin
+              rows = super
+              has_query_facets = !rows.empty?
+              if @search.facet_response['facet_fields']
+                if data = @search.facet_response['facet_fields'][@field.indexed_name]
+                  data.each_slice(2) do |value, count|
+                    row = FacetRow.new(@field.cast(value), count, self)
+                    rows << row
+                  end
                 end
               end
+              sort_rows!(rows) if has_query_facets
+              rows
             end
-            sort_rows!(rows) if has_query_facets
-            rows
-          end
+        end
       end
 
+      # 
+      # If this facet references a model class, populate the rows with instances
+      # of the model class by loading them out of the appropriate adapter.
+      #
       def populate_instances #:nodoc:
         if reference = @field.reference
           values_hash = rows.inject({}) do |hash, row|
@@ -37,6 +64,17 @@ module Sunspot
           instances.each do |instance|
             values_hash[Adapters::InstanceAdapter.adapt(instance).id].instance = instance
           end
+          true
+        end
+      end
+
+      private
+
+      def verified_rows
+        if @field.reference
+          @verified_rows ||= rows.select { |row| row.instance }
+        else
+          rows
         end
       end
     end

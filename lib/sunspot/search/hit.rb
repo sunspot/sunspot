@@ -74,7 +74,7 @@ module Sunspot
       #
       def instance
         if @instance.nil?
-          @search.populate_hits!
+          @search.populate_hits
         end
         @instance
       end

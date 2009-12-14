@@ -45,8 +45,15 @@ describe 'search results', :type => :search do
 
   end
 
-  it 'should return total' do
+  it 'returns total' do
     stub_results(Post.new, Post.new, 4)
     session.search(Post) { paginate(:page => 1) }.total.should == 4
+  end
+
+  it 'returns available results if some results are not available from data store' do
+    posts = [Post.new, Post.new]
+    posts.last.destroy
+    stub_results(*posts)
+    session.search(Post).results.should == posts[0..0]
   end
 end

@@ -227,6 +227,37 @@ describe 'faceting', :type => :search do
     search.facet(:blog_id).rows.map { |row| row.instance }.should == blogs
   end
 
+  it 'returns all instantiated facet rows, whether or not the instances exist' do
+    blogs = Array.new(2) { Blog.new }
+    blogs.last.destroy
+    stub_facet(:blog_id_i, blogs[0].id.to_s => 2, blogs[1].id.to_s => 1)
+    search = session.search(Post) { facet(:blog_id) }
+    search.facet(:blog_id).rows.map { |row| row.instance }.should == [blogs.first, nil]
+  end
+
+  it 'returns only rows with available instances if specified' do
+    blogs = Array.new(2) { Blog.new }
+    blogs.last.destroy
+    stub_facet(:blog_id_i, blogs[0].id.to_s => 2, blogs[1].id.to_s => 1)
+    search = session.search(Post) { facet(:blog_id) }
+    search.facet(:blog_id).rows(:verify => true).map { |row| row.instance }.should == blogs[0..0]
+  end
+
+  it 'returns both verified and unverified rows from the same facet' do
+    blogs = Array.new(2) { Blog.new }
+    blogs.last.destroy
+    stub_facet(:blog_id_i, blogs[0].id.to_s => 2, blogs[1].id.to_s => 1)
+    search = session.search(Post) { facet(:blog_id) }
+    search.facet(:blog_id).rows(:verify => true).map { |row| row.instance }.should == blogs[0..0]
+    search.facet(:blog_id).rows.map { |row| row.instance }.should == [blogs.first, nil]
+  end
+
+  it 'ignores :verify option if facet not a reference facet' do
+    stub_facet(:category_ids_im, '1' => 2, '2' => 1)
+    search = session.search(Post) { facet(:category_ids) }
+    search.facet(:category_ids).should have(2).rows(:verify => true)
+  end
+
   it 'returns instantiated facet values for limited field facet' do
     blogs = Array.new(2) { Blog.new }
     stub_query_facet(

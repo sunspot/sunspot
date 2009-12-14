@@ -32,7 +32,7 @@ class MockRecord
 
     def get_all(ids)
       QUERY_COUNTS[self.name.to_sym] += 1
-      ids.map { |id| get_instance(id) }.sort_by { |instance| instance.id }
+      ids.map { |id| get_instance(id) }.compact.sort_by { |instance| instance.id }
     end
 
     def query_count
@@ -44,5 +44,9 @@ class MockRecord
     def get_instance(id)
       INSTANCES[self.name.to_sym][id]
     end
+  end
+
+  def destroy
+    INSTANCES[self.class.name.to_sym].delete(@id)
   end
 end

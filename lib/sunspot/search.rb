@@ -43,18 +43,26 @@ module Sunspot
     # available, the results will be a WillPaginate::Collection instance; if
     # not, it will be a vanilla Array.
     #
+    # If not all of the results referenced by the Solr hits actually exist in
+    # the data store, Sunspot will only return the results that do exist.
+    #
     # ==== Returns
     #
     # WillPaginate::Collection or Array:: Instantiated result objects
     #
     def results
-      @results ||= if @query.page && defined?(WillPaginate::Collection)
-        WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
-          pager.replace(hits.map { |hit| hit.instance })
+      @results ||=
+        begin
+          results = hits.map { |hit| hit.instance }
+          results.compact!
+          if @query.page && defined?(WillPaginate::Collection)
+            WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
+              pager.replace(results)
+            end
+          else
+            results
+          end
         end
-      else
-        hits.map { |hit| hit.instance }
-      end
     end
 
     # 
@@ -62,12 +70,26 @@ module Sunspot
     # that contain the class name, primary key, keyword relevance score (if
     # applicable), and any stored fields.
     #
+    # ==== Options (options)
+    #
+    # :verify::
+    #   Only return hits that reference objects that actually exist in the data
+    #   store. This causes results to be eager-loaded from the data store,
+    #   unlike the normal behavior of this method, which only loads the
+    #   referenced results when Hit#result is first called.
+    #
     # ==== Returns
     #
     # Array:: Ordered collection of Hit objects
     #
-    def hits
-      @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, highlights_for(doc), self) }
+    def hits(options = {})
+      if options[:verify]
+        verified_hits
+      else
+        @hits ||= solr_response['docs'].map do |doc|
+          Hit.new(doc, highlights_for(doc), self)
+        end
+      end
     end
     alias_method :raw_results, :hits
 
@@ -158,7 +180,7 @@ module Sunspot
     # time any hit has its instance requested, and all hits are loaded as a
     # batch.
     #
-    def populate_hits! #:nodoc:
+    def populate_hits #:nodoc:
       id_hit_hash = Hash.new { |h, k| h[k] = {} }
       hits.each do |hit|
         id_hit_hash[hit.class_name][hit.primary_key] = hit
@@ -206,6 +228,10 @@ module Sunspot
       if @solr_result['highlighting']
         @solr_result['highlighting'][doc['id']]
       end
+    end
+
+    def verified_hits
+      @verified_hits ||= hits.select { |hit| hit.instance }
     end
     
     # Clear out all the cached ivars so the search can be called again.

@@ -29,6 +29,23 @@ describe 'hits', :type => :search do
     search.hits.last.instance.should == posts.last
   end
 
+  it 'should return only hits whose referenced object exists in the data store if :verify option passed' do
+    posts = Array.new(2) { Post.new }
+    posts.last.destroy
+    stub_results(*posts)
+    search = session.search(Post)
+    search.hits(:verify => true).map { |hit| hit.instance }.should == posts[0..0]
+  end
+
+  it 'should return verified and unverified hits from the same search' do
+    posts = Array.new(2) { Post.new }
+    posts.last.destroy
+    stub_results(*posts)
+    search = session.search(Post)
+    search.hits(:verify => true).map { |hit| hit.instance }.should == posts[0..0]
+    search.hits.map { |hit| hit.instance }.should == [posts.first, nil]
+  end
+
   it 'should attach score to hits' do
     stub_full_results('instance' => Post.new, 'score' => 1.23)
     session.search(Post).hits.first.score.should == 1.23
