@@ -117,6 +117,26 @@ describe 'search faceting' do
     end
   end
 
+  context 'multiselect faceting' do
+    before do
+      Sunspot.remove_all
+      Sunspot.index!(
+        Post.new(:blog_id => 1, :category_ids => [1]),
+        Post.new(:blog_id => 1, :category_ids => [2]),
+        Post.new(:blog_id => 3, :category_ids => [3])
+      )
+    end
+
+    it 'should exclude filter from faceting' do
+      search = Sunspot.search(Post) do
+        with(:blog_id, 1)
+        category_filter = with(:category_ids, 1)
+        facet(:category_ids, :exclude => category_filter)
+      end
+      search.facet(:category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
+    end
+  end
+
   context 'date facets' do
     before :all do
       Sunspot.remove_all

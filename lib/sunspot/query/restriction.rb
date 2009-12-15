@@ -37,6 +37,8 @@ module Sunspot
       # * #to_solr_conditional
       #
       class Base #:nodoc:
+        include Filter
+
         def initialize(field, value, negated = false)
           @field, @value, @negated = field, value, negated
         end
@@ -53,7 +55,7 @@ module Sunspot
         # Hash:: Representation of this restriction as solr-ruby parameters
         #
         def to_params
-          { :fq => [to_boolean_phrase] }
+          { :fq => [to_filter_query] }
         end
 
         # 

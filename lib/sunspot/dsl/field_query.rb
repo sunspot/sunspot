@@ -38,10 +38,85 @@ module Sunspot
         order_by(:random)
       end
 
-      # Request facets on the given field names. If the last argument is a hash,
-      # the given options will be applied to all specified fields. See
-      # Sunspot::Search#facet and Sunspot::Facet for information on what is
-      # returned.
+      #
+      # Request a facet on the search query. A facet is a feature of Solr that
+      # determines the number of documents that match the existing search *and*
+      # an additional criterion. This allows you to build powerful drill-down
+      # interfaces for search, at each step presenting the searcher with a set
+      # of refinements that are known to return results.
+      #
+      # In Sunspot, each facet returns zero or more rows, each of which
+      # represents a particular criterion conjoined with the actual query being
+      # performed. For _field_ _facets_, each row represents a particular value
+      # for a given field. For _query_ _facets_, each row represents an
+      # arbitrary scope; the facet itself is just a means of logically grouping
+      # the scopes.
+      #
+      # === Examples
+      #
+      # ==== Field Facets
+      #
+      # A field facet is specified by passing one or more Symbol arguments to
+      # this method:
+      #
+      #   Sunspot.search(Post) do
+      #     with(:blog_id, 1)
+      #     facet(:category_id)
+      #   end
+      #   
+      # The facet specified above will have a row for each category_id that is
+      # present in a document which also has a blog_id of 1.
+      #
+      # ==== Multiselect Facets
+      #
+      # In certain circumstances, it is beneficial to exclude certain query
+      # scopes from a facet; the most common example is multi-select faceting,
+      # where the user has selected a certain value, but the facet should still
+      # show all options that would be available if they had not:
+      #
+      #   Sunspot.search(Post) do
+      #     with(:blog_id, 1)
+      #     category_filter = with(:category_id, 2)
+      #     facet(:category_id, :exclude => category_filter)
+      #   end
+      # 
+      # Although the results of the above search will be restricted to those
+      # with a category_id of 2, the category_id facet will operate as if a
+      # category had not been selected, allowing the user to select additional
+      # categories (which will presumably be ORed together).
+      #
+      # ==== Query Facets
+      #
+      # A query facet is a collection of arbitrary scopes, each of which
+      # represents a row. This is specified by passing a block into the #facet
+      # method; the block then contains one or more +row+ blocks, each of which
+      # creates a query facet row. The +row+ blocks follow the usual Sunspot
+      # scope DSL.
+      #
+      # For example, a query facet can be used to facet over a set of ranges:
+      #
+      #   Sunspot.search(Post) do
+      #     facet(:average_rating) do
+      #       row(1.0..2.0) do
+      #         with(:average_rating, 1.0..2.0)
+      #       end
+      #       row(2.0..3.0) do
+      #         with(:average_rating, 2.0..3.0)
+      #       end
+      #       row(3.0..4.0) do
+      #         with(:average_rating, 3.0..4.0)
+      #       end
+      #       row(4.0..5.0) do
+      #         with(:average_rating, 4.0..5.0)
+      #       end
+      #     end
+      #   end
+      #
+      # Note that the arguments to the +facet+ and +row+ methods simply provide
+      # labels for the facet and its rows, so that they can be retrieved and
+      # identified from the Search object. They are not passed to Solr and no
+      # semantic meaning is attached to them. The label for +facet+ should be
+      # a symbol; the label for +row+ can be whatever you'd like.
       #
       # ==== Parameters
       #
@@ -58,6 +133,10 @@ module Sunspot
       # :zeros<Boolean>::
       #   Return facet rows for which there are no matches (equivalent to
       #   :minimum_count => 0). Default is false.
+      # :exclude<Object>::
+      #   Exclude this filter when performing the faceting (see Multiselect
+      #   Faceting above). The object given for this argument should be the
+      #   return value of a scoping method (+with+, +any_of+, +all_of+, etc.).
       # :extra<Symbol,Array>::
       #   One or more of :any and :none. :any returns a facet row with a count
       #   of all matching documents that have some value for this field. :none

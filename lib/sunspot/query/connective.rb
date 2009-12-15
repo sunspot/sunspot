@@ -5,6 +5,8 @@ module Sunspot
       # Base class for connectives (conjunctions and disjunctions).
       #
       class Abstract
+        include Filter
+
         def initialize(negated = false) #:nodoc:
           @negated = negated
           @components = []
@@ -14,7 +16,7 @@ module Sunspot
         # Add a restriction to the connective.
         #
         def add_restriction(field, restriction_type, value, negated = false)
-          @components << restriction_type.new(field, value, negated)
+          add_component(restriction_type.new(field, value, negated))
         end
 
         # 
