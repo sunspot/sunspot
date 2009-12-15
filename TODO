@@ -1,4 +1,5 @@
 === 1.0 ===
+* Named field facets
 * Trie Fields
 * commitWithin
 * Built-in session proxies; #thread_local_sessions! method

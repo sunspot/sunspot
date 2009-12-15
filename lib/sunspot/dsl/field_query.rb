@@ -85,6 +85,12 @@ module Sunspot
       # category had not been selected, allowing the user to select additional
       # categories (which will presumably be ORed together).
       #
+      # <strong>As far as I can tell, Solr only supports multi-select with
+      # field facets; if +:exclude+ is passed to a query facet, this method will
+      # raise an error. Also, the +:only+ and +:extra+ options use query
+      # faceting under the hood, so these can't be used with +:extra+ either.
+      # </strong>
+      #
       # ==== Query Facets
       #
       # A query facet is a collection of arbitrary scopes, each of which
@@ -133,16 +139,23 @@ module Sunspot
       # :zeros<Boolean>::
       #   Return facet rows for which there are no matches (equivalent to
       #   :minimum_count => 0). Default is false.
-      # :exclude<Object>::
-      #   Exclude this filter when performing the faceting (see Multiselect
-      #   Faceting above). The object given for this argument should be the
-      #   return value of a scoping method (+with+, +any_of+, +all_of+, etc.).
+      # :exclude<Object,Array>::
+      #   Exclude one or more filters when performing the faceting (see
+      #   Multiselect Faceting above). The object given for this argument should
+      #   be the return value(s) of a scoping method (+with+, +any_of+,
+      #   +all_of+, etc.). <strong>Only can be used for field facets that do not
+      #   use the +:extra+ or +:only+ options.</strong>
+      # :only<Array>::
+      #   Only return facet rows for the given values. Useful if you are only
+      #   interested in faceting on a subset of values for a given field.
+      #   <strong>Only applies to field facets.</strong>
       # :extra<Symbol,Array>::
       #   One or more of :any and :none. :any returns a facet row with a count
       #   of all matching documents that have some value for this field. :none
       #   returns a facet row with a count of all matching documents that have
       #   no value for this field. The facet row(s) corresponding to the extras
-      #   have a value of the symbol passed.
+      #   have a value of the symbol passed. <strong>Only applies to field
+      #   facets.</strong>
       #
       def facet(*field_names, &block)
         options = Sunspot::Util.extract_options_from(field_names)
@@ -154,12 +167,24 @@ module Sunspot
               "wrong number of arguments (#{field_names.length} for 1)"
             )
           end
+          if options.has_key?(:exclude)
+            raise(
+              ArgumentError,
+              "can't use :exclude with query facets"
+            )
+          end
           search_facet = @search.add_query_facet(field_names.first, options)
           Sunspot::Util.instance_eval_or_call(
             QueryFacet.new(@query, @setup, search_facet),
             &block
           )
         elsif options[:only]
+          if options.has_key?(:exclude)
+            raise(
+              ArgumentError,
+              "can't use :exclude with :only (see documentation)"
+            )
+          end
           field_names.each do |field_name|
             field = @setup.field(field_name)
             search_facet = @search.add_field_facet(field, options)
@@ -190,6 +215,12 @@ module Sunspot
               end
             @query.add_field_facet(facet)
             Util.Array(options[:extra]).each do |extra|
+              if options.has_key?(:exclude)
+                raise(
+                  ArgumentError,
+                  "can't use :exclude with :only (see documentation)"
+                )
+              end
               extra_facet = Sunspot::Query::QueryFacet.new
               case extra
               when :any

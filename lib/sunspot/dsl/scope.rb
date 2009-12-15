@@ -144,7 +144,9 @@ module Sunspot
       # future, or who do not have any expiration time at all.
       #
       def any_of(&block)
-        Util.instance_eval_or_call(Scope.new(@scope.add_disjunction, @setup), &block)
+        disjunction = @scope.add_disjunction
+        Util.instance_eval_or_call(Scope.new(disjunction, @setup), &block)
+        disjunction
       end
 
       # 
@@ -166,7 +168,9 @@ module Sunspot
       #   end
       #
       def all_of(&block)
-        Util.instance_eval_or_call(Scope.new(@scope.add_conjunction, @setup), &block)
+        conjunction = @scope.add_conjunction
+        Util.instance_eval_or_call(Scope.new(conjunction, @setup), &block)
+        conjunction
       end
 
       #
