@@ -53,7 +53,7 @@ module Sunspot
           end
         end
         if @options[:limit]
-          rows.slice!(@options[:limit], rows.length)
+          rows.replace(rows.first(@options[:limit]))
         end
         rows
       end

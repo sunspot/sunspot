@@ -217,6 +217,10 @@ describe 'faceting', :type => :search do
       facet_values_from_options(:limit => 1).should == [2]
     end
 
+    it 'returns all facets if limit greater than number of facets' do
+      facet_values_from_options(:limit => 10).should == [2, 1, 3]
+    end
+
     it 'allows zero count if specified' do
       facet_values_from_options(:zeros => true).should == [1, 3, 2, 4]
     end
