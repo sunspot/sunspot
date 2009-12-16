@@ -63,7 +63,7 @@ describe 'faceting', :type => :search do
        Time.gm(2009, 04, 07, 20, 26, 19)]
   end
 
-  it 'should return date facet' do
+  it 'returns date facet' do
     stub_facet(
       :expire_date_d,
       '2009-07-13T00:00:00Z' => 3,
@@ -77,19 +77,40 @@ describe 'faceting', :type => :search do
        Date.new(2009, 04, 01)]
   end
 
-  it 'should return boolean facet' do
+  it 'returns boolean facet' do
     stub_facet(:featured_b, 'true' => 3, 'false' => 1)
     result = session.search(Post) { facet(:featured) }
     facet_values(result, :featured).should == [true, false]
   end
 
-  it 'should return class facet' do
+
+  { 'string' => 'blog', 'symbol' => :blog }.each_pair do |type, name|
+    it "returns field facet with #{type} custom name" do
+      stub_facet(:blog, '2' => 1, '1' => 4)
+      result = session.search(Post) { facet(:blog_id, :name => name) }
+      facet_values(result, :blog).should == [1, 2]
+    end
+
+    it "assigns #{type} custom name to field facet" do
+      stub_facet(:blog, '2' => 1)
+      result = session.search(Post) { facet(:blog_id, :name => name) }
+      result.facet(:blog).name.should == :blog
+    end
+
+    it "retains field name for #{type} custom-named field facet" do
+      stub_facet(:blog, '2' => 1)
+      result = session.search(Post) { facet(:blog_id, :name => name) }
+      result.facet(:blog).field_name.should == :blog_id
+    end
+  end
+
+  it 'returns class facet' do
     stub_facet(:class_name, 'Post' => 3, 'Namespaced::Comment' => 1)
     result = session.search(Post) { facet(:class) }
     facet_values(result, :class).should == [Post, Namespaced::Comment]
   end
 
-  it 'should return special :any facet' do
+  it 'returns special :any facet' do
     stub_query_facet(
       'category_ids_im:[* TO *]' => 3
     )
@@ -99,7 +120,7 @@ describe 'faceting', :type => :search do
     row.count.should == 3
   end
 
-  it 'should return special :none facet' do
+  it 'returns special :none facet' do
     stub_query_facet(
       '-category_ids_im:[* TO *]' => 3
     )
@@ -109,7 +130,7 @@ describe 'faceting', :type => :search do
     row.count.should == 3
   end
 
-  it 'should return date range facet' do
+  it 'returns date range facet' do
     stub_date_facet(:published_at_d, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
     start_time = Time.utc(2009, 7, 7, 4)
     end_time = start_time + 2*24*60*60
@@ -119,7 +140,7 @@ describe 'faceting', :type => :search do
     facet.rows.last.value.should == ((start_time+24*60*60)..end_time)
   end
 
-  it 'should return date range facet sorted by count' do
+  it 'returns date range facet sorted by count' do
     stub_date_facet(:published_at_d, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
     start_time = Time.utc(2009, 7, 7, 4)
     end_time = start_time + 2*24*60*60

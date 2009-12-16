@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe 'multiselect faceting' do
+describe 'facet local params' do
   it 'tags and excludes a scope filter in a field facet' do
     session.search(Post) do
       blog_filter = with(:blog_id, 1)
@@ -45,6 +45,20 @@ describe 'multiselect faceting' do
       with(:blog_id, 1)
     end
     connection.should have_last_search_including(:fq, "blog_id_i:1")
+  end
+
+  it 'names a field facet' do
+    session.search(Post) do
+      facet(:blog_id, :name => :blog)
+    end
+    connection.should have_last_search_including(:"facet.field", "{!key=blog}blog_id_i")
+  end
+
+  it 'uses the custom field facet name in facet option parameters' do
+    session.search(Post) do
+      facet(:blog_id, :name => :blog, :sort => :count)
+    end
+    connection.should have_last_search_with(:"f.blog.facet.sort" => 'true')
   end
 
   it 'raises an ArgumentError if exclusion attempted on a query facet' do

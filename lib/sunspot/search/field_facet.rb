@@ -5,11 +5,13 @@ module Sunspot
     # contrast to a QueryFacet, whose rows represent arbitrary queries.
     #
     class FieldFacet < QueryFacet
-      alias_method :field_name, :name
-
       def initialize(field, search, options) #:nodoc:
-        super(field.name, search, options)
+        super((options[:name] || field.name).to_sym, search, options)
         @field = field
+      end
+
+      def field_name
+        @field.name
       end
 
       # 
@@ -35,7 +37,7 @@ module Sunspot
               rows = super
               has_query_facets = !rows.empty?
               if @search.facet_response['facet_fields']
-                if data = @search.facet_response['facet_fields'][@field.indexed_name]
+                if data = @search.facet_response['facet_fields'][key]
                   data.each_slice(2) do |value, count|
                     row = FacetRow.new(@field.cast(value), count, self)
                     rows << row
@@ -76,6 +78,10 @@ module Sunspot
         else
           rows
         end
+      end
+      
+      def key
+        @key ||= (@options[:name] || @field.indexed_name).to_s
       end
     end
   end

@@ -191,11 +191,13 @@ module Sunspot
     end
 
     def add_field_facet(field, options = {}) #:nodoc:
-      @facets[field.name] = FieldFacet.new(field, self, options)
+      name = (options[:name] || field.name).to_sym
+      @facets[name] = FieldFacet.new(field, self, options)
     end
 
     def add_date_facet(field, options) #:nodoc:
-      @facets[field.name] = DateFacet.new(field, self, options)
+      name = (options[:name] || field.name).to_sym
+      @facets[name] = DateFacet.new(field, self, options)
     end
 
     def add_query_facet(name, options) #:nodoc:

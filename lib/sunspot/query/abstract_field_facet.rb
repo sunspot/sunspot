@@ -36,7 +36,11 @@ module Sunspot
       private
 
       def qualified_param(param)
-        :"f.#{@field.indexed_name}.facet.#{param}"
+        :"f.#{key}.facet.#{param}"
+      end
+      
+      def key
+        @key ||= @options[:name] || @field.indexed_name
       end
     end
   end

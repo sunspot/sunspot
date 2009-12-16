@@ -145,6 +145,12 @@ module Sunspot
       #   be the return value(s) of a scoping method (+with+, +any_of+,
       #   +all_of+, etc.). <strong>Only can be used for field facets that do not
       #   use the +:extra+ or +:only+ options.</strong>
+      # :name<Symbol>::
+      #   Give a custom name to a field facet. The main use case for this option
+      #   is for requesting the same field facet multiple times, using different
+      #   filter exclusions (see Multiselect Faceting above). If you pass this
+      #   option, it is also the argument that should be passed to Search#facet
+      #   when retrieving the facet result.
       # :only<Array>::
       #   Only return facet rows for the given values. Useful if you are only
       #   interested in faceting on a subset of values for a given field.
@@ -210,7 +216,7 @@ module Sunspot
                 search_facet = @search.add_date_facet(field, options)
                 Sunspot::Query::DateFieldFacet.new(field, options)
               else
-                search_facet = @search.add_field_facet(field)
+                search_facet = @search.add_field_facet(field, options)
                 Sunspot::Query::FieldFacet.new(field, options)
               end
             @query.add_field_facet(facet)
@@ -218,7 +224,7 @@ module Sunspot
               if options.has_key?(:exclude)
                 raise(
                   ArgumentError,
-                  "can't use :exclude with :only (see documentation)"
+                  "can't use :exclude with :extra (see documentation)"
                 )
               end
               extra_facet = Sunspot::Query::QueryFacet.new

@@ -135,6 +135,17 @@ describe 'search faceting' do
       end
       search.facet(:category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
     end
+
+    it 'should use facet keys to facet more than once with different exclusions' do
+      search = Sunspot.search(Post) do
+        with(:blog_id, 1)
+        category_filter = with(:category_ids, 1)
+        facet(:category_ids)
+        facet(:category_ids, :exclude => category_filter, :name => :all_category_ids)
+      end
+      search.facet(:category_ids).rows.map { |row| row.value }.should == [1]
+      search.facet(:all_category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
+    end
   end
 
   context 'date facets' do
