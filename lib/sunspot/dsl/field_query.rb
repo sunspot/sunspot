@@ -207,7 +207,7 @@ module Sunspot
             field = @setup.field(field_name)
             facet =
               if options[:time_range]
-                unless field.type == Sunspot::Type::TimeType
+                unless field.type.is_a?(Sunspot::Type::TimeType)
                   raise(
                     ArgumentError,
                     ':time_range can only be specified for Date or Time fields'

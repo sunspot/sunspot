@@ -77,6 +77,36 @@ describe 'faceting', :type => :search do
        Date.new(2009, 04, 01)]
   end
 
+  it 'returns trie integer facet' do
+    stub_facet(:size_it, '3' => 2, '1' => 1)
+    result = session.search Photo do
+      facet :size
+    end
+    facet_values(result, :size).should == [3, 1]
+  end
+
+  it 'returns float facet' do
+    stub_facet(:average_rating_ft, '9.3' => 2, '1.1' => 1)
+    result = session.search Photo do
+      facet :average_rating
+    end
+    facet_values(result, :average_rating).should == [9.3, 1.1]
+  end
+
+  it 'returns time facet' do
+    stub_facet(
+      :created_at_dt,
+      '1239135923' => 3,
+      '1239135979' => 1
+    )
+    result = session.search Photo do
+      facet :created_at
+    end
+    facet_values(result, :created_at).should ==
+      [Time.gm(2009, 04, 07, 20, 25, 23),
+       Time.gm(2009, 04, 07, 20, 26, 19)]
+  end
+
   it 'returns boolean facet' do
     stub_facet(:featured_b, 'true' => 3, 'false' => 1)
     result = session.search(Post) { facet(:featured) }

@@ -99,7 +99,7 @@ module Sunspot
     attr_reader :default_boost
 
     def initialize(name, options = {})
-      super(name, Type::TextType, options)
+      super(name, Type::TextType.instance, options)
       @multiple = true
       @boost = options.delete(:boost)
       @default_boost = options.delete(:default_boost)

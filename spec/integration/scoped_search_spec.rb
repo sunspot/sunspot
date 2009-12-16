@@ -2,85 +2,91 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe 'scoped_search' do
   def self.test_field_type(name, attribute, field, *values)
+    clazz =
+      if values.first.is_a?(Class)
+        values.shift
+      else
+        Post
+      end
     raise(ArgumentError, 'Please supply five values') unless values.length == 5
 
     context "with field of type #{name}" do
       before :all do
         Sunspot.remove_all
-        @posts = values.map do |value|
-          post = Post.new(attribute => value)
-          Sunspot.index(post)
-          post
+        @objects = values.map do |value|
+          object = clazz.new(attribute => value)
+          Sunspot.index(object)
+          object
         end
         Sunspot.commit
       end
 
       it 'should filter by exact match' do
-        Sunspot.search(Post) { with(field, values[2]) }.results.should == [@posts[2]]
+        Sunspot.search(clazz) { with(field, values[2]) }.results.should == [@objects[2]]
       end
 
       it 'should reject by inexact match' do
-        results = Sunspot.search(Post) { without(field, values[2]) }.results
-        [0, 1, 3, 4].each { |i| results.should include(@posts[i]) }
-        results.should_not include(@posts[2])
+        results = Sunspot.search(clazz) { without(field, values[2]) }.results
+        [0, 1, 3, 4].each { |i| results.should include(@objects[i]) }
+        results.should_not include(@objects[2])
       end
 
       it 'should filter by less than' do
-        results = Sunspot.search(Post) { with(field).less_than values[2] }.results
-        (0..2).each { |i| results.should include(@posts[i]) }
-        (3..4).each { |i| results.should_not include(@posts[i]) }
+        results = Sunspot.search(clazz) { with(field).less_than values[2] }.results
+        (0..2).each { |i| results.should include(@objects[i]) }
+        (3..4).each { |i| results.should_not include(@objects[i]) }
       end
 
       it 'should reject by less than' do
-        results = Sunspot.search(Post) { without(field).less_than values[2] }.results
-        (0..2).each { |i| results.should_not include(@posts[i]) }
-        (3..4).each { |i| results.should include(@posts[i]) }
+        results = Sunspot.search(clazz) { without(field).less_than values[2] }.results
+        (0..2).each { |i| results.should_not include(@objects[i]) }
+        (3..4).each { |i| results.should include(@objects[i]) }
       end
 
       it 'should filter by greater than' do
-        results = Sunspot.search(Post) { with(field).greater_than values[2] }.results
-        (2..4).each { |i| results.should include(@posts[i]) }
-        (0..1).each { |i| results.should_not include(@posts[i]) }
+        results = Sunspot.search(clazz) { with(field).greater_than values[2] }.results
+        (2..4).each { |i| results.should include(@objects[i]) }
+        (0..1).each { |i| results.should_not include(@objects[i]) }
       end
 
       it 'should reject by greater than' do
-        results = Sunspot.search(Post) { without(field).greater_than values[2] }.results
-        (2..4).each { |i| results.should_not include(@posts[i]) }
-        (0..1).each { |i| results.should include(@posts[i]) }
+        results = Sunspot.search(clazz) { without(field).greater_than values[2] }.results
+        (2..4).each { |i| results.should_not include(@objects[i]) }
+        (0..1).each { |i| results.should include(@objects[i]) }
       end
 
       it 'should filter by between' do
-        results = Sunspot.search(Post) { with(field).between(values[1]..values[3]) }.results
-        (1..3).each { |i| results.should include(@posts[i]) }
-        [0, 4].each { |i| results.should_not include(@posts[i]) }
+        results = Sunspot.search(clazz) { with(field).between(values[1]..values[3]) }.results
+        (1..3).each { |i| results.should include(@objects[i]) }
+        [0, 4].each { |i| results.should_not include(@objects[i]) }
       end
 
       it 'should reject by between' do
-        results = Sunspot.search(Post) { without(field).between(values[1]..values[3]) }.results
-        (1..3).each { |i| results.should_not include(@posts[i]) }
-        [0, 4].each { |i| results.should include(@posts[i]) }
+        results = Sunspot.search(clazz) { without(field).between(values[1]..values[3]) }.results
+        (1..3).each { |i| results.should_not include(@objects[i]) }
+        [0, 4].each { |i| results.should include(@objects[i]) }
       end
 
       it 'should filter by any of' do
-        results = Sunspot.search(Post) { with(field).any_of(values.values_at(1, 3)) }.results
-        [1, 3].each { |i| results.should include(@posts[i]) }
-        [0, 2, 4].each { |i| results.should_not include(@posts[i]) }
+        results = Sunspot.search(clazz) { with(field).any_of(values.values_at(1, 3)) }.results
+        [1, 3].each { |i| results.should include(@objects[i]) }
+        [0, 2, 4].each { |i| results.should_not include(@objects[i]) }
       end
 
       it 'should reject by any of' do
-        results = Sunspot.search(Post) { without(field).any_of(values.values_at(1, 3)) }.results
-        [1, 3].each { |i| results.should_not include(@posts[i]) }
-        [0, 2, 4].each { |i| results.should include(@posts[i]) }
+        results = Sunspot.search(clazz) { without(field).any_of(values.values_at(1, 3)) }.results
+        [1, 3].each { |i| results.should_not include(@objects[i]) }
+        [0, 2, 4].each { |i| results.should include(@objects[i]) }
       end
 
       it 'should order by field ascending' do
-        results = Sunspot.search(Post) { order_by field, :asc }.results
-        results.should == @posts
+        results = Sunspot.search(clazz) { order_by field, :asc }.results
+        results.should == @objects
       end
 
       it 'should order by field descending' do
-        results = Sunspot.search(Post) { order_by field, :desc }.results
-        results.should == @posts.reverse
+        results = Sunspot.search(clazz) { order_by field, :desc }.results
+        results.should == @objects.reverse
       end
     end
   end
@@ -90,6 +96,10 @@ describe 'scoped_search' do
   test_field_type 'Float', :ratings_average, :average_rating, -2.5, 0.0, 3.2, 3.5, 16.0
   test_field_type 'Time', :published_at, :published_at, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
                                                            '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
+  test_field_type 'Trie Integer', :size, :size, Photo, -2, 0, 3, 12, 20
+  test_field_type 'Trie Float', :average_rating, :average_rating, Photo, -2.5, 0.0, 3.2, 3.5, 16.0
+  test_field_type 'Trie Time', :created_at, :created_at, Photo, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
+                                                                   '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
 
   describe 'Boolean field type' do
     before :all do

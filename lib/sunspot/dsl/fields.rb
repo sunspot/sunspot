@@ -83,16 +83,25 @@ module Sunspot
       # The call to +time+ will create a field of type Sunspot::Types::TimeType
       #
       def method_missing(method, *args, &block)
+        options = Util.extract_options_from(args)
+        type_const_name = "#{Util.camel_case(method.to_s.sub(/^dynamic_/, ''))}Type"
+        trie = options.delete(:trie)
+        type_const_name = "Trie#{type_const_name}" if trie
         begin
-          type = Type.const_get("#{Util.camel_case(method.to_s.sub(/^dynamic_/, ''))}Type")
+          type_class = Type.const_get(type_const_name)
         rescue(NameError)
-          super(method.to_sym, *args, &block) and return
+          if trie
+            raise ArgumentError, "Trie fields are only valid for numeric and time types"
+          else
+            super(method, *args, &block)
+          end
         end
+        type = type_class.instance
         name = args.shift
         if method.to_s =~ /^dynamic_/
-          @setup.add_dynamic_field_factory(name, type, *args, &block)
+          @setup.add_dynamic_field_factory(name, type, options, &block)
         else
-          @setup.add_field_factory(name, type, *args, &block)
+          @setup.add_field_factory(name, type, options, &block)
         end
       end
     end

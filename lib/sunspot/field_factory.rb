@@ -36,7 +36,7 @@ module Sunspot
           raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
         end
         @field =
-          if type == Type::TextType
+          if type.is_a?(Type::TextType)
             FulltextField.new(name, options)
           else
             AttributeField.new(name, type, options)

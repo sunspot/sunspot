@@ -20,7 +20,11 @@ module Sunspot
       FieldType.new('sint', 'SortableInt', 'i'),
       FieldType.new('string', 'Str', 's'),
       FieldType.new('sdouble', 'SortableDouble', 'e'),
-      FieldType.new('slong', 'SortableLong', 'l')
+      FieldType.new('slong', 'SortableLong', 'l'),
+      FieldType.new('tint', 'TrieInteger', 'it'),
+      FieldType.new('tfloat', 'TrieFloat', 'ft'),
+      FieldType.new('tdate', 'TrieInt', 'dt')
+
     ]
 
     FIELD_VARIANTS = [

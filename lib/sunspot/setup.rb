@@ -12,7 +12,7 @@ module Sunspot
         @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
       @stored_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @dsl = DSL::Fields.new(self)
-      add_field_factory(:class, Type::ClassType)
+      add_field_factory(:class, Type::ClassType.instance)
     end
 
     def type_names
@@ -41,7 +41,7 @@ module Sunspot
     #
     def add_text_field_factory(name, options = {}, &block)
       stored = options[:stored]
-      field_factory = FieldFactory::Static.new(name, Type::TextType, options, &block)
+      field_factory = FieldFactory::Static.new(name, Type::TextType.instance, options, &block)
       @text_field_factories[name] = field_factory
       @text_field_factories_cache[field_factory.name] = field_factory
       if stored
