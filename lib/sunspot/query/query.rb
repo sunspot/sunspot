@@ -63,6 +63,10 @@ module Sunspot
         params
       end
 
+      def [](key)
+        to_params[key.to_sym]
+      end
+
       def page
         @pagination.page if @pagination
       end

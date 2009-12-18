@@ -13,11 +13,11 @@ class MockRecord
   end
 
   def initialize(attrs = {})
+    @id = attrs.delete(:id) || IDS[self.class.name.to_sym] += 1
+    INSTANCES[self.class.name.to_sym][@id] = self
     attrs.each_pair do |name, value|
       send(:"#{name}=", value)
     end
-    @id = IDS[self.class.name.to_sym] += 1
-    INSTANCES[self.class.name.to_sym][@id] = self
   end
 
   def self.inherited(base)

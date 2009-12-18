@@ -13,6 +13,16 @@ module Sunspot
             RUBY
           end
         end
+
+        def not_supported(*methods)
+          methods.each do |method|
+            module_eval(<<-RUBY, __FILE__, __LINE__ + 1)
+              def #{method}(*args, &block)
+                raise NotSupportedError, "#{name} does not support #{method.inspect}"
+              end
+            RUBY
+          end
+        end
       end
     end
   end
