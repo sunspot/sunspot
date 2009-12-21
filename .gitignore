@@ -6,3 +6,4 @@ pkg
 .DS_Store
 
 .yardoc
+sunspot.gemspec
