@@ -39,6 +39,7 @@ module Sunspot
   NoAdapterError = Class.new(Exception)
   NoSetupError = Class.new(Exception)
   IllegalSearchError = Class.new(Exception)
+  NotImplementedError = Class.new(Exception)
 
 
   class <<self
