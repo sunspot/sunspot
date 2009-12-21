@@ -93,7 +93,7 @@ module Sunspot
     # Builder method for evaluating the setup DSL
     #
     def setup(&block)
-      @dsl.instance_eval(&block)
+      Util.instance_eval_or_call(@dsl, &block)
     end
 
     # 

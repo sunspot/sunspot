@@ -101,7 +101,7 @@ describe 'dynamic field query', :type => :query do
     lambda do
       session.search Post do
         dynamic :custom_string do
-          paginate 3, 10
+          paginate :page => 3, :per_page => 10
         end
       end
     end.should raise_error(NoMethodError)

@@ -83,7 +83,7 @@ module Sunspot
         if block.arity > 0
           block.call(object)
         else
-          object.instance_eval(&block)
+          ContextBoundDelegate.instance_eval_with_context(object, &block)
         end
       end
 
@@ -208,6 +208,44 @@ module Sunspot
         elsif @coords.respond_to?(:longitude)
           @coords.longitude
         end.to_f
+      end
+    end
+
+    class ContextBoundDelegate
+      class <<self
+        def instance_eval_with_context(receiver, &block)
+          calling_context = eval('self', block.binding)
+          if parent_calling_context = calling_context.instance_eval{@__calling_context__}
+            calling_context = parent_calling_context
+          end
+          new(receiver, calling_context).instance_eval(&block)
+        end
+        private :new
+      end
+
+      BASIC_METHODS = Set[:==, :equal?, :"!", :"!=", :instance_eval,
+                          :object_id, :__send__, :__id__]
+
+      instance_methods.each do |method|
+        unless BASIC_METHODS.include?(method.to_sym)
+          undef_method(method)
+        end
+      end
+
+      def initialize(receiver, calling_context)
+        @__receiver__, @__calling_context__ = receiver, calling_context
+      end
+
+      def method_missing(method, *args, &block)
+        begin
+          @__receiver__.send(method.to_sym, *args, &block)
+        rescue ::NoMethodError => e
+          begin
+            @__calling_context__.send(method.to_sym, *args, &block)
+          rescue ::NoMethodError
+            raise(e)
+          end
+        end
       end
     end
   end
