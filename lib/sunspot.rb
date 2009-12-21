@@ -34,12 +34,12 @@ end
 # method) is _not_ session-specific, but rather global.
 #
 module Sunspot
-  UnrecognizedFieldError = Class.new(Exception)
-  UnrecognizedRestrictionError = Class.new(Exception)
-  NoAdapterError = Class.new(Exception)
-  NoSetupError = Class.new(Exception)
-  IllegalSearchError = Class.new(Exception)
-  NotImplementedError = Class.new(Exception)
+  UnrecognizedFieldError = Class.new(StandardError)
+  UnrecognizedRestrictionError = Class.new(StandardError)
+  NoAdapterError = Class.new(StandardError)
+  NoSetupError = Class.new(StandardError)
+  IllegalSearchError = Class.new(StandardError)
+  NotImplementedError = Class.new(StandardError)
 
 
   class <<self

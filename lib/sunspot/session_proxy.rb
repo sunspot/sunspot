@@ -25,7 +25,7 @@ module Sunspot
   #   Sunspot.session = Sunspot::SessionProxy::MasterSlaveSessionProxy.new(master_session, slave_session)
   #
   module SessionProxy
-    NotSupportedError = Class.new(Exception)
+    NotSupportedError = Class.new(StandardError)
 
     autoload(
       :ThreadLocalSessionProxy,
