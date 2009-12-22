@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'version')
 
 module Sunspot
   class GemTasks
-    PROJECT_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
+    PROJECT_ROOT = File.dirname(Rake.application.rakefile_location)
 
     def initialize(&block)
       @gemspec_block = block
