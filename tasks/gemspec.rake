@@ -12,7 +12,7 @@ Sunspot is a library providing a powerful, all-ruby API for the Solr search engi
 TEXT
   s.authors = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Marcel de Graaf', 'Brandon Keepers', 'Peter Berkenbosch', 'Brian Atkinson', 'Tom Coleman', 'Matt Mitchell']
   s.rubyforge_project = 'sunspot'
-  s.files = FileList['[A-Z]*', '{bin,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/{conf,lib}/*', 'solr/start.jar']
+  s.files = FileList['[A-Z]*', '{bin,installer,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/{conf,lib}/*', 'solr/start.jar']
   s.add_runtime_dependency 'solr-ruby', '0.0.8'
   s.add_runtime_dependency 'daemons', '~> 1.0'
   s.add_development_dependency 'rspec', '~> 1.1'

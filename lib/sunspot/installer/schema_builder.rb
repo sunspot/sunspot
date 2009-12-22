@@ -14,7 +14,7 @@ module Sunspot
     #
     class SchemaBuilder
       CONFIG_PATH = File.join(
-        File.dirname(__FILE__), '..', '..', '..', 'config', 'schema.yml'
+        File.dirname(__FILE__), '..', '..', '..', 'installer', 'config', 'schema.yml'
       )
 
       class <<self
@@ -29,6 +29,7 @@ module Sunspot
         @schema_path = schema_path
         @config = File.open(CONFIG_PATH) { |f| YAML.load(f) }
         @verbose = !!options.delete(:verbose)
+        @force = !!options.delete(:force)
       end
 
       def execute
@@ -49,7 +50,7 @@ module Sunspot
 
       def add_fixed_fields
         @config['fixed'].each do |name, options|
-          maybe_add_field(name, options['type'], :indexed, *options['attributes'])
+          maybe_add_field(name, options['type'], :indexed, *Array(options['attributes']))
         end
       end
 
@@ -67,22 +68,32 @@ module Sunspot
       def maybe_add_field(name, type, *flags)
         node_name = name =~ /\*/ ? 'dynamicField' : 'field'
         if field_node = fields_node.elements[%Q(#{node_name}[@name="#{name}"])]
-          say("Using existing #{node_name} #{name.inspect}")
-        else
-          maybe_add_type(type)
-          say("Adding field #{name.inspect}")
-          attributes = {
-            'name' => name,
-            'type' => type,
-            'indexed' => 'true',
-            'stored' => 'false',
-            'multiValued' => 'false'
-          }
-          flags.each do |flag|
-            attributes[flag.to_s] = 'true'
+          if @force
+            say("Removing existing #{node_name} #{name.inspect}")
+            field_node.remove
+          else
+            say("Using existing #{node_name} #{name.inspect}")
+            add_comment(field_node)
+            return
           end
-          field_node = fields_node.add_element(node_name, attributes)
         end
+        maybe_add_type(type)
+        say("Adding field #{name.inspect}")
+        attributes = {
+          'name' => name,
+          'type' => type,
+          'indexed' => 'true',
+          'stored' => 'false',
+          'multiValued' => 'false'
+        }
+        flags.each do |flag|
+          attributes[flag.to_s] = 'true'
+        end
+        if name == 'type'
+          require 'rubygems'
+          require 'ruby-debug'
+        end
+        field_node = fields_node.add_element(node_name, attributes)
         add_comment(field_node)
       end
 
@@ -90,19 +101,25 @@ module Sunspot
         unless @added_types.include?(type)
           @added_types << type
           if type_node = types_node.elements[%Q(fieldType[@name="#{type}"])] || types_node.elements[%Q(fieldtype[@name="#{type}"])]
-            say("Using existing type #{type.inspect}")
-          else
-            say("Adding type #{type.inspect}")
-            type_config = @config['types'][type]
-            type_node = types_node.add_element(
-              'fieldType',
-              'name' => type,
-              'class' => to_solr_class(type_config['class']),
-              'omitNorms' => type_config['omit_norms'].nil? ? 'true' : type_config['omit_norms']
-            )
-            if type_config['tokenizer']
-              add_analyzer(type_node, type_config)
+            if @force
+              say("Removing type #{type.inspect}")
+              type_node.remove
+            else
+              say("Using existing type #{type.inspect}")
+              add_comment(type_node)
+              return
             end
+          end
+          say("Adding type #{type.inspect}")
+          type_config = @config['types'][type]
+          type_node = types_node.add_element(
+            'fieldType',
+            'name' => type,
+            'class' => to_solr_class(type_config['class']),
+            'omitNorms' => type_config['omit_norms'].nil? ? 'true' : type_config['omit_norms']
+          )
+          if type_config['tokenizer']
+            add_analyzer(type_node, type_config)
           end
           add_comment(type_node)
         end

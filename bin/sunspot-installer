@@ -11,6 +11,9 @@ OptionParser.new do |opts|
   opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
     options[:verbose] = v
   end
+  opts.on('-f', '--[no-]force', 'Replace existing nodes with Sunspot\'s preferences (recommended for clean Solr installation)') do |f|
+    options[:force] = f
+  end
 end.parse!
 
 Sunspot::Installer.execute(home, options)

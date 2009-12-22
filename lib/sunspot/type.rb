@@ -182,16 +182,6 @@ module Sunspot
       def indexed_name(name)
         "#{super}t"
       end
-
-      def to_indexed(value)
-        if value
-          value_to_time(value).to_i.to_s
-        end
-      end
-
-      def cast(string)
-        Time.at(string.to_i)
-      end
     end
 
 

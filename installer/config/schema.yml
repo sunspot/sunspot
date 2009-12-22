@@ -31,7 +31,7 @@ types: !omap
       class: StrField
       suffix: s
   - tint:
-      class: TrieIntegerField
+      class: TrieIntField
       suffix: it
   - tfloat:
       class: TrieFloatField
@@ -39,14 +39,15 @@ types: !omap
   - tdouble:
       class: TrieDoubleField
   - tdate:
-      class: TrieIntegerField
+      class: TrieDateField
       suffix: dt
 fixed: !omap
   - id:
       type: string
-      attributes: [multiValued]
+      attributes: [stored]
   - type:
       type: string
+      attributes: [multiValued]
   - class_name:
       type: string
   - text:
@@ -60,6 +61,8 @@ fixed: !omap
       attributes: [stored]
   - 'random_*':
       type: rand
+  - '_local*':
+      type: tdouble
     
 variants: !omap
   - multiValued: m
