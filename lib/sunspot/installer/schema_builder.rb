@@ -65,8 +65,9 @@ module Sunspot
       end
 
       def maybe_add_field(name, type, *flags)
-        if field_node = fields_node.elements[%Q(field[@name="#{name}"])]
-          say("Using existing field #{name.inspect}")
+        node_name = name =~ /\*/ ? 'dynamicField' : 'field'
+        if field_node = fields_node.elements[%Q(#{node_name}[@name="#{name}"])]
+          say("Using existing #{node_name} #{name.inspect}")
         else
           maybe_add_type(type)
           say("Adding field #{name.inspect}")
@@ -80,7 +81,7 @@ module Sunspot
           flags.each do |flag|
             attributes[flag.to_s] = 'true'
           end
-          field_node = fields_node.add_element('field', attributes)
+          field_node = fields_node.add_element(node_name, attributes)
         end
         add_comment(field_node)
       end
@@ -88,7 +89,7 @@ module Sunspot
       def maybe_add_type(type)
         unless @added_types.include?(type)
           @added_types << type
-          if type_node = types_node.elements[%Q(fieldType[@name="#{type}"])]
+          if type_node = types_node.elements[%Q(fieldType[@name="#{type}"])] || types_node.elements[%Q(fieldtype[@name="#{type}"])]
             say("Using existing type #{type.inspect}")
           else
             say("Adding type #{type.inspect}")
