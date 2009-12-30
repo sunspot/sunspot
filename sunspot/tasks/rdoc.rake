@@ -1,4 +1,4 @@
-gem 'mislav-hanna'
+gem 'hanna'
 require 'hanna/rdoctask'
 require 'jeweler'
 
