@@ -96,8 +96,8 @@ describe 'faceting', :type => :search do
   it 'returns time facet' do
     stub_facet(
       :created_at_dt,
-      '1239135923' => 3,
-      '1239135979' => 1
+      '2009-04-07T20:25:23Z' => 3,
+      '2009-04-07T20:26:19Z' => 1
     )
     result = session.search Photo do
       facet :created_at
