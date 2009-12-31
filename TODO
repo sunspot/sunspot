@@ -1,7 +1,14 @@
 === 1.0 ===
 * Sunspot Solr Installer
-* Hand-rolled gem tasks
+* Support for solr-spatial
+* Sunspot::Server (port over from sunspot_rails)
+* Support for long and double fields
+* Rudimentary fulltext prefixing support
 
 === Future ===
 * commitWithin (need solr-ruby support for this)
 * Support Solr functions (e.g. dismax :bf)
+
+=== Solr 1.5 ===
+* Field Collapsing (SOLR-236)
+* Support for official spatial support (SOLR-773)
