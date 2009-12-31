@@ -135,7 +135,7 @@ module Sunspot
         if coordinates = @data_extractor.value_for(model)
           coordinates = Util::Coordinates.new(coordinates)
           document << Solr::Field.new(:lat => coordinates.lat)
-          document << Solr::Field.new(:long => coordinates.lng)
+          document << Solr::Field.new(:lng => coordinates.lng)
         end
       end
     end

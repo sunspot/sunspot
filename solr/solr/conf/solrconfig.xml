@@ -488,6 +488,9 @@
      will be used.
   -->
   <requestHandler name="standard" class="solr.SearchHandler" default="true">
+		<arr name="last-components">
+			<str>spatial</str>
+		</arr>
     <!-- default values for query parameters -->
      <lst name="defaults">
        <str name="echoParams">explicit</str>
@@ -642,6 +645,10 @@
       <str>myLastComponentName</str>
     </arr>
   -->
+
+	<!-- solr-spatial-light search component -->
+
+	<searchComponent name="spatial" class="me.outofti.solrspatiallight.SpatialQueryComponent" />
 
    <!-- The spell check component can return a list of alternative spelling
   suggestions.  -->
@@ -1029,31 +1036,4 @@
     <healthcheck type="file">server-enabled</healthcheck>
     -->
   </admin>
-
-  <!-- configuration for LocalSolr -->
-  <updateRequestProcessorChain>
-    <processor class='com.pjaol.search.solr.update.LocalUpdateProcessorFactory'>
-      <str name='latField'>lat</str>
-      <str name='lngField'>long</str>
-      <int name='startTier'>9</int>
-      <int name='endTier'>16</int>
-    </processor>
-    <processor class='solr.RunUpdateProcessorFactory'></processor>
-    <processor class='solr.LogUpdateProcessorFactory'></processor>
-  </updateRequestProcessorChain>
-  <searchComponent class='com.pjaol.search.solr.component.LocalSolrQueryComponent' name='localsolr'>
-    <str name='latField'>lat</str>
-    <str name='lngField'>long</str>
-  </searchComponent>
-  <requestHandler class='org.apache.solr.handler.component.SearchHandler' name='geo'>
-    <str name="defType">lucene</str>
-    <arr name='components'>
-      <str>localsolr</str>
-      <str>facet</str>
-      <str>mlt</str>
-      <str>highlight</str>
-      <str>debug</str>
-    </arr>
-  </requestHandler>
-
 </config>

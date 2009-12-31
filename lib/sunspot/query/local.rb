@@ -7,20 +7,19 @@ module Sunspot
     # generates the appropriate parameters.
     #
     class Local #:nodoc:
-      def initialize(coordinates, radius)
-        if radius < 1
-          raise ArgumentError, "LocalSolr does not seem to support a radius of less than 1 mile."
-        end
-        @coordinates, @radius = Util::Coordinates.new(coordinates), radius
+      def initialize(coordinates, options)
+        @coordinates, @options = Util::Coordinates.new(coordinates), options
       end
 
       def to_params
-        {
-          :qt => 'geo',
-          :lat => @coordinates.lat,
-          :long => @coordinates.lng,
-          :radius => @radius
-        }
+        local_params = [
+          [:radius, @options[:distance]],
+          [:sort, @options[:sort]]
+        ].map do |key,value|
+          "#{key}=#{value}" if value
+        end.compact.join(" ") #TODO Centralized local param builder
+        query = "{!#{local_params}}#{@coordinates.lat},#{@coordinates.lng}"
+        { :spatial => query }
       end
     end
   end

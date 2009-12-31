@@ -152,10 +152,18 @@ module Sunspot
       # Scope the search by geographical distance from a given point.
       # +coordinates+ should either respond to #first and #last (e.g. a
       # two-element array), or to #lat and one of #lng, #lon, or #long.
-      # +miles+ is the radius around the point for which to return documents.
+      # +options+ should be one or both of the following:
       #
-      def near(coordinates, miles)
-        @query.add_location_restriction(coordinates, miles)
+      # :distance:: The maximum distance in miles from which results can come
+      # :sort::
+      #   Whether to sort by distance from these coordinates. If other sorts are
+      #   specified, they take precedence over distance sort.
+      #
+      def near(coordinates, options)
+        if options.respond_to?(:to_f)
+          options = { :distance => options }
+        end
+        @query.add_location_restriction(coordinates, options)
       end
     end
   end

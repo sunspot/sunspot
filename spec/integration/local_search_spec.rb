@@ -17,21 +17,32 @@ describe 'local search' do
   end
 
   it 'should find all the posts within a given radius' do
-    search = Sunspot.search(Post) { |query| query.near(ORIGIN, 20) }
+    search = Sunspot.search(Post) { |query| query.near(ORIGIN, :distance => 20) }
     search.results.to_set.should == @posts[0..2].to_set
   end
 
   it 'should perform a radial search with fulltext matching' do
     search = Sunspot.search(Post) do |query|
       query.keywords 'teacup'
-      query.near(ORIGIN, 20)
+      query.near(ORIGIN, :distance => 20)
     end
     search.results.should == [@posts[1]]
   end
 
+  it 'should use dismax for fulltext matching in local search' do
+    lambda do
+      search = Sunspot.new_search(Post)
+      search.build do |query|
+        query.keywords 'teacup['
+        query.near(ORIGIN, :distance => 20)
+      end
+      search.execute
+    end.should_not raise_error
+  end
+
   it 'should perform a radial search with attribute scoping' do
     search = Sunspot.search(Post) do |query|
-      query.near(ORIGIN,20)
+      query.near(ORIGIN, :distance => 20)
       query.with(:title, 'teacup')
     end
     search.results.should == [@posts[1]]
@@ -39,7 +50,7 @@ describe 'local search' do
   
   it 'should order by arbitrary field' do
     search = Sunspot.search(Post) do |query|
-      query.near(ORIGIN, 20)
+      query.near(ORIGIN, :distance => 20)
       query.order_by(:blog_id)
     end
     search.results.should == @posts[0..2].reverse
@@ -47,8 +58,7 @@ describe 'local search' do
 
   it 'should order by geo distance' do
     search = Sunspot.search(Post) do |query|
-      query.near(ORIGIN, 20)
-      query.order_by(:distance)
+      query.near(ORIGIN, :distance => 20, :sort => true)
     end
     search.results.should == @posts[0..2]
   end

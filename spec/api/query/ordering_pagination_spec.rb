@@ -63,12 +63,6 @@ describe 'ordering and pagination' do
     connection.should have_last_search_with(:sort => 'score desc')
   end
 
-  it 'orders by geo distance' do
-    session.search Post do
-      order_by :distance, :asc
-    end
-  end
-
   it 'throws an ArgumentError if a bogus order direction is given' do
     lambda do
       session.search Post do
