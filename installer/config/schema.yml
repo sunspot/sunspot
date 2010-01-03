@@ -56,7 +56,7 @@ fixed: !omap
   - lat:
       type: tdouble
       attributes: [stored]
-  - long:
+  - lng:
       type: tdouble
       attributes: [stored]
   - 'random_*':

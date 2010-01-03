@@ -1,0 +1,81 @@
+require 'rubygems'
+require 'fileutils'
+require 'nokogiri'
+
+require 'ruby-debug'
+
+module Sunspot
+  class Installer
+    class SolrconfigUpdater
+      include TaskHelper
+
+      class <<self
+        def execute(solrconfig_path, options = {})
+          new(solrconfig_path, options).execute
+        end
+      end
+
+      def initialize(solrconfig_path, options)
+        unless File.exist?(solrconfig_path)
+          abort("#{File.expand_path(@solrconfig_path)} doesn't exist." +
+                " Are you sure you're pointing to a SOLR_HOME?")
+        end
+        @solrconfig_path = solrconfig_path
+        @verbose = !!options[:verbose]
+      end
+
+      def execute
+        @document = File.open(@solrconfig_path) do |f|
+          Nokogiri::XML(
+            f, nil, nil, 
+            Nokogiri::XML::ParseOptions::DEFAULT_XML |
+            Nokogiri::XML::ParseOptions::NOBLANKS
+          )
+        end
+        @root = @document.root
+        maybe_create_spatial_component
+        maybe_add_spatial_component_to_standard_handler
+        original_path = "#{@solrconfig_path}.orig"
+        FileUtils.cp(@solrconfig_path, original_path)
+        say("Saved backup of original to #{original_path}")
+        File.open(@solrconfig_path, 'w') do |file|
+          @document.write_to(
+            file,
+            :indent => 2
+          )
+        end
+        say("Wrote solrconfig to #{@solrconfig_path}")
+      end
+
+      private
+
+      def maybe_create_spatial_component
+        if @root.xpath('searchComponent[@name="spatial"]').any?
+          say('Spatial search component already defined')
+        else
+          say('Defining spatial search component')
+          search_component_node =
+            Nokogiri::XML::Node.new('searchComponent', @document)
+          search_component_node['name'] = 'spatial'
+          search_component_node['class'] =
+            'me.outofti.solrspatiallight.SpatialQueryComponent'
+          @root << search_component_node
+        end
+      end
+
+      def maybe_add_spatial_component_to_standard_handler
+        standard_handler_node =
+          @root.xpath('requestHandler[@name="standard"]').first
+        last_components_node =
+          standard_handler_node.xpath('arr[@name="last-components"]').first ||
+          add_element(standard_handler_node, 'arr', 'name' => 'last-components')
+        if last_components_node.xpath('str[normalize-space()="spatial"]').any?
+          say('Spatial search component already in standard search handler')
+        else
+          say('Adding spatial search component into standard search handler')
+          add_element(last_components_node, 'str').content = 'spatial'
+        end
+      end
+    end
+  end
+end

@@ -13,6 +13,8 @@ module Sunspot
     # users can modify the resulting schema without unwittingly breaking it.
     #
     class SchemaBuilder
+      include TaskHelper
+
       CONFIG_PATH = File.join(
         File.dirname(__FILE__), '..', '..', '..', 'installer', 'config', 'schema.yml'
       )
@@ -28,12 +30,18 @@ module Sunspot
       def initialize(schema_path, options = {})
         @schema_path = schema_path
         @config = File.open(CONFIG_PATH) { |f| YAML.load(f) }
-        @verbose = !!options.delete(:verbose)
-        @force = !!options.delete(:force)
+        @verbose = !!options[:verbose]
+        @force = !!options[:force]
       end
 
       def execute
-        @document = File.open(@schema_path) { |f| REXML::Document.new(f) }
+        @document = File.open(@schema_path) do |f|
+          Nokogiri::XML(
+            f, nil, nil,
+            Nokogiri::XML::ParseOptions::DEFAULT_XML |
+            Nokogiri::XML::ParseOptions::NOBLANKS
+          )
+        end
         @root = @document.root
         @added_types = Set[]
         add_fixed_fields
@@ -42,7 +50,9 @@ module Sunspot
         original_path = "#{@schema_path}.orig"
         FileUtils.cp(@schema_path, original_path)
         say("Saved backup of original to #{original_path}")
-        File.open(@schema_path, 'w') { |file| @document.write(file, 2) }
+        File.open(@schema_path, 'w') do |file|
+          @document.write_xml_to(file, :indent => 2)
+        end
         say("Wrote schema to #{@schema_path}")
       end
 
@@ -67,7 +77,7 @@ module Sunspot
 
       def maybe_add_field(name, type, *flags)
         node_name = name =~ /\*/ ? 'dynamicField' : 'field'
-        if field_node = fields_node.elements[%Q(#{node_name}[@name="#{name}"])]
+        if field_node = fields_node.xpath(%Q(#{node_name}[@name="#{name}"])).first
           if @force
             say("Removing existing #{node_name} #{name.inspect}")
             field_node.remove
@@ -89,18 +99,15 @@ module Sunspot
         flags.each do |flag|
           attributes[flag.to_s] = 'true'
         end
-        if name == 'type'
-          require 'rubygems'
-          require 'ruby-debug'
-        end
-        field_node = fields_node.add_element(node_name, attributes)
+        field_node = add_element(fields_node, node_name, attributes)
         add_comment(field_node)
       end
 
       def maybe_add_type(type)
         unless @added_types.include?(type)
           @added_types << type
-          if type_node = types_node.elements[%Q(fieldType[@name="#{type}"])] || types_node.elements[%Q(fieldtype[@name="#{type}"])]
+          if type_node = types_node.xpath(%Q(fieldType[@name="#{type}"])).first ||
+             types_node.xpath(%Q(fieldtype[@name="#{type}"])).first
             if @force
               say("Removing type #{type.inspect}")
               type_node.remove
@@ -112,11 +119,12 @@ module Sunspot
           end
           say("Adding type #{type.inspect}")
           type_config = @config['types'][type]
-          type_node = types_node.add_element(
+          type_node = add_element(
+            types_node,
             'fieldType',
             'name' => type,
             'class' => to_solr_class(type_config['class']),
-            'omitNorms' => type_config['omit_norms'].nil? ? 'true' : type_config['omit_norms']
+            'omitNorms' => type_config['omit_norms'].nil? ? 'true' : type_config['omit_norms'].to_s
           )
           if type_config['tokenizer']
             add_analyzer(type_node, type_config)
@@ -126,38 +134,43 @@ module Sunspot
       end
 
       def add_analyzer(node, config)
-        analyzer_node = node.add_element('analyzer')
-        analyzer_node.add_element(
+        analyzer_node = add_element(node, 'analyzer')
+        add_element(
+          analyzer_node,
           'tokenizer',
           'class' => to_solr_class(config['tokenizer'])
         )
         Array(config['filters']).each do |filter|
-          analyzer_node.add_element('filter', 'class' => to_solr_class(filter))
+          add_element(analyzer_node, 'filter', 'class' => to_solr_class(filter))
         end
       end
 
       def set_misc_settings
-        unless @root.elements['uniqueKey[text()="id"]']
-          unique_key_node = @root.add_element('uniqueKey')
-          unique_key_node.add_text('id')
+        if @root.xpath('uniqueKey[normalize-space()="id"]').any?
+          say('Unique key already set')
+        else
+          say("Creating unique key node")
+          add_element(@root, 'uniqueKey').content = 'id'
         end
-        solr_query_parser_node = @root.elements['solrQueryParser'] || @root.add_element('solrQueryParser')
-        solr_query_parser_node.add_attribute('defaultOperator', 'AND')
+        say('Setting default operator to AND')
+        solr_query_parser_node = @root.xpath('solrQueryParser').first ||
+                                 add_element(@root, 'solrQueryParser')
+        solr_query_parser_node['defaultOperator'] = 'AND'
       end
 
       def add_comment(node)
         comment_message = " *** This #{node.name} is used by Sunspot! *** "
-        unless (comment = previous_non_text_sibling(node)) && comment.node_type == :comment && comment.string =~ /Sunspot/
-          node.parent.insert_before(node, REXML::Comment.new(comment_message))
+        unless (comment = previous_non_text_sibling(node)) && comment.node_type == :comment && comment.content =~ /Sunspot/
+          node.add_previous_sibling(Nokogiri::XML::Comment.new(@document, comment_message))
         end
       end
 
       def types_node
-        @types_node ||= @root.elements['/schema/types']
+        @types_node ||= @root.xpath('/schema/types').first
       end
 
       def fields_node
-        @fields_node ||= @root.elements['/schema/fields']
+        @fields_node ||= @root.xpath('/schema/fields').first
       end
 
       def to_solr_class(class_name)
