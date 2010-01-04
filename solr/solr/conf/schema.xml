@@ -146,8 +146,6 @@
       but with a lexicographic ordering the same as the numeric ordering,
       so that range queries work correctly.
     -->
-    <fieldType name="slong" class="solr.SortableLongField" sortMissingLast="true" omitNorms="true"/>
-    <fieldType name="sdouble" class="solr.SortableDoubleField" sortMissingLast="true" omitNorms="true"/>
     <!-- The "RandomSortField" is not used to store or search any
          data.  You can declare fields of this type it in your schema
          to generate pseudo-random orderings of your docs for sorting 
@@ -329,9 +327,13 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="date" class="solr.DateField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
+    <fieldType name="sdouble" class="solr.SortableDoubleField" omitNorms="true"/>
+    <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="sfloat" class="solr.SortableFloatField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="sint" class="solr.SortableIntField" omitNorms="true"/>
+    <!-- *** This fieldType is used by Sunspot! *** -->
+    <fieldType name="slong" class="solr.SortableLongField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tint" class="solr.TrieIntField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
@@ -413,7 +415,6 @@
         EXAMPLE:  name="*_i" will match any field ending in _i (like myid_i, z_i)
         Longer patterns will be matched first.  if equal size patterns
         both match, the first appearing in the schema will be used.  -->
-    <dynamicField name="*_l" type="long" indexed="true" stored="true"/>
     <dynamicField name="*_t" type="text" indexed="true" stored="true"/>
     <!-- some trie-coded dynamic fields for faster range queries -->
     <dynamicField name="*_ti" type="tint" indexed="true" stored="true"/>
@@ -466,6 +467,14 @@
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_dms" stored="true" type="date" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_e" stored="false" type="sdouble" multiValued="false" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_em" stored="false" type="sdouble" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_es" stored="true" type="sdouble" multiValued="false" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_ems" stored="true" type="sdouble" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_f" stored="false" type="sfloat" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_fm" stored="false" type="sfloat" multiValued="true" indexed="true"/>
@@ -481,6 +490,14 @@
     <dynamicField name="*_is" stored="true" type="sint" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_ims" stored="true" type="sint" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_l" stored="false" type="slong" multiValued="false" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_lm" stored="false" type="slong" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_ls" stored="true" type="slong" multiValued="false" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_lms" stored="true" type="slong" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_s" stored="false" type="string" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->

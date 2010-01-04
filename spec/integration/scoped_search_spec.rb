@@ -93,7 +93,9 @@ describe 'scoped_search' do
 
   test_field_type 'String', :title, :title, 'apple pie', 'banana split', 'cherry tart', 'date pastry', 'eggplant a la mode'
   test_field_type 'Integer', :blog_id, :blog_id, -2, 0, 3, 12, 20
+  test_field_type 'Long', :hash, :hash, Namespaced::Comment, 2**29, 2**30, 2**31, 2**32, 2**33
   test_field_type 'Float', :ratings_average, :average_rating, -2.5, 0.0, 3.2, 3.5, 16.0
+  test_field_type 'Double', :average_rating, :average_rating, Namespaced::Comment, -2.5, 0.0, 3.2, 3.5, 16.0
   test_field_type 'Time', :published_at, :published_at, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
                                                            '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
   test_field_type 'Trie Integer', :size, :size, Photo, -2, 0, 3, 12, 20

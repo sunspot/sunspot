@@ -82,6 +82,15 @@ module Sunspot
     end
 
     # 
+    # The Long type indexes Ruby Fixnum and Bignum numbers into Java Longs
+    #
+    class LongType < IntegerType
+      def indexed_name(name) #:nodoc:
+        "#{name}_l"
+      end
+    end
+
+    # 
     # The Float type represents floating-point numbers.
     #
     class FloatType < AbstractType
@@ -95,6 +104,16 @@ module Sunspot
 
       def cast(string) #:nodoc:
         string.to_f
+      end
+    end
+
+    # 
+    # The Double type indexes Ruby Floats (which are in fact doubles) into Java
+    # Double fields
+    #
+    class DoubleType < FloatType
+      def indexed_name(name)
+        "#{name}_e"
       end
     end
 

@@ -16,9 +16,11 @@ module Sunspot
       end
 
       def execute
+        sunspot_library_path = File.join(File.dirname(__FILE__), '..', '..',
+                                         '..', 'solr', 'solr', 'lib')
+        return if File.expand_path(sunspot_library_path) == File.expand_path(@library_path)
         FileUtils.mkdir_p(@library_path)
-        Dir.glob(File.join(File.dirname(__FILE__), '..', '..', '..', 'solr',
-                           'solr', 'lib', '*.jar')).each do |jar|
+        Dir.glob(File.join(sunspot_library_path, '*.jar')).each do |jar|
           jar = File.expand_path(jar)
           dest = File.join(@library_path, File.basename(jar))
           if File.exist?(dest)

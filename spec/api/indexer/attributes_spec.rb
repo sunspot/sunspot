@@ -11,9 +11,19 @@ describe 'indexing attribute fields', :type => :indexer do
     connection.should have_add_with(:blog_id_i => '4')
   end
 
+  it 'should correctly index a long attribute field' do
+    session.index(Namespaced::Comment.new(:hash => 2**30))
+    connection.should have_add_with(:hash_l => '1073741824')
+  end
+
   it 'should correctly index a float attribute field' do
     session.index(post(:ratings_average => 2.23))
     connection.should have_add_with(:average_rating_f => '2.23')
+  end
+
+  it 'should correctly index a double attribute field' do
+    session.index(Namespaced::Comment.new(:average_rating => 2.23))
+    connection.should have_add_with(:average_rating_e => '2.23')
   end
 
   it 'should correctly index a trie integer attribute field' do

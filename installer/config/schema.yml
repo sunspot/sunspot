@@ -19,6 +19,7 @@ types: !omap
       class: RandomSortField
   - sdouble:
       class: SortableDoubleField
+      suffix: e
   - sfloat:
       class: SortableFloatField
       suffix: f
@@ -27,6 +28,7 @@ types: !omap
       suffix: i
   - slong:
       class: SortableLongField
+      suffix: l
   - string:
       class: StrField
       suffix: s
