@@ -1,8 +1,6 @@
 === 1.0 ===
-* Support for long and double fields
 * Sunspot::Server (port over from sunspot_rails)
 * Rudimentary fulltext prefixing support
-* Query elevation
 
 === Future ===
 * commitWithin (need solr-ruby support for this)
