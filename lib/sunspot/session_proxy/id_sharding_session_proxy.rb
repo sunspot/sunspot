@@ -63,7 +63,26 @@ module Sunspot
       private
 
       def session_for_index_id(index_id)
-        @sessions[index_id.hash % @sessions.length]
+        @sessions[id_hash(index_id) % @sessions.length]
+      end
+
+      # 
+      # This method is implemented explicitly instead of using String#hash to
+      # give predictable behavior across different Ruby interpreters.
+      #
+      if "".respond_to?(:bytes) # Ruby 1.9
+        def id_hash(id)
+          id.bytes.inject { |hash, byte| hash * 31 + byte }
+        end
+      else
+        def id_hash(id)
+          hash, i, len = 0, 0, id.length
+          while i < len
+            hash = hash * 31 + id[i]
+            i += 1
+          end
+          hash
+        end
       end
     end
   end

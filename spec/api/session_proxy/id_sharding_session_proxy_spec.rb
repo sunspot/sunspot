@@ -9,7 +9,7 @@ describe Sunspot::SessionProxy::ShardingSessionProxy do
 
   [:index, :index!, :remove, :remove!].each do |method|
     it "should delegate #{method} to appropriate shard" do
-      posts = [Post.new(:id => 1), Post.new(:id => 2)]
+      posts = [Post.new(:id => 2), Post.new(:id => 1)]
       @proxy.sessions[0].should_receive(method).with([posts[0]])
       @proxy.sessions[1].should_receive(method).with([posts[1]])
       @proxy.send(method, posts[0])
@@ -19,8 +19,8 @@ describe Sunspot::SessionProxy::ShardingSessionProxy do
 
   [:remove_by_id, :remove_by_id!].each do |method|
     it "should delegate #{method} to appropriate session" do
-      @proxy.sessions[0].should_receive(method).with(Post, 1)
-      @proxy.sessions[1].should_receive(method).with(Post, 2)
+      @proxy.sessions[0].should_receive(method).with(Post, 2)
+      @proxy.sessions[1].should_receive(method).with(Post, 1)
       @proxy.send(method, Post, 1)
       @proxy.send(method, Post, 2)
     end
