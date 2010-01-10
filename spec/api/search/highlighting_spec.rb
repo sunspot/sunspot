@@ -21,23 +21,27 @@ describe 'search with highlighting results', :type => :search do
     @search.hits.last.should have(2).highlights(:body)
   end
 
+  it 'returns first highlight for a specified field' do
+    @search.hits.first.highlight(:title).format.should == 'one <em>two</em> three'
+  end
+
   it 'returns an empty array if a given field does not have a highlight' do
     @search.hits.first.highlights(:body).should == []
   end
 
-  it 'should format hits with <em> by default' do
+  it 'formats hits with <em> by default' do
     highlight = @search.hits.first.highlights(:title).first.formatted
     highlight.should == 'one <em>two</em> three'
   end
 
-  it 'should format hits with provided block' do
+  it 'formats hits with provided block' do
     highlight = @search.hits.first.highlights(:title).first.format do |word|
       "<i>#{word}</i>"
     end
     highlight.should == 'one <i>two</i> three'
   end
 
-  it 'should handle multiple highlighted words' do
+  it 'handles multiple highlighted words' do
     highlight = @search.hits.last.highlights(:body).last.format do |word|
       "<b>#{word}</b>"
     end

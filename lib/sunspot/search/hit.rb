@@ -52,6 +52,14 @@ module Sunspot
         end || []
       end
 
+      #
+      # Return the first highlight found for a given field, or nil if there is
+      # none.
+      #
+      def highlight(field_name)
+        highlights(field_name).first
+      end
+
       # 
       # Retrieve stored field value. For any attribute field configured with
       # :stored => true, the Hit object will contain the stored value for
@@ -78,6 +86,7 @@ module Sunspot
         end
         @instance
       end
+      alias_method :result, :instance
 
       def inspect #:nodoc:
         "#<Sunspot::Search::Hit:#{@class_name} #{@primary_key}>"

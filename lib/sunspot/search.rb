@@ -48,13 +48,7 @@ module Sunspot
     # WillPaginate::Collection or Array:: Instantiated result objects
     #
     def results
-      @results ||= if @query.page && defined?(WillPaginate::Collection)
-        WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
-          pager.replace(hits.map { |hit| hit.instance })
-        end
-      else
-        hits.map { |hit| hit.instance }
-      end
+      @results ||= maybe_will_paginate(hits.map { |hit| hit.instance })
     end
 
     # 
@@ -67,7 +61,12 @@ module Sunspot
     # Array:: Ordered collection of Hit objects
     #
     def hits
-      @hits ||= solr_response['docs'].map { |doc| Hit.new(doc, highlights_for(doc), self) }
+      @hits ||=
+        maybe_will_paginate(
+          solr_response['docs'].map do |doc|
+            Hit.new(doc, highlights_for(doc), self)
+          end
+        )
     end
     alias_method :raw_results, :hits
 
@@ -165,9 +164,9 @@ module Sunspot
       end
       id_hit_hash.each_pair do |class_name, hits|
         ids = hits.map { |id, hit| hit.primary_key }
-        data_accessor_for(Util.full_const_get(class_name)).load_all(ids).each do |instance|
-          hit = id_hit_hash[class_name][Adapters::InstanceAdapter.adapt(instance).id.to_s]
-          hit.instance = instance
+        data_accessor_for(Util.full_const_get(class_name)).load_all(ids).each do |result|
+          hit = id_hit_hash[class_name][Adapters::InstanceAdapter.adapt(result).id.to_s]
+          hit.instance = result
         end
       end
     end
@@ -205,6 +204,16 @@ module Sunspot
     def highlights_for(doc)
       if @solr_result['highlighting']
         @solr_result['highlighting'][doc['id']]
+      end
+    end
+
+    def maybe_will_paginate(collection)
+      if defined?(WillPaginate::Collection)
+        WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
+          pager.replace(collection)
+        end
+      else
+        collection
       end
     end
     
