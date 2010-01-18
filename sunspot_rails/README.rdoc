@@ -1,0 +1,260 @@
+= Sunspot::Rails
+
+Sunspot::Rails is a Rails plugin that provides drop-in integration of the
+Sunspot[http://outoftime.github.com/sunspot] Solr search library with Rails. It
+provides the following features:
+
+* Configure Sunspot using config/sunspot.yml
+* Extend ActiveRecord for easy index configuration, search, and indexing
+* Automatically index ActiveRecord objects when they are saved, and remove them
+  from the index when they are destroyed (can be disabled)
+* Automatically commit Solr changes at the end of each request (can be disabled)
+* Provide utility methods to find and fix orphaned documents and rebuild the
+  Solr index for a given class
+* Provide rake tasks for starting and stopping the development Solr instance,
+  using the configuration in sunspot.yml
+
+Sunspot::Rails has been tested with Rails versions 2.1, 2.2, and 2.3
+
+== Installation
+
+For recent versions of Rails, In your project's <code>config/environment.rb</code>, add the following gem dependencies:
+
+  config.gem 'sunspot', :lib => 'sunspot'
+  config.gem 'sunspot_rails', :lib => 'sunspot/rails'
+    
+Install the gems with:
+
+  rake gems:install
+
+If you are using an older version of Rails that doesn't support plugins-as-gems, install the gems manually and install the plugin:
+
+  sudo gem install sunspot sunspot_rails --source=http://gems.github.com
+  
+  script/plugin install git://github.com/outoftime/sunspot_rails.git
+  
+Generate the file <code>config/sunspot.yml</code>:
+
+  script/generate sunspot
+
+Rails doesn't automatically load rake tasks from plugins installed as gems
+(https://rails.lighthouseapp.com/projects/8994/tickets/59). If you installed
+Sunspot::Rails as a gem, add the following line to your project's Rakefile:
+
+  require 'sunspot/rails/tasks'
+
+If you wish to make modifications to the Solr schema, you can create a custom
+Solr home in your project directory. In order to do so, create the directory
+<code>RAILS_ROOT/solr/conf</code>, and copy in the contents of the Solr gem's
+<code>solr/solr/conf</code> directory. If the files are in the right place,
+Sunspot::Rails will detect them and tell Solr to use your local configurations.
+Use caution when modifying <code>schema.xml</code> - Sunspot relies on the
+field naming scheme in the packaged schema file.
+
+To start up a Solr instance, issue the following:
+
+  rake sunspot:solr:start
+
+Note that using the built-in Solr instance packaged with Sunspot is great for
+development, but is not recommended for production. See the Sunspot
+documentation for more information.
+
+== Usage
+
+=== Setup
+
+In order for an ActiveRecord model to be indexable and searchable, it must be
+configured for search. For example:
+
+  class Post < ActiveRecord::Base
+    searchable do
+      text :title, :body
+      integer :blog_id
+      time :updated_at
+      string :sort_title do
+        title.downcase.sub(/^(an?|the) /, '')
+      end
+    end
+  end
+
+See the documentation for Sunspot.setup for full details on what can go in the
+configuration block.
+
+=== Indexing
+
+By default, models are indexed whenever they are saved, and removed from the
+index whenever they are destroyed. This behavior can be disabled:
+
+  class Post < ActiveRecord::Base
+    searchable :auto_index => false, :auto_remove => false do
+      # setup...
+    end
+  end
+
+Note that <b>using the <code>:auto_remove</code> option is not recommended
+</b>, as destroying an object without removing it from the index will
+create an orphaned document in the index, which is a Bad Thing. Turning off
+<code>:auto_index</code> is perfectly safe if you prefer to manage indexing manually
+(perhaps using a background job).
+
+If you have disabled lifecycle indexing hooks, you can invoke indexing
+operations directly on your model:
+
+  post = Post.create
+  post.index
+  post.remove_from_index
+
+=== Committing
+
+When data is changed in Solr, it is initially stored in memory and not made
+available to the currently running searcher instance. Issuing a +commit+ to Solr
+will cause it to write the changes to disk, and instantiate a new searcher
+instance. This operation is fairly expensive, so rather than issuing a commit
+every time a document is added or removed, Sunspot::Rails issues a commit at
+the end of any request where data has been added to or removed from Solr. If
+you need to immediately issue a commit, bang!-versions of the methods are
+available:
+
+  post = Post.create
+  post.index!
+  # this is the same as...
+  post.index
+  Sunspot.commit
+
+When writing tests outside of the context of a controller request, you will want
+to use one of these two approaches.
+
+=== Searching
+
+Do it like this:
+
+  Post.search do
+    with :blog_id, 1
+    with(:updated_at).greater_than(Time.now - 2.weeks)
+    order :sort_title, :asc
+    paginate :page => 1, :per_page => 15
+  end
+
+See the documentation for <code>Sunspot.search</code> for all the options
+available in the search block, and the information available in the result
+block.
+
+=== Searching for IDs
+
+In some situations, you may want to get the IDs for models returned by a search
+without actually loading the models out of the database. For that, you can
+call +search_ids+, using the same block format as #search. This will return an
+array of IDs.
+
+
+=== Searching for multiple types
+
+Sunspot is entirely agnostic about whether searches are for one or more types;
+the only restriction is that columns used for restriction, ordering, etc. are
+defined in the same way for all types being searched. Sunspot::Rails does not
+provide any additional support for this, since there is not anything useful to
+be added, so just use the interface provided by Sunspot:
+
+  Sunspot.search(Post, Comment) do
+    with :blog_id, 1
+    order :created_at, :asc
+  end
+
+Be sure to check out the Sunspot documentation for all the details.
+
+=== Adding search functionality in mixins
+
+Sunspot does not require that search setup for a given class happen all in one
+place; it is perfectly acceptable to call the <code>Sunspot.setup</code> method
+more than once. This capability is particularly useful for adding search
+functionality in mixins. For instance, if you have a +Ratable+ module, you may
+wish to add additional search fields for searchable classes that mix in that
+module. For example:
+
+  module Ratable
+    def self.included(base)
+      if base.searchable?
+        base.searchable do
+          float :average_rating do
+            ratings.average(:value)
+          end
+        end
+      end
+    end
+  end
+
+Note the use of <code>base.searchable?</code> - this ensures that only classes
+that already have search enabled will have the additional configuration added.
+The above pattern requires that the class be declared searchable before the
+module is mixed in; other patterns (such as passing a :searchable option to an
+acts_as_-style declaration) may be more flexible.
+
+=== Utility methods
+
+If you need to completely reindex all of the instances of a given model class,
+you can issue:
+
+  Post.reindex
+
+If for some reason models get deleted from the database, but not from the index,
+they will become index orphans - not a good situation. To get IDs that exist in
+the index but not the database, you can use the +index_orphans+ method; to
+remove those documents from the index, use +clean_index_orphans+. Note that
+neither of these operations should be needed if Sunspot and Sunspot::Rails are
+used as intended.
+
+
+== Testing Solr integration using RSpec
+
+To disable the sunspot-solr integration for your active record models, add the
+following line to your spec_helper.rb
+
+require 'sunspot/spec/extension'
+
+This will disable all automatic after_save/after_destroy solr-requests generated
+via the #searchable method. This will not disable/mock explicit calls in your code.
+
+If you want to test the sunspot-solr integration with active record, you can 
+reenable the after_save/after_destroy hooks by adding 'integrate_sunspot' in your
+examples.
+
+  describe Searches do
+    integrate_sunspot
+    
+    before(:each) do
+      @movie = Factory.create :movie
+    end
+    
+    it "should find a movie" do
+      Movie.search { keywords @movie.title }.first.should == @movie
+    end
+  end
+
+
+
+== Further Reading
+
+Reading the {Sunspot documentation}[http://outoftime.github.com/sunspot/docs] is
+highly recommended. Sunspot::Rails exists to wrap Sunspot with a Rails-friendly
+API, but almost all of the functionality you use in Sunspot::Rails is
+implemented in Sunspot.
+
+Posts about Sunspot on my blog are available at http://outofti.me/tagged/sunspot
+
+== Bugs
+
+Please submit bug reports to
+http://outoftime.lighthouseapp.com/projects/20339-sunspot
+
+== Contributors
+
+- Mat Brown (mat@patch.com)
+- Peer Allan (peer.allan@gmail.com)
+- Michael Moen (michael@underpantsgnome.com)
+- Benjamin Krause (bk@benjaminkrause.com)
+- Adam Salter (adam@codebright.net)
+- Brandon Keepers (brandon@opensoul.org)
+
+== License
+
+Sunspot::Rails is distributed under the MIT License, copyright (c) 2009 Mat Brown

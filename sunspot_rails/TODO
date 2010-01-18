@@ -1,0 +1,8 @@
+* Session proxy should give access to config
+=======
+* Fix final status output for reindex
+* Add batch-per-request option
+* Optionally yield from reindex
+* Access to all searchable classes
+* Add a method to disable sunspot updates for certain values, e.g. 
+  if you just touch a record, sunspot shouldn't index the 
