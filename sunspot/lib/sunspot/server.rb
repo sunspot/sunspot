@@ -1,4 +1,5 @@
 require 'escape'
+require 'set'
 
 module Sunspot #:nodoc:
   # The Sunspot::Rails::Server class is a simple wrapper around
@@ -11,6 +12,8 @@ module Sunspot #:nodoc:
     SOLR_START_JAR = File.expand_path(
       File.join(File.dirname(__FILE__), '..', '..', 'solr', 'start.jar')
     )
+
+    LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
     attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
     attr_writer :pid_dir, :log_level, :solr_data_dir, :solr_home
@@ -93,32 +96,20 @@ module Sunspot #:nodoc:
       end
     end
 
-    def pid_file=(pid_file)
-      @pid_file = pid_file
-      @pid_dir = File.dirname(pid_file)
-    end
-
-    private
-
-    def logging_config_path
-      return @logging_config_path if defined?(@logging_config_path)
-      @logging_config_path =
-        if log_file
-          logging_config = Tempfile.new('logging.properties')
-          logging_config.puts(".level = #{log_level.to_s.upcase}")
-          logging_config.puts("handlers = java.util.logging.FileHandler")
-          logging_config.puts("java.util.logging.FileHandler.pattern = #{log_file}")
-          logging_config.puts("java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter")
-          logging_config.flush
-          logging_config.close
-          logging_config.path
-        end
+    def log_level=(level)
+      unless LOG_LEVELS.include?(level.to_s.upcase)
+        raise(ArgumentError, "#{level} is not a valid log level: Use one of #{LOG_LEVELS.to_a.join(',')}")
+      end
+      @log_level = level.to_s.upcase
     end
 
     def log_level
-      if @log_level then @log_level.to_s.upcase
-      else 'WARN'
-      end
+      @log_level || 'WARNING'
+    end
+
+    def pid_file=(pid_file)
+      @pid_file = pid_file
+      @pid_dir = File.dirname(pid_file)
     end
 
     def pid_file
@@ -135,6 +126,23 @@ module Sunspot #:nodoc:
 
     def solr_home
       File.expand_path(@solr_home || File.join(File.dirname(SOLR_START_JAR), 'solr'))
+    end
+
+    private
+
+    def logging_config_path
+      return @logging_config_path if defined?(@logging_config_path)
+      @logging_config_path =
+        if log_file
+          logging_config = Tempfile.new('logging.properties')
+          logging_config.puts("handlers = java.util.logging.FileHandler")
+          logging_config.puts("java.util.logging.FileHandler.level = #{log_level.to_s.upcase}")
+          logging_config.puts("java.util.logging.FileHandler.pattern = #{log_file}")
+          logging_config.puts("java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter")
+          logging_config.flush
+          logging_config.close
+          logging_config.path
+        end
     end
   end
 end
