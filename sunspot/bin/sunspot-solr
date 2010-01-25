@@ -5,7 +5,7 @@ begin
   require 'tempfile'
   require 'tmpdir'
   require 'optparse'
-  require 'daemons'
+  require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'server')
 rescue LoadError => e
   if using_gems
     raise(e)
@@ -16,80 +16,55 @@ rescue LoadError => e
   end
 end
 
-working_directory = FileUtils.pwd
-solr_install = File.expand_path(File.join(File.dirname(__FILE__), '..', 'solr'))
-
-port        = '8983'
-data_dir    = File.expand_path(File.join(Dir.tmpdir, 'solr_data'))
-solr_home   = File.join(solr_install, 'solr')
-pid_dir     = working_directory
-log_file    = nil
-log_level   = 'OFF'
-min_memory  = '128m'
-max_memory  = '512m'
+server = Sunspot::Server.new
 
 OptionParser.new do |opts|
   opts.banner = "Usage: sunspot-solr start [options]"
 
   opts.on '-p', '--port=PORT', 'Port on which to run Solr (default 8983)' do |p|
-    port = p
+    server.port = p
   end
 
   opts.on '-d', '--data-directory=DIRECTORY', 'Solr data directory' do |d|
-    data_dir = File.expand_path(d)
+    server.data_dir = File.expand_path(d)
   end
 
   opts.on '-s', '--solr-home=HOME', 'Solr home directory (should contain conf/ directory)' do |s|
-    solr_home = File.expand_path(s)
+    server.solr_home = File.expand_path(s)
   end
 
   opts.on '--pid-dir=PID_DIR', 'Directory for pid files' do |pd|
-    pid_dir = File.expand_path(pd)
+    server.pid_dir = File.expand_path(pd)
   end
 
   opts.on '-l', '--log-level=LOG_LEVEL', 'Solr logging level' do |l|
-    log_level = l
+    server.log_level = l
   end
 
   opts.on '--log-file=LOG_FILE', 'Path to Solr log file' do |lf|
-    log_file = File.expand_path(lf)
+    server.log_file = File.expand_path(lf)
   end
   
   opts.on '--max-memory=MEMORY', 'Specify the maximum size of the memory allocation pool' do |mm|
-    max_memory = mm
+    server.max_memory = mm
   end
   
   opts.on '--min-memory=MEMORY', 'Specify the initial size of the memory allocation pool' do |mm|
-    min_memory = mm
+    server.min_memory = mm
   end
 end.parse!
 
-options = { :dir_mode => :normal, :dir => pid_dir }
-
-def logging_properties( log_file, log_level )
-  temp_file = Tempfile.new 'logging.properties'
-  temp_file << <<PROPERTIES
-.level = #{log_level}
-handlers = java.util.logging.FileHandler
-java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
-java.util.logging.FileHandler.pattern   = #{log_file}
-PROPERTIES
-  temp_file.flush
-  temp_file.close
-  temp_file.path
-end
-
-Daemons.run_proc('sunspot-solr', options) do
-  FileUtils.cd(solr_install) do
-    args = ['java']
-    args << "-Xms#{min_memory}"
-    args << "-Xmx#{max_memory}"
-    args << "-Djetty.port=#{port}" if port
-    args << "-Dsolr.data.dir=#{data_dir}" if data_dir
-    args << "-Dsolr.solr.home=#{solr_home}" if solr_home
-    args << "-Djava.util.logging.config.file=#{logging_properties(log_file, log_level)}" if log_file and log_level != 'OFF'
-    args << '-jar' << File.join(solr_install, 'start.jar')
-    STDERR.puts(args * ' ')
-    Kernel.exec(*args)
+begin
+  case ARGV[0]
+  when 'start'
+    server.start
+  when 'run'
+    server.run
+  when 'stop'
+    server.stop
+  else
+    abort("Usage: sunspot-solr (start|stop|run)")
   end
+rescue Sunspot::Server::NotRunningError => e
+  abort(e.message)
 end

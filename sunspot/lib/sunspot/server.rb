@@ -4,13 +4,16 @@ module Sunspot #:nodoc:
   # The Sunspot::Rails::Server class is a simple wrapper around
   # the start/stop scripts for solr.
   class Server
+    # Raised if #stop is called but the server is not running
+    NotRunningError = Class.new(RuntimeError)
+
     # Name of the sunspot executable (shell script)
     SOLR_START_JAR = File.expand_path(
-      File.join(File.dirname(__FILE__), '..', '..', 'solr', 'solr', 'start.jar')
+      File.join(File.dirname(__FILE__), '..', '..', 'solr', 'start.jar')
     )
 
     attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
-    attr_writer :pid_dir, :log_level
+    attr_writer :pid_dir, :log_level, :solr_data_dir, :solr_home
 
     #
     # Start the sunspot-solr server. Bootstrap solr_home first,
@@ -21,10 +24,28 @@ module Sunspot #:nodoc:
     # Boolean:: success
     #
     def start
-      pid = fork { run }
-      FileUtils.mkdir_p(pid_dir)
-      File.open(pid_file, 'w') do |file|
-        file << pid
+      if File.exist?(pid_file)
+        existing_pid = IO.read(pid_file).to_i
+        begin
+          Process.kill(0, existing_pid)
+          abort("Server is already running with PID #{existing_pid}")
+        rescue Errno::ESRCH
+          STDERR.puts("Removing stale PID file at #{pid_file}")
+          FileUtils.rm(pid_file)
+        end
+      end
+      fork do
+        pid = fork do
+          Process.setsid
+          STDIN.reopen('/dev/null')
+          STDOUT.reopen('/dev/null', 'a')
+          STDERR.reopen(STDOUT)
+          run
+        end
+        FileUtils.mkdir_p(pid_dir)
+        File.open(pid_file, 'w') do |file|
+          file << pid
+        end
       end
     end
 
@@ -44,8 +65,10 @@ module Sunspot #:nodoc:
       command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
       command << "-Dsolr.solr.home=#{solr_home}" if solr_home
       command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
-      command << '-jar' << SOLR_START_JAR
-      exec(Escape.shell_command(command))
+      command << '-jar' << File.basename(SOLR_START_JAR)
+      FileUtils.cd(File.dirname(SOLR_START_JAR)) do
+        exec(Escape.shell_command(command))
+      end
     end
 
     # 
@@ -56,7 +79,18 @@ module Sunspot #:nodoc:
     # Boolean:: success
     #
     def stop
-      execute(stop_command)
+      if File.exist?(pid_file)
+        pid = IO.read(pid_file).to_i
+        begin
+          Process.kill('TERM', pid)
+        rescue Errno::ESRCH
+          raise NotRunningError, "Process with PID #{pid} is no longer running"
+        ensure
+          FileUtils.rm(pid_file)
+        end
+      else
+        raise NotRunningError, "No PID file at #{pid_file}"
+      end
     end
 
     def pid_file=(pid_file)
@@ -88,11 +122,19 @@ module Sunspot #:nodoc:
     end
 
     def pid_file
-      @pid_file || File.join(pid_dir, 'sunspot-solr.pid')
+      File.expand_path(@pid_file || File.join(pid_dir, 'sunspot-solr.pid'))
     end
 
     def pid_dir
-      @pid_dir || FileUtils.pwd
+      File.expand_path(@pid_dir || FileUtils.pwd)
+    end
+
+    def solr_data_dir
+      File.expand_path(@solr_data_dir || Dir.tmpdir)
+    end
+
+    def solr_home
+      File.expand_path(@solr_home || File.join(File.dirname(SOLR_START_JAR), 'solr'))
     end
   end
 end
