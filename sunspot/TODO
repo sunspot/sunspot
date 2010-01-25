@@ -1,9 +1,6 @@
-=== 1.0 ===
-* Shorthand arguments to Sunspot#search
-* Sunspot::Server (port over from sunspot_rails)
-* Rudimentary fulltext prefixing support
-
 === Future ===
+* Shorthand arguments to Sunspot#search
+* Rudimentary fulltext prefixing support
 * commitWithin (need solr-ruby support for this)
 * Support Solr functions (e.g. dismax :bf)
 

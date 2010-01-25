@@ -5,12 +5,12 @@ namespace :sunspot do
       if RUBY_PLATFORM =~ /w(in)?32$/
         abort('This command does not work on Windows. Please use rake sunspot:solr:run to run Solr in the foreground.')
       end
-      Sunspot::Rails::Server.start
+      Sunspot::Rails::Server.new.start
     end
 
     desc 'Run the Solr instance in the foreground'
     task :run => :environment do
-      Sunspot::Rails::Server.run
+      Sunspot::Rails::Server.new.run
     end
 
     desc 'Stop the Solr instance'
@@ -18,7 +18,7 @@ namespace :sunspot do
       if RUBY_PLATFORM =~ /w(in)?32$/
         abort('This command does not work on Windows.')
       end
-      Sunspot::Rails::Server.stop
+      Sunspot::Rails::Server.new.stop
     end
 
     desc 'Reindex all solr models'

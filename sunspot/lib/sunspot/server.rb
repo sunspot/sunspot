@@ -15,8 +15,8 @@ module Sunspot #:nodoc:
 
     LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
-    attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
-    attr_writer :pid_dir, :log_level, :solr_data_dir, :solr_home
+    attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home
+    attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :log_file
 
     #
     # Start the sunspot-solr server. Bootstrap solr_home first,
@@ -27,14 +27,14 @@ module Sunspot #:nodoc:
     # Boolean:: success
     #
     def start
-      if File.exist?(pid_file)
-        existing_pid = IO.read(pid_file).to_i
+      if File.exist?(pid_path)
+        existing_pid = IO.read(pid_path).to_i
         begin
           Process.kill(0, existing_pid)
           abort("Server is already running with PID #{existing_pid}")
         rescue Errno::ESRCH
-          STDERR.puts("Removing stale PID file at #{pid_file}")
-          FileUtils.rm(pid_file)
+          STDERR.puts("Removing stale PID file at #{pid_path}")
+          FileUtils.rm(pid_path)
         end
       end
       fork do
@@ -46,7 +46,7 @@ module Sunspot #:nodoc:
           run
         end
         FileUtils.mkdir_p(pid_dir)
-        File.open(pid_file, 'w') do |file|
+        File.open(pid_path, 'w') do |file|
           file << pid
         end
       end
@@ -82,17 +82,17 @@ module Sunspot #:nodoc:
     # Boolean:: success
     #
     def stop
-      if File.exist?(pid_file)
-        pid = IO.read(pid_file).to_i
+      if File.exist?(pid_path)
+        pid = IO.read(pid_path).to_i
         begin
           Process.kill('TERM', pid)
         rescue Errno::ESRCH
           raise NotRunningError, "Process with PID #{pid} is no longer running"
         ensure
-          FileUtils.rm(pid_file)
+          FileUtils.rm(pid_path)
         end
       else
-        raise NotRunningError, "No PID file at #{pid_file}"
+        raise NotRunningError, "No PID file at #{pid_path}"
       end
     end
 
@@ -107,13 +107,12 @@ module Sunspot #:nodoc:
       @log_level || 'WARNING'
     end
 
-    def pid_file=(pid_file)
-      @pid_file = pid_file
-      @pid_dir = File.dirname(pid_file)
+    def pid_path
+      File.join(pid_dir, pid_file)
     end
 
     def pid_file
-      File.expand_path(@pid_file || File.join(pid_dir, 'sunspot-solr.pid'))
+      @pid_file || 'sunspot-solr.pid'
     end
 
     def pid_dir
