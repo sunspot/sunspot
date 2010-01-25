@@ -15,7 +15,40 @@ module Sunspot #:nodoc:
       end
 
       def reset
-        @master_session = @configuration = nil
+        @configuration = nil
+      end
+
+      def build_session(configuration = self.configuration)
+        if configuration.has_master?
+          SessionProxy::MasterSlaveSessionProxy.new(
+            SessionProxy::ThreadLocalSessionProxy.new(master_config(configuration)),
+            SessionProxy::ThreadLocalSessionProxy.new(slave_config(configuration))
+          )
+        else
+          SessionProxy::ThreadLocalSessionProxy.new(slave_config(configuration))
+        end
+      end
+
+      private
+
+      def master_config(sunspot_rails_configuration)
+        config = Sunspot::Configuration.build
+        config.solr.url = URI::HTTP.build(
+          :host => sunspot_rails_configuration.master_hostname,
+          :port => sunspot_rails_configuration.master_port,
+          :path => sunspot_rails_configuration.master_path
+        ).to_s
+        config
+      end
+
+      def slave_config(sunspot_rails_configuration)
+        config = Sunspot::Configuration.build
+        config.solr.url = URI::HTTP.build(
+          :host => configuration.hostname,
+          :port => configuration.port,
+          :path => configuration.path
+        ).to_s
+        config
       end
     end
   end

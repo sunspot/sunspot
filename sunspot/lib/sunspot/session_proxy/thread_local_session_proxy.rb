@@ -23,7 +23,7 @@ module Sunspot
       end
 
       def session #:nodoc:
-        Thread.current[:sunspot_session] ||= Session.new(:config)
+        Thread.current[:sunspot_session] ||= Session.new(config)
       end
     end
   end
