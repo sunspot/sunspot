@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
+require 'tempfile'
 
 describe Sunspot::Server do
   SUNSPOT_START_JAR = File.expand_path(
@@ -26,6 +27,24 @@ describe Sunspot::Server do
     @server.stub!(:exec)
     @server.start
     IO.read('./sunspot-solr.pid').to_i.should == 123
+  end
+
+  it 'writes PID file to specified directory' do
+    @server.pid_dir = 'spec/tmp/pids'
+    @server.stub!(:fork).and_yield.and_return(123)
+    @server.stub!(:exec)
+    @server.start
+    IO.read('./spec/tmp/pids/sunspot-solr.pid').to_i.should == 123
+    FileUtils.rm_r('./spec/tmp')
+  end
+
+  it 'writes PID to specified file' do
+    @server.pid_file = 'spec/tmp/pids/solr-development.pid'
+    @server.stub!(:fork).and_yield.and_return(123)
+    @server.stub!(:exec)
+    @server.start
+    IO.read('./spec/tmp/pids/solr-development.pid').to_i.should == 123
+    FileUtils.rm_r('./spec/tmp')
   end
 
   it 'runs server in current process' do
@@ -62,5 +81,42 @@ describe Sunspot::Server do
     @server.solr_home = '/var/solr'
     @server.should_receive(:exec).with("java -Dsolr.solr.home=/var/solr -jar #{SUNSPOT_START_JAR}")
     @server.run
+  end
+
+  describe 'with logging' do
+    before :each do
+      @server.log_level = 'debug'
+      @server.log_file = 'log/sunspot-development.log'
+      Tempfile.should_receive(:new).with('logging.properties').and_return(@tempfile = StringIO.new)
+      @tempfile.should_receive(:flush)
+      @tempfile.should_receive(:close)
+      @tempfile.stub(:path).and_return('/tmp/logging.properties.12345')
+      @server.stub(:exec)
+    end
+
+    it 'runs Solr with logging properties file' do
+      @server.should_receive(:exec).with("java -Djava.util.logging.config.file=/tmp/logging.properties.12345 -jar #{SUNSPOT_START_JAR}")
+      @server.run
+    end
+
+    it 'sets logging level' do
+      @server.run
+      @tempfile.string.should =~ /^\.level *= *DEBUG$/
+    end
+
+    it 'sets handler' do
+      @server.run
+      @tempfile.string.should =~ /^handlers *= *java.util.logging.FileHandler$/
+    end
+
+    it 'sets formatter' do
+      @server.run
+      @tempfile.string.should =~ /^java\.util\.logging\.FileHandler\.formatter *= *java\.util\.logging\.SimpleFormatter$/
+    end
+
+    it 'sets log file' do
+      @server.run
+      @tempfile.string.should =~ /^java\.util\.logging\.FileHandler\.pattern *= *log\/sunspot-development\.log$/
+    end
   end
 end

@@ -9,7 +9,8 @@ module Sunspot #:nodoc:
       File.join(File.dirname(__FILE__), '..', '..', 'solr', 'solr', 'start.jar')
     )
 
-    attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home
+    attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
+    attr_writer :pid_dir, :log_level
 
     #
     # Start the sunspot-solr server. Bootstrap solr_home first,
@@ -21,7 +22,8 @@ module Sunspot #:nodoc:
     #
     def start
       pid = fork { run }
-      File.open('./sunspot-solr.pid', 'w') do |file|
+      FileUtils.mkdir_p(pid_dir)
+      File.open(pid_file, 'w') do |file|
         file << pid
       end
     end
@@ -41,6 +43,7 @@ module Sunspot #:nodoc:
       command << "-Djetty.port=#{port}" if port
       command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
       command << "-Dsolr.solr.home=#{solr_home}" if solr_home
+      command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
       command << '-jar' << SOLR_START_JAR
       exec(Escape.shell_command(command))
     end
@@ -54,6 +57,42 @@ module Sunspot #:nodoc:
     #
     def stop
       execute(stop_command)
+    end
+
+    def pid_file=(pid_file)
+      @pid_file = pid_file
+      @pid_dir = File.dirname(pid_file)
+    end
+
+    private
+
+    def logging_config_path
+      return @logging_config_path if defined?(@logging_config_path)
+      @logging_config_path =
+        if log_file
+          logging_config = Tempfile.new('logging.properties')
+          logging_config.puts(".level = #{log_level.to_s.upcase}")
+          logging_config.puts("handlers = java.util.logging.FileHandler")
+          logging_config.puts("java.util.logging.FileHandler.pattern = #{log_file}")
+          logging_config.puts("java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter")
+          logging_config.flush
+          logging_config.close
+          logging_config.path
+        end
+    end
+
+    def log_level
+      if @log_level then @log_level.to_s.upcase
+      else 'WARN'
+      end
+    end
+
+    def pid_file
+      @pid_file || File.join(pid_dir, 'sunspot-solr.pid')
+    end
+
+    def pid_dir
+      @pid_dir || FileUtils.pwd
     end
   end
 end
