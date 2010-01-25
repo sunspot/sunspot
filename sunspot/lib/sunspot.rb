@@ -41,6 +41,7 @@ module Sunspot
   IllegalSearchError = Class.new(StandardError)
   NotImplementedError = Class.new(StandardError)
 
+  autoload :Server, File.join(File.dirname(__FILE__), 'sunspot', 'server')
 
   class <<self
     # 
