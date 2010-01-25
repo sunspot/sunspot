@@ -1,4 +1,5 @@
 === 1.0 ===
+* Shorthand arguments to Sunspot#search
 * Sunspot::Server (port over from sunspot_rails)
 * Rudimentary fulltext prefixing support
 
