@@ -1,9 +1,18 @@
-gem 'hanna'
-require 'hanna/rdoctask'
-require 'jeweler'
+using_gems = false
+begin
+  require 'hanna/rdoctask'
+rescue LoadError
+  unless using_gems
+    using_gems = true
+    retry
+  end
+  # It's OK if hanna isn't installed.
+end
+
+require File.join(File.dirname(__FILE__), '..', 'sunspot', 'version')
 
 Rake::RDocTask.new(:doc) do |rdoc|
-  version = Jeweler::VersionHelper.new(File.join(File.dirname(__FILE__), '..')).to_s
+  version = Sunspot::VERSION
   rdoc.title = "Sunspot #{version} - Solr-powered search for Ruby objects - API Documentation"
   rdoc.main = 'README.rdoc'
   rdoc.rdoc_files.include('README.rdoc', 'lib/sunspot.rb', 'lib/sunspot/**/*.rb')
