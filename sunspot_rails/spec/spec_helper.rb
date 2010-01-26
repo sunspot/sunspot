@@ -30,6 +30,7 @@ end
 Spec::Runner.configure do |config|
   config.before(:each) do
     load_schema
+    Sunspot.remove_all!
   end
 end
 
