@@ -30,4 +30,13 @@ describe 'indexing dynamic fields' do
     session.index(post(:custom_fl => { :test => [1.0, 2.1, 3.2] }))
     connection.should have_add_with(:"custom_float:test_fm" => %w(1.0 2.1 3.2))
   end
+
+  it 'should throw a NoMethodError if dynamic text field defined' do
+    lambda do
+      Sunspot.setup(Post) do
+        dynamic_text :custom_text
+      end
+    end.should raise_error(NoMethodError)
+  end
 end
+

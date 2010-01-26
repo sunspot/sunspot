@@ -99,7 +99,11 @@ module Sunspot
         type = type_class.instance
         name = args.shift
         if method.to_s =~ /^dynamic_/
-          @setup.add_dynamic_field_factory(name, type, options, &block)
+          if type.accepts_dynamic?
+            @setup.add_dynamic_field_factory(name, type, options, &block)
+          else
+            super(method, *args, &block)
+          end
         else
           @setup.add_field_factory(name, type, options, &block)
         end

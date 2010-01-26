@@ -24,6 +24,10 @@ module Sunspot
         end
         private :new
       end
+
+      def accepts_dynamic?
+        true
+      end
     end
 
     # 
@@ -44,6 +48,10 @@ module Sunspot
 
       def cast(text)
         text
+      end
+
+      def accepts_dynamic?
+        false
       end
     end
 
