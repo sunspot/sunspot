@@ -15,8 +15,8 @@ module Sunspot #:nodoc:
 
     LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
-    attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home
-    attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :log_file
+    attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
+    attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home
 
     #
     # Start the sunspot-solr server. Bootstrap solr_home first,

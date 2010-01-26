@@ -48,7 +48,7 @@ describe Sunspot::Server do
 
   describe 'with logging' do
     before :each do
-      @server.log_level = 'debug'
+      @server.log_level = 'info'
       @server.log_file = 'log/sunspot-development.log'
       Tempfile.should_receive(:new).with('logging.properties').and_return(@tempfile = StringIO.new)
       @tempfile.should_receive(:flush)
@@ -64,7 +64,7 @@ describe Sunspot::Server do
 
     it 'sets logging level' do
       @server.run
-      @tempfile.string.should =~ /^\.level *= *DEBUG$/
+      @tempfile.string.should =~ /^java\.util\.logging\.FileHandler\.level *= *INFO$/
     end
 
     it 'sets handler' do
