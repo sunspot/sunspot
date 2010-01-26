@@ -57,9 +57,13 @@ module Sunspot
     # field_factories<Array>:: Array of dynamic field objects
     # 
     def add_dynamic_field_factory(name, type, options = {}, &block)
+      stored = options[:stored]
       field_factory = FieldFactory::Dynamic.new(name, type, options, &block)
       @dynamic_field_factories[field_factory.signature] = field_factory
       @dynamic_field_factories_cache[field_factory.name] = field_factory
+      if stored
+        @stored_field_factories_cache[field_factory.name] << field_factory
+      end
     end
 
     # 
@@ -132,9 +136,13 @@ module Sunspot
     # Return one or more stored fields (can be either attribute or text fields)
     # for the given name.
     #
-    def stored_fields(field_name)
+    def stored_fields(field_name, dynamic_field_name = nil)
       @stored_field_factories_cache[field_name.to_sym].map do |field_factory|
-        field_factory.build
+        if dynamic_field_name
+          field_factory.build(dynamic_field_name)
+        else
+          field_factory.build
+        end
       end
     end
 

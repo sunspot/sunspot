@@ -54,7 +54,7 @@ Sunspot.setup(Post) do
   end
   coordinates :coordinates
 
-  dynamic_string :custom_string
+  dynamic_string :custom_string, :stored => true
   dynamic_float :custom_float, :multiple => true, :using => :custom_fl
   dynamic_integer :custom_integer do
     category_ids.inject({}) do |hash, category_id|

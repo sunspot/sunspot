@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe 'indexing dynamic fields' do
   it 'indexes string data' do
     session.index(post(:custom_string => { :test => 'string' }))
-    connection.should have_add_with(:"custom_string:test_s" => 'string')
+    connection.should have_add_with(:"custom_string:test_ss" => 'string')
   end
 
   it 'indexes integer data with virtual accessor' do

@@ -70,9 +70,19 @@ module Sunspot
       #
       # field_name<Symbol>::
       #   The name of the field for which to retrieve the stored value.
+      # dynamic_field_name<Symbol>::
+      #   If you want to access a stored dynamic field, this should be the
+      #   dynamic component of the field name.
       #
-      def stored(field_name)
-        @stored_cache[field_name.to_sym] ||= stored_value(field_name)
+      def stored(field_name, dynamic_field_name = nil)
+        field_key =
+          if dynamic_field_name
+            [field_name.to_sym, dynamic_field_name.to_sym]
+          else
+            field_name.to_sym
+          end
+        return @stored_cache[field_key] if @stored_cache.has_key?(field_key)
+        @stored_cache[field_key] = stored_value(field_name, dynamic_field_name)
       end
 
       # 
@@ -114,12 +124,13 @@ module Sunspot
           end
       end
 
-      def stored_value(field_name)
-        setup.stored_fields(field_name).each do |field|
+      def stored_value(field_name, dynamic_field_name)
+        setup.stored_fields(field_name, dynamic_field_name).each do |field|
           if value = @stored_values[field.indexed_name]
             return field.cast(value)
           end
         end
+        nil
       end
     end
   end

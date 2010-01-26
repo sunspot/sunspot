@@ -4,8 +4,8 @@ module Namespaced
     attr_accessor :author_name, :published_at, :body, :average_rating, :boost,
                   :hash
 
-    def custom_string
-      @custom_string ||= {}
+    def custom_float
+      @custom_float ||= {}
     end
   end
 end
@@ -16,6 +16,6 @@ Sunspot.setup(Namespaced::Comment) do
   time :published_at
   long :hash
   double :average_rating
-  dynamic_string :custom_string
+  dynamic_float :custom_float
   boost :boost
 end

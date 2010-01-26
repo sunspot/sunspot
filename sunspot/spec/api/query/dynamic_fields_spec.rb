@@ -7,7 +7,7 @@ describe 'dynamic field query', :type => :query do
         with :test, 'string'
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_string\:test_s:string')
+    connection.should have_last_search_including(:fq, 'custom_string\:test_ss:string')
   end
 
   it 'restricts by dynamic integer field with less than restriction' do
@@ -53,7 +53,7 @@ describe 'dynamic field query', :type => :query do
         without :test, 'foo'
       end
     end
-    connection.should have_last_search_including(:fq, '-custom_string\:test_s:foo')
+    connection.should have_last_search_including(:fq, '-custom_string\:test_ss:foo')
   end
 
   it 'scopes by a dynamic field inside a disjunction' do
@@ -66,7 +66,7 @@ describe 'dynamic field query', :type => :query do
       end
     end
     connection.should have_last_search_including(
-      :fq, '(custom_string\:test_s:foo OR title_ss:bar)'
+      :fq, '(custom_string\:test_ss:foo OR title_ss:bar)'
     )
   end
 
@@ -118,7 +118,7 @@ describe 'dynamic field query', :type => :query do
       end
     end
     connection.should have_last_search_with(
-      :"facet.query" => 'custom_string\:test_s:foo'
+      :"facet.query" => 'custom_string\:test_ss:foo'
     )
   end
 
@@ -134,16 +134,16 @@ describe 'dynamic field query', :type => :query do
     end
     connection.should have_last_search_including(
       :"facet.query",
-      'custom_string\:test_s:foo'
+      'custom_string\:test_ss:foo'
     )
   end
 
   it 'allows scoping on dynamic fields common to all types' do
     session.search Post, Namespaced::Comment do
-      dynamic :custom_string do
-        with(:test, 'test')
+      dynamic :custom_float do
+        with(:test, 1.23)
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_string\\:test_s:test')
+    connection.should have_last_search_including(:fq, 'custom_float\\:test_f:1\\.23')
   end
 end
