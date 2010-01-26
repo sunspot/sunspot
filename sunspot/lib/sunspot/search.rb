@@ -115,38 +115,56 @@ module Sunspot
     # given to a query facet, or the field name of a field facet. Returns a
     # Sunspot::Facet object.
     #
-    def facet(name)
-      @facets[name.to_sym] if name
-    end
-
-    # 
-    # Get the facet object for a given dynamic field. This dynamic field will
-    # need to have been requested as a field facet inside the search block.
-    #
     # ==== Parameters
     #
-    # base_name<Symbol>::
-    #   Base name of the dynamic field definiton (as specified in the setup
-    #   block)
+    # name<Symbol>::
+    #   Name of the field to return the facet for, or the name given to the
+    #   query facet when the search was constructed.
     # dynamic_name<Symbol>::
-    #   Dynamic field name to facet on
-    # 
-    # ==== Returns
+    #   If faceting on a dynamic field, this is the dynamic portion of the field
+    #   name.
     #
-    # Sunspot::Facet:: Facet object for given dynamic field
-    # 
-    # ==== Example
+    # ==== Example:
     #
     #   search = Sunspot.search(Post) do
+    #     facet :category_ids
     #     dynamic :custom do
     #       facet :cuisine
     #     end
+    #     facet :age do
+    #       row 'Less than a month' do
+    #         with(:published_at).greater_than(1.month.ago)
+    #       end
+    #       row 'Less than a year' do
+    #         with(:published_at, 1.year.ago..1.month.ago)
+    #       end
+    #       row 'More than a year' do
+    #         with(:published_at).less_than(1.year.ago)
+    #       end
+    #     end
     #   end
-    #   search.dynamic_facet(:custom, :cuisine)
+    #   search.facet(:category_ids)
+    #     #=> Facet for :category_ids field
+    #   search.facet(:custom, :cuisine)
     #     #=> Facet for the dynamic field :cuisine in the :custom field definition
+    #   search.facet(:age)
+    #     #=> Facet for the query facet named :age
+    #
+    def facet(name, dynamic_name = nil)
+      if name
+        if dynamic_name
+          @facets[:"#{name}:#{dynamic_name}"]
+        else
+          @facets[name.to_sym]
+        end
+      end
+    end
+
     # 
-    def dynamic_facet(base_name, dynamic_name)
-      facet(:"#{base_name}:#{dynamic_name}")
+    # Deprecated in favor of optional second argument to #facet
+    #
+    def dynamic_facet(base_name, dynamic_name) #:nodoc:
+      facet(base_name, dynamic_name)
     end
 
     # 
