@@ -52,6 +52,17 @@ describe 'hits', :type => :search do
     session.search(Post).hits.first.instance.should == posts.first
   end
 
+  it 'should provide iterator over hits with instances' do
+    posts = Array.new(2) { Post.new }
+    stub_results(*posts)
+    search = session.search(Post)
+    hits, results = [], []
+    search.each_hit_with_result do |hit, result|
+      hits << hit
+      results << result
+    end
+  end
+
   it 'should hydrate all hits when an instance is requested from a hit' do
     posts = Array.new(2) { Post.new }
     stub_results(*posts)

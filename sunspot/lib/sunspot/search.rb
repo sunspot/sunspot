@@ -85,6 +85,20 @@ module Sunspot
     end
     alias_method :raw_results, :hits
 
+    #
+    # Convenience method to iterate over hit and result objects. Block is
+    # yielded a Sunspot::Server::Hit instance and a Sunspot::Server::Result
+    # instance.
+    #
+    # Note that this method iterates over verified hits (see #hits method
+    # for more information).
+    #
+    def each_hit_with_result
+      verified_hits.each do |hit|
+        yield(hit, hit.result)
+      end
+    end
+
     # 
     # The total number of documents matching the query parameters
     #

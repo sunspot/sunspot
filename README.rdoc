@@ -125,8 +125,7 @@ See Sunspot.search for more information.
           = link_to(row.instance.name, params.merge(:blog_id => row.value))
           %span.count== (#{row.count})
   .page_info== Displaying page #{@search.page} of #{@search.per_page} out of #{@search.total} results
-  - @search.hits.each do |hit|
-    - post = hit.result
+  - @search.each_hit_with_result do |hit, post|
     .search_result
       %h3.title
         = link_to(h(hit.stored(:title)), post_url(post))
