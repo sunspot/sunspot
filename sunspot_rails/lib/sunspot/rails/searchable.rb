@@ -163,6 +163,9 @@ module Sunspot #:nodoc:
         #                  used for including associated objects that need to be
         #                  indexed with the parent object, accepts all formats
         #                  ActiveRecord::Base.find does
+        # first_id:: The lowest possible ID for this class. Defaults to 0, which
+        #            is fine for integer IDs; string primary keys will need to
+        #            specify something reasonable here.
         #
         # ==== Examples
         #   
@@ -179,7 +182,7 @@ module Sunspot #:nodoc:
         #   Post.reindex(:include => :author) 
         #
         def reindex(opts={})
-          options = { :batch_size => 500, :batch_commit => true, :include => []}.merge(opts)
+          options = { :batch_size => 500, :batch_commit => true, :include => [], :first_id => 0}.merge(opts)
           remove_all_from_index
           unless options[:batch_size]
             Sunspot.index!(all(:include => options[:include]))
@@ -187,7 +190,7 @@ module Sunspot #:nodoc:
             offset = 0
             counter = 1
             record_count = count
-            last_id = 0
+            last_id = options[:first_id]
             while(offset < record_count)
               benchmark options[:batch_size], counter do
                 records = all(:include => options[:include], :conditions => ["#{table_name}.#{primary_key} > ?", last_id], :limit => options[:batch_size], :order => primary_key)
