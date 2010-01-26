@@ -485,8 +485,6 @@ module Sunspot
       @session = Session.new(config)
     end
 
-    private
-
     # 
     # Get the singleton session, creating it if none yet exists.
     #

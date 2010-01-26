@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe 'searchable with lifecycle' do
-  integrate_sunspot
-  
   describe 'on create' do
     before :each do
       @post = PostWithAuto.create
@@ -40,8 +38,6 @@ describe 'searchable with lifecycle' do
 end
 
 describe 'searchable with lifecycle - ignoring specific attributes' do
-  integrate_sunspot
-  
   before(:each) do
     @post = PostWithAuto.create
   end

@@ -137,12 +137,9 @@ module Sunspot #:nodoc:
         # Remove all instances of this class from the Solr index and immediately
         # commit.
         #
-        #---
-        # XXX Sunspot should implement remove_all!()
         #
         def remove_all_from_index!
-          remove_all_from_index
-          Sunspot.commit
+          Sunspot.remove_all!(self)
         end
 
         # 

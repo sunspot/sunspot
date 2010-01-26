@@ -206,31 +206,24 @@ used as intended.
 
 == Testing Solr integration using RSpec
 
-To disable the sunspot-solr integration for your active record models, add the
-following line to your spec_helper.rb
+To disable the sunspot-solr integration for your active record models, require
+the file `sunspot/rails/spec_helper`
 
-require 'sunspot/spec/extension'
+Then, in your spec, use the #disconnect_sunspot method:
 
-This will disable all automatic after_save/after_destroy solr-requests generated
-via the #searchable method. This will not disable/mock explicit calls in your code.
+  require 'sunspot/rails/spec_helper'
 
-If you want to test the sunspot-solr integration with active record, you can 
-reenable the after_save/after_destroy hooks by adding 'integrate_sunspot' in your
-examples.
-
-  describe Searches do
-    integrate_sunspot
+  describe Post do
+    disconnect_sunspot
     
-    before(:each) do
-      @movie = Factory.create :movie
-    end
-    
-    it "should find a movie" do
-      Movie.search { keywords @movie.title }.first.should == @movie
+    it 'should have some behavior'
+      # ...
     end
   end
 
-
+In all of the examples in this group, all Sunspot calls will be stubbed out. The
+Sunspot#search method will return a stub search object that mimics a search with
+no results.
 
 == Further Reading
 

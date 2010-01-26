@@ -7,6 +7,8 @@ require 'sunspot/rails/util'
 
 module Sunspot #:nodoc:
   module Rails #:nodoc:
+    autoload :StubSessionProxy, File.join(File.dirname(__FILE__), 'rails', 'stub_session_proxy')
+
     class <<self
       attr_writer :configuration
 

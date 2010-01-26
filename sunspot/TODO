@@ -1,3 +1,4 @@
+* new_search should accept block
 === Future ===
 * Shorthand arguments to Sunspot#search
 * Rudimentary fulltext prefixing support

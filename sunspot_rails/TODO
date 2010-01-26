@@ -1,4 +1,4 @@
-* Session proxy should give access to config
+* Delegate new_search method
 =======
 * Fix final status output for reindex
 * Add batch-per-request option
