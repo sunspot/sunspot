@@ -124,7 +124,7 @@ See Sunspot.search for more information.
         li.facet_row
           = link_to(row.instance.name, params.merge(:blog_id => row.value))
           %span.count== (#{row.count})
-  .page_info== Displaying page #{@search.page} of #{@search.per_page} out of #{@search.total} results
+  .page_info== Displaying page #{@search.hits.page} of #{@search.hits.per_page} out of #{@search.total} results
   - @search.each_hit_with_result do |hit, post|
     .search_result
       %h3.title
