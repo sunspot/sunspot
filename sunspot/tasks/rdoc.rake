@@ -3,6 +3,7 @@ begin
   require 'hanna/rdoctask'
 rescue LoadError
   unless using_gems
+    require 'rubygems'
     using_gems = true
     retry
   end
