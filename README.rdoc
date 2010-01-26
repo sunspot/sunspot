@@ -11,10 +11,15 @@ searching for them.
 Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
 objects such as the filesystem.
 
+=== Where to learn all about Sunspot: The Wiki!
+
 This README is intended as a quick primer on what Sunspot is capable of; for
 detailed treatment of Sunspot's full feature range, check out the wiki:
 http://wiki.github.com/outoftime/sunspot
 
+The API documentation is also complete and up-to-date; however, because of the
+way Sunspot is structured, it's not the easiest way for new users to get to know
+the library.
 
 === Features:
 
