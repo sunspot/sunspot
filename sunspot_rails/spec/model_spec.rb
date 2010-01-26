@@ -107,7 +107,7 @@ describe 'ActiveRecord mixin' do
     end
     
     it 'should find ActiveRecord objects with an integer, not a string' do
-      Post.should_receive(:find).with([@post.id.to_i], anything()).and_return([@post])
+      Post.should_receive(:find_all_by_id).with([@post.id.to_i], anything).and_return([@post])
       Post.search do
         with :title, 'Test Post'
       end.results.should == [@post]
@@ -135,6 +135,16 @@ describe 'ActiveRecord mixin' do
         with :title, 'Test Post'
       end.results.should == [@post]
     end
+
+    it 'should gracefully handle nonexistent records' do
+      post2 = Post.create!(:title => 'Test Post')
+      post2.index!
+      post2.destroy
+      Post.search do
+        with :title, 'Test Post'
+      end.results.should == [@post]
+    end
+
   end
 
   describe 'search_ids()' do
@@ -233,8 +243,9 @@ describe 'ActiveRecord mixin' do
         Post.search.results.to_set.should == @posts.to_set
       end
     end
-    
   end
+
+
   
   describe "reindex()" do
   
