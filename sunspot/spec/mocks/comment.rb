@@ -16,6 +16,6 @@ Sunspot.setup(Namespaced::Comment) do
   time :published_at
   long :hash
   double :average_rating
-  dynamic_float :custom_float
+  dynamic_float :custom_float, :multiple => true
   boost :boost
 end

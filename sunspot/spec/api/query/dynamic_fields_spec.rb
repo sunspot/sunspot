@@ -144,6 +144,6 @@ describe 'dynamic field query', :type => :query do
         with(:test, 1.23)
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_float\\:test_f:1\\.23')
+    connection.should have_last_search_including(:fq, 'custom_float\\:test_fm:1\\.23')
   end
 end
