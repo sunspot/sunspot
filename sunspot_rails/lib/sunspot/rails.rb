@@ -7,6 +7,7 @@ require File.join(File.dirname(__FILE__), 'rails', 'searchable')
 module Sunspot #:nodoc:
   module Rails #:nodoc:
     autoload :StubSessionProxy, File.join(File.dirname(__FILE__), 'rails', 'stub_session_proxy')
+    autoload :VERSION, File.join(File.dirname(__FILE__), 'rails', 'version')
 
     class <<self
       attr_writer :configuration
