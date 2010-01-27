@@ -66,8 +66,11 @@ You can change the URL at which Sunspot accesses Solr with:
 
 == Rails Integration
 
-The {Sunspot::Rails}[http://github.com/outoftime/sunspot_rails] plugin makes
-integrating Sunspot into Rails drop-in easy.
+The Sunspot::Rails plugin makes integrating Sunspot into Rails drop-in easy.
+
+    gem install sunspot_rails
+
+See the README for that gem or the Sunspot Wiki for more information.
 
 == Using Sunspot
 

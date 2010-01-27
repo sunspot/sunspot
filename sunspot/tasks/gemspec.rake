@@ -1,6 +1,6 @@
-require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'gem_tasks')
+require File.join(File.dirname(__FILE__), '..', '..', 'tools', 'gem_tasks')
 
-Sunspot::GemTasks.new do |s|
+Sunspot::GemTasks.new(:build => :copy_rdoc) do |s|
   s.name = 'sunspot'
   s.version = Sunspot::VERSION
   s.executables = ['sunspot-solr', 'sunspot-configure-solr']
@@ -21,4 +21,12 @@ TEXT
                     '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation' <<
                     '--main' << 'README.rdoc'
 
+end
+
+task :copy_rdoc do
+  sunspot_root = File.join(File.dirname(__FILE__), '..')
+  FileUtils.cp(
+    File.join(sunspot_root, '..', 'README.rdoc'),
+    sunspot_root
+  )
 end

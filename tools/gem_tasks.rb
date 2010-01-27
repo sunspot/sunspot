@@ -1,11 +1,11 @@
 require 'rubygems/specification'
-require File.join(File.dirname(__FILE__), 'version')
 
 module Sunspot
   class GemTasks
     PROJECT_ROOT = File.dirname(Rake.application.rakefile_location)
 
-    def initialize(&block)
+    def initialize(dependencies = {}, &block)
+      @dependencies = dependencies
       @gemspec_block = block
 
       task(:gemspec, "Write gemspec")
@@ -15,6 +15,7 @@ module Sunspot
     end
 
     def build
+      run_dependencies(:build)
       filename = Gem::Builder.new(spec).build
       FileUtils.mv(filename, File.join(PROJECT_ROOT, 'pkg'))
       File.join('pkg', filename)
@@ -55,6 +56,14 @@ module Sunspot
     def task(name, description)
       Rake.application.last_description = description
       Rake::Task.define_task(name) { send(name) }
+    end
+
+    def run_dependencies(task)
+      if @dependencies[task]
+        Array(@dependencies[task]).each do |dependency|
+          Rake::Task[dependency].invoke
+        end
+      end
     end
   end
 end
