@@ -12,6 +12,7 @@ require 'spec'
 require 'spec/rails'
 require 'rake'
 require 'ruby-debug' unless RUBY_VERSION > '1.9'
+require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'rails', 'solr_logging')
 
 def load_schema
   stdout = $stdout

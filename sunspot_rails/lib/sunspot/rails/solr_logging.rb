@@ -1,0 +1,46 @@
+module Sunspot
+  module Rails
+    module SolrLogging
+      class <<self
+        def included(base)
+          base.module_eval { alias_method_chain(:request, :rails_logging) }
+        end
+      end
+
+      def request_with_rails_logging(path, params={}, *extra)
+        response = nil
+        ms = Benchmark.ms do
+          response = request_without_rails_logging(path, params, *extra)
+        end
+
+        body = (params.nil? || params.empty?) ? extra.first : params.inspect
+        action = path[1..-1].capitalize
+        if body == "<commit/>"
+          action = 'Commit'
+          body = ''
+        end
+        body = body[0, 800] + '...' if body.length > 800
+
+        log_name = 'Solr %s (%.1fms)' % [action, ms]
+        ::Rails.logger.debug(format_log_entry(log_name, body))
+
+        response
+      end
+
+      private
+
+      def format_log_entry(message, dump = nil)
+        if ActiveRecord::Base.colorize_logging
+          message_color, dump_color = "4;32;1", "0;1"
+          log_entry = "  \e[#{message_color}m#{message}\e[0m   "
+          log_entry << "\e[#{dump_color}m%#{String === dump ? 's' : 'p'}\e[0m" % dump if dump
+          log_entry
+        else
+          "%s  %s" % [message, dump]
+        end
+      end
+    end
+  end
+end
+
+RSolr::Connection::Base.module_eval { include(Sunspot::Rails::SolrLogging) }
