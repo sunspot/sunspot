@@ -144,7 +144,17 @@ module Sunspot #:nodoc:
 
         # 
         # Completely rebuild the index for this class. First removes all
-        # instances from the index, then loads records and save them. The
+        # instances from the index, then loads records and indexes them.
+        #
+        # See #index for information on options, etc.
+        #
+        def reindex(options = {})
+          remove_all_from_index
+          index(options)
+        end
+
+        #
+        # Add/update all existing records in the Solr index. The
         # +batch_size+ argument specifies how many records to load out of the
         # database at a time. The default batch size is 500; if nil is passed,
         # records will not be indexed in batches. By default, a commit is issued
@@ -169,19 +179,19 @@ module Sunspot #:nodoc:
         #
         # ==== Examples
         #   
-        #   # reindex in batches of 500, commit after each
-        #   Post.reindex 
+        #   # index in batches of 500, commit after each
+        #   Post.index 
         #
         #   # index all rows at once, then commit
-        #   Post.reindex(:batch_size => nil) 
+        #   Post.index(:batch_size => nil) 
         #
-        #   # reindex in batches of 500, commit when all batches complete
-        #   Post.reindex(:batch_commit => false) 
+        #   # index in batches of 500, commit when all batches complete
+        #   Post.index(:batch_commit => false) 
         #
         #   # include the associated +author+ object when loading to index
-        #   Post.reindex(:include => :author) 
+        #   Post.index(:include => :author) 
         #
-        def reindex(opts={})
+        def index(opts={})
           options = { :batch_size => 500, :batch_commit => true, :include => [], :first_id => 0}.merge(opts)
           remove_all_from_index
           unless options[:batch_size]
