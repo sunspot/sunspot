@@ -3,7 +3,7 @@
 http://outoftime.github.com/sunspot
 
 Sunspot is a Ruby library for expressive, powerful interaction with the Solr
-search engine. Sunspot is built on top of the solr-ruby library, which
+search engine. Sunspot is built on top of the RSolr library, which
 provides a low-level interface for Solr interaction; Sunspot provides a simple,
 intuitive, expressive DSL backed by powerful features for indexing objects and
 searching for them.
@@ -149,9 +149,8 @@ me so I can rectify the situation!
 
 == Dependencies
 
-1. solr-ruby
-2. daemons
-4. Java 1.5+
+1. RSolr
+2. Java 1.5+
 
 Sunspot has been tested with MRI 1.8.6 and 1.8.7, REE 1.8.6, YARV 1.9.1, and
 JRuby 1.2.0

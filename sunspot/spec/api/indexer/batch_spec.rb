@@ -19,7 +19,7 @@ describe 'batch indexing', :type => :indexer do
       end
     end
     add = connection.adds.last
-    connection.adds.first.map { |add| add[:id] }.should ==
+    connection.adds.first.map { |add| add.field_by_name(:id).value }.should ==
       posts.map { |post| "Post #{post.id}" }
   end
 
@@ -29,7 +29,7 @@ describe 'batch indexing', :type => :indexer do
       session.index(post)
       post.title = 'Title'
     end
-    connection.adds.first.first[:title_ss].should be_nil
+    connection.adds.first.first.field_by_name(:title_ss).should be_nil
   end
 
   it 'should batch an add and a delete' do

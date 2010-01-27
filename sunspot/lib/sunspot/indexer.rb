@@ -6,6 +6,8 @@ module Sunspot
   # subclasses).
   #
   class Indexer #:nodoc:
+    include RSolr::Char
+
     def initialize(connection)
       @connection = connection
     end
@@ -30,16 +32,18 @@ module Sunspot
     # 
     # Remove the given model from the Solr index
     #
-    def remove(model)
-      @connection.delete(Adapters::InstanceAdapter.adapt(model).index_id)
+    def remove(*models)
+      @connection.delete_by_id(
+        models.map { |model| Adapters::InstanceAdapter.adapt(model).index_id }
+      )
     end
 
     # 
     # Remove the model from the Solr index by specifying the class and ID
     #
-    def remove_by_id(class_name, id)
-      @connection.delete(
-        Adapters::InstanceAdapter.index_id_for(class_name, id)
+    def remove_by_id(class_name, *ids)
+      @connection.delete_by_id(
+        ids.map { |id| Adapters::InstanceAdapter.index_id_for(class_name, id) }
       )
     end
 
@@ -85,7 +89,7 @@ module Sunspot
       document = document_for(model)
       setup = setup_for(model)
       if boost = setup.document_boost_for(model)
-        document.boost = boost
+        document.attrs[:boost] = boost
       end
       setup.all_field_factories.each do |field_factory|
         field_factory.populate_document(document, model)
@@ -103,7 +107,7 @@ module Sunspot
     # pairs.
     #
     def document_for(model)
-      Solr::Document.new(
+      RSolr::Message::Document.new(
         :id => Adapters::InstanceAdapter.adapt(model).index_id,
         :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }
       )
@@ -122,10 +126,6 @@ module Sunspot
     #
     def setup_for(object)
       Setup.for(object.class) || raise(NoSetupError, "Sunspot is not configured for #{object.class.inspect}")
-    end
-
-    def escape(string)
-      Solr::Util.query_parser_escape(string)
     end
   end
 end

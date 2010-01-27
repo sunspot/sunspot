@@ -22,11 +22,11 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :searches, :message, :url, :deletes_by_query
+    attr_reader :adds, :commits, :searches, :message, :adapter, :deletes_by_query
     attr_writer :response
 
-    def initialize(url = nil)
-      @url = url
+    def initialize(adapter = nil)
+      @adapter = adapter
       @message = OpenStruct.new
       @adds, @deletes, @deletes_by_query, @commits, @searches = Array.new(5) { [] }
     end
@@ -35,8 +35,8 @@ module Mock
       @adds << Array(documents)
     end
 
-    def delete(*ids)
-      @deletes << ids
+    def delete_by_id(ids)
+      @deletes << Array(ids)
     end
 
     def delete_by_query(query)
@@ -47,13 +47,9 @@ module Mock
       @commits << Time.now
     end
 
-    def send(request)
-      if Sunspot::Request::Select === request
-        @searches << @last_search = request.to_hash
-        OpenStruct.new(:data => @response || {})
-      else
-        raise ArgumentError, "Mock connection doesn't handle request type #{request.class.name}"
-      end
+    def select(request)
+      @searches << @last_search = request
+      @response || {}
     end
 
     def has_add_with?(*documents)

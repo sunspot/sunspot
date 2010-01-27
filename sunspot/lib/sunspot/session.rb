@@ -15,7 +15,7 @@ module Sunspot
       # For testing purposes
       #
       def connection_class #:nodoc:
-        @connection_class ||= Solr::Connection
+        @connection_class ||= RSolr::Connection::Base
       end
     end
 
@@ -198,10 +198,15 @@ module Sunspot
     #
     # ==== Returns
     #
-    # Solr::Connection:: The connection for this session
+    # RSolr::Connection::Base:: The connection for this session
     #
     def connection
-      @connection ||= self.class.connection_class.new(config.solr.url)
+      @connection ||=
+        self.class.connection_class.new(
+          RSolr::Connection::Adapter::HTTP.new(
+            :url => config.solr.url
+          )
+        )
     end
 
     def indexer

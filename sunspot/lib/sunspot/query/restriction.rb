@@ -38,6 +38,7 @@ module Sunspot
       #
       class Base #:nodoc:
         include Filter
+        include RSolr::Char
 
         def initialize(field, value, negated = false)
           @field, @value, @negated = field, value, negated
@@ -132,10 +133,6 @@ module Sunspot
         #
         def solr_value(value = @value)
           solr_value = escape(@field.to_indexed(value))
-        end
-
-        def escape(string)
-          Solr::Util.query_parser_escape(string)
         end
       end
 

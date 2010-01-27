@@ -57,9 +57,12 @@ module Sunspot
       def populate_document(document, model) #:nodoc:
         unless (value = @data_extractor.value_for(model)).nil?
           Util.Array(@field.to_indexed(value)).each do |scalar_value|
-            document << Solr::Field.new(
-              @field.indexed_name.to_sym => scalar_value,
-              :boost => @field.boost
+            options = {}
+            options[:boost] = @field.boost if @field.boost
+            document.add_field(
+              @field.indexed_name.to_sym,
+              scalar_value,
+              options
             )
           end
         end
@@ -106,8 +109,9 @@ module Sunspot
           values.each_pair do |dynamic_name, value|
             field_instance = build(dynamic_name)
             Util.Array(field_instance.to_indexed(value)).each do |scalar_value|
-              document << Solr::Field.new(
-                field_instance.indexed_name.to_sym => scalar_value
+              document.add_field(
+                field_instance.indexed_name.to_sym,
+                scalar_value
               )
             end
           end
@@ -134,8 +138,8 @@ module Sunspot
       def populate_document(document, model)
         if coordinates = @data_extractor.value_for(model)
           coordinates = Util::Coordinates.new(coordinates)
-          document << Solr::Field.new(:lat => coordinates.lat)
-          document << Solr::Field.new(:lng => coordinates.lng)
+          document.add_field(:lat, coordinates.lat)
+          document.add_field(:lng, coordinates.lng)
         end
       end
     end

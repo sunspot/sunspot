@@ -33,7 +33,7 @@ module Sunspot
     def execute
       reset
       params = @query.to_params
-      @solr_result = @connection.send(Request::Select.new(params)).data
+      @solr_result = @connection.select(params)
       self
     end
     alias_method :execute!, :execute #:nodoc: deprecated

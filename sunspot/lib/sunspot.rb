@@ -4,17 +4,17 @@ require 'date'
 require 'enumerator'
 require 'cgi'
 begin
-  require 'solr'
+  require 'rsolr'
 rescue LoadError
   require 'rubygems'
-  require 'solr'
+  require 'rsolr'
 end
 
 require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(util adapters configuration setup composite_setup text_field_setup field
-   field_factory data_extractor indexer query request search session
-   session_proxy type dsl).each do |filename|
+   field_factory data_extractor indexer query search session session_proxy
+   type dsl).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 
