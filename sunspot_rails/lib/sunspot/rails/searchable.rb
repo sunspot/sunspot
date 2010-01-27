@@ -36,7 +36,7 @@ module Sunspot #:nodoc:
         #   </b>(see the README).
         # :ignore_attribute_changes_of<Array>::
         #   Define attributes, that should not trigger a reindex of that
-        #   object. Usual suspects are update_at or counters.
+        #   object. Usual suspects are updated_at or counters.
         #
         # ==== Example
         #
@@ -57,13 +57,12 @@ module Sunspot #:nodoc:
           unless searchable?
             extend ClassMethods
             include InstanceMethods
-            
-            Sunspot::Rails::Util.sunspot_options[self.to_s.underscore.to_sym] = options
+
+            class_inheritable_hash :sunspot_options
             
             unless options[:auto_index] == false
-              after_save do |searchable|
-                searchable.index if Sunspot::Rails::Util.index_relevant_attribute_changed?( searchable )
-              end
+              before_save :maybe_mark_for_auto_indexing
+              after_save :maybe_auto_index
             end
 
             unless options[:auto_remove] == false
@@ -72,6 +71,7 @@ module Sunspot #:nodoc:
               end
             end
           end
+          self.sunspot_options = options
         end
 
         # 
@@ -302,6 +302,25 @@ module Sunspot #:nodoc:
         #
         def remove_from_index!
           Sunspot.remove!(self)
+        end
+
+        private
+
+        def maybe_mark_for_auto_indexing
+          @marked_for_auto_indexing =
+            if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
+              @marked_for_auto_indexing = !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
+            else
+              true
+            end
+          true
+        end
+
+        def maybe_auto_index
+          if @marked_for_auto_indexing
+            index
+            remove_instance_variable(:@marked_for_auto_indexing)
+          end
         end
       end
     end

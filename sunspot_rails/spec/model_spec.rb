@@ -17,6 +17,17 @@ describe 'ActiveRecord mixin' do
     end
   end
 
+  describe 'single table inheritence' do
+    before :each do
+      @post = PhotoPost.create!
+    end
+
+    it 'should not break auto-indexing' do
+      @post.title = 'Title'
+      lambda { @post.save! }.should_not raise_error
+    end
+  end
+
   describe 'index!()' do
     before :each do
       @post = Post.create!

@@ -1,6 +1,7 @@
 ActiveRecord::Schema.define(:version => 0) do
   create_table :posts, :force => true do |t|
     t.string :title
+    t.string :type
     t.text :body
     t.references :blog
     t.timestamps
