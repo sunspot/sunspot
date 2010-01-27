@@ -14,7 +14,7 @@ running a Sunspot-compatible Solr instance for development and test
 environments, and automatically commit Solr index changes at the end of each
 Rails request.
 TEXT
-    s.authors = ['Mat Brown', 'Peer Allan', 'Michael Moen', 'Benjamin Krause']
+    s.authors = ['Mat Brown', 'Peer Allan', 'Michael Moen', 'Benjamin Krause', 'Adam Salter', 'Brandon Keepers', 'Paul Canavese']
     s.rubyforge_project = 'sunspot'
     s.files = FileList['[A-Z]*',
                        '{lib,tasks,dev_tasks}/**/*',

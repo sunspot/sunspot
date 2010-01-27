@@ -247,6 +247,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 - Benjamin Krause (bk@benjaminkrause.com)
 - Adam Salter (adam@codebright.net)
 - Brandon Keepers (brandon@opensoul.org)
+- Paul Canavese (paul@canavese.org)
 
 == License
 
