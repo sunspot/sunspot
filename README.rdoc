@@ -192,12 +192,22 @@ Sunspot repository at `upstream`:
   git fetch upstream
   git format-patch --stdout upstream/master.. > my-awesome.patch
 
-== Further Reading
+== Help and Support
+
+=== Ask for help
 
 * Sunspot Discussion: http://groups.google.com/group/ruby-sunspot
 * IRC: #sunspot-ruby @ Freenode
-* Posts about Sunspot from my tumblog: http://outofti.me/tagged/sunspot
-* Read about it on Linux Magazine: http://www.linux-mag.com/id/7341
+
+=== Tutorials and Articles
+
+* {Full-text search in Rails with Sunspot}[http://tech.favoritemedium.com/2010/01/full-text-search-in-rails-with-sunspot.html] (Tropical Software Observations)
+* {Sunspot Full-text Search for Rails/Ruby}[http://therailworld.com/posts/23-Sunspot-Full-text-Search-for-Rails-Ruby] (The Rail World)
+* {A Few Sunspot Tips}[http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/] (spiral_code)
+* {Sunspot: A Solr-Powered Search Engine for Ruby}[http://www.linux-mag.com/id/7341] (Linux Magazine)
+* {Default scope with Sunspot}[http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/] (Cloudspace)
+* {Sunspot Quickstart}[http://wiki.websolr.com/index.php/Sunspot_Quickstart] (WebSolr)
+* {Solr, and Sunspot}[http://www.kuahyeow.com/2009/08/solr-and-sunspot.html] (YT!)
 
 == Contributors
 
