@@ -8,11 +8,8 @@ module Sunspot
       end
 
       def request_with_rails_logging(path, params={}, *extra)
-        response = nil
-        ms = Benchmark.ms do
-          response = request_without_rails_logging(path, params, *extra)
-        end
 
+        # Set up logging text.
         body = (params.nil? || params.empty?) ? extra.first : params.inspect
         action = path[1..-1].capitalize
         if body == "<commit/>"
@@ -21,8 +18,19 @@ module Sunspot
         end
         body = body[0, 800] + '...' if body.length > 800
 
-        log_name = 'Solr %s (%.1fms)' % [action, ms]
-        ::Rails.logger.debug(format_log_entry(log_name, body))
+        # Make request and log.
+        response = nil
+        begin
+          ms = Benchmark.ms do
+            response = request_without_rails_logging(path, params, *extra)
+          end
+          log_name = 'Solr %s (%.1fms)' % [action, ms]
+          ::Rails.logger.debug(format_log_entry(log_name, body))
+        rescue Exception => e
+          log_name = 'Solr %s (Error)' % [action]
+          ::Rails.logger.debug(format_log_entry(log_name, body))
+          raise e
+        end
 
         response
       end
