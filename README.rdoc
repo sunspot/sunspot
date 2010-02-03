@@ -206,6 +206,7 @@ Sunspot repository at `upstream`:
 * {A Few Sunspot Tips}[http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/] (spiral_code)
 * {Sunspot: A Solr-Powered Search Engine for Ruby}[http://www.linux-mag.com/id/7341] (Linux Magazine)
 * {Default scope with Sunspot}[http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/] (Cloudspace)
+* {Running cucumber features with sunspot_rails}[http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails] (Kabisa Blog)
 * {Sunspot Quickstart}[http://wiki.websolr.com/index.php/Sunspot_Quickstart] (WebSolr)
 * {Solr, and Sunspot}[http://www.kuahyeow.com/2009/08/solr-and-sunspot.html] (YT!)
 
