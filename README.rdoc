@@ -196,7 +196,7 @@ Sunspot repository at `upstream`:
 
 === Ask for help
 
-* Sunspot Discussion: ruby-sunspot@googlegroups.com / http://groups.google.com/group/ruby-sunspot
+* Sunspot Discussion: {ruby-sunspot@googlegroups.com}[mailto:ruby-sunspot@googlegroups.com] / http://groups.google.com/group/ruby-sunspot
 * IRC: {#sunspot-ruby @ Freenode}[irc://chat.freenode.net/#sunspot-ruby]
 
 === Tutorials and Articles
