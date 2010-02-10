@@ -4,8 +4,9 @@ module Sunspot
   # contents are built using the Sunspot.setup method.
   #
   class Setup #:nodoc:
+    attr_reader :class_object_id
     def initialize(clazz)
-      @clazz = clazz
+      @class_object_id = clazz.object_id
       @class_name = clazz.name
       @field_factories, @text_field_factories, @dynamic_field_factories,
         @field_factories_cache, @text_field_factories_cache,
@@ -109,7 +110,7 @@ module Sunspot
       else
         raise(
           UnrecognizedFieldError,
-          "No field configured for #{@clazz.name} with name '#{field_name}'"
+          "No field configured for #{@class_name} with name '#{field_name}'"
         )
       end
     end
@@ -126,7 +127,7 @@ module Sunspot
         else
           raise(
             UnrecognizedFieldError,
-            "No text field configured for #{@clazz.name} with name '#{field_name}'"
+            "No text field configured for #{@class_name} with name '#{field_name}'"
           )
         end
       [text_field]
@@ -157,7 +158,7 @@ module Sunspot
     def dynamic_field_factory(field_name)
       @dynamic_field_factories_cache[field_name.to_sym] || raise(
         UnrecognizedFieldError,
-        "No dynamic field configured for #{@clazz.name} with name '#{field_name}'"
+        "No dynamic field configured for #{@class_name} with name '#{field_name}'"
       )
     end
 
@@ -317,7 +318,12 @@ module Sunspot
       # Sunspot::Setup:: New or existing setup for this class
       #
       def for!(clazz) #:nodoc:
-        setups[clazz.name.to_sym] ||= new(clazz)
+        setup = setups[clazz.name.to_sym]
+        if setup && setup.class_object_id == clazz.object_id
+          setup
+        else
+          setups[clazz.name.to_sym] = new(clazz)
+        end
       end
 
       private
