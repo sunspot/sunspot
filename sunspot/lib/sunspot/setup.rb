@@ -10,8 +10,8 @@ module Sunspot
       @class_name = clazz.name
       @field_factories, @text_field_factories, @dynamic_field_factories,
         @field_factories_cache, @text_field_factories_cache,
-        @dynamic_field_factories_cache, @stored_field_factories_cache =
-        *Array.new(7) { Hash.new }
+        @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
+      @stored_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @dsl = DSL::Fields.new(self)
       add_field_factory(:class, Type::ClassType.instance)
     end
@@ -29,7 +29,7 @@ module Sunspot
       @field_factories[field_factory.signature] = field_factory
       @field_factories_cache[field_factory.name] = field_factory
       if stored
-        @stored_field_factories_cache[field_factory.name] = field_factory
+        @stored_field_factories_cache[field_factory.name] << field_factory
       end
     end
 
@@ -46,7 +46,7 @@ module Sunspot
       @text_field_factories[name] = field_factory
       @text_field_factories_cache[field_factory.name] = field_factory
       if stored
-        @stored_field_factories_cache[field_factory.name] = field_factory
+        @stored_field_factories_cache[field_factory.name] << field_factory
       end
     end
 
@@ -63,7 +63,7 @@ module Sunspot
       @dynamic_field_factories[field_factory.signature] = field_factory
       @dynamic_field_factories_cache[field_factory.name] = field_factory
       if stored
-        @stored_field_factories_cache[field_factory.name] = field_factory
+        @stored_field_factories_cache[field_factory.name] << field_factory
       end
     end
 
@@ -137,18 +137,13 @@ module Sunspot
     # Return one or more stored fields (can be either attribute or text fields)
     # for the given name.
     #
-    def stored_field(field_name, dynamic_field_name = nil)
-      if field_factory = @stored_field_factories_cache[field_name.to_sym]
+    def stored_fields(field_name, dynamic_field_name = nil)
+      @stored_field_factories_cache[field_name.to_sym].map do |field_factory|
         if dynamic_field_name
           field_factory.build(dynamic_field_name)
         else
           field_factory.build
         end
-      else
-        raise(
-          UnrecognizedFieldError,
-          "No stored field configured for class #{class_name} with name #{field_name.inspect}"
-        )
       end
     end
 

@@ -125,9 +125,12 @@ module Sunspot
       end
 
       def stored_value(field_name, dynamic_field_name)
-        field = setup.stored_field(field_name, dynamic_field_name)
-        value = @stored_values[field.indexed_name]
-        field.cast(value)
+        setup.stored_fields(field_name, dynamic_field_name).each do |field|
+          if value = @stored_values[field.indexed_name]
+            return field.cast(value)
+          end
+        end
+        nil
       end
     end
   end
