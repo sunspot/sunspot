@@ -225,6 +225,7 @@ Sunspot repository at `upstream`:
 * Brian Atkinson
 * Tom Coleman (tom@thesnail.org)
 * Matt Mitchell (goodieboy@gmail.com)
+* Nathan Beyer (nbeyer@gmail.com)
 
 == License
 
