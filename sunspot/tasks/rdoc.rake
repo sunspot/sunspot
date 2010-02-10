@@ -1,10 +1,7 @@
-using_gems = false
 begin
   require 'hanna/rdoctask'
 rescue LoadError
-  unless using_gems
-    require 'rubygems'
-    using_gems = true
+  if require 'rubygems'
     retry
   end
   # It's OK if hanna isn't installed.

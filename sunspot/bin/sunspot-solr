@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-using_gems = false
 begin
   require 'fileutils'
   require 'tempfile'
@@ -7,12 +6,10 @@ begin
   require 'optparse'
   require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'server')
 rescue LoadError => e
-  if using_gems
-    raise(e)
-  else
-    using_gems = true
-    require 'rubygems'
+  if require 'rubygems'
     retry
+  else
+    raise(e)
   end
 end
 
