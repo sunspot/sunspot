@@ -196,8 +196,8 @@ Sunspot repository at `upstream`:
 
 === Ask for help
 
-* Sunspot Discussion: http://groups.google.com/group/ruby-sunspot
-* IRC: #sunspot-ruby @ Freenode
+* Sunspot Discussion: {ruby-sunspot@googlegroups.com}[mailto:ruby-sunspot@googlegroups.com] / http://groups.google.com/group/ruby-sunspot
+* IRC: {#sunspot-ruby @ Freenode}[irc://chat.freenode.net/#sunspot-ruby]
 
 === Tutorials and Articles
 
@@ -205,7 +205,11 @@ Sunspot repository at `upstream`:
 * {Sunspot Full-text Search for Rails/Ruby}[http://therailworld.com/posts/23-Sunspot-Full-text-Search-for-Rails-Ruby] (The Rail World)
 * {A Few Sunspot Tips}[http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/] (spiral_code)
 * {Sunspot: A Solr-Powered Search Engine for Ruby}[http://www.linux-mag.com/id/7341] (Linux Magazine)
+* {Using Sunspot for Free-Text Search with Redis}[http://masonoise.wordpress.com/2010/02/06/using-sunspot-for-free-text-search-with-redis/] (While I Pondered...)
 * {Default scope with Sunspot}[http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/] (Cloudspace)
+* {Testing Sunspot with Cucumber}[http://blog.trydionel.com/2010/02/06/testing-sunspot-with-cucumber/] (spiral_code)
+* {Running cucumber features with sunspot_rails}[http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails] (Kabisa Blog)
+* {How To Use Twitter Lists to Determine Influence}[http://www.untitledstartup.com/2010/01/how-to-use-twitter-lists-to-determine-influence/] (Untitled Startup)
 * {Sunspot Quickstart}[http://wiki.websolr.com/index.php/Sunspot_Quickstart] (WebSolr)
 * {Solr, and Sunspot}[http://www.kuahyeow.com/2009/08/solr-and-sunspot.html] (YT!)
 
