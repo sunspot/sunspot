@@ -23,7 +23,7 @@ OptionParser.new do |opts|
   end
 
   opts.on '-d', '--data-directory=DIRECTORY', 'Solr data directory' do |d|
-    server.data_dir = File.expand_path(d)
+    server.solr_data_dir = File.expand_path(d)
   end
 
   opts.on '-s', '--solr-home=HOME', 'Solr home directory (should contain conf/ directory)' do |s|
