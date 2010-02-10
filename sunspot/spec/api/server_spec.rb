@@ -12,7 +12,7 @@ describe Sunspot::Server do
 
   it 'runs server in current process' do
     @server.should_not_receive(:fork)
-    @server.should_receive(:exec).with(/java .*-jar \"start.jar\"/)
+    @server.should_receive(:exec).with(/java .*-jar start.jar/)
     @server.run
   end
 
