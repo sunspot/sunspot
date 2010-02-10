@@ -28,7 +28,7 @@ module Sunspot
           ::Rails.logger.debug(format_log_entry(log_name, body))
         rescue Exception => e
           log_name = 'Solr %s (Error)' % [action]
-          ::Rails.logger.debug(format_log_entry(log_name, body))
+          ::Rails.logger.error(format_log_entry(log_name, body))
           raise e
         end
 
