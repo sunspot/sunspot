@@ -36,13 +36,13 @@ describe Sunspot::Server do
 
   it 'runs Solr with specified data dir' do
     @server.solr_data_dir = '/var/solr/data'
-    @server.should_receive(:exec).with(%r(-Dsolr\.data\.dir=\"/var/solr/data\"))
+    @server.should_receive(:exec).with(%r(-Dsolr\.data\.dir=/var/solr/data))
     @server.run
   end
 
   it 'runs Solr with specified Solr home' do
     @server.solr_home = '/var/solr'
-    @server.should_receive(:exec).with(%r(-Dsolr\.solr\.home=\"/var/solr\"))
+    @server.should_receive(:exec).with(%r(-Dsolr\.solr\.home=/var/solr))
     @server.run
   end
 
@@ -58,7 +58,7 @@ describe Sunspot::Server do
     end
 
     it 'runs Solr with logging properties file' do
-      @server.should_receive(:exec).with(%r(-Djava\.util\.logging\.config\.file=\"/tmp/logging\.properties\.12345\"))
+      @server.should_receive(:exec).with(%r(-Djava\.util\.logging\.config\.file=/tmp/logging\.properties\.12345))
       @server.run
     end
 

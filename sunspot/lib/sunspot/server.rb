@@ -65,10 +65,10 @@ module Sunspot #:nodoc:
       command << "-Xms#{min_memory}" if min_memory
       command << "-Xmx#{max_memory}" if max_memory
       command << "-Djetty.port=#{port}" if port
-      command << "-Dsolr.data.dir=\"#{solr_data_dir}\"" if solr_data_dir
-      command << "-Dsolr.solr.home=\"#{solr_home}\"" if solr_home
-      command << "-Djava.util.logging.config.file=\"#{logging_config_path}\"" if logging_config_path
-      command << "-jar #{File.basename(SOLR_START_JAR)}"
+      command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
+      command << "-Dsolr.solr.home=#{solr_home}" if solr_home
+      command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
+      command << '-jar' << File.basename(SOLR_START_JAR)
       FileUtils.cd(File.dirname(SOLR_START_JAR)) do
         exec(Escape.shell_command(command))
       end
