@@ -193,7 +193,6 @@ module Sunspot #:nodoc:
         #
         def index(opts={})
           options = { :batch_size => 500, :batch_commit => true, :include => [], :first_id => 0}.merge(opts)
-          remove_all_from_index
           unless options[:batch_size]
             Sunspot.index!(all(:include => options[:include]))
           else
