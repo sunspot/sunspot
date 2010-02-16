@@ -62,4 +62,13 @@ describe 'local search' do
     end
     search.results.should == @posts[0..2]
   end
+
+  it 'should order by geo distance with fulltext' do
+    lambda do
+      search = Sunspot.search(Post) do |query|
+        query.fulltext('teacup')
+        query.near(ORIGIN, :sort => true)
+      end
+    end.should_not raise_error
+  end
 end
