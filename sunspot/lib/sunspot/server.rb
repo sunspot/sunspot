@@ -1,9 +1,8 @@
 require 'escape'
 require 'set'
+require 'tempfile'
 
 module Sunspot #:nodoc:
-  # The Sunspot::Rails::Server class is a simple wrapper around
-  # the start/stop scripts for solr.
   class Server
     # Raised if #stop is called but the server is not running
     NotRunningError = Class.new(RuntimeError)
