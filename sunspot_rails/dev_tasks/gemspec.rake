@@ -1,6 +1,8 @@
 require File.join(File.dirname(__FILE__), '..', '..', 'tools', 'gem_tasks')
 
 Sunspot::GemTasks.new do |s|
+  require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'rails', 'version')
+
   s.name = 'sunspot_rails'
   s.version = Sunspot::Rails::VERSION
   s.summary = 'Rails integration for the Sunspot Solr search library'

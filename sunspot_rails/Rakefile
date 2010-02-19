@@ -1,7 +1,6 @@
 require 'rake'
 require 'spec/rake/spectask'
 require 'rake/rdoctask'
-require File.join(File.dirname(__FILE__), 'lib', 'sunspot', 'rails', 'version')
 
 task :default => :spec
 
