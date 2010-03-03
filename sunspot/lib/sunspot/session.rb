@@ -39,17 +39,18 @@ module Sunspot
     # 
     # See Sunspot.new_search
     #
-    def new_search(*types)
+    def new_search(*types, &block)
       types.flatten!
-      Search.new(connection, setup_for_types(types), Query::Query.new(types), @config)
+      search = Search.new(connection, setup_for_types(types), Query::Query.new(types), @config)
+      search.build(&block) if block
+      search
     end
 
     #
     # See Sunspot.search
     #
     def search(*types, &block)
-      search = new_search(*types)
-      search.build(&block) if block
+      search = new_search(*types, &block)
       search.execute!
     end
 

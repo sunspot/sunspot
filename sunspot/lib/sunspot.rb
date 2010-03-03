@@ -208,9 +208,30 @@ module Sunspot
 
     # 
     # Create a new Search instance, but do not execute it immediately. Generally
-    # you will want to use the #search method to execute searches using the
-    # DSL; however, if you are building searches dynamically (using the Builder
-    # pattern, for instance), it may be easier to access the Query API directly.
+    # you will want to use the #search method to build and execute searches in
+    # one step, but if you are building searches piecemeal you may call
+    # #new_search and then call #build one or more times to add components to
+    # the query.
+    #
+    # ==== Example
+    #
+    #   search = Sunspot.new_search do
+    #     with(:blog_id, 1)
+    #   end
+    #   search.build do
+    #     keywords('some keywords')
+    #   end
+    #   search.build do
+    #     order_by(:published_at, :desc)
+    #   end
+    #   search.execute
+    #
+    #   # This is equivalent to:
+    #   Sunspot.search do
+    #     with(:blog_id, 1)
+    #     keywords('some keywords')
+    #     order_by(:published_at, :desc)
+    #   end
     # 
     # ==== Parameters
     #
@@ -224,8 +245,8 @@ module Sunspot
     #   Search object, not yet executed. Query parameters can be added manually;
     #   then #execute! should be called.
     # 
-    def new_search(*types)
-      session.new_search(*types)
+    def new_search(*types, &block)
+      session.new_search(*types, &block)
     end
 
 

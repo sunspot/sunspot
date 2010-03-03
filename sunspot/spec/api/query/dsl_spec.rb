@@ -8,5 +8,11 @@ describe 'query DSL', :type => :query do
     end
     connection.should have_last_search_including(:fq, 'blog_id_i:1')
   end
+
+  it 'should accept a block in the #new_search method' do
+    search = session.new_search(Post) { with(:blog_id, 1) }
+    search.execute
+    connection.should have_last_search_including(:fq, 'blog_id_i:1')
+  end
 end
 
