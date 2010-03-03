@@ -13,7 +13,7 @@ TEXT
   s.authors = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Marcel de Graaf', 'Brandon Keepers', 'Peter Berkenbosch', 'Brian Atkinson', 'Tom Coleman', 'Matt Mitchell', 'Nathan Beyer']
   s.rubyforge_project = 'sunspot'
   s.files = FileList['[A-Z]*', '{bin,installer,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/{conf,lib}/*', 'solr/start.jar']
-  s.add_runtime_dependency 'rsolr', '0.9.6'
+  s.add_runtime_dependency 'rsolr', '0.12.1'
   s.add_development_dependency 'rspec', '~> 1.1'
   s.extra_rdoc_files = ['README.rdoc']
   s.test_files = FileList['spec/**/*_spec.rb']

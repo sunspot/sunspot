@@ -4,7 +4,7 @@ module Mock
       if @instance
         raise('Factory can only create an instance once!')
       else
-        @instance = Connection.new(opts.delete(:adapter), opts)
+        @instance = Connection.new(opts)
       end
     end
 
@@ -22,11 +22,11 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :searches, :message, :adapter, :deletes_by_query
+    attr_reader :adds, :commits, :searches, :message, :opts, :deletes_by_query
     attr_writer :response
 
-    def initialize(adapter = nil)
-      @adapter = adapter
+    def initialize(opts = {})
+      @opts = opts
       @message = OpenStruct.new
       @adds, @deletes, @deletes_by_query, @commits, @searches = Array.new(5) { [] }
     end

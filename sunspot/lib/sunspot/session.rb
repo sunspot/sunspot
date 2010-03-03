@@ -15,7 +15,7 @@ module Sunspot
       # For testing purposes
       #
       def connection_class #:nodoc:
-        @connection_class ||= RSolr::Connection::Base
+        @connection_class ||= RSolr
       end
     end
 
@@ -202,11 +202,7 @@ module Sunspot
     #
     def connection
       @connection ||=
-        self.class.connection_class.new(
-          RSolr::Connection::Adapter::HTTP.new(
-            :url => config.solr.url
-          )
-        )
+        self.class.connection_class.connect(:url => config.solr.url)
     end
 
     def indexer

@@ -1,10 +1,10 @@
 using_gems = false
 
-if solr_ruby_gem_version = ENV['SOLR_RUBY_GEM_VERSION']
-  STDERR.puts("Forcing solr-ruby gem version #{solr_ruby_gem_version}")
+if rsolr_gem_version = ENV['RSOLR_GEM_VERSION']
+  STDERR.puts("Forcing rsolr gem version #{rsolr_gem_version}")
   using_gems = true
   require 'rubygems'
-  gem 'solr-ruby', solr_ruby_gem_version
+  gem 'rsolr', rsolr_gem_version
 end
 
 begin
