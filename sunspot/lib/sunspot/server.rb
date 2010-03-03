@@ -5,7 +5,9 @@ require 'tempfile'
 module Sunspot #:nodoc:
   class Server
     # Raised if #stop is called but the server is not running
-    NotRunningError = Class.new(RuntimeError)
+    ServerError = Class.new(RuntimeError)
+    AlreadyRunningError = Class.new(ServerError)
+    NotRunningError = Class.new(ServerError)
 
     # Name of the sunspot executable (shell script)
     SOLR_START_JAR = File.expand_path(
@@ -30,7 +32,7 @@ module Sunspot #:nodoc:
         existing_pid = IO.read(pid_path).to_i
         begin
           Process.kill(0, existing_pid)
-          abort("Server is already running with PID #{existing_pid}")
+          raise(AlreadyRunningError, "Server is already running with PID #{existing_pid}")
         rescue Errno::ESRCH
           STDERR.puts("Removing stale PID file at #{pid_path}")
           FileUtils.rm(pid_path)

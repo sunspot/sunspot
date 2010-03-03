@@ -62,6 +62,6 @@ begin
   else
     abort("Usage: sunspot-solr (start|stop|run)")
   end
-rescue Sunspot::Server::NotRunningError => e
+rescue Sunspot::Server::ServerError => e
   abort(e.message)
 end
