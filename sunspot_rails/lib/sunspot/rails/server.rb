@@ -25,7 +25,7 @@ module Sunspot
       #
       def bootstrap
         unless @bootstrapped
-          create_solr_directories and create_solr_configuration_files and copy_custom_solr_libraries
+          install_solr_home
           @bootstrapped = true
         end
       end
@@ -125,25 +125,13 @@ module Sunspot
       #
       # Boolean:: success
       #
-      def create_solr_configuration_files
-        Dir.glob( File.join( Sunspot::Configuration.solr_default_configuration_location, '*') ).each do |config_file|
-          unless File.exists?(File.join(config_path, File.basename(config_file)))
-            STDOUT.puts("Copying config file #{File.basename(config_file)} into #{config_path}")
-            FileUtils.cp_r( config_file, config_path )
-          end
-        end
-      end
-
-      # 
-      # Copy custom libraries used by Sunspot's Solr installation into the local
-      # Rails Solr installation
-      #
-      def copy_custom_solr_libraries
-        Dir.glob(File.join(Sunspot::Configuration.solr_default_configuration_location, '..', 'lib', '*.jar')).each do |jar|
-          unless File.exists?(File.join(lib_path, File.basename(jar)))
-            STDOUT.puts("Copying custom library #{File.basename(jar)} into #{lib_path}")
-            FileUtils.cp_r(jar, lib_path)
-          end
+      def install_solr_home
+        unless File.exists?(solr_home)
+          Sunspot::Installer.execute(
+            solr_home,
+            :force => true,
+            :verbose => true
+          )
         end
       end
 
@@ -155,7 +143,7 @@ module Sunspot
       # Boolean:: success
       #
       def create_solr_directories
-        [ solr_home, config_path, solr_data_dir, pid_dir, lib_path ].each do |path|
+        [solr_data_dir, pid_dir].each do |path|
           FileUtils.mkdir_p( path )
         end
       end

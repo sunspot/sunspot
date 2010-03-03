@@ -42,6 +42,7 @@ module Sunspot
   NotImplementedError = Class.new(StandardError)
 
   autoload :Server, File.join(File.dirname(__FILE__), 'sunspot', 'server')
+  autoload :Installer, File.join(File.dirname(__FILE__), 'sunspot', 'installer')
 
   class <<self
     # 
