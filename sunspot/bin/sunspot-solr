@@ -59,6 +59,9 @@ begin
     server.run
   when 'stop'
     server.stop
+  when 'restart'
+    server.stop
+    server.start
   else
     abort("Usage: sunspot-solr (start|stop|run)")
   end
