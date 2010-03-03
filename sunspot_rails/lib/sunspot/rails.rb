@@ -1,4 +1,4 @@
-#require 'sunspot'
+require 'sunspot'
 require File.join(File.dirname(__FILE__), 'rails', 'configuration')
 require File.join(File.dirname(__FILE__), 'rails', 'adapters')
 require File.join(File.dirname(__FILE__), 'rails', 'request_lifecycle')
