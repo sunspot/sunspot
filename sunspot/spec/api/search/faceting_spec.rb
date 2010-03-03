@@ -53,14 +53,16 @@ describe 'faceting', :type => :search do
     stub_facet(
       :published_at_d,
       '2009-04-07T20:25:23Z' => 3,
-      '2009-04-07T20:26:19Z' => 1
+      '2009-04-07T20:26:19Z' => 2,
+      '2050-04-07T20:27:15Z' => 1
     )
     result = session.search Post do
       facet :published_at
     end
     facet_values(result, :published_at).should ==
-      [Time.gm(2009, 04, 07, 20, 25, 23),
-       Time.gm(2009, 04, 07, 20, 26, 19)]
+      [Time.gm(2009, 4, 7, 20, 25, 23),
+       Time.gm(2009, 4, 7, 20, 26, 19),
+       DateTime.civil(2050, 4, 7, 20, 27, 15)]
   end
 
   it 'returns date facet' do

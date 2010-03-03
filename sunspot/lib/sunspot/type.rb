@@ -130,27 +130,39 @@ module Sunspot
     # UTC before indexing, and facets of Time fields always return times in UTC.
     #
     class TimeType < AbstractType
+      XMLSCHEMA = "%Y-%m-%dT%H:%M:%SZ"
+
       def indexed_name(name) #:nodoc:
         "#{name}_d"
       end
 
       def to_indexed(value) #:nodoc:
         if value
-          value_to_time(value).utc.xmlschema
+          value_to_utc_time(value).strftime(XMLSCHEMA)
         end
       end
 
       def cast(string) #:nodoc:
-        Time.xmlschema(string)
+        begin
+          Time.xmlschema(string)
+        rescue ArgumentError
+          DateTime.strptime(string, XMLSCHEMA)
+        end
       end
 
       private
 
-      def value_to_time(value)
+      def value_to_utc_time(value)
         if value.respond_to?(:utc)
-          value
+          value.utc
+        elsif value.respond_to?(:new_offset)
+          value.new_offset
         else
-          Time.parse(value.to_s)
+          begin
+            Time.parse(value.to_s).utc
+          rescue ArgumentError
+            DateTime.parse(value.to_s).new_offset
+          end
         end
       end
     end
