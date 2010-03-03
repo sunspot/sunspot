@@ -16,7 +16,8 @@ module Sunspot
       end
 
       def initialize(solrconfig_path, options)
-        unless File.exist?(solrconfig_path)
+        @force = !!options[:force]
+        unless @force || File.exist?(solrconfig_path)
           abort("#{File.expand_path(@solrconfig_path)} doesn't exist." +
                 " Are you sure you're pointing to a SOLR_HOME?")
         end
@@ -25,26 +26,34 @@ module Sunspot
       end
 
       def execute
-        @document = File.open(@solrconfig_path) do |f|
-          Nokogiri::XML(
-            f, nil, nil, 
-            Nokogiri::XML::ParseOptions::DEFAULT_XML |
-            Nokogiri::XML::ParseOptions::NOBLANKS
-          )
+        if @force
+          FileUtils.mkdir_p(File.dirname(@solrconfig_path))
+          source_path =
+            File.join(File.dirname(__FILE__), '..', '..', '..', 'solr', 'solr', 'conf', 'solrconfig.xml')
+          FileUtils.cp(source_path, @solrconfig_path)
+          say("Copied default solrconfig.xml to #{@solrconfig_path}")
+        else
+          @document = File.open(@solrconfig_path) do |f|
+            Nokogiri::XML(
+              f, nil, nil, 
+              Nokogiri::XML::ParseOptions::DEFAULT_XML |
+              Nokogiri::XML::ParseOptions::NOBLANKS
+            )
+          end
+          @root = @document.root
+          maybe_create_spatial_component
+          maybe_add_spatial_component_to_standard_handler
+          original_path = "#{@solrconfig_path}.orig"
+          FileUtils.cp(@solrconfig_path, original_path)
+          say("Saved backup of original to #{original_path}")
+          File.open(@solrconfig_path, 'w') do |file|
+            @document.write_to(
+              file,
+              :indent => 2
+            )
+          end
+          say("Wrote solrconfig to #{@solrconfig_path}")
         end
-        @root = @document.root
-        maybe_create_spatial_component
-        maybe_add_spatial_component_to_standard_handler
-        original_path = "#{@solrconfig_path}.orig"
-        FileUtils.cp(@solrconfig_path, original_path)
-        say("Saved backup of original to #{original_path}")
-        File.open(@solrconfig_path, 'w') do |file|
-          @document.write_to(
-            file,
-            :indent => 2
-          )
-        end
-        say("Wrote solrconfig to #{@solrconfig_path}")
       end
 
       private

@@ -35,25 +35,32 @@ module Sunspot
       end
 
       def execute
-        @document = File.open(@schema_path) do |f|
-          Nokogiri::XML(
-            f, nil, nil,
-            Nokogiri::XML::ParseOptions::DEFAULT_XML |
-            Nokogiri::XML::ParseOptions::NOBLANKS
-          )
+        if @force
+          FileUtils.mkdir_p(File.dirname(@schema_path))
+          source_path = File.join(File.dirname(__FILE__), '..', '..', '..', 'solr', 'solr', 'conf', 'schema.xml')
+          FileUtils.cp(source_path, @schema_path)
+          say("Copied default schema.xml to #{@schema_path}")
+        else
+          @document = File.open(@schema_path) do |f|
+            Nokogiri::XML(
+              f, nil, nil,
+              Nokogiri::XML::ParseOptions::DEFAULT_XML |
+              Nokogiri::XML::ParseOptions::NOBLANKS
+            )
+          end
+          @root = @document.root
+          @added_types = Set[]
+          add_fixed_fields
+          add_dynamic_fields
+          set_misc_settings
+          original_path = "#{@schema_path}.orig"
+          FileUtils.cp(@schema_path, original_path)
+          say("Saved backup of original to #{original_path}")
+          File.open(@schema_path, 'w') do |file|
+            @document.write_xml_to(file, :indent => 2)
+          end
+          say("Wrote schema to #{@schema_path}")
         end
-        @root = @document.root
-        @added_types = Set[]
-        add_fixed_fields
-        add_dynamic_fields
-        set_misc_settings
-        original_path = "#{@schema_path}.orig"
-        FileUtils.cp(@schema_path, original_path)
-        say("Saved backup of original to #{original_path}")
-        File.open(@schema_path, 'w') do |file|
-          @document.write_xml_to(file, :indent => 2)
-        end
-        say("Wrote schema to #{@schema_path}")
       end
 
       private
@@ -78,14 +85,9 @@ module Sunspot
       def maybe_add_field(name, type, *flags)
         node_name = name =~ /\*/ ? 'dynamicField' : 'field'
         if field_node = fields_node.xpath(%Q(#{node_name}[@name="#{name}"])).first
-          if @force
-            say("Removing existing #{node_name} #{name.inspect}")
-            field_node.remove
-          else
-            say("Using existing #{node_name} #{name.inspect}")
-            add_comment(field_node)
-            return
-          end
+          say("Using existing #{node_name} #{name.inspect}")
+          add_comment(field_node)
+          return
         end
         maybe_add_type(type)
         say("Adding field #{name.inspect}")
@@ -108,14 +110,9 @@ module Sunspot
           @added_types << type
           if type_node = types_node.xpath(%Q(fieldType[@name="#{type}"])).first ||
              types_node.xpath(%Q(fieldtype[@name="#{type}"])).first
-            if @force
-              say("Removing type #{type.inspect}")
-              type_node.remove
-            else
-              say("Using existing type #{type.inspect}")
-              add_comment(type_node)
-              return
-            end
+            say("Using existing type #{type.inspect}")
+            add_comment(type_node)
+            return
           end
           say("Adding type #{type.inspect}")
           type_config = @config['types'][type]
