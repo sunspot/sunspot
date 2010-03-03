@@ -59,10 +59,17 @@ describe 'faceting', :type => :search do
     result = session.search Post do
       facet :published_at
     end
+    # In JRuby, Time doesn't have 32-bit range constraint, apparently.
+    future_time =
+      begin
+        Time.gm(2050, 4, 7, 20, 27, 15)
+      rescue ArgumentError
+        DateTime.civil(2050, 4, 7, 20, 27, 15)
+      end
     facet_values(result, :published_at).should ==
       [Time.gm(2009, 4, 7, 20, 25, 23),
        Time.gm(2009, 4, 7, 20, 26, 19),
-       DateTime.civil(2050, 4, 7, 20, 27, 15)]
+       future_time]
   end
 
   it 'returns date facet' do
