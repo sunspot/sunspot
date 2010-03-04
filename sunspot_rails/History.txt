@@ -1,3 +1,15 @@
+== 1.0.0
+* Sunspot::Rails::Server subclasses Sunspot::Server; no longer needs to shell out
+* Use Sunspot built-in session proxies in Sunspot::Rails
+* Sunspot::Rails adapter compatible with assumed inconsistency
+* Use session proxy for disconnecting Sunspot in specs
+* Allow specification of first ID for reindex batches.
+* Log Solr requests in Rails logger
+* Use class_inheritable_hash for sunspot_options
+* Add `index` class method, which is like `reindex` but doesn't clear first
+* Rename sunspot:solr:reindex to sunspot:reindex
+* Use Sunspot::Installer to bootstrap Rails Solr home
+
 == 0.10.7
 * Added Sunspot::Rails::Server class to  start/stop/run/bootstrap the solr server
 * Added log_level key to sunspot.yml, see java docs for valid values (http://java.sun.com/j2se/1.5.0/docs/api/java/util/logging/Level.html)

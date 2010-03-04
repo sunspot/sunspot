@@ -1,3 +1,33 @@
+== 1.0.0 2010-03-03
+* Multiselect Field Faceting
+* Named field facets
+* Upgrade to Solr 1.4
+* Deletion by query
+* Allow :latitude and :longitude as coordinate method names
+* Assumed inconsistency
+* Support for TrieField numeric/time types
+* Built-in Session Proxies: Thread-local, master/slave, sharding
+* Give DSL blocks access to calling context
+* Create sunspot-installer executable, which modifies an existing
+	schema/solrconfig to work with Sunspot
+* Support for Long and Double types
+* new_search method accepts DSL block
+* Sunspot::Server now a real class that manages embedded Sunspot instance
+* Add Search#each_hit_with_result method
+* Able to access stored dynamic fields
+* Access dynamic facets using the #facet method
+* Remove accidental existence of dynamic_text fields
+* Upgrade to RSolr 0.12.1
+* Switch from LocalSolr to solr-spatial-light
+* Turn off request logging in Jetty for default Solr install
+* Full support for class-reloading of Sunspot-setup classes
+* Support time ranges outside of 32-bit range
+* Remove sunspot-configure-solr executable
+* new_search method accepts DSL block
+
+== 0.10.8 2009-11-24
+* Strictly enforce RSolr 0.9.6 gem dependency (newer ones broken)
+
 == 0.10.7 2009-11-16
 * Ignore boost_fields that don't apply
 * Ability to specify text_fields inside connectives
