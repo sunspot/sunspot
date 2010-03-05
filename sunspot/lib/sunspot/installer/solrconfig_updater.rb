@@ -9,6 +9,8 @@ module Sunspot
     class SolrconfigUpdater
       include TaskHelper
 
+      CONFIG_FILES = %w(solrconfig.xml elevate.xml spellings.txt stopwords.txt synonyms.txt) 
+
       class <<self
         def execute(solrconfig_path, options = {})
           new(solrconfig_path, options).execute
@@ -27,11 +29,14 @@ module Sunspot
 
       def execute
         if @force
-          FileUtils.mkdir_p(File.dirname(@solrconfig_path))
-          source_path =
-            File.join(File.dirname(__FILE__), '..', '..', '..', 'solr', 'solr', 'conf', 'solrconfig.xml')
-          FileUtils.cp(source_path, @solrconfig_path)
-          say("Copied default solrconfig.xml to #{@solrconfig_path}")
+          config_dir = File.dirname(@solrconfig_path)
+          FileUtils.mkdir_p(config_dir)
+          CONFIG_FILES.each do |file|
+            source_path =
+              File.join(File.dirname(__FILE__), '..', '..', '..', 'solr', 'solr', 'conf', file)
+            FileUtils.cp(source_path, config_dir)
+            say("Copied default #{file} to #{config_dir}")
+          end
         else
           @document = File.open(@solrconfig_path) do |f|
             Nokogiri::XML(
