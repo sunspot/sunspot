@@ -51,4 +51,8 @@ module Sunspot
   end
 end
 
-RSolr::Connection::Base.module_eval { include(Sunspot::Rails::SolrLogging) }
+begin
+  RSolr::Client.module_eval { include(Sunspot::Rails::SolrLogging) }
+rescue NameError # RSolr 0.9.6
+  RSolr::Connection::Base.module_eval { include(Sunspot::Rails::SolrLogging) }
+end

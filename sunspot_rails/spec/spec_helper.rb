@@ -1,5 +1,9 @@
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_ROOT'] ||= File.join(File.dirname(__FILE__), 'mock_app')
+if rsolr_version = ENV['RSOLR_GEM_VERSION']
+  STDERR.puts("Forcing RSolr version #{rsolr_version}")
+  gem "rsolr", rsolr_version
+end
 
 if File.exist?(sunspot_lib = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'sunspot', 'lib')))
   STDERR.puts("Using sunspot lib at #{sunspot_lib}")
