@@ -26,14 +26,14 @@ describe 'searchable with lifecycle' do
     it "should index model if relevant attribute changed" do
       @post = PostWithAuto.create!
       @post.title = 'new title'
-      @post.should_receive :index
+      @post.should_receive :solr_index
       @post.save!
     end
 
     it "should not index model if relevant attribute not changed" do
       @post = PostWithAuto.create!
       @post.updated_at = Date.tomorrow
-      @post.should_not_receive :index
+      @post.should_not_receive :solr_index
       @post.save!
     end
   end

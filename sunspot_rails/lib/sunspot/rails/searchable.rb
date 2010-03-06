@@ -51,7 +51,7 @@ module Sunspot #:nodoc:
         #     end
         #   end
         #
-        def searchable(options = {}, &block)
+        def solr_searchable(options = {}, &block)
           Sunspot.setup(self, &block)
 
           unless searchable?
@@ -73,6 +73,7 @@ module Sunspot #:nodoc:
           end
           self.sunspot_options = options
         end
+        alias_method :searchable, :solr_searchable unless ActiveRecord::Base.respond_to? :searchable
 
         # 
         # This method is defined on all ActiveRecord::Base subclasses. It
@@ -83,9 +84,10 @@ module Sunspot #:nodoc:
         #
         # +false+
         #
-        def searchable?
+        def solr_searchable?
           false
         end
+        alias_method :searchable?, :solr_searchable? unless ActiveRecord::Base.respond_to? :searchable?
       end
 
       module ClassMethods
@@ -108,9 +110,10 @@ module Sunspot #:nodoc:
         #
         # Sunspot::Search:: Object containing results, totals, facets, etc.
         #
-        def search(&block)
+        def solr_search(&block)
           Sunspot.search(self, &block)
         end
+        alias_method :search, :solr_search unless ActiveRecord::Base.respond_to? :search
 
         # 
         # Get IDs of matching results without loading the result objects from
@@ -122,25 +125,28 @@ module Sunspot #:nodoc:
         #
         # Array:: Array of IDs, in the order returned by the search
         #
-        def search_ids(&block)
-          search(&block).raw_results.map { |raw_result| raw_result.primary_key.to_i }
+        def solr_search_ids(&block)
+          solr_search(&block).raw_results.map { |raw_result| raw_result.primary_key.to_i }
         end
+        alias_method :search_ids, :solr_search_ids unless ActiveRecord::Base.respond_to? :search_ids
 
         # 
         # Remove instances of this class from the Solr index.
         #
-        def remove_all_from_index
+        def solr_remove_all_from_index
           Sunspot.remove_all(self)
         end
+        alias_method :remove_all_from_index, :solr_remove_all_from_index unless ActiveRecord::Base.respond_to? :remove_all_from_index
 
         # 
         # Remove all instances of this class from the Solr index and immediately
         # commit.
         #
         #
-        def remove_all_from_index!
+        def solr_remove_all_from_index!
           Sunspot.remove_all!(self)
         end
+        alias_method :remove_all_from_index!, :solr_remove_all_from_index! unless ActiveRecord::Base.respond_to? :remove_all_from_index!
 
         # 
         # Completely rebuild the index for this class. First removes all
@@ -148,10 +154,11 @@ module Sunspot #:nodoc:
         #
         # See #index for information on options, etc.
         #
-        def reindex(options = {})
-          remove_all_from_index
-          index(options)
+        def solr_reindex(options = {})
+          solr_remove_all_from_index
+          solr_index(options)
         end
+        alias_method :reindex, :solr_reindex unless ActiveRecord::Base.respond_to? :reindex
 
         #
         # Add/update all existing records in the Solr index. The
@@ -191,7 +198,7 @@ module Sunspot #:nodoc:
         #   # include the associated +author+ object when loading to index
         #   Post.index(:include => :author) 
         #
-        def index(opts={})
+        def solr_index(opts={})
           options = { :batch_size => 500, :batch_commit => true, :include => [], :first_id => 0}.merge(opts)
           unless options[:batch_size]
             Sunspot.index!(all(:include => options[:include]))
@@ -201,7 +208,7 @@ module Sunspot #:nodoc:
             record_count = count
             last_id = options[:first_id]
             while(offset < record_count)
-              benchmark options[:batch_size], counter do
+              solr_benchmark options[:batch_size], counter do
                 records = all(:include => options[:include], :conditions => ["#{table_name}.#{primary_key} > ?", last_id], :limit => options[:batch_size], :order => primary_key)
                 Sunspot.index(records)
                 last_id = records.last.id
@@ -213,6 +220,7 @@ module Sunspot #:nodoc:
             Sunspot.commit unless options[:batch_commit]
           end
         end
+        alias_method :index, :solr_index unless ActiveRecord::Base.respond_to? :index
 
         # 
         # Return the IDs of records of this class that are indexed in Solr but
@@ -224,14 +232,15 @@ module Sunspot #:nodoc:
         # ==== Returns
         #
         # Array:: Collection of IDs that exist in Solr but not in the database
-        def index_orphans
+        def solr_index_orphans
           count = self.count
-          indexed_ids = search_ids { paginate(:page => 1, :per_page => count) }.to_set
+          indexed_ids = solr_search_ids { paginate(:page => 1, :per_page => count) }.to_set
           all(:select => 'id').each do |object|
             indexed_ids.delete(object.id)
           end
           indexed_ids.to_a
         end
+        alias_method :index_orphans, :solr_index_orphans unless ActiveRecord::Base.respond_to? :index_orphans
 
         # 
         # Find IDs of records of this class that are indexed in Solr but do not
@@ -239,13 +248,14 @@ module Sunspot #:nodoc:
         # circumstances, this should not be necessary; this method is provided
         # in case something goes wrong.
         #
-        def clean_index_orphans
-          index_orphans.each do |id|
+        def solr_clean_index_orphans
+          solr_index_orphans.each do |id|
             new do |fake_instance|
               fake_instance.id = id
-            end.remove_from_index
+            end.solr_remove_from_index
           end
         end
+        alias_method :clean_index_orphans, :solr_clean_index_orphans unless ActiveRecord::Base.respond_to? :clean_index_orphans
 
         # 
         # Classes that have been defined as searchable return +true+ for this
@@ -255,22 +265,24 @@ module Sunspot #:nodoc:
         #
         # +true+
         #
-        def searchable?
+        def solr_searchable?
           true
         end
+        alias_method :searchable?, :solr_searchable? unless ActiveRecord::Base.respond_to? :searchable?
         
         protected
         
         # 
         # Does some logging for benchmarking indexing performance
         #
-        def benchmark(batch_size, counter,  &block)
+        def solr_benchmark(batch_size, counter,  &block)
           start = Time.now
           logger.info("[#{Time.now}] Start Indexing")
           yield
           elapsed = Time.now-start
           logger.info("[#{Time.now}] Completed Indexing. Rows indexed #{counter * batch_size}. Rows/sec: #{batch_size/elapsed.to_f} (Elapsed: #{elapsed} sec.)")
         end
+        alias_method :benchmark, :solr_benchmark unless ActiveRecord::Base.respond_to? :benchmark
         
       end
 
@@ -283,16 +295,18 @@ module Sunspot #:nodoc:
         # ClassMethods#searchable), this method allows you to manage indexing
         # manually.
         #
-        def index
+        def solr_index
           Sunspot.index(self)
         end
+        alias_method :index, :solr_index unless ActiveRecord::Base.method_defined? :index
 
         # 
         # Index the model in Solr and immediately commit. See #index
         #
-        def index!
+        def solr_index!
           Sunspot.index!(self)
         end
+        alias_method :index!, :solr_index! unless ActiveRecord::Base.method_defined? :index!
         
         # 
         # Remove the model from the Solr index. Using the defaults, this should
@@ -301,17 +315,19 @@ module Sunspot #:nodoc:
         # (which is not recommended!), you can use this method to manage removal
         # manually.
         #
-        def remove_from_index
+        def solr_remove_from_index
           Sunspot.remove(self)
         end
+        alias_method :remove_from_index, :solr_remove_from_index unless ActiveRecord::Base.method_defined? :remove_from_index
 
         # 
         # Remove the model from the Solr index and commit immediately. See
         # #remove_from_index
         #
-        def remove_from_index!
+        def solr_remove_from_index!
           Sunspot.remove!(self)
         end
+        alias_method :remove_from_index!, :solr_remove_from_index! unless ActiveRecord::Base.method_defined? :remove_from_index!
 
         private
 
@@ -327,7 +343,7 @@ module Sunspot #:nodoc:
 
         def maybe_auto_index
           if @marked_for_auto_indexing
-            index
+            solr_index
             remove_instance_variable(:@marked_for_auto_indexing)
           end
         end
