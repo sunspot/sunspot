@@ -71,4 +71,13 @@ describe 'local search' do
       end
     end.should_not raise_error
   end
+
+  it 'should return geographical distance from origin' do
+    search = Sunspot.search(Post) do |query|
+      query.near(ORIGIN, :sort => true)
+    end
+    search.hits.each do |hit|
+      hit.distance.should_not be_nil
+    end
+  end
 end

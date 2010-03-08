@@ -123,7 +123,11 @@ describe 'hits', :type => :search do
   end
 
   it 'should return geo distance' do
-    stub_full_results('instance' => Post.new, 'geo_distance' => '1.23')
+    post = Post.new
+    stub_results(post)
+    connection.response['distances'] = {
+      "Post #{post.id}" => 1.23
+    }
     session.search(Post).hits.first.distance.should == 1.23
   end
 

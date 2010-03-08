@@ -30,10 +30,10 @@ module Sunspot
 
       attr_writer :result #:nodoc:
 
-      def initialize(raw_hit, highlights, search) #:nodoc:
+      def initialize(raw_hit, highlights, distance, search) #:nodoc:
         @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
         @score = raw_hit['score']
-        @distance = raw_hit['geo_distance'].to_f if raw_hit['geo_distance']
+        @distance = distance
         @search = search
         @stored_values = raw_hit
         @stored_cache = {}

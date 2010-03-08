@@ -23,7 +23,7 @@ module Mock
 
   class Connection
     attr_reader :adds, :commits, :searches, :message, :opts, :deletes_by_query
-    attr_writer :response
+    attr_accessor :response
 
     def initialize(opts = {})
       @opts = opts
