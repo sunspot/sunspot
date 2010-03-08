@@ -90,16 +90,6 @@ module Sunspot
           "score #{direction_for_solr}"
         end
       end
-
-      # 
-      # A DistanceSort sorts by distance from the origin coordinates of a
-      # geographical distance search.
-      #
-      class DistanceSort < Abstract
-        def to_param
-          "geo_distance #{direction_for_solr}"
-        end
-      end
     end
   end
 end

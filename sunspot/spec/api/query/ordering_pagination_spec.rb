@@ -71,6 +71,14 @@ describe 'ordering and pagination' do
     end.should raise_error(ArgumentError)
   end
 
+  it 'throws an UnrecognizedFieldError if :distance is given for sort' do
+    lambda do
+      session.search Post do
+        order_by :distance, :asc
+      end
+    end.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
   it 'does not allow ordering by multiple-value fields' do
     lambda do
       session.search Post do
