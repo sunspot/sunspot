@@ -40,6 +40,8 @@ module Sunspot
         include Filter
         include RSolr::Char
 
+        RESERVED_WORDS = Set['AND', 'OR', 'NOT']
+
         def initialize(field, value, negated = false)
           @field, @value, @negated = field, value, negated
         end
@@ -133,6 +135,11 @@ module Sunspot
         #
         def solr_value(value = @value)
           solr_value = escape(@field.to_indexed(value))
+          if RESERVED_WORDS.include?(solr_value)
+            %Q("#{solr_value}")
+          else
+            solr_value
+          end
         end
       end
 

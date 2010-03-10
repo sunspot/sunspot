@@ -15,6 +15,13 @@ describe 'scoped query', :type => :query do
     connection.should have_last_search_including(:fq, 'title_ss:My\ Pet\ Post')
   end
 
+  it 'scopes by exact match with a special string' do
+    session.search Post do
+      with :title, 'OR'
+    end
+    connection.should have_last_search_including(:fq, 'title_ss:"OR"')
+  end
+
   it 'scopes by exact match with time' do
     time = Time.parse('1983-07-08 05:00:00 -0400')
     session.search Post do

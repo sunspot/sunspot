@@ -119,6 +119,15 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'reserved words' do
+    %w(AND OR NOT TO).each do |word|
+      it "should successfully search for #{word.inspect}" do
+        Sunspot.index!(post = Post.new(:title => word))
+        Sunspot.search(Post) { with(:title, word) }.results.should == [post]
+      end
+    end
+  end
+
   describe 'passing nil value to equal' do
     before :all do
       Sunspot.remove_all
