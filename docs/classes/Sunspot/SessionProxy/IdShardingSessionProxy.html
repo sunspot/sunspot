@@ -63,7 +63,7 @@
             <p>
             Unlike the abstract <a
             href="ShardingSessionProxy.html">ShardingSessionProxy</a>, this proxy
-            supports the <a href="IdShardingSessionProxy.html#M000009">remove_by_id</a>
+            supports the <a href="IdShardingSessionProxy.html#M000028">remove_by_id</a>
             method.
             </p>
           </div>
@@ -71,12 +71,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000008">new</a></li>
+              <li><a href="#M000027">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000009">remove_by_id</a></li>
-              <li><a href="#M000010">remove_by_id!</a></li>
+              <li><a href="#M000028">remove_by_id</a></li>
+              <li><a href="#M000029">remove_by_id!</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -109,8 +109,8 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000008'>
-                <a name='M000008'>      </a>
+              <div class='public-class method' id='method-M000027'>
+                <a name='M000027'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(search_session, shard_sessions)</span>
@@ -118,53 +118,53 @@
                 <div class='description'>
                   <p>
                   Initialize with a search session (see <a
-                  href="ShardingSessionProxy.html#M000018">ShardingSessionProxy.new</a>) and
+                  href="ShardingSessionProxy.html#M000037">ShardingSessionProxy.new</a>) and
                   a collection of one or more shard sessions. See note about changing the
                   number of shard sessions in the documentation for this class.
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000027-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000008-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/id_sharding_session_proxy.rb, line 32</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">search_session</span>, <span class="ruby-identifier">shard_sessions</span>)&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">search_session</span>)&#x000A;        <span class="ruby-ivar">@sessions</span> = <span class="ruby-identifier">shard_sessions</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/id_sharding_session_proxy.rb, line 32</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">search_session</span>, <span class="ruby-identifier">shard_sessions</span>)&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">search_session</span>)&#x000A;        <span class="ruby-ivar">@sessions</span> = <span class="ruby-identifier">shard_sessions</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000009'>
-                <a name='M000009'>      </a>
+              <div class='public-instance method' id='method-M000028'>
+                <a name='M000028'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_by_id</span>
                   <span class='arguments'>(clazz, id)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  See Sunspot.remove_by_id
+                  See <a href="../../Sunspot.html#M000009">Sunspot.remove_by_id</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000028-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000009-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/id_sharding_session_proxy.rb, line 48</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_by_id</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-identifier">session_for_index_id</span>(&#x000A;          <span class="ruby-constant">Adapters</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceAdapter</span>.<span class="ruby-identifier">index_id_for</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;        ).<span class="ruby-identifier">remove_by_id</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000028-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/id_sharding_session_proxy.rb, line 48</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_by_id</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-identifier">session_for_index_id</span>(&#x000A;          <span class="ruby-constant">Adapters</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceAdapter</span>.<span class="ruby-identifier">index_id_for</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;        ).<span class="ruby-identifier">remove_by_id</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000010'>
-                <a name='M000010'>      </a>
+              <div class='public-instance method' id='method-M000029'>
+                <a name='M000029'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_by_id!</span>
                   <span class='arguments'>(clazz, id)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  See Sunspot.remove_by_id!
+                  See <a href="../../Sunspot.html#M000010">Sunspot.remove_by_id!</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000029-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000010-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/id_sharding_session_proxy.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_by_id!</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-identifier">session_for_index_id</span>(&#x000A;          <span class="ruby-constant">Adapters</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceAdapter</span>.<span class="ruby-identifier">index_id_for</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;        ).<span class="ruby-identifier">remove_by_id!</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000029-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/id_sharding_session_proxy.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_by_id!</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;        <span class="ruby-identifier">session_for_index_id</span>(&#x000A;          <span class="ruby-constant">Adapters</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceAdapter</span>.<span class="ruby-identifier">index_id_for</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;        ).<span class="ruby-identifier">remove_by_id!</span>(<span class="ruby-identifier">clazz</span>, <span class="ruby-identifier">id</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

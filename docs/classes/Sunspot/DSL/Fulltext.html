@@ -52,23 +52,23 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000061">boost</a></li>
-              <li><a href="#M000062">boost_fields</a></li>
-              <li><a href="#M000057">exclude_fields</a></li>
-              <li><a href="#M000056">fields</a></li>
-              <li><a href="#M000058">highlight</a></li>
-              <li><a href="#M000063">minimum_match</a></li>
-              <li><a href="#M000059">phrase_fields</a></li>
-              <li><a href="#M000060">phrase_slop</a></li>
-              <li><a href="#M000064">query_phrase_slop</a></li>
-              <li><a href="#M000065">tie</a></li>
+              <li><a href="#M000080">boost</a></li>
+              <li><a href="#M000081">boost_fields</a></li>
+              <li><a href="#M000076">exclude_fields</a></li>
+              <li><a href="#M000075">fields</a></li>
+              <li><a href="#M000077">highlight</a></li>
+              <li><a href="#M000082">minimum_match</a></li>
+              <li><a href="#M000078">phrase_fields</a></li>
+              <li><a href="#M000079">phrase_slop</a></li>
+              <li><a href="#M000083">query_phrase_slop</a></li>
+              <li><a href="#M000084">tie</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000061'>
-                <a name='M000061'>      </a>
+              <div class='public-instance method' id='method-M000080'>
+                <a name='M000080'>      </a>
                 <div class='synopsis'>
                   <span class='name'>boost</span>
                   <span class='arguments'>(factor, &amp;block)</span>
@@ -91,14 +91,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000061-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000080-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000061-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 161</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">boost</span>(<span class="ruby-identifier">factor</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@query</span>.<span class="ruby-identifier">create_boost_query</span>(<span class="ruby-identifier">factor</span>), <span class="ruby-ivar">@setup</span>),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000080-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 161</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">boost</span>(<span class="ruby-identifier">factor</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@query</span>.<span class="ruby-identifier">create_boost_query</span>(<span class="ruby-identifier">factor</span>), <span class="ruby-ivar">@setup</span>),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000062'>
-                <a name='M000062'>      </a>
+              <div class='public-instance method' id='method-M000081'>
+                <a name='M000081'>      </a>
                 <div class='synopsis'>
                   <span class='name'>boost_fields</span>
                   <span class='arguments'>(boosts)</span>
@@ -111,14 +111,14 @@
                   <pre>Sunspot.search(Post) do&#x000A;  keywords('pork sandwich') do&#x000A;    boost_fields :title =&gt; 1.5&#x000A;  end&#x000A;end</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000062-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000081-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000062-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 180</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">boost_fields</span>(<span class="ruby-identifier">boosts</span>)&#x000A;        <span class="ruby-identifier">boosts</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">boost</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_fulltext_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">boost</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">UnrecognizedFieldError</span>&#x000A;            <span class="ruby-comment cmt"># We'll let this one slide.</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000081-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 180</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">boost_fields</span>(<span class="ruby-identifier">boosts</span>)&#x000A;        <span class="ruby-identifier">boosts</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">boost</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_fulltext_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">boost</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">UnrecognizedFieldError</span>&#x000A;            <span class="ruby-comment cmt"># We'll let this one slide.</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000057'>
-                <a name='M000057'>      </a>
+              <div class='public-instance method' id='method-M000076'>
+                <a name='M000076'>      </a>
                 <div class='synopsis'>
                   <span class='name'>exclude_fields</span>
                   <span class='arguments'>(*field_names)</span>
@@ -130,14 +130,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000057-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000076-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000057-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 56</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exclude_fields</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">field_names</span>)&#x000A;        <span class="ruby-ivar">@exclude_fields</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-identifier">field_names</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000076-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 56</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exclude_fields</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">field_names</span>)&#x000A;        <span class="ruby-ivar">@exclude_fields</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-identifier">field_names</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000056'>
-                <a name='M000056'>      </a>
+              <div class='public-instance method' id='method-M000075'>
+                <a name='M000075'>      </a>
                 <div class='synopsis'>
                   <span class='name'>fields</span>
                   <span class='arguments'>(*field_names)</span>
@@ -150,7 +150,7 @@
                   </p>
                   <p>
                   If you wish to boost certain fields without restricting which fields are
-                  searched, use <a href="Fulltext.html#M000062">boost_fields</a>
+                  searched, use <a href="Fulltext.html#M000081">boost_fields</a>
                   </p>
                   <h3>Example</h3>
                   <pre>Sunspot.search(Post) do&#x000A;  keywords 'search is cool' do&#x000A;    fields(:body, :title =&gt; 2.0)&#x000A;  end&#x000A;end</pre>
@@ -160,14 +160,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000056-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000075-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000056-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 35</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fields</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">field_names</span>)&#x000A;        <span class="ruby-ivar">@fields_added</span> = <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-identifier">boosted_fields</span> = <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">pop</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;        <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_fulltext_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">field</span>.<span class="ruby-identifier">default_boost</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">boosted_fields</span>&#x000A;          <span class="ruby-identifier">boosted_fields</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">boost</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_fulltext_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">boost</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000075-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 35</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fields</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">field_names</span>)&#x000A;        <span class="ruby-ivar">@fields_added</span> = <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-identifier">boosted_fields</span> = <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">pop</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;        <span class="ruby-identifier">field_names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_fulltext_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">field</span>.<span class="ruby-identifier">default_boost</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">boosted_fields</span>&#x000A;          <span class="ruby-identifier">boosted_fields</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">boost</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_fulltext_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">boost</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000058'>
-                <a name='M000058'>      </a>
+              <div class='public-instance method' id='method-M000077'>
+                <a name='M000077'>      </a>
                 <div class='synopsis'>
                   <span class='name'>highlight</span>
                   <span class='arguments'>(*args)</span>
@@ -213,14 +213,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000058-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000077-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000058-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 95</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">highlight</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">options</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}&#x000A;        <span class="ruby-identifier">fields</span> = []&#x000A;        <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span><span class="ruby-operator">|</span> <span class="ruby-identifier">fields</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>)) }&#x000A;&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_highlight</span>(<span class="ruby-identifier">fields</span>, <span class="ruby-identifier">options</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000077-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 95</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">highlight</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">options</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}&#x000A;        <span class="ruby-identifier">fields</span> = []&#x000A;        <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span><span class="ruby-operator">|</span> <span class="ruby-identifier">fields</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>)) }&#x000A;&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_highlight</span>(<span class="ruby-identifier">fields</span>, <span class="ruby-identifier">options</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000063'>
-                <a name='M000063'>      </a>
+              <div class='public-instance method' id='method-M000082'>
+                <a name='M000082'>      </a>
                 <div class='synopsis'>
                   <span class='name'>minimum_match</span>
                   <span class='arguments'>(minimum_match)</span>
@@ -233,14 +233,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000063-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000082-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000063-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 197</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">minimum_match</span>(<span class="ruby-identifier">minimum_match</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">minimum_match</span> = <span class="ruby-identifier">minimum_match</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000082-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 197</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">minimum_match</span>(<span class="ruby-identifier">minimum_match</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">minimum_match</span> = <span class="ruby-identifier">minimum_match</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000059'>
-                <a name='M000059'>      </a>
+              <div class='public-instance method' id='method-M000078'>
+                <a name='M000078'>      </a>
                 <div class='synopsis'>
                   <span class='name'>phrase_fields</span>
                   <span class='arguments'>(boosted_fields)</span>
@@ -253,21 +253,21 @@
                   </p>
                   <p>
                   Boosted fields are specified in a hash of field names to a boost, as with
-                  the <a href="Fulltext.html#M000056">fields</a> and <a
-                  href="Fulltext.html#M000062">boost_fields</a> methods.
+                  the <a href="Fulltext.html#M000075">fields</a> and <a
+                  href="Fulltext.html#M000081">boost_fields</a> methods.
                   </p>
                   <h3>Example</h3>
                   <pre>Sunspot.search(Post) do&#x000A;  keywords 'nothing reveals like relevance' do&#x000A;    phrase_fields :title =&gt; 2.0&#x000A;  end&#x000A;end</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000059-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000078-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000059-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 119</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">phrase_fields</span>(<span class="ruby-identifier">boosted_fields</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">boosted_fields</span>&#x000A;          <span class="ruby-identifier">boosted_fields</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">boost</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_phrase_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">boost</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000078-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 119</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">phrase_fields</span>(<span class="ruby-identifier">boosted_fields</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">boosted_fields</span>&#x000A;          <span class="ruby-identifier">boosted_fields</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">boost</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">text_fields</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_phrase_field</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">boost</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000060'>
-                <a name='M000060'>      </a>
+              <div class='public-instance method' id='method-M000079'>
+                <a name='M000079'>      </a>
                 <div class='synopsis'>
                   <span class='name'>phrase_slop</span>
                   <span class='arguments'>(slop)</span>
@@ -276,22 +276,22 @@
                   <p>
                   The maximum number of words that can appear between search terms for a
                   field to qualify for phrase field boost. See <a
-                  href="Fulltext.html#M000064">query_phrase_slop</a> for examples. Phrase
+                  href="Fulltext.html#M000083">query_phrase_slop</a> for examples. Phrase
                   slop is only meaningful if phrase fields are specified (see <a
-                  href="Fulltext.html#M000059">phrase_fields</a>), and it does not have an
+                  href="Fulltext.html#M000078">phrase_fields</a>), and it does not have an
                   effect on which results are returned; only on what their respective boosts
                   are.
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000060-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000079-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000060-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 136</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">phrase_slop</span>(<span class="ruby-identifier">slop</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">phrase_slop</span> = <span class="ruby-identifier">slop</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000079-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 136</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">phrase_slop</span>(<span class="ruby-identifier">slop</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">phrase_slop</span> = <span class="ruby-identifier">slop</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000064'>
-                <a name='M000064'>      </a>
+              <div class='public-instance method' id='method-M000083'>
+                <a name='M000083'>      </a>
                 <div class='synopsis'>
                   <span class='name'>query_phrase_slop</span>
                   <span class='arguments'>(slop)</span>
@@ -307,14 +307,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000064-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000083-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000064-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 208</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">query_phrase_slop</span>(<span class="ruby-identifier">slop</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">query_phrase_slop</span> = <span class="ruby-identifier">slop</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000083-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 208</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">query_phrase_slop</span>(<span class="ruby-identifier">slop</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">query_phrase_slop</span> = <span class="ruby-identifier">slop</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000065'>
-                <a name='M000065'>      </a>
+              <div class='public-instance method' id='method-M000084'>
+                <a name='M000084'>      </a>
                 <div class='synopsis'>
                   <span class='name'>tie</span>
                   <span class='arguments'>(tie)</span>
@@ -329,10 +329,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000065-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000084-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000065-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 219</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tie</span>(<span class="ruby-identifier">tie</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">tie</span> = <span class="ruby-identifier">tie</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000084-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/fulltext.rb, line 219</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tie</span>(<span class="ruby-identifier">tie</span>)&#x000A;        <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">tie</span> = <span class="ruby-identifier">tie</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

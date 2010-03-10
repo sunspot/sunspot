@@ -46,12 +46,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000005">instance_eval_with_context</a></li>
-              <li><a href="#M000006">new</a></li>
+              <li><a href="#M000024">instance_eval_with_context</a></li>
+              <li><a href="#M000025">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000007">method_missing</a></li>
+              <li><a href="#M000026">method_missing</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -69,44 +69,44 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000005'>
-                <a name='M000005'>      </a>
+              <div class='public-class method' id='method-M000024'>
+                <a name='M000024'>      </a>
                 <div class='synopsis'>
                   <span class='name'>instance_eval_with_context</span>
                   <span class='arguments'>(receiver, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000005-source'><span class="ruby-comment cmt"># File lib/sunspot/util.rb, line 216</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance_eval_with_context</span>(<span class="ruby-identifier">receiver</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">calling_context</span> = <span class="ruby-identifier">eval</span>(<span class="ruby-value str">'self'</span>, <span class="ruby-identifier">block</span>.<span class="ruby-identifier">binding</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent_calling_context</span> = <span class="ruby-identifier">calling_context</span>.<span class="ruby-identifier">instance_eval</span>{<span class="ruby-ivar">@__calling_context__</span>}&#x000A;            <span class="ruby-identifier">calling_context</span> = <span class="ruby-identifier">parent_calling_context</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">new</span>(<span class="ruby-identifier">receiver</span>, <span class="ruby-identifier">calling_context</span>).<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/sunspot/util.rb, line 216</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance_eval_with_context</span>(<span class="ruby-identifier">receiver</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">calling_context</span> = <span class="ruby-identifier">eval</span>(<span class="ruby-value str">'self'</span>, <span class="ruby-identifier">block</span>.<span class="ruby-identifier">binding</span>)&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent_calling_context</span> = <span class="ruby-identifier">calling_context</span>.<span class="ruby-identifier">instance_eval</span>{<span class="ruby-ivar">@__calling_context__</span>}&#x000A;            <span class="ruby-identifier">calling_context</span> = <span class="ruby-identifier">parent_calling_context</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">new</span>(<span class="ruby-identifier">receiver</span>, <span class="ruby-identifier">calling_context</span>).<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000006'>
-                <a name='M000006'>      </a>
+              <div class='public-class method' id='method-M000025'>
+                <a name='M000025'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(receiver, calling_context)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000006-source'><span class="ruby-comment cmt"># File lib/sunspot/util.rb, line 235</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">receiver</span>, <span class="ruby-identifier">calling_context</span>)&#x000A;        <span class="ruby-ivar">@__receiver__</span>, <span class="ruby-ivar">@__calling_context__</span> = <span class="ruby-identifier">receiver</span>, <span class="ruby-identifier">calling_context</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/sunspot/util.rb, line 235</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">receiver</span>, <span class="ruby-identifier">calling_context</span>)&#x000A;        <span class="ruby-ivar">@__receiver__</span>, <span class="ruby-ivar">@__calling_context__</span> = <span class="ruby-identifier">receiver</span>, <span class="ruby-identifier">calling_context</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000007'>
-                <a name='M000007'>      </a>
+              <div class='public-instance method' id='method-M000026'>
+                <a name='M000026'>      </a>
                 <div class='synopsis'>
                   <span class='name'>method_missing</span>
                   <span class='arguments'>(method, *args, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/sunspot/util.rb, line 239</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">method</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-ivar">@__receiver__</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">NoMethodError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-ivar">@__calling_context__</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">NoMethodError</span>&#x000A;            <span class="ruby-identifier">raise</span>(<span class="ruby-identifier">e</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/sunspot/util.rb, line 239</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">method</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-ivar">@__receiver__</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">NoMethodError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-ivar">@__calling_context__</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">NoMethodError</span>&#x000A;            <span class="ruby-identifier">raise</span>(<span class="ruby-identifier">e</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

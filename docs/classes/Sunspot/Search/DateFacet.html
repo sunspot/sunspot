@@ -46,55 +46,55 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000091">new</a></li>
+              <li><a href="#M000110">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000092">field_name</a></li>
-              <li><a href="#M000093">rows</a></li>
+              <li><a href="#M000111">field_name</a></li>
+              <li><a href="#M000112">rows</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000091'>
-                <a name='M000091'>      </a>
+              <div class='public-class method' id='method-M000110'>
+                <a name='M000110'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(field, search, options)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000091-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000110-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000091-source'><span class="ruby-comment cmt"># File lib/sunspot/search/date_facet.rb, line 4</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">search</span>, <span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-ivar">@field</span>, <span class="ruby-ivar">@search</span>, <span class="ruby-ivar">@options</span> = <span class="ruby-identifier">field</span>, <span class="ruby-identifier">search</span>, <span class="ruby-identifier">options</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000110-source'><span class="ruby-comment cmt"># File lib/sunspot/search/date_facet.rb, line 4</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">search</span>, <span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-ivar">@field</span>, <span class="ruby-ivar">@search</span>, <span class="ruby-ivar">@options</span> = <span class="ruby-identifier">field</span>, <span class="ruby-identifier">search</span>, <span class="ruby-identifier">options</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000092'>
-                <a name='M000092'>      </a>
+              <div class='public-instance method' id='method-M000111'>
+                <a name='M000111'>      </a>
                 <div class='synopsis'>
                   <span class='name'>field_name</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000092-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000111-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000092-source'><span class="ruby-comment cmt"># File lib/sunspot/search/date_facet.rb, line 8</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">field_name</span>&#x000A;        <span class="ruby-ivar">@field</span>.<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000111-source'><span class="ruby-comment cmt"># File lib/sunspot/search/date_facet.rb, line 8</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">field_name</span>&#x000A;        <span class="ruby-ivar">@field</span>.<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000093'>
-                <a name='M000093'>      </a>
+              <div class='public-instance method' id='method-M000112'>
+                <a name='M000112'>      </a>
                 <div class='synopsis'>
                   <span class='name'>rows</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000093-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000112-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000093-source'><span class="ruby-comment cmt"># File lib/sunspot/search/date_facet.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rows</span>&#x000A;        <span class="ruby-ivar">@rows</span> <span class="ruby-operator">||=</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">facet_response</span>[<span class="ruby-value str">'facet_dates'</span>][<span class="ruby-ivar">@field</span>.<span class="ruby-identifier">indexed_name</span>]&#x000A;            <span class="ruby-identifier">gap</span> = (<span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:time_interval</span>] <span class="ruby-operator">||</span> <span class="ruby-value">86400</span>).<span class="ruby-identifier">to_i</span>&#x000A;            <span class="ruby-identifier">rows</span> = []&#x000A;            <span class="ruby-identifier">data</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span>, <span class="ruby-identifier">count</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/</span>&#x000A;                <span class="ruby-identifier">start_time</span> = <span class="ruby-ivar">@field</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)&#x000A;                <span class="ruby-identifier">end_time</span> = <span class="ruby-identifier">start_time</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">gap</span>&#x000A;                <span class="ruby-identifier">rows</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">FacetRow</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">start_time</span><span class="ruby-operator">..</span><span class="ruby-identifier">end_time</span>, <span class="ruby-identifier">count</span>, <span class="ruby-keyword kw">self</span>)&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:sort</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:count</span>&#x000A;              <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">sort!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">lrow</span>, <span class="ruby-identifier">rrow</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rrow</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">lrow</span>.<span class="ruby-identifier">count</span> }&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">sort!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">lrow</span>, <span class="ruby-identifier">rrow</span><span class="ruby-operator">|</span> <span class="ruby-identifier">lrow</span>.<span class="ruby-identifier">value</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">rrow</span>.<span class="ruby-identifier">value</span>.<span class="ruby-identifier">first</span> }&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-identifier">rows</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000112-source'><span class="ruby-comment cmt"># File lib/sunspot/search/date_facet.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rows</span>&#x000A;        <span class="ruby-ivar">@rows</span> <span class="ruby-operator">||=</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">facet_response</span>[<span class="ruby-value str">'facet_dates'</span>][<span class="ruby-ivar">@field</span>.<span class="ruby-identifier">indexed_name</span>]&#x000A;            <span class="ruby-identifier">gap</span> = (<span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:time_interval</span>] <span class="ruby-operator">||</span> <span class="ruby-value">86400</span>).<span class="ruby-identifier">to_i</span>&#x000A;            <span class="ruby-identifier">rows</span> = []&#x000A;            <span class="ruby-identifier">data</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span>, <span class="ruby-identifier">count</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/</span>&#x000A;                <span class="ruby-identifier">start_time</span> = <span class="ruby-ivar">@field</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>)&#x000A;                <span class="ruby-identifier">end_time</span> = <span class="ruby-identifier">start_time</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">gap</span>&#x000A;                <span class="ruby-identifier">rows</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">FacetRow</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">start_time</span><span class="ruby-operator">..</span><span class="ruby-identifier">end_time</span>, <span class="ruby-identifier">count</span>, <span class="ruby-keyword kw">self</span>)&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:sort</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:count</span>&#x000A;              <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">sort!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">lrow</span>, <span class="ruby-identifier">rrow</span><span class="ruby-operator">|</span> <span class="ruby-identifier">rrow</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">lrow</span>.<span class="ruby-identifier">count</span> }&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">sort!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">lrow</span>, <span class="ruby-identifier">rrow</span><span class="ruby-operator">|</span> <span class="ruby-identifier">lrow</span>.<span class="ruby-identifier">value</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">rrow</span>.<span class="ruby-identifier">value</span>.<span class="ruby-identifier">first</span> }&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-identifier">rows</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

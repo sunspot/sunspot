@@ -55,8 +55,8 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000094">format</a></li>
-              <li><a href="#M000095">formatted</a></li>
+              <li><a href="#M000113">format</a></li>
+              <li><a href="#M000114">formatted</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -77,8 +77,8 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000094'>
-                <a name='M000094'>      </a>
+              <div class='public-instance method' id='method-M000113'>
+                <a name='M000113'>      </a>
                 <div class='synopsis'>
                   <span class='name'>format</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -93,21 +93,21 @@
                   <pre>search.highlights(:body).first.format { |word| &quot;&lt;strong&gt;#{word}&lt;/strong&gt;&quot; }</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000094-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000113-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000094-source'><span class="ruby-comment cmt"># File lib/sunspot/search/highlight.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">block</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;&lt;em&gt;#{word}&lt;/em&gt;&quot;</span> }&#x000A;        <span class="ruby-ivar">@highlight</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">HIGHLIGHT_MATCHER</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">last_match</span>[<span class="ruby-value">1</span>])&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000113-source'><span class="ruby-comment cmt"># File lib/sunspot/search/highlight.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">block</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;&lt;em&gt;#{word}&lt;/em&gt;&quot;</span> }&#x000A;        <span class="ruby-ivar">@highlight</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">HIGHLIGHT_MATCHER</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">last_match</span>[<span class="ruby-value">1</span>])&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000095'>
-                <a name='M000095'>      </a>
+              <div class='public-instance method' id='method-M000114'>
+                <a name='M000114'>      </a>
                 <div class='synopsis'>
                   <span class='name'>formatted</span>
                   <span class='arguments'>(&amp;block)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Alias for <a href="Highlight.html#M000094">format</a>
+                  Alias for <a href="Highlight.html#M000113">format</a>
                   </p>
                 </div>
               </div>

@@ -42,37 +42,37 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000127">add_element</a></li>
-              <li><a href="#M000126">say</a></li>
+              <li><a href="#M000136">add_element</a></li>
+              <li><a href="#M000135">say</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000127'>
-                <a name='M000127'>      </a>
+              <div class='public-instance method' id='method-M000136'>
+                <a name='M000136'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_element</span>
                   <span class='arguments'>(node, name, attributes = {})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000127-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000136-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000127-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/task_helper.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_element</span>(<span class="ruby-identifier">node</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">attributes</span> = {})&#x000A;        <span class="ruby-identifier">new_node</span> = <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span><span class="ruby-operator">::</span><span class="ruby-constant">Node</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-ivar">@document</span>)&#x000A;        <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">new_node</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">value</span> }&#x000A;        <span class="ruby-identifier">node</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">new_node</span> &#x000A;        <span class="ruby-identifier">new_node</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000136-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/task_helper.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_element</span>(<span class="ruby-identifier">node</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">attributes</span> = {})&#x000A;        <span class="ruby-identifier">new_node</span> = <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span><span class="ruby-operator">::</span><span class="ruby-constant">Node</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-ivar">@document</span>)&#x000A;        <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">each_pair</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">new_node</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">value</span> }&#x000A;        <span class="ruby-identifier">node</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">new_node</span> &#x000A;        <span class="ruby-identifier">new_node</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000126'>
-                <a name='M000126'>      </a>
+              <div class='public-instance method' id='method-M000135'>
+                <a name='M000135'>      </a>
                 <div class='synopsis'>
                   <span class='name'>say</span>
                   <span class='arguments'>(message)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000126-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000135-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000126-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/task_helper.rb, line 4</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">say</span>(<span class="ruby-identifier">message</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@verbose</span>&#x000A;          <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-identifier">message</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000135-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/task_helper.rb, line 4</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">say</span>(<span class="ruby-identifier">message</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@verbose</span>&#x000A;          <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-identifier">message</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

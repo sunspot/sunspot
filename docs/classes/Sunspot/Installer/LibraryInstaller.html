@@ -46,69 +46,69 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000131">execute</a></li>
-              <li><a href="#M000132">new</a></li>
+              <li><a href="#M000140">execute</a></li>
+              <li><a href="#M000141">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000133">execute</a></li>
-              <li><a href="#M000134">say</a></li>
+              <li><a href="#M000142">execute</a></li>
+              <li><a href="#M000143">say</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000131'>
-                <a name='M000131'>      </a>
+              <div class='public-class method' id='method-M000140'>
+                <a name='M000140'>      </a>
                 <div class='synopsis'>
                   <span class='name'>execute</span>
                   <span class='arguments'>(library_path, options)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000131-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000140-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000131-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/library_installer.rb, line 7</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">library_path</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-identifier">new</span>(<span class="ruby-identifier">library_path</span>, <span class="ruby-identifier">options</span>).<span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000140-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/library_installer.rb, line 7</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">library_path</span>, <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-identifier">new</span>(<span class="ruby-identifier">library_path</span>, <span class="ruby-identifier">options</span>).<span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000132'>
-                <a name='M000132'>      </a>
+              <div class='public-class method' id='method-M000141'>
+                <a name='M000141'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(library_path, options)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000132-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000141-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000132-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/library_installer.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">library_path</span>, <span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-ivar">@library_path</span> = <span class="ruby-identifier">library_path</span>&#x000A;        <span class="ruby-ivar">@verbose</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verbose</span>]&#x000A;        <span class="ruby-ivar">@force</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:force</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000141-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/library_installer.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">library_path</span>, <span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-ivar">@library_path</span> = <span class="ruby-identifier">library_path</span>&#x000A;        <span class="ruby-ivar">@verbose</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verbose</span>]&#x000A;        <span class="ruby-ivar">@force</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:force</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000133'>
-                <a name='M000133'>      </a>
+              <div class='public-instance method' id='method-M000142'>
+                <a name='M000142'>      </a>
                 <div class='synopsis'>
                   <span class='name'>execute</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000133-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000142-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000133-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/library_installer.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-identifier">sunspot_library_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'..'</span>,&#x000A;                                         <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'lib'</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">sunspot_library_path</span>) <span class="ruby-operator">==</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-ivar">@library_path</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-ivar">@library_path</span>)&#x000A;        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">sunspot_library_path</span>, <span class="ruby-value str">'*.jar'</span>)).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">jar</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">jar</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">jar</span>)&#x000A;          <span class="ruby-identifier">dest</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@library_path</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">jar</span>))&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">dest</span>)&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@force</span>&#x000A;              <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Removing existing library #{dest}&quot;</span>)&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-keyword kw">next</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Copying #{jar} =&gt; #{dest}&quot;</span>)&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">jar</span>, <span class="ruby-identifier">dest</span>)&#x000A;                           <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000142-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/library_installer.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-identifier">sunspot_library_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'..'</span>,&#x000A;                                         <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'lib'</span>)&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">sunspot_library_path</span>) <span class="ruby-operator">==</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-ivar">@library_path</span>)&#x000A;        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-ivar">@library_path</span>)&#x000A;        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">sunspot_library_path</span>, <span class="ruby-value str">'*.jar'</span>)).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">jar</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">jar</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">jar</span>)&#x000A;          <span class="ruby-identifier">dest</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@library_path</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">jar</span>))&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">dest</span>)&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@force</span>&#x000A;              <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Removing existing library #{dest}&quot;</span>)&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-keyword kw">next</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Copying #{jar} =&gt; #{dest}&quot;</span>)&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">jar</span>, <span class="ruby-identifier">dest</span>)&#x000A;                           <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000134'>
-                <a name='M000134'>      </a>
+              <div class='public-instance method' id='method-M000143'>
+                <a name='M000143'>      </a>
                 <div class='synopsis'>
                   <span class='name'>say</span>
                   <span class='arguments'>(message)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000134-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000143-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000134-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/library_installer.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">say</span>(<span class="ruby-identifier">message</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@verbose</span>&#x000A;          <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-identifier">message</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000143-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/library_installer.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">say</span>(<span class="ruby-identifier">message</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@verbose</span>&#x000A;          <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">puts</span>(<span class="ruby-identifier">message</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

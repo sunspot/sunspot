@@ -44,14 +44,14 @@
         <div id='text'>
           <div id='description'>
             <p>
-            This is a generic abstract implementation of a session proxy that allows
-            Sunspot to be used with a distributed (sharded) Solr deployment. Concrete
-            subclasses should implement the <a
-            href="ShardingSessionProxy.html#M000019">session_for</a> method, which
+            This is a generic abstract implementation of a session proxy that allows <a
+            href="../../Sunspot.html">Sunspot</a> to be used with a distributed
+            (sharded) Solr deployment. Concrete subclasses should implement the <a
+            href="ShardingSessionProxy.html#M000038">session_for</a> method, which
             takes a searchable object and returns a <a
             href="../Session.html">Session</a> that points to the appropriate Solr
             shard for that object. Subclasses should also implement the <a
-            href="ShardingSessionProxy.html#M000020">all_sessions</a> object, which
+            href="ShardingSessionProxy.html#M000039">all_sessions</a> object, which
             returns the collection of all sharded <a href="../Session.html">Session</a>
             objects.
             </p>
@@ -59,7 +59,7 @@
             The class is initialized with a session that points to the Solr instance
             used to perform searches. Searches will have the <tt>:shards</tt> param
             injected, containing references to the Solr instances returned by <a
-            href="ShardingSessionProxy.html#M000020">all_sessions</a>.
+            href="ShardingSessionProxy.html#M000039">all_sessions</a>.
             </p>
             <p>
             For more on distributed search, see: <a
@@ -82,10 +82,10 @@
             <li>remove_by_id!
             
             </li>
-            <li><a href="ShardingSessionProxy.html#M000025">remove_all</a> with an argument
+            <li><a href="ShardingSessionProxy.html#M000044">remove_all</a> with an argument
             
             </li>
-            <li><a href="ShardingSessionProxy.html#M000025">remove_all</a>! with an
+            <li><a href="ShardingSessionProxy.html#M000044">remove_all</a>! with an
             argument
             
             </li>
@@ -95,32 +95,32 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000018">new</a></li>
+              <li><a href="#M000037">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000020">all_sessions</a></li>
-              <li><a href="#M000027">commit</a></li>
-              <li><a href="#M000029">commit_if_delete_dirty</a></li>
-              <li><a href="#M000028">commit_if_dirty</a></li>
-              <li><a href="#M000033">delete_dirty?</a></li>
-              <li><a href="#M000032">dirty?</a></li>
-              <li><a href="#M000021">index</a></li>
-              <li><a href="#M000022">index!</a></li>
-              <li><a href="#M000030">new_search</a></li>
-              <li><a href="#M000023">remove</a></li>
-              <li><a href="#M000024">remove!</a></li>
-              <li><a href="#M000025">remove_all</a></li>
-              <li><a href="#M000026">remove_all!</a></li>
-              <li><a href="#M000031">search</a></li>
-              <li><a href="#M000019">session_for</a></li>
+              <li><a href="#M000039">all_sessions</a></li>
+              <li><a href="#M000046">commit</a></li>
+              <li><a href="#M000048">commit_if_delete_dirty</a></li>
+              <li><a href="#M000047">commit_if_dirty</a></li>
+              <li><a href="#M000052">delete_dirty?</a></li>
+              <li><a href="#M000051">dirty?</a></li>
+              <li><a href="#M000040">index</a></li>
+              <li><a href="#M000041">index!</a></li>
+              <li><a href="#M000049">new_search</a></li>
+              <li><a href="#M000042">remove</a></li>
+              <li><a href="#M000043">remove!</a></li>
+              <li><a href="#M000044">remove_all</a></li>
+              <li><a href="#M000045">remove_all!</a></li>
+              <li><a href="#M000050">search</a></li>
+              <li><a href="#M000038">session_for</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000018'>
-                <a name='M000018'>      </a>
+              <div class='public-class method' id='method-M000037'>
+                <a name='M000037'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(search_session = Sunspot.session.new)</span>
@@ -131,15 +131,15 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">search_session</span> = <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">session</span>.<span class="ruby-identifier">new</span>)&#x000A;        <span class="ruby-ivar">@search_session</span> = <span class="ruby-identifier">search_session</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">search_session</span> = <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">session</span>.<span class="ruby-identifier">new</span>)&#x000A;        <span class="ruby-ivar">@search_session</span> = <span class="ruby-identifier">search_session</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000020'>
-                <a name='M000020'>      </a>
+              <div class='public-instance method' id='method-M000039'>
+                <a name='M000039'>      </a>
                 <div class='synopsis'>
                   <span class='name'>all_sessions</span>
                   <span class='arguments'>()</span>
@@ -153,32 +153,33 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000020-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000020-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 55</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_sessions</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 55</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_sessions</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000027'>
-                <a name='M000027'>      </a>
+              <div class='public-instance method' id='method-M000046'>
+                <a name='M000046'>      </a>
                 <div class='synopsis'>
                   <span class='name'>commit</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Commit all shards. See Sunspot.commit
+                  Commit all shards. See <a
+                  href="../../Sunspot.html#M000004">Sunspot.commit</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000027-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000046-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 118</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000046-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 118</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000029'>
-                <a name='M000029'>      </a>
+              <div class='public-instance method' id='method-M000048'>
+                <a name='M000048'>      </a>
                 <div class='synopsis'>
                   <span class='name'>commit_if_delete_dirty</span>
                   <span class='arguments'>()</span>
@@ -189,18 +190,18 @@
                   committed.
                   </p>
                   <p>
-                  See Sunspot.commit_if_delete_dirty
+                  See <a href="../../Sunspot.html#M000017">Sunspot.commit_if_delete_dirty</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000029-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000048-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000029-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 137</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit_if_delete_dirty</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit_if_delete_dirty</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000048-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 137</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit_if_delete_dirty</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit_if_delete_dirty</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000028'>
-                <a name='M000028'>      </a>
+              <div class='public-instance method' id='method-M000047'>
+                <a name='M000047'>      </a>
                 <div class='synopsis'>
                   <span class='name'>commit_if_dirty</span>
                   <span class='arguments'>()</span>
@@ -210,18 +211,18 @@
                   Commit all dirty sessions. Only dirty sessions will be committed.
                   </p>
                   <p>
-                  See Sunspot.commit_if_dirty
+                  See <a href="../../Sunspot.html#M000015">Sunspot.commit_if_dirty</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000028-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000047-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000028-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 127</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit_if_dirty</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit_if_dirty</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000047-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 127</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commit_if_dirty</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">commit_if_dirty</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000033'>
-                <a name='M000033'>      </a>
+              <div class='public-instance method' id='method-M000052'>
+                <a name='M000052'>      </a>
                 <div class='synopsis'>
                   <span class='name'>delete_dirty?</span>
                   <span class='arguments'>()</span>
@@ -229,20 +230,20 @@
                 <div class='description'>
                   <p>
                   True if any shard session is delete-dirty. Note that directly using the <a
-                  href="ShardingSessionProxy.html#M000029">commit_if_delete_dirty</a> method
+                  href="ShardingSessionProxy.html#M000048">commit_if_delete_dirty</a> method
                   is more efficient if that&#8217;s what you&#8217;re trying to do, since in
                   that case only the delete-dirty sessions are committed.
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000052-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 187</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_dirty?</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">any?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete_dirty?</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000052-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 187</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_dirty?</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">any?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete_dirty?</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000032'>
-                <a name='M000032'>      </a>
+              <div class='public-instance method' id='method-M000051'>
+                <a name='M000051'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dirty?</span>
                   <span class='arguments'>()</span>
@@ -250,59 +251,59 @@
                 <div class='description'>
                   <p>
                   True if any shard session is dirty. Note that directly using the <a
-                  href="ShardingSessionProxy.html#M000028">commit_if_dirty</a> method is more
+                  href="ShardingSessionProxy.html#M000047">commit_if_dirty</a> method is more
                   efficient if that&#8217;s what you&#8217;re trying to do, since in that
                   case only the dirty sessions are committed.
                   </p>
                   <p>
-                  See Sunspot.dirty?
+                  See <a href="../../Sunspot.html#M000014">Sunspot.dirty?</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000051-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 177</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dirty?</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">any?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">dirty?</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000051-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 177</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dirty?</span>&#x000A;        <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">any?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">dirty?</span> }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000021'>
-                <a name='M000021'>      </a>
+              <div class='public-instance method' id='method-M000040'>
+                <a name='M000040'>      </a>
                 <div class='synopsis'>
                   <span class='name'>index</span>
                   <span class='arguments'>(*objects)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  See Sunspot.index
+                  See <a href="../../Sunspot.html#M000002">Sunspot.index</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000021-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000021-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 62</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;        <span class="ruby-identifier">using_sharded_session</span>(<span class="ruby-identifier">objects</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span>, <span class="ruby-identifier">group</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">group</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 62</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;        <span class="ruby-identifier">using_sharded_session</span>(<span class="ruby-identifier">objects</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span>, <span class="ruby-identifier">group</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">group</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000022'>
-                <a name='M000022'>      </a>
+              <div class='public-instance method' id='method-M000041'>
+                <a name='M000041'>      </a>
                 <div class='synopsis'>
                   <span class='name'>index!</span>
                   <span class='arguments'>(*objects)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  See Sunspot.index!
+                  See <a href="../../Sunspot.html#M000003">Sunspot.index!</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000022-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 69</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;        <span class="ruby-identifier">using_sharded_session</span>(<span class="ruby-identifier">objects</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span>, <span class="ruby-identifier">group</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">index!</span>(<span class="ruby-identifier">group</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 69</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;        <span class="ruby-identifier">using_sharded_session</span>(<span class="ruby-identifier">objects</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span>, <span class="ruby-identifier">group</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">index!</span>(<span class="ruby-identifier">group</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000030'>
-                <a name='M000030'>      </a>
+              <div class='public-instance method' id='method-M000049'>
+                <a name='M000049'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new_search</span>
                   <span class='arguments'>(*types)</span>
@@ -315,61 +316,62 @@
                   the search session to search across all shards.
                   </p>
                   <p>
-                  See Sunspot.new_search
+                  See <a href="../../Sunspot.html#M000005">Sunspot.new_search</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000030-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000049-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 149</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>)&#x000A;        <span class="ruby-identifier">shard_urls</span> = <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">config</span>.<span class="ruby-identifier">solr</span>.<span class="ruby-identifier">url</span> }&#x000A;        <span class="ruby-identifier">search</span> = <span class="ruby-ivar">@search_session</span>.<span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>)&#x000A;        <span class="ruby-identifier">search</span>.<span class="ruby-identifier">build</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">adjust_solr_params</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">params</span><span class="ruby-operator">|</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:shards</span>] = <span class="ruby-identifier">shard_urls</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">','</span>) }&#x000A;          <span class="ruby-comment cmt"># I feel a little dirty doing this.</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">search</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000049-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 149</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>)&#x000A;        <span class="ruby-identifier">shard_urls</span> = <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">config</span>.<span class="ruby-identifier">solr</span>.<span class="ruby-identifier">url</span> }&#x000A;        <span class="ruby-identifier">search</span> = <span class="ruby-ivar">@search_session</span>.<span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>)&#x000A;        <span class="ruby-identifier">search</span>.<span class="ruby-identifier">build</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">adjust_solr_params</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">params</span><span class="ruby-operator">|</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:shards</span>] = <span class="ruby-identifier">shard_urls</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">','</span>) }&#x000A;          <span class="ruby-comment cmt"># I feel a little dirty doing this.</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">search</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000023'>
-                <a name='M000023'>      </a>
+              <div class='public-instance method' id='method-M000042'>
+                <a name='M000042'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove</span>
                   <span class='arguments'>(*objects)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  See Sunspot.remove
+                  See <a href="../../Sunspot.html#M000007">Sunspot.remove</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000023-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000023-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 76</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;        <span class="ruby-identifier">using_sharded_session</span>(<span class="ruby-identifier">objects</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span>, <span class="ruby-identifier">group</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-identifier">group</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 76</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;        <span class="ruby-identifier">using_sharded_session</span>(<span class="ruby-identifier">objects</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span>, <span class="ruby-identifier">group</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-identifier">group</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000024'>
-                <a name='M000024'>      </a>
+              <div class='public-instance method' id='method-M000043'>
+                <a name='M000043'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove!</span>
                   <span class='arguments'>(*objects)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  See Sunspot.remove!
+                  See <a href="../../Sunspot.html#M000008">Sunspot.remove!</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 83</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;        <span class="ruby-identifier">using_sharded_session</span>(<span class="ruby-identifier">objects</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span>, <span class="ruby-identifier">group</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove!</span>(<span class="ruby-identifier">group</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 83</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">objects</span>)&#x000A;        <span class="ruby-identifier">using_sharded_session</span>(<span class="ruby-identifier">objects</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span>, <span class="ruby-identifier">group</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove!</span>(<span class="ruby-identifier">group</span>) }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000025'>
-                <a name='M000025'>      </a>
+              <div class='public-instance method' id='method-M000044'>
+                <a name='M000044'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_all</span>
                   <span class='arguments'>(clazz = nil)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  If no argument is passed, behaves like Sunspot.remove_all
+                  If no argument is passed, behaves like <a
+                  href="../../Sunspot.html#M000011">Sunspot.remove_all</a>
                   </p>
                   <p>
                   If an argument is passed, will raise NotSupportedError, as the proxy does
@@ -377,21 +379,22 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 93</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all</span>(<span class="ruby-identifier">clazz</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">clazz</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotSupportedError</span>, <span class="ruby-value str">&quot;Sharding session proxy does not support remove_all with an argument.&quot;</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all</span> }&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 93</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all</span>(<span class="ruby-identifier">clazz</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">clazz</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotSupportedError</span>, <span class="ruby-value str">&quot;Sharding session proxy does not support remove_all with an argument.&quot;</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all</span> }&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000026'>
-                <a name='M000026'>      </a>
+              <div class='public-instance method' id='method-M000045'>
+                <a name='M000045'>      </a>
                 <div class='synopsis'>
                   <span class='name'>remove_all!</span>
                   <span class='arguments'>(clazz = nil)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  If no argument is passed, behaves like Sunspot.remove_all!
+                  If no argument is passed, behaves like <a
+                  href="../../Sunspot.html#M000012">Sunspot.remove_all!</a>
                   </p>
                   <p>
                   If an argument is passed, will raise NotSupportedError, as the proxy does
@@ -399,14 +402,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 107</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all!</span>(<span class="ruby-identifier">clazz</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">clazz</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotSupportedError</span>, <span class="ruby-value str">&quot;Sharding session proxy does not support remove_all! with an argument.&quot;</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all!</span> }&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 107</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all!</span>(<span class="ruby-identifier">clazz</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">clazz</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotSupportedError</span>, <span class="ruby-value str">&quot;Sharding session proxy does not support remove_all! with an argument.&quot;</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">all_sessions</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">session</span><span class="ruby-operator">|</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">remove_all!</span> }&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000031'>
-                <a name='M000031'>      </a>
+              <div class='public-instance method' id='method-M000050'>
+                <a name='M000050'>      </a>
                 <div class='synopsis'>
                   <span class='name'>search</span>
                   <span class='arguments'>(*types, &amp;block)</span>
@@ -419,18 +422,18 @@
                   shards.
                   </p>
                   <p>
-                  See Sunspot.search
+                  See <a href="../../Sunspot.html#M000006">Sunspot.search</a>
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000031-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000050-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 166</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>).<span class="ruby-identifier">execute</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000050-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 166</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">new_search</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">types</span>).<span class="ruby-identifier">execute</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000019'>
-                <a name='M000019'>      </a>
+              <div class='public-instance method' id='method-M000038'>
+                <a name='M000038'>      </a>
                 <div class='synopsis'>
                   <span class='name'>session_for</span>
                   <span class='arguments'>(object)</span>
@@ -444,10 +447,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000019-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000019-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 46</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">session_for</span>(<span class="ruby-identifier">object</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/sharding_session_proxy.rb, line 46</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">session_for</span>(<span class="ruby-identifier">object</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

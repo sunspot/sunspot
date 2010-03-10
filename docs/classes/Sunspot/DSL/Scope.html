@@ -55,12 +55,12 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000053">all_of</a></li>
-              <li><a href="#M000052">any_of</a></li>
-              <li><a href="#M000054">dynamic</a></li>
-              <li><a href="#M000055">text_fields</a></li>
-              <li><a href="#M000050">with</a></li>
-              <li><a href="#M000051">without</a></li>
+              <li><a href="#M000072">all_of</a></li>
+              <li><a href="#M000071">any_of</a></li>
+              <li><a href="#M000073">dynamic</a></li>
+              <li><a href="#M000074">text_fields</a></li>
+              <li><a href="#M000069">with</a></li>
+              <li><a href="#M000070">without</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -78,8 +78,8 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000053'>
-                <a name='M000053'>      </a>
+              <div class='public-instance method' id='method-M000072'>
+                <a name='M000072'>      </a>
                 <div class='synopsis'>
                   <span class='name'>all_of</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -95,14 +95,14 @@
                   <pre>Sunspot.search(Post) do&#x000A;  any_of do&#x000A;    with(:blog_id, 1)&#x000A;    all_of do&#x000A;      with(:blog_id, 2)&#x000A;      with(:category_ids, 3)&#x000A;    end&#x000A;  end&#x000A;end</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000053-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000072-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000053-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 170</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_of</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">conjunction</span> = <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_conjunction</span>&#x000A;        <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(<span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">conjunction</span>, <span class="ruby-ivar">@setup</span>), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">conjunction</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000072-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 170</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">all_of</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">conjunction</span> = <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_conjunction</span>&#x000A;        <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(<span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">conjunction</span>, <span class="ruby-ivar">@setup</span>), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">conjunction</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000052'>
-                <a name='M000052'>      </a>
+              <div class='public-instance method' id='method-M000071'>
+                <a name='M000071'>      </a>
                 <div class='synopsis'>
                   <span class='name'>any_of</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -120,14 +120,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000052-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000071-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000052-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 146</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">any_of</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">disjunction</span> = <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_disjunction</span>&#x000A;        <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(<span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">disjunction</span>, <span class="ruby-ivar">@setup</span>), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">disjunction</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000071-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 146</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">any_of</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">disjunction</span> = <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_disjunction</span>&#x000A;        <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(<span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">disjunction</span>, <span class="ruby-ivar">@setup</span>), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">disjunction</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000054'>
-                <a name='M000054'>      </a>
+              <div class='public-instance method' id='method-M000073'>
+                <a name='M000073'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dynamic</span>
                   <span class='arguments'>(base_name, &amp;block)</span>
@@ -150,14 +150,14 @@
                   <pre>Sunspot.search Post do&#x000A;  dynamic :custom do&#x000A;    with :cuisine, 'Pizza'&#x000A;    facet :atmosphere&#x000A;    order_by :chef_name&#x000A;  end&#x000A;end</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000054-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000073-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000054-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 196</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dynamic</span>(<span class="ruby-identifier">base_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@scope</span>, <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">dynamic_field_factory</span>(<span class="ruby-identifier">base_name</span>)),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000073-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 196</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dynamic</span>(<span class="ruby-identifier">base_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@scope</span>, <span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">dynamic_field_factory</span>(<span class="ruby-identifier">base_name</span>)),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000055'>
-                <a name='M000055'>      </a>
+              <div class='public-instance method' id='method-M000074'>
+                <a name='M000074'>      </a>
                 <div class='synopsis'>
                   <span class='name'>text_fields</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -179,14 +179,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000055-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000074-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000055-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 221</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text_fields</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@scope</span>, <span class="ruby-constant">TextFieldSetup</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@setup</span>)),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000074-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 221</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text_fields</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@scope</span>, <span class="ruby-constant">TextFieldSetup</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@setup</span>)),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000050'>
-                <a name='M000050'>      </a>
+              <div class='public-instance method' id='method-M000069'>
+                <a name='M000069'>      </a>
                 <div class='synopsis'>
                   <span class='name'>with</span>
                   <span class='arguments'>(field_name, value = NONE)</span>
@@ -198,7 +198,7 @@
                   types. With two arguments, this creates a shorthand restriction: if the
                   second argument is a scalar, an equality restriction is created; if it is a
                   Range, a between restriction will be created; and if it is an Array, an <a
-                  href="Scope.html#M000052">any_of</a> restriction will be created.
+                  href="Scope.html#M000071">any_of</a> restriction will be created.
                   </p>
                   <h4>Parameters</h4>
                   <table>
@@ -236,14 +236,14 @@
                   <pre>Sunspot.search(Post) do&#x000A;  with(:average_rating).greater_than(3.0)&#x000A;end</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000050-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000069-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000050-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 63</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">with</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">value</span> = <span class="ruby-constant">NONE</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-constant">NONE</span>&#x000A;          <span class="ruby-constant">DSL</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>), <span class="ruby-ivar">@scope</span>, <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_shorthand_restriction</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>), <span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000069-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 63</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">with</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">value</span> = <span class="ruby-constant">NONE</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-constant">NONE</span>&#x000A;          <span class="ruby-constant">DSL</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>), <span class="ruby-ivar">@scope</span>, <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_shorthand_restriction</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>), <span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000051'>
-                <a name='M000051'>      </a>
+              <div class='public-instance method' id='method-M000070'>
+                <a name='M000070'>      </a>
                 <div class='synopsis'>
                   <span class='name'>without</span>
                   <span class='arguments'>(*args)</span>
@@ -253,7 +253,7 @@
                   Build a negative restriction (exclusion). This method can take three forms:
                   equality exclusion, exclusion by another restriction, or identity
                   exclusion. The first two forms work the same way as the <a
-                  href="Scope.html#M000050">with</a> method; the third excludes a specific
+                  href="Scope.html#M000069">with</a> method; the third excludes a specific
                   instance from the search results.
                   </p>
                   <h4>Parameters (exclusion by field value)</h4>
@@ -286,10 +286,10 @@
                   <pre>Sunspot.search(Post) do&#x000A;  without(some_post_instance)&#x000A;end</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000051-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000070-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000051-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 108</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">without</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>, <span class="ruby-constant">Symbol</span>&#x000A;          <span class="ruby-identifier">field_name</span> = <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">:</span> <span class="ruby-constant">NONE</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-constant">NONE</span>&#x000A;            <span class="ruby-constant">DSL</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>), <span class="ruby-ivar">@scope</span>, <span class="ruby-keyword kw">true</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_negated_shorthand_restriction</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>), <span class="ruby-identifier">value</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">instances</span> = <span class="ruby-identifier">args</span>&#x000A;          <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_negated_restriction</span>(&#x000A;              <span class="ruby-constant">IdField</span>.<span class="ruby-identifier">instance</span>,&#x000A;              <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span><span class="ruby-operator">::</span><span class="ruby-constant">EqualTo</span>,&#x000A;              <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Adapters</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceAdapter</span>.<span class="ruby-identifier">adapt</span>(<span class="ruby-identifier">instance</span>).<span class="ruby-identifier">index_id</span>&#x000A;            )&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000070-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/scope.rb, line 108</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">without</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>, <span class="ruby-constant">Symbol</span>&#x000A;          <span class="ruby-identifier">field_name</span> = <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]&#x000A;          <span class="ruby-identifier">value</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">:</span> <span class="ruby-constant">NONE</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-constant">NONE</span>&#x000A;            <span class="ruby-constant">DSL</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>), <span class="ruby-ivar">@scope</span>, <span class="ruby-keyword kw">true</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_negated_shorthand_restriction</span>(<span class="ruby-ivar">@setup</span>.<span class="ruby-identifier">field</span>(<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>), <span class="ruby-identifier">value</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">instances</span> = <span class="ruby-identifier">args</span>&#x000A;          <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">add_negated_restriction</span>(&#x000A;              <span class="ruby-constant">IdField</span>.<span class="ruby-identifier">instance</span>,&#x000A;              <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span><span class="ruby-operator">::</span><span class="ruby-constant">Restriction</span><span class="ruby-operator">::</span><span class="ruby-constant">EqualTo</span>,&#x000A;              <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Adapters</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceAdapter</span>.<span class="ruby-identifier">adapt</span>(<span class="ruby-identifier">instance</span>).<span class="ruby-identifier">index_id</span>&#x000A;            )&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
