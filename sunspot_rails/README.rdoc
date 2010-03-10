@@ -248,6 +248,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 - Adam Salter (adam@codebright.net)
 - Brandon Keepers (brandon@opensoul.org)
 - Paul Canavese (paul@canavese.org)
+- John Eberly (jeberly@elctech.com)
 
 == License
 
