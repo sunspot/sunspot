@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Type [Sunspot 0.10.6 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Type [Sunspot 1.0.1 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../files/lib/sunspot/type_rb.html">lib/sunspot/type.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/type.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/type.rb">view online</a>)
           </li>
         </ol>
       </div>
@@ -41,12 +41,11 @@
           <div id='description'>
             <p>
             This module contains singleton objects that represent the types that can be
-            indexed and searched using <a href="../Sunspot.html">Sunspot</a>. Plugin
-            developers should be able to add new constants to the <a
-            href="Type.html">Type</a> module; as long as they implement the appropriate
-            methods, <a href="../Sunspot.html">Sunspot</a> should be able to integrate
-            them (note that this capability is untested at the moment). The required
-            methods are:
+            indexed and searched using Sunspot. Plugin developers should be able to add
+            new constants to the <a href="Type.html">Type</a> module; as long as they
+            implement the appropriate methods, Sunspot should be able to integrate them
+            (note that this capability is untested at the moment). The required methods
+            are:
             </p>
             <table>
             <tr><td valign="top"><tt>indexed_name</tt>:</td><td>Convert a given field name into its form as stored in Solr. This generally
@@ -66,14 +65,19 @@
           <div id='section'>
             <div id='class-list'>
               <h2>Classes and Modules</h2>
-              Module <a href="Type/BooleanType.html" class="link">Sunspot::Type::BooleanType</a><br />
-              Module <a href="Type/ClassType.html" class="link">Sunspot::Type::ClassType</a><br />
-              Module <a href="Type/DateType.html" class="link">Sunspot::Type::DateType</a><br />
-              Module <a href="Type/FloatType.html" class="link">Sunspot::Type::FloatType</a><br />
-              Module <a href="Type/IntegerType.html" class="link">Sunspot::Type::IntegerType</a><br />
-              Module <a href="Type/StringType.html" class="link">Sunspot::Type::StringType</a><br />
-              Module <a href="Type/TextType.html" class="link">Sunspot::Type::TextType</a><br />
-              Module <a href="Type/TimeType.html" class="link">Sunspot::Type::TimeType</a><br />
+              Class <a href="Type/BooleanType.html" class="link">Sunspot::Type::BooleanType</a><br />
+              Class <a href="Type/ClassType.html" class="link">Sunspot::Type::ClassType</a><br />
+              Class <a href="Type/DateType.html" class="link">Sunspot::Type::DateType</a><br />
+              Class <a href="Type/DoubleType.html" class="link">Sunspot::Type::DoubleType</a><br />
+              Class <a href="Type/FloatType.html" class="link">Sunspot::Type::FloatType</a><br />
+              Class <a href="Type/IntegerType.html" class="link">Sunspot::Type::IntegerType</a><br />
+              Class <a href="Type/LongType.html" class="link">Sunspot::Type::LongType</a><br />
+              Class <a href="Type/StringType.html" class="link">Sunspot::Type::StringType</a><br />
+              Class <a href="Type/TextType.html" class="link">Sunspot::Type::TextType</a><br />
+              Class <a href="Type/TimeType.html" class="link">Sunspot::Type::TimeType</a><br />
+              Class <a href="Type/TrieFloatType.html" class="link">Sunspot::Type::TrieFloatType</a><br />
+              Class <a href="Type/TrieIntegerType.html" class="link">Sunspot::Type::TrieIntegerType</a><br />
+              Class <a href="Type/TrieTimeType.html" class="link">Sunspot::Type::TrieTimeType</a><br />
             </div>
           </div>
         </div>

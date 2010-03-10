@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: README.rdoc [Sunspot 0.10.6 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>File: README.rdoc [Sunspot 1.0.1 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -28,40 +28,43 @@
         <div class='name'>README.rdoc</div>
         <div class='paths'>
           README.rdoc
-          (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/README.rdoc">view online</a>)
+          (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/README.rdoc">view online</a>)
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Thu Nov 05 18:25:49 -0500 2009</span>
+          <span class='datetime'>Fri Mar 05 10:35:01 -0500 2010</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
-            <h1><a href="../classes/Sunspot.html">Sunspot</a></h1>
+            <h1>Sunspot</h1>
             <p>
             <a
             href="http://outoftime.github.com/sunspot">outoftime.github.com/sunspot</a>
             </p>
             <p>
-            <a href="../classes/Sunspot.html">Sunspot</a> is a Ruby library for
-            expressive, powerful interaction with the Solr search engine. <a
-            href="../classes/Sunspot.html">Sunspot</a> is built on top of the RSolr
-            gem, which provides a low-level interface for Solr interaction; <a
-            href="../classes/Sunspot.html">Sunspot</a> provides a simple, intuitive,
-            expressive DSL backed by powerful features for indexing objects and
-            searching for them.
+            Sunspot is a Ruby library for expressive, powerful interaction with the
+            Solr search engine. Sunspot is built on top of the RSolr library, which
+            provides a low-level interface for Solr interaction; Sunspot provides a
+            simple, intuitive, expressive DSL backed by powerful features for indexing
+            objects and searching for them.
             </p>
             <p>
-            <a href="../classes/Sunspot.html">Sunspot</a> is designed to be easily
-            plugged in to any ORM, or even non-database-backed objects such as the
-            filesystem.
+            Sunspot is designed to be easily plugged in to any ORM, or even
+            non-database-backed objects such as the filesystem.
             </p>
+            <h3>Where to learn all about Sunspot: The Wiki!</h3>
             <p>
-            This README is intended as a quick primer on what <a
-            href="../classes/Sunspot.html">Sunspot</a> is capable of; for detailed
-            treatment of Sunspot&#8217;s full feature range, check out the wiki: <a
+            This README is intended as a quick primer on what Sunspot is capable of;
+            for detailed treatment of Sunspot&#8217;s full feature range, check out the
+            wiki: <a
             href="http://wiki.github.com/outoftime/sunspot">wiki.github.com/outoftime/sunspot</a>
+            </p>
+            <p>
+            The API documentation is also complete and up-to-date; however, because of
+            the way Sunspot is structured, it&#8217;s not the easiest way for new users
+            to get to know the library.
             </p>
             <h3>Features:</h3>
             <ul>
@@ -99,7 +102,7 @@
             <li>Full compatibility with will_paginate
             
             </li>
-            <li>Ordering
+            <li>Ordering by field value, relevance, geographical distance, or random
             
             </li>
             </ul>
@@ -117,37 +120,36 @@
             If you specify a solr home, the directory must contain a <tt>conf</tt>
             directory, which should contain at least <tt>schema.xml</tt> and
             <tt>solrconfig.xml</tt>. Be sure to copy the <tt>schema.xml</tt> out of the
-            <a href="../classes/Sunspot.html">Sunspot</a> gem&#8217;s
-            <tt>solr/solr/conf</tt> directory. <a
-            href="../classes/Sunspot.html">Sunspot</a> relies on the field name
-            patterns defined in the packaged <tt>schema.xml</tt>, so those cannot be
-            modified.
+            Sunspot gem&#8217;s <tt>solr/solr/conf</tt> directory. Sunspot relies on
+            the field name patterns defined in the packaged <tt>schema.xml</tt>, so
+            those cannot be modified.
             </p>
             <p>
             You can also run your own instance of Solr wherever you&#8217;d like; just
             copy the solr/config/schema.xml file out of the gem&#8217;s solr into your
-            installation. You can change the URL at which <a
-            href="../classes/Sunspot.html">Sunspot</a> accesses Solr with:
+            installation. You can change the URL at which Sunspot accesses Solr with:
             </p>
             <pre>Sunspot.config.solr.url = 'http://solr.my.host:9818/solr'</pre>
             <h2>Rails Integration</h2>
             <p>
-            The <a href="http://github.com/outoftime/sunspot_rails">Sunspot::Rails</a>
-            plugin makes integrating <a href="../classes/Sunspot.html">Sunspot</a> into
-            Rails drop-in easy.
+            The Sunspot::Rails plugin makes integrating Sunspot into Rails drop-in
+            easy.
             </p>
-            <h2>Using <a href="../classes/Sunspot.html">Sunspot</a></h2>
+            <pre>gem install sunspot_rails</pre>
+            <p>
+            See the README for that gem or the Sunspot Wiki for more information.
+            </p>
+            <h2>Using Sunspot</h2>
             <h3>Define an index:</h3>
             <pre>class Post&#x000A;  #...&#x000A;end&#x000A;&#x000A;Sunspot.setup(Post) do&#x000A;  text :title, :body&#x000A;  string :author_name&#x000A;  integer :blog_id&#x000A;  integer :category_ids&#x000A;  float :average_rating, :using =&gt; :ratings_average&#x000A;  time :published_at&#x000A;  string :sort_title do&#x000A;    title.downcase.sub(/^(an?|the)\W+/, ''/) if title = self.title&#x000A;  end&#x000A;end</pre>
             <p>
-            See <a href="../classes/Sunspot.html#M000001">Sunspot.setup</a> for more
-            information.
+            See Sunspot.setup for more information.
             </p>
             <p>
             Note that in order for a class to be searchable, it must have an adapter
-            registered for itself or one of its subclasses. Adapters allow <a
-            href="../classes/Sunspot.html">Sunspot</a> to load objects out of
-            persistent storage, and to determine their primary key for indexing. <a
+            registered for itself or one of its subclasses. Adapters allow Sunspot to
+            load objects out of persistent storage, and to determine their primary key
+            for indexing. <a
             href="http://github.com/outoftime/sunspot_rails">Sunspot::Rails</a> comes
             with an adapter for ActiveRecord objects, but for other types of models you
             will need to define your own. See <a
@@ -157,11 +159,10 @@
             <h3>Search for objects:</h3>
             <pre>search = Sunspot.search Post do&#x000A;  keywords 'great pizza'&#x000A;  with :author_name, 'Mark Twain'&#x000A;  with(:blog_id).any_of [2, 14]&#x000A;  with(:category_ids).all_of [4, 10]&#x000A;  with(:published_at).less_than Time.now&#x000A;  any_of do&#x000A;    with(:expired_at).greater_than(Time.now)&#x000A;    with(:expired_at, nil)&#x000A;  end&#x000A;  without :title, 'Bad Title'&#x000A;  without bad_instance # specifically exclude this instance from results&#x000A;&#x000A;  paginate :page =&gt; 3, :per_page =&gt; 15&#x000A;  order_by :average_rating, :desc&#x000A;&#x000A;  facet :blog_id&#x000A;end</pre>
             <p>
-            See <a href="../classes/Sunspot.html#M000006">Sunspot.search</a> for more
-            information.
+            See Sunspot.search for more information.
             </p>
-            <h3>Get data from search:</h3>
-            <pre>search.results&#x000A;search.total&#x000A;search.page&#x000A;search.per_page&#x000A;search.facet(:blog_id)</pre>
+            <h3>Work with search results (Haml for readability):</h3>
+            <pre>.facets&#x000A;  ul.blog_facet&#x000A;    - @search.facet(:blog_id).rows.each do |row|&#x000A;      li.facet_row&#x000A;        = link_to(row.instance.name, params.merge(:blog_id =&gt; row.value))&#x000A;        %span.count== (#{row.count})&#x000A;.page_info== Displaying page #{@search.hits.page} of #{@search.hits.per_page} out of #{@search.total} results&#x000A;- @search.each_hit_with_result do |hit, post|&#x000A;  .search_result&#x000A;    %h3.title&#x000A;      = link_to(h(hit.stored(:title)), post_url(post))&#x000A;    - if hit.score&#x000A;      %span.relevance== (#{hit.score})&#x000A;    %p= hit.highlight(:description).format { |word| &quot;&lt;span class=\&quot;highlight\&quot;&gt;#{word}&lt;/span&gt;&quot; }&#x000A;.pagination= will_paginate(search.hits)</pre>
             <h2>About the API documentation</h2>
             <p>
             All of the methods documented in the RDoc are considered part of
@@ -172,10 +173,7 @@
             </p>
             <h2>Dependencies</h2>
             <ol>
-            <li>RSolr 0.9.6
-            
-            </li>
-            <li>Daemons 1.x
+            <li>RSolr
             
             </li>
             <li>Java 1.5+
@@ -183,8 +181,8 @@
             </li>
             </ol>
             <p>
-            <a href="../classes/Sunspot.html">Sunspot</a> has been tested with MRI
-            1.8.6 and 1.8.7, REE 1.8.6, YARV 1.9.1, and JRuby 1.2.0
+            Sunspot has been tested with MRI 1.8.6 and 1.8.7, REE 1.8.6, YARV 1.9.1,
+            and JRuby 1.2.0
             </p>
             <h2>Bugs</h2>
             <p>
@@ -203,8 +201,8 @@
             with an attached git patch. See below for how to create a git patch.
             
             </li>
-            <li>Patches should not make any changes in your patch to the gemspec task other
-            than adding/removing dependencies (e.g., changing the name, version, email,
+            <li>Patches should not make any changes to the gemspec task other than
+            adding/removing dependencies (e.g., changing the name, version, email,
             description, etc.)
             
             </li>
@@ -231,25 +229,74 @@
             </ul>
             <p>
             Here&#8217;s how to create a Git patch - assuming you&#8217;re pulling from
-            the canonical <a href="../classes/Sunspot.html">Sunspot</a> repository at
-            `upstream`:
+            the canonical Sunspot repository at `upstream`:
             </p>
-            <pre>git fetch upstream&#x000A;git format-patch upstre</pre>
-            <h2>Further Reading</h2>
+            <pre>git fetch upstream&#x000A;git format-patch --stdout upstream/master.. &gt; my-awesome.patch</pre>
+            <h2>Help and Support</h2>
+            <h3>Ask for help</h3>
             <ul>
-            <li><a href="../classes/Sunspot.html">Sunspot</a> Discussion: <a
+            <li>Sunspot Discussion: <a
+            href="mailto:ruby-sunspot@googlegroups.com">ruby-sunspot@googlegroups.com</a>
+            / <a
             href="http://groups.google.com/group/ruby-sunspot">groups.google.com/group/ruby-sunspot</a>
             
             </li>
-            <li>IRC: sunspot-ruby @ Freenode
+            <li>IRC: <a href="irc://chat.freenode.net/#sunspot-ruby">#sunspot-ruby @
+            Freenode</a>
             
             </li>
-            <li>Posts about <a href="../classes/Sunspot.html">Sunspot</a> from my tumblog:
-            <a href="http://outofti.me/tagged/sunspot">outofti.me/tagged/sunspot</a>
+            </ul>
+            <h3>Tutorials and Articles</h3>
+            <ul>
+            <li><a
+            href="http://tech.favoritemedium.com/2010/01/full-text-search-in-rails-with-sunspot.html">Full-text
+            search in Rails with Sunspot</a> (Tropical Software Observations)
             
             </li>
-            <li>Read about it on Linux Magazine: <a
-            href="http://www.linux-mag.com/id/7341">www.linux-mag.com/id/7341</a>
+            <li><a
+            href="http://therailworld.com/posts/23-Sunspot-Full-text-Search-for-Rails-Ruby">Sunspot
+            Full-text Search for Rails/Ruby</a> (The Rail World)
+            
+            </li>
+            <li><a href="http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/">A Few
+            Sunspot Tips</a> (spiral_code)
+            
+            </li>
+            <li><a href="http://www.linux-mag.com/id/7341">Sunspot: A Solr-Powered Search
+            Engine for Ruby</a> (Linux Magazine)
+            
+            </li>
+            <li><a
+            href="http://masonoise.wordpress.com/2010/02/06/using-sunspot-for-free-text-search-with-redis/">Using
+            Sunspot for Free-Text Search with Redis</a> (While I Pondered&#8230;)
+            
+            </li>
+            <li><a
+            href="http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/">Default
+            scope with Sunspot</a> (Cloudspace)
+            
+            </li>
+            <li><a
+            href="http://blog.trydionel.com/2010/02/06/testing-sunspot-with-cucumber/">Testing
+            Sunspot with Cucumber</a> (spiral_code)
+            
+            </li>
+            <li><a
+            href="http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails">Running
+            cucumber features with sunspot_rails</a> (Kabisa Blog)
+            
+            </li>
+            <li><a
+            href="http://www.untitledstartup.com/2010/01/how-to-use-twitter-lists-to-determine-influence/">How
+            To Use Twitter Lists to Determine Influence</a> (Untitled Startup)
+            
+            </li>
+            <li><a href="http://wiki.websolr.com/index.php/Sunspot_Quickstart">Sunspot
+            Quickstart</a> (WebSolr)
+            
+            </li>
+            <li><a href="http://www.kuahyeow.com/2009/08/solr-and-sunspot.html">Solr, and
+            Sunspot</a> (YT!)
             
             </li>
             </ul>
@@ -282,11 +329,17 @@
             <li>Tom Coleman (tom@thesnail.org)
             
             </li>
+            <li>Matt Mitchell (goodieboy@gmail.com)
+            
+            </li>
+            <li>Nathan Beyer (nbeyer@gmail.com)
+            
+            </li>
             </ul>
             <h2>License</h2>
             <p>
-            <a href="../classes/Sunspot.html">Sunspot</a> is distributed under the MIT
-            License, copyright &#169; 2008-2009 Mat Brown
+            Sunspot is distributed under the MIT License, copyright &#169; 2008-2009
+            Mat Brown
             </p>
           </div>
           <div id='section'>

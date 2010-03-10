@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Search::FieldFacet [Sunspot 0.10.6 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Search::FieldFacet [Sunspot 1.0.1 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/sunspot/search/field_facet_rb.html">lib/sunspot/search/field_facet.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search/field_facet.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search/field_facet.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -42,39 +42,68 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <p>
+            A <a href="FieldFacet.html">FieldFacet</a> is a facet whose rows are all
+            values for a certain field, in contrast to a <a
+            href="QueryFacet.html">QueryFacet</a>, whose rows represent arbitrary
+            queries.
+            </p>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000065">rows</a></li>
+              <li><a href="#M000081">field_name</a></li>
+              <li><a href="#M000082">rows</a></li>
             </ol>
           </div>
           <div id='section'>
-            <div id='aliases-list'>
-              <h2>External Aliases</h2>
-              <div class='name-list'>
-                <table summary='External aliases'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>name</td>
-                    <td>-&gt;</td>
-                    <td class='context-item-value'>field_name</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000065'>
-                <a name='M000065'>      </a>
+              <div class='public-instance method' id='method-M000081'>
+                <a name='M000081'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>rows</span>
+                  <span class='name'>field_name</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000065-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000081-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000065-source'><span class="ruby-comment cmt"># File lib/sunspot/search/field_facet.rb, line 11</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rows</span>&#x000A;        <span class="ruby-ivar">@rows</span> <span class="ruby-operator">||=</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-identifier">rows</span> = <span class="ruby-keyword kw">super</span>&#x000A;            <span class="ruby-identifier">has_query_facets</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">rows</span>.<span class="ruby-identifier">empty?</span>&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">facet_response</span>[<span class="ruby-value str">'facet_fields'</span>]&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">facet_response</span>[<span class="ruby-value str">'facet_fields'</span>][<span class="ruby-ivar">@field</span>.<span class="ruby-identifier">indexed_name</span>]&#x000A;                <span class="ruby-identifier">data</span>.<span class="ruby-identifier">each_slice</span>(<span class="ruby-value">2</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span>, <span class="ruby-identifier">count</span><span class="ruby-operator">|</span>&#x000A;                  <span class="ruby-identifier">rows</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">FacetRow</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@field</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>), <span class="ruby-identifier">count</span>, <span class="ruby-keyword kw">self</span>)&#x000A;                <span class="ruby-keyword kw">end</span>&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-identifier">sort_rows!</span>(<span class="ruby-identifier">rows</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_query_facets</span>&#x000A;            <span class="ruby-identifier">rows</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000081-source'><span class="ruby-comment cmt"># File lib/sunspot/search/field_facet.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">field_name</span>&#x000A;        <span class="ruby-ivar">@field</span>.<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000082'>
+                <a name='M000082'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>rows</span>
+                  <span class='arguments'>(options = {})</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Get the rows returned for this facet.
+                  </p>
+                  <h4>Options (options)</h4>
+                  <table>
+                  <tr><td valign="top">:verify:</td><td>Only return rows for which the referenced object exists in the data store.
+                  This option is ignored unless the field associated with this facet is
+                  configured with a :references argument.
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Returns</h4>
+                  <table>
+                  <tr><td valign="top">Array:</td><td>Array of <a href="FacetRow.html">FacetRow</a> objects
+                  
+                  </td></tr>
+                  </table>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000082-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000082-source'><span class="ruby-comment cmt"># File lib/sunspot/search/field_facet.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rows</span>(<span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verify</span>]&#x000A;          <span class="ruby-identifier">verified_rows</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-ivar">@rows</span> <span class="ruby-operator">||=</span>&#x000A;            <span class="ruby-keyword kw">begin</span>&#x000A;              <span class="ruby-identifier">rows</span> = <span class="ruby-keyword kw">super</span>&#x000A;              <span class="ruby-identifier">has_query_facets</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">rows</span>.<span class="ruby-identifier">empty?</span>&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">facet_response</span>[<span class="ruby-value str">'facet_fields'</span>]&#x000A;                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">facet_response</span>[<span class="ruby-value str">'facet_fields'</span>][<span class="ruby-identifier">key</span>]&#x000A;                  <span class="ruby-identifier">data</span>.<span class="ruby-identifier">each_slice</span>(<span class="ruby-value">2</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span>, <span class="ruby-identifier">count</span><span class="ruby-operator">|</span>&#x000A;                    <span class="ruby-identifier">row</span> = <span class="ruby-constant">FacetRow</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@field</span>.<span class="ruby-identifier">cast</span>(<span class="ruby-identifier">value</span>), <span class="ruby-identifier">count</span>, <span class="ruby-keyword kw">self</span>)&#x000A;                    <span class="ruby-identifier">rows</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">row</span>&#x000A;                  <span class="ruby-keyword kw">end</span>&#x000A;                <span class="ruby-keyword kw">end</span>&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;              <span class="ruby-identifier">sort_rows!</span>(<span class="ruby-identifier">rows</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_query_facets</span>&#x000A;              <span class="ruby-identifier">rows</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

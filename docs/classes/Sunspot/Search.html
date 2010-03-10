@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Search [Sunspot 0.10.6 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Search [Sunspot 1.0.1 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,31 +32,31 @@
         <ol class='paths'>
           <li>
             <a href="../../files/lib/sunspot/search/facet_row_rb.html">lib/sunspot/search/facet_row.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search/facet_row.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search/facet_row.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/search/hit_rb.html">lib/sunspot/search/hit.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search/hit.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search/hit.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/search/highlight_rb.html">lib/sunspot/search/highlight.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search/highlight.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search/highlight.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/search/query_facet_rb.html">lib/sunspot/search/query_facet.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search/query_facet.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search/query_facet.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/search/field_facet_rb.html">lib/sunspot/search/field_facet.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search/field_facet.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search/field_facet.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/search/date_facet_rb.html">lib/sunspot/search/date_facet.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search/date_facet.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search/date_facet.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/search_rb.html">lib/sunspot/search.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search.rb">view online</a>)
           </li>
           <li>
             <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
@@ -73,24 +73,23 @@
             <p>
             This class encapsulates the results of a Solr search. It provides access to
             search results, total result count, facets, and pagination information.
-            Instances of <a href="Search.html">Search</a> are returned by the <a
-            href="../Sunspot.html#M000006">Sunspot.search</a> and <a
-            href="../Sunspot.html#M000005">Sunspot.new_search</a> methods.
+            Instances of <a href="Search.html">Search</a> are returned by the
+            Sunspot.search and Sunspot.new_search methods.
             </p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000064">build</a></li>
-              <li><a href="#M000063">dynamic_facet</a></li>
-              <li><a href="#M000056">execute</a></li>
-              <li><a href="#M000057">execute!</a></li>
-              <li><a href="#M000062">facet</a></li>
-              <li><a href="#M000059">hits</a></li>
-              <li><a href="#M000060">raw_results</a></li>
-              <li><a href="#M000058">results</a></li>
-              <li><a href="#M000061">total</a></li>
+              <li><a href="#M000080">build</a></li>
+              <li><a href="#M000077">each_hit_with_result</a></li>
+              <li><a href="#M000072">execute</a></li>
+              <li><a href="#M000073">execute!</a></li>
+              <li><a href="#M000079">facet</a></li>
+              <li><a href="#M000075">hits</a></li>
+              <li><a href="#M000076">raw_results</a></li>
+              <li><a href="#M000074">results</a></li>
+              <li><a href="#M000078">total</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -114,8 +113,8 @@
                       
                       Query information for this search. If you wish to build the query without
                       using the search DSL, this method allows you to access the query API
-                      directly. See <a href="../Sunspot.html#M000005">Sunspot#new_search</a> for
-                      how to construct the search object in this case.
+                      directly. See Sunspot#new_search for how to construct the search object in
+                      this case.
                     </td>
                   </tr>
                 </table>
@@ -123,8 +122,8 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000064'>
-                <a name='M000064'>      </a>
+              <div class='public-instance method' id='method-M000080'>
+                <a name='M000080'>      </a>
                 <div class='synopsis'>
                   <span class='name'>build</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -132,58 +131,44 @@
                 <div class='description'>
                   <p>
                   Build this search using a DSL block. This method can be called more than
-                  once on an unexecuted search (e.g., <a
-                  href="../Sunspot.html#M000005">Sunspot.new_search</a>) in order to build a
+                  once on an unexecuted search (e.g., Sunspot.new_search) in order to build a
                   search incrementally.
                   </p>
                   <h3>Example</h3>
                   <pre>search = Sunspot.new_search(Post)&#x000A;search.build do&#x000A;  with(:published_at).less_than Time.now&#x000A;end&#x000A;search.execute!</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000064-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000080-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000064-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 151</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(<span class="ruby-identifier">dsl</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000080-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 197</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(<span class="ruby-identifier">dsl</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000063'>
-                <a name='M000063'>      </a>
+              <div class='public-instance method' id='method-M000077'>
+                <a name='M000077'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>dynamic_facet</span>
-                  <span class='arguments'>(base_name, dynamic_name)</span>
+                  <span class='name'>each_hit_with_result</span>
+                  <span class='arguments'>() {|hit, hit.result| ...}</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Get the facet object for a given dynamic field. This dynamic field will
-                  need to have been requested as a field facet inside the search block.
+                  Convenience method to iterate over hit and result objects. Block is yielded
+                  a Sunspot::Server::Hit instance and a Sunspot::Server::Result instance.
                   </p>
-                  <h4>Parameters</h4>
-                  <table>
-                  <tr><td valign="top">base_name<Symbol>:</td><td>Base name of the dynamic field definiton (as specified in the setup block)
-                  
-                  </td></tr>
-                  <tr><td valign="top">dynamic_name<Symbol>:</td><td>Dynamic field name to facet on
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Returns</h4>
-                  <table>
-                  <tr><td valign="top">Sunspot::Facet:</td><td>Facet object for given dynamic field
-                  
-                  </td></tr>
-                  </table>
-                  <h4>Example</h4>
-                  <pre>search = Sunspot.search(Post) do&#x000A;  dynamic :custom do&#x000A;    facet :cuisine&#x000A;  end&#x000A;end&#x000A;search.dynamic_facet(:custom, :cuisine)&#x000A;  #=&gt; Facet for the dynamic field :cuisine in the :custom field definition</pre>
+                  <p>
+                  Note that this method iterates over verified hits (see <a
+                  href="Search.html#M000075">hits</a> method for more information).
+                  </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000063-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000077-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000063-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 120</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dynamic_facet</span>(<span class="ruby-identifier">base_name</span>, <span class="ruby-identifier">dynamic_name</span>)&#x000A;      <span class="ruby-identifier">facet</span>(<span class="ruby-identifier">:&quot;#{base_name}:#{dynamic_name}&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000077-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 96</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_hit_with_result</span>&#x000A;      <span class="ruby-identifier">verified_hits</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hit</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">hit</span>, <span class="ruby-identifier">hit</span>.<span class="ruby-identifier">result</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000056'>
-                <a name='M000056'>      </a>
+              <div class='public-instance method' id='method-M000072'>
+                <a name='M000072'>      </a>
                 <div class='synopsis'>
                   <span class='name'>execute</span>
                   <span class='arguments'>()</span>
@@ -191,37 +176,35 @@
                 <div class='description'>
                   <p>
                   Execute the search on the Solr instance and store the results. If you use
-                  <a href="../Sunspot.html#M000006">Sunspot#search()</a> to construct your
-                  searches, there is no need to call this method as it has already been
-                  called. If you use <a
-                  href="../Sunspot.html#M000005">Sunspot#new_search()</a>, you will need to
-                  call this method after building the query.
+                  Sunspot#search() to construct your searches, there is no need to call this
+                  method as it has already been called. If you use Sunspot#new_search(), you
+                  will need to call this method after building the query.
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000056-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000072-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000056-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 33</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>&#x000A;      <span class="ruby-identifier">reset</span>&#x000A;      <span class="ruby-identifier">params</span> = <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">to_params</span>&#x000A;      <span class="ruby-ivar">@solr_result</span> = <span class="ruby-ivar">@connection</span>.<span class="ruby-identifier">select</span>(<span class="ruby-identifier">params</span>)&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000072-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 33</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>&#x000A;      <span class="ruby-identifier">reset</span>&#x000A;      <span class="ruby-identifier">params</span> = <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">to_params</span>&#x000A;      <span class="ruby-ivar">@solr_result</span> = <span class="ruby-ivar">@connection</span>.<span class="ruby-identifier">select</span>(<span class="ruby-identifier">params</span>)&#x000A;      <span class="ruby-keyword kw">self</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000057'>
-                <a name='M000057'>      </a>
+              <div class='public-instance method' id='method-M000073'>
+                <a name='M000073'>      </a>
                 <div class='synopsis'>
                   <span class='name'>execute!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Alias for <a href="Search.html#M000056">execute</a>
+                  Alias for <a href="Search.html#M000072">execute</a>
                   </p>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000062'>
-                <a name='M000062'>      </a>
+              <div class='public-instance method' id='method-M000079'>
+                <a name='M000079'>      </a>
                 <div class='synopsis'>
                   <span class='name'>facet</span>
-                  <span class='arguments'>(name)</span>
+                  <span class='arguments'>(name, dynamic_name = nil)</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -229,19 +212,32 @@
                   given to a query facet, or the field name of a field facet. Returns a
                   Sunspot::Facet object.
                   </p>
+                  <h4>Parameters</h4>
+                  <table>
+                  <tr><td valign="top">name<Symbol>:</td><td>Name of the field to return the facet for, or the name given to the query
+                  facet when the search was constructed.
+                  
+                  </td></tr>
+                  <tr><td valign="top">dynamic_name<Symbol>:</td><td>If faceting on a dynamic field, this is the dynamic portion of the field
+                  name.
+                  
+                  </td></tr>
+                  </table>
+                  <h4>Example:</h4>
+                  <pre>search = Sunspot.search(Post) do&#x000A;  facet :category_ids&#x000A;  dynamic :custom do&#x000A;    facet :cuisine&#x000A;  end&#x000A;  facet :age do&#x000A;    row 'Less than a month' do&#x000A;      with(:published_at).greater_than(1.month.ago)&#x000A;    end&#x000A;    row 'Less than a year' do&#x000A;      with(:published_at, 1.year.ago..1.month.ago)&#x000A;    end&#x000A;    row 'More than a year' do&#x000A;      with(:published_at).less_than(1.year.ago)&#x000A;    end&#x000A;  end&#x000A;end&#x000A;search.facet(:category_ids)&#x000A;  #=&gt; Facet for :category_ids field&#x000A;search.facet(:custom, :cuisine)&#x000A;  #=&gt; Facet for the dynamic field :cuisine in the :custom field definition&#x000A;search.facet(:age)&#x000A;  #=&gt; Facet for the query facet named :age</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000062-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000079-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000062-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 90</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">facet</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-ivar">@facets</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000079-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 153</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">facet</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">dynamic_name</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dynamic_name</span>&#x000A;          <span class="ruby-ivar">@facets</span>[<span class="ruby-identifier">:&quot;#{name}:#{dynamic_name}&quot;</span>]&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-ivar">@facets</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000059'>
-                <a name='M000059'>      </a>
+              <div class='public-instance method' id='method-M000075'>
+                <a name='M000075'>      </a>
                 <div class='synopsis'>
                   <span class='name'>hits</span>
-                  <span class='arguments'>()</span>
+                  <span class='arguments'>(options = {})</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -249,6 +245,15 @@
                   href="Search/Hit.html">Hit</a> objects that contain the class name, primary
                   key, keyword relevance score (if applicable), and any stored fields.
                   </p>
+                  <h4>Options (options)</h4>
+                  <table>
+                  <tr><td valign="top">:verify:</td><td>Only return hits that reference objects that actually exist in the data
+                  store. This causes results to be eager-loaded from the data store, unlike
+                  the normal behavior of this method, which only loads the referenced results
+                  when <a href="Search/Hit.html#M000089">Hit#result</a> is first called.
+                  
+                  </td></tr>
+                  </table>
                   <h4>Returns</h4>
                   <table>
                   <tr><td valign="top">Array:</td><td>Ordered collection of <a href="Search/Hit.html">Hit</a> objects
@@ -257,26 +262,26 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000059-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000075-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000059-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 69</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hits</span>&#x000A;      <span class="ruby-ivar">@hits</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">solr_response</span>[<span class="ruby-value str">'docs'</span>].<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">doc</span><span class="ruby-operator">|</span> <span class="ruby-constant">Hit</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">highlights_for</span>(<span class="ruby-identifier">doc</span>), <span class="ruby-keyword kw">self</span>) }&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000075-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 74</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hits</span>(<span class="ruby-identifier">options</span> = {})&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verify</span>]&#x000A;        <span class="ruby-identifier">verified_hits</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-ivar">@hits</span> <span class="ruby-operator">||=</span>&#x000A;          <span class="ruby-identifier">maybe_will_paginate</span>(&#x000A;            <span class="ruby-identifier">solr_response</span>[<span class="ruby-value str">'docs'</span>].<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">doc</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-constant">Hit</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">highlights_for</span>(<span class="ruby-identifier">doc</span>), <span class="ruby-identifier">distance_for</span>(<span class="ruby-identifier">doc</span>), <span class="ruby-keyword kw">self</span>)&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          )&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000060'>
-                <a name='M000060'>      </a>
+              <div class='public-instance method' id='method-M000076'>
+                <a name='M000076'>      </a>
                 <div class='synopsis'>
                   <span class='name'>raw_results</span>
-                  <span class='arguments'>()</span>
+                  <span class='arguments'>(options = {})</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Alias for <a href="Search.html#M000059">hits</a>
+                  Alias for <a href="Search.html#M000075">hits</a>
                   </p>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000058'>
-                <a name='M000058'>      </a>
+              <div class='public-instance method' id='method-M000074'>
+                <a name='M000074'>      </a>
                 <div class='synopsis'>
                   <span class='name'>results</span>
                   <span class='arguments'>()</span>
@@ -287,6 +292,10 @@
                   available, the results will be a WillPaginate::Collection instance; if not,
                   it will be a vanilla Array.
                   </p>
+                  <p>
+                  If not all of the results referenced by the Solr hits actually exist in the
+                  data store, Sunspot will only return the results that do exist.
+                  </p>
                   <h4>Returns</h4>
                   <table>
                   <tr><td valign="top">WillPaginate::Collection or Array:</td><td>Instantiated result objects
@@ -295,14 +304,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000058-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000074-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000058-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 50</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">results</span>&#x000A;      <span class="ruby-ivar">@results</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">page</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">WillPaginate</span><span class="ruby-operator">::</span><span class="ruby-constant">Collection</span>)&#x000A;        <span class="ruby-constant">WillPaginate</span><span class="ruby-operator">::</span><span class="ruby-constant">Collection</span>.<span class="ruby-identifier">create</span>(<span class="ruby-ivar">@query</span>.<span class="ruby-identifier">page</span>, <span class="ruby-ivar">@query</span>.<span class="ruby-identifier">per_page</span>, <span class="ruby-identifier">total</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">pager</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">pager</span>.<span class="ruby-identifier">replace</span>(<span class="ruby-identifier">hits</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">hit</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hit</span>.<span class="ruby-identifier">instance</span> })&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">hits</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">hit</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hit</span>.<span class="ruby-identifier">instance</span> }&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000074-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 53</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">results</span>&#x000A;      <span class="ruby-ivar">@results</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">maybe_will_paginate</span>(<span class="ruby-identifier">verified_hits</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">hit</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hit</span>.<span class="ruby-identifier">instance</span> })&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000061'>
-                <a name='M000061'>      </a>
+              <div class='public-instance method' id='method-M000078'>
+                <a name='M000078'>      </a>
                 <div class='synopsis'>
                   <span class='name'>total</span>
                   <span class='arguments'>()</span>
@@ -319,10 +328,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000061-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000078-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000061-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 81</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">total</span>&#x000A;      <span class="ruby-ivar">@total</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">solr_response</span>[<span class="ruby-value str">'numFound'</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000078-source'><span class="ruby-comment cmt"># File lib/sunspot/search.rb, line 109</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">total</span>&#x000A;      <span class="ruby-ivar">@total</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">solr_response</span>[<span class="ruby-value str">'numFound'</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

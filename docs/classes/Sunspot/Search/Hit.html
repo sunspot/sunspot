@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Search::Hit [Sunspot 0.10.6 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Search::Hit [Sunspot 1.0.1 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/sunspot/search/hit_rb.html">lib/sunspot/search/hit.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/search/hit.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/search/hit.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -54,9 +54,11 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000069">highlights</a></li>
-              <li><a href="#M000071">instance</a></li>
-              <li><a href="#M000070">stored</a></li>
+              <li><a href="#M000087">highlight</a></li>
+              <li><a href="#M000086">highlights</a></li>
+              <li><a href="#M000090">instance</a></li>
+              <li><a href="#M000089">result</a></li>
+              <li><a href="#M000088">stored</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -103,8 +105,27 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000069'>
-                <a name='M000069'>      </a>
+              <div class='public-instance method' id='method-M000087'>
+                <a name='M000087'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>highlight</span>
+                  <span class='arguments'>(field_name)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Return the first highlight found for a given field, or nil if there is
+                  none.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000087-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000087-source'><span class="ruby-comment cmt"># File lib/sunspot/search/hit.rb, line 59</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">highlight</span>(<span class="ruby-identifier">field_name</span>)&#x000A;        <span class="ruby-identifier">highlights</span>(<span class="ruby-identifier">field_name</span>).<span class="ruby-identifier">first</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000086'>
+                <a name='M000086'>      </a>
                 <div class='synopsis'>
                   <span class='name'>highlights</span>
                   <span class='arguments'>(field_name = nil)</span>
@@ -116,16 +137,28 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000069-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000086-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000069-source'><span class="ruby-comment cmt"># File lib/sunspot/search/hit.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">highlights</span>(<span class="ruby-identifier">field_name</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">nil?</span>&#x000A;          <span class="ruby-identifier">highlights_cache</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">flatten</span> &#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">highlights_cache</span>[<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;        <span class="ruby-keyword kw">end</span> <span class="ruby-operator">||</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000086-source'><span class="ruby-comment cmt"># File lib/sunspot/search/hit.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">highlights</span>(<span class="ruby-identifier">field_name</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">nil?</span>&#x000A;          <span class="ruby-identifier">highlights_cache</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">flatten</span> &#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">highlights_cache</span>[<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;        <span class="ruby-keyword kw">end</span> <span class="ruby-operator">||</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000071'>
-                <a name='M000071'>      </a>
+              <div class='public-instance method' id='method-M000090'>
+                <a name='M000090'>      </a>
                 <div class='synopsis'>
                   <span class='name'>instance</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Alias for <a href="Hit.html#M000089">result</a>
+                  </p>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000089'>
+                <a name='M000089'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>result</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
@@ -136,17 +169,17 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000071-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000089-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000071-source'><span class="ruby-comment cmt"># File lib/sunspot/search/hit.rb, line 75</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@instance</span>.<span class="ruby-identifier">nil?</span>&#x000A;          <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">populate_hits!</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-ivar">@instance</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000089-source'><span class="ruby-comment cmt"># File lib/sunspot/search/hit.rb, line 93</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">result</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@result</span>.<span class="ruby-identifier">nil?</span>&#x000A;          <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">populate_hits</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-ivar">@result</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000070'>
-                <a name='M000070'>      </a>
+              <div class='public-instance method' id='method-M000088'>
+                <a name='M000088'>      </a>
                 <div class='synopsis'>
                   <span class='name'>stored</span>
-                  <span class='arguments'>(field_name)</span>
+                  <span class='arguments'>(field_name, dynamic_field_name = nil)</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -160,13 +193,17 @@
                   <tr><td valign="top">field_name<Symbol>:</td><td>The name of the field for which to retrieve the stored value.
                   
                   </td></tr>
+                  <tr><td valign="top">dynamic_field_name<Symbol>:</td><td>If you want to access a stored dynamic field, this should be the dynamic
+                  component of the field name.
+                  
+                  </td></tr>
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000070-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000088-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000070-source'><span class="ruby-comment cmt"># File lib/sunspot/search/hit.rb, line 66</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stored</span>(<span class="ruby-identifier">field_name</span>)&#x000A;        <span class="ruby-ivar">@stored_cache</span>[<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">stored_value</span>(<span class="ruby-identifier">field_name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000088-source'><span class="ruby-comment cmt"># File lib/sunspot/search/hit.rb, line 77</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stored</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">dynamic_field_name</span> = <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">field_key</span> =&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dynamic_field_name</span>&#x000A;            [<span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">dynamic_field_name</span>.<span class="ruby-identifier">to_sym</span>]&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">field_name</span>.<span class="ruby-identifier">to_sym</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@stored_cache</span>[<span class="ruby-identifier">field_key</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@stored_cache</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">field_key</span>)&#x000A;        <span class="ruby-ivar">@stored_cache</span>[<span class="ruby-identifier">field_key</span>] = <span class="ruby-identifier">stored_value</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-identifier">dynamic_field_name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Adapters [Sunspot 0.10.6 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Adapters [Sunspot 1.0.1 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../files/lib/sunspot/adapters_rb.html">lib/sunspot/adapters.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v0.10.6/lib/sunspot/adapters.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.1/lib/sunspot/adapters.rb">view online</a>)
           </li>
         </ol>
       </div>
@@ -40,19 +40,17 @@
         <div id='text'>
           <div id='description'>
             <p>
-            <a href="../Sunspot.html">Sunspot</a> works by saving references to the
-            primary key (or natural ID) of each indexed object, and then retrieving the
-            objects from persistent storage when their IDs are referenced in search
-            results. In order for <a href="../Sunspot.html">Sunspot</a> to know what an
-            object&#8217;s primary key is, and how to retrieve objects from persistent
-            storage given a primary key, an adapter must be registered for that
-            object&#8217;s class or one of its superclasses (for instance, an adapter
-            registered for ActiveRecord::Base would be used for all ActiveRecord
-            models).
+            Sunspot works by saving references to the primary key (or natural ID) of
+            each indexed object, and then retrieving the objects from persistent
+            storage when their IDs are referenced in search results. In order for
+            Sunspot to know what an object&#8217;s primary key is, and how to retrieve
+            objects from persistent storage given a primary key, an adapter must be
+            registered for that object&#8217;s class or one of its superclasses (for
+            instance, an adapter registered for ActiveRecord::Base would be used for
+            all ActiveRecord models).
             </p>
             <p>
-            To provide <a href="../Sunspot.html">Sunspot</a> with this ability,
-            adapters must have two roles:
+            To provide Sunspot with this ability, adapters must have two roles:
             </p>
             <table>
             <tr><td valign="top">Data accessor:</td><td>A subclass of <a
@@ -67,18 +65,18 @@
             <tr><td valign="top">Instance adapter:</td><td>A subclass of <a
             href="Adapters/InstanceAdapter.html">Sunspot::Adapters::InstanceAdapter</a>,
             this object is instantiated with a particular instance. Its only job is to
-            tell <a href="../Sunspot.html">Sunspot</a> what the object&#8217;s primary
-            key is, by implementing the id() method.
+            tell Sunspot what the object&#8217;s primary key is, by implementing the
+            id() method.
             
             </td></tr>
             </table>
             <p>
             <a href="Adapters.html">Adapters</a> are registered by registering their
-            two components, telling <a href="../Sunspot.html">Sunspot</a> that they are
-            available for one or more classes, and all of their subclasses. See <a
-            href="Adapters/DataAccessor.html#M000023">Sunspot::Adapters::DataAccessor.register</a>
+            two components, telling Sunspot that they are available for one or more
+            classes, and all of their subclasses. See <a
+            href="Adapters/DataAccessor.html#M000004">Sunspot::Adapters::DataAccessor.register</a>
             and <a
-            href="Adapters/InstanceAdapter.html#M000021">Sunspot::Adapters::InstanceAdapter.register</a>
+            href="Adapters/InstanceAdapter.html#M000002">Sunspot::Adapters::InstanceAdapter.register</a>
             for the details.
             </p>
             <p>
