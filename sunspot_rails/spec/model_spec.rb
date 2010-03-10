@@ -154,6 +154,14 @@ describe 'ActiveRecord mixin' do
       end.results.should == [@post]
     end
 
+    it 'should use an ActiveRecord object for coordinates' do
+      post = Post.new(:title => 'Test Post')
+      post.location = Location.create!(:lat => 40.0, :lng => -70.0)
+      post.save
+      post.index!
+      Post.search { near([40.0, -70.0], :distance => 1) }.results.should == [post]
+    end
+
   end
 
   describe 'search_ids()' do
