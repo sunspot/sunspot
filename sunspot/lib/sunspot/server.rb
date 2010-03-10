@@ -2,8 +2,8 @@ require 'escape'
 require 'set'
 require 'tempfile'
 
-module Sunspot #:nodoc:
-  class Server
+module Sunspot
+  class Server #:nodoc:
     # Raised if #stop is called but the server is not running
     ServerError = Class.new(RuntimeError)
     AlreadyRunningError = Class.new(ServerError)

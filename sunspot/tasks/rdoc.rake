@@ -20,7 +20,7 @@ namespace :doc do
   desc 'Generate rdoc and move into pages directory'
   task :publish => :redoc do
     doc_dir = File.join(File.dirname(__FILE__), '..', 'doc')
-    publish_dir = File.join(File.dirname(__FILE__), '..', 'pages', 'docs')
+    publish_dir = File.join(File.dirname(__FILE__), '..', '..', 'pages', 'docs')
     FileUtils.rm_rf(publish_dir) if File.exist?(publish_dir)
     FileUtils.cp_r(doc_dir, publish_dir)
   end
