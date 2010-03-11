@@ -96,20 +96,30 @@ module Sunspot #:nodoc:
         #
         # ==== Example
         #
-        #   Post.search do
+        #   Post.search(:include => [:blog]) do
         #     keywords 'best pizza'
         #     with :blog_id, 1
         #     order :updated_at, :desc
         #     facet :category_ids
         #   end
         #
+        # ==== Options
+        #
+        # :include:: Specify associations to eager load
         #
         # ==== Returns
         #
         # Sunspot::Search:: Object containing results, totals, facets, etc.
         #
-        def search(&block)
-          Sunspot.search(self, &block)
+        def search(options = {}, &block)
+          options.assert_valid_keys(:include)
+          search = Sunspot.new_search(self, &block)
+          if options[:include]
+            search.build do |query|
+              query.data_accessor_for(self).include = options[:include]
+            end
+          end
+          search.execute
         end
 
         # 
