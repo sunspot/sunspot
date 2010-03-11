@@ -91,6 +91,20 @@ module Sunspot
         File.join(::Rails.root, 'log', "sunspot-solr-#{::Rails.env}.log")
       end
 
+      # 
+      # Minimum Java heap size for Solr
+      #
+      def min_memory
+        configuration.min_memory
+      end
+
+      # 
+      # Maximum Java heap size for Solr
+      #
+      def max_memory
+        configuration.max_memory
+      end
+
       private
 
       #

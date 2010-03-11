@@ -9,6 +9,8 @@ module Sunspot #:nodoc:
     #     solr:
     #       hostname: localhost
     #       port: 8982
+    #       min_memory: 512M
+    #       max_memory: 1G
     #   test:
     #     solr:
     #       hostname: localhost
@@ -193,6 +195,20 @@ module Sunspot #:nodoc:
           else
             File.join(::Rails.root, 'solr')
           end
+      end
+
+      # 
+      # Minimum java heap size for Solr instance
+      #
+      def min_memory
+        @min_memory ||= user_configuration_from_key('solr', 'min_memory')
+      end
+
+      # 
+      # Maximum java heap size for Solr instance
+      #
+      def max_memory
+        @max_memory ||= user_configuration_from_key('solr', 'max_memory')
       end
       
       private
