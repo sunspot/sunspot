@@ -1,3 +1,10 @@
+== 1.0.2 2010-03-11
+* Restore Hit#distance for result geo distance
+* Remove :distance special sort
+* Quote reserved keywords in boolean queries
+* Regression spec for distance sorting with restriction
+* Add Search#facets accessor to retrieve all facets
+
 == 1.0.1 2010-03-05
 * Copy all needed config files when sunspot-installer run with force option
 

@@ -1,7 +1,14 @@
-== 1.0.1
+== 1.0.2 2010-03-11
+* Allow use of ActiveRecord object for coordinates extraction
+* Works with non-standard primary keys
+* Add :include, :select options to Searchable::search()
+* Allow specification of min_memory and max_memory in config/sunspot.yml
+* Searchable now more considerate of model namespaces
+
+== 1.0.1 2010-03-05
 * Fix Solr logging compatibility with RSolr 0.12.1
 
-== 1.0.0
+== 1.0.0 2010-03-03
 * Sunspot::Rails::Server subclasses Sunspot::Server; no longer needs to shell out
 * Use Sunspot built-in session proxies in Sunspot::Rails
 * Sunspot::Rails adapter compatible with assumed inconsistency
