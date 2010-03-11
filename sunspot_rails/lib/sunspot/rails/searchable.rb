@@ -9,7 +9,9 @@ module Sunspot #:nodoc:
     module Searchable
       class <<self
         def included(base) #:nodoc:
-          base.module_eval { extend(ActsAsMethods) }
+          base.module_eval do
+            extend(ActsAsMethods)
+          end
         end
       end
 
@@ -89,6 +91,18 @@ module Sunspot #:nodoc:
       end
 
       module ClassMethods
+        def self.extended(base) #:nodoc:
+          class <<base
+            alias_method :search, :solr_search unless method_defined? :search
+            alias_method :search_ids, :solr_search_ids unless method_defined? :search_ids
+            alias_method :remove_all_from_index, :solr_remove_all_from_index unless method_defined? :remove_all_from_index
+            alias_method :remove_all_from_index!, :solr_remove_all_from_index! unless method_defined? :remove_all_from_index!
+            alias_method :reindex, :solr_reindex unless method_defined? :reindex
+            alias_method :index, :solr_index unless method_defined? :index
+            alias_method :index_orphans, :solr_index_orphans unless method_defined? :index_orphans
+            alias_method :clean_index_orphans, :solr_clean_index_orphans unless method_defined? :clean_index_orphans
+          end
+        end
         # 
         # Search for instances of this class in Solr. The block is delegated to
         # the Sunspot.search method - see the Sunspot documentation for the full
@@ -111,7 +125,7 @@ module Sunspot #:nodoc:
         #
         # Sunspot::Search:: Object containing results, totals, facets, etc.
         #
-        def search(options = {}, &block)
+        def solr_search(options = {}, &block)
           options.assert_valid_keys(:include)
           search = Sunspot.new_search(self, &block)
           if options[:include]
@@ -132,14 +146,14 @@ module Sunspot #:nodoc:
         #
         # Array:: Array of IDs, in the order returned by the search
         #
-        def search_ids(&block)
-          search(&block).raw_results.map { |raw_result| raw_result.primary_key.to_i }
+        def solr_search_ids(&block)
+          solr_search(&block).raw_results.map { |raw_result| raw_result.primary_key.to_i }
         end
 
         # 
         # Remove instances of this class from the Solr index.
         #
-        def remove_all_from_index
+        def solr_remove_all_from_index
           Sunspot.remove_all(self)
         end
 
@@ -148,7 +162,7 @@ module Sunspot #:nodoc:
         # commit.
         #
         #
-        def remove_all_from_index!
+        def solr_remove_all_from_index!
           Sunspot.remove_all!(self)
         end
 
@@ -158,9 +172,9 @@ module Sunspot #:nodoc:
         #
         # See #index for information on options, etc.
         #
-        def reindex(options = {})
-          remove_all_from_index
-          index(options)
+        def solr_reindex(options = {})
+          solr_remove_all_from_index
+          solr_index(options)
         end
 
         #
@@ -201,7 +215,7 @@ module Sunspot #:nodoc:
         #   # include the associated +author+ object when loading to index
         #   Post.index(:include => :author) 
         #
-        def index(opts={})
+        def solr_index(opts={})
           options = { :batch_size => 500, :batch_commit => true, :include => [], :first_id => 0}.merge(opts)
           unless options[:batch_size]
             Sunspot.index!(all(:include => options[:include]))
@@ -211,7 +225,7 @@ module Sunspot #:nodoc:
             record_count = count
             last_id = options[:first_id]
             while(offset < record_count)
-              benchmark options[:batch_size], counter do
+              solr_benchmark options[:batch_size], counter do
                 records = all(:include => options[:include], :conditions => ["#{table_name}.#{primary_key} > ?", last_id], :limit => options[:batch_size], :order => primary_key)
                 Sunspot.index(records)
                 last_id = records.last.id
@@ -234,9 +248,9 @@ module Sunspot #:nodoc:
         # ==== Returns
         #
         # Array:: Collection of IDs that exist in Solr but not in the database
-        def index_orphans
+        def solr_index_orphans
           count = self.count
-          indexed_ids = search_ids { paginate(:page => 1, :per_page => count) }.to_set
+          indexed_ids = solr_search_ids { paginate(:page => 1, :per_page => count) }.to_set
           all(:select => 'id').each do |object|
             indexed_ids.delete(object.id)
           end
@@ -249,11 +263,11 @@ module Sunspot #:nodoc:
         # circumstances, this should not be necessary; this method is provided
         # in case something goes wrong.
         #
-        def clean_index_orphans
-          index_orphans.each do |id|
+        def solr_clean_index_orphans
+          solr_index_orphans.each do |id|
             new do |fake_instance|
               fake_instance.id = id
-            end.remove_from_index
+            end.solr_remove_from_index
           end
         end
 
@@ -274,7 +288,7 @@ module Sunspot #:nodoc:
         # 
         # Does some logging for benchmarking indexing performance
         #
-        def benchmark(batch_size, counter,  &block)
+        def solr_benchmark(batch_size, counter,  &block)
           start = Time.now
           logger.info("[#{Time.now}] Start Indexing")
           yield
@@ -285,6 +299,14 @@ module Sunspot #:nodoc:
       end
 
       module InstanceMethods
+        def self.included(base) #:nodoc:
+          base.module_eval do
+            alias_method :index, :solr_index unless method_defined? :index
+            alias_method :index!, :solr_index! unless method_defined? :index!
+            alias_method :remove_from_index, :solr_remove_from_index unless method_defined? :remove_from_index
+            alias_method :remove_from_index!, :solr_remove_from_index! unless method_defined? :remove_from_index!
+          end
+        end
         # 
         # Index the model in Solr. If the model is already indexed, it will be
         # updated. Using the defaults, you will usually not need to call this
@@ -293,14 +315,14 @@ module Sunspot #:nodoc:
         # ClassMethods#searchable), this method allows you to manage indexing
         # manually.
         #
-        def index
+        def solr_index
           Sunspot.index(self)
         end
 
         # 
         # Index the model in Solr and immediately commit. See #index
         #
-        def index!
+        def solr_index!
           Sunspot.index!(self)
         end
         
@@ -311,7 +333,7 @@ module Sunspot #:nodoc:
         # (which is not recommended!), you can use this method to manage removal
         # manually.
         #
-        def remove_from_index
+        def solr_remove_from_index
           Sunspot.remove(self)
         end
 
@@ -319,7 +341,7 @@ module Sunspot #:nodoc:
         # Remove the model from the Solr index and commit immediately. See
         # #remove_from_index
         #
-        def remove_from_index!
+        def solr_remove_from_index!
           Sunspot.remove!(self)
         end
 
@@ -337,7 +359,7 @@ module Sunspot #:nodoc:
 
         def maybe_auto_index
           if @marked_for_auto_indexing
-            index
+            solr_index
             remove_instance_variable(:@marked_for_auto_indexing)
           end
         end

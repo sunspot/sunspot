@@ -249,6 +249,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 - Brandon Keepers (brandon@opensoul.org)
 - Paul Canavese (paul@canavese.org)
 - John Eberly (jeberly@elctech.com)
+- Gert Thiel (gertthiel@gmail.com)
 
 == License
 
