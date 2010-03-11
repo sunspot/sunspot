@@ -2,8 +2,6 @@ require 'rubygems'
 require 'fileutils'
 require 'nokogiri'
 
-require 'ruby-debug'
-
 module Sunspot
   class Installer
     class SolrconfigUpdater
