@@ -17,6 +17,17 @@ describe 'faceting', :type => :search do
     result.facet('title').field_name.should == :title
   end
 
+  it 'returns all facets specified by search' do
+    stub_facet(:title_ss, { 'Author 1' => 1 })
+    stub_facet(:blog_id_i, { '1' => 3 })
+    result = session.search(Post) do
+      facet :title
+      facet :blog_id
+    end
+    result.facets.first.field_name.should == :title
+    result.facets.last.field_name.should == :blog_id
+  end
+
   it 'returns string facet' do
     stub_facet(:title_ss, 'Author 1' => 2, 'Author 2' => 1)
     result = session.search Post do

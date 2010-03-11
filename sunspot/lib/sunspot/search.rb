@@ -11,16 +11,18 @@ module Sunspot
   # Sunspot.new_search methods.
   #
   class Search
-    # Query information for this search. If you wish to build the query without
-    # using the search DSL, this method allows you to access the query API
-    # directly. See Sunspot#new_search for how to construct the search object
-    # in this case.
-    attr_reader :query 
+    attr_reader :query #:nodoc:
+    # 
+    # Retrieve all facet objects defined for this search, in order they were
+    # defined. To retrieve an individual facet by name, use #facet()
+    #
+    attr_reader :facets
 
     def initialize(connection, setup, query, configuration) #:nodoc:
       @connection, @setup, @query = connection, setup, query
       @query.paginate(1, configuration.pagination.default_per_page)
-      @facets = {}
+      @facets = []
+      @facets_by_name = {}
     end
 
     #
@@ -153,9 +155,9 @@ module Sunspot
     def facet(name, dynamic_name = nil)
       if name
         if dynamic_name
-          @facets[:"#{name}:#{dynamic_name}"]
+          @facets_by_name[:"#{name}:#{dynamic_name}"]
         else
-          @facets[name.to_sym]
+          @facets_by_name[name.to_sym]
         end
       end
     end
@@ -223,17 +225,17 @@ module Sunspot
     end
 
     def add_field_facet(field, options = {}) #:nodoc:
-      name = (options[:name] || field.name).to_sym
-      @facets[name] = FieldFacet.new(field, self, options)
+      name = (options[:name] || field.name)
+      add_facet(name, FieldFacet.new(field, self, options))
     end
 
     def add_date_facet(field, options) #:nodoc:
-      name = (options[:name] || field.name).to_sym
-      @facets[name] = DateFacet.new(field, self, options)
+      name = (options[:name] || field.name)
+      add_facet(name, DateFacet.new(field, self, options))
     end
 
     def add_query_facet(name, options) #:nodoc:
-      @facets[name] = QueryFacet.new(name, self, options)
+      add_facet(name, QueryFacet.new(name, self, options))
     end
 
     def facet_response #:nodoc:
@@ -279,6 +281,11 @@ module Sunspot
     # Clear out all the cached ivars so the search can be called again.
     def reset
       @results = @hits = @verified_hits = @total = @solr_response = @doc_ids = nil
+    end
+
+    def add_facet(name, facet)
+      @facets << facet
+      @facets_by_name[name.to_sym] = facet
     end
   end
 end
