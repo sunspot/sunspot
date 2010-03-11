@@ -47,6 +47,14 @@ describe 'local search' do
     end
     search.results.should == [@posts[1]]
   end
+
+  it 'should perform a radial search with attribute scoping and distance sorting' do
+    search = Sunspot.search(Post) do |query|
+      query.near(ORIGIN, :sort => true)
+      query.with(:title, 'teacup')
+    end
+    search.results.should == [@posts[1], @posts[4]]
+  end
   
   it 'should order by arbitrary field' do
     search = Sunspot.search(Post) do |query|
