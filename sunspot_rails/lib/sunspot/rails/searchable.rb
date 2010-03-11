@@ -9,7 +9,9 @@ module Sunspot #:nodoc:
     module Searchable
       class <<self
         def included(base) #:nodoc:
-          base.module_eval { extend(ActsAsMethods) }
+          base.module_eval do
+            extend(ActsAsMethods)
+          end
         end
       end
 
@@ -51,7 +53,7 @@ module Sunspot #:nodoc:
         #     end
         #   end
         #
-        def solr_searchable(options = {}, &block)
+        def searchable(options = {}, &block)
           Sunspot.setup(self, &block)
 
           unless searchable?
@@ -73,7 +75,6 @@ module Sunspot #:nodoc:
           end
           self.sunspot_options = options
         end
-        alias_method :searchable, :solr_searchable unless Module.respond_to? :searchable
 
         # 
         # This method is defined on all ActiveRecord::Base subclasses. It
@@ -84,13 +85,24 @@ module Sunspot #:nodoc:
         #
         # +false+
         #
-        def solr_searchable?
+        def searchable?
           false
         end
-        alias_method :searchable?, :solr_searchable? unless Module.respond_to? :searchable?
       end
 
       module ClassMethods
+        def self.extended(base) #:nodoc:
+          class <<base
+            alias_method :search, :solr_search unless method_defined? :search
+            alias_method :search_ids, :solr_search_ids unless method_defined? :search_ids
+            alias_method :remove_all_from_index, :solr_remove_all_from_index unless method_defined? :remove_all_from_index
+            alias_method :remove_all_from_index!, :solr_remove_all_from_index! unless method_defined? :remove_all_from_index!
+            alias_method :reindex, :solr_reindex unless method_defined? :reindex
+            alias_method :index, :solr_index unless method_defined? :index
+            alias_method :index_orphans, :solr_index_orphans unless method_defined? :index_orphans
+            alias_method :clean_index_orphans, :solr_clean_index_orphans unless method_defined? :clean_index_orphans
+          end
+        end
         # 
         # Search for instances of this class in Solr. The block is delegated to
         # the Sunspot.search method - see the Sunspot documentation for the full
@@ -113,7 +125,6 @@ module Sunspot #:nodoc:
         def solr_search(&block)
           Sunspot.search(self, &block)
         end
-        alias_method :search, :solr_search unless Module.respond_to? :search
 
         # 
         # Get IDs of matching results without loading the result objects from
@@ -128,7 +139,6 @@ module Sunspot #:nodoc:
         def solr_search_ids(&block)
           solr_search(&block).raw_results.map { |raw_result| raw_result.primary_key.to_i }
         end
-        alias_method :search_ids, :solr_search_ids unless Module.respond_to? :search_ids
 
         # 
         # Remove instances of this class from the Solr index.
@@ -136,7 +146,6 @@ module Sunspot #:nodoc:
         def solr_remove_all_from_index
           Sunspot.remove_all(self)
         end
-        alias_method :remove_all_from_index, :solr_remove_all_from_index unless Module.respond_to? :remove_all_from_index
 
         # 
         # Remove all instances of this class from the Solr index and immediately
@@ -146,7 +155,6 @@ module Sunspot #:nodoc:
         def solr_remove_all_from_index!
           Sunspot.remove_all!(self)
         end
-        alias_method :remove_all_from_index!, :solr_remove_all_from_index! unless Module.respond_to? :remove_all_from_index!
 
         # 
         # Completely rebuild the index for this class. First removes all
@@ -158,7 +166,6 @@ module Sunspot #:nodoc:
           solr_remove_all_from_index
           solr_index(options)
         end
-        alias_method :reindex, :solr_reindex unless Module.respond_to? :reindex
 
         #
         # Add/update all existing records in the Solr index. The
@@ -220,7 +227,6 @@ module Sunspot #:nodoc:
             Sunspot.commit unless options[:batch_commit]
           end
         end
-        alias_method :index, :solr_index unless Module.respond_to? :index
 
         # 
         # Return the IDs of records of this class that are indexed in Solr but
@@ -240,7 +246,6 @@ module Sunspot #:nodoc:
           end
           indexed_ids.to_a
         end
-        alias_method :index_orphans, :solr_index_orphans unless Module.respond_to? :index_orphans
 
         # 
         # Find IDs of records of this class that are indexed in Solr but do not
@@ -255,7 +260,6 @@ module Sunspot #:nodoc:
             end.solr_remove_from_index
           end
         end
-        alias_method :clean_index_orphans, :solr_clean_index_orphans unless Module.respond_to? :clean_index_orphans
 
         # 
         # Classes that have been defined as searchable return +true+ for this
@@ -265,10 +269,9 @@ module Sunspot #:nodoc:
         #
         # +true+
         #
-        def solr_searchable?
+        def searchable?
           true
         end
-        alias_method :searchable?, :solr_searchable? unless Module.respond_to? :searchable?
         
         protected
         
@@ -282,11 +285,18 @@ module Sunspot #:nodoc:
           elapsed = Time.now-start
           logger.info("[#{Time.now}] Completed Indexing. Rows indexed #{counter * batch_size}. Rows/sec: #{batch_size/elapsed.to_f} (Elapsed: #{elapsed} sec.)")
         end
-        alias_method :benchmark, :solr_benchmark unless Module.respond_to? :benchmark
         
       end
 
       module InstanceMethods
+        def self.included(base) #:nodoc:
+          base.module_eval do
+            alias_method :index, :solr_index unless method_defined? :index
+            alias_method :index!, :solr_index! unless method_defined? :index!
+            alias_method :remove_from_index, :solr_remove_from_index unless method_defined? :remove_from_index
+            alias_method :remove_from_index!, :solr_remove_from_index! unless method_defined? :remove_from_index!
+          end
+        end
         # 
         # Index the model in Solr. If the model is already indexed, it will be
         # updated. Using the defaults, you will usually not need to call this
@@ -298,7 +308,6 @@ module Sunspot #:nodoc:
         def solr_index
           Sunspot.index(self)
         end
-        alias_method :index, :solr_index unless Module.method_defined? :index
 
         # 
         # Index the model in Solr and immediately commit. See #index
@@ -306,7 +315,6 @@ module Sunspot #:nodoc:
         def solr_index!
           Sunspot.index!(self)
         end
-        alias_method :index!, :solr_index! unless Module.method_defined? :index!
         
         # 
         # Remove the model from the Solr index. Using the defaults, this should
@@ -318,7 +326,6 @@ module Sunspot #:nodoc:
         def solr_remove_from_index
           Sunspot.remove(self)
         end
-        alias_method :remove_from_index, :solr_remove_from_index unless Module.method_defined? :remove_from_index
 
         # 
         # Remove the model from the Solr index and commit immediately. See
@@ -327,7 +334,6 @@ module Sunspot #:nodoc:
         def solr_remove_from_index!
           Sunspot.remove!(self)
         end
-        alias_method :remove_from_index!, :solr_remove_from_index! unless Module.method_defined? :remove_from_index!
 
         private
 
