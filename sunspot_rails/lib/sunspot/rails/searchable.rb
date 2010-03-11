@@ -120,17 +120,23 @@ module Sunspot #:nodoc:
         # ==== Options
         #
         # :include:: Specify associations to eager load
+        # :select:: Specify columns to select from database when loading results
         #
         # ==== Returns
         #
         # Sunspot::Search:: Object containing results, totals, facets, etc.
         #
         def solr_search(options = {}, &block)
-          options.assert_valid_keys(:include)
+          options.assert_valid_keys(:include, :select)
           search = Sunspot.new_search(self, &block)
-          if options[:include]
+          unless options.empty?
             search.build do |query|
-              query.data_accessor_for(self).include = options[:include]
+              if options[:include]
+                query.data_accessor_for(self).include = options[:include]
+              end
+              if options[:select]
+                query.data_accessor_for(self).select = options[:select]
+              end
             end
           end
           search.execute

@@ -136,6 +136,13 @@ describe 'ActiveRecord mixin' do
         with :title, 'Test Post'
       end.results.should == [@post]
     end
+    
+    it 'should use the select option from search call to data accessor' do
+      Post.should_receive(:find).with(anything(), hash_including(:select => 'title, published_at')).and_return([@post])
+      Post.search(:select => 'title, published_at') do
+        with :title, 'Test Post'
+      end.results.should == [@post]
+    end
 
     it 'should not allow bogus options to search' do
       lambda { Post.search(:bogus => :option) }.should raise_error(ArgumentError)
