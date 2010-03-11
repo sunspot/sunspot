@@ -2,7 +2,6 @@
 * Restore Hit#distance for result geo distance
 * Remove :distance special sort
 * Quote reserved keywords in boolean queries
-* Regression spec for distance sorting with restriction
 * Add Search#facets accessor to retrieve all facets
 
 == 1.0.1 2010-03-05
