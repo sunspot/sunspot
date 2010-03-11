@@ -45,17 +45,19 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000040">bootstrap</a></li>
-              <li><a href="#M000041">lib_path</a></li>
-              <li><a href="#M000048">log_file</a></li>
-              <li><a href="#M000047">log_level</a></li>
-              <li><a href="#M000042">pid_dir</a></li>
-              <li><a href="#M000043">pid_file</a></li>
-              <li><a href="#M000046">port</a></li>
-              <li><a href="#M000039">run</a></li>
-              <li><a href="#M000044">solr_data_dir</a></li>
-              <li><a href="#M000045">solr_home</a></li>
-              <li><a href="#M000038">start</a></li>
+              <li><a href="#M000042">bootstrap</a></li>
+              <li><a href="#M000043">lib_path</a></li>
+              <li><a href="#M000050">log_file</a></li>
+              <li><a href="#M000049">log_level</a></li>
+              <li><a href="#M000052">max_memory</a></li>
+              <li><a href="#M000051">min_memory</a></li>
+              <li><a href="#M000044">pid_dir</a></li>
+              <li><a href="#M000045">pid_file</a></li>
+              <li><a href="#M000048">port</a></li>
+              <li><a href="#M000041">run</a></li>
+              <li><a href="#M000046">solr_data_dir</a></li>
+              <li><a href="#M000047">solr_home</a></li>
+              <li><a href="#M000040">start</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -79,15 +81,15 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000040'>
-                <a name='M000040'>      </a>
+              <div class='public-instance method' id='method-M000042'>
+                <a name='M000042'>      </a>
                 <div class='synopsis'>
                   <span class='name'>bootstrap</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Bootstrap a new <a href="Server.html#M000045">solr_home</a> by creating all
+                  Bootstrap a new <a href="Server.html#M000047">solr_home</a> by creating all
                   required directories.
                   </p>
                   <h4>Returns</h4>
@@ -98,14 +100,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bootstrap</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@bootstrapped</span>&#x000A;          <span class="ruby-identifier">install_solr_home</span>&#x000A;          <span class="ruby-ivar">@bootstrapped</span> = <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bootstrap</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@bootstrapped</span>&#x000A;          <span class="ruby-identifier">install_solr_home</span>&#x000A;          <span class="ruby-ivar">@bootstrapped</span> = <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000041'>
-                <a name='M000041'>      </a>
+              <div class='public-instance method' id='method-M000043'>
+                <a name='M000043'>      </a>
                 <div class='synopsis'>
                   <span class='name'>lib_path</span>
                   <span class='arguments'>()</span>
@@ -116,14 +118,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lib_path</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-identifier">solr_home</span>, <span class="ruby-value str">'lib'</span> )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lib_path</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-identifier">solr_home</span>, <span class="ruby-value str">'lib'</span> )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000048'>
-                <a name='M000048'>      </a>
+              <div class='public-instance method' id='method-M000050'>
+                <a name='M000050'>      </a>
                 <div class='synopsis'>
                   <span class='name'>log_file</span>
                   <span class='arguments'>()</span>
@@ -134,14 +136,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000048-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000050-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000048-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 90</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_file</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'log'</span>, <span class="ruby-node">&quot;sunspot-solr-#{::Rails.env}.log&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000050-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 90</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_file</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'log'</span>, <span class="ruby-node">&quot;sunspot-solr-#{::Rails.env}.log&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000047'>
-                <a name='M000047'>      </a>
+              <div class='public-instance method' id='method-M000049'>
+                <a name='M000049'>      </a>
                 <div class='synopsis'>
                   <span class='name'>log_level</span>
                   <span class='arguments'>()</span>
@@ -153,14 +155,50 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000047-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000049-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000047-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 83</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_level</span>&#x000A;        <span class="ruby-constant">LOG_LEVELS</span>[<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">level</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000049-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 83</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_level</span>&#x000A;        <span class="ruby-constant">LOG_LEVELS</span>[<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">level</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000042'>
-                <a name='M000042'>      </a>
+              <div class='public-instance method' id='method-M000052'>
+                <a name='M000052'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>max_memory</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Maximum Java heap size for Solr
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000052-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000052-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 104</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">max_memory</span>&#x000A;        <span class="ruby-identifier">configuration</span>.<span class="ruby-identifier">max_memory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000051'>
+                <a name='M000051'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>min_memory</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Minimum Java heap size for Solr
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000051-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000051-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 97</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">min_memory</span>&#x000A;        <span class="ruby-identifier">configuration</span>.<span class="ruby-identifier">min_memory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000044'>
+                <a name='M000044'>      </a>
                 <div class='synopsis'>
                   <span class='name'>pid_dir</span>
                   <span class='arguments'>()</span>
@@ -171,14 +209,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pid_dir</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'tmp'</span>, <span class="ruby-value str">'pids'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pid_dir</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'tmp'</span>, <span class="ruby-value str">'pids'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000043'>
-                <a name='M000043'>      </a>
+              <div class='public-instance method' id='method-M000045'>
+                <a name='M000045'>      </a>
                 <div class='synopsis'>
                   <span class='name'>pid_file</span>
                   <span class='arguments'>()</span>
@@ -189,14 +227,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 50</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pid_file</span>&#x000A;        <span class="ruby-node">&quot;sunspot-solr-#{::Rails.env}.pid&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 50</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pid_file</span>&#x000A;        <span class="ruby-node">&quot;sunspot-solr-#{::Rails.env}.pid&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000046'>
-                <a name='M000046'>      </a>
+              <div class='public-instance method' id='method-M000048'>
+                <a name='M000048'>      </a>
                 <div class='synopsis'>
                   <span class='name'>port</span>
                   <span class='arguments'>()</span>
@@ -207,27 +245,27 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000046-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000048-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000046-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 75</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">port</span>&#x000A;        <span class="ruby-identifier">configuration</span>.<span class="ruby-identifier">port</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000048-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 75</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">port</span>&#x000A;        <span class="ruby-identifier">configuration</span>.<span class="ruby-identifier">port</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000039'>
-                <a name='M000039'>      </a>
+              <div class='public-instance method' id='method-M000041'>
+                <a name='M000041'>      </a>
                 <div class='synopsis'>
                   <span class='name'>run</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>&#x000A;        <span class="ruby-identifier">bootstrap</span>&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>&#x000A;        <span class="ruby-identifier">bootstrap</span>&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000044'>
-                <a name='M000044'>      </a>
+              <div class='public-instance method' id='method-M000046'>
+                <a name='M000046'>      </a>
                 <div class='synopsis'>
                   <span class='name'>solr_data_dir</span>
                   <span class='arguments'>()</span>
@@ -244,14 +282,14 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000046-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_data_dir</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">solr_home</span>, <span class="ruby-value str">'data'</span>, <span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000046-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_data_dir</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">solr_home</span>, <span class="ruby-value str">'data'</span>, <span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000045'>
-                <a name='M000045'>      </a>
+              <div class='public-instance method' id='method-M000047'>
+                <a name='M000047'>      </a>
                 <div class='synopsis'>
                   <span class='name'>solr_home</span>
                   <span class='arguments'>()</span>
@@ -262,23 +300,23 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000047-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 68</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_home</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'solr'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000047-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 68</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_home</span>&#x000A;        <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'solr'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000038'>
-                <a name='M000038'>      </a>
+              <div class='public-instance method' id='method-M000040'>
+                <a name='M000040'>      </a>
                 <div class='synopsis'>
                   <span class='name'>start</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 8</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>&#x000A;        <span class="ruby-identifier">bootstrap</span>&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/server.rb, line 8</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>&#x000A;        <span class="ruby-identifier">bootstrap</span>&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

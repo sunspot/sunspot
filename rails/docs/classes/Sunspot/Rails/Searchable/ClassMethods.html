@@ -41,28 +41,51 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000013">clean_index_orphans</a></li>
-              <li><a href="#M000011">index</a></li>
-              <li><a href="#M000012">index_orphans</a></li>
-              <li><a href="#M000010">reindex</a></li>
-              <li><a href="#M000008">remove_all_from_index</a></li>
-              <li><a href="#M000009">remove_all_from_index!</a></li>
-              <li><a href="#M000006">search</a></li>
-              <li><a href="#M000007">search_ids</a></li>
               <li><a href="#M000014">searchable?</a></li>
+              <li><a href="#M000013">solr_clean_index_orphans</a></li>
+              <li><a href="#M000011">solr_index</a></li>
+              <li><a href="#M000012">solr_index_orphans</a></li>
+              <li><a href="#M000010">solr_reindex</a></li>
+              <li><a href="#M000008">solr_remove_all_from_index</a></li>
+              <li><a href="#M000009">solr_remove_all_from_index!</a></li>
+              <li><a href="#M000006">solr_search</a></li>
+              <li><a href="#M000007">solr_search_ids</a></li>
             </ol>
             <h3>protected instance</h3>
             <ol>
-              <li><a href="#M000015">benchmark</a></li>
+              <li><a href="#M000015">solr_benchmark</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000014'>
+                <a name='M000014'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>searchable?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Classes that have been defined as searchable return <tt>true</tt> for this
+                  method.
+                  </p>
+                  <h4>Returns</h4>
+                  <p>
+                  <tt>true</tt>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000014-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 288</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">searchable?</span>&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
               <div class='public-instance method' id='method-M000013'>
                 <a name='M000013'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>clean_index_orphans</span>
+                  <span class='name'>solr_clean_index_orphans</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
@@ -77,13 +100,13 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000013-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 242</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clean_index_orphans</span>&#x000A;          <span class="ruby-identifier">index_orphans</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fake_instance</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">fake_instance</span>.<span class="ruby-identifier">id</span> = <span class="ruby-identifier">id</span>&#x000A;            <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">remove_from_index</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000013-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 272</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_clean_index_orphans</span>&#x000A;          <span class="ruby-identifier">solr_index_orphans</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fake_instance</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">fake_instance</span>.<span class="ruby-identifier">id</span> = <span class="ruby-identifier">id</span>&#x000A;            <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">solr_remove_from_index</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000011'>
                 <a name='M000011'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>index</span>
+                  <span class='name'>solr_index</span>
                   <span class='arguments'>(opts={})</span>
                 </div>
                 <div class='description'>
@@ -125,13 +148,13 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000011-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 194</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>(<span class="ruby-identifier">opts</span>={})&#x000A;          <span class="ruby-identifier">options</span> = { <span class="ruby-identifier">:batch_size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">500</span>, <span class="ruby-identifier">:batch_commit</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>, <span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> [], <span class="ruby-identifier">:first_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_size</span>]&#x000A;            <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">index!</span>(<span class="ruby-identifier">all</span>(<span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:include</span>]))&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">offset</span> = <span class="ruby-value">0</span>&#x000A;            <span class="ruby-identifier">counter</span> = <span class="ruby-value">1</span>&#x000A;            <span class="ruby-identifier">record_count</span> = <span class="ruby-identifier">count</span>&#x000A;            <span class="ruby-identifier">last_id</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:first_id</span>]&#x000A;            <span class="ruby-keyword kw">while</span>(<span class="ruby-identifier">offset</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">record_count</span>)&#x000A;              <span class="ruby-identifier">benchmark</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_size</span>], <span class="ruby-identifier">counter</span> <span class="ruby-keyword kw">do</span>&#x000A;                <span class="ruby-identifier">records</span> = <span class="ruby-identifier">all</span>(<span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:include</span>], <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-node">&quot;#{table_name}.#{primary_key} &gt; ?&quot;</span>, <span class="ruby-identifier">last_id</span>], <span class="ruby-identifier">:limit</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_size</span>], <span class="ruby-identifier">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">primary_key</span>)&#x000A;                <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">records</span>)&#x000A;                <span class="ruby-identifier">last_id</span> = <span class="ruby-identifier">records</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">id</span>&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;              <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">commit</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_commit</span>]&#x000A;              <span class="ruby-identifier">offset</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_size</span>]&#x000A;              <span class="ruby-identifier">counter</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">commit</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_commit</span>]&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000011-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 224</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_index</span>(<span class="ruby-identifier">opts</span>={})&#x000A;          <span class="ruby-identifier">options</span> = { <span class="ruby-identifier">:batch_size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">500</span>, <span class="ruby-identifier">:batch_commit</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>, <span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> [], <span class="ruby-identifier">:first_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_size</span>]&#x000A;            <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">index!</span>(<span class="ruby-identifier">all</span>(<span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:include</span>]))&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">offset</span> = <span class="ruby-value">0</span>&#x000A;            <span class="ruby-identifier">counter</span> = <span class="ruby-value">1</span>&#x000A;            <span class="ruby-identifier">record_count</span> = <span class="ruby-identifier">count</span>&#x000A;            <span class="ruby-identifier">last_id</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:first_id</span>]&#x000A;            <span class="ruby-keyword kw">while</span>(<span class="ruby-identifier">offset</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">record_count</span>)&#x000A;              <span class="ruby-identifier">solr_benchmark</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_size</span>], <span class="ruby-identifier">counter</span> <span class="ruby-keyword kw">do</span>&#x000A;                <span class="ruby-identifier">records</span> = <span class="ruby-identifier">all</span>(<span class="ruby-identifier">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:include</span>], <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-node">&quot;#{table_name}.#{primary_key} &gt; ?&quot;</span>, <span class="ruby-identifier">last_id</span>], <span class="ruby-identifier">:limit</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_size</span>], <span class="ruby-identifier">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">primary_key</span>)&#x000A;                <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">records</span>)&#x000A;                <span class="ruby-identifier">last_id</span> = <span class="ruby-identifier">records</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">id</span>&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;              <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">commit</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_commit</span>]&#x000A;              <span class="ruby-identifier">offset</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_size</span>]&#x000A;              <span class="ruby-identifier">counter</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">commit</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:batch_commit</span>]&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000012'>
                 <a name='M000012'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>index_orphans</span>
+                  <span class='name'>solr_index_orphans</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
@@ -139,9 +162,8 @@
                   Return the IDs of records of this class that are indexed in Solr but do not
                   exist in the database. Under normal circumstances, this should never
                   happen, but this method is provided in case something goes wrong. Usually
-                  you will want to rectify the situation by calling <a
-                  href="ClassMethods.html#M000013">clean_index_orphans</a> or <a
-                  href="ClassMethods.html#M000010">reindex</a>
+                  you will want to rectify the situation by calling clean_index_orphans or
+                  reindex
                   </p>
                   <h4>Returns</h4>
                   <table>
@@ -154,13 +176,13 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000012-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 227</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index_orphans</span>&#x000A;          <span class="ruby-identifier">count</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">count</span>&#x000A;          <span class="ruby-identifier">indexed_ids</span> = <span class="ruby-identifier">search_ids</span> { <span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>, <span class="ruby-identifier">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">count</span>) }.<span class="ruby-identifier">to_set</span>&#x000A;          <span class="ruby-identifier">all</span>(<span class="ruby-identifier">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id'</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">object</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">indexed_ids</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">indexed_ids</span>.<span class="ruby-identifier">to_a</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000012-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 257</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_index_orphans</span>&#x000A;          <span class="ruby-identifier">count</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">count</span>&#x000A;          <span class="ruby-identifier">indexed_ids</span> = <span class="ruby-identifier">solr_search_ids</span> { <span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>, <span class="ruby-identifier">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">count</span>) }.<span class="ruby-identifier">to_set</span>&#x000A;          <span class="ruby-identifier">all</span>(<span class="ruby-identifier">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'id'</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">object</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">indexed_ids</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">object</span>.<span class="ruby-identifier">id</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">indexed_ids</span>.<span class="ruby-identifier">to_a</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000010'>
                 <a name='M000010'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>reindex</span>
+                  <span class='name'>solr_reindex</span>
                   <span class='arguments'>(options = {})</span>
                 </div>
                 <div class='description'>
@@ -169,21 +191,20 @@
                   from the index, then loads records and indexes them.
                   </p>
                   <p>
-                  See <a href="ClassMethods.html#M000011">index</a> for information on
-                  options, etc.
+                  See index for information on options, etc.
                   </p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000010-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 151</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reindex</span>(<span class="ruby-identifier">options</span> = {})&#x000A;          <span class="ruby-identifier">remove_all_from_index</span>&#x000A;          <span class="ruby-identifier">index</span>(<span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000010-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 181</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_reindex</span>(<span class="ruby-identifier">options</span> = {})&#x000A;          <span class="ruby-identifier">solr_remove_all_from_index</span>&#x000A;          <span class="ruby-identifier">solr_index</span>(<span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000008'>
                 <a name='M000008'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>remove_all_from_index</span>
+                  <span class='name'>solr_remove_all_from_index</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
@@ -195,13 +216,13 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000008-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 132</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all_from_index</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">remove_all</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000008-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 162</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_remove_all_from_index</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">remove_all</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000009'>
                 <a name='M000009'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>remove_all_from_index!</span>
+                  <span class='name'>solr_remove_all_from_index!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
@@ -214,14 +235,14 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000009-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 141</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_all_from_index!</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">remove_all!</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000009-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 171</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_remove_all_from_index!</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">remove_all!</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000006'>
                 <a name='M000006'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>search</span>
-                  <span class='arguments'>(&amp;block)</span>
+                  <span class='name'>solr_search</span>
+                  <span class='arguments'>(options = {}, &amp;block)</span>
                 </div>
                 <div class='description'>
                   <p>
@@ -229,7 +250,16 @@
                   Sunspot.search method - see the Sunspot documentation for the full API.
                   </p>
                   <h4>Example</h4>
-                  <pre>Post.search do&#x000A;  keywords 'best pizza'&#x000A;  with :blog_id, 1&#x000A;  order :updated_at, :desc&#x000A;  facet :category_ids&#x000A;end</pre>
+                  <pre>Post.search(:include =&gt; [:blog]) do&#x000A;  keywords 'best pizza'&#x000A;  with :blog_id, 1&#x000A;  order :updated_at, :desc&#x000A;  facet :category_ids&#x000A;end</pre>
+                  <h4>Options</h4>
+                  <table>
+                  <tr><td valign="top">:include:</td><td>Specify associations to eager load
+                  
+                  </td></tr>
+                  <tr><td valign="top">:select:</td><td>Specify columns to select from database when loading results
+                  
+                  </td></tr>
+                  </table>
                   <h4>Returns</h4>
                   <table>
                   <tr><td valign="top">Sunspot::Search:</td><td>Object containing results, totals, facets, etc.
@@ -241,13 +271,13 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000006-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 111</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">search</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000006-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 129</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_search</span>(<span class="ruby-identifier">options</span> = {}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">options</span>.<span class="ruby-identifier">assert_valid_keys</span>(<span class="ruby-identifier">:include</span>, <span class="ruby-identifier">:select</span>)&#x000A;          <span class="ruby-identifier">search</span> = <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">new_search</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>&#x000A;            <span class="ruby-identifier">search</span>.<span class="ruby-identifier">build</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">query</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:include</span>]&#x000A;                <span class="ruby-identifier">query</span>.<span class="ruby-identifier">data_accessor_for</span>(<span class="ruby-keyword kw">self</span>).<span class="ruby-identifier">include</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:include</span>]&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:select</span>]&#x000A;                <span class="ruby-identifier">query</span>.<span class="ruby-identifier">data_accessor_for</span>(<span class="ruby-keyword kw">self</span>).<span class="ruby-identifier">select</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:select</span>]&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">search</span>.<span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000007'>
                 <a name='M000007'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>search_ids</span>
+                  <span class='name'>solr_search_ids</span>
                   <span class='arguments'>(&amp;block)</span>
                 </div>
                 <div class='description'>
@@ -255,7 +285,7 @@
                   Get IDs of matching results without loading the result objects from the
                   database. This method may be useful if search is used as an intermediate
                   step in a larger find operation. The block is the same as the block
-                  provided to the <a href="ClassMethods.html#M000006">search</a> method.
+                  provided to the search method.
                   </p>
                   <h4>Returns</h4>
                   <table>
@@ -268,37 +298,14 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 125</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search_ids</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">search</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>).<span class="ruby-identifier">raw_results</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">raw_result</span><span class="ruby-operator">|</span> <span class="ruby-identifier">raw_result</span>.<span class="ruby-identifier">primary_key</span>.<span class="ruby-identifier">to_i</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000014'>
-                <a name='M000014'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>searchable?</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Classes that have been defined as searchable return <tt>true</tt> for this
-                  method.
-                  </p>
-                  <h4>Returns</h4>
-                  <p>
-                  <tt>true</tt>
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000014-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 258</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">searchable?</span>&#x000A;          <span class="ruby-keyword kw">true</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 155</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_search_ids</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">solr_search</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>).<span class="ruby-identifier">raw_results</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">raw_result</span><span class="ruby-operator">|</span> <span class="ruby-identifier">raw_result</span>.<span class="ruby-identifier">primary_key</span>.<span class="ruby-identifier">to_i</span> }&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Protected instance methods</h2>
               <div class='protected-instance method' id='method-M000015'>
                 <a name='M000015'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>benchmark</span>
+                  <span class='name'>solr_benchmark</span>
                   <span class='arguments'>(batch_size, counter) {|| ...}</span>
                 </div>
                 <div class='description'>
@@ -310,7 +317,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000015-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 267</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">benchmark</span>(<span class="ruby-identifier">batch_size</span>, <span class="ruby-identifier">counter</span>,  <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">start</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;          <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;[#{Time.now}] Start Indexing&quot;</span>)&#x000A;          <span class="ruby-keyword kw">yield</span>&#x000A;          <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span><span class="ruby-operator">-</span><span class="ruby-identifier">start</span>&#x000A;          <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;[#{Time.now}] Completed Indexing. Rows indexed #{counter * batch_size}. Rows/sec: #{batch_size/elapsed.to_f} (Elapsed: #{elapsed} sec.)&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000015-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 297</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_benchmark</span>(<span class="ruby-identifier">batch_size</span>, <span class="ruby-identifier">counter</span>,  <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;          <span class="ruby-identifier">start</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;          <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;[#{Time.now}] Start Indexing&quot;</span>)&#x000A;          <span class="ruby-keyword kw">yield</span>&#x000A;          <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span><span class="ruby-operator">-</span><span class="ruby-identifier">start</span>&#x000A;          <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;[#{Time.now}] Completed Indexing. Rows indexed #{counter * batch_size}. Rows/sec: #{batch_size/elapsed.to_f} (Elapsed: #{elapsed} sec.)&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

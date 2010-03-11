@@ -41,10 +41,10 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000016">index</a></li>
-              <li><a href="#M000017">index!</a></li>
-              <li><a href="#M000018">remove_from_index</a></li>
-              <li><a href="#M000019">remove_from_index!</a></li>
+              <li><a href="#M000016">solr_index</a></li>
+              <li><a href="#M000017">solr_index!</a></li>
+              <li><a href="#M000018">solr_remove_from_index</a></li>
+              <li><a href="#M000019">solr_remove_from_index!</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -53,7 +53,7 @@
               <div class='public-instance method' id='method-M000016'>
                 <a name='M000016'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>index</span>
+                  <span class='name'>solr_index</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
@@ -69,32 +69,31 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000016-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 286</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">index</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000016-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 324</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_index</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">index</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000017'>
                 <a name='M000017'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>index!</span>
+                  <span class='name'>solr_index!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Index the model in Solr and immediately commit. See <a
-                  href="InstanceMethods.html#M000016">index</a>
+                  Index the model in Solr and immediately commit. See index
                   </p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000017-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000017-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 293</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index!</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">index!</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000017-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 331</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_index!</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">index!</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000018'>
                 <a name='M000018'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>remove_from_index</span>
+                  <span class='name'>solr_remove_from_index</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
@@ -109,26 +108,26 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 304</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_from_index</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 342</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_remove_from_index</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">remove</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000019'>
                 <a name='M000019'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>remove_from_index!</span>
+                  <span class='name'>solr_remove_from_index!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Remove the model from the Solr index and commit immediately. See <a
-                  href="InstanceMethods.html#M000018">remove_from_index</a>
+                  Remove the model from the Solr index and commit immediately. See
+                  remove_from_index
                   </p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000019-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000019-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 312</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_from_index!</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">remove!</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000019-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/searchable.rb, line 350</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_remove_from_index!</span>&#x000A;          <span class="ruby-constant">Sunspot</span>.<span class="ruby-identifier">remove!</span>(<span class="ruby-keyword kw">self</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -47,7 +47,7 @@
             contains properties keyed by environment name. A sample sunspot.yml file
             would look like:
             </p>
-            <pre>development:&#x000A;  solr:&#x000A;    hostname: localhost&#x000A;    port: 8982&#x000A;test:&#x000A;  solr:&#x000A;    hostname: localhost&#x000A;    port: 8983&#x000A;    log_level: OFF&#x000A;production:&#x000A;  solr:&#x000A;    hostname: localhost&#x000A;    port: 8983&#x000A;    path: /solr/myindex&#x000A;    log_level: WARNING&#x000A;    solr_home: /some/path&#x000A;  master_solr:&#x000A;    hostname: localhost&#x000A;    port: 8982&#x000A;    path: /solr&#x000A;  auto_commit_after_request: true</pre>
+            <pre>development:&#x000A;  solr:&#x000A;    hostname: localhost&#x000A;    port: 8982&#x000A;    min_memory: 512M&#x000A;    max_memory: 1G&#x000A;test:&#x000A;  solr:&#x000A;    hostname: localhost&#x000A;    port: 8983&#x000A;    log_level: OFF&#x000A;production:&#x000A;  solr:&#x000A;    hostname: localhost&#x000A;    port: 8983&#x000A;    path: /solr/myindex&#x000A;    log_level: WARNING&#x000A;    solr_home: /some/path&#x000A;  master_solr:&#x000A;    hostname: localhost&#x000A;    port: 8982&#x000A;    path: /solr&#x000A;  auto_commit_after_request: true</pre>
             <p>
             Sunspot::Rails uses the configuration to set up the Solr connection, as
             well as for starting Solr with the appropriate port using the <tt>rake
@@ -73,6 +73,8 @@
               <li><a href="#M000027">master_hostname</a></li>
               <li><a href="#M000029">master_path</a></li>
               <li><a href="#M000028">master_port</a></li>
+              <li><a href="#M000039">max_memory</a></li>
+              <li><a href="#M000038">min_memory</a></li>
               <li><a href="#M000026">path</a></li>
               <li><a href="#M000036">pid_path</a></li>
               <li><a href="#M000025">port</a></li>
@@ -114,7 +116,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 155</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">auto_commit_after_delete_request?</span>&#x000A;        <span class="ruby-ivar">@auto_commit_after_delete_request</span> <span class="ruby-operator">||=</span> &#x000A;          (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'auto_commit_after_delete_request'</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 157</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">auto_commit_after_delete_request?</span>&#x000A;        <span class="ruby-ivar">@auto_commit_after_delete_request</span> <span class="ruby-operator">||=</span> &#x000A;          (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'auto_commit_after_delete_request'</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000032'>
@@ -137,7 +139,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 142</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">auto_commit_after_request?</span>&#x000A;        <span class="ruby-ivar">@auto_commit_after_request</span> <span class="ruby-operator">||=</span> &#x000A;          <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'auto_commit_after_request'</span>) <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 144</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">auto_commit_after_request?</span>&#x000A;        <span class="ruby-ivar">@auto_commit_after_request</span> <span class="ruby-operator">||=</span> &#x000A;          <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'auto_commit_after_request'</span>) <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000035'>
@@ -150,7 +152,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 172</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_path</span>&#x000A;        <span class="ruby-ivar">@data_path</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'data_path'</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'data'</span>, <span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 174</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">data_path</span>&#x000A;        <span class="ruby-ivar">@data_path</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'data_path'</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'data'</span>, <span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000030'>
@@ -174,7 +176,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000030-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 117</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_master?</span>&#x000A;        <span class="ruby-ivar">@has_master</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'master_solr'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 119</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_master?</span>&#x000A;        <span class="ruby-ivar">@has_master</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'master_solr'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000024'>
@@ -198,7 +200,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hostname</span>&#x000A;        <span class="ruby-ivar">@hostname</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'hostname'</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'localhost'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 49</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hostname</span>&#x000A;        <span class="ruby-ivar">@hostname</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'hostname'</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'localhost'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000034'>
@@ -222,7 +224,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 168</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_file</span>&#x000A;        <span class="ruby-ivar">@log_file</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'log_file'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">default_log_file_location</span> )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 170</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_file</span>&#x000A;        <span class="ruby-ivar">@log_file</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'log_file'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">default_log_file_location</span> )&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000031'>
@@ -248,7 +250,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000031-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 130</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_level</span>&#x000A;        <span class="ruby-ivar">@log_level</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'log_level'</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'INFO'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 132</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_level</span>&#x000A;        <span class="ruby-ivar">@log_level</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'log_level'</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'INFO'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000027'>
@@ -273,7 +275,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000027-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 82</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">master_hostname</span>&#x000A;        <span class="ruby-ivar">@master_hostname</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'master_hostname'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">hostname</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 84</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">master_hostname</span>&#x000A;        <span class="ruby-ivar">@master_hostname</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'master_hostname'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">hostname</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000029'>
@@ -298,7 +300,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000029-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000029-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 106</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">master_path</span>&#x000A;        <span class="ruby-ivar">@master_path</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'master_path'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">path</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000029-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 108</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">master_path</span>&#x000A;        <span class="ruby-ivar">@master_path</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'master_path'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">path</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000028'>
@@ -323,7 +325,43 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000028-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000028-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 94</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">master_port</span>&#x000A;        <span class="ruby-ivar">@master_port</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'master_port'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">port</span>).<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000028-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 96</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">master_port</span>&#x000A;        <span class="ruby-ivar">@master_port</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'master_port'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">port</span>).<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000039'>
+                <a name='M000039'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>max_memory</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Maximum java heap size for Solr instance
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 210</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">max_memory</span>&#x000A;        <span class="ruby-ivar">@max_memory</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'max_memory'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000038'>
+                <a name='M000038'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>min_memory</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Minimum java heap size for Solr instance
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 203</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">min_memory</span>&#x000A;        <span class="ruby-ivar">@min_memory</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'min_memory'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000026'>
@@ -348,7 +386,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 70</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">path</span>&#x000A;        <span class="ruby-ivar">@path</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'path'</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'/solr'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 72</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">path</span>&#x000A;        <span class="ruby-ivar">@path</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'path'</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'/solr'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000036'>
@@ -361,7 +399,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 176</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pid_path</span>&#x000A;        <span class="ruby-ivar">@pids_path</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'pid_path'</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'pids'</span>, <span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 178</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pid_path</span>&#x000A;        <span class="ruby-ivar">@pids_path</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'pid_path'</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'pids'</span>, <span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000025'>
@@ -385,7 +423,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 58</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">port</span>&#x000A;        <span class="ruby-ivar">@port</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'port'</span>) <span class="ruby-operator">||</span> <span class="ruby-value">8983</span>).<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 60</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">port</span>&#x000A;        <span class="ruby-ivar">@port</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'port'</span>) <span class="ruby-operator">||</span> <span class="ruby-value">8983</span>).<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000037'>
@@ -398,7 +436,7 @@
                   <p>
                   The solr home directory. Sunspot::Rails expects this directory to contain a
                   config, data and pids directory. See <a
-                  href="Server.html#M000040">Sunspot::Rails::Server.bootstrap</a> for more
+                  href="Server.html#M000042">Sunspot::Rails::Server.bootstrap</a> for more
                   information.
                   </p>
                   <h4>Returns</h4>
@@ -412,7 +450,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 189</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_home</span>&#x000A;        <span class="ruby-ivar">@solr_home</span> <span class="ruby-operator">||=</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'solr_home'</span>)&#x000A;            <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'solr_home'</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'solr'</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/sunspot/rails/configuration.rb, line 191</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">solr_home</span>&#x000A;        <span class="ruby-ivar">@solr_home</span> <span class="ruby-operator">||=</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'solr_home'</span>)&#x000A;            <span class="ruby-identifier">user_configuration_from_key</span>(<span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'solr_home'</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'solr'</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
