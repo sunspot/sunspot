@@ -46,6 +46,12 @@ describe Sunspot::Server do
     @server.run
   end
 
+  it 'runs Solr with specified Solr jar' do
+    @server.solr_jar = SUNSPOT_START_JAR
+    FileUtils.should_receive(:cd).with(File.dirname(SUNSPOT_START_JAR))
+    @server.run
+  end
+
   describe 'with logging' do
     before :each do
       @server.log_level = 'info'

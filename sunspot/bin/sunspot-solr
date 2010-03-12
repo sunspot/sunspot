@@ -30,6 +30,10 @@ OptionParser.new do |opts|
     server.solr_home = File.expand_path(s)
   end
 
+  opts.on '-j', '--solr-jar=JAR', 'Solr start jar' do |j|
+    server.solr_jar = File.expand_path(j)
+  end
+
   opts.on '--pid-dir=PID_DIR', 'Directory for pid files' do |pd|
     server.pid_dir = File.expand_path(pd)
   end

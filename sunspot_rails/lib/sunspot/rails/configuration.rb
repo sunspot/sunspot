@@ -11,6 +11,7 @@ module Sunspot #:nodoc:
     #       port: 8982
     #       min_memory: 512M
     #       max_memory: 1G
+    #       solr_jar: /some/path/solr15/start.jar
     #   test:
     #     solr:
     #       hostname: localhost
@@ -195,6 +196,13 @@ module Sunspot #:nodoc:
           else
             File.join(::Rails.root, 'solr')
           end
+      end
+
+      # 
+      # Solr start jar
+      #
+      def solr_jar
+        @solr_jar ||= user_configuration_from_key('solr', 'solr_jar')
       end
 
       # 

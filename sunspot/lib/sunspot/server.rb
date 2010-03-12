@@ -17,7 +17,7 @@ module Sunspot
     LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
     attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
-    attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home
+    attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :solr_jar
 
     #
     # Start the sunspot-solr server. Bootstrap solr_home first,
@@ -69,8 +69,8 @@ module Sunspot
       command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
       command << "-Dsolr.solr.home=#{solr_home}" if solr_home
       command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
-      command << '-jar' << File.basename(SOLR_START_JAR)
-      FileUtils.cd(File.dirname(SOLR_START_JAR)) do
+      command << '-jar' << File.basename(solr_jar)
+      FileUtils.cd(File.dirname(solr_jar)) do
         exec(Escape.shell_command(command))
       end
     end
@@ -125,7 +125,11 @@ module Sunspot
     end
 
     def solr_home
-      File.expand_path(@solr_home || File.join(File.dirname(SOLR_START_JAR), 'solr'))
+      File.expand_path(@solr_home || File.join(File.dirname(solr_jar), 'solr'))
+    end
+
+    def solr_jar
+        @solr_jar || SOLR_START_JAR
     end
 
     private
