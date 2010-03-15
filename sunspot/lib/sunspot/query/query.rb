@@ -40,6 +40,11 @@ module Sunspot
         facet
       end
 
+      def add_function(function)
+        @components << function
+        function
+      end
+
       def paginate(page, per_page)
         if @pagination
           @pagination.page = page

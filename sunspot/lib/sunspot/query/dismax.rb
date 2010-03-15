@@ -7,6 +7,7 @@ module Sunspot
         @keywords = keywords
         @fulltext_fields = {}
         @boost_queries = []
+        @boost_functions = []
         @highlights = []
       end
 
@@ -24,6 +25,11 @@ module Sunspot
         unless @boost_queries.empty?
           params[:bq] = @boost_queries.map do |boost_query|
             boost_query.to_boolean_phrase
+          end
+        end
+        unless @boost_functions.empty?
+          params[:bf] = @boost_functions.map do |boost_function|
+            boost_function.to_s
           end
         end
         if @minimum_match
@@ -50,6 +56,13 @@ module Sunspot
       def create_boost_query(factor)
         @boost_queries << boost_query = BoostQuery.new(factor)
         boost_query
+      end
+
+      # 
+      # Add a boost function
+      #
+      def add_boost_function(function_query)
+        @boost_functions << function_query
       end
 
       # 

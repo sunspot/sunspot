@@ -7,6 +7,9 @@ module Sunspot
     class Fulltext
       attr_reader :exclude_fields #:nodoc:
 
+      # accept function in boost
+      include Functional
+
       def initialize(query, setup) #:nodoc:
         @query, @setup = query, setup
         @fields_added = false
@@ -139,9 +142,14 @@ module Sunspot
 
       # 
       # Boost queries allow specification of an arbitrary scope for which
-      # matching documents should receive an extra boost. The block is evaluated
+      # matching documents should receive an extra boost. You can either specify 
+      # a boost factor and a block, or a boost function. The block is evaluated
       # in the usual scope DSL, and field names are attribute fields, not text
       # fields, as in other scope.
+      #
+      # The boost function can be a constant (numeric or string literal), 
+      # a field name or another function. You can build arbitrarily complex 
+      # functions, which are passed transparently to solr.
       #
       # This method can be called more than once for different boost queries
       # with different boosts.
@@ -153,16 +161,23 @@ module Sunspot
       #       boost(2.0) do
       #         with(:featured, true)
       #       end
+      #
+      #       boost(function { sum(:average_rating, product(:popularity, 10)) })
       #     end
       #   end
       #
-      # In the above search, featured posts will receive a boost of 2.0.
+      # In the above search, featured posts will receive a boost of 2.0 and all posts 
+      # will be boosted by (average_rating + popularity * 10).
       #
-      def boost(factor, &block)
-        Sunspot::Util.instance_eval_or_call(
-          Scope.new(@query.create_boost_query(factor), @setup),
-          &block
-        )
+      def boost(factorOrFunction, &block)
+        if factorOrFunction.is_a?(Sunspot::Query::AbstractFunctionQuery)
+          @query.add_boost_function(factorOrFunction)
+        else
+          Sunspot::Util.instance_eval_or_call(
+            Scope.new(@query.create_boost_query(factorOrFunction), @setup),
+            &block
+          )
+        end
       end
 
       #
