@@ -210,6 +210,7 @@ Sunspot repository at `upstream`:
 * {Sunspot: A Solr-Powered Search Engine for Ruby}[http://www.linux-mag.com/id/7341] (Linux Magazine)
 * {Using Sunspot for Free-Text Search with Redis}[http://masonoise.wordpress.com/2010/02/06/using-sunspot-for-free-text-search-with-redis/] (While I Pondered...)
 * {Default scope with Sunspot}[http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/] (Cloudspace)
+* {Chef recipe for Sunspot in production}[http://gist.github.com/336403]
 * {Testing Sunspot with Cucumber}[http://blog.trydionel.com/2010/02/06/testing-sunspot-with-cucumber/] (spiral_code)
 * {Running cucumber features with sunspot_rails}[http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails] (Kabisa Blog)
 * {How To Use Twitter Lists to Determine Influence}[http://www.untitledstartup.com/2010/01/how-to-use-twitter-lists-to-determine-influence/] (Untitled Startup)
