@@ -213,10 +213,13 @@ module Sunspot
       end
       id_hit_hash.each_pair do |class_name, hits|
         ids = hits.map { |id, hit| hit.primary_key }
-        data_accessor_for(Util.full_const_get(class_name)).load_all(ids).each do |result|
-          hit = id_hit_hash[class_name][Adapters::InstanceAdapter.adapt(result).id.to_s]
+        data_accessor = data_accessor_for(Util.full_const_get(class_name))
+        hits_for_class = id_hit_hash[class_name]
+        data_accessor.load_all(ids).each do |result|
+          hit = hits_for_class.delete(Adapters::InstanceAdapter.adapt(result).id.to_s)
           hit.result = result
         end
+        hits_for_class.values.each { |hit| hit.result = nil }
       end
     end
 

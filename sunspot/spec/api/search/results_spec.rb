@@ -56,4 +56,14 @@ describe 'search results', :type => :search do
     stub_results(*posts)
     session.search(Post).results.should == posts[0..0]
   end
+
+  it 'does not attempt to query the data store more than once when results are unavailable' do
+    posts = [Post.new, Post.new]
+    posts.each { |post| post.destroy }
+    stub_results(*posts)
+    search = session.search(Post) do
+      data_accessor_for(Post).should_receive(:load_all).once.and_return([])
+    end
+    search.results.should == []
+  end
 end

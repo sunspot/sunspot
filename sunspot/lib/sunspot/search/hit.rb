@@ -91,9 +91,8 @@ module Sunspot
       # load their instances using the adapter's #load_all method.
       #
       def result
-        if @result.nil?
-          @search.populate_hits
-        end
+        return @result if defined?(@result)
+        @search.populate_hits
         @result
       end
       alias_method :instance, :result
