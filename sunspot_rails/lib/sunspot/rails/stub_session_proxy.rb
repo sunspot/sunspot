@@ -57,6 +57,10 @@ module Sunspot
       end
 
       class Search
+        def build
+          self
+        end
+
         def results
           []
         end
@@ -76,6 +80,7 @@ module Sunspot
         end
 
         def execute
+          self
         end
       end
     end
