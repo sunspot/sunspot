@@ -12,6 +12,7 @@ module Sunspot
         @field_factories_cache, @text_field_factories_cache,
         @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
       @stored_field_factories_cache = Hash.new { |h, k| h[k] = [] }
+      @more_like_this_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @dsl = DSL::Fields.new(self)
       add_field_factory(:class, Type::ClassType.instance)
     end
@@ -24,12 +25,15 @@ module Sunspot
     # Add field factory for scope/ordering
     #
     def add_field_factory(name, type, options = {}, &block)
-      stored = options[:stored]
+      stored, more_like_this = options[:stored], options[:more_like_this]
       field_factory = FieldFactory::Static.new(name, type, options, &block)
       @field_factories[field_factory.signature] = field_factory
       @field_factories_cache[field_factory.name] = field_factory
       if stored
         @stored_field_factories_cache[field_factory.name] << field_factory
+      end
+      if more_like_this
+	@more_like_this_field_factories_cache[field_factory.name] << field_factory
       end
     end
 
@@ -41,12 +45,15 @@ module Sunspot
     # field_factories<Array>:: Array of Sunspot::Field objects
     #
     def add_text_field_factory(name, options = {}, &block)
-      stored = options[:stored]
+      stored, more_like_this = options[:stored], options[:more_like_this]
       field_factory = FieldFactory::Static.new(name, Type::TextType.instance, options, &block)
       @text_field_factories[name] = field_factory
       @text_field_factories_cache[field_factory.name] = field_factory
       if stored
         @stored_field_factories_cache[field_factory.name] << field_factory
+      end
+      if more_like_this
+	@more_like_this_field_factories_cache[field_factory.name] << field_factory
       end
     end
 
@@ -58,12 +65,15 @@ module Sunspot
     # field_factories<Array>:: Array of dynamic field objects
     # 
     def add_dynamic_field_factory(name, type, options = {}, &block)
-      stored = options[:stored]
+      stored, more_like_this = options[:stored], options[:more_like_this]
       field_factory = FieldFactory::Dynamic.new(name, type, options, &block)
       @dynamic_field_factories[field_factory.signature] = field_factory
       @dynamic_field_factories_cache[field_factory.name] = field_factory
       if stored
         @stored_field_factories_cache[field_factory.name] << field_factory
+      end
+      if more_like_this
+	@more_like_this_field_factories_cache[field_factory.name] << field_factory
       end
     end
 
@@ -147,6 +157,20 @@ module Sunspot
       end
     end
 
+    #
+    # Return one or more more_like_this fields (can be either attribute or text fields)
+    # for the given name.
+    #
+    def more_like_this_fields(field_name, dynamic_field_name = nil)
+      @more_like_this_field_factories_cache[field_name.to_sym].map do |field_factory|
+        if dynamic_field_name
+          field_factory.build(dynamic_field_name)
+        else
+          field_factory.build
+        end
+      end
+    end
+
     # 
     # Return the DynamicFieldFactory with the given base name
     #
@@ -169,6 +193,15 @@ module Sunspot
     #
     def all_text_fields
       text_field_factories.map { |text_field_factory| text_field_factory.build }
+    end
+
+    # 
+    # Return all more_like_this fields
+    #
+    def all_more_like_this_fields
+      @more_like_this_field_factories_cache.values.map do |field_factories| 
+	field_factories.map { |field_factory| field_factory.build }
+      end.flatten
     end
 
     # 

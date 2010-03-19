@@ -11,7 +11,7 @@ module Sunspot
       # The configuration with which the thread-local sessions are initialized.
       attr_reader :config
 
-      delegate :batch, :commit, :commit_if_delete_dirty, :commit_if_dirty, :delete_dirty?, :dirty?, :index, :index!, :new_search, :remove, :remove!, :remove_all, :remove_all!, :remove_by_id, :remove_by_id!, :search, :to => :session
+      delegate :batch, :commit, :commit_if_delete_dirty, :commit_if_dirty, :delete_dirty?, :dirty?, :index, :index!, :new_search, :remove, :remove!, :remove_all, :remove_all!, :remove_by_id, :remove_by_id!, :search, :more_like_this, :new_more_like_this, :to => :session
 
       # 
       # Optionally pass an existing Sunspot::Configuration object. If none is

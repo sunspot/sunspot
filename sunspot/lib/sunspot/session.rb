@@ -54,6 +54,24 @@ module Sunspot
       search.execute!
     end
 
+    # 
+    # See Sunspot.new_more_like_this
+    #
+    def new_more_like_this(object, &block)
+      mlt = MoreLikeThis.new(connection, Setup.for(object.class), Query::MoreLikeThisQuery.new, @config)
+      mlt.this_object = object
+      mlt.build(&block) if block
+      mlt
+    end
+
+    #
+    # See Sunspot.more_like_this
+    #
+    def more_like_this(object, &block)
+      mlt = new_more_like_this(object, &block)
+      mlt.execute!
+    end
+
     #
     # See Sunspot.index
     #

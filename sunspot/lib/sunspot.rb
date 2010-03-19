@@ -13,7 +13,7 @@ end
 require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(util adapters configuration setup composite_setup text_field_setup field
-   field_factory data_extractor indexer query search session session_proxy
+   field_factory data_extractor indexer query search more_like_this session session_proxy
    type dsl).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
@@ -321,6 +321,14 @@ module Sunspot
     #
     def search(*types, &block)
       session.search(*types, &block)
+    end
+
+    def new_more_like_this(object, &block)
+      session.new_more_like_this(object, &block)
+    end
+
+    def more_like_this(object, &block)
+      session.more_like_this(object, &block)
     end
 
     # Remove objects from the index. Any time an object is destroyed, it must

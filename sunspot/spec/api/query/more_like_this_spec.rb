@@ -1,0 +1,122 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
+describe 'more_like_this' do
+  it 'should query passed in object' do
+    p = Post.new
+    session.more_like_this(p)
+    connection.should have_last_mlt_with(:q => ["id:Post\\ #{p.id}"])
+  end
+
+  it 'should use more_like_this fields if no fields specified' do
+    session.more_like_this(Post.new)
+    connection.mlts.last["mlt.fl"].split(',').sort.should == %w(body_mlt_textv tags_smv)
+  end
+
+  it 'should use more_like_this fields if specified' do
+    session.more_like_this(Post.new) do
+      fields :body_mlt
+    end
+    connection.should have_last_mlt_with("mlt.fl" => "body_mlt_textv")
+  end
+
+  it 'assigns boosts to fields when specified' do
+    session.more_like_this(Post.new) do
+      fields :body_mlt, :tags => 8
+    end
+    connection.mlts.last["mlt.fl"].split(',').sort.should == %w(body_mlt_textv tags_smv)
+    connection.should have_last_mlt_with(:qf => "tags_smv^8")
+  end
+
+  it 'doesn\'t assign boosts to fields when not specified' do
+    session.more_like_this(Post.new) do
+      fields :body_mlt
+    end
+    connection.should_not have_last_mlt_with(:qf)
+  end
+
+  it 'should raise ArgumentError if a field is not setup for more_like_this' do
+    lambda do
+      session.more_like_this(Post.new) do
+	fields :body
+      end
+    end.should raise_error(ArgumentError)
+  end
+
+  it 'should accept options' do
+    session.more_like_this(Post.new) do
+      minimum_term_frequency 1
+      minimum_document_frequency 2
+      minimum_word_length 3
+      maximum_word_length 4
+      maximum_query_terms 5
+      boost_by_relevance false
+    end
+    connection.should have_last_mlt_with("mlt.mintf" => 1)
+    connection.should have_last_mlt_with("mlt.mindf" => 2)
+    connection.should have_last_mlt_with("mlt.minwl" => 3)
+    connection.should have_last_mlt_with("mlt.maxwl" => 4)
+    connection.should have_last_mlt_with("mlt.maxqt" => 5)
+    connection.should have_last_mlt_with("mlt.boost" => false)
+  end
+
+  it 'should accept short options' do
+    session.more_like_this(Post.new) do
+      mintf 1
+      mindf 2
+      minwl 3
+      maxwl 4
+      maxqt 5
+      boost true
+    end
+    connection.should have_last_mlt_with("mlt.mintf" => 1)
+    connection.should have_last_mlt_with("mlt.mindf" => 2)
+    connection.should have_last_mlt_with("mlt.minwl" => 3)
+    connection.should have_last_mlt_with("mlt.maxwl" => 4)
+    connection.should have_last_mlt_with("mlt.maxqt" => 5)
+    connection.should have_last_mlt_with("mlt.boost" => true)
+  end
+
+  it 'paginates using default per_page when page not provided' do
+    session.more_like_this(Post.new)
+    connection.should have_last_mlt_with(:rows => 30)
+  end
+
+  it 'paginates using default per_page when page provided' do
+    session.more_like_this(Post.new) do
+      paginate :page => 2
+    end
+    connection.should have_last_mlt_with(:rows => 30, :start => 30)
+  end
+
+  it 'paginates using provided per_page' do
+    session.more_like_this(Post.new) do
+      paginate :page => 4, :per_page => 15
+    end
+    connection.should have_last_mlt_with(:rows => 15, :start => 45)
+  end
+
+  it 'defaults to page 1 if no :page argument given' do
+    session.more_like_this(Post.new) do
+      paginate :per_page => 15
+    end
+    connection.should have_last_mlt_with(:rows => 15, :start => 0)
+  end
+
+  it 'paginates from string argument' do
+    session.more_like_this(Post.new) do
+      paginate :page => '3', :per_page => '15'
+    end
+    connection.should have_last_mlt_with(:rows => 15, :start => 30)
+  end
+
+  it "should send query to solr with adjusted parameters (keyword example)" do
+    session.more_like_this(Post.new) do
+      adjust_solr_params do |params|
+        params[:q]    = 'new search'
+        params[:some] = 'param'
+      end
+    end
+    connection.should have_last_mlt_with(:q    => 'new search')
+    connection.should have_last_mlt_with(:some => 'param')
+  end
+end

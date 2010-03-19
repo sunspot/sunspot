@@ -53,14 +53,14 @@ describe 'fulltext query', :type => :query do
     search = session.search Post do
       keywords 'keyword search'
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text)
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_mlt_textv body_texts title_text)
   end
 
   it 'searches both stored and unstored text fields' do
     session.search Post, Namespaced::Comment do
       keywords 'keyword search'
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(author_name_text backwards_title_text body_text body_texts title_text)
+    connection.searches.last[:qf].split(' ').sort.should == %w(author_name_text backwards_title_text body_mlt_textv body_text body_texts title_text)
   end
 
   it 'searches only specified text fields when specified' do
@@ -73,7 +73,7 @@ describe 'fulltext query', :type => :query do
   it 'excludes text fields when instructed' do
     session.search Post do
       keywords 'keyword search' do
-        exclude_fields :backwards_title
+        exclude_fields :backwards_title, :body_mlt
       end
     end
     connection.searches.last[:qf].split(' ').sort.should == %w(body_texts title_text)
@@ -148,7 +148,7 @@ describe 'fulltext query', :type => :query do
         boost_fields :title => 1.5
       end
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text^1.5)
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_mlt_textv body_texts title_text^1.5)
   end
 
   it 'ignores boost fields that do not apply' do
@@ -157,7 +157,7 @@ describe 'fulltext query', :type => :query do
         boost_fields :bogus => 1.2, :title => 1.5
       end
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text^1.5)
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_mlt_textv body_texts title_text^1.5)
   end
 
   it 'sets default boost with default fields' do

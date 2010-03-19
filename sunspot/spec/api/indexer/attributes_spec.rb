@@ -6,6 +6,11 @@ describe 'indexing attribute fields', :type => :indexer do
     connection.should have_add_with(:title_ss => 'A Title')
   end
 
+  it 'should correctly index a more_like_this string attribute field' do
+    session.index(post(:tags => ['tag1', 'tag2']))
+    connection.should have_add_with(:tags_smv => ['tag1', 'tag2'])
+  end
+
   it 'should correctly index an integer attribute field' do
     session.index(post(:blog_id => 4))
     connection.should have_add_with(:blog_id_i => '4')
@@ -138,6 +143,12 @@ describe 'indexing attribute fields', :type => :indexer do
     lambda do
       Sunspot.setup(Post) { string :author_name }
       session.index(post(:author_name => ['Mat Brown', 'Matthew Brown']))
+    end.should raise_error(ArgumentError)
+  end
+
+  it 'should throw an ArgumentError if specifying more_like_this on type that does not support it' do
+    lambda do
+      Sunspot.setup(Post) { integer :popularity, :more_like_this => true }
     end.should raise_error(ArgumentError)
   end
 end

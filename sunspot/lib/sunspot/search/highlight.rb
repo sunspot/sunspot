@@ -1,5 +1,5 @@
 module Sunspot
-  class Search
+  class AbstractSearch
     # 
     # A Highlight represents a single highlighted fragment of text from a
     # document. Depending on the highlighting parameters used for search, there

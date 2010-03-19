@@ -167,6 +167,15 @@ module Sunspot
         new_search(*types).execute
       end
 
+      def more_like_this(object, &block)
+	mlt = new_more_like_this(object, &block)
+	mlt.execute!
+      end
+
+      def new_more_like_this(object, &block)
+	@search_session.new_more_like_this(object, &block)
+      end
+
       # 
       # True if any shard session is dirty. Note that directly using the
       # #commit_if_dirty method is more efficient if that's what you're

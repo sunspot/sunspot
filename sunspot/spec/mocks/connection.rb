@@ -22,13 +22,13 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :searches, :message, :opts, :deletes_by_query
+    attr_reader :adds, :commits, :searches, :mlts, :message, :opts, :deletes_by_query
     attr_accessor :response
 
     def initialize(opts = {})
       @opts = opts
       @message = OpenStruct.new
-      @adds, @deletes, @deletes_by_query, @commits, @searches = Array.new(5) { [] }
+      @adds, @deletes, @deletes_by_query, @commits, @searches, @mlts = Array.new(6) { [] }
     end
 
     def add(documents)
@@ -49,6 +49,11 @@ module Mock
 
     def select(request)
       @searches << @last_search = request
+      @response || {}
+    end
+
+    def mlt(request)
+      @mlts << @last_mlt = request
       @response || {}
     end
 
@@ -81,16 +86,7 @@ module Mock
     end
 
     def has_last_search_with?(params)
-      return unless @last_search
-      if params.respond_to?(:all?)
-        params.all? do |key, value|
-          if @last_search.has_key?(key)
-            @last_search[key] == value
-          end
-        end
-      else
-        @last_search.has_key?(params)
-      end
+      with?(@last_search, params) if @last_search
     end
 
     def has_last_search_including?(key, *values)
@@ -101,6 +97,24 @@ module Mock
         elsif values.length == 1
           @last_search[key] == values.first
         end
+      end
+    end
+
+    def has_last_mlt_with?(params)
+      with?(@last_mlt, params) if @last_mlt
+    end
+
+    private
+
+    def with?(request, params)
+      if params.respond_to?(:all?)
+        params.all? do |key, value|
+          if request.has_key?(key)
+            request[key] == value
+          end
+        end
+      else
+        request.has_key?(params)
       end
     end
   end

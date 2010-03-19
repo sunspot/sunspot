@@ -127,19 +127,9 @@ module Sunspot #:nodoc:
         # Sunspot::Search:: Object containing results, totals, facets, etc.
         #
         def solr_search(options = {}, &block)
-          options.assert_valid_keys(:include, :select)
-          search = Sunspot.new_search(self, &block)
-          unless options.empty?
-            search.build do |query|
-              if options[:include]
-                query.data_accessor_for(self).include = options[:include]
-              end
-              if options[:select]
-                query.data_accessor_for(self).select = options[:select]
-              end
-            end
-          end
-          search.execute
+	  solr_execute_search(options) do
+	    Sunspot.new_search(self, &block)
+	  end
         end
 
         # 
@@ -153,7 +143,9 @@ module Sunspot #:nodoc:
         # Array:: Array of IDs, in the order returned by the search
         #
         def solr_search_ids(&block)
-          solr_search(&block).raw_results.map { |raw_result| raw_result.primary_key.to_i }
+	  solr_execute_search_ids do
+	    solr_search(&block)
+	  end
         end
 
         # 
@@ -289,6 +281,27 @@ module Sunspot #:nodoc:
           true
         end
         
+	def solr_execute_search(options = {})
+          options.assert_valid_keys(:include, :select)
+          search = yield
+          unless options.empty?
+            search.build do |query|
+              if options[:include]
+                query.data_accessor_for(self).include = options[:include]
+              end
+              if options[:select]
+                query.data_accessor_for(self).select = options[:select]
+              end
+            end
+          end
+          search.execute
+	end
+
+	def solr_execute_search_ids(options = {})
+	  search = yield
+	  search.raw_results.map { |raw_result| raw_result.primary_key.to_i }
+	end
+        
         protected
         
         # 
@@ -301,7 +314,7 @@ module Sunspot #:nodoc:
           elapsed = Time.now-start
           logger.info("[#{Time.now}] Completed Indexing. Rows indexed #{counter * batch_size}. Rows/sec: #{batch_size/elapsed.to_f} (Elapsed: #{elapsed} sec.)")
         end
-        
+
       end
 
       module InstanceMethods
@@ -311,6 +324,8 @@ module Sunspot #:nodoc:
             alias_method :index!, :solr_index! unless method_defined? :index!
             alias_method :remove_from_index, :solr_remove_from_index unless method_defined? :remove_from_index
             alias_method :remove_from_index!, :solr_remove_from_index! unless method_defined? :remove_from_index!
+            alias_method :more_like_this, :solr_more_like_this unless method_defined? :more_like_this
+            alias_method :more_like_this_ids, :solr_more_like_this_ids unless method_defined? :more_like_this_ids
           end
         end
         # 
@@ -350,6 +365,18 @@ module Sunspot #:nodoc:
         def solr_remove_from_index!
           Sunspot.remove!(self)
         end
+
+	def solr_more_like_this(options = {}, &block)
+	  self.class.solr_execute_search(options) do
+	    Sunspot.new_more_like_this(self, &block)
+	  end
+	end
+
+	def solr_more_like_this_ids(&block)
+	  self.class.solr_execute_search_ids do
+	    solr_more_like_this(&block)
+	  end
+	end
 
         private
 

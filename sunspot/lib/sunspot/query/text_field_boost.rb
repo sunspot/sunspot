@@ -1,6 +1,8 @@
 module Sunspot
   module Query
     class TextFieldBoost #:nodoc:
+      attr_reader :boost
+
       def initialize(field, boost = nil)
         @field, @boost = field, boost
       end

@@ -1,5 +1,5 @@
 module Sunspot
-  class Search
+  class AbstractSearch
     class QueryFacet
       RequestedFacet = Struct.new(:label, :boolean_phrase) #:nodoc:
 

@@ -28,6 +28,10 @@ module Sunspot
       def accepts_dynamic?
         true
       end
+
+      def accepts_more_like_this?
+	false
+      end
     end
 
     # 
@@ -53,6 +57,10 @@ module Sunspot
       def accepts_dynamic?
         false
       end
+
+      def accepts_more_like_this?
+	true
+      end
     end
 
     # 
@@ -69,6 +77,10 @@ module Sunspot
 
       def cast(string) #:nodoc:
         string
+      end
+
+      def accepts_more_like_this?
+	true
       end
     end
 

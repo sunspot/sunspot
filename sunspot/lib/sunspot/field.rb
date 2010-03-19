@@ -10,6 +10,8 @@ module Sunspot
     def initialize(name, type, options = {}) #:nodoc
       @name, @type = name.to_sym, type
       @stored = !!options.delete(:stored)
+      @more_like_this = !!options.delete(:more_like_this)
+      raise ArgumentError, "Field of type #{type} cannot be used for more_like_this" unless type.accepts_more_like_this? or !@more_like_this
     end
 
     # Convert a value to its representation for Solr indexing. This delegates
@@ -77,6 +79,18 @@ module Sunspot
       !!@multiple
     end
 
+    # 
+    # Whether this field can be used for more_like_this queries.
+    # If true, the field is configured to store termVectors.
+    #
+    # ==== Returns
+    #
+    # Boolean:: True if this field can be used for more_like_this queries.
+    #
+    def more_like_this?
+      !!@more_like_this
+    end
+
     def hash
       indexed_name.hash
     end
@@ -107,7 +121,7 @@ module Sunspot
     end
 
     def indexed_name
-      "#{super}#{'s' if @stored}"
+      "#{super}#{'s' if @stored}#{'v' if more_like_this?}"
     end
   end
 
@@ -140,7 +154,7 @@ module Sunspot
     # String:: The field's indexed name
     #
     def indexed_name
-      "#{super}#{'m' if @multiple}#{'s' if @stored}"
+      "#{super}#{'m' if @multiple}#{'s' if @stored}#{'v' if more_like_this?}"
     end
   end
 
