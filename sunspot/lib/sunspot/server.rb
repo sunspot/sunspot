@@ -129,7 +129,7 @@ module Sunspot
     end
 
     def solr_jar
-        @solr_jar || SOLR_START_JAR
+      @solr_jar || SOLR_START_JAR
     end
 
     private

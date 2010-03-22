@@ -73,7 +73,7 @@ module Sunspot
       # Solr start jar
       #
       def solr_jar
-          configuration.solr_jar || super
+        configuration.solr_jar || super
       end
 
       # 

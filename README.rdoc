@@ -231,6 +231,7 @@ Sunspot repository at `upstream`:
 * Matt Mitchell (goodieboy@gmail.com)
 * Nathan Beyer (nbeyer@gmail.com)
 * Kieran Topping
+* Nicolas Braem (nicolas.braem@gmail.com)
 
 == License
 
