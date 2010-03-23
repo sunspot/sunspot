@@ -104,8 +104,9 @@ module Sunspot
 
       private
 
-      def escape_quotes(string)
-        string.gsub(/(['"])/, '\\\\\1')
+      def escape_quotes(value)
+        return value unless value.is_a? String
+        value.gsub(/(['"])/, '\\\\\1')
       end
 
     end

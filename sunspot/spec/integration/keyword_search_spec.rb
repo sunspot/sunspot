@@ -74,8 +74,17 @@ describe 'keyword search' do
       search = Sunspot.search(Post) do
         keywords 'spirit', :fields => [:title]
         keywords '"interpret the buffer"', :fields => [:body]
+        keywords '"does the"', :fields => [:body]
       end
       search.results.should == [@posts[2]]
+    end
+
+    it 'matches multiple keywords different options' do
+      search = Sunspot.search(Post) do
+        keywords 'insufficient nonexistent', :fields => [:title], :minimum_match => 1
+        keywords 'wind does', :fields => [:body], :minimum_match => 2
+      end
+      search.results.should == [@posts[0]]
     end
   end
 
