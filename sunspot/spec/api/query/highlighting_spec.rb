@@ -27,7 +27,7 @@ describe 'highlighted fulltext queries', :type => :query do
       keywords 'test', :highlight => [:title, :body]
     end
 
-    connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_texts))
+    connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_textsv))
   end
 
   it 'should raise UnrecognizedFieldError if try to highlight unexisting field via keywords argument' do
@@ -45,7 +45,7 @@ describe 'highlighted fulltext queries', :type => :query do
       end
     end
 
-    connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_texts))
+    connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_textsv))
   end
 
   it 'should enable highlighting on multiple fields for multiple search types' do
@@ -54,7 +54,7 @@ describe 'highlighted fulltext queries', :type => :query do
         highlight :body
       end
     end
-    connection.searches.last[:'hl.fl'].to_set.should == Set['body_text', 'body_texts']
+    connection.searches.last[:'hl.fl'].to_set.should == Set['body_text', 'body_textsv']
   end
 
   it 'should raise UnrecognizedFieldError if try to highlight unexisting field via block call' do
@@ -217,9 +217,9 @@ describe 'highlighted fulltext queries', :type => :query do
       end
     end
     connection.should have_last_search_with(
-      :"hl.fl" => %w(title_text body_texts),
+      :"hl.fl" => %w(title_text body_textsv),
       :"f.title_text.hl.snippets" => 2,
-      :"f.body_texts.hl.snippets" => 1
+      :"f.body_textsv.hl.snippets" => 1
     )
   end
 end

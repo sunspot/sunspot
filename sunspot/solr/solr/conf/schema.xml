@@ -211,6 +211,18 @@
     <dynamicField name="*_dts" stored="true" type="tdate" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_dtms" stored="true" type="tdate" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_textv" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_textsv" stored="true" termVectors="true" type="text" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_et" stored="false" termVectors="true" type="tdouble" multiValued="false" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_etm" stored="false" termVectors="true" type="tdouble" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_ets" stored="true" termVectors="true" type="tdouble" multiValued="false" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_etms" stored="true" termVectors="true" type="tdouble" multiValued="true" indexed="true"/>
   </fields>
   <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field

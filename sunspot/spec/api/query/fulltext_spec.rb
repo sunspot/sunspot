@@ -53,21 +53,21 @@ describe 'fulltext query', :type => :query do
     search = session.search Post do
       keywords 'keyword search'
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_mlt_textv body_texts title_text)
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_textsv tags_textv title_text)
   end
 
   it 'searches both stored and unstored text fields' do
     session.search Post, Namespaced::Comment do
       keywords 'keyword search'
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(author_name_text backwards_title_text body_mlt_textv body_text body_texts title_text)
+    connection.searches.last[:qf].split(' ').sort.should == %w(author_name_text backwards_title_text body_text body_textsv tags_textv title_text)
   end
 
   it 'searches only specified text fields when specified' do
     session.search Post do
       keywords 'keyword search', :fields => [:title, :body]
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(body_texts title_text)
+    connection.searches.last[:qf].split(' ').sort.should == %w(body_textsv title_text)
   end
 
   it 'excludes text fields when instructed' do
@@ -76,7 +76,7 @@ describe 'fulltext query', :type => :query do
         exclude_fields :backwards_title, :body_mlt
       end
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(body_texts title_text)
+    connection.searches.last[:qf].split(' ').sort.should == %w(body_textsv tags_textv title_text)
   end
 
   it 'assigns boost to fields when specified' do
@@ -85,7 +85,7 @@ describe 'fulltext query', :type => :query do
         fields :title => 2.0, :body => 0.75
       end
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(body_texts^0.75 title_text^2.0)
+    connection.searches.last[:qf].split(' ').sort.should == %w(body_textsv^0.75 title_text^2.0)
   end
 
   it 'allows assignment of boosted and unboosted fields' do
@@ -100,7 +100,7 @@ describe 'fulltext query', :type => :query do
     session.search Post, Namespaced::Comment do
       keywords 'keyword search', :fields => [:body]
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(body_text body_texts)
+    connection.searches.last[:qf].split(' ').sort.should == %w(body_text body_textsv)
   end
 
   it 'requests score when keywords used' do
@@ -148,7 +148,7 @@ describe 'fulltext query', :type => :query do
         boost_fields :title => 1.5
       end
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_mlt_textv body_texts title_text^1.5)
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_textsv tags_textv title_text^1.5)
   end
 
   it 'ignores boost fields that do not apply' do
@@ -157,7 +157,7 @@ describe 'fulltext query', :type => :query do
         boost_fields :bogus => 1.2, :title => 1.5
       end
     end
-    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_mlt_textv body_texts title_text^1.5)
+    connection.searches.last[:qf].split(' ').sort.should == %w(backwards_title_text body_textsv tags_textv title_text^1.5)
   end
 
   it 'sets default boost with default fields' do

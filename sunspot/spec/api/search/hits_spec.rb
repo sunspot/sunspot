@@ -107,7 +107,7 @@ describe 'hits', :type => :search do
   end
 
   it 'should return stored text fields' do
-    stub_full_results('instance' => Post.new, 'body_texts' => 'Body')
+    stub_full_results('instance' => Post.new, 'body_textsv' => 'Body')
     session.search(Post, Namespaced::Comment).hits.first.stored(:body).should == 'Body'
   end
 

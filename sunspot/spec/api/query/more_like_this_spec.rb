@@ -9,27 +9,27 @@ describe 'more_like_this' do
 
   it 'should use more_like_this fields if no fields specified' do
     session.more_like_this(Post.new)
-    connection.mlts.last["mlt.fl"].split(',').sort.should == %w(body_mlt_textv tags_smv)
+    connection.mlts.last["mlt.fl"].split(',').sort.should == %w(body_textsv tags_textv)
   end
 
   it 'should use more_like_this fields if specified' do
     session.more_like_this(Post.new) do
-      fields :body_mlt
+      fields :body
     end
-    connection.should have_last_mlt_with("mlt.fl" => "body_mlt_textv")
+    connection.should have_last_mlt_with("mlt.fl" => "body_textsv")
   end
 
   it 'assigns boosts to fields when specified' do
     session.more_like_this(Post.new) do
-      fields :body_mlt, :tags => 8
+      fields :body, :tags => 8
     end
-    connection.mlts.last["mlt.fl"].split(',').sort.should == %w(body_mlt_textv tags_smv)
-    connection.should have_last_mlt_with(:qf => "tags_smv^8")
+    connection.mlts.last["mlt.fl"].split(',').sort.should == %w(body_textsv tags_textv)
+    connection.should have_last_mlt_with(:qf => "tags_textv^8")
   end
 
   it 'doesn\'t assign boosts to fields when not specified' do
     session.more_like_this(Post.new) do
-      fields :body_mlt
+      fields :body
     end
     connection.should_not have_last_mlt_with(:qf)
   end
@@ -37,7 +37,7 @@ describe 'more_like_this' do
   it 'should raise ArgumentError if a field is not setup for more_like_this' do
     lambda do
       session.more_like_this(Post.new) do
-	fields :body
+	      fields :title
       end
     end.should raise_error(ArgumentError)
   end

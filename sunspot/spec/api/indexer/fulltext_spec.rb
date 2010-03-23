@@ -8,7 +8,7 @@ describe 'indexing fulltext fields' do
 
   it 'indexes stored text field' do
     session.index(post(:body => 'Test body'))
-    connection.should have_add_with(:body_texts => 'Test body')
+    connection.should have_add_with(:body_textsv => 'Test body')
   end
 
   it 'indexes text field with boost' do
@@ -18,7 +18,7 @@ describe 'indexing fulltext fields' do
 
   it 'indexes multiple values for a text field' do
     session.index(post(:body => %w(some title)))
-    connection.should have_add_with(:body_texts => %w(some title))
+    connection.should have_add_with(:body_textsv => %w(some title))
   end
 
   it 'indexes text via a block accessor' do

@@ -6,11 +6,6 @@ describe 'indexing attribute fields', :type => :indexer do
     connection.should have_add_with(:title_ss => 'A Title')
   end
 
-  it 'should correctly index a more_like_this string attribute field' do
-    session.index(post(:tags => ['tag1', 'tag2']))
-    connection.should have_add_with(:tags_smv => ['tag1', 'tag2'])
-  end
-
   it 'should correctly index an integer attribute field' do
     session.index(post(:blog_id => 4))
     connection.should have_add_with(:blog_id_i => '4')
