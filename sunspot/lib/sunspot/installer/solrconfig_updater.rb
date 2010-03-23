@@ -46,6 +46,7 @@ module Sunspot
           @root = @document.root
           maybe_create_spatial_component
           maybe_add_spatial_component_to_standard_handler
+          maybe_add_more_like_this_handler
           original_path = "#{@solrconfig_path}.orig"
           FileUtils.cp(@solrconfig_path, original_path)
           say("Saved backup of original to #{original_path}")
@@ -86,6 +87,17 @@ module Sunspot
         else
           say('Adding spatial search component into standard search handler')
           add_element(last_components_node, 'str').content = 'spatial'
+        end
+      end
+
+      def maybe_add_more_like_this_handler
+        unless @root.xpath('requestHandler[@name="mlt"]').first
+          mlt_node = add_element(
+            @root, 'requestHandler',
+            :name => 'mlt', :class => 'solr.MoreLikeThisHandler'
+          )
+          add_element(mlt_node, 'str', :name => 'mlt.mintf').content = '1'
+          add_element(mlt_node, 'str', :name => 'mlt.mindf').content = '2'
         end
       end
     end

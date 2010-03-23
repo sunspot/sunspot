@@ -12,37 +12,60 @@ types: !omap
   - boolean:
       class: BoolField
       suffix: b
+      invariants:
+        termVectors: valse
   - date:
       class: DateField
       suffix: d
+      invariants:
+        termVectors: valse
   - rand:
       class: RandomSortField
   - sdouble:
       class: SortableDoubleField
       suffix: e
+      invariants:
+        termVectors: valse
   - sfloat:
       class: SortableFloatField
       suffix: f
+      invariants:
+        termVectors: valse
   - sint:
       class: SortableIntField
       suffix: i
+      invariants:
+        termVectors: valse
   - slong:
       class: SortableLongField
       suffix: l
+      invariants:
+        termVectors: valse
   - string:
       class: StrField
       suffix: s
+      invariants:
+        termVectors: valse
   - tint:
       class: TrieIntField
       suffix: it
+      invariants:
+        termVectors: valse
   - tfloat:
       class: TrieFloatField
       suffix: ft
+      invariants:
+        termVectors: valse
   - tdouble:
       class: TrieDoubleField
+      suffix: et
+      invariants:
+        termVectors: valse
   - tdate:
       class: TrieDateField
       suffix: dt
+      invariants:
+        termVectors: valse
 fixed: !omap
   - id:
       type: string
@@ -69,3 +92,4 @@ fixed: !omap
 variants: !omap
   - multiValued: m
   - stored: s
+  - termVectors: v
