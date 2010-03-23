@@ -54,7 +54,7 @@ describe 'fulltext query', :type => :query do
       keywords 'first search'
       keywords 'second search'
     end
-    connection.should have_last_search_with(:q => "_query_:\"{!dismax qf='title_text body_texts backwards_title_text' v='first search' fl='* score'}\" _query_:\"{!dismax qf='title_text body_texts backwards_title_text' v='second search' fl='* score'}\"")
+    connection.should have_last_search_with(:q => "_query_:\"{!dismax qf='title_text body_texts backwards_title_text' fl='* score'}first search\" _query_:\"{!dismax qf='title_text body_texts backwards_title_text' fl='* score'}second search\"")
   end
 
   it 'searches all text fields for searched class' do

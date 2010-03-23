@@ -10,7 +10,7 @@ describe 'keyword search' do
       @posts << Post.new(:title => 'A nail abbreviates the recovering insight outside the moron',
                          :body => 'The interpreted strain scans the buffer around the upper temper')
       @posts << Post.new(:title => 'The toast abbreviates the recovering spirit',
-                         :body => 'Does the wind interpret the buffer, moron?')
+                         :body => 'Does the host\'s wind interpret the buffer, moron?')
       Sunspot.index!(*@posts)
       @comment = Namespaced::Comment.new(:body => 'Hey there where ya goin, not exactly knowin, who says you have to call just one place toast.')
       Sunspot.index!(@comment)
@@ -60,6 +60,22 @@ describe 'keyword search' do
         keywords 'buffer',  :fields => [:body]
       end
       search.results.should == [@posts[1]]
+    end
+
+    it 'matches multiple keywords with escaped characters' do
+      search = Sunspot.search(Post) do
+        keywords 'spirit',   :fields => [:title]
+        keywords 'host\'s',  :fields => [:body]
+      end
+      search.results.should == [@posts[2]]
+    end
+
+    it 'matches multiple keywords with phrase-based search' do
+      search = Sunspot.search(Post) do
+        keywords 'spirit', :fields => [:title]
+        keywords '"interpret the buffer"', :fields => [:body]
+      end
+      search.results.should == [@posts[2]]
     end
   end
 

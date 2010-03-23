@@ -56,9 +56,9 @@ module Sunspot
       def to_subquery
         params = self.to_params
         params.delete :defType
-        params[:v] = params.delete(:q)
-        options = params.map {|key, value| "#{key}='#{value}'"}.join(' ')
-        "_query_:\"{!dismax #{options}}\""
+        params.delete(:q)
+        options = params.map {|key, value| "#{key}='#{escape_quotes(value)}'"}.join(' ')
+        "_query_:\"{!dismax #{options}}#{escape_quotes(@keywords)}\""
       end
 
       #
@@ -100,6 +100,14 @@ module Sunspot
       def has_fulltext_field?(field)
         @fulltext_fields.has_key?(field.indexed_name)
       end
+
+
+      private
+
+      def escape_quotes(string)
+        string.gsub(/(['"])/, '\\\\\1')
+      end
+
     end
   end
 end
