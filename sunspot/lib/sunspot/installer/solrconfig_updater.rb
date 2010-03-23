@@ -91,13 +91,14 @@ module Sunspot
       end
 
       def maybe_add_more_like_this_handler
-        unless @root.xpath('requestHandler[@name="mlt"]').first
+        unless @root.xpath('requestHandler[@name="/mlt"]').first
           mlt_node = add_element(
             @root, 'requestHandler',
-            :name => 'mlt', :class => 'solr.MoreLikeThisHandler'
+            :name => '/mlt', :class => 'solr.MoreLikeThisHandler'
           )
-          add_element(mlt_node, 'str', :name => 'mlt.mintf').content = '1'
-          add_element(mlt_node, 'str', :name => 'mlt.mindf').content = '2'
+          defaults_node = add_element(mlt_node, 'lst', :name => 'defaults')
+          add_element(defaults_node, 'str', :name => 'mlt.mintf').content = '1'
+          add_element(defaults_node, 'str', :name => 'mlt.mindf').content = '2'
         end
       end
     end

@@ -11,18 +11,12 @@ describe 'more_like_this' do
   end
 
   it 'should return results' do
-    Sunspot.more_like_this(@posts.first).results.length.should > 0
+    Sunspot.more_like_this(@posts.first).results.should_not be_empty
   end
 
   it 'should return results for text fields' do
     Sunspot.more_like_this(@posts.first) do 
-      fields :body_mlt
+      fields :body
     end.results.should == @posts[2..3]
-  end
-
-  it 'should return results for string fields' do
-    Sunspot.more_like_this(@posts.first) do 
-      fields :tags
-    end.results.should == [@posts[3], @posts[1]]
   end
 end

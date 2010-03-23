@@ -929,8 +929,10 @@
     -->
   </admin>
   <searchComponent name="spatial" class="me.outofti.solrspatiallight.SpatialQueryComponent"/>
-  <requestHandler class="solr.MoreLikeThisHandler" name="mlt">
-    <str name="mlt.mintf">1</str>
-    <str name="mlt.mindf">2</str>
+  <requestHandler class="solr.MoreLikeThisHandler" name="/mlt">
+    <lst name="defaults">
+      <str name="mlt.mintf">1</str>
+      <str name="mlt.mindf">2</str>
+    </lst>
   </requestHandler>
 </config>
