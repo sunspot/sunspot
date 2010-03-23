@@ -51,6 +51,17 @@ module Sunspot
       end
 
       #
+      # Serialize the query as a Solr nested subquery.
+      #
+      def to_subquery
+        params = self.to_params
+        params.delete :defType
+        params[:v] = params.delete(:q)
+        options = params.map {|key, value| "#{key}='#{value}'"}.join(' ')
+        "_query_:\"{!dismax #{options}}\""
+      end
+
+      #
       # Assign a new boost query and return it.
       #
       def create_boost_query(factor)

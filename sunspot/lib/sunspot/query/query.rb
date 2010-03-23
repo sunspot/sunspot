@@ -1,12 +1,13 @@
 module Sunspot
   module Query
     class Query
-      attr_accessor :scope, :fulltext, :parameter_adjustment
+      attr_accessor :scope, :fulltexts, :parameter_adjustment
 
       def initialize(types)
-        @scope = Scope.new
-        @sort = SortComposite.new
+        @scope      = Scope.new
+        @sort       = SortComposite.new
         @components = []
+        @fulltexts  = []
         if types.length == 1
           @scope.add_restriction(TypeField.instance, Restriction::EqualTo, types.first)
         else
@@ -14,10 +15,10 @@ module Sunspot
         end
       end
 
-      def set_fulltext(keywords)
-        @fulltext = Dismax.new(keywords)
+      def add_fulltext(keywords)
+        @fulltexts.push(Dismax.new(keywords)).last
       end
-      
+
       def set_solr_parameter_adjustment( block )
         @parameter_adjustment = block
       end
@@ -51,7 +52,7 @@ module Sunspot
 
       def to_params
         params = @scope.to_params
-        Sunspot::Util.deep_merge!(params, @fulltext.to_params) if @fulltext
+        Sunspot::Util.deep_merge!(params, @fulltexts.first.to_params) if @fulltexts.first
         Sunspot::Util.deep_merge!(params, @sort.to_params)
         Sunspot::Util.deep_merge!(params, @pagination.to_params) if @pagination
         Sunspot::Util.deep_merge!(params, @local.to_params) if @local
