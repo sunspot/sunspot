@@ -9,7 +9,7 @@ module Sunspot
 
       def add_element(node, name, attributes = {})
         new_node = Nokogiri::XML::Node.new(name, @document)
-        attributes.each_pair { |name, value| new_node[name] = value }
+        attributes.each_pair { |name, value| new_node[name.to_s] = value }
         node << new_node 
         new_node
       end

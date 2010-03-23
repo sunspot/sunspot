@@ -157,7 +157,7 @@ module Sunspot
 
       def add_comment(node)
         comment_message = " *** This #{node.name} is used by Sunspot! *** "
-        unless (comment = previous_non_text_sibling(node)) && comment.node_type == :comment && comment.content =~ /Sunspot/
+        unless (comment = previous_non_text_sibling(node)) && comment.comment? && comment.content =~ /Sunspot/
           node.add_previous_sibling(Nokogiri::XML::Comment.new(@document, comment_message))
         end
       end
