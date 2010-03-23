@@ -1,3 +1,6 @@
+== 1.0.4 2010-03-19
+* Fix StubSessionProxy to match new internal API
+
 == 1.0.2 2010-03-11
 * Allow use of ActiveRecord object for coordinates extraction
 * Works with non-standard primary keys

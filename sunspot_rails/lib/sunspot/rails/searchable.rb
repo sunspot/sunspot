@@ -39,6 +39,11 @@ module Sunspot #:nodoc:
         # :ignore_attribute_changes_of<Array>::
         #   Define attributes, that should not trigger a reindex of that
         #   object. Usual suspects are updated_at or counters.
+        # :include<Mixed>::
+        #   Define default ActiveRecord includes, set this to allow ActiveRecord
+        #   to load required associations when indexing. See ActiveRecord's 
+        #   documentation on eager-loading for examples on how to set this
+        #   Default: [] 
         #
         # ==== Example
         #
@@ -72,6 +77,8 @@ module Sunspot #:nodoc:
                 searchable.remove_from_index
               end
             end
+            
+            options[:include] ||= []
           end
           self.sunspot_options = options
         end
@@ -214,7 +221,7 @@ module Sunspot #:nodoc:
         #   Post.index(:include => :author) 
         #
         def solr_index(opts={})
-          options = { :batch_size => 500, :batch_commit => true, :include => [], :first_id => 0}.merge(opts)
+          options = { :batch_size => 500, :batch_commit => true, :include => self.sunspot_options[:include], :first_id => 0}.merge(opts)
           unless options[:batch_size]
             Sunspot.index!(all(:include => options[:include]))
           else

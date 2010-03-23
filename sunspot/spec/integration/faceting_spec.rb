@@ -109,6 +109,14 @@ describe 'search faceting' do
       search.facet(:title).rows.map { |row| row.value }.should == %w(four three two one)
     end
 
+    it 'should limit facet values by prefix' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :prefix => 't'
+      end
+      search.facet(:title).rows.map { |row| row.value }.sort.should == %w(three two)
+    end
+
     it 'should return :all facet' do
       search = Sunspot.search(Post) do
         with :blog_id, 1

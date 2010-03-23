@@ -78,6 +78,20 @@ describe 'faceting' do
       connection.should have_last_search_with(:"f.category_ids_im.facet.mincount" => 1)
     end
 
+    it 'sets the facet prefix' do
+      session.search Post do
+        facet :title, :prefix => 'Test'
+      end
+      connection.should have_last_search_with(:"f.title_ss.facet.prefix" => 'Test')
+    end
+
+    it 'escapes the facet prefix' do
+      session.search Post do
+        facet :title, :prefix => 'Test Title'
+      end
+      connection.should have_last_search_with(:"f.title_ss.facet.prefix" => 'Test\ Title')
+    end
+
     it 'sends a query facet for :any extra' do
       session.search Post do
         facet :category_ids, :extra => :any

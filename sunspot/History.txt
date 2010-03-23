@@ -1,3 +1,9 @@
+== 1.0.4 2010-03-19
+* Update solr-spatial-light to 0.0.5
+  * Fix NullPointerException in repeated geo search
+  * Fix missing distances in repeated geo search
+* Don't query the data store more than once when results are missing
+
 == 1.0.2 2010-03-11
 * Restore Hit#distance for result geo distance
 * Remove :distance special sort

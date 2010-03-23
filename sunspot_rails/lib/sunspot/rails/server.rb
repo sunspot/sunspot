@@ -69,6 +69,13 @@ module Sunspot
         File.join(::Rails.root, 'solr')
       end
 
+      #
+      # Solr start jar
+      #
+      def solr_jar
+        configuration.solr_jar || super
+      end
+
       # 
       # Port on which to run Solr
       #
