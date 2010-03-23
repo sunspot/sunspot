@@ -47,6 +47,20 @@ describe 'keyword search' do
       end.results
       results.should == [@posts[1]]
     end
+
+    it 'matches multiple keywords on different fields using subqueries' do
+      search = Sunspot.search(Post) do
+        keywords 'moron', :fields => [:title]
+        keywords 'wind',  :fields => [:body]
+      end
+      search.results.should == []
+
+      search = Sunspot.search(Post) do
+        keywords 'moron',   :fields => [:title]
+        keywords 'buffer',  :fields => [:body]
+      end
+      search.results.should == [@posts[1]]
+    end
   end
 
   describe 'with field boost' do
@@ -75,7 +89,7 @@ describe 'keyword search' do
 
     it 'should assign a higher score to the higher-boosted document' do
       search = Sunspot.search(Post) { keywords 'test' }
-      search.hits.map { |hit| hit.primary_key }.should == 
+      search.hits.map { |hit| hit.primary_key }.should ==
         @posts.map { |post| post.id.to_s }
       search.hits.first.score.should > search.hits.last.score
     end
@@ -110,7 +124,7 @@ describe 'keyword search' do
       hits.first.instance.should == @comments.first
       hits.first.score.should > hits.last.score
     end
-    
+
     it 'assigns a higher score to documents in which the search terms appear in a higher boosted phrase field' do
       hits = Sunspot.search(Namespaced::Comment) do
         keywords 'test text' do

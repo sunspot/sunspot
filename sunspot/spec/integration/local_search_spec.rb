@@ -74,7 +74,7 @@ describe 'local search' do
   it 'should order by geo distance with fulltext' do
     lambda do
       search = Sunspot.search(Post) do |query|
-        query.fulltexts.first('teacup')
+        query.fulltext('teacup')
         query.near(ORIGIN, :sort => true)
       end
     end.should_not raise_error
