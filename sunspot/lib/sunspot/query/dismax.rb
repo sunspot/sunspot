@@ -58,7 +58,7 @@ module Sunspot
         params.delete :defType
         params[:v] = params.delete(:q)
         options = params.map {|key, value| "#{key}='#{value}'"}.join(' ')
-        "_query_:\"{!dismax #{options}}\""
+        "\"{!dismax #{options}}\""
       end
 
       #
