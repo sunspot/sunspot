@@ -4,23 +4,23 @@ module Sunspot
       attr_accessor :scope, :parameter_adjustment
 
       class Scope < Connective::Conjunction
-	def to_params
-	  { :q => @components.map { |component| component.to_filter_query }}
-	end
+        def to_params
+          { :q => @components.map { |component| component.to_filter_query }}
+        end
       end
 
       def initialize()
-	@scope = Scope.new
-	@fields = {}
-	@options = {}
+        @scope = Scope.new
+        @fields = {}
+        @options = {}
       end
 
       def reset_fields
-	@fields = {}
+        @fields = {}
       end
       
       def add_field(field, boost = nil)
-	raise(ArgumentError, "field is not setup for more_like_this") unless field.more_like_this?
+        raise(ArgumentError, "field is not setup for more_like_this") unless field.more_like_this?
         @fields[field.indexed_name] = TextFieldBoost.new(field, boost)
       end
 
@@ -29,27 +29,27 @@ module Sunspot
       end
 
       def set_minimum_term_frequency(value)
-	@options["mlt.mintf"] = value
+        @options[:"mlt.mintf"] = value
       end
 
       def set_minimum_document_frequency(value)
-	@options["mlt.mindf"] = value
+        @options[:"mlt.mindf"] = value
       end
 
       def set_minimum_word_length(value)
-	@options["mlt.minwl"] = value
+        @options[:"mlt.minwl"] = value
       end
 
       def set_maximum_word_length(value)
-	@options["mlt.maxwl"] = value
+        @options[:"mlt.maxwl"] = value
       end
       
       def set_maximum_query_terms(value)
-	@options["mlt.maxqt"] = value
+        @options[:"mlt.maxqt"] = value
       end
 
       def set_boost_by_relevance(should_boost)
-	@options["mlt.boost"] = should_boost
+        @options[:"mlt.boost"] = should_boost
       end
 
       def paginate(page, per_page)
@@ -63,13 +63,13 @@ module Sunspot
 
       def to_params
         params = {}
-	Sunspot::Util.deep_merge!(params, @scope.to_params) # add :q => "id:Post\\ 1"
-	Sunspot::Util.deep_merge!(params, @options) # add mlt.xxx options
+        Sunspot::Util.deep_merge!(params, @scope.to_params) # add :q => "id:Post\\ 1"
+        Sunspot::Util.deep_merge!(params, @options) # add mlt.xxx options
         Sunspot::Util.deep_merge!(params, @pagination.to_params) if @pagination
 
-	params["mlt.fl"] = @fields.keys.join(",")
+        params[:"mlt.fl"] = @fields.keys.join(",")
 
-	boosted_fields = @fields.values.select { |field| field.boost }
+        boosted_fields = @fields.values.select { |field| field.boost }
         params[:qf] = boosted_fields.map { |field| field.to_boosted_field }.join(' ') unless boosted_fields.empty?
 
         @parameter_adjustment.call(params) if @parameter_adjustment

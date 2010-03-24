@@ -9,21 +9,21 @@ describe 'more_like_this' do
 
   it 'should use more_like_this fields if no fields specified' do
     session.more_like_this(Post.new)
-    connection.mlts.last["mlt.fl"].split(',').sort.should == %w(body_textsv tags_textv)
+    connection.mlts.last[:"mlt.fl"].split(',').sort.should == %w(body_textsv tags_textv)
   end
 
   it 'should use more_like_this fields if specified' do
     session.more_like_this(Post.new) do
       fields :body
     end
-    connection.should have_last_mlt_with("mlt.fl" => "body_textsv")
+    connection.should have_last_mlt_with(:"mlt.fl" => "body_textsv")
   end
 
   it 'assigns boosts to fields when specified' do
     session.more_like_this(Post.new) do
       fields :body, :tags => 8
     end
-    connection.mlts.last["mlt.fl"].split(',').sort.should == %w(body_textsv tags_textv)
+    connection.mlts.last[:"mlt.fl"].split(',').sort.should == %w(body_textsv tags_textv)
     connection.should have_last_mlt_with(:qf => "tags_textv^8")
   end
 
@@ -51,12 +51,12 @@ describe 'more_like_this' do
       maximum_query_terms 5
       boost_by_relevance false
     end
-    connection.should have_last_mlt_with("mlt.mintf" => 1)
-    connection.should have_last_mlt_with("mlt.mindf" => 2)
-    connection.should have_last_mlt_with("mlt.minwl" => 3)
-    connection.should have_last_mlt_with("mlt.maxwl" => 4)
-    connection.should have_last_mlt_with("mlt.maxqt" => 5)
-    connection.should have_last_mlt_with("mlt.boost" => false)
+    connection.should have_last_mlt_with(:"mlt.mintf" => 1)
+    connection.should have_last_mlt_with(:"mlt.mindf" => 2)
+    connection.should have_last_mlt_with(:"mlt.minwl" => 3)
+    connection.should have_last_mlt_with(:"mlt.maxwl" => 4)
+    connection.should have_last_mlt_with(:"mlt.maxqt" => 5)
+    connection.should have_last_mlt_with(:"mlt.boost" => false)
   end
 
   it 'should accept short options' do
@@ -68,12 +68,12 @@ describe 'more_like_this' do
       maxqt 5
       boost true
     end
-    connection.should have_last_mlt_with("mlt.mintf" => 1)
-    connection.should have_last_mlt_with("mlt.mindf" => 2)
-    connection.should have_last_mlt_with("mlt.minwl" => 3)
-    connection.should have_last_mlt_with("mlt.maxwl" => 4)
-    connection.should have_last_mlt_with("mlt.maxqt" => 5)
-    connection.should have_last_mlt_with("mlt.boost" => true)
+    connection.should have_last_mlt_with(:"mlt.mintf" => 1)
+    connection.should have_last_mlt_with(:"mlt.mindf" => 2)
+    connection.should have_last_mlt_with(:"mlt.minwl" => 3)
+    connection.should have_last_mlt_with(:"mlt.maxwl" => 4)
+    connection.should have_last_mlt_with(:"mlt.maxqt" => 5)
+    connection.should have_last_mlt_with(:"mlt.boost" => true)
   end
 
   it 'paginates using default per_page when page not provided' do
