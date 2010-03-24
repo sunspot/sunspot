@@ -7,21 +7,20 @@ module Sunspot
   #
   module Search
     class MoreLikeThisSearch < AbstractSearch
-
-      def this_object=(object)
-        @query.scope.add_restriction(
-	  IdField.instance,
-	  Sunspot::Query::Restriction::EqualTo,
-	  Sunspot::Adapters::InstanceAdapter.adapt(object).index_id
-        )
-        @setup.all_more_like_this_fields.each { |field| @query.add_field(field) }
+      def execute
+        if @query.more_like_this.fields.empty?
+          @setup.all_more_like_this_fields.each do |field|
+            @query.more_like_this.add_field(field)
+          end
+        end
+        super
       end
 
       private
 
       # override
       def dsl
-        DSL::MoreLikeThis.new(@query, @setup)
+        DSL::MoreLikeThisQuery.new(self, @query, @setup)
       end
 
       def execute_request(params)

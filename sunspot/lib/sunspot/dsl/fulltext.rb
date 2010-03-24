@@ -8,6 +8,7 @@ module Sunspot
       attr_reader :exclude_fields #:nodoc:
 
       def initialize(query, setup) #:nodoc:
+        debugger if query.is_a?(Array)
         @query, @setup = query, setup
         @fields_added = false
         @exclude_fields = []

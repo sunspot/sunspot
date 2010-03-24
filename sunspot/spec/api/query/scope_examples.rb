@@ -230,14 +230,6 @@ shared_examples_for "scoped query" do
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
-  it 'raises Sunspot::UnrecognizedFieldError if a text field that does not exist for any type is specified' do
-    lambda do
-      search Post, Namespaced::Comment do
-        keywords 'fulltext', :fields => :bogus
-      end
-    end.should raise_error(Sunspot::UnrecognizedFieldError)
-  end
-
   it 'raises Sunspot::UnrecognizedFieldError for nonexistant fields in block scope' do
     lambda do
       search do

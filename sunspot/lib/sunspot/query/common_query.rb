@@ -1,29 +1,19 @@
 module Sunspot
-  module Query
-    class Query
-      attr_accessor :scope, :fulltext, :parameter_adjustment
-
+  module Query #:nodoc:
+    class CommonQuery
       def initialize(types)
         @scope = Scope.new
         @sort = SortComposite.new
-        @components = []
+        @components = [@scope, @sort]
         if types.length == 1
           @scope.add_restriction(TypeField.instance, Restriction::EqualTo, types.first)
         else
           @scope.add_restriction(TypeField.instance, Restriction::AnyOf, types)
         end
       end
-
-      def set_fulltext(keywords)
-        @fulltext = Dismax.new(keywords)
-      end
       
-      def set_solr_parameter_adjustment( block )
+      def solr_parameter_adjustment=(block)
         @parameter_adjustment = block
-      end
-
-      def add_location_restriction(coordinates, radius)
-        @local = Local.new(coordinates, radius)
       end
 
       def add_sort(sort)
@@ -45,16 +35,12 @@ module Sunspot
           @pagination.page = page
           @pagination.per_page = per_page
         else
-          @pagination = Pagination.new(page, per_page)
+          @components << @pagination = Pagination.new(page, per_page)
         end
       end
 
       def to_params
-        params = @scope.to_params
-        Sunspot::Util.deep_merge!(params, @fulltext.to_params) if @fulltext
-        Sunspot::Util.deep_merge!(params, @sort.to_params)
-        Sunspot::Util.deep_merge!(params, @pagination.to_params) if @pagination
-        Sunspot::Util.deep_merge!(params, @local.to_params) if @local
+        params = {}
         @components.each do |component|
           Sunspot::Util.deep_merge!(params, component.to_params)
         end

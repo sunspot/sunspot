@@ -1,4 +1,4 @@
-%w(fields scope paginatable adjustable field_query query query_facet fulltext restriction
-   search more_like_this).each do |file|
+%w(fields scope paginatable adjustable field_query standard_query query_facet fulltext restriction
+   search more_like_this_query).each do |file|
   require File.join(File.dirname(__FILE__), 'dsl', file)
 end

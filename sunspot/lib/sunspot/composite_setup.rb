@@ -112,6 +112,10 @@ module Sunspot
       @text_fields ||= text_fields_hash.values.map { |set| set.to_a }.flatten
     end
 
+    def all_more_like_this_fields
+      @more_like_this_fields ||= more_like_this_fields_hash.values.map { |set| set.to_a }.flatten
+    end
+
     private
 
     # 
@@ -127,6 +131,16 @@ module Sunspot
         setups.inject({}) do |hash, setup|
           setup.all_text_fields.each do |text_field|
             (hash[text_field.name] ||= Set.new) << text_field
+          end
+          hash
+        end
+    end
+
+    def more_like_this_fields_hash
+      @more_like_this_fields_hash ||=
+        setups.inject({}) do |hash, setup|
+          setup.all_more_like_this_fields.each do |more_like_this_field|
+            (hash[more_like_this_field.name] ||= Set.new) << more_like_this_field
           end
           hash
         end

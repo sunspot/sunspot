@@ -28,7 +28,7 @@ module Sunspot
       #   end
       # 
       def adjust_solr_params( &block )
-        @query.set_solr_parameter_adjustment( block )
+        @query.solr_parameter_adjustment = block
       end
     end
   end

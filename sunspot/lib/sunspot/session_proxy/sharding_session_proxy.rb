@@ -168,12 +168,12 @@ module Sunspot
       end
 
       def more_like_this(object, &block)
-	mlt = new_more_like_this(object, &block)
-	mlt.execute!
+        #FIXME should use shards
+        new_more_like_this(object, &block).execute
       end
 
       def new_more_like_this(object, &block)
-	@search_session.new_more_like_this(object, &block)
+        @search_session.new_more_like_this(object, &block)
       end
 
       # 

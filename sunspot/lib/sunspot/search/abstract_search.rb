@@ -27,7 +27,10 @@ module Sunspot
         @solr_result = execute_request(params)
         self
       end
-      alias_method :execute!, :execute #:nodoc: deprecated
+
+      def execute! #:nodoc: deprecated
+        execute
+      end
   
       # 
       # Get the collection of results as instantiated objects. If WillPaginate is
@@ -126,7 +129,7 @@ module Sunspot
       #   search.build do
       #     with(:published_at).less_than Time.now
       #   end
-      #   search.execute!
+      #   search.execute
       #
       def build(&block)
         Util.instance_eval_or_call(dsl, &block)

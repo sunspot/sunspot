@@ -22,13 +22,15 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :searches, :mlts, :message, :opts, :deletes_by_query
+    attr_reader :adds, :commits, :searches, :message, :opts, :deletes_by_query
     attr_accessor :response
+    attr_writer :expected_handler
 
     def initialize(opts = {})
       @opts = opts
       @message = OpenStruct.new
-      @adds, @deletes, @deletes_by_query, @commits, @searches, @mlts = Array.new(6) { [] }
+      @adds, @deletes, @deletes_by_query, @commits, @searches = Array.new(5) { [] }
+      @expected_handler = :select
     end
 
     def add(documents)
@@ -47,14 +49,13 @@ module Mock
       @commits << Time.now
     end
 
-    def select(request)
-      @searches << @last_search = request
-      @response || {}
-    end
-
-    def mlt(request)
-      @mlts << @last_mlt = request
-      @response || {}
+    def method_missing(method, *args, &block)
+      if method.to_sym == @expected_handler
+        @searches << @last_search = args.first
+        @response || {}
+      else
+        super
+      end
     end
 
     def has_add_with?(*documents)
@@ -98,10 +99,6 @@ module Mock
           @last_search[key] == values.first
         end
       end
-    end
-
-    def has_last_mlt_with?(params)
-      with?(@last_mlt, params) if @last_mlt
     end
 
     private

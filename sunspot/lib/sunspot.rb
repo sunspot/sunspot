@@ -243,7 +243,7 @@ module Sunspot
     #
     # Sunspot::Search::
     #   Search object, not yet executed. Query parameters can be added manually;
-    #   then #execute! should be called.
+    #   then #execute should be called.
     # 
     def new_search(*types, &block)
       session.new_search(*types, &block)

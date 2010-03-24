@@ -8,7 +8,7 @@ module Sunspot
     #
     # See Sunspot.search for usage examples
     #
-    class Query < FieldQuery
+    class StandardQuery < FieldQuery
       include Paginatable, Adjustable
 
       # Specify a phrase that should be searched as fulltext. Only +text+
