@@ -15,8 +15,6 @@ module Sunspot
   
       def initialize(connection, setup, query, configuration) #:nodoc:
         super(connection, setup, query, configuration)
-        @facets = []
-        @facets_by_name = {}
       end
   
       # 
@@ -76,20 +74,6 @@ module Sunspot
         facet(base_name, dynamic_name)
       end
   
-      def add_field_facet(field, options = {}) #:nodoc:
-        name = (options[:name] || field.name)
-        add_facet(name, FieldFacet.new(field, self, options))
-      end
-  
-      def add_date_facet(field, options) #:nodoc:
-        name = (options[:name] || field.name)
-        add_facet(name, DateFacet.new(field, self, options))
-      end
-  
-      def add_query_facet(name, options) #:nodoc:
-        add_facet(name, QueryFacet.new(name, self, options))
-      end
-  
       def facet_response #:nodoc:
         @solr_result['facet_counts']
       end
@@ -102,11 +86,6 @@ module Sunspot
   
       def execute_request(params)
         @connection.select(params)
-      end
-  
-      def add_facet(name, facet)
-        @facets << facet
-        @facets_by_name[name.to_sym] = facet
       end
     end
   end
