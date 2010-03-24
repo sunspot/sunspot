@@ -1,5 +1,5 @@
 module Sunspot
-  class AbstractSearch
+  module Search
     # 
     # A FieldFacet is a facet whose rows are all values for a certain field, in
     # contrast to a QueryFacet, whose rows represent arbitrary queries.

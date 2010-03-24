@@ -1,5 +1,5 @@
 module Sunspot
-  class AbstractSearch
+  module Search
     class DateFacet
       def initialize(field, search, options)
         @field, @search, @options = field, search, options

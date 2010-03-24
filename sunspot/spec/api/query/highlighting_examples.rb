@@ -1,29 +1,29 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe 'highlighted fulltext queries', :type => :query do
+shared_examples_for "query with highlighting support" do
   it 'should not send highlight parameter when highlight not requested' do
-    session.search(Post) do
+    search do
       keywords 'test'
     end
     connection.should_not have_last_search_with(:hl)
   end
 
   it 'should enable highlighting when highlighting requested as keywords argument' do
-    session.search(Post) do
+    search do
       keywords 'test', :highlight => true
     end
     connection.should have_last_search_with(:hl => 'on')
   end
 
   it 'should not set highlight fields parameter if highlight fields are not passed' do
-    session.search(Post) do
+    search do
       keywords 'test', :highlight => true, :fields => [:title]
     end
     connection.should_not have_last_search_with(:'hl.fl')
   end
 
   it 'should enable highlighting on multiple fields when highlighting requested as array of fields via keywords argument' do
-    session.search(Post) do
+    search do
       keywords 'test', :highlight => [:title, :body]
     end
 
@@ -32,14 +32,14 @@ describe 'highlighted fulltext queries', :type => :query do
 
   it 'should raise UnrecognizedFieldError if try to highlight unexisting field via keywords argument' do
     lambda {
-      session.search(Post) do
+      search do
         keywords 'test', :highlight => [:unknown_field]
       end
     }.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'should enable highlighting on multiple fields when highlighting requested as list of fields via block call' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :title, :body
       end
@@ -59,7 +59,7 @@ describe 'highlighted fulltext queries', :type => :query do
 
   it 'should raise UnrecognizedFieldError if try to highlight unexisting field via block call' do
     lambda {
-      session.search(Post) do
+      search do
         keywords 'test' do
           highlight :unknown_field
         end
@@ -68,7 +68,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'should set internal formatting' do
-    session.search(Post) do
+    search do
       keywords 'test', :highlight => true
     end
     connection.should have_last_search_with(
@@ -78,7 +78,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'should set highlight fields from DSL' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :title
       end
@@ -89,7 +89,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'should not set formatting params specific to fields if fields specified' do
-    session.search(Post) do
+    search do
       keywords 'test', :highlight => :body
     end
     connection.should have_last_search_with(
@@ -99,7 +99,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'should set maximum highlights per field' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :max_snippets => 3
       end
@@ -110,7 +110,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'should set max snippets specific to highlight fields' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :title, :max_snippets => 3
       end
@@ -122,7 +122,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'should set the maximum size' do
-    session.search(Post) do
+    search do
       keywords 'text' do
         highlight :fragment_size => 200
       end
@@ -133,7 +133,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'should set the maximum size for specific fields' do
-    session.search(Post) do
+    search do
       keywords 'text' do
         highlight :title, :fragment_size => 200
       end
@@ -144,7 +144,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'enables merging of contiguous fragments' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :merge_contiguous_fragments => true
       end
@@ -155,7 +155,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'enables merging of contiguous fragments for specific fields' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :title, :merge_contiguous_fragments => true
       end
@@ -166,7 +166,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'enables use of phrase highlighter' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :phrase_highlighter => true
       end
@@ -177,7 +177,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'enables use of phrase highlighter for specific fields' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :title, :phrase_highlighter => true
       end
@@ -188,7 +188,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'requires field match if requested' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :phrase_highlighter => true, :require_field_match => true
       end
@@ -199,7 +199,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'requires field match for specified field if requested' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :title, :phrase_highlighter => true, :require_field_match => true
       end
@@ -210,7 +210,7 @@ describe 'highlighted fulltext queries', :type => :query do
   end
 
   it 'sets field specific params for different fields if different params given' do
-    session.search(Post) do
+    search do
       keywords 'test' do
         highlight :title, :max_snippets => 2
         highlight :body, :max_snippets => 1

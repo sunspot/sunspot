@@ -119,4 +119,10 @@ describe 'more_like_this' do
     connection.should have_last_mlt_with(:q    => 'new search')
     connection.should have_last_mlt_with(:some => 'param')
   end
+
+  private
+
+  def search(&block)
+    session.more_like_this(Post.new, &block)
+  end
 end

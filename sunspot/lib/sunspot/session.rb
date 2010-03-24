@@ -41,7 +41,8 @@ module Sunspot
     #
     def new_search(*types, &block)
       types.flatten!
-      search = Search.new(connection, setup_for_types(types), Query::Query.new(types), @config)
+      search = Search::StandardSearch.new(
+        connection, setup_for_types(types), Query::Query.new(types), @config)
       search.build(&block) if block
       search
     end
@@ -58,7 +59,7 @@ module Sunspot
     # See Sunspot.new_more_like_this
     #
     def new_more_like_this(object, &block)
-      mlt = MoreLikeThis.new(connection, Setup.for(object.class), Query::MoreLikeThisQuery.new, @config)
+      mlt = Search::MoreLikeThisSearch.new(connection, Setup.for(object.class), Query::MoreLikeThisQuery.new, @config)
       mlt.this_object = object
       mlt.build(&block) if block
       mlt

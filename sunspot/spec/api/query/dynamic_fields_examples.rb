@@ -1,8 +1,6 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
-
-describe 'dynamic field query', :type => :query do
+shared_examples_for "query with dynamic field support" do
   it 'restricts by dynamic string field with equality restriction' do
-    session.search Post do
+    search do
       dynamic :custom_string do
         with :test, 'string'
       end
@@ -11,7 +9,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'restricts by dynamic integer field with less than restriction' do
-    session.search Post do
+    search do
       dynamic :custom_integer do
         with(:test).less_than(1)
       end
@@ -20,7 +18,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'restricts by dynamic float field with between restriction' do
-    session.search Post do
+    search do
       dynamic :custom_float do
         with(:test).between(2.2..3.3)
       end
@@ -29,7 +27,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'restricts by dynamic time field with any of restriction' do
-    session.search Post do
+    search do
       dynamic :custom_time do
         with(:test).any_of([Time.parse('2009-02-10 14:00:00 UTC'),
                             Time.parse('2009-02-13 18:00:00 UTC')])
@@ -39,7 +37,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'restricts by dynamic boolean field with equality restriction' do
-    session.search Post do
+    search do
       dynamic :custom_boolean do
         with :test, false
       end
@@ -48,7 +46,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'negates a dynamic field restriction' do
-    session.search Post do
+    search do
       dynamic :custom_string do
         without :test, 'foo'
       end
@@ -57,7 +55,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'scopes by a dynamic field inside a disjunction' do
-    session.search Post do
+    search do
       any_of do
         dynamic :custom_string do
           with :test, 'foo'
@@ -71,7 +69,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'orders by a dynamic field' do
-    session.search Post do
+    search do
       dynamic :custom_integer do
         order_by :test, :desc
       end
@@ -80,7 +78,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'orders by a dynamic field and static field, with given precedence' do
-    session.search Post do
+    search do
       dynamic :custom_integer do
         order_by :test, :desc
       end
@@ -91,7 +89,7 @@ describe 'dynamic field query', :type => :query do
 
   it 'raises an UnrecognizedFieldError if an unknown dynamic field is searched by' do
     lambda do
-      session.search Post do
+      search do
         dynamic(:bogus) { with :some, 'value' }
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
@@ -99,7 +97,7 @@ describe 'dynamic field query', :type => :query do
 
   it 'raises a NoMethodError if pagination is attempted in a dynamic query' do
     lambda do
-      session.search Post do
+      search do
         dynamic :custom_string do
           paginate :page => 3, :per_page => 10
         end
@@ -108,7 +106,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'requests query facet with internal dynamic field' do
-    session.search Post do
+    search do
       facet :test do
         row 'foo' do
           dynamic :custom_string do
@@ -123,7 +121,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'requests query facet with external dynamic field' do
-    session.search Post do
+    search do
       dynamic :custom_string do
         facet :test do
           row 'foo' do
@@ -139,7 +137,7 @@ describe 'dynamic field query', :type => :query do
   end
 
   it 'allows scoping on dynamic fields common to all types' do
-    session.search Post, Namespaced::Comment do
+    search Post, Namespaced::Comment do
       dynamic :custom_float do
         with(:test, 1.23)
       end

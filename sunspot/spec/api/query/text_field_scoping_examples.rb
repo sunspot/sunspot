@@ -1,6 +1,6 @@
-describe 'scoping with text fields', :type => :query do
+shared_examples_for 'query with text field scoping' do
   it 'should scope with a text field' do
-    session.search(Post) do
+    search do
       text_fields do
         with(:body, 'test')
       end
@@ -10,7 +10,7 @@ describe 'scoping with text fields', :type => :query do
 
   it 'should raise an UnrecognizedFieldError if differently configured text field is used' do
     lambda do
-      session.search(Post, Namespaced::Comment) do
+      search(Post, Namespaced::Comment) do
         text_fields do
           with(:body, 'test')
         end
@@ -20,7 +20,7 @@ describe 'scoping with text fields', :type => :query do
 
   it 'should raise an UnrecognizedFieldError if no field exists' do
     lambda do
-      session.search(Post) do
+      search do
         text_fields do
           with(:bogus, 'test')
         end

@@ -1,5 +1,5 @@
 module Sunspot
-  class AbstractSearch
+  module Search
     # 
     # Hit objects represent the raw information returned by Solr for a single
     # document. As well as the primary key and class name, hit objects give

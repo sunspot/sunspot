@@ -1,5 +1,5 @@
 module Sunspot
-  class AbstractSearch
+  module Search
     class FacetRow
       attr_reader :value, :count
       attr_writer :instance #:nodoc:
