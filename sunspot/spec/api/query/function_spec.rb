@@ -16,7 +16,7 @@ describe 'function query' do
         boost(function { 10.5 })
       end
     end
-    connection.should have_last_search_including(:bf, '10.5')
+    connection.should have_last_search_including(:bf, '10\.5')
   end
 
   it "should handle boost function with string literal" do
@@ -25,7 +25,16 @@ describe 'function query' do
         boost(function { "hello world" })
       end
     end
-    connection.should have_last_search_including(:bf, '"hello world"')
+    connection.should have_last_search_including(:bf, 'hello\ world')
+  end
+
+  it "should handle boost function with time literal" do
+    session.search Post do
+      keywords('pizza') do
+        boost(function { Time.parse('2010-03-25 14:13:00 EDT') })
+      end
+    end
+    connection.should have_last_search_including(:bf, '2010\-03\-25T18\:13\:00Z')
   end
  
   it "should handle arbitrary functions in a function query block" do
