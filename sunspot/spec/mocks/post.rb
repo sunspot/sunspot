@@ -40,8 +40,8 @@ Sunspot.setup(Post) do
   string :title, :stored => true
   integer :blog_id, :references => Blog
   integer :category_ids, :multiple => true
-  float :average_rating, :using => :ratings_average
-  time :published_at
+  float :average_rating, :using => :ratings_average, :trie => true
+  time :published_at, :trie => true
   date :expire_date
   boolean :featured, :using => :featured?
   string :sort_title do

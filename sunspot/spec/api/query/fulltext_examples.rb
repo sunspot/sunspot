@@ -49,6 +49,32 @@ shared_examples_for 'fulltext query' do
     connection.should have_last_search_with(:fq => ['type:Post'])
   end
 
+  describe 'with multiple keyword components' do
+    before :each do
+      session.search Post do
+        keywords 'first search', :fields => :title
+        keywords 'second search'
+      end
+    end
+
+    it 'puts specified keywords in subquery' do
+      subqueries(:q).map { |subquery| subquery[:v] }.should ==
+        ['first search', 'second search']
+    end
+
+    it 'puts specified dismax parameters in subquery' do
+      subqueries(:q).first[:qf].should == 'title_text'
+    end
+
+    it 'puts default dismax parameters in subquery' do
+      subqueries(:q).last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text)
+    end
+
+    it 'puts automatic dismax parameters in subquery' do
+      subqueries(:q).each { |subquery| subquery[:fl].should == '* score' }
+    end
+  end
+
   it 'searches all text fields for searched class' do
     search = search do
       keywords 'keyword search'
@@ -200,7 +226,7 @@ shared_examples_for 'fulltext query' do
         end
       end
     end
-    connection.should have_last_search_with(:bq => ['average_rating_f:[2\.0 TO *]^2.0'])
+    connection.should have_last_search_with(:bq => ['average_rating_ft:[2\.0 TO *]^2.0'])
   end
 
   it 'creates multiple boost queries' do
@@ -216,7 +242,7 @@ shared_examples_for 'fulltext query' do
     end
     connection.should have_last_search_with(
       :bq => [
-        'average_rating_f:[2\.0 TO *]^2.0',
+        'average_rating_ft:[2\.0 TO *]^2.0',
         'featured_b:true^1.5'
       ]
     )

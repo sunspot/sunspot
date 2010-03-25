@@ -10,7 +10,7 @@ describe 'keyword search' do
       @posts << Post.new(:title => 'A nail abbreviates the recovering insight outside the moron',
                          :body => 'The interpreted strain scans the buffer around the upper temper')
       @posts << Post.new(:title => 'The toast abbreviates the recovering spirit',
-                         :body => 'Does the wind interpret the buffer, moron?')
+                         :body => 'Does the host\'s wind interpret the buffer, moron?')
       Sunspot.index!(*@posts)
       @comment = Namespaced::Comment.new(:body => 'Hey there where ya goin, not exactly knowin, who says you have to call just one place toast.')
       Sunspot.index!(@comment)
@@ -47,6 +47,45 @@ describe 'keyword search' do
       end.results
       results.should == [@posts[1]]
     end
+
+    it 'matches multiple keywords on different fields using subqueries' do
+      search = Sunspot.search(Post) do
+        keywords 'moron', :fields => [:title]
+        keywords 'wind',  :fields => [:body]
+      end
+      search.results.should == []
+
+      search = Sunspot.search(Post) do
+        keywords 'moron',   :fields => [:title]
+        keywords 'buffer',  :fields => [:body]
+      end
+      search.results.should == [@posts[1]]
+    end
+
+    it 'matches multiple keywords with escaped characters' do
+      search = Sunspot.search(Post) do
+        keywords 'spirit',   :fields => [:title]
+        keywords 'host\'s',  :fields => [:body]
+      end
+      search.results.should == [@posts[2]]
+    end
+
+    it 'matches multiple keywords with phrase-based search' do
+      search = Sunspot.search(Post) do
+        keywords 'spirit', :fields => [:title]
+        keywords '"interpret the buffer"', :fields => [:body]
+        keywords '"does the"', :fields => [:body]
+      end
+      search.results.should == [@posts[2]]
+    end
+
+    it 'matches multiple keywords different options' do
+      search = Sunspot.search(Post) do
+        keywords 'insufficient nonexistent', :fields => [:title], :minimum_match => 1
+        keywords 'wind does', :fields => [:body], :minimum_match => 2
+      end
+      search.results.should == [@posts[0]]
+    end
   end
 
   describe 'with field boost' do
@@ -75,7 +114,7 @@ describe 'keyword search' do
 
     it 'should assign a higher score to the higher-boosted document' do
       search = Sunspot.search(Post) { keywords 'test' }
-      search.hits.map { |hit| hit.primary_key }.should == 
+      search.hits.map { |hit| hit.primary_key }.should ==
         @posts.map { |post| post.id.to_s }
       search.hits.first.score.should > search.hits.last.score
     end
@@ -110,7 +149,7 @@ describe 'keyword search' do
       hits.first.instance.should == @comments.first
       hits.first.score.should > hits.last.score
     end
-    
+
     it 'assigns a higher score to documents in which the search terms appear in a higher boosted phrase field' do
       hits = Sunspot.search(Namespaced::Comment) do
         keywords 'test text' do
@@ -240,6 +279,39 @@ describe 'keyword search' do
 
     it 'should not give phrase field boost to match beyond slop' do
       @sorted_hits[4].score.should == @sorted_hits[5].score
+    end
+  end
+
+  describe 'with function queries' do
+    before :each do
+      Sunspot.remove_all
+    end
+
+    after :each do
+      @search.results.should == @posts
+      @search.hits.first.score.should > @search.hits.last.score
+    end
+
+    it 'boosts via function query with float' do
+      @posts = [Post.new(:title => 'test', :ratings_average => 4.0),
+                Post.new(:title => 'test', :ratings_average => 2.0)]
+      Sunspot.index!(@posts)
+      @search = Sunspot.search(Post) do
+        keywords('test') do
+          boost function { :average_rating }
+        end
+      end
+    end
+
+    it 'boosts via function query with date' do
+      @posts = [Post.new(:title => 'test', :published_at => Time.now),
+                Post.new(:title => 'test', :published_at => Time.now - 60*60*24*31*6)] # roughly six months ago
+      Sunspot.index!(@posts)
+      @search = Sunspot.search(Post) do
+        keywords('test') do
+          boost function { recip(ms(Time.now, :published_at), 3.16e-11, 1, 1) }
+        end
+      end
     end
   end
 end

@@ -55,7 +55,7 @@ describe 'local search' do
     end
     search.results.should == [@posts[1], @posts[4]]
   end
-  
+
   it 'should order by arbitrary field' do
     search = Sunspot.search(Post) do |query|
       query.near(ORIGIN, :distance => 20)

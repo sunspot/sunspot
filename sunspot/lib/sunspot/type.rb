@@ -17,6 +17,46 @@ module Sunspot
   #   Ruby type.
   #
   module Type
+    class <<self
+      def register(sunspot_type, *classes)
+        classes.each do |clazz|
+          ruby_type_map[clazz.name.to_sym] = sunspot_type.instance
+        end
+      end
+
+      def for_class(clazz)
+        if clazz
+          ruby_type_map[clazz.name.to_sym] || for_class(clazz.superclass)
+        end
+      end
+
+      def for(object)
+        for_class(object.class)
+      end
+
+      def to_indexed(object)
+        if type = self.for(object)
+          type.to_indexed(object)
+        else
+          object.to_s
+        end
+      end
+
+      def to_literal(object)
+        if type = self.for(object)
+          type.to_literal(object)
+        else
+          raise ArgumentError, "Can't use #{object.inspect} as Solr literal: #{object.class} has no registered Solr type"
+        end
+      end
+
+      private
+
+      def ruby_type_map
+        @ruby_type_map ||= {}
+      end
+    end
+
     class AbstractType #:nodoc:
       class <<self
         def instance
@@ -31,6 +71,13 @@ module Sunspot
 
       def accepts_more_like_this?
         false
+      end
+
+      def to_literal(object)
+        raise(
+          ArgumentError,
+          "#{self.class.name} cannot be used as a Solr literal"
+        )
       end
     end
 
@@ -78,11 +125,8 @@ module Sunspot
       def cast(string) #:nodoc:
         string
       end
-
-      def accepts_more_like_this?
-        true
-      end
     end
+    register(StringType, String)
 
     # 
     # The Integer type represents integers.
@@ -96,10 +140,15 @@ module Sunspot
         value.to_i.to_s if value
       end
 
+      def to_literal(value)
+        to_indexed(value)
+      end
+
       def cast(string) #:nodoc:
         string.to_i
       end
     end
+    register(IntegerType, Integer)
 
     # 
     # The Long type indexes Ruby Fixnum and Bignum numbers into Java Longs
@@ -122,10 +171,15 @@ module Sunspot
         value.to_f.to_s if value
       end
 
+      def to_literal(value)
+        to_indexed(value)
+      end
+
       def cast(string) #:nodoc:
         string.to_f
       end
     end
+    register(FloatType, Float)
 
     # 
     # The Double type indexes Ruby Floats (which are in fact doubles) into Java
@@ -154,6 +208,10 @@ module Sunspot
         end
       end
 
+      def to_literal(value)
+        to_indexed(value)
+      end
+
       def cast(string) #:nodoc:
         begin
           Time.xmlschema(string)
@@ -178,6 +236,7 @@ module Sunspot
         end
       end
     end
+    register TimeType, Time, DateTime
 
     # 
     # The DateType encapsulates dates (without time information). Internally,
@@ -204,6 +263,7 @@ module Sunspot
         Date.civil(time.year, time.mon, time.mday)
       end
     end
+    register DateType, Date
 
     # 
     # Store integers in a TrieField, which makes range queries much faster.
@@ -260,6 +320,7 @@ module Sunspot
         end
       end
     end
+    register BooleanType, TrueClass, FalseClass
 
     class ClassType < AbstractType
       def indexed_name(name) #:nodoc:
@@ -274,5 +335,6 @@ module Sunspot
         Sunspot::Util.full_const_get(string)
       end
     end
+    register ClassType, Class
   end
 end

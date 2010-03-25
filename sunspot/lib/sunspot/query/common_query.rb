@@ -11,7 +11,11 @@ module Sunspot
           @scope.add_restriction(TypeField.instance, Restriction::AnyOf, types)
         end
       end
-      
+
+      def add_fulltext(keywords)
+        @fulltexts.push(Dismax.new(keywords)).last
+      end
+
       def solr_parameter_adjustment=(block)
         @parameter_adjustment = block
       end
@@ -30,6 +34,11 @@ module Sunspot
         facet
       end
 
+      def add_function(function)
+        @components << function
+        function
+      end
+
       def paginate(page, per_page)
         if @pagination
           @pagination.page = page
@@ -40,7 +49,6 @@ module Sunspot
       end
 
       def to_params
-        params = {}
         @components.each do |component|
           Sunspot::Util.deep_merge!(params, component.to_params)
         end
@@ -60,6 +68,21 @@ module Sunspot
       def per_page
         @pagination.per_page if @pagination
       end
+
+
+      private
+
+      #
+      # If we have a single fulltext query, merge is normally. If there are
+      # multiple nested queries, serialize them as `_query_` subqueries.
+      #
+      def merge_fulltext(params)
+        return nil if @fulltexts.empty?
+        return Sunspot::Util.deep_merge!(params, @fulltexts.first.to_params) if @fulltexts.length == 1
+        subqueries = @fulltexts.map {|fulltext| fulltext.to_subquery }.join(' ')
+        Sunspot::Util.deep_merge!(params, {:q => subqueries})
+      end
+
     end
   end
 end

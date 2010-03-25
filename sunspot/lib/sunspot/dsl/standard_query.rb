@@ -55,7 +55,7 @@ module Sunspot
       #
       def fulltext(keywords, options = {}, &block)
         if keywords && !(keywords.to_s =~ /^\s*$/)
-          fulltext_query = @query.set_fulltext(keywords)
+          fulltext_query = @query.add_fulltext(keywords)
           if field_names = options.delete(:fields)
             Util.Array(field_names).each do |field_name|
               @setup.text_fields(field_name).each do |field|
@@ -103,7 +103,7 @@ module Sunspot
       end
       alias_method :keywords, :fulltext
 
-      # 
+      #
       # Scope the search by geographical distance from a given point.
       # +coordinates+ should either respond to #first and #last (e.g. a
       # two-element array), or to #lat and one of #lng, #lon, or #long.

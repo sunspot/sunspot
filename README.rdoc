@@ -232,6 +232,7 @@ Sunspot repository at `upstream`:
 * Nathan Beyer (nbeyer@gmail.com)
 * Kieran Topping
 * Nicolas Braem (nicolas.braem@gmail.com)
+* Jeremy Ashkenas (jashkenas@gmail.com)
 
 == License
 
