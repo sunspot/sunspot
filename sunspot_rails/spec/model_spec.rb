@@ -195,7 +195,7 @@ describe 'ActiveRecord mixin' do
   
   describe 'searchable?()' do
     it 'should not be true for models that have not been configured for search' do
-      Blog.should_not be_searchable
+      Location.should_not be_searchable
     end
 
     it 'should be true for models that have been configured for search' do
