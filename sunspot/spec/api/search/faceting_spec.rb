@@ -53,7 +53,7 @@ describe 'faceting', :type => :search do
   end
 
   it 'returns float facet' do
-    stub_facet(:average_rating_f, '9.3' => 2, '1.1' => 1)
+    stub_facet(:average_rating_ft, '9.3' => 2, '1.1' => 1)
     result = session.search Post do
       facet :average_rating
     end
@@ -62,7 +62,7 @@ describe 'faceting', :type => :search do
 
   it 'returns time facet' do
     stub_facet(
-      :published_at_d,
+      :published_at_dt,
       '2009-04-07T20:25:23Z' => 3,
       '2009-04-07T20:26:19Z' => 2,
       '2050-04-07T20:27:15Z' => 1
@@ -181,7 +181,7 @@ describe 'faceting', :type => :search do
   end
 
   it 'returns date range facet' do
-    stub_date_facet(:published_at_d, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
+    stub_date_facet(:published_at_dt, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
     start_time = Time.utc(2009, 7, 7, 4)
     end_time = start_time + 2*24*60*60
     result = session.search(Post) { facet(:published_at, :time_range => start_time..end_time) }
@@ -191,7 +191,7 @@ describe 'faceting', :type => :search do
   end
 
   it 'returns date range facet sorted by count' do
-    stub_date_facet(:published_at_d, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
+    stub_date_facet(:published_at_dt, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
     start_time = Time.utc(2009, 7, 7, 4)
     end_time = start_time + 2*24*60*60
     result = session.search(Post) { facet(:published_at, :time_range => start_time..end_time, :sort => :count) }
@@ -202,8 +202,8 @@ describe 'faceting', :type => :search do
 
   it 'returns query facet' do
     stub_query_facet(
-      'average_rating_f:[3\.0 TO 5\.0]' => 3,
-      'average_rating_f:[1\.0 TO 3\.0]' => 1
+      'average_rating_ft:[3\.0 TO 5\.0]' => 3,
+      'average_rating_ft:[1\.0 TO 3\.0]' => 1
     )
     search = session.search(Post) do
       facet :average_rating do
@@ -236,10 +236,10 @@ describe 'faceting', :type => :search do
 
     before :each do
       stub_query_facet(
-        'average_rating_f:[1\.0 TO 2\.0]' => 2,
-        'average_rating_f:[2\.0 TO 3\.0]' => 3,
-        'average_rating_f:[3\.0 TO 4\.0]' => 1,
-        'average_rating_f:[4\.0 TO 5\.0]' => 0
+        'average_rating_ft:[1\.0 TO 2\.0]' => 2,
+        'average_rating_ft:[2\.0 TO 3\.0]' => 3,
+        'average_rating_ft:[3\.0 TO 4\.0]' => 1,
+        'average_rating_ft:[4\.0 TO 5\.0]' => 0
       )
     end
 

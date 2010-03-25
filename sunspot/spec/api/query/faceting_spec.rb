@@ -132,7 +132,7 @@ describe 'faceting' do
       session.search Post do |query|
         query.facet :published_at, :time_range => @time_range
       end
-      connection.should have_last_search_with(:"facet.date" => ['published_at_d'])
+      connection.should have_last_search_with(:"facet.date" => ['published_at_dt'])
     end
 
     it 'sets the facet start and end' do
@@ -140,8 +140,8 @@ describe 'faceting' do
         query.facet :published_at, :time_range => @time_range
       end
       connection.should have_last_search_with(
-        :"f.published_at_d.facet.date.start" => '2009-06-01T04:00:00Z',
-        :"f.published_at_d.facet.date.end" => '2009-07-01T04:00:00Z'
+        :"f.published_at_dt.facet.date.start" => '2009-06-01T04:00:00Z',
+        :"f.published_at_dt.facet.date.end" => '2009-07-01T04:00:00Z'
       )
     end
 
@@ -149,14 +149,14 @@ describe 'faceting' do
       session.search Post do |query|
         query.facet :published_at, :time_range => @time_range
       end
-      connection.should have_last_search_with(:"f.published_at_d.facet.date.gap" => "+86400SECONDS")
+      connection.should have_last_search_with(:"f.published_at_dt.facet.date.gap" => "+86400SECONDS")
     end
 
     it 'uses custom time interval' do
       session.search Post do |query|
         query.facet :published_at, :time_range => @time_range, :time_interval => 3600
       end
-      connection.should have_last_search_with(:"f.published_at_d.facet.date.gap" => "+3600SECONDS")
+      connection.should have_last_search_with(:"f.published_at_dt.facet.date.gap" => "+3600SECONDS")
     end
 
     it 'does not allow date faceting on a non-date field' do
@@ -188,7 +188,7 @@ describe 'faceting' do
           end
         end
       end
-      connection.should have_last_search_with(:"facet.query" => 'average_rating_f:[4\.0 TO 5\.0]')
+      connection.should have_last_search_with(:"facet.query" => 'average_rating_ft:[4\.0 TO 5\.0]')
     end
 
     it 'requests multiple query facets' do
@@ -204,8 +204,8 @@ describe 'faceting' do
       end
       connection.should have_last_search_with(
         :"facet.query" => [
-          'average_rating_f:[3\.0 TO 4\.0]',
-          'average_rating_f:[4\.0 TO 5\.0]'
+          'average_rating_ft:[3\.0 TO 4\.0]',
+          'average_rating_ft:[4\.0 TO 5\.0]'
         ]
       )
     end
@@ -255,8 +255,8 @@ describe 'faceting' do
       end
       connection.should have_last_search_with(
         :"facet.query" => [
-          'published_at_d:2009\-08\-28T15\:33\:00Z',
-          'published_at_d:2008\-08\-28T15\:33\:00Z'
+          'published_at_dt:2009\-08\-28T15\:33\:00Z',
+          'published_at_dt:2008\-08\-28T15\:33\:00Z'
         ]
       )
     end

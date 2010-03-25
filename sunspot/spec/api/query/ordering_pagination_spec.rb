@@ -38,7 +38,7 @@ describe 'ordering and pagination' do
     session.search Post do
       order_by :average_rating, :desc
     end
-    connection.should have_last_search_with(:sort => 'average_rating_f desc')
+    connection.should have_last_search_with(:sort => 'average_rating_ft desc')
   end
 
   it 'orders by multiple fields' do
@@ -46,7 +46,7 @@ describe 'ordering and pagination' do
       order_by :average_rating, :desc
       order_by :sort_title, :asc
     end
-    connection.should have_last_search_with(:sort => 'average_rating_f desc, sort_title_s asc')
+    connection.should have_last_search_with(:sort => 'average_rating_ft desc, sort_title_s asc')
   end
 
   it 'orders by random' do
