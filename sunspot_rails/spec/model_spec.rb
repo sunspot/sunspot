@@ -343,6 +343,15 @@ describe 'ActiveRecord mixin' do
         end.and_return(@posts)
         Post.reindex(:include => [{:author => :address}])
       end
+      
+      it "should set the include option from the searchable options" do
+        @blogs = Array.new(10) { Blog.create }
+        Blog.should_receive(:all).with do |params|
+          params[:include].should == :posts
+          @blogs
+        end.and_return(@blogs)
+        Blog.reindex
+      end
 
       it "should commit after indexing each batch" do
         Sunspot.should_receive(:commit).twice

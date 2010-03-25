@@ -11,6 +11,7 @@ module Sunspot #:nodoc:
     #       port: 8982
     #       min_memory: 512M
     #       max_memory: 1G
+    #       solr_jar: /some/path/solr15/start.jar
     #   test:
     #     solr:
     #       hostname: localhost
@@ -82,7 +83,7 @@ module Sunspot #:nodoc:
       # String:: host name
       #
       def master_hostname
-        @master_hostname ||= (user_configuration_from_key('solr', 'master_hostname') || hostname)
+        @master_hostname ||= (user_configuration_from_key('master_solr', 'hostname') || hostname)
       end
 
       #
@@ -94,7 +95,7 @@ module Sunspot #:nodoc:
       # Integer:: port
       #
       def master_port
-        @master_port ||= (user_configuration_from_key('solr', 'master_port') || port).to_i
+        @master_port ||= (user_configuration_from_key('master_solr', 'port') || port).to_i
       end
 
       #
@@ -106,7 +107,7 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def master_path
-        @master_path ||= (user_configuration_from_key('solr', 'master_path') || path)
+        @master_path ||= (user_configuration_from_key('master_solr', 'path') || path)
       end
 
       #
@@ -195,6 +196,13 @@ module Sunspot #:nodoc:
           else
             File.join(::Rails.root, 'solr')
           end
+      end
+
+      # 
+      # Solr start jar
+      #
+      def solr_jar
+        @solr_jar ||= user_configuration_from_key('solr', 'solr_jar')
       end
 
       # 

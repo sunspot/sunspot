@@ -230,6 +230,9 @@ Sunspot repository at `upstream`:
 * Tom Coleman (tom@thesnail.org)
 * Matt Mitchell (goodieboy@gmail.com)
 * Nathan Beyer (nbeyer@gmail.com)
+* Kieran Topping
+* Nicolas Braem (nicolas.braem@gmail.com)
+* Jeremy Ashkenas (jashkenas@gmail.com)
 
 == License
 

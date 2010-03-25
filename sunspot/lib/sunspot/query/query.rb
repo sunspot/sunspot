@@ -1,12 +1,13 @@
 module Sunspot
   module Query
     class Query
-      attr_accessor :scope, :fulltext, :parameter_adjustment
+      attr_accessor :scope, :fulltexts, :parameter_adjustment
 
       def initialize(types)
-        @scope = Scope.new
-        @sort = SortComposite.new
+        @scope      = Scope.new
+        @sort       = SortComposite.new
         @components = []
+        @fulltexts  = []
         if types.length == 1
           @scope.add_restriction(TypeField.instance, Restriction::EqualTo, types.first)
         else
@@ -14,10 +15,10 @@ module Sunspot
         end
       end
 
-      def set_fulltext(keywords)
-        @fulltext = Dismax.new(keywords)
+      def add_fulltext(keywords)
+        @fulltexts.push(Dismax.new(keywords)).last
       end
-      
+
       def set_solr_parameter_adjustment( block )
         @parameter_adjustment = block
       end
@@ -56,7 +57,7 @@ module Sunspot
 
       def to_params
         params = @scope.to_params
-        Sunspot::Util.deep_merge!(params, @fulltext.to_params) if @fulltext
+        merge_fulltext(params)
         Sunspot::Util.deep_merge!(params, @sort.to_params)
         Sunspot::Util.deep_merge!(params, @pagination.to_params) if @pagination
         Sunspot::Util.deep_merge!(params, @local.to_params) if @local
@@ -79,6 +80,21 @@ module Sunspot
       def per_page
         @pagination.per_page if @pagination
       end
+
+
+      private
+
+      #
+      # If we have a single fulltext query, merge is normally. If there are
+      # multiple nested queries, serialize them as `_query_` subqueries.
+      #
+      def merge_fulltext(params)
+        return nil if @fulltexts.empty?
+        return Sunspot::Util.deep_merge!(params, @fulltexts.first.to_params) if @fulltexts.length == 1
+        subqueries = @fulltexts.map {|fulltext| fulltext.to_subquery }.join(' ')
+        Sunspot::Util.deep_merge!(params, {:q => subqueries})
+      end
+
     end
   end
 end
