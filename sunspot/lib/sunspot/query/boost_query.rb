@@ -13,10 +13,10 @@ module Sunspot
       end
 
       def to_boolean_phrase
-        if @boost.is_a?(AbstractFunctionQuery)
-            "#{@boost}"
+        if @boost.is_a?(FunctionQuery)
+          "#{@boost}"
         else
-            "#{super}^#{@boost}"
+          "#{super}^#{@boost}"
         end
       end
     end

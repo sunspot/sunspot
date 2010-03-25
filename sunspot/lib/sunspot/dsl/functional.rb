@@ -24,10 +24,10 @@ module Sunspot
 
       #
       # Creates an AbstractFunctionQuery from an expression, also called by
-      # Sunspot::DLS::Function
+      # Sunspot::DSL::Function
       #
-      def create_function_query(expression)
-        if expression.is_a?(Sunspot::Query::AbstractFunctionQuery)
+      def create_function_query(expression) #:nodoc:
+        if expression.is_a?(Sunspot::Query::FunctionQuery)
           expression
         elsif expression.is_a?(Symbol)
           Sunspot::Query::FieldFunctionQuery.new(@setup.field(expression))

@@ -169,12 +169,12 @@ module Sunspot
       # In the above search, featured posts will receive a boost of 2.0 and all posts 
       # will be boosted by (average_rating + popularity * 10).
       #
-      def boost(factorOrFunction, &block)
-        if factorOrFunction.is_a?(Sunspot::Query::AbstractFunctionQuery)
-          @query.add_boost_function(factorOrFunction)
+      def boost(factor_or_function, &block)
+        if factor_or_function.is_a?(Sunspot::Query::FunctionQuery)
+          @query.add_boost_function(factor_or_function)
         else
           Sunspot::Util.instance_eval_or_call(
-            Scope.new(@query.create_boost_query(factorOrFunction), @setup),
+            Scope.new(@query.create_boost_query(factor_or_function), @setup),
             &block
           )
         end
