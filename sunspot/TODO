@@ -1,12 +1,13 @@
-=== Sunspot 1.0 ===
-* new_search should accept block
+=== Sunspot 1.1 ===
+* commitWithin (need solr-ruby support for this)
+* remove_all() should just use '*:*', since it's faster and cleaner
 
-=== Future ===
+=== Someday ===
 * Shorthand arguments to Sunspot#search
 * Rudimentary fulltext prefixing support
-* commitWithin (need solr-ruby support for this)
-* Support Solr functions (e.g. dismax :bf)
 
 === Solr 1.5 ===
 * Field Collapsing (SOLR-236)
 * Support for official spatial support (SOLR-773)
+* Support sorting by function
+* Support string constants in functions
