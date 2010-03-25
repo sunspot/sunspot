@@ -281,4 +281,37 @@ describe 'keyword search' do
       @sorted_hits[4].score.should == @sorted_hits[5].score
     end
   end
+
+  describe 'with function queries' do
+    before :each do
+      Sunspot.remove_all
+    end
+
+    after :each do
+      @search.results.should == @posts
+      @search.hits.first.score.should > @search.hits.last.score
+    end
+
+    it 'boosts via function query with float' do
+      @posts = [Post.new(:title => 'test', :ratings_average => 4.0),
+                Post.new(:title => 'test', :ratings_average => 2.0)]
+      Sunspot.index!(@posts)
+      @search = Sunspot.search(Post) do
+        keywords('test') do
+          boost function { :average_rating }
+        end
+      end
+    end
+
+    it 'boosts via function query with date' do
+      @posts = [Post.new(:title => 'test', :published_at => Time.now),
+                Post.new(:title => 'test', :published_at => Time.now - 60*60*24*31*6)] # roughly six months ago
+      Sunspot.index!(@posts)
+      @search = Sunspot.search(Post) do
+        keywords('test') do
+          boost function { recip(ms(Time.now, :published_at), 3.16e-11, 1, 1) }
+        end
+      end
+    end
+  end
 end

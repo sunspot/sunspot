@@ -42,6 +42,14 @@ module Sunspot
         end
       end
 
+      def to_literal(object)
+        if type = self.for(object)
+          type.to_literal(object)
+        else
+          raise ArgumentError, "Can't use #{object.inspect} as Solr literal: #{object.class} has no registered Solr type"
+        end
+      end
+
       private
 
       def ruby_type_map
@@ -59,6 +67,13 @@ module Sunspot
 
       def accepts_dynamic?
         true
+      end
+
+      def to_literal(object)
+        raise(
+          ArgumentError,
+          "#{self.class.name} cannot be used as a Solr literal"
+        )
       end
     end
 
@@ -117,6 +132,10 @@ module Sunspot
         value.to_i.to_s if value
       end
 
+      def to_literal(value)
+        to_indexed(value)
+      end
+
       def cast(string) #:nodoc:
         string.to_i
       end
@@ -142,6 +161,10 @@ module Sunspot
 
       def to_indexed(value) #:nodoc:
         value.to_f.to_s if value
+      end
+
+      def to_literal(value)
+        to_indexed(value)
       end
 
       def cast(string) #:nodoc:
@@ -175,6 +198,10 @@ module Sunspot
         if value
           value_to_utc_time(value).strftime(XMLSCHEMA)
         end
+      end
+
+      def to_literal(value)
+        to_indexed(value)
       end
 
       def cast(string) #:nodoc:

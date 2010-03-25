@@ -16,7 +16,7 @@ module Sunspot
       end
 
       def to_s
-        escape(Type.to_indexed(@constant))
+        Type.to_literal(@constant)
       end
     end
 
