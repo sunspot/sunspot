@@ -67,7 +67,7 @@ shared_examples_for 'fulltext query' do
     end
 
     it 'puts default dismax parameters in subquery' do
-      subqueries(:q).last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text)
+      subqueries(:q).last[:qf].split(' ').sort.should == %w(backwards_title_text body_textsv tags_textv title_text)
     end
 
     it 'puts automatic dismax parameters in subquery' do

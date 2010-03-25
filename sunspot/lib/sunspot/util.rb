@@ -164,7 +164,7 @@ module Sunspot
       #
       def deep_merge_into(destination, left, right)
         left.each_pair do |name, left_value|
-          right_value = right[name]
+          right_value = right[name] if right
           destination[name] =
             if right_value.nil? || left_value == right_value
               left_value

@@ -11,7 +11,6 @@ module Sunspot
       include Functional
 
       def initialize(query, setup) #:nodoc:
-        debugger if query.is_a?(Array)
         @query, @setup = query, setup
         @fields_added = false
         @exclude_fields = []

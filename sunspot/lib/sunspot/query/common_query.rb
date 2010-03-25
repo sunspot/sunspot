@@ -12,10 +12,6 @@ module Sunspot
         end
       end
 
-      def add_fulltext(keywords)
-        @fulltexts.push(Dismax.new(keywords)).last
-      end
-
       def solr_parameter_adjustment=(block)
         @parameter_adjustment = block
       end
@@ -49,6 +45,7 @@ module Sunspot
       end
 
       def to_params
+        params = {}
         @components.each do |component|
           Sunspot::Util.deep_merge!(params, component.to_params)
         end
