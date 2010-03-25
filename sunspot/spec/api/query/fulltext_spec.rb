@@ -49,12 +49,30 @@ describe 'fulltext query', :type => :query do
     connection.should have_last_search_with(:fq => ['type:Post'])
   end
 
-  it 'searches with multiple keyword components' do
-    session.search Post do
-      keywords 'first search'
-      keywords 'second search'
+  describe 'with multiple keyword components' do
+    before :each do
+      session.search Post do
+        keywords 'first search', :fields => :title
+        keywords 'second search'
+      end
     end
-    connection.should have_last_search_with(:q => %q(_query_:"{!dismax fl='* score' qf='body_texts backwards_title_text title_text'}first search" _query_:"{!dismax fl='* score' qf='body_texts backwards_title_text title_text'}second search"))
+
+    it 'puts specified keywords in subquery' do
+      subqueries(:q).map { |subquery| subquery[:v] }.should ==
+        ['first search', 'second search']
+    end
+
+    it 'puts specified dismax parameters in subquery' do
+      subqueries(:q).first[:qf].should == 'title_text'
+    end
+
+    it 'puts default dismax parameters in subquery' do
+      subqueries(:q).last[:qf].split(' ').sort.should == %w(backwards_title_text body_texts title_text)
+    end
+
+    it 'puts automatic dismax parameters in subquery' do
+      subqueries(:q).each { |subquery| subquery[:fl].should == '* score' }
+    end
   end
 
   it 'searches all text fields for searched class' do

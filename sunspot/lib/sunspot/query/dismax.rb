@@ -57,7 +57,7 @@ module Sunspot
         params = self.to_params
         params.delete :defType
         keywords = params.delete(:q)
-        options = params.sort_by { |key, value| key.to_s }.map {|key, value| "#{key}='#{escape_quotes(value)}'"}.join(' ')
+        options = params.map { |key, value| "#{key}='#{escape_quotes(value)}'"}.join(' ')
         "_query_:\"{!dismax #{options}}#{escape_quotes(keywords)}\""
       end
 
