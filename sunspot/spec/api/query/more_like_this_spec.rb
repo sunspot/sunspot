@@ -49,7 +49,7 @@ describe 'more_like_this' do
   it 'should raise ArgumentError if a field is not setup for more_like_this' do
     lambda do
       session.more_like_this(Post.new) do
-	      fields :title
+        fields :title
       end
     end.should raise_error(ArgumentError)
   end

@@ -30,7 +30,7 @@ module Sunspot
       end
 
       def accepts_more_like_this?
-	false
+        false
       end
     end
 
@@ -59,7 +59,7 @@ module Sunspot
       end
 
       def accepts_more_like_this?
-	true
+        true
       end
     end
 
@@ -80,7 +80,7 @@ module Sunspot
       end
 
       def accepts_more_like_this?
-	true
+        true
       end
     end
 
