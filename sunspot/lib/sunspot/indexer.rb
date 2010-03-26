@@ -54,7 +54,7 @@ module Sunspot
       if clazz
         @connection.delete_by_query("type:#{escape(clazz.name)}")
       else
-        @connection.delete_by_query("type:[* TO *]")
+        @connection.delete_by_query("*:*")
       end
     end
 

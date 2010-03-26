@@ -25,7 +25,7 @@ describe 'document removal', :type => :indexer do
 
   it 'removes everything from the index' do
     session.remove_all
-    connection.should have_delete_by_query("type:[* TO *]")
+    connection.should have_delete_by_query("*:*")
   end
 
   it 'removes everything from the index and immediately commits' do

@@ -1,6 +1,10 @@
 === Sunspot 1.1 ===
-* commitWithin (need solr-ruby support for this)
-* remove_all() should just use '*:*', since it's faster and cleaner
+* Make sure reindex options can be added more than once in Sunspot::Rails
+* Specs for MLT in Sunspot::Rails
+
+=== Sunspot 1.1.x ===
+* commitWithin (needs support from RSolr, currently available in master)
+* commit options (non-blocking, etc.)
 
 === Someday ===
 * Shorthand arguments to Sunspot#search
