@@ -1,5 +1,5 @@
 === Sunspot 1.1 ===
-* Specs for MLT in Sunspot::Rails
+* Custom request handler in search
 
 === Sunspot 1.1.x ===
 * commitWithin (needs support from RSolr, currently available in master)

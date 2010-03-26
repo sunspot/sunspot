@@ -5,5 +5,6 @@ class PostWithAuto < ActiveRecord::Base
 
   searchable :ignore_attribute_changes_of => [ :updated_at ] do
     string :title
+    text :body, :more_like_this => true
   end
 end

@@ -136,9 +136,9 @@ module Sunspot #:nodoc:
         # Sunspot::Search:: Object containing results, totals, facets, etc.
         #
         def solr_search(options = {}, &block)
-	  solr_execute_search(options) do
-	    Sunspot.new_search(self, &block)
-	  end
+          solr_execute_search(options) do
+            Sunspot.new_search(self, &block)
+          end
         end
 
         # 
@@ -152,9 +152,9 @@ module Sunspot #:nodoc:
         # Array:: Array of IDs, in the order returned by the search
         #
         def solr_search_ids(&block)
-	  solr_execute_search_ids do
-	    solr_search(&block)
-	  end
+          solr_execute_search_ids do
+            solr_search(&block)
+          end
         end
 
         # 
@@ -290,7 +290,7 @@ module Sunspot #:nodoc:
           true
         end
         
-	def solr_execute_search(options = {})
+        def solr_execute_search(options = {})
           options.assert_valid_keys(:include, :select)
           search = yield
           unless options.empty?
@@ -304,12 +304,12 @@ module Sunspot #:nodoc:
             end
           end
           search.execute
-	end
+        end
 
-	def solr_execute_search_ids(options = {})
-	  search = yield
-	  search.raw_results.map { |raw_result| raw_result.primary_key.to_i }
-	end
+        def solr_execute_search_ids(options = {})
+          search = yield
+          search.raw_results.map { |raw_result| raw_result.primary_key.to_i }
+        end
         
         protected
         
@@ -375,17 +375,18 @@ module Sunspot #:nodoc:
           Sunspot.remove!(self)
         end
 
-	def solr_more_like_this(options = {}, &block)
-	  self.class.solr_execute_search(options) do
-	    Sunspot.new_more_like_this(self, &block)
-	  end
-	end
+        def solr_more_like_this(*args, &block)
+          options = args.extract_options!
+          self.class.solr_execute_search(options) do
+            Sunspot.new_more_like_this(self, *args, &block)
+          end
+        end
 
-	def solr_more_like_this_ids(&block)
-	  self.class.solr_execute_search_ids do
-	    solr_more_like_this(&block)
-	  end
-	end
+        def solr_more_like_this_ids(&block)
+          self.class.solr_execute_search_ids do
+            solr_more_like_this(&block)
+          end
+        end
 
         private
 

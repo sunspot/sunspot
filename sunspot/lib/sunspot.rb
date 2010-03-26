@@ -323,12 +323,12 @@ module Sunspot
       session.search(*types, &block)
     end
 
-    def new_more_like_this(object, &block)
-      session.new_more_like_this(object, &block)
+    def new_more_like_this(object, *types, &block)
+      session.new_more_like_this(object, *types, &block)
     end
 
-    def more_like_this(object, &block)
-      session.more_like_this(object, &block)
+    def more_like_this(object, *types, &block)
+      session.more_like_this(object, *types, &block)
     end
 
     # Remove objects from the index. Any time an object is destroyed, it must

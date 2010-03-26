@@ -369,10 +369,14 @@ describe 'ActiveRecord mixin' do
   describe "more_like_this()" do
     before(:each) do
       @posts = [
-	Post.create!(:title => 'Post123', :body => "one two three"),
-	Post.create!(:title => 'Post345', :body => "three four five"),
-	Post.create!(:title => 'Post456', :body => "four five six"),
-	Post.create!(:title => 'Post234', :body => "two three four"),
+        Post.create!(:title => 'Post123', :body => "one two three"),
+        Post.create!(:title => 'Post345', :body => "three four five"),
+        Post.create!(:title => 'Post456', :body => "four five six"),
+        Post.create!(:title => 'Post234', :body => "two three four"),
+      ]
+      @posts_with_auto = [
+        PostWithAuto.create!(:body => "one two three"),
+        PostWithAuto.create!(:body => "four five six")
       ]
       @posts.each { |p| p.index! }
     end
@@ -380,15 +384,20 @@ describe 'ActiveRecord mixin' do
     it "should return results" do
       @posts.first.more_like_this.results.should == [@posts[3], @posts[1]]
     end
+
+    it "should return results for specified classes" do
+      @posts.first.more_like_this(Post, PostWithAuto).results.to_set.should ==
+        Set[@posts_with_auto[0], @posts[1], @posts[3]]
+    end
   end
 
   describe 'more_like_this_ids()' do
     before :each do
       @posts = [
-	Post.create!(:title => 'Post123', :body => "one two three"),
-	Post.create!(:title => 'Post345', :body => "three four five"),
-	Post.create!(:title => 'Post456', :body => "four five six"),
-	Post.create!(:title => 'Post234', :body => "two three four"),
+        Post.create!(:title => 'Post123', :body => "one two three"),
+        Post.create!(:title => 'Post345', :body => "three four five"),
+        Post.create!(:title => 'Post456', :body => "four five six"),
+        Post.create!(:title => 'Post234', :body => "two three four"),
       ]
       @posts.each { |p| p.index! }
     end
@@ -397,5 +406,4 @@ describe 'ActiveRecord mixin' do
       @posts.first.more_like_this_ids.to_set.should == [@posts[3], @posts[1]].map { |post| post.id }.to_set
     end
   end
-  
 end
