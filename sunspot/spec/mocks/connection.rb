@@ -25,6 +25,7 @@ module Mock
     attr_reader :adds, :commits, :searches, :message, :opts, :deletes_by_query
     attr_accessor :response
     attr_writer :expected_handler
+    undef_method :select # annoyingly defined on Object
 
     def initialize(opts = {})
       @opts = opts

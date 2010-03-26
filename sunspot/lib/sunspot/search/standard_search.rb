@@ -7,15 +7,14 @@ module Sunspot
     # Sunspot.new_search methods.
     #
     class StandardSearch < AbstractSearch
+      def request_handler
+        super || :select
+      end
   
       private
   
       def dsl
         DSL::Search.new(self, @setup)
-      end
-  
-      def execute_request(params)
-        @connection.select(params)
       end
     end
   end

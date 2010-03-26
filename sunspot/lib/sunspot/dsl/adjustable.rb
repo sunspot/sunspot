@@ -30,6 +30,18 @@ module Sunspot
       def adjust_solr_params( &block )
         @query.solr_parameter_adjustment = block
       end
+
+      #
+      # <strong>Expert:</strong> Use a custom request handler for this search.
+      # The general use case for this would be a request handler configuration
+      # you've defined in solrconfig that has different search components,
+      # defaults, etc. Using this to point at an entirely different type of
+      # request handler that Sunspot doesn't support probably won't get you very
+      # far.
+      #
+      def request_handler(request_handler)
+        @search.request_handler = request_handler
+      end
     end
   end
 end

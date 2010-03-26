@@ -16,15 +16,15 @@ module Sunspot
         super
       end
 
+      def request_handler
+        super || :mlt
+      end
+
       private
 
       # override
       def dsl
         DSL::MoreLikeThisQuery.new(self, @query, @setup)
-      end
-
-      def execute_request(params)
-        @connection.mlt(params)
       end
     end
   end

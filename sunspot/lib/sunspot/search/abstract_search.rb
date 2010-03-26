@@ -13,6 +13,7 @@ module Sunspot
       #
       attr_reader :facets
       attr_reader :query #:nodoc:
+      attr_accessor :request_handler
   
       def initialize(connection, setup, query, configuration) #:nodoc:
         @connection, @setup, @query = connection, setup, query
@@ -31,7 +32,7 @@ module Sunspot
       def execute
         reset
         params = @query.to_params
-        @solr_result = execute_request(params)
+        @solr_result = @connection.__send__(request_handler, params)
         self
       end
 

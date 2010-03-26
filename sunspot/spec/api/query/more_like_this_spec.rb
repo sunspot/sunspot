@@ -7,7 +7,7 @@ describe 'more_like_this' do
 
   it_should_behave_like "scoped query"
   it_should_behave_like "facetable query"
-  it_should_behave_like "query with adjustable params"
+  it_should_behave_like "query with advanced manipulation"
   it_should_behave_like "query with connective scope"
   it_should_behave_like "query with dynamic field support"
   it_should_behave_like "sortable query"
