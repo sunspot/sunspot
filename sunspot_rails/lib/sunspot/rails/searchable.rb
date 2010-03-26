@@ -61,7 +61,9 @@ module Sunspot #:nodoc:
         def searchable(options = {}, &block)
           Sunspot.setup(self, &block)
 
-          unless searchable?
+          if searchable?
+            sunspot_options[:include].concat(Util::Array(options[:include]))
+          else
             extend ClassMethods
             include InstanceMethods
 
@@ -77,10 +79,10 @@ module Sunspot #:nodoc:
                 searchable.remove_from_index
               end
             end
+            options[:include] = Util::Array(options[:include])
             
-            options[:include] ||= []
+            self.sunspot_options = options
           end
-          self.sunspot_options = options
         end
 
         # 

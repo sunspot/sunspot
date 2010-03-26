@@ -1,5 +1,4 @@
 === Sunspot 1.1 ===
-* Make sure reindex options can be added more than once in Sunspot::Rails
 * Specs for MLT in Sunspot::Rails
 
 === Sunspot 1.1.x ===

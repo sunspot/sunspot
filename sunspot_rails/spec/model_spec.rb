@@ -347,7 +347,7 @@ describe 'ActiveRecord mixin' do
       it "should set the include option from the searchable options" do
         @blogs = Array.new(10) { Blog.create }
         Blog.should_receive(:all).with do |params|
-          params[:include].should == :posts
+          params[:include].should == [:posts, :comments]
           @blogs
         end.and_return(@blogs)
         Blog.reindex
