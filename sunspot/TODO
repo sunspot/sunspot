@@ -1,6 +1,3 @@
-=== Sunspot 1.1 ===
-* Custom request handler in search
-
 === Sunspot 1.1.x ===
 * commitWithin (needs support from RSolr, currently available in master)
 * commit options (non-blocking, etc.)
