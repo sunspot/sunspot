@@ -53,7 +53,6 @@ namespace :sunspot do
     else
       sunspot_models = args[:models].split('+').map{|m| m.constantize}
     end
-    raise reindex_options.inspect
     sunspot_models.each do |model|
       model.solr_reindex reindex_options
     end
