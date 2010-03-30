@@ -100,7 +100,8 @@ module Sunspot
       # as I know the behavior of Kernel.Array() is otherwise fine.
       #
       def Array(object)
-        if object.is_a?(String)
+        case object
+        when String, Hash
           [object]
         else
           super

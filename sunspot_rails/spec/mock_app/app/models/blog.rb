@@ -2,7 +2,7 @@ class Blog < ActiveRecord::Base
   has_many :posts
   has_many :comments, :through => :posts
 
-  searchable :include => :posts do
+  searchable :include => { :posts => :author } do
     string :subdomain
     text :name
   end
