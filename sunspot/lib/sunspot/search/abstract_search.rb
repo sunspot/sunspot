@@ -32,7 +32,7 @@ module Sunspot
       def execute
         reset
         params = @query.to_params
-        @solr_result = @connection.__send__(request_handler, params)
+        @solr_result = @connection.request("/#{request_handler}", params)
         self
       end
 

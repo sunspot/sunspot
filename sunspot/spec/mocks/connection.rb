@@ -50,13 +50,16 @@ module Mock
       @commits << Time.now
     end
 
-    def method_missing(method, *args, &block)
-      if method.to_sym == @expected_handler
-        @searches << @last_search = args.first
-        @response || {}
-      else
-        super
+    def request(path, params)
+      unless path == "/#{@expected_handler}"
+        raise ArgumentError, "Expected request to #{@expected_handler} request handler"
       end
+      @searches << @last_search = params
+      @response || {}
+    end
+
+    def method_missing(method, *args, &block)
+      request("/#{method}", *args)
     end
 
     def has_add_with?(*documents)
