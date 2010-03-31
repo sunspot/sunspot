@@ -105,6 +105,24 @@ shared_examples_for "query with dynamic field support" do
     end.should raise_error(NoMethodError)
   end
 
+  it 'requests field facet on dynamic field' do
+    search do
+      dynamic :custom_string do
+        facet(:test)
+      end
+    end
+    connection.should have_last_search_including(:"facet.field", 'custom_string:test_ss')
+  end
+
+  it 'requests named field facet on dynamic field' do
+    search do
+      dynamic :custom_string do
+        facet(:test, :name => :bogus)
+      end
+    end
+    connection.should have_last_search_including(:"facet.field", '{!key=bogus}custom_string:test_ss')
+  end
+
   it 'requests query facet with internal dynamic field' do
     search do
       facet :test do

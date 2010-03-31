@@ -7,6 +7,12 @@ describe 'search with dynamic fields' do
     result.facet(:custom_string, :test).rows.map { |row| row.value }.should == ['two', 'one']
   end
 
+  it 'returns dynamic field facet with custom label' do
+    stub_facet(:"bogus", 'two' => 2, 'one' => 1)
+    result = session.search(Post) { dynamic(:custom_string) { facet(:test, :name => :bogus) }}
+    result.facet(:bogus).rows.map { |row| row.value }.should == ['two', 'one']
+  end
+
   it 'returns query facet specified in dynamic call' do
     stub_query_facet(
       'custom_string\:test_ss:(foo OR bar)' => 3
