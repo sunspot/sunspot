@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'more_like_this' do
   before :all do
     Sunspot.remove_all
@@ -19,5 +21,23 @@ describe 'more_like_this' do
     Sunspot.more_like_this(@posts.first) do 
       fields :body
     end.results.to_set.should == @posts[2..3].to_set
+  end
+
+  it 'should return empty result set if no results' do
+    Sunspot.more_like_this(@posts.last) do
+      with(:title, 'bogus')
+    end.results.should == []
+  end
+
+  describe 'when non-indexed object searched' do
+    before(:each) { @mlt = Sunspot.more_like_this(Post.new) }
+
+    it 'should return empty result set' do
+      @mlt.results.should == []
+    end
+
+    it 'shoult return a total of 0' do
+      @mlt.total.should == 0
+    end
   end
 end

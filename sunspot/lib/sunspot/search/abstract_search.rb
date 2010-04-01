@@ -78,11 +78,14 @@ module Sunspot
           verified_hits
         else
           @hits ||=
-            maybe_will_paginate(
-              solr_response['docs'].map do |doc|
-                Hit.new(doc, highlights_for(doc), distance_for(doc), self)
+            begin
+              hits = if solr_response && solr_response['docs']
+                solr_response['docs'].map do |doc|
+                  Hit.new(doc, highlights_for(doc), distance_for(doc), self)
+                end
               end
-            )
+              maybe_will_paginate(hits || [])
+            end
         end
       end
       alias_method :raw_results, :hits
@@ -109,7 +112,7 @@ module Sunspot
       # Integer:: Total matching documents
       #
       def total
-        @total ||= solr_response['numFound']
+        @total ||= solr_response['numFound'] || 0
       end
   
       # 
@@ -256,7 +259,7 @@ module Sunspot
       end
   
       def solr_response
-        @solr_response ||= @solr_result['response']
+        @solr_response ||= @solr_result['response'] || {}
       end
   
       def highlights_for(doc)

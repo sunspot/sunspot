@@ -1,4 +1,8 @@
 module SearchHelper
+  def stub_nil_results
+    connection.response = { 'response' => nil }
+  end
+
   def stub_full_results(*results)
     count =
       if results.last.is_a?(Integer) then results.pop

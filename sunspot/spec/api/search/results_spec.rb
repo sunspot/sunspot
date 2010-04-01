@@ -25,6 +25,11 @@ describe 'search results', :type => :search do
     session.search(Post, Namespaced::Comment).results.should == results
   end
 
+  it 'gracefully returns empty results when response is nil' do
+    stub_nil_results
+    session.search(Post).results.should == []
+  end
+
   if ENV['USE_WILL_PAGINATE']
 
     it 'returns search total as attribute of results' do
@@ -48,6 +53,11 @@ describe 'search results', :type => :search do
   it 'returns total' do
     stub_results(Post.new, Post.new, 4)
     session.search(Post) { paginate(:page => 1) }.total.should == 4
+  end
+
+  it 'returns total for nil search' do
+    stub_nil_results
+    session.search(Post).total.should == 0
   end
 
   it 'returns available results if some results are not available from data store' do
