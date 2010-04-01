@@ -1,5 +1,5 @@
 module Sunspot
   module Rails
-    VERSION = '1.1rc3'
+    VERSION = '1.1.0'
   end
 end
