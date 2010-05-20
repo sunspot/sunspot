@@ -208,6 +208,7 @@ Sunspot repository at `upstream`:
 * {Sunspot Full-text Search for Rails/Ruby}[http://therailworld.com/posts/23-Sunspot-Full-text-Search-for-Rails-Ruby] (The Rail World)
 * {A Few Sunspot Tips}[http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/] (spiral_code)
 * {Sunspot: A Solr-Powered Search Engine for Ruby}[http://www.linux-mag.com/id/7341] (Linux Magazine)
+* {Sunspot Showed Me the Light}[http://bennyfreshness.com/2010/05/sunspot-helped-me-see-the-light/] (ben koonse)
 * {Using Sunspot for Free-Text Search with Redis}[http://masonoise.wordpress.com/2010/02/06/using-sunspot-for-free-text-search-with-redis/] (While I Pondered...)
 * {Default scope with Sunspot}[http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/] (Cloudspace)
 * {Chef recipe for Sunspot in production}[http://gist.github.com/336403]
