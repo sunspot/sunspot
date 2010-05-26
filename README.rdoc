@@ -84,7 +84,7 @@ See the README for that gem or the Sunspot Wiki for more information.
   end
 
   Sunspot.setup(Post) do
-    text :title, :body
+    text :title, :description, :stored => true
     string :author_name
     integer :blog_id
     integer :category_ids
@@ -106,8 +106,10 @@ to define your own. See Sunspot::Adapters for more information.
 
 === Search for objects:
   
-  search = Sunspot.search Post do
-    keywords 'great pizza'
+  @search = Sunspot.search Post do
+    keywords 'great pizza' do 
+      hightlight :title, :description
+    end
     with :author_name, 'Mark Twain'
     with(:blog_id).any_of [2, 14]
     with(:category_ids).all_of [4, 10]
@@ -143,7 +145,7 @@ See Sunspot.search for more information.
       - if hit.score
         %span.relevance== (#{hit.score})
       %p= hit.highlight(:description).format { |word| "<span class=\"highlight\">#{word}</span>" }
-  .pagination= will_paginate(search.hits)
+  .pagination= will_paginate(@search.hits)
 
 == About the API documentation
 
