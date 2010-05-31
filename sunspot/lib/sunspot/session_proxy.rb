@@ -75,5 +75,13 @@ module Sunspot
         'id_sharding_session_proxy'
       )
     )
+    autoload(
+      :SilentFailSessionProxy,
+      File.join(
+        File.dirname(__FILE__),
+        'session_proxy',
+        'silent_fail_session_proxy'
+      )
+    )
   end
 end
