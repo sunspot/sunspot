@@ -4,6 +4,7 @@ module Sunspot
     attr_accessor :type # The Type of the field
     attr_accessor :reference # Model class that the value of this field refers to
     attr_reader :boost
+    attr_reader :indexed_name # Name with which this field is indexed internally. Based on public name and type or the +:as+ option.
 
     # 
     #
@@ -11,6 +12,7 @@ module Sunspot
       @name, @type = name.to_sym, type
       @stored = !!options.delete(:stored)
       @more_like_this = !!options.delete(:more_like_this)
+      @indexed_name = (options.delete(:as) || @type.indexed_name(@name)).to_s
       raise ArgumentError, "Field of type #{type} cannot be used for more_like_this" unless type.accepts_more_like_this? or !@more_like_this
     end
 
@@ -54,18 +56,6 @@ module Sunspot
     #
     def cast(value)
       @type.cast(value)
-    end
-
-    # 
-    # Name with which this field is indexed internally. Based on public name and
-    # type.
-    #
-    # ==== Returns
-    #
-    # String:: Internal name of the field
-    #
-    def indexed_name
-      @type.indexed_name(@name)
     end
 
     # 

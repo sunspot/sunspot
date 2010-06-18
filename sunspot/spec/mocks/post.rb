@@ -70,6 +70,10 @@ Sunspot.setup(Post) do
       1 + (ratings_average - 3.0) / 4.0
     end
   end
+  
+  string :legacy, :as => :legacy_field do
+    "legacy #{title}"
+  end
 end
 
 class PhotoPost < Post

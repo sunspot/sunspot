@@ -146,4 +146,9 @@ describe 'indexing attribute fields', :type => :indexer do
       Sunspot.setup(Post) { integer :popularity, :more_like_this => true }
     end.should raise_error(ArgumentError)
   end
+  
+  it 'should use a specified field name when the :as option is set' do
+    session.index(post(:title => 'A Title'))
+    connection.should have_add_with(:legacy_field => 'legacy A Title')
+  end
 end
