@@ -38,7 +38,7 @@ module Sunspot
       private
 
       def sort_rows!(rows)
-        case @options[:sort] || (:count if @options[:limit])
+        case @options[:sort] || (:count if limit)
         when :count
           rows.sort! { |lrow, rrow| rrow.count <=> lrow.count }
         when :index
@@ -52,10 +52,15 @@ module Sunspot
             end
           end
         end
-        if @options[:limit]
-          rows.replace(rows.first(@options[:limit]))
+        if limit
+          rows.replace(rows.first(limit))
         end
         rows
+      end
+
+      def limit
+        return @limit if defined?(@limit)
+        @limit = (@options[:limit].to_i if @options[:limit].to_i > 0)
       end
     end
   end
