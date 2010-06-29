@@ -1,6 +1,13 @@
-require File.join(File.dirname(__FILE__), '..', '..', 'tools', 'gem_tasks')
+# -*- encoding: utf-8 -*-
+lib = File.expand_path('../lib/', __FILE__)
 
-Sunspot::GemTasks.new(:build => :copy_rdoc) do |s|
+$:.unshift(lib) unless $:.include?(lib)
+
+require 'sunspot/version'
+
+FileUtils.cp('../README.rdoc', './')
+
+Gem::Specification.new do |s|
   s.name = 'sunspot'
   s.version = Sunspot::VERSION
   s.executables = ['sunspot-solr', 'sunspot-installer']
@@ -12,22 +19,17 @@ Sunspot is a library providing a powerful, all-ruby API for the Solr search engi
 TEXT
   s.authors = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Marcel de Graaf', 'Brandon Keepers', 'Peter Berkenbosch', 'Brian Atkinson', 'Tom Coleman', 'Matt Mitchell', 'Nathan Beyer', 'Kieran Topping', 'Nicolas Braem', 'Jeremy Ashkenas']
   s.rubyforge_project = 'sunspot'
-  s.files = FileList['[A-Z]*', '{bin,installer,lib,spec,tasks,templates}/**/*', 'solr/{etc,lib,webapps}/**/*', 'solr/solr/{conf,lib}/*', 'solr/start.jar']
+  s.files = Dir.glob('[A-Z]*') +
+            Dir.glob('{bin,installer,lib,spec,tasks,templates}/**/*') +
+            Dir.glob('solr/{etc,lib,webapps}/**/*') +
+            Dir.glob('solr/solr/{conf,lib}/*') << 'solr/start.jar'
   s.add_runtime_dependency 'rsolr', '0.12.1'
   s.add_runtime_dependency 'escape', '0.0.4'
   s.add_development_dependency 'rspec', '~> 1.1'
   s.extra_rdoc_files = ['README.rdoc']
-  s.test_files = FileList['spec/**/*_spec.rb']
+  s.test_files = Dir.glob('spec/**/*_spec.rb')
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                     '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation' <<
                     '--main' << 'README.rdoc'
 
-end
-
-task :copy_rdoc do
-  sunspot_root = File.join(File.dirname(__FILE__), '..')
-  FileUtils.cp(
-    File.join(sunspot_root, '..', 'README.rdoc'),
-    sunspot_root
-  )
 end

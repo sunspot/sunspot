@@ -1,13 +1,8 @@
-if rsolr_gem_version = ENV['RSOLR_GEM_VERSION']
-  STDERR.puts("Forcing rsolr gem version #{rsolr_gem_version}")
-  using_gems = true
-  require 'rubygems'
-  gem 'rsolr', rsolr_gem_version
-end
-
 require 'ostruct'
 begin
+  require 'bundler'
   require 'spec'
+  Bundler.setup(:default, :test)
   if ENV['USE_WILL_PAGINATE']
     require 'will_paginate'
     require 'will_paginate/collection'
@@ -20,11 +15,6 @@ rescue LoadError => e
   end
 end
 
-unless gem_name = ENV['SUNSPOT_TEST_GEM']
-  $:.unshift(File.dirname(__FILE__) + '/../lib')
-else
-  gem gem_name
-end
 require 'sunspot'
 
 require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')

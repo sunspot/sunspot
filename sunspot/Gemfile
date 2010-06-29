@@ -1,0 +1,5 @@
+gem 'sunspot', :path => File.expand_path('..', __FILE__)
+
+group :test do
+  gem 'rspec', '~> 1.1'
+end
