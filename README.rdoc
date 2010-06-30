@@ -168,7 +168,7 @@ http://outoftime.lighthouseapp.com/projects/20339-sunspot
 
 == Related Projects
 
-* {sunspot_index_queue}[http://rubygems.org/gems/sunspot_index_queue] &mdash; Provides asynchronous indexing to Solr for the sunspot gem. It uses a pluggable model for the backing queue and provides support for ActiveRecord and MongoDB out of the box.
+* {sunspot_index_queue}[http://rubygems.org/gems/sunspot_index_queue] -- Provides asynchronous indexing to Solr for the sunspot gem. It uses a pluggable model for the backing queue and provides support for ActiveRecord and MongoDB out of the box.
 
 == Contribution Guidelines
 
