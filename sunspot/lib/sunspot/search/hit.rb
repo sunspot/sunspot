@@ -104,7 +104,7 @@ module Sunspot
       private
 
       def setup
-        @setup ||= Sunspot::Setup.for(@class_name)
+        @setup ||= Sunspot::Setup.for(Util.full_const_get(@class_name))
       end
 
       def highlights_cache

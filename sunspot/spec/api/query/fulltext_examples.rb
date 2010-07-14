@@ -243,7 +243,7 @@ shared_examples_for 'fulltext query' do
     connection.should have_last_search_with(
       :bq => [
         'average_rating_ft:[2\.0 TO *]^2.0',
-        'featured_b:true^1.5'
+        'featured_bs:true^1.5'
       ]
     )
   end

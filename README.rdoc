@@ -237,6 +237,7 @@ Sunspot repository at `upstream`:
 * Kieran Topping
 * Nicolas Braem (nicolas.braem@gmail.com)
 * Jeremy Ashkenas (jashkenas@gmail.com)
+* Dylan Vaughn (dylanvaughn@yahoo.com)
 
 == License
 

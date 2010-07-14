@@ -106,9 +106,20 @@ describe 'hits', :type => :search do
     session.search(Post, Namespaced::Comment).hits.first.stored(:title).should == 'Title'
   end
 
+  it 'should return stored field values for searches against base type when subtype matches' do
+    class SubclassedPost < Post; end;
+    stub_full_results('instance' => SubclassedPost.new, 'title_ss' => 'Title')
+    session.search(Post).hits.first.stored(:title).should == 'Title'
+  end
+
   it 'should return stored text fields' do
     stub_full_results('instance' => Post.new, 'body_textsv' => 'Body')
     session.search(Post, Namespaced::Comment).hits.first.stored(:body).should == 'Body'
+  end
+
+  it 'should return stored boolean fields' do
+    stub_full_results('instance' => Post.new, 'featured_bs' => true)
+    session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should be_true
   end
 
   it 'should return stored dynamic fields' do

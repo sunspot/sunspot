@@ -128,7 +128,7 @@ describe 'faceting', :type => :search do
   end
 
   it 'returns boolean facet' do
-    stub_facet(:featured_b, 'true' => 3, 'false' => 1)
+    stub_facet(:featured_bs, 'true' => 3, 'false' => 1)
     result = session.search(Post) { facet(:featured) }
     facet_values(result, :featured).should == [true, false]
   end

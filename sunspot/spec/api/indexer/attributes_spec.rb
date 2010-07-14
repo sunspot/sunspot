@@ -72,17 +72,17 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should correctly index a boolean field' do
     session.index(post(:featured => true))
-    connection.should have_add_with(:featured_b => 'true')
+    connection.should have_add_with(:featured_bs => 'true')
   end
 
   it 'should correctly index a false boolean field' do
     session.index(post(:featured => false))
-    connection.should have_add_with(:featured_b => 'false')
+    connection.should have_add_with(:featured_bs => 'false')
   end
 
   it 'should not index a nil boolean field' do
     session.index(post)
-    connection.should_not have_add_with(:featured_b)
+    connection.should_not have_add_with(:featured_bs)
   end
 
   it 'should index latitude and longitude as a pair' do
