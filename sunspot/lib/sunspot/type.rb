@@ -317,6 +317,8 @@ module Sunspot
           true
         when 'false'
           false
+        when true, false
+          string
         end
       end
     end

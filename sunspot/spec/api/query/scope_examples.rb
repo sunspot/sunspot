@@ -39,7 +39,7 @@ shared_examples_for "scoped query" do
     search do
       with :featured, false
     end
-    connection.should have_last_search_including(:fq, 'featured_b:false')
+    connection.should have_last_search_including(:fq, 'featured_bs:false')
   end
 
   it 'scopes by less than match with float' do

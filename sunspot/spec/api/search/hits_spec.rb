@@ -111,6 +111,11 @@ describe 'hits', :type => :search do
     session.search(Post, Namespaced::Comment).hits.first.stored(:body).should == 'Body'
   end
 
+  it 'should return stored boolean fields' do
+    stub_full_results('instance' => Post.new, 'featured_bs' => true)
+    session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should be_true
+  end
+
   it 'should return stored dynamic fields' do
     stub_full_results('instance' => Post.new, 'custom_string:test_ss' => 'Custom')
     session.search(Post, Namespaced::Comment).hits.first.stored(:custom_string, :test).should == 'Custom'
