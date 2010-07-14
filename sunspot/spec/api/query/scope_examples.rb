@@ -13,6 +13,13 @@ shared_examples_for "scoped query" do
     connection.should have_last_search_including(:fq, 'title_ss:"OR"')
   end
 
+  it 'scopes by exact match with empty string' do
+    search do
+      with :title, ''
+    end
+    connection.should have_last_search_including(:fq, 'title_ss:[* TO ""]')
+  end
+
   it 'scopes by exact match with time' do
     time = Time.parse('1983-07-08 05:00:00 -0400')
     search do

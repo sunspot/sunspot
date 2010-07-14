@@ -144,6 +144,31 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'empty strings' do
+    before :all do
+      Sunspot.remove_all
+      @posts = [Post.new(:title => ''), Post.new(:title => 'Bogus'), Post.new]
+      Sunspot.index!(@posts)
+    end
+
+    it 'should filter results with an empty string' do
+      search = Sunspot.search(Post) { with(:title, '') }
+      search.results.should == [@posts[0]]
+    end
+
+    it 'should not exclude results with non-empty string value' do
+      Sunspot.search(Post) { without(:title, '') }.results.should include(@posts[1])
+    end
+
+    it 'should not exclude results with no value' do
+      Sunspot.search(Post) { without(:title, '') }.results.should include(@posts[2])
+    end
+
+    it 'should exclude results with empty string value' do
+      Sunspot.search(Post) { without(:title, '') }.results.should_not include(@posts[0])
+    end
+  end
+
   describe 'prefix searching' do
     before :each do
       Sunspot.remove_all
