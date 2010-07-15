@@ -80,10 +80,14 @@ module Sunspot
               if @components.length == 1
                 @components.first.to_boolean_phrase
               else
-                component_phrases = @components.map do |component|
-                  component.to_boolean_phrase
+                component_phrases = []
+                @components.each do |component|
+                  boolean_phrase = component.to_boolean_phrase
+                  component_phrases << boolean_phrase if boolean_phrase
                 end
-                "(#{component_phrases.join(" #{connector} ")})"
+                unless component_phrases.empty?
+                  "(#{component_phrases.join(" #{connector} ")})"
+                end
               end
             if negated?
               "-#{phrase}"

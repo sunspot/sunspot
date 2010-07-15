@@ -167,10 +167,20 @@ shared_examples_for "query with connective scope" do
     )
   end
 
-  it 'should ignore empty connectives' do
+  it 'ignores empty connectives' do
     search do
       any_of {}
     end
     connection.should_not have_last_search_including(:fq, '')
+  end
+
+  it 'ignores multiple empty nested connectives' do # regression test
+    search do
+      any_of do
+        all_of { any_of {}}
+        all_of { any_of {}}
+      end
+    end
+    connection.searches.last[:fq].should have(1).item
   end
 end
