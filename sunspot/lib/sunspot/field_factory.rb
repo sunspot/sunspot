@@ -125,23 +125,5 @@ module Sunspot
         [@name, @type]
       end
     end
-
-    class Coordinates
-      def initialize(name = nil, &block)
-        if block
-          @data_extractor = DataExtractor::BlockExtractor.new(&block)
-        else
-          @data_extractor = DataExtractor::AttributeExtractor.new(name)
-        end
-      end
-
-      def populate_document(document, model)
-        if coordinates = @data_extractor.value_for(model)
-          coordinates = Util::Coordinates.new(coordinates)
-          document.add_field(:lat, coordinates.lat)
-          document.add_field(:lng, coordinates.lng)
-        end
-      end
-    end
   end
 end

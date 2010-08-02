@@ -102,24 +102,6 @@ module Sunspot
         end
       end
       alias_method :keywords, :fulltext
-
-      #
-      # Scope the search by geographical distance from a given point.
-      # +coordinates+ should either respond to #first and #last (e.g. a
-      # two-element array), or to #lat and one of #lng, #lon, or #long.
-      # +options+ should be one or both of the following:
-      #
-      # :distance:: The maximum distance in miles from which results can come
-      # :sort::
-      #   Whether to sort by distance from these coordinates. If other sorts are
-      #   specified, they take precedence over distance sort.
-      #
-      def near(coordinates, options)
-        if options.respond_to?(:to_f)
-          options = { :distance => options }
-        end
-        @query.add_location_restriction(coordinates, options)
-      end
     end
   end
 end

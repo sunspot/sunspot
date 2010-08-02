@@ -442,9 +442,6 @@
        <str name="version">2.1</str>
         -->
     </lst>
-    <arr name="last-components">
-      <str>spatial</str>
-    </arr>
   </requestHandler>
   <!-- Please refer to http://wiki.apache.org/solr/SolrReplication for details on configuring replication -->
   <!-- remove the <lst name="master"> section if this is just a slave -->
@@ -928,7 +925,6 @@
     <healthcheck type="file">server-enabled</healthcheck>
     -->
   </admin>
-  <searchComponent name="spatial" class="me.outofti.solrspatiallight.SpatialQueryComponent"/>
   <requestHandler class="solr.MoreLikeThisHandler" name="/mlt">
     <lst name="defaults">
       <str name="mlt.mintf">1</str>

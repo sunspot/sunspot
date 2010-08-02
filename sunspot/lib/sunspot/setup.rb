@@ -78,15 +78,6 @@ module Sunspot
     end
 
     # 
-    # The coordinates field factory is used for populating the coordinate fields
-    # of documents during index, but does not actually generate fields (since
-    # the field names used in search are static).
-    #
-    def set_coordinates_field(name = nil, &block)
-      @coordinates_field_factory = FieldFactory::Coordinates.new(name, &block)
-    end
-
-    # 
     # Add a document boost to documents at index time. Document boost can be
     # static (the same for all documents of this class), or extracted on a per-
     # document basis using either attribute or block extraction as per usual.
@@ -234,7 +225,6 @@ module Sunspot
     def all_field_factories
       all_field_factories = []
       all_field_factories.concat(field_factories).concat(text_field_factories).concat(dynamic_field_factories)
-      all_field_factories << @coordinates_field_factory if @coordinates_field_factory
       all_field_factories
     end
 
