@@ -9,7 +9,6 @@ describe 'standard query', :type => :query do
   it_should_behave_like "fulltext query"
   it_should_behave_like "query with highlighting support"
   it_should_behave_like "sortable query"
-  it_should_behave_like "spatial query"
   it_should_behave_like "query with text field scoping"
 
   it 'adds a no-op query to :q parameter when no :q provided' do

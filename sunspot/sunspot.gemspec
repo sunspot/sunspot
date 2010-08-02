@@ -25,6 +25,7 @@ TEXT
             Dir.glob('solr/solr/{conf,lib}/*') << 'solr/start.jar'
   s.add_runtime_dependency 'rsolr', '0.12.1'
   s.add_runtime_dependency 'escape', '0.0.4'
+  s.add_runtime_dependency 'geohash', '1.0.1'
   s.add_development_dependency 'rspec', '~> 1.1'
   s.extra_rdoc_files = ['README.rdoc']
   s.test_files = Dir.glob('spec/**/*_spec.rb')

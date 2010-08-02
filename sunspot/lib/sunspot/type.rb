@@ -1,3 +1,5 @@
+require 'geohash'
+
 module Sunspot
   # 
   # This module contains singleton objects that represent the types that can be
@@ -323,6 +325,18 @@ module Sunspot
       end
     end
     register BooleanType, TrueClass, FalseClass
+
+    class CoordinatesType < AbstractType
+      include GeoHash
+
+      def indexed_name(name)
+        "#{name}_s"
+      end
+
+      def to_indexed(value)
+        encode(value.lat, value.lng)
+      end
+    end
 
     class ClassType < AbstractType
       def indexed_name(name) #:nodoc:

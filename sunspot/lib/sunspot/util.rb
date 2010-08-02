@@ -182,35 +182,7 @@ module Sunspot
       end
     end
 
-    class Coordinates #:nodoc:
-      def initialize(coords)
-        @coords = coords
-      end
-
-      def lat
-        if @coords.respond_to?(:first)
-          @coords.first
-        elsif @coords.respond_to?(:lat)
-          @coords.lat
-        else
-          @coords.latitude
-        end.to_f
-      end
-
-      def lng
-        if @coords.respond_to?(:last)
-          @coords.last
-        elsif @coords.respond_to?(:lng)
-          @coords.lng
-        elsif @coords.respond_to?(:lon)
-          @coords.lon
-        elsif @coords.respond_to?(:long)
-          @coords.long
-        elsif @coords.respond_to?(:longitude)
-          @coords.longitude
-        end.to_f
-      end
-    end
+    Coordinates = Struct.new(:lat, :lng)
 
     class ContextBoundDelegate
       class <<self

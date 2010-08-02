@@ -86,27 +86,8 @@ describe 'indexing attribute fields', :type => :indexer do
   end
 
   it 'should index latitude and longitude as a pair' do
-    session.index(post(:coordinates => [40.7, -73.5]))
-    connection.should have_add_with(:lat => 40.7, :lng => -73.5)
-  end
-
-  [
-    [:lat, :lng],
-    [:lat, :lon],
-    [:lat, :long],
-    [:latitude, :longitude]
-  ].each do |lat_attr, lng_attr|
-    it "should index latitude and longitude from #{lat_attr.inspect}, #{lng_attr.inspect}" do
-      session.index(post(
-          :coordinates => OpenStruct.new(lat_attr => 40.7, lng_attr => -73.5)
-      ))
-      connection.should have_add_with(:lat => 40.7, :lng => -73.5)
-    end
-  end
-
-  it 'should index latitude and longitude from a block' do
-    session.index(Photo.new(:lat => 30, :lng => -60))
-    connection.should have_add_with(:lat => 30.0, :lng => -60.0)
+    session.index(post(:coordinates => Sunspot::Util::Coordinates.new(40.7, -73.5)))
+    connection.should have_add_with(:coordinates_s => 'dr5xx3nytv')
   end
 
   it 'should correctly index an attribute field with block access' do
