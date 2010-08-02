@@ -238,6 +238,7 @@ Sunspot repository at `upstream`:
 * Nicolas Braem (nicolas.braem@gmail.com)
 * Jeremy Ashkenas (jashkenas@gmail.com)
 * Dylan Vaughn (dylanvaughn@yahoo.com)
+* Brian Durand (brian@embellishedvisions.com)
 
 == License
 
