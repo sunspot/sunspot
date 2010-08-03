@@ -53,7 +53,7 @@ Sunspot.setup(Post) do
   time :last_indexed_at, :stored => true do
     Time.now
   end
-  coordinates :coordinates
+  location :coordinates
 
   dynamic_string :custom_string, :stored => true
   dynamic_float :custom_float, :multiple => true, :using => :custom_fl

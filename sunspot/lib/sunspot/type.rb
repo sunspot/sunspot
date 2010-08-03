@@ -1,4 +1,5 @@
 require 'geohash'
+require 'singleton'
 
 module Sunspot
   # 
@@ -60,12 +61,7 @@ module Sunspot
     end
 
     class AbstractType #:nodoc:
-      class <<self
-        def instance
-          @instance ||= new
-        end
-        private :new
-      end
+      include Singleton
 
       def accepts_dynamic?
         true
@@ -326,7 +322,7 @@ module Sunspot
     end
     register BooleanType, TrueClass, FalseClass
 
-    class CoordinatesType < AbstractType
+    class LocationType < AbstractType
       include GeoHash
 
       def indexed_name(name)
