@@ -115,9 +115,9 @@ module Sunspot
         types = objects
         conjunction = Query::Connective::Conjunction.new
         if types.length == 1
-          conjunction.add_restriction(TypeField.instance, Query::Restriction::EqualTo, types.first)
+          conjunction.add_positive_restriction(TypeField.instance, Query::Restriction::EqualTo, types.first)
         else
-          conjunction.add_restriction(TypeField.instance, Query::Restriction::AnyOf, types)
+          conjunction.add_positive_restriction(TypeField.instance, Query::Restriction::AnyOf, types)
         end
         dsl = DSL::Scope.new(conjunction, setup_for_types(types))
         Util.instance_eval_or_call(dsl, &block)

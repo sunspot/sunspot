@@ -196,7 +196,7 @@ module Sunspot
             search_facet = @search.add_field_facet(field, options)
             Util.Array(options[:only]).each do |value|
               facet = Sunspot::Query::QueryFacet.new
-              facet.add_restriction(field, Sunspot::Query::Restriction::EqualTo, value)
+              facet.add_positive_restriction(field, Sunspot::Query::Restriction::EqualTo, value)
               @query.add_query_facet(facet)
               search_facet.add_row(value, facet.to_boolean_phrase)
             end
@@ -236,7 +236,7 @@ module Sunspot
                   nil
                 )
               when :none
-                extra_facet.add_restriction(
+                extra_facet.add_positive_restriction(
                   field,
                   Sunspot::Query::Restriction::EqualTo,
                   nil

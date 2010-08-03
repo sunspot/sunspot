@@ -6,9 +6,9 @@ module Sunspot
         @sort = SortComposite.new
         @components = [@scope, @sort]
         if types.length == 1
-          @scope.add_restriction(TypeField.instance, Restriction::EqualTo, types.first)
+          @scope.add_positive_restriction(TypeField.instance, Restriction::EqualTo, types.first)
         else
-          @scope.add_restriction(TypeField.instance, Restriction::AnyOf, types)
+          @scope.add_positive_restriction(TypeField.instance, Restriction::AnyOf, types)
         end
       end
 

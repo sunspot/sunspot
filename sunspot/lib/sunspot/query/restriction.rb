@@ -42,8 +42,9 @@ module Sunspot
 
         RESERVED_WORDS = Set['AND', 'OR', 'NOT']
 
-        def initialize(field, value, negated = false)
-          @field, @value, @negated = field, value, negated
+        def initialize(negated, field, value)
+          raise ArgumentError.new("RFCTR") unless [true, false].include?(negated)
+          @negated, @field, @value = negated, field, value
         end
 
         # 
@@ -116,7 +117,7 @@ module Sunspot
         # is used by disjunction denormalization.
         #
         def negate
-          self.class.new(@field, @value, !@negated)
+          self.class.new(!@negated, @field, @value)
         end
 
         protected

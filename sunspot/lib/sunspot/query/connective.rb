@@ -15,22 +15,37 @@ module Sunspot
         # 
         # Add a restriction to the connective.
         #
-        def add_restriction(field, restriction_type, value, negated = false)
-          add_component(restriction_type.new(field, value, negated))
+        def add_restriction(negated, field, restriction_type, *value)
+          add_component(restriction_type.new(negated, field, *value))
         end
 
         # 
         # Add a shorthand restriction; the restriction type is determined by
         # the value.
         #
-        def add_shorthand_restriction(field, value, negated = false)
+        def add_shorthand_restriction(negated, field, value)
           restriction_type =
             case value
             when Array then Restriction::AnyOf
             when Range then Restriction::Between
             else Restriction::EqualTo
             end
-          add_restriction(field, restriction_type, value, negated)
+          add_restriction(negated, field, restriction_type, value)
+        end
+
+        # 
+        # Add a positive restriction. The restriction will match all
+        # documents who match the terms fo the restriction.
+        #
+        def add_positive_restriction(field, restriction_type, value)
+          add_restriction(false, field, restriction_type, value)
+        end
+
+        # 
+        # Add a positive shorthand restriction (see add_shorthand_restriction)
+        #
+        def add_positive_shorthand_restriction(field, value)
+          add_shorthand_restriction(false, field, value)
         end
 
         # 
@@ -38,14 +53,14 @@ module Sunspot
         # documents who do not match the terms of the restriction.
         #
         def add_negated_restriction(field, restriction_type, value)
-          add_restriction(field, restriction_type, value, true)
+          add_restriction(true, field, restriction_type, value)
         end
 
         # 
         # Add a negated shorthand restriction (see add_shorthand_restriction)
         #
         def add_negated_shorthand_restriction(field, value)
-          add_shorthand_restriction(field, value, true)
+          add_shorthand_restriction(true, field, value)
         end
 
         # 

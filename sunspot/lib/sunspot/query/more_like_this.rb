@@ -5,6 +5,7 @@ module Sunspot
 
       def initialize(document)
         @document_scope = Restriction::EqualTo.new(
+          false,
           IdField.instance,
           Adapters::InstanceAdapter.adapt(document).index_id
         )

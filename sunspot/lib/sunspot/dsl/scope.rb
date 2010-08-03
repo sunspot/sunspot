@@ -64,7 +64,7 @@ module Sunspot
         if value == NONE
           DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, false)
         else
-          @scope.add_shorthand_restriction(@setup.field(field_name), value)
+          @scope.add_positive_shorthand_restriction(@setup.field(field_name), value)
         end
       end
 
