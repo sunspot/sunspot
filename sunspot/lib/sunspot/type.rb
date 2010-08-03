@@ -1,5 +1,5 @@
-require 'geohash'
 require 'singleton'
+require 'geohash'
 
 module Sunspot
   # 
@@ -330,7 +330,7 @@ module Sunspot
       end
 
       def to_indexed(value)
-        encode(value.lat, value.lng)
+        encode(value.lat, value.lng, 12)
       end
     end
 

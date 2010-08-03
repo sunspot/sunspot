@@ -87,7 +87,7 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should index latitude and longitude as a pair' do
     session.index(post(:coordinates => Sunspot::Util::Coordinates.new(40.7, -73.5)))
-    connection.should have_add_with(:coordinates_s => 'dr5xx3nytv')
+    connection.should have_add_with(:coordinates_s => 'dr5xx3nytvgs')
   end
 
   it 'should correctly index an attribute field with block access' do
