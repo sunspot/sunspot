@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 require 'irb'
 require 'rubygems'
-require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot')
+require 'bundler'
+Bundler.setup(:default, :test)
+require 'sunspot'
 def test_env!
   require File.join(File.dirname(__FILE__), '..', 'spec', 'integration', 'spec_helper')
 end

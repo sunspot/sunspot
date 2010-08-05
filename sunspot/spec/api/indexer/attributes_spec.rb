@@ -130,6 +130,6 @@ describe 'indexing attribute fields', :type => :indexer do
   
   it 'should use a specified field name when the :as option is set' do
     session.index(post(:title => 'A Title'))
-    connection.should have_add_with(:legacy_field => 'legacy A Title')
+    connection.should have_add_with(:legacy_field_s => 'legacy A Title')
   end
 end

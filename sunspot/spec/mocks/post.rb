@@ -71,7 +71,7 @@ Sunspot.setup(Post) do
     end
   end
   
-  string :legacy, :as => :legacy_field do
+  string :legacy, :as => :legacy_field_s do
     "legacy #{title}"
   end
 end

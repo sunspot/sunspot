@@ -10,6 +10,7 @@ describe 'standard query', :type => :query do
   it_should_behave_like "query with highlighting support"
   it_should_behave_like "sortable query"
   it_should_behave_like "query with text field scoping"
+  it_should_behave_like "geohash query"
 
   it 'adds a no-op query to :q parameter when no :q provided' do
     session.search Post do
