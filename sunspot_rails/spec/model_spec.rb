@@ -177,7 +177,7 @@ describe 'ActiveRecord mixin' do
       post.location = Location.create!(:lat => 40.0, :lng => -70.0)
       post.save
       post.index!
-      Post.search { near([40.0, -70.0], :distance => 1) }.results.should == [post]
+      Post.search { with(:location).near(40.0, -70.0) }.results.should == [post]
     end
 
   end

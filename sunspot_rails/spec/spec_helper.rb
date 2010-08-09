@@ -5,18 +5,12 @@ if rsolr_version = ENV['RSOLR_GEM_VERSION']
   gem "rsolr", rsolr_version
 end
 
-if File.exist?(sunspot_lib = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'sunspot', 'lib')))
-  STDERR.puts("Using sunspot lib at #{sunspot_lib}")
-  $: << sunspot_lib
-end
-
-require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config', 'environment.rb'))
+require File.expand_path('config/environment', ENV['RAILS_ROOT'])
 
 require 'spec'
 require 'spec/rails'
 require 'rake'
-require 'ruby-debug' unless RUBY_VERSION > '1.9'
-require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'rails', 'solr_logging')
+require File.join('sunspot', 'rails', 'solr_logging')
 
 def load_schema
   stdout = $stdout
