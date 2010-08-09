@@ -123,7 +123,7 @@ describe 'ActiveRecord mixin' do
     end
     
     it 'should use the include option on the data accessor when specified' do
-      Post.should_receive(:find).with(anything(), hash_including(:include => [:blog])).and_return([@post])
+      Post.should_receive(:all).with(hash_including(:include => [:blog])).and_return([@post])
       Post.search do
         with :title, 'Test Post'
         data_accessor_for(Post).include = [:blog]
@@ -131,14 +131,14 @@ describe 'ActiveRecord mixin' do
     end
 
     it 'should pass :include option from search call to data accessor' do
-      Post.should_receive(:find).with(anything(), hash_including(:include => [:blog])).and_return([@post])
+      Post.should_receive(:all).with(hash_including(:include => [:blog])).and_return([@post])
       Post.search(:include => [:blog]) do
         with :title, 'Test Post'
       end.results.should == [@post]
     end
     
     it 'should use the select option from search call to data accessor' do
-      Post.should_receive(:find).with(anything(), hash_including(:select => 'title, published_at')).and_return([@post])
+      Post.should_receive(:all).with(hash_including(:select => 'title, published_at')).and_return([@post])
       Post.search(:select => 'title, published_at') do
         with :title, 'Test Post'
       end.results.should == [@post]
@@ -149,7 +149,7 @@ describe 'ActiveRecord mixin' do
     end
     
     it 'should use the select option on the data accessor when specified' do
-      Post.should_receive(:find).with(anything(), hash_including(:select => 'title, published_at')).and_return([@post])
+      Post.should_receive(:all).with(hash_including(:select => 'title, published_at')).and_return([@post])
       Post.search do
         with :title, 'Test Post'
         data_accessor_for(Post).select = [:title, :published_at]
@@ -157,7 +157,7 @@ describe 'ActiveRecord mixin' do
     end
     
     it 'should not use the select option on the data accessor when not specified' do
-      Post.should_receive(:find).with(anything(), hash_not_including(:select)).and_return([@post])
+      Post.should_receive(:all).with(hash_not_including(:select)).and_return([@post])
       Post.search do
         with :title, 'Test Post'
       end.results.should == [@post]

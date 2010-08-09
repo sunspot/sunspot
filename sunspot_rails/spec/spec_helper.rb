@@ -1,5 +1,5 @@
 ENV['RAILS_ENV'] = 'test'
-ENV['RAILS_ROOT'] ||= File.join(File.dirname(__FILE__), 'mock_app')
+ENV['RAILS_ROOT'] ||= File.join(File.dirname(__FILE__), 'rails3')
 if rsolr_version = ENV['RSOLR_GEM_VERSION']
   STDERR.puts("Forcing RSolr version #{rsolr_version}")
   gem "rsolr", rsolr_version
@@ -7,8 +7,8 @@ end
 
 require File.expand_path('config/environment', ENV['RAILS_ROOT'])
 
-require 'spec'
-require 'spec/rails'
+require 'rspec'
+require 'rspec/rails'
 require 'rake'
 require File.join('sunspot', 'rails', 'solr_logging')
 
@@ -26,14 +26,14 @@ def silence_stderr(&block)
   $stderr = stderr
 end
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.before(:each) do
     load_schema
     Sunspot.remove_all!
   end
 end
 
-module Spec
+module RSpec
   module Mocks
     module Methods
       def should_respond_to_and_receive(*args, &block)

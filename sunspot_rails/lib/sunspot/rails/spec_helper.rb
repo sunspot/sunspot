@@ -14,6 +14,6 @@ module Sunspot
   end
 end
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.extend(Sunspot::Rails::SpecHelper)
 end
