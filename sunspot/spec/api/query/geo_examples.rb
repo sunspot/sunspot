@@ -38,7 +38,7 @@ shared_examples_for 'geohash query' do
       "{!dismax fl='* score' qf='title_text'}pizza (#{build_geo_query})"
     connection.should have_last_search_including(
       :q,
-      %Q(_query_:"{!dismax fl='* score' qf='title_text'}pizza" (#{build_geo_query}))
+      %Q(_query_:"{!dismax qf='title_text'}pizza" (#{build_geo_query}))
     )
   end
 
@@ -54,7 +54,8 @@ shared_examples_for 'geohash query' do
         if i == 12 then hash
         else "#{hash[0, i]}*"
         end
-      "coordinates_s:#{phrase}^#{boost*precision_factor**(i-12.0)}"
+      precision_boost = Sunspot::Util.format_float(boost*precision_factor**(i-12.0), 3)
+      "coordinates_s:#{phrase}^#{precision_boost}"
     end.reverse.join(' OR ')
   end
 end

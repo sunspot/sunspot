@@ -28,7 +28,8 @@ module Sunspot
         queries = []
         MAX_PRECISION.downto(precision) do |i|
           star = i == MAX_PRECISION ? '' : '*'
-          precision_boost = boost * precision_factor ** (i-MAX_PRECISION).to_f
+          precision_boost = Util.format_float(
+            boost * precision_factor ** (i-MAX_PRECISION).to_f, 3)
           queries << "#{@field.indexed_name}:#{@geohash[0, i]}#{star}^#{precision_boost}"
         end
         queries.join(' OR ')

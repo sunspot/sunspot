@@ -20,9 +20,9 @@ module Sunspot
         when 0
           {}
         when 1
-          @components.first.to_params
+          @components.first.to_params.merge(:fl => '* score')
         else
-          to_subqueries
+          to_subqueries.merge(:fl => '* score')
         end
       end
 

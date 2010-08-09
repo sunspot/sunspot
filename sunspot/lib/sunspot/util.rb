@@ -109,6 +109,20 @@ module Sunspot
       end
 
       # 
+      # When generating boosts, Solr requires that the values be in standard
+      # (not scientific) notation. We would like to ensure a minimum number of
+      # significant digits (i.e., digits that are not prefix zeros) for small
+      # float values.
+      #
+      def format_float(f, digits)
+        if f < 1
+          sprintf('%.*f', digits - Math.log10(f), f)
+        else
+          f.to_s
+        end
+      end
+
+      # 
       # Perform a deep merge of hashes, returning the result as a new hash.
       # See #deep_merge_into for rules used to merge the hashes
       #

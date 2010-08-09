@@ -62,6 +62,7 @@ module Sunspot
       def to_subquery
         params = self.to_params
         params.delete :defType
+        params.delete :fl
         keywords = params.delete(:q)
         options = params.map { |key, value| "#{key}='#{escape_quotes(value)}'"}.join(' ')
         "_query_:\"{!dismax #{options}}#{escape_quotes(keywords)}\""

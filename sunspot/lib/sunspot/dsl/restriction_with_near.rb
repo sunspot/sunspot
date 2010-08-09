@@ -106,6 +106,13 @@ module Sunspot
       #     with the fact that each precision's bounding box is about sixteen
       #     times the size of the next highest precision.)</dd>
       #
+      # ==== Example
+      #
+      # Sunspot.search(Post) do
+      #   fulltext('pizza')
+      #   with(:location).near(-40.0, -70.0, :boost => 2, :precision => 6)
+      # end
+      #
       def near(lat, lng, options = {})
         @query.fulltext.add_location(@field, lat, lng, options)
       end
