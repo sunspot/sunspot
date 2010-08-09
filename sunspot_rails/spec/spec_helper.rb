@@ -7,8 +7,13 @@ end
 
 require File.expand_path('config/environment', ENV['RAILS_ROOT'])
 
-require 'rspec'
-require 'rspec/rails'
+begin
+  require 'rspec'
+  require 'rspec/rails'
+rescue LoadError => e
+  require 'spec'
+  require 'spec/rails'
+end
 require 'rake'
 require File.join('sunspot', 'rails', 'solr_logging')
 
@@ -26,20 +31,16 @@ def silence_stderr(&block)
   $stderr = stderr
 end
 
-RSpec.configure do |config|
+rspec = 
+  begin
+    RSpec
+  rescue NameError
+    Spec::Runner
+  end
+
+rspec.configure do |config|
   config.before(:each) do
     load_schema
     Sunspot.remove_all!
-  end
-end
-
-module RSpec
-  module Mocks
-    module Methods
-      def should_respond_to_and_receive(*args, &block)
-        respond_to?(args.first).should ==(true)
-        should_receive(*args, &block)
-      end
-    end
   end
 end

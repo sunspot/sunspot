@@ -1,0 +1,4 @@
+test: &test
+  :adapter: sqlite3
+  :database: db/test.db
+development: *test
