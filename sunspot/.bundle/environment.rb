@@ -174,14 +174,14 @@ end
 module Bundler
   ENV_LOADED   = true
   LOCKED_BY    = '0.9.25'
-  FINGERPRINT  = "761dc16e2855b9732238d7f3ffe0b9305046662e"
+  FINGERPRINT  = "700f0f4a8f01f0fbffe81be244d72f7e66bbc796"
   HOME         = '/home/mat/.bundle/ruby/1.8/bundler'
   AUTOREQUIRES = {:test=>[["rspec", false]], :default=>[["sunspot", false]]}
   SPECS        = [
         {:loaded_from=>"/opt/ruby-enterprise-1.8.6-20090610/lib/ruby/gems/1.8/specifications/rake-0.8.7.gemspec", :name=>"rake", :load_paths=>["/opt/ruby-enterprise-1.8.6-20090610/lib/ruby/gems/1.8/gems/rake-0.8.7/lib"]},
         {:loaded_from=>"/opt/ruby-enterprise-1.8.6-20090610/lib/ruby/gems/1.8/specifications/builder-2.1.2.gemspec", :name=>"builder", :load_paths=>["/opt/ruby-enterprise-1.8.6-20090610/lib/ruby/gems/1.8/gems/builder-2.1.2/lib"]},
         {:loaded_from=>"/opt/ruby-enterprise-1.8.6-20090610/lib/ruby/gems/1.8/specifications/escape-0.0.4.gemspec", :name=>"escape", :load_paths=>["/opt/ruby-enterprise-1.8.6-20090610/lib/ruby/gems/1.8/gems/escape-0.0.4/lib"]},
-        {:loaded_from=>"/home/mat/.bundle/ruby/1.8/specifications/json_pure-1.4.3.gemspec", :name=>"json_pure", :load_paths=>["/home/mat/.bundle/ruby/1.8/gems/json_pure-1.4.3/lib"]},
+        {:loaded_from=>"/home/mat/.bundle/ruby/1.8/specifications/json_pure-1.4.6.gemspec", :name=>"json_pure", :load_paths=>["/home/mat/.bundle/ruby/1.8/gems/json_pure-1.4.6/lib"]},
         {:loaded_from=>"/home/mat/.bundle/ruby/1.8/specifications/rubyforge-2.0.4.gemspec", :name=>"rubyforge", :load_paths=>["/home/mat/.bundle/ruby/1.8/gems/rubyforge-2.0.4/lib"]},
         {:loaded_from=>"/home/mat/.bundle/ruby/1.8/specifications/hoe-2.6.1.gemspec", :name=>"hoe", :load_paths=>["/home/mat/.bundle/ruby/1.8/gems/hoe-2.6.1/lib"]},
         {:loaded_from=>"/home/mat/.bundle/ruby/1.8/specifications/geohash-1.0.1.gemspec", :name=>"geohash", :load_paths=>["/home/mat/.bundle/ruby/1.8/gems/geohash-1.0.1/lib"]},
