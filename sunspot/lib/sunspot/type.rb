@@ -322,6 +322,24 @@ module Sunspot
     end
     register BooleanType, TrueClass, FalseClass
 
+    # 
+    # The Location type encodes geographical coordinates as a GeoHash.
+    # The data for this type must respond to the `lat` and `lng` methods; you
+    # can use Sunspot::Util::Coordinates as a wrapper if your source data does
+    # not follow this API.
+    #
+    # Location fields are most usefully searched using the
+    # Sunspot::DSL::RestrictionWithType#near method; see that method for more
+    # information on geographical search.
+    #
+    # ==== Example
+    #
+    #   Sunspot.setup(Post) do
+    #     location :coordinates do
+    #       Sunspot::Util::Coordinates.new(coordinates[0], coordinates[1])
+    #     end
+    #   end
+    #
     class LocationType < AbstractType
       include GeoHash
 

@@ -89,29 +89,29 @@ module Sunspot
       #
       # <dt><code>:precision</code></dt>
       # <dd>The minimum precision at which locations should match. See the table
-      #     of precisions and bounding-box sizes above; the proximity value will
-      #     ensure that all matching documents share a bounding box of the
-      #     corresponding maximum size with your origin point. The default value
-      #     is 7, meaning all results will share a bounding box with edges of
-      #     about one and a half miles with the origin.</dd>
+      # of precisions and bounding-box sizes above; the proximity value will
+      # ensure that all matching documents share a bounding box of the
+      # corresponding maximum size with your origin point. The default value
+      # is 7, meaning all results will share a bounding box with edges of
+      # about one and a half miles with the origin.</dd>
       # <dt><code>:boost</code></dt>
       # <dd>The boost to apply to maximum-precision matches. Default is 1.0. You
-      #     can use this option to adjust the weight given to geographic
-      #     proximity versus fulltext matching, if you are doing both in a
-      #     search.</dd>
+      # can use this option to adjust the weight given to geographic
+      # proximity versus fulltext matching, if you are doing both in a
+      # search.</dd>
       # <dt><code>:precision_factor</code></dt>
       # <dd>This option determines how much boost is applied to matches at lower
-      #     precisions. The default value, 16.0, means that a match at precision
-      #     N is 1/16 as relevant as a match at precision N+1 (this is consistent
-      #     with the fact that each precision's bounding box is about sixteen
-      #     times the size of the next highest precision.)</dd>
+      # precisions. The default value, 16.0, means that a match at precision
+      # N is 1/16 as relevant as a match at precision N+1 (this is consistent
+      # with the fact that each precision's bounding box is about sixteen
+      # times the size of the next highest precision.)</dd>
       #
       # ==== Example
       #
-      # Sunspot.search(Post) do
-      #   fulltext('pizza')
-      #   with(:location).near(-40.0, -70.0, :boost => 2, :precision => 6)
-      # end
+      #   Sunspot.search(Post) do
+      #     fulltext('pizza')
+      #     with(:location).near(-40.0, -70.0, :boost => 2, :precision => 6)
+      #   end
       #
       def near(lat, lng, options = {})
         @query.fulltext.add_location(@field, lat, lng, options)
