@@ -9,7 +9,7 @@ dependencies:
   rails: 
     group: 
     - :default
-    version: = 2.3.8
+    version: = 2.3.4
   sqlite3-ruby: 
     group: 
     - :default
@@ -22,8 +22,6 @@ dependencies:
     group: 
     - :default
     version: ">= 0"
-    require: 
-    - sunspot/rails
   rspec-rails: 
     group: 
     - :test
@@ -32,17 +30,17 @@ specs:
 - rake: 
     version: 0.8.7
 - activesupport: 
-    version: 2.3.8
+    version: 2.3.4
 - rack: 
-    version: 1.1.0
+    version: 1.0.1
 - actionpack: 
-    version: 2.3.8
+    version: 2.3.4
 - actionmailer: 
-    version: 2.3.8
+    version: 2.3.4
 - activerecord: 
-    version: 2.3.8
+    version: 2.3.4
 - activeresource: 
-    version: 2.3.8
+    version: 2.3.4
 - builder: 
     version: 2.1.2
 - columnize: 
@@ -60,7 +58,7 @@ specs:
 - linecache: 
     version: "0.43"
 - rails: 
-    version: 2.3.8
+    version: 2.3.4
 - rsolr: 
     version: 0.12.1
 - rspec: 
@@ -79,12 +77,11 @@ specs:
 - sunspot_rails: 
     version: 1.2rc1
     source: 0
-hash: 001bd7384d5df565190a2b6377d462cae8e172e2
+hash: 474c3240163f647b618987a01e6faa2b34cf414b
 sources: 
 - Path: 
     path: !ruby/object:Pathname 
       path: /home/mat/Projects/sunspot/sunspot_rails
-    require: sunspot/rails
 - Path: 
     path: !ruby/object:Pathname 
       path: /home/mat/Projects/sunspot/sunspot

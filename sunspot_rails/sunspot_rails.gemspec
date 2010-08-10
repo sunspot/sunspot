@@ -25,8 +25,7 @@ TEXT
     Dir.glob('[A-Z]*') +
     Dir.glob('{lib,tasks,dev_tasks}/**/*') +
     Dir.glob('generators/**/*') +
-    ['install.rb', 'MIT-LICENSE'] +
-    Dir.glob('rails/*') +
+    ['install.rb', 'MIT-LICENSE', 'rails/init.rb'] +
     Dir.glob('spec/*.rb') +
     Dir.glob('spec/mock_app/{app,lib,db,vendor,config}/**/*') +
     Dir.glob('spec/mock_app/{tmp,log,solr}')
