@@ -11,7 +11,7 @@ module Sunspot
 
       def initialize(field, lat, lng, options)
         @field, @options = field, options
-        @geohash = encode(lat, lng, MAX_PRECISION)
+        @geohash = encode(lat.to_f, lng.to_f, MAX_PRECISION)
       end
 
       def to_params

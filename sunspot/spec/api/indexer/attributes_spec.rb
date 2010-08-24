@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
+require 'bigdecimal'
 
 describe 'indexing attribute fields', :type => :indexer do
   it 'should correctly index a stored string attribute field' do
@@ -87,6 +88,13 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should index latitude and longitude as a pair' do
     session.index(post(:coordinates => Sunspot::Util::Coordinates.new(40.7, -73.5)))
+    connection.should have_add_with(:coordinates_s => 'dr5xx3nytvgs')
+  end
+
+  it 'should index latitude and longitude passed as non-Floats' do
+    coordinates = Sunspot::Util::Coordinates.new(
+      BigDecimal.new('40.7'), BigDecimal.new('-73.5'))
+    session.index(post(:coordinates => coordinates))
     connection.should have_add_with(:coordinates_s => 'dr5xx3nytvgs')
   end
 

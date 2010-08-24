@@ -348,7 +348,7 @@ module Sunspot
       end
 
       def to_indexed(value)
-        encode(value.lat, value.lng, 12)
+        encode(value.lat.to_f, value.lng.to_f, 12)
       end
     end
 
