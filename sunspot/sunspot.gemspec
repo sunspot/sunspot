@@ -5,8 +5,6 @@ $:.unshift(lib) unless $:.include?(lib)
 
 require 'sunspot/version'
 
-FileUtils.cp('../README.rdoc', './')
-
 Gem::Specification.new do |s|
   s.name = 'sunspot'
   s.version = Sunspot::VERSION
