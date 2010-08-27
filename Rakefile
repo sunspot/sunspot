@@ -1,8 +1,5 @@
 desc 'Release Sunspot and Sunspot::Rails to Gemcutter'
 task :release do
-  def system(command)
-    puts command
-  end
   FileUtils.cp('README.rdoc', 'sunspot/')
   system "git commit sunspot/README.rdoc -qm 'Updating README for gem release'"
 
