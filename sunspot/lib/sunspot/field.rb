@@ -81,6 +81,17 @@ module Sunspot
       !!@more_like_this
     end
 
+    #
+    # Whether this field is stored.
+    #
+    # ==== Returns
+    #
+    # Boolean:: True if this field is stored.
+    #
+    def stored?
+      @stored
+    end
+
     def hash
       indexed_name.hash
     end
