@@ -32,6 +32,11 @@ module Sunspot
 
       def initialize(raw_hit, highlights, distance, search) #:nodoc:
         @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
+
+        if clazz = Sunspot::TypeField.aliases_inverted[@class_name]
+          @class_name = clazz.name
+        end
+
         @score = raw_hit['score']
         @distance = distance
         @search = search

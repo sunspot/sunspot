@@ -161,6 +161,19 @@ module Sunspot
 
   class TypeField #:nodoc:
     class <<self
+      def alias(dest_class, source_class_name)
+        @@inverted = nil # invalidate cache
+        aliases[dest_class] = source_class_name
+      end
+
+      def aliases
+        @@aliases ||= {}
+      end
+
+      def aliases_inverted
+        @@inverted ||= aliases.invert
+      end
+
       def instance
         @instance ||= new
       end
@@ -171,7 +184,7 @@ module Sunspot
     end
 
     def to_indexed(clazz)
-      clazz.name
+      self.class.aliases[clazz] || clazz.name
     end
   end
 
