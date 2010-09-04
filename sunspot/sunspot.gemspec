@@ -25,7 +25,6 @@ TEXT
   s.add_runtime_dependency 'escape', '0.0.4'
   s.add_runtime_dependency 'geohash', '1.1.0'
   s.add_development_dependency 'rspec', '~> 1.1'
-  s.extra_rdoc_files = ['../README.rdoc']
   s.test_files = Dir.glob('spec/**/*_spec.rb')
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                     '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation' <<
