@@ -62,7 +62,6 @@ module Sunspot
 
 		# AbstractType is never instantiated, should be a module
     module AbstractType #:nodoc:
-      include Singleton
 
       def accepts_dynamic?
         true
@@ -89,6 +88,7 @@ module Sunspot
     #
     class TextType
 			include AbstractType
+			include Singleton
 		
       def indexed_name(name) #:nodoc:
         "#{name}_text"
@@ -116,6 +116,7 @@ module Sunspot
     #
     class StringType
 			include AbstractType
+			include Singleton
 			
       def indexed_name(name) #:nodoc:
         "#{name}_s"
@@ -136,6 +137,7 @@ module Sunspot
     #
     class IntegerType
 			include AbstractType
+			include Singleton
 			
       def indexed_name(name) #:nodoc:
         "#{name}_i"
@@ -169,6 +171,7 @@ module Sunspot
     #
     class FloatType
 			include AbstractType
+			include Singleton
 			
       def indexed_name(name) #:nodoc:
         "#{name}_f"
@@ -204,6 +207,7 @@ module Sunspot
     #
     class TimeType
 			include AbstractType
+			include Singleton
 			
       XMLSCHEMA = "%Y-%m-%dT%H:%M:%SZ"
 
@@ -311,6 +315,7 @@ module Sunspot
     #
     class BooleanType
 			include AbstractType
+			include Singleton
 			
       def indexed_name(name) #:nodoc:
         "#{name}_b"
@@ -355,6 +360,7 @@ module Sunspot
     #
     class LocationType < GeoHash
       include AbstractType
+			include Singleton
 
       def indexed_name(name)
         "#{name}_s"
@@ -367,6 +373,7 @@ module Sunspot
 
     class ClassType
 			include AbstractType
+			include Singleton
 			
       def indexed_name(name) #:nodoc:
         'class_name'
