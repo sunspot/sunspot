@@ -24,6 +24,7 @@ TEXT
   s.add_runtime_dependency 'rsolr', '0.12.1'
   s.add_runtime_dependency 'escape', '0.0.4'
   s.add_runtime_dependency 'geohash', '1.1.0'
+	s.add_runtime_dependency 'nokogiri', '1.4.3.1'
   s.add_development_dependency 'rspec', '~> 1.1'
   s.test_files = Dir.glob('spec/**/*_spec.rb')
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
