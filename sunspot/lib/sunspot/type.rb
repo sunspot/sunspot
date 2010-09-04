@@ -60,7 +60,8 @@ module Sunspot
       end
     end
 
-    class AbstractType #:nodoc:
+		# AbstractType is never instantiated, should be a module
+    module AbstractType #:nodoc:
       include Singleton
 
       def accepts_dynamic?
@@ -86,7 +87,9 @@ module Sunspot
     # restrictions. Similarly, text fields are the only fields that are made
     # available to keyword search.
     #
-    class TextType < AbstractType
+    class TextType
+			include AbstractType
+		
       def indexed_name(name) #:nodoc:
         "#{name}_text"
       end
@@ -111,7 +114,9 @@ module Sunspot
     # 
     # The String type represents string data.
     #
-    class StringType < AbstractType
+    class StringType
+			include AbstractType
+			
       def indexed_name(name) #:nodoc:
         "#{name}_s"
       end
@@ -129,7 +134,9 @@ module Sunspot
     # 
     # The Integer type represents integers.
     #
-    class IntegerType < AbstractType
+    class IntegerType
+			include AbstractType
+			
       def indexed_name(name) #:nodoc:
         "#{name}_i"
       end
@@ -160,7 +167,9 @@ module Sunspot
     # 
     # The Float type represents floating-point numbers.
     #
-    class FloatType < AbstractType
+    class FloatType
+			include AbstractType
+			
       def indexed_name(name) #:nodoc:
         "#{name}_f"
       end
@@ -193,7 +202,9 @@ module Sunspot
     # The time type represents times. Note that times are always converted to
     # UTC before indexing, and facets of Time fields always return times in UTC.
     #
-    class TimeType < AbstractType
+    class TimeType
+			include AbstractType
+			
       XMLSCHEMA = "%Y-%m-%dT%H:%M:%SZ"
 
       def indexed_name(name) #:nodoc:
@@ -298,7 +309,9 @@ module Sunspot
     # The boolean type represents true/false values. Note that +nil+ will not be
     # indexed at all; only +false+ will be indexed with a false value.
     #
-    class BooleanType < AbstractType
+    class BooleanType
+			include AbstractType
+			
       def indexed_name(name) #:nodoc:
         "#{name}_b"
       end
@@ -340,8 +353,8 @@ module Sunspot
     #     end
     #   end
     #
-    class LocationType < AbstractType
-      include GeoHash
+    class LocationType < GeoHash
+      include AbstractType
 
       def indexed_name(name)
         "#{name}_s"
@@ -352,7 +365,9 @@ module Sunspot
       end
     end
 
-    class ClassType < AbstractType
+    class ClassType
+			include AbstractType
+			
       def indexed_name(name) #:nodoc:
         'class_name'
       end
