@@ -2,8 +2,7 @@ require 'geohash'
 
 module Sunspot
   module Query
-    class Geo
-      include GeoHash
+    class Geo < GeoHash
 
       MAX_PRECISION = 12
       DEFAULT_PRECISION = 7
