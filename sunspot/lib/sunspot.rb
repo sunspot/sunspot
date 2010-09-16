@@ -345,14 +345,14 @@ module Sunspot
     # functionality as standard searches; the only thing you can't do in a MLT
     # search is fulltext matching (since the MLT itself is a fulltext query).
     #
-    # #### Example
+    # ==== Example
     #
-    # post = Post.first
-    # Sunspot.more_like_this(post, Post, Page) do
-    #   fields :title, :body
-    #   with(:updated_at).greater_than(1.month.ago)
-    #   facet(:category_ids)
-    # end
+    #   post = Post.first
+    #   Sunspot.more_like_this(post, Post, Page) do
+    #     fields :title, :body
+    #     with(:updated_at).greater_than(1.month.ago)
+    #     facet(:category_ids)
+    #   end
     #
     #
     def more_like_this(object, *types, &block)
