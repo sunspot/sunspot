@@ -327,6 +327,34 @@ module Sunspot
       session.new_more_like_this(object, *types, &block)
     end
 
+    # 
+    # Initiate a MoreLikeThis search. MoreLikeThis is a special type of search
+    # that finds similar documents using fulltext comparison. The fields to be
+    # compared are `text` fields set up with the `:more_like_this` option set to
+    # `true`. By default, more like this returns objects of the same type as the
+    # object used for comparison, but a list of types can optionally be passed
+    # to this method to return similar documents of other types. This will only
+    # work for types that have common fields.
+    #
+    # The DSL for MoreLikeThis search exposes several methods for setting
+    # options specific to this type of search. See the
+    # Sunspot::DSL::MoreLikeThis class and the MoreLikeThis documentation on
+    # the Solr wiki: http://wiki.apache.org/solr/MoreLikeThis
+    #
+    # MoreLikeThis searches have all of the same scoping, ordering, and faceting
+    # functionality as standard searches; the only thing you can't do in a MLT
+    # search is fulltext matching (since the MLT itself is a fulltext query).
+    #
+    # #### Example
+    #
+    # post = Post.first
+    # Sunspot.more_like_this(post, Post, Page) do
+    #   fields :title, :body
+    #   with(:updated_at).greater_than(1.month.ago)
+    #   facet(:category_ids)
+    # end
+    #
+    #
     def more_like_this(object, *types, &block)
       session.more_like_this(object, *types, &block)
     end
