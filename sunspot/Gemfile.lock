@@ -1,41 +1,24 @@
---- 
-specs: 
-- rake: 
-    version: 0.8.7
-- builder: 
-    version: 2.1.2
-- escape: 
-    version: 0.0.4
-- json_pure: 
-    version: 1.4.6
-- rubyforge: 
-    version: 2.0.4
-- hoe: 
-    version: 2.6.1
-- geohash: 
-    version: 1.0.1
-- rsolr: 
-    version: 0.12.1
-- rspec: 
-    version: 1.3.0
-- sunspot: 
-    version: 1.2rc2
-    source: 0
-hash: 700f0f4a8f01f0fbffe81be244d72f7e66bbc796
-sources: 
-- Path: 
-    name: sunspot
-    version: 1.2rc2
-    path: !ruby/object:Pathname 
-      path: /home/mat/Projects/sunspot/sunspot
-- Rubygems: 
-    uri: http://gemcutter.org
-dependencies: 
-  rspec: 
-    version: ~> 1.3
-    group: 
-    - :test
-  sunspot: 
-    version: = 1.2rc2
-    group: 
-    - :default
+PATH
+  remote: .
+  specs:
+    sunspot (1.2.rc3)
+      escape (= 0.0.4)
+      pr_geohash (~> 1.0)
+      rsolr (= 0.12.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    builder (2.1.2)
+    escape (0.0.4)
+    pr_geohash (1.0.0)
+    rsolr (0.12.1)
+      builder (>= 2.1.2)
+    rspec (1.3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rspec (~> 1.3)
+  sunspot (= 1.2.rc3)!
