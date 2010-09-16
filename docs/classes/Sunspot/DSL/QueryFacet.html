@@ -52,14 +52,14 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000114">row</a></li>
+              <li><a href="#M000111">row</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000114'>
-                <a name='M000114'></a>
+              <div class='method public-instance' id='method-M000111'>
+                <a name='M000111'></a>
                 <div class='synopsis'>
                   <span class='name'>row</span>
                   <span class='arguments'>(label, &amp;block)</span>
@@ -84,10 +84,10 @@
                   </table>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000114-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000111-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000114-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query_facet.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">row</span>(<span class="ruby-identifier">label</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">query_facet</span> = <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span><span class="ruby-operator">::</span><span class="ruby-constant">QueryFacet</span>.<span class="ruby-identifier">new</span>&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_query_facet</span>(<span class="ruby-identifier">query_facet</span>), <span class="ruby-ivar">@setup</span>),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;        <span class="ruby-ivar">@facet</span>.<span class="ruby-identifier">add_row</span>(<span class="ruby-identifier">label</span>, <span class="ruby-identifier">query_facet</span>.<span class="ruby-identifier">to_boolean_phrase</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000111-source'><span class="ruby-comment cmt"># File lib/sunspot/dsl/query_facet.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">row</span>(<span class="ruby-identifier">label</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">query_facet</span> = <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Query</span><span class="ruby-operator">::</span><span class="ruby-constant">QueryFacet</span>.<span class="ruby-identifier">new</span>&#x000A;        <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">instance_eval_or_call</span>(&#x000A;          <span class="ruby-constant">Scope</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@query</span>.<span class="ruby-identifier">add_query_facet</span>(<span class="ruby-identifier">query_facet</span>), <span class="ruby-ivar">@setup</span>),&#x000A;          <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        )&#x000A;        <span class="ruby-ivar">@facet</span>.<span class="ruby-identifier">add_row</span>(<span class="ruby-identifier">label</span>, <span class="ruby-identifier">query_facet</span>.<span class="ruby-identifier">to_boolean_phrase</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
