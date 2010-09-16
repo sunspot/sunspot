@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::SessionProxy [Sunspot 1.0.3 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::SessionProxy [Sunspot 1.2.rc3 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -31,32 +31,36 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../files/lib/sunspot/session_proxy/thread_local_session_proxy_rb.html">lib/sunspot/session_proxy/thread_local_session_proxy.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/session_proxy/thread_local_session_proxy.rb">view online</a>)
-          </li>
-          <li class='other'>
-            <a href="../../files/lib/sunspot/session_proxy/class_sharding_session_proxy_rb.html">lib/sunspot/session_proxy/class_sharding_session_proxy.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/session_proxy/class_sharding_session_proxy.rb">view online</a>)
+            <a href="../../files/lib/sunspot/session_proxy_rb.html">lib/sunspot/session_proxy.rb</a>
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/session_proxy/master_slave_session_proxy_rb.html">lib/sunspot/session_proxy/master_slave_session_proxy.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/session_proxy/master_slave_session_proxy.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy/master_slave_session_proxy.rb">view online</a>)
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/sunspot/session_proxy/class_sharding_session_proxy_rb.html">lib/sunspot/session_proxy/class_sharding_session_proxy.rb</a>
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy/class_sharding_session_proxy.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/session_proxy/abstract_session_proxy_rb.html">lib/sunspot/session_proxy/abstract_session_proxy.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/session_proxy/abstract_session_proxy.rb">view online</a>)
-          </li>
-          <li class='other'>
-            <a href="../../files/lib/sunspot/session_proxy/id_sharding_session_proxy_rb.html">lib/sunspot/session_proxy/id_sharding_session_proxy.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/session_proxy/id_sharding_session_proxy.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy/abstract_session_proxy.rb">view online</a>)
           </li>
           <li class='other'>
             <a href="../../files/lib/sunspot/session_proxy/sharding_session_proxy_rb.html">lib/sunspot/session_proxy/sharding_session_proxy.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/session_proxy/sharding_session_proxy.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy/sharding_session_proxy.rb">view online</a>)
           </li>
           <li class='other'>
-            <a href="../../files/lib/sunspot/session_proxy_rb.html">lib/sunspot/session_proxy.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/session_proxy.rb">view online</a>)
+            <a href="../../files/lib/sunspot/session_proxy/thread_local_session_proxy_rb.html">lib/sunspot/session_proxy/thread_local_session_proxy.rb</a>
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy/thread_local_session_proxy.rb">view online</a>)
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/sunspot/session_proxy/silent_fail_session_proxy_rb.html">lib/sunspot/session_proxy/silent_fail_session_proxy.rb</a>
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy/silent_fail_session_proxy.rb">view online</a>)
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/sunspot/session_proxy/id_sharding_session_proxy_rb.html">lib/sunspot/session_proxy/id_sharding_session_proxy.rb</a>
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy/id_sharding_session_proxy.rb">view online</a>)
           </li>
           <li>
             <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
@@ -93,6 +97,13 @@
             <h5>Example: Chain a <a href="SessionProxy/MasterSlaveSessionProxy.html">MasterSlaveSessionProxy</a> with a <a href="SessionProxy/ThreadLocalSessionProxy.html">ThreadLocalSessionProxy</a></h5>
             <pre>master_session = Sunspot::SessionProxy::ThreadLocalSessionProxy.new&#x000A;slave_session = Sunspot::SessionProxy::ThreadLocalSessionProxy.new&#x000A;master_session.config.solr.url = 'http://master-solr.local:9080/solr'&#x000A;slave_session.config.solr.url = 'http://slave-solr.local:9080/solr'&#x000A;Sunspot.session = Sunspot::SessionProxy::MasterSlaveSessionProxy.new(master_session, slave_session)</pre>
           </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000055">new</a></li>
+            </ol>
+          </div>
           <div id='section'>
             <div id='class-list'>
               <h2>Classes and Modules</h2>
@@ -100,6 +111,7 @@
               Class <a href="SessionProxy/IdShardingSessionProxy.html" class="link">Sunspot::SessionProxy::IdShardingSessionProxy</a><br />
               Class <a href="SessionProxy/MasterSlaveSessionProxy.html" class="link">Sunspot::SessionProxy::MasterSlaveSessionProxy</a><br />
               Class <a href="SessionProxy/ShardingSessionProxy.html" class="link">Sunspot::SessionProxy::ShardingSessionProxy</a><br />
+              Class <a href="SessionProxy/SilentFailSessionProxy.html" class="link">Sunspot::SessionProxy::SilentFailSessionProxy</a><br />
               Class <a href="SessionProxy/ThreadLocalSessionProxy.html" class="link">Sunspot::SessionProxy::ThreadLocalSessionProxy</a><br />
             </div>
             <div id='constants-list'>
@@ -112,6 +124,45 @@
                     <td class='context-item-value'>Class.new(StandardError)</td>
                   </tr>
                 </table>
+              </div>
+            </div>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>config</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      The configuration with which the thread-local sessions are initialized.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='method public-class' id='method-M000055'>
+                <a name='M000055'></a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(config = Sunspot::Configuration.new)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Optionally pass an existing <a
+                  href="Configuration.html">Sunspot::Configuration</a> object. If none is
+                  passed, a default configuration is used; it can then be modified using the
+                  config attribute.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000055-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000055-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/thread_local_session_proxy.rb, line 27</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">config</span> = <span class="ruby-constant">Sunspot</span><span class="ruby-operator">::</span><span class="ruby-constant">Configuration</span>.<span class="ruby-identifier">new</span>)&#x000A;        <span class="ruby-ivar">@config</span> = <span class="ruby-identifier">config</span>&#x000A;        <span class="ruby-constant">ObjectSpace</span>.<span class="ruby-identifier">define_finalizer</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-constant">FINALIZER</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
               </div>
             </div>
           </div>

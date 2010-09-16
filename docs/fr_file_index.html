@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Files [Sunspot 1.0.3 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>Files [Sunspot 1.2.rc3 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <base target='docwin'>
@@ -17,14 +17,20 @@
         <li class='other'><a href="files/lib/sunspot/configuration_rb.html">lib/sunspot/configuration.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/data_extractor_rb.html">lib/sunspot/data_extractor.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/dsl_rb.html">lib/sunspot/dsl.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/dsl/adjustable_rb.html">lib/sunspot/dsl/adjustable.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/dsl/field_query_rb.html">lib/sunspot/dsl/field_query.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/dsl/fields_rb.html">lib/sunspot/dsl/fields.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/dsl/fulltext_rb.html">lib/sunspot/dsl/fulltext.rb</a></li>
-        <li class='other'><a href="files/lib/sunspot/dsl/query_rb.html">lib/sunspot/dsl/query.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/dsl/function_rb.html">lib/sunspot/dsl/function.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/dsl/functional_rb.html">lib/sunspot/dsl/functional.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/dsl/more_like_this_query_rb.html">lib/sunspot/dsl/more_like_this_query.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/dsl/paginatable_rb.html">lib/sunspot/dsl/paginatable.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/dsl/query_facet_rb.html">lib/sunspot/dsl/query_facet.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/dsl/restriction_rb.html">lib/sunspot/dsl/restriction.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/dsl/restriction_with_near_rb.html">lib/sunspot/dsl/restriction_with_near.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/dsl/scope_rb.html">lib/sunspot/dsl/scope.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/dsl/search_rb.html">lib/sunspot/dsl/search.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/dsl/standard_query_rb.html">lib/sunspot/dsl/standard_query.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/field_rb.html">lib/sunspot/field.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/field_factory_rb.html">lib/sunspot/field_factory.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/indexer_rb.html">lib/sunspot/indexer.rb</a></li>
@@ -36,29 +42,37 @@
         <li class='other'><a href="files/lib/sunspot/query_rb.html">lib/sunspot/query.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/abstract_field_facet_rb.html">lib/sunspot/query/abstract_field_facet.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/boost_query_rb.html">lib/sunspot/query/boost_query.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/query/common_query_rb.html">lib/sunspot/query/common_query.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/query/composite_fulltext_rb.html">lib/sunspot/query/composite_fulltext.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/connective_rb.html">lib/sunspot/query/connective.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/date_field_facet_rb.html">lib/sunspot/query/date_field_facet.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/dismax_rb.html">lib/sunspot/query/dismax.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/field_facet_rb.html">lib/sunspot/query/field_facet.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/filter_rb.html">lib/sunspot/query/filter.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/query/function_query_rb.html">lib/sunspot/query/function_query.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/query/geo_rb.html">lib/sunspot/query/geo.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/highlighting_rb.html">lib/sunspot/query/highlighting.rb</a></li>
-        <li class='other'><a href="files/lib/sunspot/query/local_rb.html">lib/sunspot/query/local.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/query/more_like_this_rb.html">lib/sunspot/query/more_like_this.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/query/more_like_this_query_rb.html">lib/sunspot/query/more_like_this_query.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/pagination_rb.html">lib/sunspot/query/pagination.rb</a></li>
-        <li class='other'><a href="files/lib/sunspot/query/query_rb.html">lib/sunspot/query/query.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/query_facet_rb.html">lib/sunspot/query/query_facet.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/restriction_rb.html">lib/sunspot/query/restriction.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/scope_rb.html">lib/sunspot/query/scope.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/sort_rb.html">lib/sunspot/query/sort.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/sort_composite_rb.html">lib/sunspot/query/sort_composite.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/query/standard_query_rb.html">lib/sunspot/query/standard_query.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/query/text_field_boost_rb.html">lib/sunspot/query/text_field_boost.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/schema_rb.html">lib/sunspot/schema.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/search_rb.html">lib/sunspot/search.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/search/abstract_search_rb.html">lib/sunspot/search/abstract_search.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/search/date_facet_rb.html">lib/sunspot/search/date_facet.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/search/facet_row_rb.html">lib/sunspot/search/facet_row.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/search/field_facet_rb.html">lib/sunspot/search/field_facet.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/search/highlight_rb.html">lib/sunspot/search/highlight.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/search/hit_rb.html">lib/sunspot/search/hit.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/search/more_like_this_search_rb.html">lib/sunspot/search/more_like_this_search.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/search/query_facet_rb.html">lib/sunspot/search/query_facet.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/search/standard_search_rb.html">lib/sunspot/search/standard_search.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/server_rb.html">lib/sunspot/server.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/session_rb.html">lib/sunspot/session.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/session_proxy_rb.html">lib/sunspot/session_proxy.rb</a></li>
@@ -67,6 +81,7 @@
         <li class='other'><a href="files/lib/sunspot/session_proxy/id_sharding_session_proxy_rb.html">lib/sunspot/session_proxy/id_sharding_session_proxy.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/session_proxy/master_slave_session_proxy_rb.html">lib/sunspot/session_proxy/master_slave_session_proxy.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/session_proxy/sharding_session_proxy_rb.html">lib/sunspot/session_proxy/sharding_session_proxy.rb</a></li>
+        <li class='other'><a href="files/lib/sunspot/session_proxy/silent_fail_session_proxy_rb.html">lib/sunspot/session_proxy/silent_fail_session_proxy.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/session_proxy/thread_local_session_proxy_rb.html">lib/sunspot/session_proxy/thread_local_session_proxy.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/setup_rb.html">lib/sunspot/setup.rb</a></li>
         <li class='other'><a href="files/lib/sunspot/text_field_setup_rb.html">lib/sunspot/text_field_setup.rb</a></li>

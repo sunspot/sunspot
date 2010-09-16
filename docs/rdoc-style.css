@@ -2,7 +2,7 @@ html, body {
   height: 100%; }
 
 body {
-  font-family: Lucida Grande , Verdana, Arial, Helvetica, sans-serif;
+  font-family: Lucida Grande, Verdana, Arial, Helvetica, sans-serif;
   font-size: 90%;
   margin: 0;
   padding: 0;
@@ -57,7 +57,7 @@ a {
 
 #description a, .method .description a, .header a {
   color: #336699; }
-  #description a:hover,   .method .description a:hover,   .header a:hover {
+  #description a:hover, .method .description a:hover, .header a:hover {
     color: #eee; }
 #description h1 a, #description h2 a, #description h3 a, #description h4 a, #description h5 a, #description h6 a, .method .description h1 a, .method .description h2 a, .method .description h3 a, .method .description h4 a, .method .description h5 a, .method .description h6 a, .header h1 a, .header h2 a, .header h3 a, .header h4 a, .header h5 a, .header h6 a {
   color: #0b3e71; }
@@ -93,9 +93,9 @@ table {
   text-decoration: underline;
   font-style: italic;
   color: #666666; }
-  #index a.show:after,   div.header a.show:after {
+  #index a.show:after, div.header a.show:after {
     content: " ..."; }
-  #index a.show:hover,   div.header a.show:hover {
+  #index a.show:hover, div.header a.show:hover {
     color: black;
     background: #ffe; }
 
@@ -113,11 +113,17 @@ table {
     margin: 0;
     padding: 0; }
     #index form input {
-      margin: .4em;
-      margin-bottom: 0;
-      width: 90%; }
+      margin: .4em 3px 0 .4em;
+      width: 80%; }
     #index form #search.untouched {
       color: #777777; }
+    #index form .clear_button {
+      -moz-border-radius: 7px;
+      -webkit-border-radius: 7px;
+      background: #AAA;
+      color: white;
+      padding: 0 5px 1px 5px;
+      cursor: pointer; }
   #index ol {
     padding: .4em .5em; }
     #index ol li {
@@ -134,14 +140,17 @@ table {
       font-weight: bold; }
     #index #index-entries.classes .parent {
       font-weight: normal; }
-  #index #index-entries.methods li,   #index #search-results.methods li {
+  #index #index-entries.methods li, #index #search-results.methods li {
     margin-bottom: 0.2em; }
-    #index #index-entries.methods li a .method_name,     #index #search-results.methods li a .method_name {
+    #index #index-entries.methods li a .method_name, #index #search-results.methods li a .method_name {
       margin-right: 0.25em; }
-    #index #index-entries.methods li a .module_name,     #index #search-results.methods li a .module_name {
+    #index #index-entries.methods li a .module_name, #index #search-results.methods li a .module_name {
       color: #666666; }
-    #index #index-entries.methods li a:hover .module_name,     #index #search-results.methods li a:hover .module_name {
+    #index #index-entries.methods li a:hover .module_name, #index #search-results.methods li a:hover .module_name {
       color: #ddd; }
+
+#attribute-list .context-item-name {
+  font-weight: bold; }
 
 div.header {
   font-size: 80%;
@@ -173,19 +182,19 @@ div.header {
     position: relative;
     width: 72%; }
   #content pre, #content .method .synopsis {
-    font: 14px Monaco, DejaVu Sans Mono , Bitstream Vera Sans Mono , Courier New , monospace; }
+    font: 14px Monaco, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace; }
   #content pre {
     color: black;
     background: #eee;
     border: 1px solid silver;
     padding: .5em .8em;
     overflow: auto; }
-  #content p code, #content p tt,   #content li code, #content li tt,   #content dl code, #content dl tt {
-    font: 14px Monaco, DejaVu Sans Mono , Bitstream Vera Sans Mono , Courier New , monospace;
+  #content p code, #content p tt, #content li code, #content li tt, #content dl code, #content dl tt {
+    font: 14px Monaco, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
     background: #ffffe3;
     padding: 2px 3px;
     line-height: 1.4; }
-  #content h1 code, #content h1 tt,   #content h2 code, #content h2 tt,   #content h3 code, #content h3 tt,   #content h4 code, #content h4 tt,   #content h5 code, #content h5 tt,   #content h6 code, #content h6 tt {
+  #content h1 code, #content h1 tt, #content h2 code, #content h2 tt, #content h3 code, #content h3 tt, #content h4 code, #content h4 tt, #content h5 code, #content h5 tt, #content h6 code, #content h6 tt {
     font-size: 1.1em; }
   #content #text {
     position: relative; }
@@ -217,12 +226,12 @@ div.header {
     font-size: 1.0em;
     margin: .8em 0 .3em 0;
     color: #666666; }
-  #content #description ul, #content #description ol,   #content .method .description ul, #content .method .description ol {
+  #content #description ul, #content #description ol, #content .method .description ul, #content .method .description ol {
     margin: .8em 0;
     padding-left: 1.5em; }
-  #content #description ol,   #content .method .description ol {
+  #content #description ol, #content .method .description ol {
     list-style: decimal; }
-    #content #description ol li,     #content .method .description ol li {
+    #content #description ol li, #content .method .description ol li {
       white-space: normal; }
 
 #method-list {

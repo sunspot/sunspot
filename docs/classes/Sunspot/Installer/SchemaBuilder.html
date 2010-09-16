@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Installer::SchemaBuilder [Sunspot 1.0.3 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Installer::SchemaBuilder [Sunspot 1.2.rc3 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/sunspot/installer/schema_builder_rb.html">lib/sunspot/installer/schema_builder.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/installer/schema_builder.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/installer/schema_builder.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -57,12 +57,12 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000144">execute</a></li>
-              <li><a href="#M000145">new</a></li>
+              <li><a href="#M000181">execute</a></li>
+              <li><a href="#M000182">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000146">execute</a></li>
+              <li><a href="#M000183">execute</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -88,44 +88,44 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000144'>
-                <a name='M000144'>      </a>
+              <div class='method public-class' id='method-M000181'>
+                <a name='M000181'></a>
                 <div class='synopsis'>
                   <span class='name'>execute</span>
                   <span class='arguments'>(schema_path, options = {})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000144-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000181-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000144-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/schema_builder.rb, line 23</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">schema_path</span>, <span class="ruby-identifier">options</span> = {})&#x000A;          <span class="ruby-identifier">new</span>(<span class="ruby-identifier">schema_path</span>, <span class="ruby-identifier">options</span>).<span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000181-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/schema_builder.rb, line 23</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">schema_path</span>, <span class="ruby-identifier">options</span> = {})&#x000A;          <span class="ruby-identifier">new</span>(<span class="ruby-identifier">schema_path</span>, <span class="ruby-identifier">options</span>).<span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000145'>
-                <a name='M000145'>      </a>
+              <div class='method public-class' id='method-M000182'>
+                <a name='M000182'></a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(schema_path, options = {})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000145-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000182-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000145-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/schema_builder.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">schema_path</span>, <span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-ivar">@schema_path</span> = <span class="ruby-identifier">schema_path</span>&#x000A;        <span class="ruby-ivar">@config</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">CONFIG_PATH</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">f</span>) }&#x000A;        <span class="ruby-ivar">@verbose</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verbose</span>]&#x000A;        <span class="ruby-ivar">@force</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:force</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000182-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/schema_builder.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">schema_path</span>, <span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-ivar">@schema_path</span> = <span class="ruby-identifier">schema_path</span>&#x000A;        <span class="ruby-ivar">@config</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">CONFIG_PATH</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">f</span>) }&#x000A;        <span class="ruby-ivar">@verbose</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verbose</span>]&#x000A;        <span class="ruby-ivar">@force</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:force</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000146'>
-                <a name='M000146'>      </a>
+              <div class='method public-instance' id='method-M000183'>
+                <a name='M000183'></a>
                 <div class='synopsis'>
                   <span class='name'>execute</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000146-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000183-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000146-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/schema_builder.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@force</span>&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-ivar">@schema_path</span>))&#x000A;          <span class="ruby-identifier">source_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'conf'</span>, <span class="ruby-value str">'schema.xml'</span>)&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">source_path</span>, <span class="ruby-ivar">@schema_path</span>)&#x000A;          <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Copied default schema.xml to #{@schema_path}&quot;</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-ivar">@document</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@schema_path</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span>(&#x000A;              <span class="ruby-identifier">f</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">nil</span>,&#x000A;              <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseOptions</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_XML</span> <span class="ruby-operator">|</span>&#x000A;              <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseOptions</span><span class="ruby-operator">::</span><span class="ruby-constant">NOBLANKS</span>&#x000A;            )&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-ivar">@root</span> = <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">root</span>&#x000A;          <span class="ruby-ivar">@added_types</span> = <span class="ruby-constant">Set</span>[]&#x000A;          <span class="ruby-identifier">add_fixed_fields</span>&#x000A;          <span class="ruby-identifier">add_dynamic_fields</span>&#x000A;          <span class="ruby-identifier">set_misc_settings</span>&#x000A;          <span class="ruby-identifier">original_path</span> = <span class="ruby-node">&quot;#{@schema_path}.orig&quot;</span>&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-ivar">@schema_path</span>, <span class="ruby-identifier">original_path</span>)&#x000A;          <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Saved backup of original to #{original_path}&quot;</span>)&#x000A;          <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@schema_path</span>, <span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">write_xml_to</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">:indent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Wrote schema to #{@schema_path}&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000183-source'><span class="ruby-comment cmt"># File lib/sunspot/installer/schema_builder.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@force</span>&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-ivar">@schema_path</span>))&#x000A;          <span class="ruby-identifier">source_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'solr'</span>, <span class="ruby-value str">'conf'</span>, <span class="ruby-value str">'schema.xml'</span>)&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">source_path</span>, <span class="ruby-ivar">@schema_path</span>)&#x000A;          <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Copied default schema.xml to #{@schema_path}&quot;</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-ivar">@document</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@schema_path</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span>(&#x000A;              <span class="ruby-identifier">f</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">nil</span>,&#x000A;              <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseOptions</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_XML</span> <span class="ruby-operator">|</span>&#x000A;              <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseOptions</span><span class="ruby-operator">::</span><span class="ruby-constant">NOBLANKS</span>&#x000A;            )&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-ivar">@root</span> = <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">root</span>&#x000A;          <span class="ruby-ivar">@added_types</span> = <span class="ruby-constant">Set</span>[]&#x000A;          <span class="ruby-identifier">add_fixed_fields</span>&#x000A;          <span class="ruby-identifier">add_dynamic_fields</span>&#x000A;          <span class="ruby-identifier">set_misc_settings</span>&#x000A;          <span class="ruby-identifier">original_path</span> = <span class="ruby-node">&quot;#{@schema_path}.orig&quot;</span>&#x000A;          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-ivar">@schema_path</span>, <span class="ruby-identifier">original_path</span>)&#x000A;          <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Saved backup of original to #{original_path}&quot;</span>)&#x000A;          <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@schema_path</span>, <span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">write_xml_to</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">:indent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">say</span>(<span class="ruby-node">&quot;Wrote schema to #{@schema_path}&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

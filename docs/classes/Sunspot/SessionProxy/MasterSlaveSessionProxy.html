@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::SessionProxy::MasterSlaveSessionProxy [Sunspot 1.0.3 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::SessionProxy::MasterSlaveSessionProxy [Sunspot 1.2.rc3 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/sunspot/session_proxy/master_slave_session_proxy_rb.html">lib/sunspot/session_proxy/master_slave_session_proxy.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/session_proxy/master_slave_session_proxy.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/session_proxy/master_slave_session_proxy.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -54,11 +54,11 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000030">new</a></li>
+              <li><a href="#M000064">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000031">config</a></li>
+              <li><a href="#M000065">config</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -87,22 +87,22 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000030'>
-                <a name='M000030'>      </a>
+              <div class='method public-class' id='method-M000064'>
+                <a name='M000064'></a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(master_session, slave_session)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000030-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000064-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/master_slave_session_proxy.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">master_session</span>, <span class="ruby-identifier">slave_session</span>)&#x000A;        <span class="ruby-ivar">@master_session</span>, <span class="ruby-ivar">@slave_session</span> = <span class="ruby-identifier">master_session</span>, <span class="ruby-identifier">slave_session</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000064-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/master_slave_session_proxy.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">master_session</span>, <span class="ruby-identifier">slave_session</span>)&#x000A;        <span class="ruby-ivar">@master_session</span>, <span class="ruby-ivar">@slave_session</span> = <span class="ruby-identifier">master_session</span>, <span class="ruby-identifier">slave_session</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000031'>
-                <a name='M000031'>      </a>
+              <div class='method public-instance' id='method-M000065'>
+                <a name='M000065'></a>
                 <div class='synopsis'>
                   <span class='name'>config</span>
                   <span class='arguments'>(delegate = :master)</span>
@@ -115,10 +115,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000031-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000065-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/master_slave_session_proxy.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config</span>(<span class="ruby-identifier">delegate</span> = <span class="ruby-identifier">:master</span>)&#x000A;        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">delegate</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:master</span> <span class="ruby-keyword kw">then</span> <span class="ruby-ivar">@master_session</span>.<span class="ruby-identifier">config</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:slave</span> <span class="ruby-keyword kw">then</span>  <span class="ruby-ivar">@slave_session</span>.<span class="ruby-identifier">config</span>&#x000A;        <span class="ruby-keyword kw">else</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Expected :master or :slave&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000065-source'><span class="ruby-comment cmt"># File lib/sunspot/session_proxy/master_slave_session_proxy.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config</span>(<span class="ruby-identifier">delegate</span> = <span class="ruby-identifier">:master</span>)&#x000A;        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">delegate</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:master</span> <span class="ruby-keyword kw">then</span> <span class="ruby-ivar">@master_session</span>.<span class="ruby-identifier">config</span>&#x000A;        <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:slave</span> <span class="ruby-keyword kw">then</span>  <span class="ruby-ivar">@slave_session</span>.<span class="ruby-identifier">config</span>&#x000A;        <span class="ruby-keyword kw">else</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Expected :master or :slave&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

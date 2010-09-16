@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Sunspot::Search::QueryFacet [Sunspot 1.0.3 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <title>: Sunspot::Search::QueryFacet [Sunspot 1.2.rc3 - Solr-powered search for Ruby objects - API Documentation]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -32,7 +32,7 @@
         <ol class='paths'>
           <li>
             <a href="../../../files/lib/sunspot/search/query_facet_rb.html">lib/sunspot/search/query_facet.rb</a>
-            (<a href="http://github.com/outoftime/sunspot/tree/v1.0.3/lib/sunspot/search/query_facet.rb">view online</a>)
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/search/query_facet.rb">view online</a>)
           </li>
         </ol>
         <div class='parent'>
@@ -46,7 +46,7 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000104">rows</a></li>
+              <li><a href="#M000034">rows</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -64,17 +64,17 @@
             </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000104'>
-                <a name='M000104'>      </a>
+              <div class='method public-instance' id='method-M000034'>
+                <a name='M000034'></a>
                 <div class='synopsis'>
                   <span class='name'>rows</span>
                   <span class='arguments'>(options = {})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000104-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000104-source'><span class="ruby-comment cmt"># File lib/sunspot/search/query_facet.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rows</span>(<span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-ivar">@rows</span> <span class="ruby-operator">||=</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">facet_response</span>[<span class="ruby-value str">'facet_queries'</span>]&#x000A;            <span class="ruby-identifier">rows</span> = []&#x000A;            <span class="ruby-identifier">minimum_count</span> =&#x000A;              <span class="ruby-keyword kw">case</span>&#x000A;              <span class="ruby-keyword kw">when</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:minimum_count</span>] <span class="ruby-keyword kw">then</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:minimum_count</span>]&#x000A;              <span class="ruby-keyword kw">when</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:zeros</span>] <span class="ruby-keyword kw">then</span> <span class="ruby-value">0</span>&#x000A;              <span class="ruby-keyword kw">else</span> <span class="ruby-value">1</span>&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-ivar">@requested_facets</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">requested_facet</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">count</span> = <span class="ruby-identifier">data</span>[<span class="ruby-identifier">requested_facet</span>.<span class="ruby-identifier">boolean_phrase</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0</span>&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">minimum_count</span>&#x000A;                <span class="ruby-identifier">rows</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">FacetRow</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">requested_facet</span>.<span class="ruby-identifier">label</span>, <span class="ruby-identifier">count</span>, <span class="ruby-keyword kw">self</span>)&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-identifier">sort_rows!</span>(<span class="ruby-identifier">rows</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/sunspot/search/query_facet.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rows</span>(<span class="ruby-identifier">options</span> = {})&#x000A;        <span class="ruby-ivar">@rows</span> <span class="ruby-operator">||=</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@search</span>.<span class="ruby-identifier">facet_response</span>[<span class="ruby-value str">'facet_queries'</span>]&#x000A;            <span class="ruby-identifier">rows</span> = []&#x000A;            <span class="ruby-identifier">minimum_count</span> =&#x000A;              <span class="ruby-keyword kw">case</span>&#x000A;              <span class="ruby-keyword kw">when</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:minimum_count</span>] <span class="ruby-keyword kw">then</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:minimum_count</span>]&#x000A;              <span class="ruby-keyword kw">when</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:zeros</span>] <span class="ruby-keyword kw">then</span> <span class="ruby-value">0</span>&#x000A;              <span class="ruby-keyword kw">else</span> <span class="ruby-value">1</span>&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-ivar">@requested_facets</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">requested_facet</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">count</span> = <span class="ruby-identifier">data</span>[<span class="ruby-identifier">requested_facet</span>.<span class="ruby-identifier">boolean_phrase</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0</span>&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">minimum_count</span>&#x000A;                <span class="ruby-identifier">rows</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">FacetRow</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">requested_facet</span>.<span class="ruby-identifier">label</span>, <span class="ruby-identifier">count</span>, <span class="ruby-keyword kw">self</span>)&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-identifier">sort_rows!</span>(<span class="ruby-identifier">rows</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Sunspot::Type::LocationType [Sunspot 1.2.rc3 - Solr-powered search for Ruby objects - API Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Sunspot::Type::LocationType
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/sunspot/type_rb.html">lib/sunspot/type.rb</a>
+            (<a href="http://github.com/outoftime/sunspot/tree/v1.2.rc3/lib/sunspot/type.rb">view online</a>)
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong>Sunspot::Type::AbstractType</strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            The Location type encodes geographical coordinates as a GeoHash. The data
+            for this type must respond to the `lat` and `lng` methods; you can use
+            Sunspot::Util::Coordinates as a wrapper if your source data does not follow
+            this API.
+            </p>
+            <p>
+            Location fields are most usefully searched using the
+            Sunspot::DSL::RestrictionWithType#near method; see that method for more
+            information on geographical search.
+            </p>
+            <h4>Example</h4>
+            <pre>Sunspot.setup(Post) do&#x000A;  location :coordinates do&#x000A;    Sunspot::Util::Coordinates.new(coordinates[0], coordinates[1])&#x000A;  end&#x000A;end</pre>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000148">indexed_name</a></li>
+              <li><a href="#M000149">to_indexed</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+            <div id='includes'>
+              <h2>Included modules</h2>
+              <ol>
+                <li>GeoHash</li>
+              </ol>
+            </div>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000148'>
+                <a name='M000148'></a>
+                <div class='synopsis'>
+                  <span class='name'>indexed_name</span>
+                  <span class='arguments'>(name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000148-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000148-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 346</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indexed_name</span>(<span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-node">&quot;#{name}_s&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000149'>
+                <a name='M000149'></a>
+                <div class='synopsis'>
+                  <span class='name'>to_indexed</span>
+                  <span class='arguments'>(value)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000149-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000149-source'><span class="ruby-comment cmt"># File lib/sunspot/type.rb, line 350</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_indexed</span>(<span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-identifier">encode</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">lat</span>.<span class="ruby-identifier">to_f</span>, <span class="ruby-identifier">value</span>.<span class="ruby-identifier">lng</span>.<span class="ruby-identifier">to_f</span>, <span class="ruby-value">12</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
