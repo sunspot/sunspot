@@ -63,7 +63,7 @@ field name patterns defined in the packaged <code>schema.xml</code>, so those
 cannot be modified.
 
 You can also run your own instance of Solr wherever you'd like; just copy the solr/config/schema.xml file out of the gem's solr into your installation.
-You can change the URL at which Sunspot accesses Solr with:
+You can change the URL at which Sunspot accesses Solr by setting <code>SOLR_URL</code> in your application's environment, or assigning it to Sunspot's configuration directly:
 
   Sunspot.config.solr.url = 'http://solr.my.host:9818/solr'
 
