@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe Sunspot::Rails::Configuration, "default values" do
+describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" do
   before(:each) do
-    File.should_receive(:exist?).at_least(:once).and_return(false)
+    File.stub!(:exist?).and_return(false) # simulate sunspot.yml not existing
     @config = Sunspot::Rails::Configuration.new
   end
   
@@ -14,8 +14,27 @@ describe Sunspot::Rails::Configuration, "default values" do
     @config.path.should == '/solr'
   end
 
-  it "should handle the 'port' property when not set" do
-    @config.port.should == 8983
+  describe "port" do
+    it "should default to port 8981 in test" do
+      ::Rails.stub!(:env => 'test')
+      @config = Sunspot::Rails::Configuration.new
+      @config.port.should == 8981
+    end
+    it "should default to port 8982 in development" do
+      ::Rails.stub!(:env => 'development')
+      @config = Sunspot::Rails::Configuration.new
+      @config.port.should == 8982
+    end
+    it "should default to 8983 in production" do
+      ::Rails.stub!(:env => 'production')
+      @config = Sunspot::Rails::Configuration.new
+      @config.port.should == 8983
+    end
+    it "should generally default to 8983" do
+      ::Rails.stub!(:env => 'staging')
+      @config = Sunspot::Rails::Configuration.new
+      @config.port.should == 8983
+    end
   end
 
   it "should handle the 'log_level' property when not set" do
@@ -54,7 +73,7 @@ describe Sunspot::Rails::Configuration, "default values" do
   end
 end
 
-describe Sunspot::Rails::Configuration, "user settings" do
+describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
   before(:each) do
     ::Rails.stub!(:env => 'config_test')
     @config = Sunspot::Rails::Configuration.new
@@ -100,3 +119,59 @@ describe Sunspot::Rails::Configuration, "user settings" do
     @config.auto_commit_after_delete_request?.should == true
   end
 end
+
+
+describe Sunspot::Rails::Configuration, "with ENV['SOLR_URL'] overriding sunspot.yml" do
+  before(:all) do
+    ENV['SOLR_URL'] = 'http://environment.host:5432/solr/env'
+  end
+
+  before(:each) do
+    ::Rails.stub!(:env => 'config_test')
+    @config = Sunspot::Rails::Configuration.new
+  end
+  
+  after(:all) do
+    ENV.delete('SOLR_URL')
+  end
+
+  it "should handle the 'hostname' property when set" do
+    @config.hostname.should == 'environment.host'
+  end
+
+  it "should handle the 'port' property when set" do
+    @config.port.should == 5432
+  end
+  
+  it "should handle the 'path' property when set" do
+    @config.path.should == '/solr/env'
+  end
+end
+
+describe Sunspot::Rails::Configuration, "with ENV['WEBSOLR_URL'] overriding sunspot.yml" do
+  before(:all) do
+    ENV['WEBSOLR_URL'] = 'http://index.websolr.test/solr/a1b2c3d4e5f'
+  end
+
+  before(:each) do
+    ::Rails.stub!(:env => 'config_test')
+    @config = Sunspot::Rails::Configuration.new
+  end
+  
+  after(:all) do
+    ENV.delete('WEBSOLR_URL')
+  end
+
+  it "should handle the 'hostname' property when set" do
+    @config.hostname.should == 'index.websolr.test'
+  end
+
+  it "should handle the 'port' property when set" do
+    @config.port.should == 80
+  end
+  
+  it "should handle the 'path' property when set" do
+    @config.path.should == '/solr/a1b2c3d4e5f'
+  end
+end
+
