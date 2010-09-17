@@ -309,7 +309,7 @@ describe 'ActiveRecord mixin' do
           params[:limit].should == 500
           params[:include].should == []
           params[:conditions].should == ['posts.id > ?', 0]
-          params[:order].should == 'id'
+          params[:order].should == 'posts.id'
         end.and_return(@posts)
         Post.reindex
       end
@@ -318,7 +318,7 @@ describe 'ActiveRecord mixin' do
         @posts = Array.new(10) { Author.create }
         Author.should_receive(:all).with do |params|
           params[:conditions].should == ['writers.writer_id > ?', 0]
-          params[:order].should == 'writer_id'
+          params[:order].should == 'writers.writer_id'
         end.and_return(@posts)
         Author.reindex
       end
