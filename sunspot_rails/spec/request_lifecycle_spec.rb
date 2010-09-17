@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe PostsController, :type => :controller do
   begin
-    include RSpec::Rails::ControllerExampleGroup
+    include ::RSpec::Rails::ControllerExampleGroup
   rescue NameError
     # Silent -- rspec-rails 1.x catches the :type => :controller
   end

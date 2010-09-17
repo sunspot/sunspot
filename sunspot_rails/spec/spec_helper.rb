@@ -34,7 +34,7 @@ end
 rspec = 
   begin
     RSpec
-  rescue NameError
+  rescue NameError, ArgumentError
     Spec::Runner
   end
 
