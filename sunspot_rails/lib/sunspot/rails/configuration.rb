@@ -50,7 +50,7 @@ module Sunspot #:nodoc:
       def hostname
         @hostname ||= (user_configuration_from_key('solr', 'hostname') || 'localhost')
       end
-
+      
       #
       # The port at which to connect to Solr. Default 8983.
       #
@@ -267,6 +267,33 @@ module Sunspot #:nodoc:
             end
           end
       end
+    
+    protected
+    
+      #
+      # When a specific hostname, port and path aren't provided in the
+      # sunspot.yml file, look for a key named 'url', then check the
+      # environment, then fall back to a sensible localhost default.
+      #
+      
+      # def default_url
+      #   user_configuration_from_key('url') ||
+      #     ENV['SOLR_URL'] || ENV['WEBSOLR_URL'] ||
+      #     'http://localhost:8983/solr'
+      # end
+      
+      # def default_hostname
+      #   URI.parse(default_url).host
+      # end
+      
+      # def default_port
+      #   URI.parse(default_url).port
+      # end
+      
+      # def default_path
+      #   URI.parse(default_url).path
+      # end
+      
     end
   end
 end
