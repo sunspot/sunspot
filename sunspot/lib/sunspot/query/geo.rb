@@ -1,17 +1,19 @@
-require 'geohash'
+begin
+  require 'geohash'
+rescue LoadError => e
+  require 'pr_geohash'
+end
 
 module Sunspot
   module Query
     class Geo
-      include GeoHash
-
       MAX_PRECISION = 12
       DEFAULT_PRECISION = 7
       DEFAULT_PRECISION_FACTOR = 16.0
 
       def initialize(field, lat, lng, options)
         @field, @options = field, options
-        @geohash = encode(lat.to_f, lng.to_f, MAX_PRECISION)
+        @geohash = GeoHash.encode(lat.to_f, lng.to_f, MAX_PRECISION)
       end
 
       def to_params

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe PostsController, :type => :controller do
   begin
-    include RSpec::Rails::ControllerExampleGroup
+    include ::RSpec::Rails::ControllerExampleGroup
   rescue NameError
     # Silent -- rspec-rails 1.x catches the :type => :controller
   end
@@ -15,10 +15,8 @@ describe PostsController, :type => :controller do
     Sunspot::Rails.configuration = nil
   end
 
-  if respond_to?(:describes) # RSpec 2
-    describes :posts
-  else                       # RSpec 1
-    controller_name :posts
+  unless respond_to?(:describes)
+    controller_name :posts  # RSpec 1
   end
 
   it 'should automatically commit after each action if specified' do

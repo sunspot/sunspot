@@ -1,5 +1,9 @@
 require 'singleton'
-require 'geohash'
+begin
+  require 'geohash'
+rescue LoadError => e
+  require 'pr_geohash'
+end
 
 module Sunspot
   # 
@@ -341,14 +345,12 @@ module Sunspot
     #   end
     #
     class LocationType < AbstractType
-      include GeoHash
-
       def indexed_name(name)
         "#{name}_s"
       end
 
       def to_indexed(value)
-        encode(value.lat.to_f, value.lng.to_f, 12)
+        GeoHash.encode(value.lat.to_f, value.lng.to_f, 12)
       end
     end
 
