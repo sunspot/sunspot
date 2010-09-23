@@ -158,6 +158,36 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'inclusion by identity' do
+    before do
+      @posts = (1..5).map do |i|
+        post = Post.new
+        Sunspot.index(post)
+        post
+      end
+      Sunspot.commit
+    end
+
+    it 'should only return included object' do
+      included_post = @posts.shift
+      Sunspot.search(Post) { with(included_post) }.results.should include(included_post)
+    end
+
+    it 'should not return objects not included' do
+      included_post = @posts.shift
+      for excluded_post in @posts
+        Sunspot.search(Post) { with(included_post) }.results.should_not include(excluded_post)
+      end
+    end
+
+    it 'should return included objects' do
+      included_posts = [@posts.shift, @posts.shift]
+      for included_post in included_posts
+        Sunspot.search(Post) { with(included_posts) }.results.should include(included_post)
+      end
+    end
+  end
+
   describe 'exclusion by identity' do
     before do
       @posts = (1..5).map do |i|

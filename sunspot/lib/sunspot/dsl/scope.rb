@@ -15,24 +15,35 @@ module Sunspot
       end
 
       # 
-      # Build a positive restriction. With one argument, this method returns
-      # another DSL object which presents methods for attaching various
-      # restriction types. With two arguments, this creates a shorthand
-      # restriction: if the second argument is a scalar, an equality restriction
-      # is created; if it is a Range, a between restriction will be created; and
-      # if it is an Array, an any_of restriction will be created.
+      # Build a positive restriction. This method can take three forms: equality
+      # restriction, restriction by another restriction, or identity
+      # restriction.
+      # In the first two forms, the first argument is a field name. If only a
+      # field name is specified, this method returns another DSL object which
+      # presents methods for attaching various restriction types.
+      # With two arguments, this creates a shorthand restriction: if the second
+      # argument is a scalar, an equality restriction is created; if it is a
+      # Range, a between restriction will be created; and if it is an Array, an
+      # any_of restriction will be created.
+      # The third from restricts the search results to a specific instance.
       #
-      # ==== Parameters
+      # ==== Parameters (restriction by field value)
       #
       # field_name<Symbol>:: Name of the field on which to place the restriction
       # value<Object,Range,Array>::
       #   If passed, creates an equality, range, or any-of restriction based on
       #   the type of value passed.
       #
+      # ==== Parameters (restriction by identity)
+      #
+      # args<Object>...::
+      #   One or more instances that should be included in the results
+      #
       # ==== Returns
       #
       # Sunspot::DSL::Query::Restriction::
-      #   Restriction DSL object (if only one argument is passed)
+      #   Restriction DSL object (if only one argument is passed which is a
+      #   field name)
       #
       # ==== Examples
       #
@@ -60,71 +71,22 @@ module Sunspot
       #     with(:average_rating).greater_than(3.0)
       #   end
       #
-      def with(field_name, value = NONE)
-        if value == NONE
-          DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, false)
-        else
-          @scope.add_positive_shorthand_restriction(@setup.field(field_name), value)
-        end
+      # Restriction by identity:
+      #
+      #   Sunspot.search(Post) do
+      #     with(some_post_instance)
+      #   end
+      #
+      def with(*args)
+        add_restriction(false, *args)
       end
 
-      # 
-      # Build a negative restriction (exclusion). This method can take three
-      # forms: equality exclusion, exclusion by another restriction, or identity
-      # exclusion. The first two forms work the same way as the #with method;
-      # the third excludes a specific instance from the search results.
       #
-      # ==== Parameters (exclusion by field value)
-      #
-      # field_name<Symbol>:: Name of the field on which to place the exclusion
-      # value<Symbol>::
-      #   If passed, creates an equality exclusion with this value
-      #
-      # ==== Parameters (exclusion by identity)
-      #
-      # args<Object>...::
-      #   One or more instances that should be excluded from the results
-      #
-      # ==== Examples
-      #
-      # An equality exclusion:
-      #
-      #   Sunspot.search(Post) do
-      #     without(:blog_id, 1)
-      #   end
-      # 
-      # Other restriction types:
-      #
-      #   Sunspot.search(Post) do
-      #     without(:average_rating).greater_than(3.0)
-      #   end
-      #
-      # Exclusion by identity:
-      #
-      #   Sunspot.search(Post) do
-      #     without(some_post_instance)
-      #   end
+      # Build a negative restriction (exclusion). This method works the same way
+      # asthe #with method.
       #
       def without(*args)
-        case args.first
-        when String, Symbol
-          field_name = args[0]
-          value = args.length > 1 ? args[1] : NONE
-          if value == NONE
-            DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, true)
-          else
-            @scope.add_negated_shorthand_restriction(@setup.field(field_name.to_sym), value)
-          end
-        else
-          instances = args
-          instances.flatten.each do |instance|
-            @scope.add_negated_restriction(
-              IdField.instance,
-              Sunspot::Query::Restriction::EqualTo,
-              Sunspot::Adapters::InstanceAdapter.adapt(instance).index_id
-            )
-          end
-        end
+        add_restriction(true, *args)
       end
 
       # 
@@ -224,6 +186,32 @@ module Sunspot
           &block
         )
       end
+
+      private
+
+      def add_restriction(negated, *args)
+        case args.first
+        when String, Symbol
+          raise ArgumentError if args.length > 2
+          field_name = args[0]
+          value = args.length > 1 ? args[1] : NONE
+          if value == NONE
+            DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, negated)
+          else
+            @scope.add_shorthand_restriction(negated, @setup.field(field_name.to_sym), value)
+          end
+        else
+          instances = args.flatten
+          @scope.add_restriction(
+            negated,
+            IdField.instance,
+            Sunspot::Query::Restriction::AnyOf,
+            instances.flatten.map { |instance|
+              Sunspot::Adapters::InstanceAdapter.adapt(instance).index_id }
+          )
+        end
+      end
+
     end
   end
 end

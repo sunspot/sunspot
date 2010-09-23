@@ -103,12 +103,18 @@ module Sunspot
       end
       alias_method :keywords, :fulltext
 
-      def with(field_name, value = Scope::NONE)
-        if value == Scope::NONE
-          DSL::RestrictionWithNear.new(@setup.field(field_name.to_sym), @scope, @query, false)
-        else
-          super
+      def with(*args)
+        case args.first
+        when String, Symbol
+          field_name = args[0]
+          value = args.length > 1 ? args[1] : Scope::NONE
+          if value == Scope::NONE
+            return DSL::RestrictionWithNear.new(@setup.field(field_name.to_sym), @scope, @query, false)
+          end
         end
+
+        # else
+        super
       end
     end
   end

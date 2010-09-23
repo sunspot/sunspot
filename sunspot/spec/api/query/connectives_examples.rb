@@ -137,7 +137,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     connection.should have_last_search_including(
-      :fq, "-(id:Post\\ #{post.id} AND -category_ids_im:1)"
+      :fq, "-(id:(Post\\ #{post.id}) AND -category_ids_im:1)"
     )
   end
 
@@ -150,6 +150,19 @@ shared_examples_for "query with connective scope" do
     end
     connection.should have_last_search_including(
       :fq, '-(average_rating_ft:[* TO *] AND -average_rating_ft:[3\.0 TO *])'
+    )
+  end
+
+  it 'creates a disjunction with instance inclusion' do
+    post = Post.new
+    search do
+      any_of do
+        with(post)
+        with(:average_rating).greater_than(3.0)
+      end
+    end
+    connection.should have_last_search_including(
+      :fq, "(id:(Post\\ #{post.id}) OR average_rating_ft:[3\\.0 TO *])"
     )
   end
 

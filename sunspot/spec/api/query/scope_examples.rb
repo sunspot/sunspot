@@ -168,12 +168,40 @@ shared_examples_for "scoped query" do
     connection.should have_last_search_including(:fq, 'average_rating_ft:[* TO *]')
   end
 
+  it 'includes by object identity' do
+    post = Post.new
+    search do
+      with post
+    end
+    connection.should have_last_search_including(:fq, "id:(Post\\ #{post.id})")
+  end
+
+  it 'includes multiple objects passed as varargs by object identity' do
+    post1, post2 = Post.new, Post.new
+    search do
+      with post1, post2
+    end
+    connection.should have_last_search_including(
+      :fq, "id:(Post\\ #{post1.id} OR Post\\ #{post2.id})"
+    )
+  end
+
+  it 'includes multiple objects passed as array by object identity' do
+    posts = [Post.new, Post.new]
+    search do
+      with posts
+    end
+    connection.should have_last_search_including(
+      :fq, "id:(Post\\ #{posts.first.id} OR Post\\ #{posts.last.id})"
+    )
+  end
+
   it 'excludes by object identity' do
     post = Post.new
     search do
       without post
     end
-    connection.should have_last_search_including(:fq, "-id:Post\\ #{post.id}")
+    connection.should have_last_search_including(:fq, "-id:(Post\\ #{post.id})")
   end
 
   it 'excludes multiple objects passed as varargs by object identity' do
@@ -183,8 +211,7 @@ shared_examples_for "scoped query" do
     end
     connection.should have_last_search_including(
       :fq,
-      "-id:Post\\ #{post1.id}",
-      "-id:Post\\ #{post2.id}"
+      "-id:(Post\\ #{post1.id} OR Post\\ #{post2.id})"
     )
   end
 
@@ -195,8 +222,7 @@ shared_examples_for "scoped query" do
     end
     connection.should have_last_search_including(
       :fq,
-      "-id:Post\\ #{posts.first.id}",
-      "-id:Post\\ #{posts.last.id}"
+      "-id:(Post\\ #{posts.first.id} OR Post\\ #{posts.last.id})"
     )
   end
 
