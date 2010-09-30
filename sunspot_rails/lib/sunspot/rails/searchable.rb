@@ -392,7 +392,8 @@ module Sunspot #:nodoc:
 
         def maybe_mark_for_auto_indexing
           @marked_for_auto_indexing =
-            if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
+            if !new_record?
+              ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of] || []
               @marked_for_auto_indexing = !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
             else
               true

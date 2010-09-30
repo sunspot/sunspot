@@ -61,3 +61,14 @@ describe 'searchable with lifecycle - ignoring specific attributes' do
     @post.update_attribute :updated_at, 123.seconds.from_now
   end
 end
+
+describe 'searchable with lifecycle - without ignoring specific attributes' do
+  before(:each) do
+    @author = Author.create
+  end
+
+  it "should not reindex the object when no attributes change" do
+    Sunspot.should_not_receive(:index).with(@author)
+    @author.save
+  end
+end
