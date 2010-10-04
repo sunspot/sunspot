@@ -2,6 +2,7 @@ test:
   solr:
     hostname: localhost
     port: 8980
+    solr_home: ../solr_test
 development:
   solr:
     hostname: localhost

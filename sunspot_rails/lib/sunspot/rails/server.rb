@@ -66,7 +66,7 @@ module Sunspot
       # Directory to use for Solr home.
       #
       def solr_home
-        File.join(::Rails.root, 'solr')
+        File.join(configuration.solr_home, 'solr')
       end
 
       #

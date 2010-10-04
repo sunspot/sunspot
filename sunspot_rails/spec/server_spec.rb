@@ -3,7 +3,8 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe Sunspot::Rails::Server do
   before :each do
     @server = Sunspot::Rails::Server.new
-    @solr_home = File.expand_path(File.join(Rails.root, 'solr'))
+    @config = Sunspot::Rails::Configuration.new
+    @solr_home = File.join(@config.solr_home, 'solr')
   end
 
   it "sets the correct Solr home" do
