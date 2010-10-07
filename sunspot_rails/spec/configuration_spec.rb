@@ -60,10 +60,6 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
     @config.pid_path.should == '/some/path/solr/pids/test'
   end
   
-  it "should handle the 'solr_home' property when not set" do
-    @config.solr_home.should_not == nil
-  end
-
   it "should handle the 'auto_commit_after_request' propery when not set" do
     @config.auto_commit_after_request?.should == true
   end

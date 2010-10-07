@@ -4,7 +4,7 @@ describe Sunspot::Rails::Server do
   before :each do
     @server = Sunspot::Rails::Server.new
     @config = Sunspot::Rails::Configuration.new
-    @solr_home = File.join(@config.solr_home, 'solr')
+    @solr_home = File.join(@config.solr_home)
   end
 
   it "sets the correct Solr home" do
