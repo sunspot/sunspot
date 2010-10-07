@@ -120,6 +120,13 @@ module Sunspot
       end
 
       # 
+      # Optimize all shards. See Sunspot.optimize
+      #
+      def optimize
+        all_sessions.each { |session| session.optimize }
+      end
+
+      # 
       # Commit all dirty sessions. Only dirty sessions will be committed.
       #
       # See Sunspot.commit_if_dirty

@@ -35,6 +35,16 @@ shared_examples_for 'all sessions' do
     end
   end
 
+  context '#optimize()' do
+    before :each do
+      @session.optimize
+    end
+
+    it 'should optimize' do
+      connection.should have(1).optims
+    end
+  end
+
   context '#search()' do
     before :each do
       @session.search(Post)
@@ -152,9 +162,21 @@ describe 'Session' do
       @session.dirty?.should be_false
     end
 
+    it 'should not be dirty after an optimize' do
+      @session.index(Post.new)
+      @session.optimize
+      @session.dirty?.should be_false
+    end
+
     it 'should not be delete_dirty after a commit' do
       @session.remove(Post.new)
       @session.commit
+      @session.delete_dirty?.should be_false
+    end
+
+    it 'should not be delete_dirty after an optimize' do
+      @session.remove(Post.new)
+      @session.optimize
       @session.delete_dirty?.should be_false
     end
 

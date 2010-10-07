@@ -107,6 +107,14 @@ module Sunspot
       connection.commit
     end
 
+    #
+    # See Sunspot.optimize
+    #
+    def optimize
+      @adds = @deletes = 0
+      connection.optimize
+    end
+
     # 
     # See Sunspot.remove
     #

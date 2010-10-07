@@ -18,7 +18,7 @@ module Sunspot
       attr_reader :slave_session
 
       delegate :batch, :commit, :commit_if_delete_dirty, :commit_if_dirty,
-               :config, :delete_dirty?, :dirty?, :index, :index!, :remove,
+               :config, :delete_dirty?, :dirty?, :index, :index!, :optimize, :remove,
                :remove!, :remove_all, :remove_all!, :remove_by_id,
                :remove_by_id!, :to => :master_session
       delegate :new_search, :search, :new_more_like_this, :more_like_this, :to => :slave_session

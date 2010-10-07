@@ -40,7 +40,7 @@ describe Sunspot::SessionProxy::ClassShardingSessionProxy do
     end
   end
 
-  [:commit, :commit_if_dirty, :commit_if_delete_dirty].each do |method|
+  [:commit, :commit_if_dirty, :commit_if_delete_dirty, :optimize].each do |method|
     it "should delegate #{method} to all sessions" do
       [@proxy.post_session, @proxy.photo_session].each do |session|
         session.should_receive(method)

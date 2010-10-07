@@ -206,6 +206,18 @@ module Sunspot
       session.commit
     end
 
+    # Optimizes the index on the singletion session.
+    #
+    # Frequently adding and deleting documents to Solr, leaves the index in a
+    # fragmented state. The optimize command merges all index segments into 
+    # a single segment and removes any deleted documents, making it faster to 
+    # search. Since optimize rebuilds the index from scratch, it takes some 
+    # time and requires double the space on the hard disk while it's rebuilding.
+    # Note that optimize also commits.
+    def optimize
+      session.optimize
+    end
+
     # 
     # Create a new Search instance, but do not execute it immediately. Generally
     # you will want to use the #search method to build and execute searches in
