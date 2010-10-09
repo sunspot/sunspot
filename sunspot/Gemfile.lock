@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sunspot (1.2.rc3)
+    sunspot (1.2.rc4)
       escape (= 0.0.4)
       pr_geohash (~> 1.0)
       rsolr (= 0.12.1)
@@ -21,4 +21,4 @@ PLATFORMS
 
 DEPENDENCIES
   rspec (~> 1.3)
-  sunspot (= 1.2.rc3)!
+  sunspot (= 1.2.rc4)!

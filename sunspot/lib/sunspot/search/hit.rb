@@ -31,7 +31,8 @@ module Sunspot
       attr_writer :result #:nodoc:
 
       def initialize(raw_hit, highlights, distance, search) #:nodoc:
-        @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
+        @class_name, @primary_key = 
+          Sunspot::Adapters::InstanceAdapter.class_name_id_from(raw_hit['id'])
         @score = raw_hit['score']
         @distance = distance
         @search = search

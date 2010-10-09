@@ -49,6 +49,10 @@ describe 'indexing fixed fields', :type => :indexer do
     lambda { session.index(User.new) }.should raise_error(Sunspot::NoAdapterError)
   end
 
+  it 'raises a NoAdapterError if class without adapter is specified as a reference' do
+    lambda { session.index(Post.new(:blog => User.new)) }.should raise_error(Sunspot::NoAdapterError)
+  end
+
   it 'raises an ArgumentError if a non-word character is included in the field name' do
     lambda do
       Sunspot.setup(Post) { string :"bad name" }

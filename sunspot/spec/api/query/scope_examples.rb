@@ -42,6 +42,14 @@ shared_examples_for "scoped query" do
     connection.should have_last_search_including(:fq, 'featured_bs:false')
   end
 
+  it 'scopes by exact match with reference' do
+    blog = Blog.new(:id => 1)
+    search do
+      with :blog, blog
+    end
+    connection.should have_last_search_including(:fq, 'blog_s:Blog\\ 1')
+  end
+
   it 'scopes by less than match with float' do
     search do
       with(:average_rating).less_than 3.0
@@ -271,5 +279,13 @@ shared_examples_for "scoped query" do
         with(:category_ids, 4, 5)
       end
     end.should raise_error(ArgumentError)
+  end
+
+  it 'raises a NoAdapterError if class without adapter is passed to scope method' do
+    lambda do
+      search do
+        with :blog, User.new
+      end
+    end.should raise_error(Sunspot::NoAdapterError)
   end
 end

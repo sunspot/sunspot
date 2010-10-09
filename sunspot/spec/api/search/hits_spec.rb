@@ -133,6 +133,12 @@ describe 'hits', :type => :search do
     session.search(Post).hits.first.stored(:last_indexed_at).should == time
   end
 
+  it 'should return stored reference field values' do
+    comment = Namespaced::Comment.new
+    stub_full_results('instance' => Post.new, 'first_comment_ss' => "Namespaced::Comment #{comment.id}")
+    session.search(Post).hits.first.stored(:first_comment).should == comment
+  end
+
   it 'should return geo distance' do
     post = Post.new
     stub_results(post)

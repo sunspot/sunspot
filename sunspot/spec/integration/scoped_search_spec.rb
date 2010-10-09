@@ -119,6 +119,26 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'Reference field type' do
+    before :all do
+      Sunspot.remove_all
+      @posts = [Post.new(:blog => Blog.new), Post.new(:blog => Blog.new), Post.new]
+      Sunspot.index!(@posts)
+    end
+
+    it 'should filter by exact match' do
+      post = @posts.first
+      blog = post.blog
+      Sunspot.search(Post) { with(:blog, blog) }.results.should == [post]
+    end
+
+    it 'should reject by inexact match' do
+      post = @posts.first
+      blog = post.blog
+      Sunspot.search(Post) { without(:blog, blog) }.results.should_not include(post)
+    end
+  end
+
   describe 'reserved words' do
     %w(AND OR NOT TO).each do |word|
       it "should successfully search for #{word.inspect}" do

@@ -140,4 +140,14 @@ describe 'indexing attribute fields', :type => :indexer do
     session.index(post(:title => 'A Title'))
     connection.should have_add_with(:legacy_field_s => 'legacy A Title')
   end
+
+  it 'should correctly index a reference field' do
+    session.index(post(:blog => Blog.new(:id => 1)))
+    connection.should have_add_with(:blog_s => 'Blog 1')
+  end
+
+  it 'should correctly index a multiple-value reference field' do
+    session.index(post(:comments => [Namespaced::Comment.new(:id => 1), Namespaced::Comment.new(:id => 2)]))
+    connection.should have_add_with(:comments_sm => ['Namespaced::Comment 1', 'Namespaced::Comment 2'])
+  end
 end

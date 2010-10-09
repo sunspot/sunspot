@@ -354,6 +354,32 @@ module Sunspot
       end
     end
 
+    # 
+    # The Reference type encodes references to other objects.
+    # It allows you to store and search your object graph.
+    #
+    # ==== Example
+    #
+    #   Sunspot.setup(Post) do
+    #     reference :blog
+    #     reference :comments, :multiple => true
+    #   end
+    #
+    class ReferenceType < AbstractType
+      def indexed_name(name) #:nodoc:
+        "#{name}_s"
+      end
+
+      def to_indexed(value) #:nodoc:
+        Sunspot::Adapters::InstanceAdapter.adapt(value).index_id
+      end
+
+      def cast(index_id) #:nodoc:
+        class_name, id = Sunspot::Adapters::InstanceAdapter.class_name_id_from(index_id)
+        Adapters::DataAccessor.create(Sunspot::Util.full_const_get(class_name)).load(id)
+      end
+    end
+
     class ClassType < AbstractType
       def indexed_name(name) #:nodoc:
         'class_name'
