@@ -21,6 +21,16 @@ namespace :sunspot do
       Sunspot::Rails::Server.new.stop
     end
 
+
+    desc "Ping the Solr daemon. Raise exception if not response"
+    # This task is used as dependency for other tasks that may interact with solr
+    # Like:
+    # * spec
+    # * sunspot:solr:reindex
+    # * etc.
+    task :ping => :environment do
+      Sunspot.ping!
+    end
     task :reindex => :"sunspot:reindex"
   end
 
@@ -38,7 +48,7 @@ namespace :sunspot do
   # $ rake sunspot:reindex[1000,Post]     # reindex only the Post model in
   #                                       # batchs of 1000
   # $ rake sunspot:reindex[,Post+Author]  # reindex Post and Author model
-  task :reindex, :batch_size, :models, :needs => :environment do |t, args|
+  task :reindex, :batch_size, :models, :needs => [ :"sunspot:solr:ping", :environment ] do |t, args|
     reindex_options = {:batch_commit => false}
     case args[:batch_size]
     when 'false'

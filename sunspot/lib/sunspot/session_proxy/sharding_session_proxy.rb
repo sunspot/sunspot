@@ -204,6 +204,13 @@ module Sunspot
         all_sessions.any? { |session| session.delete_dirty? }
       end
 
+      #
+      # True if all shard sessions response to ping request.
+      #
+      def ping
+        all_sessions.all? { |session| session.ping }
+      end
+
       private
 
       # 

@@ -555,6 +555,23 @@ module Sunspot
       @session = Session.new(config)
     end
 
+    #
+    # Send /admin/ping request to solr.
+    # Returns true if response status is OK
+    # And false otherwise. Also returns false if solr refused the connection
+    #
+    def ping
+      session.ping
+    end
+
+    #
+    # Send /admin/ping request to solr.
+    # Throws exception if it doesn't respond with OK status.
+    #
+    def ping!
+      ping or raise "Can not ping solr at #{Sunspot.config.solr.url}. Check if it is up and running."
+    end
+
     # 
     # Get the singleton session, creating it if none yet exists.
     #

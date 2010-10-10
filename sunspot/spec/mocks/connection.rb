@@ -1,23 +1,25 @@
 module Mock
   class ConnectionFactory
     def connect(opts)
-      if @instance
-        raise('Factory can only create an instance once!')
-      else
-        @instance = Connection.new(opts)
-      end
+      #if @instance
+        #raise('Factory can only create an instance once!')
+      #else
+        #@instance = Connection.new(opts)
+      #end
+      instance(opts)
     end
 
     def new(url = nil)
-      if @instance
-        raise('Factory can only create an instance once!')
-      else
-        @instance = Connection.new(url)
-      end
+      #if @instance
+        #raise('Factory can only create an instance once!')
+      #else
+        #@instance ||= Connection.new(url)
+      #end
+      instance(url)
     end
 
-    def instance
-      @instance ||= Connection.new
+    def instance(opts = nil)
+      @instance ||= Connection.new(opts)
     end
   end
 

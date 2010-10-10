@@ -10,7 +10,7 @@ module Sunspot
   class Session
     class <<self
       attr_writer :connection_class #:nodoc:
-      
+
       # 
       # For testing purposes
       #
@@ -203,7 +203,7 @@ module Sunspot
     def commit_if_dirty
       commit if dirty?
     end
-    
+
     # 
     # See Sunspot.delete_dirty?
     #
@@ -217,7 +217,7 @@ module Sunspot
     def commit_if_delete_dirty
       commit if delete_dirty?
     end
-    
+
     # 
     # See Sunspot.batch
     #
@@ -225,6 +225,12 @@ module Sunspot
       indexer.start_batch
       yield
       indexer.flush_batch
+    end
+
+    def ping
+      return connection.request('/admin/ping', {})['status'] == "OK"
+    rescue Errno::ECONNREFUSED => e
+      return false
     end
 
     private

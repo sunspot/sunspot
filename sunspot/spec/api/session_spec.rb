@@ -54,6 +54,27 @@ shared_examples_for 'all sessions' do
       connection.should have(1).searches
     end
   end
+
+  context "#ping" do
+    before(:each) do
+      connection.expected_handler = 'admin/ping'
+    end
+    context "if response status is 'OK'" do
+      before(:each) do
+        connection.response = {'status' => "OK"}
+      end
+      it "should return true" do
+        @session.ping.should be_true
+      end
+      
+    end
+    context "if response status is not 'OK'" do
+      it "should return false" do
+        @session.ping.should be_false
+      end
+    end
+  end
+
 end
 
 describe 'Session' do
