@@ -23,6 +23,9 @@ module Sunspot
   #   Convert a Solr string representation of a value into the appropriate
   #   Ruby type.
   #
+  # Optionally a type can override +cast_all+, which is a batch version of
+  # +cast+.
+  #
   module Type
     class <<self
       def register(sunspot_type, *classes)
@@ -80,6 +83,10 @@ module Sunspot
           ArgumentError,
           "#{self.class.name} cannot be used as a Solr literal"
         )
+      end
+
+      def cast_all(values)
+        values.map { |value| cast(value) }
       end
     end
 
@@ -377,6 +384,15 @@ module Sunspot
       def cast(index_id) #:nodoc:
         class_name, id = Sunspot::Adapters::InstanceAdapter.class_name_id_from(index_id)
         Adapters::DataAccessor.create(Sunspot::Util.full_const_get(class_name)).load(id)
+      end
+
+      def cast_all(index_ids) #:nodoc:
+        return [] if index_ids.empty?
+
+        class_names_ids = index_ids.map { |index_id| Sunspot::Adapters::InstanceAdapter.class_name_id_from(index_id) }
+        class_names, ids = class_names_ids[0].zip(*class_names_ids[1..-1]) # unzip
+        raise ArgumentError("cast_all can only cast references of same type") if class_names.uniq.length > 1
+        Adapters::DataAccessor.create(Sunspot::Util.full_const_get(class_names[0])).load_all(ids)
       end
     end
 

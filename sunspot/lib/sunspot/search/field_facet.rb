@@ -38,8 +38,13 @@ module Sunspot
               has_query_facets = !rows.empty?
               if @search.facet_response['facet_fields']
                 if data = @search.facet_response['facet_fields'][key]
+                  values, counts = [], []
                   data.each_slice(2) do |value, count|
-                    row = FacetRow.new(@field.cast(value), count, self)
+                    values << value
+                    counts << count
+                  end
+                  @field.cast_all(values).zip(counts).each do |value, count|
+                    row = FacetRow.new(value, count, self)
                     rows << row
                   end
                 end
