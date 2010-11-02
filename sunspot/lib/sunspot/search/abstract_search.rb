@@ -280,7 +280,7 @@ module Sunspot
   
       def maybe_will_paginate(collection)
         if defined?(WillPaginate::Collection)
-          WillPaginate::Collection.create(@query.page, @query.per_page, collection.size) do |pager|
+          WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
             pager.replace(collection)
           end
         else

@@ -33,23 +33,10 @@ describe 'search results', :type => :search do
   if ENV['USE_WILL_PAGINATE']
 
     it 'returns search total as attribute of results' do
-      posts = (1..4).map { Post.new }
-      stub_results(*posts)
-      search = session.search(Post) do
+      stub_results(Post.new, 4)
+      session.search(Post) do
         paginate(:page => 1)
-      end
-      search.hits.size.should == 4
-      search.results.total_entries.should == 4
-    end
-
-    it "returns correct total for filtered results" do
-      posts = (1..4).map { EvenPost.new }
-      stub_results(*posts)
-      search = session.search(EvenPost) do
-        paginate(:page => 1)
-      end
-      search.hits.size.should == 4
-      search.results.total_entries.should == 2
+      end.results.total_entries.should == 4
     end
 
   else
