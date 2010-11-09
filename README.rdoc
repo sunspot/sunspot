@@ -241,6 +241,7 @@ Sunspot repository at `upstream`:
 * Jeremy Ashkenas (jashkenas@gmail.com)
 * Dylan Vaughn (dylanvaughn@yahoo.com)
 * Brian Durand (brian@embellishedvisions.com)
+* Sam Granieri (sam@samgranieri.com)
 
 == License
 
