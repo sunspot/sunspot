@@ -46,11 +46,15 @@ module Sunspot #:nodoc:
 
       def slave_config(sunspot_rails_configuration)
         config = Sunspot::Configuration.build
-        config.solr.url = URI::HTTP.build(
-          :host => configuration.hostname,
-          :port => configuration.port,
-          :path => configuration.path
-        ).to_s
+				options = {
+					:host => configuration.hostname,
+					:port => configuration.port,
+					:path => configuration.path
+				}
+				if configuration.shards.present?
+					options.merge!(:query => URI.escape("shards=#{configuration.shards}"))
+				end
+        config.solr.url = URI::HTTP.build(options).to_s
         config
       end
     end

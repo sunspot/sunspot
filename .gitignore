@@ -1,2 +1,4 @@
 *.gem
 Gemfile.lock
+*.swp
+**/*.swp
