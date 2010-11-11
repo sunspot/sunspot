@@ -103,7 +103,7 @@ module Sunspot
       if options[:as]
         options.delete(:as)
       else
-        "#{@type.indexed_name(@name).to_s}#{'m' if @multiple and !@as }#{'s' if @stored}#{'v' if more_like_this?}"
+        "#{@type.indexed_name(@name).to_s}#{'m' if @multiple }#{'s' if @stored}#{'v' if more_like_this?}"
       end
     end
 
