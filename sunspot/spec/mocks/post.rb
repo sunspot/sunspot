@@ -70,11 +70,16 @@ Sunspot.setup(Post) do
       1 + (ratings_average - 3.0) / 4.0
     end
   end
-  
+
   string :legacy, :as => :legacy_field_s do
     "legacy #{title}"
   end
+
+  string :legacy_array, :as => :legacy_array_field, :multiple => true do
+    ['first string', 'second string']
+ 	end
 end
 
 class PhotoPost < Post
 end
+

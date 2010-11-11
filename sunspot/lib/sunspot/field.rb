@@ -6,13 +6,13 @@ module Sunspot
     attr_reader :boost
     attr_reader :indexed_name # Name with which this field is indexed internally. Based on public name and type or the +:as+ option.
 
-    # 
+    #
     #
     def initialize(name, type, options = {}) #:nodoc
       @name, @type = name.to_sym, type
       @stored = !!options.delete(:stored)
       @more_like_this = !!options.delete(:more_like_this)
-      @indexed_name = (options.delete(:as) || @type.indexed_name(@name)).to_s
+      @indexed_name = set_indexed_name(options)
       raise ArgumentError, "Field of type #{type} cannot be used for more_like_this" unless type.accepts_more_like_this? or !@more_like_this
     end
 
@@ -58,7 +58,7 @@ module Sunspot
       @type.cast(value)
     end
 
-    # 
+    #
     # Whether this field accepts multiple values.
     #
     # ==== Returns
@@ -69,7 +69,7 @@ module Sunspot
       !!@multiple
     end
 
-    # 
+    #
     # Whether this field can be used for more_like_this queries.
     # If true, the field is configured to store termVectors.
     #
@@ -89,9 +89,27 @@ module Sunspot
       indexed_name == field.indexed_name
     end
     alias_method :==, :eql?
+
+    #
+    # Determine the indexed name. If the :as option is given use that, otherwise
+    # create the value based on the indexed_name of the type with additional
+    # suffixes for multiple, stored, and more_like_this.
+    #
+    # ==== Returns
+    #
+    # String: The field's indexed name
+    #
+    def set_indexed_name(options)
+      if options[:as]
+        options.delete(:as)
+      else
+        "#{@type.indexed_name(@name).to_s}#{'m' if @multiple and !@as }#{'s' if @stored}#{'v' if more_like_this?}"
+      end
+    end
+
   end
 
-  # 
+  #
   # FulltextField instances represent fields that are indexed as fulltext.
   # These fields are tokenized in the index, and can have boost applied to
   # them. They also always allow multiple values (since the only downside of
@@ -111,11 +129,11 @@ module Sunspot
     end
 
     def indexed_name
-      "#{super}#{'s' if @stored}#{'v' if more_like_this?}"
+      "#{super}"
     end
   end
 
-  # 
+  #
   # AttributeField instances encapsulate non-tokenized attribute data.
   # AttributeFields can have any type except TextType, and can also have
   # a reference (for instantiated facets), optionally allow multiple values
@@ -124,8 +142,8 @@ module Sunspot
   #
   class AttributeField < Field #:nodoc:
     def initialize(name, type, options = {})
-      super(name, type, options)
       @multiple = !!options.delete(:multiple)
+      super(name, type, options)
       @reference =
         if (reference = options.delete(:references)).respond_to?(:name)
           reference.name
@@ -135,17 +153,6 @@ module Sunspot
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
 
-    # The name of the field as it is indexed in Solr. The indexed name
-    # contains a suffix that contains information about the type as well as
-    # whether the field allows multiple values for a document.
-    #
-    # ==== Returns
-    #
-    # String:: The field's indexed name
-    #
-    def indexed_name
-      "#{super}#{'m' if @multiple}#{'s' if @stored}#{'v' if more_like_this?}"
-    end
   end
 
   class TypeField #:nodoc:
@@ -180,3 +187,4 @@ module Sunspot
     end
   end
 end
+
