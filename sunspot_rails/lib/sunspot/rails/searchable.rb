@@ -235,7 +235,7 @@ module Sunspot #:nodoc:
               solr_benchmark options[:batch_size], counter do
                 records = all(:include => options[:include], :conditions => ["#{table_name}.#{primary_key} > ?", last_id], :limit => options[:batch_size], :order => "#{table_name}.#{primary_key}")
                 Sunspot.index(records)
-                last_id = records.last.id
+                last_id = records.last.id unless records.last.nil?
               end
               Sunspot.commit if options[:batch_commit]
               offset += options[:batch_size]
