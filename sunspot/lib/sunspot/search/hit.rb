@@ -101,6 +101,20 @@ module Sunspot
         "#<Sunspot::Search::Hit:#{@class_name} #{@primary_key}>"
       end
 
+      #
+      # Returns the instance primary key when the Hit is used to generate urls
+      # For example, using a search that stores the :name attribute:
+      #
+      #   hits = Object.search(...)
+      #
+      #   hits.each do |hit|
+      #     link_to hit.stored(:name), edit_object_path(hit)
+      #   end
+      #
+      def to_param
+        self.primary_key
+      end
+
       private
 
       def setup
