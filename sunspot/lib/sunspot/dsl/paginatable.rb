@@ -20,6 +20,7 @@ module Sunspot
       def paginate(options = {})
         page = options.delete(:page)
         per_page = options.delete(:per_page)
+        start_offset = options.delete(:start_offset)
         raise ArgumentError, "unknown argument #{options.keys.first.inspect} passed to paginate" unless options.empty?
         @query.paginate(page, per_page)
       end
