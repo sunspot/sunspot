@@ -78,7 +78,12 @@ module Sunspot #:nodoc:
               after_destroy do |searchable|
                 searchable.remove_from_index
               end
+
+              after_rollback do |searchable|
+                searchable.remove_from_index
+              end if respond_to?(:after_rollback)
             end
+
             options[:include] = Util::Array(options[:include])
             
             self.sunspot_options = options

@@ -17,6 +17,40 @@ describe 'ActiveRecord mixin' do
     end
   end
 
+  describe 'callbacks' do
+    describe 'after_destroy' do
+      it 'should remove the model from the index' do
+        @post = PostWithAuto.create!
+
+        expect {
+          @post.destroy
+        }.to change {
+          Sunspot.commit
+          PostWithAuto.search.total
+        }.from(1).to(0)
+      end
+    end
+
+    if PostWithAuto.respond_to?(:after_rollback)
+      describe 'after_rollback' do
+        it 'should remove the model from the index' do
+          PostWithAuto.transaction do
+            @post = PostWithAuto.create!
+            Sunspot.commit
+
+            PostWithAuto.search.total.should == 1
+
+            raise ActiveRecord::Rollback
+          end
+
+          Sunspot.commit
+          PostWithAuto.search.total.should == 0
+        end
+      end
+    end
+  end
+
+
   describe 'single table inheritence' do
     before :each do
       @post = PhotoPost.create!
