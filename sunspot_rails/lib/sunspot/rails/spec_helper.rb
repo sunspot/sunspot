@@ -14,12 +14,11 @@ module Sunspot
   end
 end
 
-rspec =
-  begin
-    RSpec
-  rescue NameError, ArgumentError
-    Spec::Runner
-  end
+rspec = begin
+  RSpec
+rescue NameError, ArgumentError
+  Spec::Runner
+end
 
 rspec.configure do |config|
   config.extend(Sunspot::Rails::SpecHelper)

@@ -16,11 +16,10 @@ module Sunspot
       rake_tasks do
         load 'sunspot/rails/tasks.rb'
       end
-      
+
       generators do
         load "generators/sunspot_rails.rb"
       end
-
     end
   end
 end

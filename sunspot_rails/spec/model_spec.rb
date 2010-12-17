@@ -50,7 +50,6 @@ describe 'ActiveRecord mixin' do
     end
   end
 
-
   describe 'single table inheritence' do
     before :each do
       @post = PhotoPost.create!
@@ -148,7 +147,7 @@ describe 'ActiveRecord mixin' do
         with :title, 'Bogus Post'
       end.results.should be_empty
     end
-    
+
     it 'should use the include option on the data accessor when specified' do
       Post.should_receive(:all).with(hash_including(:include => [:blog])).and_return([@post])
       Post.search do
@@ -163,7 +162,7 @@ describe 'ActiveRecord mixin' do
         with :title, 'Test Post'
       end.results.should == [@post]
     end
-    
+
     it 'should use the select option from search call to data accessor' do
       Post.should_receive(:all).with(hash_including(:select => 'title, published_at')).and_return([@post])
       Post.search(:select => 'title, published_at') do
@@ -174,7 +173,7 @@ describe 'ActiveRecord mixin' do
     it 'should not allow bogus options to search' do
       lambda { Post.search(:bogus => :option) }.should raise_error(ArgumentError)
     end
-    
+
     it 'should use the select option on the data accessor when specified' do
       Post.should_receive(:all).with(hash_including(:select => 'title, published_at')).and_return([@post])
       Post.search do
@@ -182,7 +181,7 @@ describe 'ActiveRecord mixin' do
         data_accessor_for(Post).select = [:title, :published_at]
       end.results.should == [@post]
     end
-    
+
     it 'should not use the select option on the data accessor when not specified' do
       Post.should_receive(:all).with(hash_not_including(:select)).and_return([@post])
       Post.search do
@@ -206,7 +205,6 @@ describe 'ActiveRecord mixin' do
       post.index!
       Post.search { with(:location).near(40.0, -70.0) }.results.should == [post]
     end
-
   end
 
   describe 'search_ids()' do
@@ -219,7 +217,7 @@ describe 'ActiveRecord mixin' do
       Post.search_ids.to_set.should == @posts.map { |post| post.id }.to_set
     end
   end
-  
+
   describe 'searchable?()' do
     it 'should not be true for models that have not been configured for search' do
       Location.should_not be_searchable
@@ -275,7 +273,6 @@ describe 'ActiveRecord mixin' do
       Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
-    
   end
 
   describe 'reindex() with real data' do
@@ -297,7 +294,7 @@ describe 'ActiveRecord mixin' do
       Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
-    
+
     describe "using batch sizes" do
       it 'should index with a specified batch size' do
         Post.reindex(:batch_size => 1)
@@ -307,16 +304,12 @@ describe 'ActiveRecord mixin' do
     end
   end
 
-
-  
   describe "reindex()" do
-  
     before(:each) do
       @posts = Array.new(10) { Post.create }
     end
 
     describe "when not using batches" do
-      
       it "should select all if the batch_size is nil" do
         Post.should_receive(:all).with(:include => []).and_return([])
         Post.reindex(:batch_size => nil)
@@ -326,11 +319,9 @@ describe 'ActiveRecord mixin' do
         Post.should_receive(:all).with(:include => :author).and_return([])
         Post.reindex(:batch_size => nil, :include => :author)
       end
-    
     end
 
     describe "when using batches" do
-      
       it "should use the default options" do
         Post.should_receive(:all).with do |params|
           params[:limit].should == 500
@@ -370,7 +361,7 @@ describe 'ActiveRecord mixin' do
         end.and_return(@posts)
         Post.reindex(:include => [{:author => :address}])
       end
-      
+
       it "should set the include option from the searchable options" do
         @blogs = Array.new(10) { Blog.create }
         Blog.should_receive(:all).with do |params|
@@ -389,10 +380,9 @@ describe 'ActiveRecord mixin' do
         Sunspot.should_receive(:commit).once
         Post.reindex(:batch_commit => false)
       end
-      
     end
   end
-  
+
   describe "more_like_this()" do
     before(:each) do
       @posts = [

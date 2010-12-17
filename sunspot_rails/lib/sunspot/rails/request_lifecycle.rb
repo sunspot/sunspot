@@ -1,6 +1,6 @@
 module Sunspot #:nodoc:
   module Rails #:nodoc:
-    # 
+    #
     # This module adds an after_filter to ActionController::Base that commits
     # the Sunspot session if any documents have been added, changed, or removed
     # in the course of the request.
@@ -14,7 +14,9 @@ module Sunspot #:nodoc:
             rescue NameError
             end
           end.compact
+
           loaded_controllers = [base].concat(subclasses)
+
           # Depending on how Sunspot::Rails is loaded, there may already be
           # controllers loaded into memory that subclass this controller. In
           # this case, since after_filter uses the inheritable_attribute

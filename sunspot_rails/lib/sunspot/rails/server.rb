@@ -17,7 +17,7 @@ module Sunspot
 
       #
       # Bootstrap a new solr_home by creating all required
-      # directories. 
+      # directories.
       #
       # ==== Returns
       #
@@ -30,28 +30,28 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Directory to store custom libraries for solr
       #
       def lib_path
         File.join( solr_home, 'lib' )
       end
 
-      # 
+      #
       # Directory in which to store PID files
       #
       def pid_dir
         File.join(::Rails.root, 'tmp', 'pids')
       end
 
-      # 
+      #
       # Name of the PID file
       #
       def pid_file
         "sunspot-solr-#{::Rails.env}.pid"
       end
 
-      # 
+      #
       # Directory to store lucene index data files
       #
       # ==== Returns
@@ -62,7 +62,7 @@ module Sunspot
         File.join(solr_home, 'data', ::Rails.env)
       end
 
-      # 
+      #
       # Directory to use for Solr home.
       #
       def solr_home
@@ -76,7 +76,7 @@ module Sunspot
         configuration.solr_jar || super
       end
 
-      # 
+      #
       # Port on which to run Solr
       #
       def port
@@ -91,21 +91,21 @@ module Sunspot
         LOG_LEVELS[::Rails.logger.level]
       end
 
-      # 
+      #
       # Log file for Solr. File is in the rails log/ directory.
       #
       def log_file
         File.join(::Rails.root, 'log', "sunspot-solr-#{::Rails.env}.log")
       end
 
-      # 
+      #
       # Minimum Java heap size for Solr
       #
       def min_memory
         configuration.min_memory
       end
 
-      # 
+      #
       # Maximum Java heap size for Solr
       #
       def max_memory
@@ -127,7 +127,7 @@ module Sunspot
         Sunspot::Rails.configuration
       end
 
-      # 
+      #
       # Directory to store solr config files
       #
       # ==== Returns
@@ -156,7 +156,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Create new solr_home, config, log and pid directories
       #
       # ==== Returns

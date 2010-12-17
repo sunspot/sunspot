@@ -1,7 +1,7 @@
 module Sunspot
   module Rails
     module SolrLogging
-      class <<self
+      class << self
         def included(base)
           base.module_eval { alias_method_chain(:request, :rails_logging) }
         end

@@ -1,5 +1,6 @@
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_ROOT'] ||= File.join(File.dirname(__FILE__), 'rails3')
+
 if rsolr_version = ENV['RSOLR_GEM_VERSION']
   STDERR.puts("Forcing RSolr version #{rsolr_version}")
   gem "rsolr", rsolr_version
@@ -14,6 +15,7 @@ rescue LoadError => e
   require 'spec'
   require 'spec/rails'
 end
+
 require 'rake'
 require File.join('sunspot', 'rails', 'solr_logging')
 
@@ -31,12 +33,11 @@ def silence_stderr(&block)
   $stderr = stderr
 end
 
-rspec = 
-  begin
-    RSpec
-  rescue NameError, ArgumentError
-    Spec::Runner
-  end
+rspec = begin
+  RSpec
+rescue NameError, ArgumentError
+  Spec::Runner
+end
 
 rspec.configure do |config|
   config.before(:each) do
