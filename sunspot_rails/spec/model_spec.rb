@@ -15,6 +15,11 @@ describe 'ActiveRecord mixin' do
       Sunspot.commit
       Post.search.results.should == [@post]
     end
+
+    it "should not blow up if there's a default scope specifying order" do
+      posts = Array.new(10) { |j| PostWithDefaultScope.create! :title => (10-j).to_s }
+      PostWithDefaultScope.index :batch_size => 1
+    end
   end
 
   describe 'single table inheritence' do
