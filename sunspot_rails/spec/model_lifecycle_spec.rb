@@ -39,14 +39,27 @@ describe 'searchable with lifecycle' do
   end
   
   describe 'on destroy' do
-    before :each do
-      @post = PostWithAuto.create
-      @post.destroy
-      Sunspot.commit
-    end
+    describe 'of existing item' do
+      before :each do
+        @post = PostWithAuto.create
+        @post.destroy
+        Sunspot.commit
+      end
 
-    it 'should automatically remove it from the index' do
-      PostWithAuto.search_ids.should be_empty
+      it 'should automatically remove it from the index' do
+        PostWithAuto.search_ids.should be_empty
+      end
+    end
+    
+    describe "of an item which hasn't been saved" do
+      before :each do
+        @post = PostWithAuto.new
+        @post.destroy
+        Sunspot.commit
+      end
+      it "shouldn't try to add anything to the index" do
+        PostWithAuto.search_ids.should be_empty
+      end
     end
   end
 end
