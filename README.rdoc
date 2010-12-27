@@ -244,6 +244,8 @@ Sunspot repository at `upstream`:
 * Dylan Vaughn (dylanvaughn@yahoo.com)
 * Brian Durand (brian@embellishedvisions.com)
 * Sam Granieri (sam@samgranieri.com)
+* Nick Zadrozny (nick@onemorecloud.com)
+* Jason Ronallo (jronallo@gmail.com)
 
 == License
 
