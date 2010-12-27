@@ -9,6 +9,14 @@ describe "DSL bindings" do
     value.should == 'value'
   end
 
+  it 'should give access to calling context\'s id method in search DSL' do
+    value = nil
+    session.search(Post) do
+      value = id
+    end
+    value.should == 16
+  end
+
   it 'should give access to calling context\'s methods in nested DSL block' do
     value = nil
     session.search(Post) do
@@ -34,5 +42,9 @@ describe "DSL bindings" do
 
   def test_method
     'value'
+  end
+
+  def id
+    16
   end
 end
