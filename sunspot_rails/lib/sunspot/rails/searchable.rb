@@ -223,25 +223,23 @@ module Sunspot #:nodoc:
         #   Post.index(:include => :author) 
         #
         def solr_index(opts={})
-          options = { :batch_size => 500, :batch_commit => true, :include => self.sunspot_options[:include], :first_id => 0}.merge(opts)
-          unless options[:batch_size]
-            Sunspot.index!(all(:include => options[:include]))
-          else
-            offset = 0
-            counter = 1
-            record_count = count
-            last_id = options[:first_id]
-            while(offset < record_count)
+          options = {
+            :batch_size => 500,
+            :batch_commit => true,
+            :include => self.sunspot_options[:include],
+            :first_id => 0
+          }.merge(opts)
+
+          if options[:batch_size]
+            find_in_batches(:include => options[:include], :batch_size => options[:batch_size]) do |records|
               solr_benchmark options[:batch_size], counter do
-                records = all(:include => options[:include], :conditions => ["#{table_name}.#{primary_key} > ?", last_id], :limit => options[:batch_size], :order => "#{table_name}.#{primary_key}")
                 Sunspot.index(records)
-                last_id = records.last.id
               end
               Sunspot.commit if options[:batch_commit]
-              offset += options[:batch_size]
-              counter += 1
             end
             Sunspot.commit unless options[:batch_commit]
+          else
+            Sunspot.index!(all(:include => options[:include]))
           end
         end
 

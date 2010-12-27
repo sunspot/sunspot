@@ -17,8 +17,8 @@ describe 'ActiveRecord mixin' do
     end
 
     it "should not blow up if there's a default scope specifying order" do
-      posts = Array.new(10) { |j| PostWithDefaultScope.create! :title => (10-j).to_s }
-      PostWithDefaultScope.index :batch_size => 1
+      posts = Array.new(2) { |j| PostWithDefaultScope.create! :title => (10-j).to_s }
+      lambda { PostWithDefaultScope.index(:batch_size => 1) }.should_not raise_error
     end
   end
 
@@ -75,7 +75,7 @@ describe 'ActiveRecord mixin' do
 
   describe 'remove_all_from_index' do
     before :each do
-      @posts = Array.new(10) { Post.create! }.each { |post| Sunspot.index(post) }
+      @posts = Array.new(2) { Post.create! }.each { |post| Sunspot.index(post) }
       Sunspot.commit
       Post.remove_all_from_index
     end
@@ -92,7 +92,7 @@ describe 'ActiveRecord mixin' do
 
   describe 'remove_all_from_index!' do
     before :each do
-      Array.new(10) { Post.create! }.each { |post| Sunspot.index(post) }
+      Array.new(2) { Post.create! }.each { |post| Sunspot.index(post) }
       Sunspot.commit
       Post.remove_all_from_index!
     end
@@ -283,7 +283,7 @@ describe 'ActiveRecord mixin' do
   describe "reindex()" do
   
     before(:each) do
-      @posts = Array.new(10) { Post.create }
+      @posts = Array.new(2) { Post.create }
     end
 
     describe "when not using batches" do
@@ -313,7 +313,7 @@ describe 'ActiveRecord mixin' do
       end
 
       it "should set the conditions using the overridden table attributes" do
-        @posts = Array.new(10) { Author.create }
+        @posts = Array.new(2) { Author.create }
         Author.should_receive(:all).with do |params|
           params[:conditions].should == ['writers.writer_id > ?', 0]
           params[:order].should == 'writers.writer_id'
@@ -343,7 +343,7 @@ describe 'ActiveRecord mixin' do
       end
       
       it "should set the include option from the searchable options" do
-        @blogs = Array.new(10) { Blog.create }
+        @blogs = Array.new(2) { Blog.create }
         Blog.should_receive(:all).with do |params|
           params[:include].should == [{ :posts => :author }, :comments]
           @blogs
@@ -353,7 +353,7 @@ describe 'ActiveRecord mixin' do
 
       it "should commit after indexing each batch" do
         Sunspot.should_receive(:commit).twice
-        Post.reindex(:batch_size => 5)
+        Post.reindex(:batch_size => 1)
       end
 
       it "should commit after indexing everything" do

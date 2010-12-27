@@ -8,7 +8,7 @@ namespace :spec do
     ENV['RAILS_ROOT'] = 'spec/rails2'
     require 'bundler'
     Bundler.setup(:default, :test)
-    system 'spec --color spec'
+    system "spec --color #{ENV['SPEC'] || 'spec'}"
   end
 
   desc 'Run spec suite in Rails 3 application'
@@ -17,6 +17,6 @@ namespace :spec do
     ENV['RAILS_ROOT'] = 'spec/rails3'
     require 'bundler'
     Bundler.setup(:default, :test)
-    system 'rspec --color spec'
+    system "rspec --color #{ENV['SPEC'] || 'spec'}"
   end
 end
