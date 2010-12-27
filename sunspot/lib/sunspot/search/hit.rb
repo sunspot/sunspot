@@ -3,8 +3,8 @@ module Sunspot
     # 
     # Hit objects represent the raw information returned by Solr for a single
     # document. As well as the primary key and class name, hit objects give
-    # access to stored field values, keyword relevance score, and geographical
-    # distance (for geographical search).
+    # access to stored field values, keyword relevance score, and keyword
+    # highlighting.
     #
     class Hit
       SPECIAL_KEYS = Set.new(%w(id type score)) #:nodoc:
@@ -23,17 +23,12 @@ module Sunspot
       #
       attr_reader :score
       #
-      # For geographical searches, this is the distance between the search
-      # centerpoint and the document's location. Otherwise, it's nil.
-      # 
-      attr_reader :distance
 
       attr_writer :result #:nodoc:
 
-      def initialize(raw_hit, highlights, distance, search) #:nodoc:
+      def initialize(raw_hit, highlights, search) #:nodoc:
         @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
         @score = raw_hit['score']
-        @distance = distance
         @search = search
         @stored_values = raw_hit
         @stored_cache = {}

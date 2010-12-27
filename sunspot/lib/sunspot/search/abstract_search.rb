@@ -81,7 +81,7 @@ module Sunspot
             begin
               hits = if solr_response && solr_response['docs']
                 solr_response['docs'].map do |doc|
-                  Hit.new(doc, highlights_for(doc), distance_for(doc), self)
+                  Hit.new(doc, highlights_for(doc), self)
                 end
               end
               maybe_will_paginate(hits || [])
@@ -265,12 +265,6 @@ module Sunspot
       def highlights_for(doc)
         if @solr_result['highlighting']
           @solr_result['highlighting'][doc['id']]
-        end
-      end
-  
-      def distance_for(doc)
-        if @solr_result['distances']
-          @solr_result['distances'][doc['id']]
         end
       end
   
