@@ -16,23 +16,23 @@ provides the following features:
 
 Sunspot::Rails has been tested with Rails versions 2.3 and 3.0
 
-== Installation
+== Installation in Rails 3
 
-For recent versions of Rails, In your project's <code>config/environment.rb</code>, add the following gem dependencies:
+In your <code>Gemfile</code>:
 
-  config.gem 'sunspot', :lib => 'sunspot'
-  config.gem 'sunspot_rails', :lib => 'sunspot/rails'
+  gem 'sunspot_rails'
+
+== Installation in Rails 2
+
+In your project's <code>config/environment.rb</code>, add the following gem dependencies:
+
+  config.gem 'sunspot'
+  config.gem 'sunspot_rails'
     
 Install the gems with:
 
   rake gems:install
 
-If you are using an older version of Rails that doesn't support plugins-as-gems, install the gems manually and install the plugin:
-
-  sudo gem install sunspot sunspot_rails --source=http://gems.github.com
-  
-  script/plugin install git://github.com/outoftime/sunspot_rails.git
-  
 Generate the file <code>config/sunspot.yml</code>:
 
   script/generate sunspot
@@ -42,6 +42,8 @@ Rails doesn't automatically load rake tasks from plugins installed as gems
 Sunspot::Rails as a gem, add the following line to your project's Rakefile:
 
   require 'sunspot/rails/tasks'
+
+== Using Sunspot::Rails
 
 If you wish to make modifications to the Solr schema, you can create a custom
 Solr home in your project directory. In order to do so, create the directory
