@@ -12,7 +12,7 @@ module Sunspot
       @name, @type = name.to_sym, type
       @stored = !!options.delete(:stored)
       @more_like_this = !!options.delete(:more_like_this)
-      @indexed_name = set_indexed_name(options)
+      set_indexed_name(options)
       raise ArgumentError, "Field of type #{type} cannot be used for more_like_this" unless type.accepts_more_like_this? or !@more_like_this
     end
 
@@ -90,6 +90,8 @@ module Sunspot
     end
     alias_method :==, :eql?
 
+    private
+
     #
     # Determine the indexed name. If the :as option is given use that, otherwise
     # create the value based on the indexed_name of the type with additional
@@ -100,11 +102,12 @@ module Sunspot
     # String: The field's indexed name
     #
     def set_indexed_name(options)
-      if options[:as]
-        options.delete(:as)
-      else
-        "#{@type.indexed_name(@name).to_s}#{'m' if @multiple }#{'s' if @stored}#{'v' if more_like_this?}"
-      end
+      @indexed_name =
+        if options[:as]
+          options.delete(:as)
+        else
+          "#{@type.indexed_name(@name).to_s}#{'m' if @multiple }#{'s' if @stored}#{'v' if more_like_this?}"
+        end
     end
 
   end
