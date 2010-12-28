@@ -143,7 +143,7 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should use a specified field name when the :as option is set for array values' do
     session.index(post(:title => 'Another Title'))
-    connection.should have_add_with(:legacy_array_field => ['first string', 'second string'])
+    connection.should have_add_with(:legacy_array_field_sm => ['first string', 'second string'])
  	end
 end
 
