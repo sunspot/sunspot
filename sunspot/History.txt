@@ -1,3 +1,15 @@
+== 1.2.0 2010-12-28
+* Replace solr-spatial-light with client-side geohash-based spatial search
+* Override Solr field naming conventions using :as option
+* Delegate #id method directly to calling context inside DSL
+* Create a SilentFailSessionProxy that rescues exceptions on write operations.
+* Inclusion by identity
+* Solr optimize command
+* Ignore negative :limit option for query facets
+* Eliminated value sorting for range scopes
+* Correctly cast stored boolean values if they are booleans
+* Correctly cast and return stored values for multi-valued fields
+
 == 1.1.0 2010-04-01
 * MoreLikeThis support
 * Allow multiple fulltext queries in one search

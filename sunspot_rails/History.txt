@@ -1,5 +1,13 @@
+== 1.2.0 2010-12-28
+* Compatible with both Rails 2 and Rails 3
+* Configure Sunspot with a SOLR_URL or WEBSOLR_URL environment variable, also
+  provide a default port based on Rails.env.
+* Fix the 'Anonymous modules' ArgumentError for Ruby 1.9.2 and Rails 2.3
+* Fix SQL's ambiguous ID issue when tables are joined
+
 == 1.1.0 2010-04-01
-* Added include option to searchable options to allow definition of eager loading associations when indexing
+* Added include option to searchable options to allow definition of eager
+  loading associations when indexing
 
 == 1.0.4 2010-03-19
 * Fix StubSessionProxy to match new internal API
