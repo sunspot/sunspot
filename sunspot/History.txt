@@ -1,3 +1,15 @@
+== 1.1.0 2010-04-01
+* MoreLikeThis support
+* Allow multiple fulltext queries in one search
+* Function queries
+* Update solr-spatial-light to 0.0.6 build
+* Support for :prefix when faceting.
+* Allow specification of solr jar
+* Updated reindex task to allow setting of batch size and list of models to index
+* Use a '*:*' query for deleting the entire index
+* Ability to specify custom request handler for queries
+* Gracefully handle nonexistent search result
+
 == 1.0.4 2010-03-19
 * Update solr-spatial-light to 0.0.5
   * Fix NullPointerException in repeated geo search

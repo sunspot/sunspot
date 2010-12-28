@@ -1,3 +1,6 @@
+== 1.1.0 2010-04-01
+* Added include option to searchable options to allow definition of eager loading associations when indexing
+
 == 1.0.4 2010-03-19
 * Fix StubSessionProxy to match new internal API
 
