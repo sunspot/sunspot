@@ -231,11 +231,13 @@ module Sunspot #:nodoc:
           }.merge(opts)
 
           if options[:batch_size]
+            counter = 0
             find_in_batches(:include => options[:include], :batch_size => options[:batch_size]) do |records|
               solr_benchmark options[:batch_size], counter do
                 Sunspot.index(records)
               end
               Sunspot.commit if options[:batch_commit]
+              counter += 1
             end
             Sunspot.commit unless options[:batch_commit]
           else
