@@ -187,7 +187,7 @@ module Sunspot #:nodoc:
         #
         # Add/update all existing records in the Solr index. The
         # +batch_size+ argument specifies how many records to load out of the
-        # database at a time. The default batch size is 500; if nil is passed,
+        # database at a time. The default batch size is 50; if nil is passed,
         # records will not be indexed in batches. By default, a commit is issued
         # after each batch; passing +false+ for +batch_commit+ will disable
         # this, and only issue a commit at the end of the process. If associated
@@ -197,7 +197,7 @@ module Sunspot #:nodoc:
         # ==== Options (passed as a hash)
         #
         # batch_size<Integer>:: Batch size with which to load records. Passing
-        #                       'nil' will skip batches.  Default is 500.
+        #                       'nil' will skip batches.  Default is 50.
         # batch_commit<Boolean>:: Flag signalling if a commit should be done after
         #                         after each batch is indexed, default is 'true'
         # include<Mixed>:: include option to be passed to the ActiveRecord find,
@@ -210,13 +210,13 @@ module Sunspot #:nodoc:
         #
         # ==== Examples
         #   
-        #   # index in batches of 500, commit after each
+        #   # index in batches of 50, commit after each
         #   Post.index 
         #
         #   # index all rows at once, then commit
         #   Post.index(:batch_size => nil) 
         #
-        #   # index in batches of 500, commit when all batches complete
+        #   # index in batches of 50, commit when all batches complete
         #   Post.index(:batch_commit => false) 
         #
         #   # include the associated +author+ object when loading to index
@@ -224,7 +224,7 @@ module Sunspot #:nodoc:
         #
         def solr_index(opts={})
           options = {
-            :batch_size => 500,
+            :batch_size => 50,
             :batch_commit => true,
             :include => self.sunspot_options[:include],
             :first_id => 0
