@@ -30,6 +30,7 @@ TEXT
     Dir.glob('spec/mock_app/{app,lib,db,vendor,config}/**/*') +
     Dir.glob('spec/mock_app/{tmp,log,solr}')
   s.add_dependency 'sunspot', Sunspot::Rails::VERSION
+  s.add_dependency 'nokogiri'
   s.add_development_dependency 'rspec', '~> 1.2'
   s.add_development_dependency 'rspec-rails', '~> 1.2'
 end
