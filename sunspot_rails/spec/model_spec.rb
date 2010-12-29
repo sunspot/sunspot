@@ -301,56 +301,6 @@ describe 'ActiveRecord mixin' do
     end
 
     describe "when using batches" do
-      
-      it "should use the default options" do
-        Post.should_receive(:all).with do |params|
-          params[:limit].should == 500
-          params[:include].should == []
-          params[:conditions].should == ['posts.id > ?', 0]
-          params[:order].should == 'posts.id'
-        end.and_return(@posts)
-        Post.reindex
-      end
-
-      it "should set the conditions using the overridden table attributes" do
-        @posts = Array.new(2) { Author.create }
-        Author.should_receive(:all).with do |params|
-          params[:conditions].should == ['writers.writer_id > ?', 0]
-          params[:order].should == 'writers.writer_id'
-        end.and_return(@posts)
-        Author.reindex
-      end
-
-      it "should count the number of records to index" do
-        Post.should_receive(:count).and_return(10)
-        Post.reindex
-      end
-
-      it "should override the batch_size" do
-        Post.should_receive(:all).with do |params|
-          params[:limit].should == 20
-          @posts
-        end.and_return(@posts)
-        Post.reindex(:batch_size => 20)
-      end
-
-      it "should set the include option" do
-        Post.should_receive(:all).with do |params|
-          params[:include].should == [{:author => :address}]
-          @posts
-        end.and_return(@posts)
-        Post.reindex(:include => [{:author => :address}])
-      end
-      
-      it "should set the include option from the searchable options" do
-        @blogs = Array.new(2) { Blog.create }
-        Blog.should_receive(:all).with do |params|
-          params[:include].should == [{ :posts => :author }, :comments]
-          @blogs
-        end.and_return(@blogs)
-        Blog.reindex
-      end
-
       it "should commit after indexing each batch" do
         Sunspot.should_receive(:commit).twice
         Post.reindex(:batch_size => 1)
@@ -360,7 +310,6 @@ describe 'ActiveRecord mixin' do
         Sunspot.should_receive(:commit).once
         Post.reindex(:batch_commit => false)
       end
-      
     end
   end
   
