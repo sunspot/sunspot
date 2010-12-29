@@ -27,7 +27,7 @@ namespace :sunspot do
   desc "Reindex all solr models that are located in your application's models directory."
   # This task depends on the standard Rails file naming \
   # conventions, in that the file name matches the defined class name. \
-  # By default the indexing system works in batches of 500 records, you can \
+  # By default the indexing system works in batches of 50 records, you can \
   # set your own value for this by using the batch_size argument. You can \
   # also optionally define a list of models to separated by a forward slash '/'
   # 
