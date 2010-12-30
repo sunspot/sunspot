@@ -1,18 +1,9 @@
 require 'ostruct'
-begin
-  require 'bundler'
-  require 'spec'
-  Bundler.setup(:default, :test)
-  if ENV['USE_WILL_PAGINATE']
-    require 'will_paginate'
-    require 'will_paginate/collection'
-  end
-rescue LoadError => e
-  if require 'rubygems'
-    retry
-  else
-    raise(e)
-  end
+require 'spec'
+
+if ENV['USE_WILL_PAGINATE']
+  require 'will_paginate'
+  require 'will_paginate/collection'
 end
 
 require 'sunspot'
