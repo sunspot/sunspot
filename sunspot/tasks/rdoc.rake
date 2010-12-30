@@ -1,11 +1,4 @@
-begin
-  require 'hanna/rdoctask'
-rescue LoadError
-  if require 'rubygems'
-    retry
-  end
-  # It's OK if hanna isn't installed.
-end
+require 'hanna/rdoctask'
 
 Rake::RDocTask.new(:doc) do |rdoc|
   version = Sunspot::VERSION
