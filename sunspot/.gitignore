@@ -9,3 +9,4 @@ pkg
 sunspot.gemspec
 README.rdoc
 .bundle
+Gemfile.lock
