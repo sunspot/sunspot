@@ -134,6 +134,19 @@ module Sunspot
       [text_field]
     end
 
+    def facetable_field(field_name)
+      field_factory = @field_factories_cache[field_name.to_sym]
+      field_factory ||= @text_field_factories_cache[field_name.to_sym]
+      if field_factory
+        field_factory.build
+      else
+        raise(
+          UnrecognizedFieldError,
+          "No field configured for #{@class_name} with name '#{field_name}'"
+        )
+      end
+    end
+
     #
     # Return one or more stored fields (can be either attribute or text fields)
     # for the given name.

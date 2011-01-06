@@ -40,6 +40,7 @@ describe 'search faceting' do
   end
 
   test_field_type('String', :title, :title, 'Title 1', 'Title 2')
+  test_field_type('Text', :body, :body, 'description1', 'description2')
   test_field_type('Integer', :blog_id, :blog_id, 3, 4)
   test_field_type('Float', :ratings_average, :average_rating, 2.2, 1.1)
   test_field_type('Time', :published_at, :published_at, Time.mktime(2008, 02, 17, 17, 45, 04),
