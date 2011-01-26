@@ -21,7 +21,7 @@ TEXT
             Dir.glob('{bin,installer,lib,spec,tasks,templates}/**/*') +
             Dir.glob('solr/{etc,lib,webapps}/**/*') +
             Dir.glob('solr/solr/{conf,lib}/*') << 'solr/start.jar'
-  s.add_runtime_dependency 'rsolr', '0.12.1'
+  s.add_runtime_dependency 'rsolr', '1.0.0'
   s.add_runtime_dependency 'escape', '0.0.4'
   s.add_runtime_dependency 'pr_geohash', '~> 1.0'
   s.add_development_dependency 'rspec', '~> 1.1'
