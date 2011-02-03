@@ -14,6 +14,9 @@ module Sunspot
       #   function { :average_rating }
       #   function { sum(:average_rating, 10) }
       #
+      # See http://wiki.apache.org/solr/FunctionQuery for a list of all
+      # applicable functions
+      #
       def function(&block)
         expression = Sunspot::Util.instance_eval_or_call(
           Function.new(self),
