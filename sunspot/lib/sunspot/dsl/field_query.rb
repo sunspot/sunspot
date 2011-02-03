@@ -84,6 +84,19 @@ module Sunspot
       # with a category_id of 2, the category_id facet will operate as if a
       # category had not been selected, allowing the user to select additional
       # categories (which will presumably be ORed together).
+      # 
+      # It possible to exclude multiple filters by passing an array:
+      #
+      #   Sunspot.search(Post) do
+      #     with(:blog_id, 1)
+      #     category_filter = with(:category_id, 2)
+      #     author_filter = with(:author_id, 3)
+      #     facet(:category_id,
+      #           :exclude => [category_filter, author_filter].compact)
+      #   end
+      #
+      # You should consider using +.compact+ to ensure that the array does not 
+      # contain any nil values.
       #
       # <strong>As far as I can tell, Solr only supports multi-select with
       # field facets; if +:exclude+ is passed to a query facet, this method will
