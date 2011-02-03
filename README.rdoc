@@ -108,7 +108,7 @@ to define your own. See Sunspot::Adapters for more information.
   
   @search = Sunspot.search Post do
     keywords 'great pizza' do 
-      hightlight :title, :description
+      highlight :title, :description
     end
     with :author_name, 'Mark Twain'
     with(:blog_id).any_of [2, 14]
