@@ -73,6 +73,10 @@
             <Set name="port"><SystemProperty name="jetty.port" default="8983"/></Set>
             <Set name="maxIdleTime">50000</Set>
             <Set name="lowResourceMaxIdleTime">1500</Set>
+            <!-- Increase header buffer size from default of 4KB to 64KB to 
+                 prevent Solr from reaching this limit during large queries
+            -->
+            <Set name="headerBufferSize">65536</Set>
           </New>
       </Arg>
     </Call>
