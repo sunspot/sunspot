@@ -221,6 +221,7 @@ Sunspot repository at `upstream`:
 * {Cucumber and Sunspot}[http://opensoul.org/2010/4/7/cucumber-and-sunspot] (opensoul.org)
 * {Testing Sunspot with Cucumber}[http://blog.trydionel.com/2010/02/06/testing-sunspot-with-cucumber/] (spiral_code)
 * {Running cucumber features with sunspot_rails}[http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails] (Kabisa Blog)
+* {Testing Sunspot with Test::Unit}[http://timcowlishaw.co.uk/post/3179661158/testing-sunspot-with-test-unit] (Type Slowly)
 * {How To Use Twitter Lists to Determine Influence}[http://www.untitledstartup.com/2010/01/how-to-use-twitter-lists-to-determine-influence/] (Untitled Startup)
 * {Sunspot Quickstart}[http://wiki.websolr.com/index.php/Sunspot_Quickstart] (WebSolr)
 * {Solr, and Sunspot}[http://www.kuahyeow.com/2009/08/solr-and-sunspot.html] (YT!)
