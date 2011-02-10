@@ -2,8 +2,7 @@
 
 This is the documentation for both Sunspot and Sunspot::Rails.
 
-* Sunspot - a Ruby library for expressive, powerful interaction with the Solr
-search engine
+* Sunspot - a Ruby library for expressive, powerful interaction with the Solr search engine
 * Sunspot::Rails - a Rails plugin that provides drop-in integration of the Solr search library with Rails using Sunspot
 
 = Sunspot
