@@ -49,7 +49,7 @@ namespace :sunspot do
     unless args[:models]
       models_roots = Rails.root.join('app', 'models')
       all_files = Dir.glob(models_root.join('**', '*.rb'))
-      all_models = all_files.map { |path| filename = path.gsub(root, ''); filename[0..-4].camelize.constantize }
+      all_models = all_files.map { |path| filename = path.gsub(models_root, ''); filename[0..-4].camelize.constantize }
       sunspot_models = all_models.select { |m| m < ActiveRecord::Base and m.searchable? }
     else
       sunspot_models = args[:models].split('+').map{|m| m.constantize}
