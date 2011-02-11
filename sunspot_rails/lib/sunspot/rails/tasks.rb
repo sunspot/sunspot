@@ -47,15 +47,28 @@ namespace :sunspot do
       reindex_options[:batch_size] = args[:batch_size].to_i if args[:batch_size].to_i > 0
     end
     unless args[:models]
-      all_files = Dir.glob(Rails.root.join('app', 'models', '*.rb'))
-      all_models = all_files.map { |path| File.basename(path, '.rb').camelize.constantize }
+      root = Rails.root.join('app', 'models/')
+      all_files = files_in_dir(root).flatten
+      all_models = all_files.map { |path| filename = path.gsub(root, ''); filename[0..-4].camelize.constantize }
       sunspot_models = all_models.select { |m| m < ActiveRecord::Base and m.searchable? }
     else
-      sunspot_models = args[:models].split('+').map{|m| m.constantize}
+      sunspot_models = args[:models].split('+').map{|m| m.camelize.constantize}
     end
     sunspot_models.each do |model|
       model.solr_reindex reindex_options
     end
   end
   
+end
+
+def files_in_dir(dir)
+  Dir.glob(dir + '*').collect do |file| 
+     res = if File.directory?(file)
+       files_in_dir(dir +'*/')
+     elsif  File.extname(file) ==".rb"
+       file
+     else
+       File.extname(file)
+     end
+  end
 end
