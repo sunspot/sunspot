@@ -30,19 +30,19 @@ title: "Sunspot: Solr-powered search for Ruby objects"
   			<h3>Index your objects.</h3>
 {% highlight ruby %}
 class Post < ActiveRecord::Base
-	searchable do
-  	text :title, :body
-  	text :comments do
-  	  comments.map { |comment| comment.body }
-  	end
-  	integer :blog_id
-  	integer :author_id
-  	integer :category_ids, :multiple => true
-  	time :published_at
-  	string :sort_title do
-  	  title.downcase.gsub(/^(an?|the)/, '')
-  	end
-	end
+  searchable do
+    text :title, :body
+    text :comments do
+      comments.map { |comment| comment.body }
+    end
+    integer :blog_id
+    integer :author_id
+    integer :category_ids, :multiple => true
+    time :published_at
+    string :sort_title do
+      title.downcase.gsub(/^(an?|the)/, '')
+    end
+  end
 end
 {% endhighlight %}
 
