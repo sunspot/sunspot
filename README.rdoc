@@ -206,6 +206,7 @@ Sunspot repository at `upstream`:
 
 === Tutorials and Articles
 
+* {Full Text Searching with Solr and Sunspot}[http://collectiveidea.com/blog/archives/2011/03/08/full-text-searching-with-solr-and-sunspot/] (Collective Idea)
 * {Full-text search in Rails with Sunspot}[http://tech.favoritemedium.com/2010/01/full-text-search-in-rails-with-sunspot.html] (Tropical Software Observations)
 * {Sunspot Full-text Search for Rails/Ruby}[http://therailworld.com/posts/23-Sunspot-Full-text-Search-for-Rails-Ruby] (The Rail World)
 * {A Few Sunspot Tips}[http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/] (spiral_code)
