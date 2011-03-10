@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'keyword highlighting' do
   before :all do
     @posts = []

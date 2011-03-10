@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'stored fields' do
   before :all do
     Sunspot.remove_all
