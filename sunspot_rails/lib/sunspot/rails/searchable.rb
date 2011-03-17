@@ -238,7 +238,7 @@ module Sunspot #:nodoc:
         #
         def solr_index(opts={})
           options = {
-            :batch_size => 50,
+            :batch_size => Sunspot.config.indexing.default_batch_size,
             :batch_commit => true,
             :include => self.sunspot_options[:include],
             :start => opts.delete(:first_id) || 0
@@ -275,13 +275,19 @@ module Sunspot #:nodoc:
         # wrong. Usually you will want to rectify the situation by calling
         # #clean_index_orphans or #reindex
         # 
+        # ==== Options (passed as a hash)
+        #
+        # batch_size<Integer>:: Batch size with which to load records. Passing
+        #                       Default is 1000 (from ActiveRecord).
+        # 
         # ==== Returns
         #
         # Array:: Collection of IDs that exist in Solr but not in the database
-        def solr_index_orphans
+        def solr_index_orphans(opts={})
+          batch_size = opts[:batch_size] || Sunspot.config.indexing.default_batch_size
           count = self.count
           indexed_ids = solr_search_ids { paginate(:page => 1, :per_page => count) }.to_set
-          all(:select => 'id').each do |object|
+          find_each(:select => 'id', :batch_size => batch_size) do |object|
             indexed_ids.delete(object.id)
           end
           indexed_ids.to_a
@@ -293,8 +299,13 @@ module Sunspot #:nodoc:
         # circumstances, this should not be necessary; this method is provided
         # in case something goes wrong.
         #
-        def solr_clean_index_orphans
-          solr_index_orphans.each do |id|
+        # ==== Options (passed as a hash)
+        #
+        # batch_size<Integer>:: Batch size with which to load records
+        #                       Default is 50
+        # 
+        def solr_clean_index_orphans(opts={})
+          solr_index_orphans(opts).each do |id|
             new do |fake_instance|
               fake_instance.id = id
             end.solr_remove_from_index
