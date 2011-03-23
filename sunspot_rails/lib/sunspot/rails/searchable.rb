@@ -253,7 +253,7 @@ module Sunspot #:nodoc:
             batch_counter = 0
             find_in_batches(find_in_batch_options) do |records|
               solr_benchmark options[:batch_size], batch_counter do
-                Sunspot.index(records)
+                Sunspot.index(records.select { |model| model.if_unless_constraints_pass? })
                 Sunspot.commit if options[:batch_commit]
               end
               # track progress
@@ -261,7 +261,8 @@ module Sunspot #:nodoc:
               batch_counter += 1
             end
           else
-            Sunspot.index!(all(:include => options[:include]))
+            records = all(:include => options[:include]).select { |model| model.if_unless_constraints_pass? }
+            Sunspot.index!(records)
           end
           # perform a final commit if not committing in batches
           Sunspot.commit unless options[:batch_commit]
@@ -410,6 +411,18 @@ module Sunspot #:nodoc:
           end
         end
 
+        def if_unless_constraints_pass?
+          # options[:if] is not specified or they successfully pass
+          if_passes = self.class.sunspot_options[:if].nil? ||
+                      constraint_passes?(self.class.sunspot_options[:if])
+
+          # options[:unless] is not specified or they successfully pass
+          unless_passes = self.class.sunspot_options[:unless].nil? ||
+                          !constraint_passes?(self.class.sunspot_options[:unless])
+
+          if_passes and unless_passes
+        end
+
         private
 
         def constraint_passes?(constraint)
@@ -428,18 +441,6 @@ module Sunspot #:nodoc:
               raise ArgumentError, "Unknown constraint type: #{constraint} (#{constraint.class})"
             end
           end
-        end
-
-        def if_unless_constraints_pass?
-          # options[:if] is not specified or they successfully pass
-          if_passes = self.class.sunspot_options[:if].nil? ||
-                      constraint_passes?(self.class.sunspot_options[:if])
-
-          # options[:unless] is not specified or they successfully pass
-          unless_passes = self.class.sunspot_options[:unless].nil? ||
-                          !constraint_passes?(self.class.sunspot_options[:unless])
-
-          if_passes and unless_passes
         end
 
         def mark_for_auto_indexing_or_removal

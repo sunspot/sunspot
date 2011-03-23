@@ -297,6 +297,22 @@ describe 'ActiveRecord mixin' do
         Post.should_receive(:all).with(:include => :author).and_return([])
         Post.reindex(:batch_size => nil, :include => :author)
       end
+
+      describe ':if constraints' do
+        before do
+          Post.sunspot_options[:if] = proc { |model| model.id != @posts.first.id }
+        end
+
+        after do
+          Post.sunspot_options[:if] = nil
+        end
+
+        it 'should only index those models where :if constraints pass' do
+          Post.reindex(:batch_size => nil)
+
+          Post.search.results.should_not include(@posts.first)
+        end
+      end
     
     end
 
@@ -309,6 +325,22 @@ describe 'ActiveRecord mixin' do
       it "should commit after indexing everything" do
         Sunspot.should_receive(:commit).once
         Post.reindex(:batch_commit => false)
+      end
+
+      describe ':if constraints' do
+        before do
+          Post.sunspot_options[:if] = proc { |model| model.id != @posts.first.id }
+        end
+
+        after do
+          Post.sunspot_options[:if] = nil
+        end
+
+        it 'should only index those models where :if constraints pass' do
+          Post.reindex(:batch_size => 50)
+
+          Post.search.results.should_not include(@posts.first)
+        end
       end
     end
   end
