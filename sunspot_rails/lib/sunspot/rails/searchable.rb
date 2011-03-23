@@ -404,6 +404,7 @@ module Sunspot #:nodoc:
           when Symbol
             self.__send__(constraint)
           when String
+            self.__send__(constraint.to_sym)
           when Proc
           else
             raise ArgumentError, "Unknown constraint type: #{constraint} (#{constraint.class})"
