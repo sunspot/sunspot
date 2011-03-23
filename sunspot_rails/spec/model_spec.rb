@@ -387,7 +387,7 @@ describe 'ActiveRecord mixin' do
 
     context 'String' do
       context 'constraint returns true' do
-        # searchable :if => :returns_true
+        # searchable :if => 'returns_true'
         before do
           subject.should_receive(:returns_true).and_return(true)
           subject.class.sunspot_options[:if] = 'returns_true'
@@ -397,10 +397,30 @@ describe 'ActiveRecord mixin' do
       end
 
       context 'constraint returns false' do
-        # searchable :if => :returns_false
+        # searchable :if => 'returns_false'
         before do
           subject.should_receive(:returns_false).and_return(false)
           subject.class.sunspot_options[:if] = 'returns_false'
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+    end
+
+    context 'Proc' do
+      context 'constraint returns true' do
+        # searchable :if => proc { true }
+        before do
+          subject.class.sunspot_options[:if] = proc { true }
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :if => proc { false }
+        before do
+          subject.class.sunspot_options[:if] = proc { false }
         end
 
         it_should_behave_like 'not indexed after save'

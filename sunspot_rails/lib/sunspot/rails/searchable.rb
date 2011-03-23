@@ -405,9 +405,12 @@ module Sunspot #:nodoc:
             self.__send__(constraint)
           when String
             self.__send__(constraint.to_sym)
-          when Proc
           else
-            raise ArgumentError, "Unknown constraint type: #{constraint} (#{constraint.class})"
+            if constraint.respond_to?(:call) # could be a Proc or anything else that responds to call
+              constraint.call
+            else
+              raise ArgumentError, "Unknown constraint type: #{constraint} (#{constraint.class})"
+            end
           end
         end
 
