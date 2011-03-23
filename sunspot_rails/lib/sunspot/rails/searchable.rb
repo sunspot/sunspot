@@ -36,6 +36,13 @@ module Sunspot #:nodoc:
         #   Automatically remove models from the Solr index when they are
         #   destroyed. <b>Setting this option to +false+ is not recommended
         #   </b>(see the README).
+        # :if<Mixed>::
+        #   Only index models in Solr if the method, proc or string evaluates
+        #   to true (e.g. <code>:if => :should_index?</code> or <code>:if =>
+        #   proc { |model| model.foo > 2 }</code>).  Models that do not match
+        #   the constraint will be removed from the index upon save.  Multiple
+        #   constraints can be specified by passing an array (e.g. <code>:if =>
+        #   [:method1, :method2]</code>).
         # :ignore_attribute_changes_of<Array>::
         #   Define attributes, that should not trigger a reindex of that
         #   object. Usual suspects are updated_at or counters.
@@ -44,6 +51,13 @@ module Sunspot #:nodoc:
         #   to load required associations when indexing. See ActiveRecord's 
         #   documentation on eager-loading for examples on how to set this
         #   Default: [] 
+        # :unless<Mixed>::
+        #   Only index models in Solr if the method, proc or string evaluates
+        #   to false (e.g. <code>:unless => :should_not_index?</code> or <code>
+        #   :unless => proc { |model| model.foo <= 2 }</code>).  Models that do
+        #   not match the constraint will be removed from the index upon save.
+        #   Multiple constraints can be specified by passing an array (e.g.
+        #   <code>:unless => [:method1, :method2]</code>).
         #
         # ==== Example
         #
