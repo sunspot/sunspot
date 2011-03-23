@@ -450,6 +450,17 @@ describe 'ActiveRecord mixin' do
         it_should_behave_like 'not indexed after save'
       end
     end
+
+    it 'removes the model from the index if the constraint does not match' do
+      subject.save!
+      Sunspot.commit
+      subject.class.search.results.should include(subject)
+
+      subject.class.sunspot_options[:if] = proc { false }
+      subject.save!
+      Sunspot.commit
+      subject.class.search.results.should_not include(subject)
+    end
   end
 
   describe ':unless constraint' do

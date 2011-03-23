@@ -70,8 +70,8 @@ module Sunspot #:nodoc:
             class_attribute :sunspot_options
 
             unless options[:auto_index] == false
-              before_save :maybe_mark_for_auto_indexing
-              after_save :maybe_auto_index
+              before_save :mark_for_auto_indexing_or_removal
+              after_save :perform_index_tasks
             end
 
             unless options[:auto_remove] == false
@@ -428,23 +428,35 @@ module Sunspot #:nodoc:
           if_passes and unless_passes
         end
 
-        def maybe_mark_for_auto_indexing
-          @marked_for_auto_indexing =
-            if !if_unless_constraints_pass?
-              # :if/:unless constraints do not pass
-              false
-            elsif !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
-              !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
-            else
-              true
-            end
+        def mark_for_auto_indexing_or_removal
+          if if_unless_constraints_pass?
+            # :if/:unless constraints pass or were not present
+
+            @marked_for_auto_indexing =
+              if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
+                !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
+              else
+                true
+              end
+
+            @marked_for_auto_removal = false
+          else
+            # :if/:unless constraints did not pass; do not auto index and
+            # actually go one step further by removing it from the index
+            @marked_for_auto_indexing = false
+            @marked_for_auto_removal = true
+          end
+
           true
         end
 
-        def maybe_auto_index
+        def perform_index_tasks
           if @marked_for_auto_indexing
             solr_index
             remove_instance_variable(:@marked_for_auto_indexing)
+          elsif @marked_for_auto_removal
+            solr_remove_from_index
+            remove_instance_variable(:@marked_for_auto_removal)
           end
         end
       end
