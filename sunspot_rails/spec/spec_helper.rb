@@ -37,6 +37,9 @@ rspec =
     Spec::Runner
   end
 
+# Load all shared examples
+Dir[File.expand_path("shared_examples/*.rb", File.dirname(__FILE__))].each {|f| require f}
+
 rspec.configure do |config|
   config.before(:each) do
     load_schema

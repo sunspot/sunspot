@@ -353,4 +353,36 @@ describe 'ActiveRecord mixin' do
       @posts.first.more_like_this_ids.to_set.should == [@posts[3], @posts[1]].map { |post| post.id }.to_set
     end
   end
+
+  describe ':if constraint' do
+    subject do
+      PostWithAuto.new(:title => 'Post123')
+    end
+
+    after do
+      subject.class.sunspot_options[:if] = nil
+    end
+
+    context 'Symbol' do
+      context 'constraint returns true' do
+        # searchable :if => :returns_true
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.class.sunspot_options[:if] = :returns_true
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :if => :returns_false
+        before do
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:if] = :returns_false
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+    end
+  end
 end

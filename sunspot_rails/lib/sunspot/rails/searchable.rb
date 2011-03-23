@@ -398,10 +398,37 @@ module Sunspot #:nodoc:
 
         private
 
+        def constraint_passes?(constraint)
+          case constraint
+          when Array
+          when Symbol
+            self.__send__(constraint)
+          when String
+          when Proc
+          else
+            raise ArgumentError, "Unknown constraint type: #{constraint} (#{constraint.class})"
+          end
+        end
+
+        def if_unless_constraints_pass?
+          # options[:if] is not specified or they successfully pass
+          if_passes = self.class.sunspot_options[:if].nil? ||
+                      constraint_passes?(self.class.sunspot_options[:if])
+
+          # options[:unless] is not specified or they successfully pass
+          unless_passes = self.class.sunspot_options[:unless].nil? ||
+                          !constraint_passes?(self.class.sunspot_options[:unless])
+
+          if_passes and unless_passes
+        end
+
         def maybe_mark_for_auto_indexing
           @marked_for_auto_indexing =
-            if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
-              @marked_for_auto_indexing = !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
+            if !if_unless_constraints_pass?
+              # :if/:unless constraints do not pass
+              false
+            elsif !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
+              !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
             else
               true
             end
