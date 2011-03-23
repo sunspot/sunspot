@@ -426,5 +426,29 @@ describe 'ActiveRecord mixin' do
         it_should_behave_like 'not indexed after save'
       end
     end
+
+    context 'Array' do
+      context 'all constraints returns true' do
+        # searchable :if => [:returns_true_1, :returns_true_2]
+        before do
+          subject.should_receive(:returns_true_1).and_return(true)
+          subject.should_receive(:returns_true_2).and_return(true)
+          subject.class.sunspot_options[:if] = [:returns_true_1, 'returns_true_2']
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+
+      context 'one constraint returns false' do
+        # searchable :if => [:returns_true, :returns_false]
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:if] = [:returns_true, 'returns_false']
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+    end
   end
 end

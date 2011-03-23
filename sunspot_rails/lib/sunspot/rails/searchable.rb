@@ -400,7 +400,9 @@ module Sunspot #:nodoc:
 
         def constraint_passes?(constraint)
           case constraint
-          when Array
+          when Enumerable
+            # All constraints must pass
+            constraint.all? { |inner_constraint| constraint_passes?(inner_constraint) }
           when Symbol
             self.__send__(constraint)
           when String
