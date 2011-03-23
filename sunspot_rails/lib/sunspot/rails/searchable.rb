@@ -414,13 +414,13 @@ module Sunspot #:nodoc:
 
         def constraint_passes?(constraint)
           case constraint
-          when Enumerable
-            # All constraints must pass
-            constraint.all? { |inner_constraint| constraint_passes?(inner_constraint) }
           when Symbol
             self.__send__(constraint)
           when String
             self.__send__(constraint.to_sym)
+          when Enumerable
+            # All constraints must pass
+            constraint.all? { |inner_constraint| constraint_passes?(inner_constraint) }
           else
             if constraint.respond_to?(:call) # could be a Proc or anything else that responds to call
               constraint.call(self)
