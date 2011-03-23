@@ -520,7 +520,7 @@ describe 'ActiveRecord mixin' do
       context 'constraint returns true' do
         # searchable :unless => proc { true }
         before do
-          subject.class.sunspot_options[:unless] = proc { true }
+          subject.class.sunspot_options[:unless] = proc { |model| model == subject } # true
         end
 
         it_should_behave_like 'not indexed after save'

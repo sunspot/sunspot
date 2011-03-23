@@ -423,7 +423,7 @@ module Sunspot #:nodoc:
             self.__send__(constraint.to_sym)
           else
             if constraint.respond_to?(:call) # could be a Proc or anything else that responds to call
-              constraint.call
+              constraint.call(self)
             else
               raise ArgumentError, "Unknown constraint type: #{constraint} (#{constraint.class})"
             end
