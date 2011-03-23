@@ -451,4 +451,102 @@ describe 'ActiveRecord mixin' do
       end
     end
   end
+
+  describe ':unless constraint' do
+    subject do
+      PostWithAuto.new(:title => 'Post123')
+    end
+
+    after do
+      subject.class.sunspot_options[:unless] = nil
+    end
+
+    context 'Symbol' do
+      context 'constraint returns true' do
+        # searchable :unless => :returns_true
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.class.sunspot_options[:unless] = :returns_true
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :unless => :returns_false
+        before do
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:unless] = :returns_false
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+    end
+
+    context 'String' do
+      context 'constraint returns true' do
+        # searchable :unless => 'returns_true'
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.class.sunspot_options[:unless] = 'returns_true'
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :unless => 'returns_false'
+        before do
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:unless] = 'returns_false'
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+    end
+
+    context 'Proc' do
+      context 'constraint returns true' do
+        # searchable :unless => proc { true }
+        before do
+          subject.class.sunspot_options[:unless] = proc { true }
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :unless => proc { false }
+        before do
+          subject.class.sunspot_options[:unless] = proc { false }
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+    end
+
+    context 'Array' do
+      context 'all constraints returns true' do
+        # searchable :unless => [:returns_true_1, :returns_true_2]
+        before do
+          subject.should_receive(:returns_true_1).and_return(true)
+          subject.should_receive(:returns_true_2).and_return(true)
+          subject.class.sunspot_options[:unless] = [:returns_true_1, 'returns_true_2']
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+
+      context 'one constraint returns false' do
+        # searchable :unless => [:returns_true, :returns_false]
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:unless] = [:returns_true, 'returns_false']
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+    end
+  end
 end
