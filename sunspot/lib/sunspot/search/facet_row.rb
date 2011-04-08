@@ -1,14 +1,16 @@
+require 'ruby-debug'
+
 module Sunspot
   module Search
     class FacetRow
-      attr_reader :value, :count
+      attr_reader :value, :count, :selected
       attr_writer :instance #:nodoc:
 
-      def initialize(value, count, facet) #:nodoc:
-        @value, @count, @facet = value, count, facet
+      def initialize(value, count, selected, facet) #:nodoc:
+        @value, @count, @selected, @facet = value, count, selected, facet
       end
 
-      # 
+      #
       # Return the instance referenced by this facet row. Only valid for field
       # facets whose fields are defined with the :references key.
       #
