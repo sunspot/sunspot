@@ -103,6 +103,19 @@ module Sunspot
           yield(hit, hit.result)
         end
       end
+
+      #
+      # Convenience method to iterate over hit and its 0-based position in the result set.
+      # Block is yielded a Sunspot::Server::Hit instance and an integer
+      #
+
+      def each_hit_with_position(options = {}, &block)
+        hits(options).each_with_index do |hit, index|
+          offset = (@query.page - 1) * @query.per_page
+
+          yield(hit, index + offset)
+        end
+      end
   
       # 
       # The total number of documents matching the query parameters
