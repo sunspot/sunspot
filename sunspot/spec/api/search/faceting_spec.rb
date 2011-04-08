@@ -357,4 +357,57 @@ describe 'faceting', :type => :search do
     result.facet(:blog_id).rows.each { |row| row.instance }
     (Blog.query_count - query_count).should == 1
   end
+
+  describe 'filter query parsing' do
+    it 'completes successfully with no field query' do
+      stub_results(Post.new)
+      connection.response['responseHeader'] = {
+        'params' => {
+        }
+      }
+      result = session.search(Post)
+      result.fq_response_header.nil?.should be_true
+    end
+
+    it 'completes successfully with single field query and no facets' do
+      stub_results(Post.new)
+      connection.response['responseHeader'] = {
+        'params' => {
+          'fq' => "type:Post"
+        }
+      }
+      result = session.search(Post)
+      result.fq_response_header.size.should == 1
+      result.fq_response_header.has_key?('type').should be_true
+    end
+
+    it 'returns true on selected method with single facet' do
+      stub_facet(:category_ids_im, '1' => 1)
+      connection.response['responseHeader'] = {
+        'params' => {
+          'fq' => ['type:Post', 'category_ids_im:(1)']
+        }
+      }
+      result = session.search Post do
+        with :category_ids, 1
+        facet :category_ids
+      end
+      result.facet(:category_ids).rows.first.selected.should be_true
+    end
+
+    it 'returns true on selected method with multi-select facets' do
+      stub_facet(:title_ss, {'James Beard' => 1,  'Marcel Proust' => 1, 'Harold McGee' => 1})
+      connection.response['responseHeader'] = {
+        'params' => {
+          'fq' => ['type:Post', '{!tag=wxy1a5k9gqz2}title_ss:(James\\ Beard OR Marcel\\ Proust)']
+        }
+      }
+      result = session.search Post do
+        facet :title
+      end
+      result.facet(:title).rows[0].selected.should be_true
+      result.facet(:title).rows[1].selected.should be_true
+      result.facet(:title).rows[2].selected.should be_false
+    end
+  end
 end

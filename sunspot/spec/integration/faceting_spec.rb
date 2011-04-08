@@ -212,6 +212,18 @@ describe 'search faceting' do
         search.facet(:category_ids).rows.map { |row| row.value }.should == [1]
         search.facet(:all_category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
       end
+
+      it 'marks all facet values specified in search as selected' do
+        search = Sunspot.search(Post) do
+          facet(:category_ids)
+          with(:category_ids).any_of([1])
+        end
+        search.facet(:category_ids).rows.each do |row|
+          row.selected.should == true if row.value == 1
+          row.selected.should == false if row.value != 1
+        end
+      end
+
     end
 
     context 'query faceting' do

@@ -186,6 +186,46 @@ module Sunspot
       end
   
       # 
+      # Decompose the Solr "Filter Query" (fq) facet field parameter array further into a hash that can be easily
+      # digested when constructing FieldFacet.rows. Specifically, it is used to add a boolean "selected"
+      # attribute on each row so it's easy to pick out which of the facets returned in a result are part
+      # of the originating query. This is useful for generating "undo" links and showing multiselect facet
+      # checkbox initial state as checked.
+      #
+      # Filter query values with keys ending in '_im' and '_s' are processed into their constituent parts.
+      #
+      # solr_response_header['params']['fq'] is an array of strings of the form, for example:
+      # fq: ["type:Package"
+      #      "amenities_ids_im:(9 AND 12)",
+      #      "neighborhood_s:(East\ Village OR Chelsea)",
+      #      "capacity_max_is:[30 TO *]"
+      #     ]
+      #
+      # which is converted to the equivalent hash:
+      # fq_response_header: ["type" => "Package"
+      #                      "amenties_ids_im" => ["9", "12"],
+      #                      "neighborhood_s" => ["East Village", "Chelsea"],
+      #                      "capacity_max_is" => "[30 TO *]"
+      #                      ]
+      #
+      def fq_response_header
+        @fq_response_header ||=
+          if solr_response_header['params'].is_a?(Enumerable) && solr_response_header['params']['fq']
+            begin
+              h = Hash.new
+              [*solr_response_header['params']['fq']].each do |filter_query|
+                field, value = filter_query.split(':')
+                field = field.gsub(/^\{\!tag=.*?\}/, '') # strip exclude tags
+                value = value.gsub(/^\(|\)$|\\/, '') unless value.nil? # strips surrounding parens and \,
+                value = value.split(/ AND | OR /) if field =~ /_im$|_s$/ && ! value.nil?
+                h[field] = value
+              end
+              h
+            end
+          end
+      end
+
+      #
       # Build this search using a DSL block. This method can be called more than
       # once on an unexecuted search (e.g., Sunspot.new_search) in order to build
       # a search incrementally.
@@ -279,7 +319,7 @@ module Sunspot
       
       # Clear out all the cached ivars so the search can be called again.
       def reset
-        @results = @hits = @verified_hits = @total = @solr_response = @doc_ids = nil
+        @results = @hits = @verified_hits = @total = @solr_response = @doc_ids = @solr_response_header = nil
       end
     end
   end

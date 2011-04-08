@@ -1,11 +1,11 @@
 module Sunspot
   module Search
     class FacetRow
-      attr_reader :value, :count
+      attr_reader :value, :count, :selected
       attr_writer :instance #:nodoc:
 
-      def initialize(value, count, facet) #:nodoc:
-        @value, @count, @facet = value, count, facet
+      def initialize(value, count, facet, selected=nil) #:nodoc:
+        @value, @count, @facet, @selected = value, count, facet, selected
       end
 
       # 

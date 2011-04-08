@@ -396,6 +396,40 @@ Sunspot.search(Post) do
 end
 ```
 
+#### Facet Inclusion in Response
+```ruby
+# Posts tagged with 'pizza' and any of 'Marcel Proust' or 'James Beard'.
+# Response includes counts for each :cuisine_id and :author_id, a FacetRow
+# for each of 'pizza', 'Marcel Proust', and 'James Beard'.
+@search = Post.search do
+  with(:cuisine_id).all_of(['pizza'])
+  with(:author_id).any_of(['Marcel Proust', 'James Beard'])
+  facet :author_id
+  facet :cuisine_id
+end
+
+# Example using the FacetRow.selected method to:
+# 1) succinctly render an "undo" link for facet 'pizza'
+# 2) show the state of 'Marcel Proust' and 'James Beard' checkboxes as
+#    selected in the user interface.
+# This example assumes a link_to_undo helper as well as other
+# implementation details left out as there are many solutions and this is
+# meant only to illustrate the FacetRow "selected" method.
+    <% for row in @search.facet('cuisine_id').rows %>
+      <% if row.selected %>
+        <%= link_to_undo('cuisine_id', row.value.to_s, row.instance.name) %>
+        <%= hidden_field_tag ('cuisine_id[]').to_sym, row.value %>
+      <% else %>
+        <%= link_to(row.instance.name, request.fullpath, %{#{facet}_id[]=#{row.value}} %> (<%= row.count %>)
+      <% end %>
+    <% end %>
+
+    <% for row in @search_response.facet('author_id').rows %>
+      <%= check_box_tag(facet + '[]', row.value.to_s, row.selected, id: row.value.to_s.parameterize) %>
+      <%= label_tag(row.value.to_s.parameterize, %{#{row.value} (#{row.count})}) %></li>
+    <% end %>
+```
+
 ### Ordering
 
 By default, Sunspot orders results by "score": the Solr-determined
