@@ -184,6 +184,7 @@ module Sunspot
             h = Hash.new
             solr_response_header['params']['fq'].each do |f|
               fs = f.split(':')
+              fs[0] = fs[0].gsub(/^\{\!tag=.*?\}/, '') # strip exclude tags
               fs[1] = fs[1].gsub(/^\(|\)$|\\/, '') # strips surrounding parens and \,
               fs[1] = fs[1].split(/ AND | OR /) if fs[0] =~ /_im$|_s$/
               h[fs[0]] = fs[1]
