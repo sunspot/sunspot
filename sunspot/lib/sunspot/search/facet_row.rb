@@ -1,5 +1,3 @@
-require 'ruby-debug'
-
 module Sunspot
   module Search
     class FacetRow
