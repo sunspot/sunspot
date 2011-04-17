@@ -18,7 +18,7 @@ module Sunspot
         self.class.runtime += event.duration
         return unless logger.debug?
 
-        name = '%s (%.1fms)' % ["SOLR Resquest", event.duration]
+        name = '%s (%.1fms)' % ["SOLR Request", event.duration]
 
         # produces: path=/select parameters={fq: ["type:Tag"], q: rossi, fl: * score, qf: tag_name_text, defType: dismax, start: 0, rows: 20}
         parameters = event.payload[:parameters].map { |k, v| "#{k}: #{color(v, BOLD, true)}" }.join(', ')
