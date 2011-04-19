@@ -229,7 +229,7 @@ module Sunspot #:nodoc:
             :include => self.sunspot_options[:include],
             :first_id => 0
           }.merge(opts)
-
+          progress_bar = options[:progress_bar]
           if options[:batch_size]
             counter = 0
             find_in_batches(:include => options[:include], :batch_size => options[:batch_size]) do |records|
@@ -238,6 +238,7 @@ module Sunspot #:nodoc:
               end
               Sunspot.commit if options[:batch_commit]
               counter += 1
+              progress_bar.increment! records.size unless progress_bar.nil?
             end
             Sunspot.commit unless options[:batch_commit]
           else
