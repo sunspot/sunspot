@@ -1,3 +1,5 @@
+require 'progress_bar'
+
 namespace :sunspot do
   namespace :solr do
     desc 'Start the Solr instance'
