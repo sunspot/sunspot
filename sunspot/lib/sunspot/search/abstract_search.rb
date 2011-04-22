@@ -38,7 +38,7 @@ module Sunspot
       # Sunspot#new_search(), you will need to call this method after building the
       # query.
       #
-      def execute
+      def execute opts={}
         reset
         params = @query.to_params
         # Here we add the ability to perform the request through POST rather than GET
