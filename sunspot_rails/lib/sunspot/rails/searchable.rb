@@ -232,7 +232,7 @@ module Sunspot #:nodoc:
           progress_bar = options[:progress_bar]
           if options[:batch_size]
             counter = 0
-            find_in_batches(:include => options[:include], :batch_size => options[:batch_size]) do |records|
+            find_in_batches(:include => options[:include], :batch_size => options[:batch_size], :start => options[:first_id]) do |records|
               solr_benchmark options[:batch_size], counter do
                 Sunspot.index(records)
               end
