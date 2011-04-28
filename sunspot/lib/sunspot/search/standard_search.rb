@@ -51,14 +51,14 @@ module Sunspot
       # misspelled and preventing useful results.
       #
       # Mix and match in your views for a blend of strict and liberal collations.
-      def spellcheck_collation(query=nil)
+      def spellcheck_collation(*terms)
         if solr_spellcheck['suggestions'].length > 2
-          collation = query.dup if query
+          collation = terms.join(" ").dup if terms
       
           # If we are given a query string, tokenize it and strictly replace
           # the terms that aren't present in the index
-          if query.present?
-            query.split.each do |term|
+          if terms.present?
+            terms.each do |term|
               if (spellcheck_suggestions[term]||{})['origFreq'] == 0
                 collation[term] = spellcheck_suggestion_for(term)
               end
@@ -67,11 +67,13 @@ module Sunspot
       
           # If no query was given, or all terms are present in the index,
           # return Solr's suggested collation.
-          if query == collation
+          if terms.length == 0
             collation = solr_spellcheck['suggestions'][-1]
           end
         
           collation
+        else
+          nil
         end
       end
       
