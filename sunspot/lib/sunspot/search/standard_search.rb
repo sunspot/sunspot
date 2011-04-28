@@ -52,7 +52,7 @@ module Sunspot
       #
       # Mix and match in your views for a blend of strict and liberal collations.
       def spellcheck_collation(query=nil)
-        unless solr_spellcheck[-2] == 'spelledCorrectly' && solr_spellcheck[-1] == true
+        if solr_spellcheck['suggestions'].length > 2
           collation = query.dup if query
       
           # If we are given a query string, tokenize it and strictly replace
