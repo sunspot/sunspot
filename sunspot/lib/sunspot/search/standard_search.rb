@@ -52,25 +52,27 @@ module Sunspot
       #
       # Mix and match in your views for a blend of strict and liberal collations.
       def spellcheck_collation(query=nil)
-        collation = query.dup if query
+        unless solr_spellcheck[-2] == 'spelledCorrectly' && solr_spellcheck[-1] == true
+          collation = query.dup if query
       
-        # If we are given a query string, tokenize it and strictly replace
-        # the terms that aren't present in the index
-        if query.present?
-          query.split.each do |term|
-            if (spellcheck_suggestions[term]||{})['origFreq'] == 0
-              collation[term] = spellcheck_suggestion_for(term)
+          # If we are given a query string, tokenize it and strictly replace
+          # the terms that aren't present in the index
+          if query.present?
+            query.split.each do |term|
+              if (spellcheck_suggestions[term]||{})['origFreq'] == 0
+                collation[term] = spellcheck_suggestion_for(term)
+              end
             end
           end
-        end
       
-        # If no query was given, or all terms are present in the index,
-        # return Solr's suggested collation.
-        if query == collation
-          collation = solr_spellcheck['suggestions'][-1]
-        end
+          # If no query was given, or all terms are present in the index,
+          # return Solr's suggested collation.
+          if query == collation
+            collation = solr_spellcheck['suggestions'][-1]
+          end
         
-        collation
+          collation
+        end
       end
       
       private
