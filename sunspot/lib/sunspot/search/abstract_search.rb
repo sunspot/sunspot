@@ -1,14 +1,6 @@
 module Sunspot
   module Search #:nodoc:
     
-    #
-    # We need this class to encode the params Hash in a querystring
-    #
-    class Helper
-      include Singleton
-      include RSolr::Connection::Utils
-    end
-    
     # 
     # This class encapsulates the results of a Solr search. It provides access
     # to search results, total result count, facets, and pagination information.
@@ -38,16 +30,10 @@ module Sunspot
       # Sunspot#new_search(), you will need to call this method after building the
       # query.
       #
-      def execute opts={}
+      def execute
         reset
         params = @query.to_params
-        # Here we add the ability to perform the request through POST rather than GET
-        # Particularly useful for requests which are too big too fit in an URL.
-        if opts.delete(:method) == :post
-          @solr_result = @connection.request("/#{request_handler}", {}, Helper.instance.hash_to_query(params), {:header => {'Content-Type' => 'application/x-www-form-urlencoded'}})
-        else
-          @solr_result = @connection.request("/#{request_handler}", params)
-        end
+        @solr_result = @connection.request("/#{request_handler}", params, {:header => {'Content-Type' => 'application/x-www-form-urlencoded'}})
         self
       end
 
