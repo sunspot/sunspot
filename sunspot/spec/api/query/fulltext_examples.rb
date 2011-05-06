@@ -312,4 +312,20 @@ shared_examples_for 'fulltext query' do
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
+
+  it "allows fulltext searching of a non-fulltext field if explicitly named and no similarly named fulltext fields exist" do
+    search do
+      keywords :text, :fields => :sort_title
+    end
+    connection.searches.last[:qf].should == 'sort_title_s'
+  end
+
+  it "accepts boosting of non-fulltext fields" do
+    search do
+      keywords :text do
+        fields :title, :sort_title => 2.0
+      end
+    end
+    connection.searches.last[:qf].should == 'title_text sort_title_s^2.0'
+  end
 end

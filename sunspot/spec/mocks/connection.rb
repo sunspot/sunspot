@@ -54,7 +54,7 @@ module Mock
       @optims << Time.now
     end
 
-    def request(path, params)
+    def request(path, params, extra = "")
       unless path == "/#{@expected_handler}"
         raise ArgumentError, "Expected request to #{@expected_handler} request handler"
       end

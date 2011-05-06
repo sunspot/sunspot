@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sunspot (1.2.0)
+    sunspot (1.2.1)
       escape (= 0.0.4)
       pr_geohash (~> 1.0)
       rsolr (= 0.12.1)
@@ -12,8 +12,15 @@ GEM
     builder (3.0.0)
     columnize (0.3.2)
     escape (0.0.4)
+    haml (2.2.24)
+    hanna (0.1.12)
+      haml (~> 2.2.8)
+      rake (~> 0.8.2)
+      rdoc (~> 2.3.0)
     linecache (0.43)
     pr_geohash (1.0.0)
+    rake (0.8.7)
+    rdoc (2.3.0)
     rsolr (0.12.1)
       builder (>= 2.1.2)
     rspec (1.3.0)
@@ -27,6 +34,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  hanna
   rspec (~> 1.3)
   ruby-debug
-  sunspot (= 1.2.0)!
+  sunspot (= 1.2.1)!

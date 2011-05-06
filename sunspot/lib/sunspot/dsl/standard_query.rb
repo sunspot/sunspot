@@ -58,7 +58,7 @@ module Sunspot
           fulltext_query = @query.add_fulltext(keywords)
           if field_names = options.delete(:fields)
             Util.Array(field_names).each do |field_name|
-              @setup.text_fields(field_name).each do |field|
+              @setup.any_fields(field_name).map do |field|
                 fulltext_query.add_fulltext_field(field, field.default_boost)
               end
             end

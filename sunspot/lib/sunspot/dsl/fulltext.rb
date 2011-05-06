@@ -39,13 +39,13 @@ module Sunspot
         @fields_added = true
         boosted_fields = field_names.pop if field_names.last.is_a?(Hash)
         field_names.each do |field_name|
-          @setup.text_fields(field_name).each do |field|
+          @setup.any_fields(field_name).map do |field|
             @query.add_fulltext_field(field, field.default_boost)
           end
         end
         if boosted_fields
           boosted_fields.each_pair do |field_name, boost|
-            @setup.text_fields(field_name).each do |field|
+            @setup.any_fields(field_name).map do |field|
               @query.add_fulltext_field(field, boost)
             end
           end
@@ -195,7 +195,7 @@ module Sunspot
       def boost_fields(boosts)
         boosts.each_pair do |field_name, boost|
           begin
-            @setup.text_fields(field_name).each do |field|
+            @setup.any_fields(field_name).map do |field|
               @query.add_fulltext_field(field, boost)
             end
           rescue Sunspot::UnrecognizedFieldError

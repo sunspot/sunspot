@@ -156,6 +156,14 @@ module Sunspot
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
 
+    def as_text_field #:nodoc:
+      self.clone.tap do |f|
+        class << f
+          def boost; nil; end
+          def default_boost; nil; end
+        end
+      end
+    end
   end
 
   class TypeField #:nodoc:

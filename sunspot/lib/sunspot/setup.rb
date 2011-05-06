@@ -134,6 +134,14 @@ module Sunspot
       [text_field]
     end
 
+    def any_fields(field_name)
+      begin
+        text_fields(field_name)
+      rescue Sunspot::UnrecognizedFieldError
+        [field(field_name).as_text_field]
+      end
+    end
+
     #
     # Return one or more stored fields (can be either attribute or text fields)
     # for the given name.

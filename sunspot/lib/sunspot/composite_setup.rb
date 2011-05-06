@@ -82,6 +82,14 @@ module Sunspot
       )
     end
 
+    def any_fields(field_name)
+      begin
+        text_fields(field_name)
+      rescue Sunspot::UnrecognizedFieldError
+        [field(field_name).as_text_field]
+      end
+    end
+
     # 
     # Get a dynamic field factory for the given base name.
     #
