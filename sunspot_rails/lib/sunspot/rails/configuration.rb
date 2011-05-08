@@ -14,6 +14,7 @@ module Sunspot #:nodoc:
     #       min_memory: 512M
     #       max_memory: 1G
     #       solr_jar: /some/path/solr15/start.jar
+		# 			shards: "localhost:8982/solr,localhost:8983/solr"
     #   test:
     #     solr:
     #       hostname: localhost
@@ -104,6 +105,17 @@ module Sunspot #:nodoc:
       def master_hostname
         @master_hostname ||= (user_configuration_from_key('master_solr', 'hostname') || hostname)
       end
+
+			# 
+			# Comma separated list of shards. Defaults to empty string
+			# Eg: localhost:8983/solr,localhost:8982/solr
+			#
+			# ==== Returns
+			# String:: comma separated shards
+			#
+			def shards
+				@shards ||= (user_configuration_from_key('solr', 'shards') || '')
+			end
 
       #
       # The port at which to connect to the master Solr instance. Defaults to
