@@ -328,4 +328,12 @@ shared_examples_for 'fulltext query' do
     end
     connection.searches.last[:qf].should == 'title_text sort_title_s^2.0'
   end
+
+  it "accepts non-fulltext fields in phrase queries" do
+    search do
+      keywords :text do
+        phrase_fields :sort_title => 2.0
+      end
+    end
+  end
 end
