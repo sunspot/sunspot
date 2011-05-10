@@ -48,6 +48,10 @@ the library.
 
   gem install sunspot
 
+Optionally install the packaged Solr installation (recommended for development):
+
+  gem install sunspot_solr
+
 In order to start the packaged Solr installation, run:
 
   sunspot-solr start -- [-d /path/to/data/directory] [-p port] [-s path/to/solr/home] [--pid-dir=path/to/pid/dir]
@@ -105,9 +109,9 @@ an adapter for ActiveRecord objects, but for other types of models you will need
 to define your own. See Sunspot::Adapters for more information.
 
 === Search for objects:
-  
+
   @search = Sunspot.search Post do
-    keywords 'great pizza' do 
+    keywords 'great pizza' do
       highlight :title, :description
     end
     with :author_name, 'Mark Twain'

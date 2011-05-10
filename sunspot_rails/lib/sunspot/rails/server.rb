@@ -1,6 +1,6 @@
 module Sunspot
   module Rails
-    class Server < Sunspot::Server
+    class Server < Sunspot::Solr::Server
       # ActiveSupport log levels are integers; this array maps them to the
       # appropriate java.util.logging.Level constant
       LOG_LEVELS = %w(FINE INFO WARNING SEVERE SEVERE INFO)

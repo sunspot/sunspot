@@ -4,7 +4,7 @@ begin
   require 'tempfile'
   require 'tmpdir'
   require 'optparse'
-  require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'server')
+  require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'solr', 'server')
 rescue LoadError => e
   if require 'rubygems'
     retry
@@ -13,7 +13,7 @@ rescue LoadError => e
   end
 end
 
-server = Sunspot::Server.new
+server = Sunspot::Solr::Server.new
 
 OptionParser.new do |opts|
   opts.banner = "Usage: sunspot-solr start [options]"
@@ -45,11 +45,11 @@ OptionParser.new do |opts|
   opts.on '--log-file=LOG_FILE', 'Path to Solr log file' do |lf|
     server.log_file = File.expand_path(lf)
   end
-  
+
   opts.on '--max-memory=MEMORY', 'Specify the maximum size of the memory allocation pool' do |mm|
     server.max_memory = mm
   end
-  
+
   opts.on '--min-memory=MEMORY', 'Specify the initial size of the memory allocation pool' do |mm|
     server.min_memory = mm
   end
@@ -69,6 +69,6 @@ begin
   else
     abort("Usage: sunspot-solr (start|stop|run)")
   end
-rescue Sunspot::Server::ServerError => e
+rescue Sunspot::Solr::Server::ServerError => e
   abort(e.message)
 end
