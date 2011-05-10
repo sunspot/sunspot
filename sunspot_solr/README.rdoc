@@ -1,0 +1,24 @@
+= Sunspot::Solr
+
+Sunspot::Solr is a packaged distribution of Solr for use with the
+Sunspot[http://outoftime.github.com/sunspot] and
+Sunspot::Rails[https://github.com/outoftime/sunspot/tree/master/sunspot_rails]
+gems.  See those gems' documentation for more information.
+
+== Installation
+
+  gem install sunspot_solr
+
+In order to start the daemon, run:
+
+  sunspot-solr start -- [-d /path/to/data/directory] [-p port] [-s path/to/solr/home] [--pid-dir=path/to/pid/dir]
+
+If you don't specify a data directory, your Solr index will be stored in your
+operating system's temporary directory.
+
+If you specify a solr home, the directory must contain a <code>conf</code>
+directory, which should contain at least <code>schema.xml</code> and
+<code>solrconfig.xml</code>. Be sure to copy the <code>schema.xml</code> out of
+the Sunspot gem's <code>solr/solr/conf</code> directory. Sunspot relies on the
+field name patterns defined in the packaged <code>schema.xml</code>, so those
+cannot be modified.
