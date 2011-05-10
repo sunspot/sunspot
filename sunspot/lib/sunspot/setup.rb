@@ -13,6 +13,7 @@ module Sunspot
         @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
       @stored_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @more_like_this_field_factories_cache = Hash.new { |h, k| h[k] = [] }
+      @search_by_default_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @dsl = DSL::Fields.new(self)
       add_field_factory(:class, Type::ClassType.instance)
     end
@@ -44,9 +45,9 @@ module Sunspot
     #
     # field_factories<Array>:: Array of Sunspot::Field objects
     #
-    def add_text_field_factory(name, options = {}, &block)
-      stored, more_like_this = options[:stored], options[:more_like_this]
-      field_factory = FieldFactory::Static.new(name, Type::TextType.instance, options, &block)
+    def add_text_field_factory(name, type, options = {}, &block)
+      stored, more_like_this, search_by_default = options[:stored], options[:more_like_this], options[:search_by_default]
+      field_factory = FieldFactory::Static.new(name, type, options, &block)
       @text_field_factories[name] = field_factory
       @text_field_factories_cache[field_factory.name] = field_factory
       if stored
@@ -54,6 +55,9 @@ module Sunspot
       end
       if more_like_this
         @more_like_this_field_factories_cache[field_factory.name] << field_factory
+      end
+      if search_by_default != false
+        @search_by_default_field_factories_cache[field_factory.name] << field_factory
       end
     end
 
@@ -187,6 +191,15 @@ module Sunspot
     #
     def all_more_like_this_fields
       @more_like_this_field_factories_cache.values.map do |field_factories| 
+        field_factories.map { |field_factory| field_factory.build }
+      end.flatten
+    end
+
+    # 
+    # Return all search_by_default text fields
+    #
+    def all_search_by_default_fields
+      @search_by_default_field_factories_cache.values.map do |field_factories|
         field_factories.map { |field_factory| field_factory.build }
       end.flatten
     end

@@ -30,13 +30,21 @@ class Post < SuperClass
   attr_writer :category_ids, :custom_string, :custom_fl, :custom_time, :custom_boolean
 end
 
+class Sunspot::Type::AutocompleteType < Sunspot::Type::TextType
+  # If you were doing this for real, you'd want to implement indexed_type at a minimum
+  # and create a new fieldType and dynamicField in your schema.xml that describe your
+  # desired tokenization and filtering
+end
+
 Sunspot.setup(Post) do
   text :title, :boost => 2
   text :body, :stored => true, :more_like_this => true
   text :backwards_title do
     title.reverse if title
   end
+  autocomplete :title_autocomplete, :using => :title
   text :tags, :more_like_this => true
+  autocomplete :tags_autocomplete, :using => :tags, :search_by_default => false
   string :title, :stored => true
   integer :blog_id, :references => Blog
   integer :category_ids, :multiple => true

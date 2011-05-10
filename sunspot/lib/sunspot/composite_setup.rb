@@ -116,6 +116,10 @@ module Sunspot
       @more_like_this_fields ||= more_like_this_fields_hash.values.map { |set| set.to_a }.flatten
     end
 
+    def all_search_by_default_fields
+      @search_by_default_fields ||= search_by_default_fields_hash.values.map { |set| set.to_a }.flatten
+    end
+
     private
 
     # 
@@ -141,6 +145,16 @@ module Sunspot
         setups.inject({}) do |hash, setup|
           setup.all_more_like_this_fields.each do |more_like_this_field|
             (hash[more_like_this_field.name] ||= Set.new) << more_like_this_field
+          end
+          hash
+        end
+    end
+
+    def search_by_default_fields_hash
+      @search_by_default_fields_hash ||=
+        setups.inject({}) do |hash, setup|
+          setup.all_search_by_default_fields.each do |search_by_default_field|
+            (hash[search_by_default_field.name] ||= Set.new) << search_by_default_field
           end
           hash
         end
