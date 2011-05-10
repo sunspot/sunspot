@@ -121,7 +121,7 @@ module Sunspot
   # to do otherwise). FulltextField instances always have the type TextType.
   #
   class FulltextField < Field #:nodoc:
-    attr_reader :default_boost
+    attr_reader :default_boost, :search_by_default
 
     def initialize(name, type, options = {})
       super(name, type, options)
