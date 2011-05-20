@@ -6,6 +6,7 @@ require File.join(File.dirname(__FILE__), 'rails', 'searchable')
 
 module Sunspot #:nodoc:
   module Rails #:nodoc:
+    autoload :SolrInstrumentation, File.join(File.dirname(__FILE__), 'rails', 'solr_instrumentation')
     autoload :StubSessionProxy, File.join(File.dirname(__FILE__), 'rails', 'stub_session_proxy')
     autoload :Server, File.join(File.dirname(__FILE__), 'rails', 'server')
     autoload :VERSION, File.join(File.dirname(__FILE__), 'rails', 'version')

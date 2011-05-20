@@ -47,8 +47,9 @@ namespace :sunspot do
       reindex_options[:batch_size] = args[:batch_size].to_i if args[:batch_size].to_i > 0
     end
     unless args[:models]
-      all_files = Dir.glob(Rails.root.join('app', 'models', '*.rb'))
-      all_models = all_files.map { |path| File.basename(path, '.rb').camelize.constantize }
+      models_path = Rails.root.join('app', 'models')
+      all_files = Dir.glob(models_path.join('**', '*.rb'))
+      all_models = all_files.map { |path| path.sub(models_path.to_s, '')[0..-4].camelize.sub(/^::/, '').constantize rescue nil }.compact
       sunspot_models = all_models.select { |m| m < ActiveRecord::Base and m.searchable? }
     else
       sunspot_models = args[:models].split('+').map{|m| m.constantize}

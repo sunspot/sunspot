@@ -1,3 +1,5 @@
+require 'erb'
+
 module Sunspot #:nodoc:
   module Rails #:nodoc:
     #
