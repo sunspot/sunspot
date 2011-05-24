@@ -38,7 +38,7 @@ namespace :sunspot do
   # $ rake sunspot:reindex[1000,Post]     # reindex only the Post model in
   #                                       # batchs of 1000
   # $ rake sunspot:reindex[,Post+Author]  # reindex Post and Author model
-  task :reindex, :batch_size, :models, :needs => :environment do |t, args|
+  task :reindex, [:batch_size, :models] => [:environment] do |t, args|
     reindex_options = {:batch_commit => false}
     case args[:batch_size]
     when 'false'
