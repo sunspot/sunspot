@@ -234,8 +234,6 @@ module Sunspot #:nodoc:
             counter = 0
             find_in_batches(:include => options[:include], :batch_size => options[:batch_size]) do |records|
               solr_benchmark options[:batch_size], counter do
-                records = all(:include => options[:include], :conditions => ["#{table_name}.#{primary_key} > ?", last_id], :limit => options[:batch_size], :order => "#{table_name}.#{primary_key}")
-                last_id = records.last.id
                 records = records.select{ |r| r.indexable? }
                 Sunspot.index(records)
               end
