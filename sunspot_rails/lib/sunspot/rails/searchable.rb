@@ -242,7 +242,8 @@ module Sunspot #:nodoc:
             end
             Sunspot.commit unless options[:batch_commit]
           else
-            Sunspot.index!(all(:include => options[:include]))
+            records = all(:include => options[:include]).select{ |r| r.indexable? }
+            Sunspot.index!(records)
           end
         end
 

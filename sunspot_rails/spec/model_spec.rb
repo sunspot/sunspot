@@ -385,14 +385,22 @@ describe 'ActiveRecord mixin' do
       @indexed_post = PostWithConditionalIndex.create!(:title => 'Present')
     end
 
-    it 'should not include non indexed records' do
-      PostWithConditionalIndex.reindex
-      Sunspot.commit
-      PostWithConditionalIndex.search.results.should == [@indexed_post]
+    describe "when not using batches" do
+      it 'should not include non indexed records' do
+        PostWithConditionalIndex.reindex(:batch_size => nil)
+        Sunspot.commit
+        PostWithConditionalIndex.search.results.should == [@indexed_post]
+      end
+    end
+
+    describe "when using batches" do
+      it 'should not include non indexed records' do
+        PostWithConditionalIndex.reindex(:batch_size => 1)
+        Sunspot.commit
+        PostWithConditionalIndex.search.results.should == [@indexed_post]
+      end
     end
   end
-
-
   
   describe "reindex()" do
   
