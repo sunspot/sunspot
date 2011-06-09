@@ -1,5 +1,6 @@
 module Sunspot
   module Search #:nodoc:
+    
     # 
     # This class encapsulates the results of a Solr search. It provides access
     # to search results, total result count, facets, and pagination information.
@@ -32,7 +33,7 @@ module Sunspot
       def execute
         reset
         params = @query.to_params
-        @solr_result = @connection.request("/#{request_handler}", params)
+        @solr_result = @connection.request("/#{request_handler}", params, {:header => {'Content-Type' => 'application/x-www-form-urlencoded'}})
         self
       end
 
