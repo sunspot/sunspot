@@ -52,6 +52,13 @@ describe Sunspot::Server do
     @server.run
   end
 
+  it 'raises an error if java is missing' do
+    Sunspot::Java.stub(:installed? => false)
+    expect {
+     Sunspot::Server.new
+    }.to raise_error(Sunspot::Server::JavaMissing)
+  end
+
   describe 'with logging' do
     before :each do
       @server.log_level = 'info'

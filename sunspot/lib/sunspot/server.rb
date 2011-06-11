@@ -1,6 +1,7 @@
 require 'escape'
 require 'set'
 require 'tempfile'
+require 'sunspot/java'
 
 module Sunspot
   class Server #:nodoc:
@@ -8,6 +9,7 @@ module Sunspot
     ServerError = Class.new(RuntimeError)
     AlreadyRunningError = Class.new(ServerError)
     NotRunningError = Class.new(ServerError)
+    JavaMissing = Class.new(ServerError)
 
     # Name of the sunspot executable (shell script)
     SOLR_START_JAR = File.expand_path(
@@ -18,6 +20,11 @@ module Sunspot
 
     attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
     attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :solr_jar
+
+    def initialize(*args)
+      ensure_java_installed
+      super(*args)
+    end
 
     #
     # Start the sunspot-solr server. Bootstrap solr_home first,
@@ -53,7 +60,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # Run the sunspot-solr server in the foreground. Boostrap
     # solr_home first, if neccessary.
     #
@@ -75,7 +82,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # Stop the sunspot-solr server.
     #
     # ==== Returns
@@ -133,6 +140,14 @@ module Sunspot
     end
 
     private
+
+    def ensure_java_installed
+      if !@java_installed
+        raise(JavaMissing, "You need a java runtime environment to run the solr server") unless Sunspot::Java.installed?
+        @java_installed = true
+      end
+
+    end
 
     def logging_config_path
       return @logging_config_path if defined?(@logging_config_path)
