@@ -212,6 +212,7 @@ Sunspot repository at `upstream`:
 * {A Few Sunspot Tips}[http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/] (spiral_code)
 * {Sunspot: A Solr-Powered Search Engine for Ruby}[http://www.linux-mag.com/id/7341] (Linux Magazine)
 * {Sunspot Showed Me the Light}[http://bennyfreshness.com/2010/05/sunspot-helped-me-see-the-light/] (ben koonse)
+* {RubyGems.org — A case study in upgrading to full-text search}[http://blog.websolr.com/post/3505903537/rubygems-search-upgrade-1] (Websolr)
 * {How to Implement Spatial Search with Sunspot and Solr}[http://codequest.eu/articles/how-to-implement-spatial-search-with-sunspot-and-solr] (Code Quest)
 * {Sunspot 1.2 with Spatial Solr Plugin 2.0}[http://joelmats.wordpress.com/2011/02/23/getting-sunspot-1-2-with-spatial-solr-plugin-2-0-to-work/] (joelmats)
 * {rails3 + heroku + sunspot : madness}[http://anhaminha.tumblr.com/post/632682537/rails3-heroku-sunspot-madness] (anhaminha)
