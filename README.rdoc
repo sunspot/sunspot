@@ -221,6 +221,7 @@ Sunspot repository at `upstream`:
 * {Fuzzy searching in SOLR with Sunspot}[http://www.pipetodevnull.com/past/2010/8/5/fuzzy_searching_in_solr_with_sunspot/] (pipe :to => /dev/null)
 * {Default scope with Sunspot}[http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/] (Cloudspace)
 * {Chef recipe for Sunspot in production}[http://gist.github.com/336403]
+* {Testing with Sunspot and Cucumber}[http://collectiveidea.com/blog/archives/2011/05/25/testing-with-sunspot-and-cucumber/] (Collective Idea)
 * {Cucumber and Sunspot}[http://opensoul.org/2010/4/7/cucumber-and-sunspot] (opensoul.org)
 * {Testing Sunspot with Cucumber}[http://blog.trydionel.com/2010/02/06/testing-sunspot-with-cucumber/] (spiral_code)
 * {Running cucumber features with sunspot_rails}[http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails] (Kabisa Blog)
