@@ -1,3 +1,5 @@
+require 'erb'
+
 module Sunspot #:nodoc:
   module Rails #:nodoc:
     #
@@ -277,7 +279,8 @@ module Sunspot #:nodoc:
             path = File.join(::Rails.root, 'config', 'sunspot.yml')
             if File.exist?(path)
               File.open(path) do |file|
-                YAML.load(file)[::Rails.env]
+                processed = ERB.new(file.read).result
+                YAML.load(processed)[::Rails.env]
               end
             else
               {}
