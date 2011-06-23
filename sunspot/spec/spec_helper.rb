@@ -1,21 +1,17 @@
+# encoding: utf-8
+require 'rubygems'
+require 'bundler/setup'
+
 require 'ostruct'
-begin
-  require 'bundler'
-  require 'spec'
-  Bundler.setup(:default, :test)
-  if ENV['USE_WILL_PAGINATE']
-    require 'will_paginate'
-    require 'will_paginate/collection'
-  end
-rescue LoadError => e
-  if require 'rubygems'
-    retry
-  else
-    raise(e)
+require 'sunspot'
+
+if ENV['USE_WILL_PAGINATE']
+  require 'will_paginate'
+  require 'will_paginate/collection'
+elsif ENV['USE_KAMINARI']
+  module Kaminari
   end
 end
-
-require 'sunspot'
 
 require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each do |file|
