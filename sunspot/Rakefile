@@ -1,11 +1,17 @@
 ENV['RUBYOPT'] = '-W1'
 
-task :environment do
-  require File.dirname(__FILE__) + '/lib/sunspot'
-end
+# encoding: UTF-8
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
-require File.join(File.dirname(__FILE__), 'lib', 'sunspot', 'version')
+require 'spec/rake/spectask'
 
 Dir['tasks/**/*.rake'].each { |t| load t }
 
-task :default => 'spec:api'
+desc "Run all examples"
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_files = Dir.glob('spec/**/*_spec.rb')
+  t.spec_opts << '--format specdoc'
+end
+
+task :default => 'spec'

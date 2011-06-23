@@ -1,21 +1,14 @@
-require 'ostruct'
-begin
-  require 'bundler'
-  require 'spec'
-  Bundler.setup(:default, :test)
-  if ENV['USE_WILL_PAGINATE']
-    require 'will_paginate'
-    require 'will_paginate/collection'
-  end
-rescue LoadError => e
-  if require 'rubygems'
-    retry
-  else
-    raise(e)
-  end
-end
+# encoding: utf-8
+require 'rubygems'
+require 'bundler/setup'
 
+require 'ostruct'
 require 'sunspot'
+
+if ENV['USE_WILL_PAGINATE']
+  require 'will_paginate'
+  require 'will_paginate/collection'
+end
 
 require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each do |file|
