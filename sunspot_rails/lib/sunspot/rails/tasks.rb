@@ -47,6 +47,7 @@ namespace :sunspot do
       reindex_options[:batch_size] = args[:batch_size].to_i if args[:batch_size].to_i > 0
     end
     unless args[:models]
+      Rails::Application.railties.engines.map { |e| e.eager_load! }
       all_models = ActiveRecord::Base.subclasses
       sunspot_models = all_models.select { |m| m.searchable? }
     else
