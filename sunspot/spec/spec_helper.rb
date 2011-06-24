@@ -1,4 +1,5 @@
 require 'ostruct'
+
 begin
   require 'bundler'
   require 'spec'
@@ -6,6 +7,9 @@ begin
   if ENV['USE_WILL_PAGINATE']
     require 'will_paginate'
     require 'will_paginate/collection'
+  elsif ENV['USE_KAMINARI']
+    module Kaminari
+    end
   end
 rescue LoadError => e
   if require 'rubygems'
