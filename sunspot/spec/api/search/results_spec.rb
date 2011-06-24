@@ -39,13 +39,40 @@ describe 'search results', :type => :search do
       end.results.total_entries.should == 4
     end
 
-  else
+  elsif ENV['USE_KAMINARI']
 
-    it 'returns vanilla array if WillPaginate is not available' do
+    it 'returns an array that responds to #current_page' do
       stub_results(Post.new)
       session.search(Post) do
         paginate(:page => 1)
-      end.results.should_not respond_to(:total_entries)
+      end.results.current_page.should == 1
+    end
+
+    it 'returns an array that responds to #num_pages' do
+      posts = Array.new(2) { Post.new }
+      stub_results(*posts)
+      hits = session.search(Post) do
+        paginate(:page => 1, :per_page => 1)
+      end.results.num_pages.should == 2
+    end
+
+    it 'returns an array that responds to #limit_value' do
+      posts = Array.new(2) { Post.new }
+      stub_results(*posts)
+      hits = session.search(Post) do
+        paginate(:page => 1, :per_page => 1)
+      end.results.limit_value.should == 1
+    end
+
+  else
+ 
+    it 'returns vanilla array of results if pagination is not available' do
+      stub_results(Post.new)
+      results = session.search(Post) do
+        paginate(:page => 1)
+      end
+      results.should_not respond_to(:total_entries)
+      results.should_not respond_to(:current_page)
     end
 
   end
