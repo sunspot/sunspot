@@ -12,40 +12,6 @@ describe 'hits', :type => :search do
     end.should == [['Post', post_1.id.to_s], ['Post', post_2.id.to_s]]
   end
 
-  if ENV['USE_WILL_PAGINATE']
-
-    it 'returns search total as attribute of hits' do
-      stub_results(Post.new, 4)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits.total_entries.should == 4
-    end
-
-    it 'returns search total as attribute of verified hits' do
-      stub_results(Post.new, 4)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits(:verify => true).total_entries.should == 4
-    end
-
-  else
-
-    it 'returns vanilla array of hits if WillPaginate is not available' do
-      stub_results(Post.new)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits.should_not respond_to(:total_entries)
-    end
-
-    it 'returns vanilla array of verified hits if WillPaginate is not available' do
-      stub_results(Post.new)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits(:verified => true).should_not respond_to(:total_entries)
-    end
-
-  end
-
   it 'should return instance from hit' do
     posts = Array.new(2) { Post.new }
     stub_results(*posts)
@@ -136,5 +102,65 @@ describe 'hits', :type => :search do
   it 'should return stored values for multi-valued fields' do
     stub_full_results('instance' => User.new, 'role_ids_ims' => %w(1 4 5))
     session.search(User).hits.first.stored(:role_ids).should == [1, 4, 5]
+  end
+
+  if ENV['USE_WILL_PAGINATE']
+
+    it 'returns search total as attribute of hits' do
+      stub_results(Post.new, 4)
+      session.search(Post) do
+        paginate(:page => 1)
+      end.hits.total_entries.should == 4
+    end
+
+    it 'returns search total as attribute of verified hits' do
+      stub_results(Post.new, 4)
+      session.search(Post) do
+        paginate(:page => 1)
+      end.hits(:verify => true).total_entries.should == 4
+    end
+
+  elsif ENV['USE_KAMINARI']
+
+    it 'returns an array that responds to ##current_page' do
+      stub_results(Post.new)
+      session.search(Post) do
+        paginate(:page => 1)
+      end.hits.current_page.should == 1
+    end
+
+    it 'returns an array that responds to #num_pages' do
+      stub_results(Post.new, 2)
+      hits = session.search(Post) do
+        paginate(:page => 1, :per_page => 1)
+      end.hits.num_pages.should == 2
+    end
+
+    it 'returns an array that responds to #limit_value' do
+      stub_results(Post.new, 2)
+      hits = session.search(Post) do
+        paginate(:page => 1, :per_page => 1)
+      end.hits.limit_value.should == 1
+    end
+
+  else
+
+    it 'returns vanilla array of hits if pagination plugin is not available' do
+      stub_results(Post.new)
+      hits = session.search(Post) do
+        paginate(:page => 1)
+      end
+      hits.should_not respond_to(:total_entries)
+      hits.should_not respond_to(:current_page)
+    end
+
+    it 'returns vanilla array of verified hits if pagination plugin is not available' do
+      stub_results(Post.new)
+      hits = session.search(Post) do
+        paginate(:page => 1)
+      end.hits(:verified => true)
+      hits.should_not respond_to(:total_entries)
+      hits.should_not respond_to(:current_page)
+    end
   end
 end
