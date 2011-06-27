@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'query DSL', :type => :query do
   it 'should allow building search using block argument rather than instance_eval' do

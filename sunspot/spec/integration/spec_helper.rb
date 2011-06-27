@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
+require File.expand_path('spec_helper', File.join(File.dirname(__FILE__), '..'))
 
 Spec::Runner.configure do |config|
   config.before(:each) do

@@ -1,5 +1,3 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
-
 shared_examples_for "facetable query" do
   describe 'on fields' do
     it 'does not turn faceting on if no facet requested' do
