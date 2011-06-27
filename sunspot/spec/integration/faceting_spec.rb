@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'search faceting' do
   def self.test_field_type(name, attribute, field, *args)
