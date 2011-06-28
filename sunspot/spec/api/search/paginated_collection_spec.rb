@@ -1,7 +1,7 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
-describe "Collection" do
-  subject { Sunspot::Collection.new [], 1, 10, 20 }
+describe "PaginatedCollection" do
+  subject { Sunspot::Search::PaginatedCollection.new [], 1, 10, 20 }
 
   it { subject.should be_an(Array) }
 

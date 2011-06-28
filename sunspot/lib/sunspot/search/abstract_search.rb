@@ -1,4 +1,4 @@
-require 'sunspot/collection'
+require 'sunspot/search/paginated_collection'
 
 module Sunspot
   module Search #:nodoc:
@@ -276,7 +276,7 @@ module Sunspot
       end
   
       def paginate_collection(collection)
-        Collection.new(collection, @query.page, @query.per_page, total)
+        PaginatedCollection.new(collection, @query.page, @query.per_page, total)
       end
   
       def add_facet(name, facet)
