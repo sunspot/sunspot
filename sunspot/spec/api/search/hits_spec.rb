@@ -12,38 +12,18 @@ describe 'hits', :type => :search do
     end.should == [['Post', post_1.id.to_s], ['Post', post_2.id.to_s]]
   end
 
-  if ENV['USE_WILL_PAGINATE']
+  it 'returns search total as attribute of hits' do
+    stub_results(Post.new, 4)
+    session.search(Post) do
+      paginate(:page => 1)
+    end.hits.total_entries.should == 4
+  end
 
-    it 'returns search total as attribute of hits' do
-      stub_results(Post.new, 4)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits.total_entries.should == 4
-    end
-
-    it 'returns search total as attribute of verified hits' do
-      stub_results(Post.new, 4)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits(:verify => true).total_entries.should == 4
-    end
-
-  else
-
-    it 'returns vanilla array of hits if WillPaginate is not available' do
-      stub_results(Post.new)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits.should_not respond_to(:total_entries)
-    end
-
-    it 'returns vanilla array of verified hits if WillPaginate is not available' do
-      stub_results(Post.new)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits(:verified => true).should_not respond_to(:total_entries)
-    end
-
+  it 'returns search total as attribute of verified hits' do
+    stub_results(Post.new, 4)
+    session.search(Post) do
+      paginate(:page => 1)
+    end.hits(:verify => true).total_entries.should == 4
   end
 
   it 'should return instance from hit' do
