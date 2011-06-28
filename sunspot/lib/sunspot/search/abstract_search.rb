@@ -1,3 +1,5 @@
+require 'sunspot/collection'
+
 module Sunspot
   module Search #:nodoc:
     
@@ -274,13 +276,7 @@ module Sunspot
       end
   
       def maybe_will_paginate(collection)
-        if defined?(WillPaginate::Collection)
-          WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
-            pager.replace(collection)
-          end
-        else
-          collection
-        end
+        Collection.new(collection, @query.page, @query.per_page, total)
       end
   
       def add_facet(name, facet)
