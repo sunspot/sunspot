@@ -1,8 +1,7 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
-require 'sunspot/collection'
 
 describe "Collection" do
-  subject { Sunspot::Collection.new [], 1, 20, 10 }
+  subject { Sunspot::Collection.new [], 1, 10, 20 }
 
   it { subject.should be_an(Array) }
 

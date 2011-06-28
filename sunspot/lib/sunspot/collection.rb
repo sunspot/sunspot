@@ -6,7 +6,7 @@ module Sunspot
     alias :total_entries :total_count
     alias :limit_value :per_page
 
-    def initialize collection, page, total, per_page
+    def initialize collection, page, per_page, total
       @collection   = collection
       @current_page = page
       @per_page     = per_page
