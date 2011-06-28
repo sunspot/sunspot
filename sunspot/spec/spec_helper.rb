@@ -5,14 +5,6 @@ require 'bundler/setup'
 require 'ostruct'
 require 'sunspot'
 
-if ENV['USE_WILL_PAGINATE']
-  require 'will_paginate'
-  require 'will_paginate/collection'
-elsif ENV['USE_KAMINARI']
-  module Kaminari
-  end
-end
-
 require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each do |file|
   require file unless File.basename(file) == 'mock_record.rb'
