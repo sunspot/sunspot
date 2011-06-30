@@ -116,6 +116,11 @@ module Sunspot
       def near(lat, lng, options = {})
         @query.fulltext.add_location(@field, lat, lng, options)
       end
+
+      def spatial_near(lat, lng, options = {})
+        debugger
+        @query.add_location(@field, lat, lng, options)
+      end
     end
   end
 end
