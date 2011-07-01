@@ -11,6 +11,12 @@ module Sunspot
         super(query.scope, setup)
       end
 
+
+      def spatial(field_name, lat, lon, options = {})
+        spatial = Sunspot::Query::Spatial.new(@setup.field(field_name), lat, lon, options)
+        @query.add_spatial(spatial)
+      end
+
       # Specify the order that results should be returned in. This method can
       # be called multiple times; precedence will be in the order given.
       #
@@ -274,6 +280,7 @@ module Sunspot
           &block
         )
       end
+
     end
   end
 end

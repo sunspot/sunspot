@@ -118,8 +118,7 @@ module Sunspot
       end
 
       def spatial_near(lat, lng, options = {})
-        debugger
-        @query.add_location(@field, lat, lng, options)
+        @scope.add_location(@field, lat, lng, options)
       end
     end
   end
