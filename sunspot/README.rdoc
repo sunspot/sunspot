@@ -1,17 +1,21 @@
-Warning: Not finished.
-
 Extension for Solr 3.1 Spatial Search.
 
 You have to run your own solr, (higher than 3.1), and copy schema.xml to your /solr/conf/schema.xml
 
 Then you can declare:
 
-searchable do 
-  latlon :locations, :multiple => true, :stored => true
-end
+  class Place
+    searchable do 
+      latlon :locations, :multiple => true, :stored => true
+    end
+  end
 
 
+To search:
 
+  Place.search {
+    spatial(:locations, lat, lon, :radius => 5)
+  }
 
 
 = Sunspot
