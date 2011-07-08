@@ -67,11 +67,11 @@ module Sunspot
         end
 
         def results
-          []
+          PaginatedCollection.new
         end
 
         def hits(options = {})
-          []
+          PaginatedCollection.new
         end
 
         def total
@@ -87,6 +87,10 @@ module Sunspot
         def execute
           self
         end
+      end
+      
+      
+      class PaginatedCollection < Array
         
         def total_count
           0
@@ -130,6 +134,7 @@ module Sunspot
         def offset
           0
         end
+        
       end
       
     end
