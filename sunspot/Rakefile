@@ -1,8 +1,6 @@
 ENV['RUBYOPT'] = '-W1'
 
 # encoding: UTF-8
-require 'bundler'
-Bundler::GemHelper.install_tasks
 
 require 'spec/rake/spectask'
 
