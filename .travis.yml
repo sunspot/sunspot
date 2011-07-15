@@ -11,8 +11,4 @@ notifications:
   recipients:
     - nick@onemorecloud.com
 
-script: "bundle exec rake"
-
-before_script:
-  - cd sunspot
-  - bundle install
+script: "cd sunspot; bundle exec rake"
