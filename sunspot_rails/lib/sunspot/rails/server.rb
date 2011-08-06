@@ -41,7 +41,7 @@ module Sunspot
       # Directory in which to store PID files
       #
       def pid_dir
-        File.join(::Rails.root, 'tmp', 'pids')
+        configuration.pid_dir || File.join(::Rails.root, 'tmp', 'pids')
       end
 
       # 
