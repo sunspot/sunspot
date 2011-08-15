@@ -14,7 +14,7 @@ objects such as the filesystem.
 === Where to learn all about Sunspot: The Wiki!
 
 New to Sunspot and using Rails? Check out {Adding Sunspot search to Rails in 5
-minutes or less}[http://wiki.github.com/outoftime/sunspot/adding-sunspot-search-to-rails-in-5-minutes-or-less].
+minutes or less}[https://github.com/outoftime/sunspot/wiki/Adding-Sunspot-search-to-Rails-in-5-minutes-or-less].
 
 This README is intended as a quick primer on what Sunspot is capable of; for
 detailed treatment of Sunspot's full feature range, check out the wiki:
