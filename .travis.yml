@@ -12,8 +12,5 @@ notifications:
   # recipients:
   #   - nick@onemorecloud.com
 
-before_script:
-  - ci/solr.sh
-
 script:
   - ci/travis.sh
