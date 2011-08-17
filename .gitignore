@@ -1,4 +1,5 @@
 *.gem
 Gemfile.lock
 vendor/bundle
-*/vendor/bundle
+sunspot/vendor/bundle
+**/*/vendor/bundle
