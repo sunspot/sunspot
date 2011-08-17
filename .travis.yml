@@ -8,6 +8,11 @@ rvm:
   - ree
   - jruby
 
+env:
+  - GEM=sunspot
+  - GEM=sunspot_rails RAILS=rails2
+  - GEM=sunspot_rails RAILS=rails3
+
 notifications:
   recipients:
     - nick@onemorecloud.com
