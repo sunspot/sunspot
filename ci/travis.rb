@@ -1,11 +1,13 @@
 #!/usr/bin/env ruby
 
+success = false
+
 case ENV['GEM']
 when 'sunspot'
   
   Dir.chdir('sunspot') do
     system "bundle install"
-    system "bundle exec rake spec"
+    success = system "bundle exec rake spec"
   end
 
 when 'sunspot_rails'
@@ -15,7 +17,9 @@ when 'sunspot_rails'
   end
 
   Dir.chdir("sunspot_rails") do
-    system "rake spec:#{ENV['RAILS']}"
+    success = system "rake spec:#{ENV['RAILS']}"
   end
   
 end
+
+exit(success ? 0 : 1)
