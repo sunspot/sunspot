@@ -25,17 +25,6 @@ describe Sunspot::SessionProxy::ThreadLocalSessionProxy do
     @proxy.session.should_not eql(proxy2.session)
   end
 
-  it 'should garbage collect session instance when proxy dereferenced' do
-    ref = WeakRef.new(@proxy.session)
-    @proxy = nil
-    GC.start
-    # need to do this a second time since the reference to the session is
-    # destroyed in the finalizer during the first GC run, and thus isn't picked
-    # up by that run.
-    GC.start 
-    lambda { ref.inspect }.should raise_error(WeakRef::RefError)
-  end
-
   (Sunspot::Session.public_instance_methods(false) - ['config', :config]).each do |method|
     it "should delegate #{method.inspect} to its session" do
       args = Array.new(Sunspot::Session.instance_method(method).arity.abs) do
