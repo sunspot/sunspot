@@ -11,7 +11,7 @@ case $GEM in
   "sunspot_rails")
     cd sunspot
     bundle install
-    bundle exec sunspot-solr start -p 8981
+    bundle exec sunspot-solr start -p 8980
     sleep 5
     cd ../sunspot_rails/spec/$RAILS
     bundle install
