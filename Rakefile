@@ -20,3 +20,13 @@ task :release do
     FileUtils.rm("sunspot_rails-#{Sunspot::VERSION}.gem")
   end
 end
+
+
+desc 'Run all the tests'
+task :default do
+  exit system([
+    "GEM=sunspot ci/travis.sh",
+    "GEM=sunspot_rails RAILS=rails2 ci/travis.sh",
+    "GEM=sunspot_rails RAILS=rails3 ci/travis.sh"
+  ].join(" && ")) ? 0 : 1
+end
