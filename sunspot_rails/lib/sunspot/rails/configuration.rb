@@ -239,6 +239,10 @@ module Sunspot #:nodoc:
         @max_memory ||= user_configuration_from_key('solr', 'max_memory')
       end
       
+      def multicore
+        @multicore ||= !!user_configuration_from_key('solr', 'multicore')
+      end
+      
       private
       
       #

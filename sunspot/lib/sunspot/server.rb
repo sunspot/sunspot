@@ -16,7 +16,7 @@ module Sunspot
 
     LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
-    attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
+    attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file, :multicore
     attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :solr_jar
 
     #
@@ -66,7 +66,7 @@ module Sunspot
       command << "-Xms#{min_memory}" if min_memory
       command << "-Xmx#{max_memory}" if max_memory
       command << "-Djetty.port=#{port}" if port
-      command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
+      command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir && !multicore
       command << "-Dsolr.solr.home=#{solr_home}" if solr_home
       command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
       command << '-jar' << File.basename(solr_jar)
@@ -131,7 +131,11 @@ module Sunspot
     def solr_jar
       @solr_jar || SOLR_START_JAR
     end
-
+    
+    def multicore
+      @multicore || false
+    end
+    
     private
 
     def logging_config_path

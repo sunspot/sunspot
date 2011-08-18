@@ -3,14 +3,16 @@ $:.push File.expand_path("../lib", __FILE__)
 require "sunspot/version"
 
 Gem::Specification.new do |s|
-  s.name        = "sunspot"
-  s.version     = Sunspot::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Marcel de Graaf', 'Brandon Keepers', 'Peter Berkenbosch',
                   'Brian Atkinson', 'Tom Coleman', 'Matt Mitchell', 'Nathan Beyer', 'Kieran Topping', 'Nicolas Braem', 'Jeremy Ashkenas', 
                   'Dylan Vaughn', 'Brian Durand', 'Sam Granieri', 'Nick Zadrozny', 'Jason Ronallo']
-  s.email       = ["mat@patch.com"]
-  s.homepage    = "http://outoftime.github.com/sunspot"
+
+  s.name = 'erichummel-sunspot'
+  s.version = Sunspot::VERSION
+  s.executables = ['sunspot-solr', 'sunspot-installer']
+  s.email = 'mat@patch.com'
+  s.homepage = 'http://outoftime.github.com/sunspot'
   s.summary = 'Library for expressive, powerful interaction with the Solr search engine'
   s.description = <<-TEXT
     Sunspot is a library providing a powerful, all-ruby API for the Solr search engine. Sunspot manages the configuration of persistent
