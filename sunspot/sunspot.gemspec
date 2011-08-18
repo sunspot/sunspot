@@ -6,7 +6,7 @@ $:.unshift(lib) unless $:.include?(lib)
 require 'sunspot/version'
 
 Gem::Specification.new do |s|
-  s.name = 'sunspot'
+  s.name = 'erichummel-sunspot'
   s.version = Sunspot::VERSION
   s.executables = ['sunspot-solr', 'sunspot-installer']
   s.email = 'mat@patch.com'

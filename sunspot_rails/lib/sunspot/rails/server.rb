@@ -112,6 +112,13 @@ module Sunspot
         configuration.max_memory
       end
 
+      #
+      # A boolean value indicating whether or not solr is being run with multiple cores
+      #
+      def multicore
+        !!configuration.multicore
+      end
+      
       private
 
       #
@@ -147,7 +154,7 @@ module Sunspot
       # Boolean:: success
       #
       def install_solr_home
-        unless File.exists?(solr_home)
+        unless File.exists?(File.join(File.dirname(solr_jar), solr_home))
           Sunspot::Installer.execute(
             solr_home,
             :force => true,
