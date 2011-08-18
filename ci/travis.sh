@@ -9,7 +9,7 @@ case $GEM in
     cd sunspot
     bundle install --quiet --path vendor/bundle
     bundle exec sunspot-solr start -p 8983
-    sleep 5
+    sleep 10
     /bin/echo "done."
     
     # Invoke the sunspot specs
@@ -26,7 +26,7 @@ case $GEM in
     cd sunspot
     bundle install --quiet --path vendor/bundle
     bundle exec sunspot-solr start -p 8980
-    sleep 5
+    sleep 10
     /bin/echo "done."
     
     # Install gems for test Rails application
@@ -35,7 +35,7 @@ case $GEM in
     
     # Invoke the specs, pointing to the test Rails application
     cd ../..
-    if [ "$RAILS" == "rails2" ]; then spec_cmd=spec; else spec_cmd=rspec; fi
+    if [ "$RAILS" = "rails2" ]; then spec_cmd=spec; else spec_cmd=rspec; fi
     BUNDLE_GEMFILE=spec/$RAILS/Gemfile RAILS_ROOT=spec/$RAILS \
       bundle exec $spec_cmd spec/*_spec.rb --color
 
