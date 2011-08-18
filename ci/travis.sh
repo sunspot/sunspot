@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 case $GEM in
   "sunspot")
   
@@ -33,7 +35,7 @@ case $GEM in
     
     # Invoke the specs, pointing to the test Rails application
     cd ../..
-    if [ $RAILS == "rails2" ]; then spec_cmd=spec; else spec_cmd=rspec; fi
+    if [ "$RAILS" == "rails2" ]; then spec_cmd=spec; else spec_cmd=rspec; fi
     BUNDLE_GEMFILE=spec/$RAILS/Gemfile RAILS_ROOT=spec/$RAILS \
       bundle exec $spec_cmd spec/*_spec.rb --color
 
