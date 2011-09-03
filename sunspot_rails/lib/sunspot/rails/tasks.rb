@@ -1,3 +1,5 @@
+require 'progress_bar'
+
 namespace :sunspot do
   namespace :solr do
     desc 'Start the Solr instance'
@@ -54,6 +56,8 @@ namespace :sunspot do
     else
       sunspot_models = args[:models].split('+').map{|m| m.constantize}
     end
+    count=sunspot_models.map { | m | m.count }.sum
+    reindex_options[:progress_bar]= ProgressBar.new(count)
     sunspot_models.each do |model|
       model.solr_reindex reindex_options
     end
