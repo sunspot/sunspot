@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" do
   before(:each) do
