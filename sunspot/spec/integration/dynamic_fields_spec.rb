@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'spec_helper')
+
 describe 'dynamic fields' do
   before :each do
     Sunspot.remove_all
