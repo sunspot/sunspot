@@ -1,3 +1,6 @@
+== 1.2.1 2010-12-28
+* Decreased default reindexing batch size from 500 to 50
+
 == 1.2.0 2010-12-28
 * Compatible with both Rails 2 and Rails 3
 * Configure Sunspot with a SOLR_URL or WEBSOLR_URL environment variable, also
