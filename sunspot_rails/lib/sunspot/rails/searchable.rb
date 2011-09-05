@@ -234,6 +234,7 @@ module Sunspot #:nodoc:
             counter = 0
             find_in_batches(:include => options[:include], :batch_size => options[:batch_size], :start => options[:first_id]) do |records|
               solr_benchmark options[:batch_size], counter do
+                records = records.select{ |r| r.indexable? }
                 Sunspot.index(records)
               end
               Sunspot.commit if options[:batch_commit]
@@ -242,7 +243,8 @@ module Sunspot #:nodoc:
             end
             Sunspot.commit unless options[:batch_commit]
           else
-            Sunspot.index!(all(:include => options[:include]))
+            records = all(:include => options[:include]).select{ |r| r.indexable? }
+            Sunspot.index!(records)
           end
         end
 
@@ -347,14 +349,14 @@ module Sunspot #:nodoc:
         # manually.
         #
         def solr_index
-          Sunspot.index(self)
+          Sunspot.index(self) if indexable?
         end
 
         # 
         # Index the model in Solr and immediately commit. See #index
         #
         def solr_index!
-          Sunspot.index!(self)
+          Sunspot.index!(self) if indexable?
         end
         
         # 
@@ -365,7 +367,7 @@ module Sunspot #:nodoc:
         # manually.
         #
         def solr_remove_from_index
-          Sunspot.remove(self)
+          Sunspot.remove(self) if indexable?
         end
 
         # 
@@ -373,7 +375,7 @@ module Sunspot #:nodoc:
         # #remove_from_index
         #
         def solr_remove_from_index!
-          Sunspot.remove!(self)
+          Sunspot.remove!(self) if indexable?
         end
 
         def solr_more_like_this(*args, &block)
@@ -387,6 +389,11 @@ module Sunspot #:nodoc:
           self.class.solr_execute_search_ids do
             solr_more_like_this(&block)
           end
+        end
+
+        def indexable?
+          return true unless sunspot_options.has_key?(:if)
+          send(sunspot_options[:if])
         end
 
         private
