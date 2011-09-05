@@ -354,6 +354,16 @@ module Sunspot
       end
     end
 
+    class LatlonType < AbstractType
+      def indexed_name(name)
+        "#{name}_ll"
+      end
+
+      def to_indexed(value)
+        "#{value.lat.to_f},#{value.lon.to_f}"
+      end
+    end
+
     class ClassType < AbstractType
       def indexed_name(name) #:nodoc:
         'class_name'

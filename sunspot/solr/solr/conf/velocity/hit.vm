@@ -1,0 +1,5 @@
+#set($docId = $doc.getFieldValue('id'))
+
+<div class="result-document">
+  #parse("doc.vm")
+</div>

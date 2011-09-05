@@ -7,6 +7,5 @@ pkg
 
 .yardoc
 sunspot.gemspec
-README.rdoc
 .bundle
 Gemfile.lock
