@@ -55,18 +55,23 @@ module Sunspot
       def new_search(*types)
         Search.new
       end
+      
+      def new_more_like_this(*args)
+        Search.new
+      end
 
       class Search
+        
         def build
           self
         end
 
         def results
-          []
+          PaginatedCollection.new
         end
 
         def hits(options = {})
-          []
+          PaginatedCollection.new
         end
 
         def total
@@ -83,6 +88,55 @@ module Sunspot
           self
         end
       end
+      
+      
+      class PaginatedCollection < Array
+        
+        def total_count
+          0
+        end
+        alias :total_entries :total_count
+        
+        def current_page
+          1
+        end
+        
+        def per_page
+          30
+        end
+        alias :limit_value :per_page
+        
+        def total_pages
+          1
+        end
+        alias :num_pages :total_pages
+
+        def first_page?
+          true
+        end
+
+        def last_page?
+          true
+        end
+
+        def previous_page
+          nil
+        end
+
+        def next_page
+          nil
+        end
+
+        def out_of_bounds?
+          false
+        end
+
+        def offset
+          0
+        end
+        
+      end
+      
     end
   end
 end
