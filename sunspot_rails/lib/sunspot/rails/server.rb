@@ -59,7 +59,7 @@ module Sunspot
       # String:: data_path
       #
       def solr_data_dir
-        File.join(solr_home, 'data', ::Rails.env)
+        configuration.data_path
       end
 
       # 
