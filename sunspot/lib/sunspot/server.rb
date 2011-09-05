@@ -142,11 +142,13 @@ module Sunspot
     private
 
     def ensure_java_installed
-      if !@java_installed
-        raise(JavaMissing, "You need a java runtime environment to run the solr server") unless Sunspot::Java.installed?
-        @java_installed = true
+      unless defined?(@java_installed)
+        @java_installed = Sunspot::Java.installed?
+        unless @java_installed
+          raise JavaMissing.new("You need a Java Runtime Environment to run the Solr server")
+        end
       end
-
+      @java_installed
     end
 
     def logging_config_path
