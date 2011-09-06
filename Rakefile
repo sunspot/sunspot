@@ -1,4 +1,4 @@
-desc 'Release Sunspot and Sunspot::Rails to Gemcutter'
+desc 'Release Sunspot, Sunspot::Rails and Sunspot::Solr to Gemcutter'
 task :release do
   FileUtils.cp('README.rdoc', 'sunspot/')
 
@@ -18,6 +18,12 @@ task :release do
     system "gem build sunspot_rails.gemspec"
     system "gem push sunspot_rails-#{Sunspot::VERSION}.gem"
     FileUtils.rm("sunspot_rails-#{Sunspot::VERSION}.gem")
+  end
+
+  FileUtils.cd 'sunspot_solr' do
+    system "gem build sunspot_solr.gemspec"
+    system "gem push sunspot_solr-#{Sunspot::VERSION}.gem"
+    FileUtils.rm("sunspot_solr-#{Sunspot::VERSION}.gem")
   end
 end
 
