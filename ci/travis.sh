@@ -4,10 +4,11 @@ set -e
 
 case $GEM in
   "sunspot")
-  
-    /bin/echo -n "Starting Solr on port 8983 for Sunspot specs... "
+    
     cd sunspot
+    /bin/echo -n "Starting Solr on port 8983 for Sunspot specs... "
     bundle install --quiet --path vendor/bundle
+    if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
     bundle exec sunspot-solr start -p 8983
     sleep 10
     /bin/echo "done."
@@ -22,9 +23,10 @@ case $GEM in
     
   "sunspot_rails")
   
-    /bin/echo -n "Starting Solr on port 8980 for sunspot_rails... "
     cd sunspot
+    /bin/echo -n "Starting Solr on port 8980 for Sunspot specs... "
     bundle install --quiet --path vendor/bundle
+    if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
     bundle exec sunspot-solr start -p 8980
     sleep 10
     /bin/echo "done."
