@@ -1,20 +1,21 @@
 module Sunspot
   module Rails
     module SolrLogging
+
       class <<self
         def included(base)
-          base.module_eval { alias_method_chain(:request, :rails_logging) }
+          base.alias_method_chain :execute, :rails_logging
         end
       end
 
-      def request_with_rails_logging(path, params={}, *extra)
+      COMMIT = %r{<commit/>}
 
-        # Set up logging text.
-        body = (params.nil? || params.empty?) ? extra.first : params.inspect
-        action = path[1..-1].capitalize
-        if body == "<commit/>"
-          action = 'Commit'
-          body = ''
+      def execute_with_rails_logging(client, request_context)
+        body = (request_context[:data]||"").dup
+        action = request_context[:path].capitalize
+        if body =~ COMMIT
+          action = "Commit"
+          body = ""
         end
         body = body[0, 800] + '...' if body.length > 800
 
@@ -22,7 +23,7 @@ module Sunspot
         response = nil
         begin
           ms = Benchmark.ms do
-            response = request_without_rails_logging(path, params, *extra)
+            response = execute_without_rails_logging(client, request_context)
           end
           log_name = 'Solr %s (%.1fms)' % [action, ms]
           ::Rails.logger.debug(format_log_entry(log_name, body))
@@ -39,10 +40,10 @@ module Sunspot
 
       def format_log_entry(message, dump = nil)
         @colorize_logging ||= begin
-            ::Rails.application.config.colorize_logging # Rails 3
-          rescue NoMethodError
-            ActiveRecord::Base.colorize_logging # Rails 2
-          end
+          ::Rails.application.config.colorize_logging # Rails 3
+        rescue NoMethodError
+          ActiveRecord::Base.colorize_logging # Rails 2
+        end
         if @colorize_logging
           message_color, dump_color = "4;32;1", "0;1"
           log_entry = "  \e[#{message_color}m#{message}\e[0m   "
@@ -56,8 +57,6 @@ module Sunspot
   end
 end
 
-begin
-  RSolr::Client.module_eval { include(Sunspot::Rails::SolrLogging) }
-rescue NameError # RSolr 0.9.6
-  RSolr::Connection::Base.module_eval { include(Sunspot::Rails::SolrLogging) }
+RSolr::Connection.module_eval do
+  include Sunspot::Rails::SolrLogging
 end
