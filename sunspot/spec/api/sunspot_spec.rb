@@ -1,6 +1,17 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot do
+
+  describe "setup" do
+    it "should register the class in Sunspot.searchable" do
+      Sunspot.setup(Blog) do
+        text :name
+      end
+      Sunspot.searchable.should_not be_empty
+      Sunspot.searchable.should include(Blog)
+    end
+  end
+
   describe "reset!" do
     it "should reset current session" do
       old_session = Sunspot.send(:session)
