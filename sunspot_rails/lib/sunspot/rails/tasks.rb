@@ -63,9 +63,15 @@ namespace :sunspot do
     end
     
     # Set up progress_bar to, ah, report progress
-    require 'progress_bar'
-    total_documents = sunspot_models.map { | m | m.count }.sum
-    reindex_options[:progress_bar] = ProgressBar.new(total_documents)
+    begin
+      require 'progress_bar'
+      total_documents = sunspot_models.map { | m | m.count }.sum
+      reindex_options[:progress_bar] = ProgressBar.new(total_documents)
+    rescue LoadError => e
+      $stderr.puts "Skipping progress bar - #{e.message}"
+    rescue Exception => e
+      $stderr.puts "Skipping progress bar - #{e.message}"
+    end
     
     # Finally, invoke the class-level solr_reindex on each model
     sunspot_models.each do |model|
