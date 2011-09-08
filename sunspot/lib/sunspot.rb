@@ -328,7 +328,8 @@ module Sunspot
     #   end
     #
     # See Sunspot::DSL::Search, Sunspot::DSL::Scope, Sunspot::DSL::FieldQuery
-    # and Sunspot::DSL::Query for the full API presented inside the block.
+    # and Sunspot::DSL::StandardQuery for the full API presented inside the
+    # block.
     #
     def search(*types, &block)
       session.search(*types, &block)
