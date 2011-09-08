@@ -49,10 +49,17 @@ namespace :sunspot do
       reindex_options[:batch_size] = args[:batch_size].to_i if args[:batch_size].to_i > 0
     end
     unless args[:models]
-      models_path = Rails.root.join('app', 'models')
-      all_files = Dir.glob(models_path.join('**', '*.rb'))
-      all_models = all_files.map { |path| path.sub(models_path.to_s, '')[0..-4].camelize.sub(/^::/, '').constantize rescue nil }.compact
-      sunspot_models = all_models.select { |m| m < ActiveRecord::Base and m.searchable? }
+      if defined?(Rails) && Rails::VERSION::MAJOR == 3
+        Rails::Application.eager_load!
+        Rails::Application.railties.engines.map { |e| e.eager_load! }
+        all_models = ActiveRecord::Base.subclasses
+      else
+        models_path = Rails.root.join('app', 'models')
+        all_files = Dir.glob(models_path.join('**', '*.rb'))
+        all_models = all_files.map { |path| path.sub(models_path.to_s, '')[0..-4].camelize.sub(/^::/, '').constantize rescue nil }.compact
+        all_models = all_models.select { |m| m < ActiveRecord::Base }
+      end
+      sunspot_models = all_models.select { |m| m.searchable? }
     else
       sunspot_models = args[:models].split('+').map{|m| m.constantize}
     end
