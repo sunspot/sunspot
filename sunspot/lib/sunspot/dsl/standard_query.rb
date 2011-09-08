@@ -35,6 +35,8 @@ module Sunspot
       # :highlight<Boolean,Array>::
       #   If true, perform keyword highlighting on all searched fields. If an
       #   array of field names, perform highlighting on the specified fields.
+      #   Note that for highlighting to work, the desired fields have to be set
+      #   up with :stored => true.
       #   This can also be called from within the fulltext block.
       # :minimum_match<Integer>::
       #   The minimum number of search terms that a result must match. By
