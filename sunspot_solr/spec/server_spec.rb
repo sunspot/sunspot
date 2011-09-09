@@ -53,7 +53,7 @@ describe Sunspot::Solr::Server do
   end
 
   it 'raises an error if java is missing' do
-    Sunspot::Java.stub(:installed? => false)
+    Sunspot::Solr::Java.stub(:installed? => false)
     expect {
      Sunspot::Solr::Server.new
     }.to raise_error(Sunspot::Solr::Server::JavaMissing)
