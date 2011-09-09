@@ -1,7 +1,7 @@
 require 'escape'
 require 'set'
 require 'tempfile'
-require 'sunspot/java'
+require 'sunspot/solr/java'
 
 module Sunspot
   module Solr
@@ -144,7 +144,7 @@ module Sunspot
 
       def ensure_java_installed
         unless defined?(@java_installed)
-          @java_installed = Sunspot::Java.installed?
+          @java_installed = Sunspot::Solr::Java.installed?
           unless @java_installed
             raise JavaMissing.new("You need a Java Runtime Environment to run the Solr server")
           end
