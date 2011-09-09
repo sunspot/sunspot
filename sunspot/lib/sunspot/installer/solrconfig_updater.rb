@@ -7,7 +7,7 @@ module Sunspot
     class SolrconfigUpdater
       include TaskHelper
 
-      CONFIG_FILES = %w(solrconfig.xml elevate.xml spellings.txt stopwords.txt synonyms.txt) 
+      CONFIG_FILES = %w(solrconfig.xml elevate.xml spellings.txt stopwords.txt synonyms.txt)
 
       class <<self
         def execute(solrconfig_path, options = {})
@@ -17,28 +17,26 @@ module Sunspot
 
       def initialize(solrconfig_path, options)
         @force = !!options[:force]
-        unless @force || File.exist?(solrconfig_path)
-          abort("#{File.expand_path(@solrconfig_path)} doesn't exist." +
-                " Are you sure you're pointing to a SOLR_HOME?")
-        end
         @solrconfig_path = solrconfig_path
         @verbose = !!options[:verbose]
       end
 
       def execute
-        if @force
-          config_dir = File.dirname(@solrconfig_path)
-          FileUtils.mkdir_p(config_dir)
-          CONFIG_FILES.each do |file|
+        config_dir = File.dirname(@solrconfig_path)
+        FileUtils.mkdir_p(config_dir)
+        solrconfig_existed = File.exists?(@solrconfig_path)
+        CONFIG_FILES.each do |file|
+          if @force || !File.exists?(File.join(config_dir, file))
             source_path =
-              File.join(File.dirname(__FILE__), '..', '..', '..', 'solr', 'solr', 'conf', file)
+              File.join(File.dirname(__FILE__), '..', '..', '..', 'solr_config', file)
             FileUtils.cp(source_path, config_dir)
             say("Copied default #{file} to #{config_dir}")
           end
-        else
+        end
+        if solrconfig_existed && !@force
           @document = File.open(@solrconfig_path) do |f|
             Nokogiri::XML(
-              f, nil, nil, 
+              f, nil, nil,
               Nokogiri::XML::ParseOptions::DEFAULT_XML |
               Nokogiri::XML::ParseOptions::NOBLANKS
             )

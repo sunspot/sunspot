@@ -1,5 +1,7 @@
+load File.expand_path('../sunspot/tasks/release.rake', __FILE__)
+
 desc 'Release Sunspot, Sunspot::Rails and Sunspot::Solr to Gemcutter'
-task :release do
+task :release => :bundle_solr_config  do
   FileUtils.cp('README.rdoc', 'sunspot/')
 
   require File.expand_path('../sunspot/lib/sunspot/version', __FILE__)
