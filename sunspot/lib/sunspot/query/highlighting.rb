@@ -9,7 +9,7 @@ module Sunspot
         @options = options
       end
 
-      # 
+      #
       # Return Solr highlighting params
       #
       def to_params
@@ -36,6 +36,13 @@ module Sunspot
             params.merge!(make_params('requireFieldMatch', 'true'))
           end
         end
+        if formatter = @options[:formatter]
+          params.merge!(make_params('formatter', formatter))
+        end
+        if fragmenter = @options[:fragmenter]
+          params.merge!(make_params('fragmenter', fragmenter))
+        end
+
         params
       end
 
