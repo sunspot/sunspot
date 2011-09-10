@@ -172,7 +172,6 @@ without actually loading the models out of the database. For that, you can
 call +search_ids+, using the same block format as #search. This will return an
 array of IDs.
 
-
 === Searching for multiple types
 
 Sunspot is entirely agnostic about whether searches are for one or more types;
@@ -229,7 +228,6 @@ remove those documents from the index, use +clean_index_orphans+. Note that
 neither of these operations should be needed if Sunspot and Sunspot::Rails are
 used as intended.
 
-
 == Testing Solr integration using RSpec
 
 To disable the sunspot-solr integration for your active record models, require
@@ -262,8 +260,7 @@ Posts about Sunspot on my blog are available at http://outofti.me/tagged/sunspot
 
 == Bugs
 
-Please submit bug reports to
-http://outoftime.lighthouseapp.com/projects/20339-sunspot
+Please submit bug reports to https://github.com/sunspot/sunspot/issues
 
 == Contributors
 
