@@ -2,8 +2,8 @@ module Sunspot
   module DSL
     # 
     # This top-level DSL class is the context in which the block passed to
-    # Sunspot.query. See Sunspot::DSL::Query, Sunspot::DSL::FieldQuery, and
-    # Sunspot::DSL::Scope for the full API presented.
+    # Sunspot.query. See Sunspot::DSL::StandardQuery, Sunspot::DSL::FieldQuery,
+    # and Sunspot::DSL::Scope for the full API presented.
     #
     class Search < StandardQuery
       def initialize(search, setup) #:nodoc:
