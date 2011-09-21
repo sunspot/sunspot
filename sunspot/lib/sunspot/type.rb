@@ -360,7 +360,7 @@ module Sunspot
       end
 
       def to_indexed(value)
-        "#{value.lat.to_f},#{value.lon.to_f}"
+        "#{value.lat.to_f},#{value.lng.to_f}"
       end
     end
 
