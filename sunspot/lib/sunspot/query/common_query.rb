@@ -35,6 +35,11 @@ module Sunspot
         function
       end
 
+      def add_spatial(spatial)
+        @components << spatial
+        spatial
+      end
+
       def paginate(page, per_page)
         if @pagination
           @pagination.page = page
