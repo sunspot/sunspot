@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'escape', '0.0.4'
   s.add_dependency 'pr_geohash', '~> 1.0'
 
-  s.add_development_dependency 'rspec', '~> 1.1'
+  s.add_development_dependency 'rspec', '~>2.6.0'
   s.add_development_dependency 'hanna'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<

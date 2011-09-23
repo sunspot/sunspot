@@ -65,16 +65,4 @@ module SearchHelper
   def facet_counts(result, field_name)
     result.facet(field_name).rows.map { |row| row.count }
   end
-
-  def config
-    @config ||= Sunspot::Configuration.build
-  end
-
-  def connection
-    @connection ||= Mock::Connection.new
-  end
-
-  def session
-    @session ||= Sunspot::Session.new(config, connection)
-  end
 end
