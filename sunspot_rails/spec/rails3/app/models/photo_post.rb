@@ -1,2 +1,0 @@
-class PhotoPost < PostWithAuto
-end

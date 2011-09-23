@@ -7,8 +7,9 @@ rvm:
 
 env:
   - GEM=sunspot
-  - GEM=sunspot_rails RAILS=rails2
-  - GEM=sunspot_rails RAILS=rails3
+  - GEM=sunspot_rails RAILS=2.3.14
+  - GEM=sunspot_rails RAILS=3.0.10
+  - GEM=sunspot_rails RAILS=3.1.0
 
 notifications:
   # irc: "irc.freenode.org#sunspot-ruby"
