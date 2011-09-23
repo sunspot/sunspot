@@ -82,9 +82,9 @@ namespace :sunspot do
       total_documents = sunspot_models.map { | m | m.count }.sum
       reindex_options[:progress_bar] = ProgressBar.new(total_documents)
     rescue LoadError => e
-      $stderr.puts "Skipping progress bar - #{e.message}"
+      $stderr.puts "Skipping progress bar: for progress reporting, add gem 'progress_bar' to your Gemfile"
     rescue Exception => e
-      $stderr.puts "Skipping progress bar - #{e.message}"
+      $stderr.puts "Error using progress bar: #{e.message}"
     end
     
     # Finally, invoke the class-level solr_reindex on each model
