@@ -1,1 +1,0 @@
-application_controller.rb
