@@ -13,14 +13,15 @@ end
 require File.join(File.dirname(__FILE__), 'ext')
 
 RSpec.configure do |config|
-  config.before(:each, :type => :integration) do
-    Sunspot.config.solr.url = ENV['SOLR_URL'] || 'http://localhost:8983/solr'
-  end
-
   # Mock session available to all spec/api tests
   config.include MockSessionHelper,
                  :type => :api,
                  :example_group => {:file_path => /spec[\\\/]api/}
+
+  # Real Solr instance is available to integration tests
+  config.include IntegrationHelper,
+                 :type => :integration,
+                 :example_group => {:file_path => /spec[\\\/]integration/}
 
   # Nested under spec/api
   [:indexer, :query, :search].each do |spec_type|

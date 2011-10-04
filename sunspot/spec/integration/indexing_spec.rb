@@ -1,4 +1,4 @@
-require File.expand_path('spec_helper', File.dirname(__FILE__))
+require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'indexing' do
   it 'should index non-multivalued field with newlines' do

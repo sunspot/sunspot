@@ -1,4 +1,4 @@
-require File.expand_path('spec_helper', File.dirname(__FILE__))
+require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'more_like_this' do
   before :all do
