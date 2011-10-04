@@ -116,20 +116,6 @@ operations directly on your model:
   post.index
   post.remove_from_index
 
-It is possible to index conditionally on the instance level by
-using the <code>:if</code> option. If the provided method evaluates to
-<code>false</code> then this specific instance will not be indexed.
-
-  class Post < ActiveRecord::Base
-    searchable :if => :title_is_present do
-      # setup
-    end
-
-    def title_is_present
-      title.present?
-    end
-  end
-
 === Committing
 
 When data is changed in Solr, it is initially stored in memory and not made
