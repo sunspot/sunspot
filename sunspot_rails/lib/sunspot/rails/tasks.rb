@@ -6,8 +6,8 @@ namespace :sunspot do
         abort('This command does not work on Windows. Please use rake sunspot:solr:run to run Solr in the foreground.')
       end
 
-      if defined?(Sunspot::Solr::Server)
-        Sunspot::Solr::Server.new.start
+      if defined?(Sunspot::Rails::Server)
+        Sunspot::Rails::Server.new.start
       else
         abort('sunspot_solr gem required for this command. Add gem "sunspot_solr" to Gemfile')
       end
@@ -15,8 +15,8 @@ namespace :sunspot do
 
     desc 'Run the Solr instance in the foreground'
     task :run => :environment do
-      if defined?(Sunspot::Solr::Server)
-        Sunspot::Solr::Server.new.run
+      if defined?(Sunspot::Rails::Server)
+        Sunspot::Rails::Server.new.run
       else
         abort('sunspot_solr gem required for this command. Add gem "sunspot_solr" to Gemfile')
       end
@@ -28,8 +28,8 @@ namespace :sunspot do
         abort('This command does not work on Windows.')
       end
 
-      if defined?(Sunspot::Solr::Server)
-        Sunspot::Solr::Server.new.stop
+      if defined?(Sunspot::Rails::Server)
+        Sunspot::Rails::Server.new.stop
       else
         abort('sunspot_solr gem required for this command. Add gem "sunspot_solr" to Gemfile')
       end
