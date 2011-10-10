@@ -34,9 +34,9 @@ namespace :spec do
 
       puts "Generating Rails #{version} application..."
       if version.start_with?("2")
-        `#{rails_cmd} \"#{app_path}\"`
+        `#{rails_cmd} \"#{app_path}\" --force`
       elsif version.start_with?("3")
-        `#{rails_cmd} new \"#{app_path}\" --skip-git --skip-javascript --skip-gemfile --skip-sprockets`
+        `#{rails_cmd} new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets`
       end
     end
   end
