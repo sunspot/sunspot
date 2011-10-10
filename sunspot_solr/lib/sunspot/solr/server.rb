@@ -2,6 +2,7 @@ require 'escape'
 require 'set'
 require 'tempfile'
 require 'sunspot/solr/java'
+require 'sunspot/solr/installer'
 
 module Sunspot
   module Solr
@@ -28,6 +29,22 @@ module Sunspot
       end
 
       #
+      # Bootstrap a new solr_home by creating all required
+      # directories. 
+      #
+      # ==== Returns
+      #
+      # Boolean:: success
+      #
+      def bootstrap
+        unless @bootstrapped
+          install_solr_home
+          create_solr_directories
+          @bootstrapped = true
+        end
+      end
+
+      #
       # Start the sunspot-solr server. Bootstrap solr_home first,
       # if neccessary.
       #
@@ -36,6 +53,8 @@ module Sunspot
       # Boolean:: success
       #
       def start
+        bootstrap
+
         if File.exist?(pid_path)
           existing_pid = IO.read(pid_path).to_i
           begin
@@ -70,6 +89,8 @@ module Sunspot
       # Boolean:: success
       #
       def run
+        bootstrap
+
         command = ['java']
         command << "-Xms#{min_memory}" if min_memory
         command << "-Xmx#{max_memory}" if max_memory
@@ -138,6 +159,37 @@ module Sunspot
 
       def solr_jar
         @solr_jar || SOLR_START_JAR
+      end
+
+      #
+      # Copy default solr configuration files from sunspot
+      # gem to the new solr_home/config directory
+      #
+      # ==== Returns
+      #
+      # Boolean:: success
+      #
+      def install_solr_home
+        unless File.exists?(solr_home)
+          Sunspot::Solr::Installer.execute(
+            solr_home,
+            :force => true,
+            :verbose => true
+          )
+        end
+      end
+
+      # 
+      # Create new solr_home, config, log and pid directories
+      #
+      # ==== Returns
+      #
+      # Boolean:: success
+      #
+      def create_solr_directories
+        [solr_data_dir, pid_dir].each do |path|
+          FileUtils.mkdir_p(path) unless File.exists?(path)
+        end
       end
 
       private
