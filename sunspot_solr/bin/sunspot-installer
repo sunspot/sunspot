@@ -3,7 +3,7 @@
 require 'optparse'
 require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'solr', 'installer')
 
-home = ARGV.select { |arg| arg !~ /^-/ }.last || Dir.pwd
+home = ARGV.select { |arg| arg !~ /^-/ }.last || File.join(Dir.pwd, "solr")
 options = {}
 
 OptionParser.new do |opts|
@@ -17,3 +17,4 @@ OptionParser.new do |opts|
 end.parse!
 
 Sunspot::Solr::Installer.execute(home, options)
+puts "Installed to #{home}"
