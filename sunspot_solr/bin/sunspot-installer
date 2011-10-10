@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
 require 'optparse'
-require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'installer')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'solr', 'installer')
 
-home = ARGV.select { |arg| arg !~ /^-/ }.last || Dir.pwd
+home = ARGV.select { |arg| arg !~ /^-/ }.last || File.join(Dir.pwd, "solr")
 options = {}
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: sunspot-install [options] [solr-home]"
+  opts.banner = "Usage: sunspot-installer [options] [solr-home]"
   opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
     options[:verbose] = v
   end
@@ -16,4 +16,5 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-Sunspot::Installer.execute(home, options)
+Sunspot::Solr::Installer.execute(home, options)
+puts "Installed to #{home}"
