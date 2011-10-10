@@ -54,12 +54,22 @@ namespace :sunspot do
       model.solr_reindex(reindex_options)
     end
   end
-  
+
+
   unless defined?(Sunspot::Solr)
     namespace :solr do
   		task :moved_to_sunspot_solr do
-  	    abort "This task has been moved to the sunspot_solr gem. Please include that gem in your Gemfile."
+  	    abort %(
+  Note: This task has been moved to the sunspot_solr gem. To install, start and
+  stop a local Solr instance, please add sunspot_solr to your Gemfile:
+
+  group :development do
+    gem 'sunspot_solr'
+  end
+
+)
   		end
+  		
       desc 'Start the Solr instance'
       task :start => :moved_to_sunspot_solr
       desc 'Run the Solr instance in the foreground'
