@@ -5,7 +5,7 @@ require 'fileutils'
 
 module Sunspot
   class Installer
-    # 
+    #
     # This class modifies an existing Solr schema.xml file to work with Sunspot.
     # It makes the minimum necessary changes to the schema, adding fields and
     # types only when they don't already exist. It also comments all fields and
@@ -23,21 +23,21 @@ module Sunspot
         def execute(schema_path, options = {})
           new(schema_path, options).execute
         end
-        
+
         private :new
       end
 
       def initialize(schema_path, options = {})
+        @force = !!options[:force]
         @schema_path = schema_path
         @config = File.open(CONFIG_PATH) { |f| YAML.load(f) }
         @verbose = !!options[:verbose]
-        @force = !!options[:force]
       end
 
       def execute
-        if @force
-          FileUtils.mkdir_p(File.dirname(@schema_path))
-          source_path = File.join(File.dirname(__FILE__), '..', '..', '..', 'solr', 'solr', 'conf', 'schema.xml')
+        FileUtils.mkdir_p(File.dirname(@schema_path))
+        if @force || !File.exists?(@schema_path)
+          source_path = File.join(File.dirname(__FILE__), '..', '..', '..', 'solr_config', 'schema.xml')
           FileUtils.cp(source_path, @schema_path)
           say("Copied default schema.xml to #{@schema_path}")
         else

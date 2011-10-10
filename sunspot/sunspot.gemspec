@@ -2,6 +2,9 @@
 $:.push File.expand_path("../lib", __FILE__)
 require "sunspot/version"
 
+# To grab config files constant
+require "sunspot/installer"
+
 Gem::Specification.new do |s|
   s.name        = "sunspot"
   s.version     = Sunspot::VERSION
@@ -20,7 +23,9 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "sunspot"
 
-  s.files         = `git ls-files`.split("\n")
+  # These are not in the repo but need to be pulled in when building the gem:
+  config_files = Sunspot::Installer::SolrconfigUpdater::CONFIG_FILES + ["schema.xml"]
+  s.files         = `git ls-files`.split("\n") + config_files.map {|f| "solr_config/#{f}" }
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]

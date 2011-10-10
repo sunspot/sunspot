@@ -1,4 +1,4 @@
-%w(task_helper library_installer schema_builder solrconfig_updater).each do |file|
+%w(task_helper schema_builder solrconfig_updater).each do |file|
   require File.join(File.dirname(__FILE__), 'installer', file)
 end
 
@@ -25,7 +25,6 @@ module Sunspot
         File.join(@solr_home, 'conf', 'solrconfig.xml'),
         @options
       )
-      LibraryInstaller.execute(File.join(@solr_home, 'lib'), @options)
     end
   end
 end
