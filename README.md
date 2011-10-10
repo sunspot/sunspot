@@ -1,6 +1,6 @@
 # Sunspot
 
-![Build Status](https://secure.travis-ci.org/sunspot/sunspot.png)
+[![Build Status](https://secure.travis-ci.org/sunspot/sunspot.png)](http://travis-ci.org/#!/sunspot/sunspot)
 
 <http://outoftime.github.com/sunspot>
 
