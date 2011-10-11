@@ -1,5 +1,8 @@
+require 'sunspot/search/paginated_collection'
+
 module Sunspot
   module Search #:nodoc:
+    
     # 
     # This class encapsulates the results of a Solr search. It provides access
     # to search results, total result count, facets, and pagination information.
@@ -32,7 +35,7 @@ module Sunspot
       def execute
         reset
         params = @query.to_params
-        @solr_result = @connection.request("/#{request_handler}", params)
+        @solr_result = @connection.post "#{request_handler}", :params => params, :headers => { 'Content-Type' => 'application/x-www-form-urlencoded' }
         self
       end
 
@@ -53,7 +56,7 @@ module Sunspot
       # WillPaginate::Collection or Array:: Instantiated result objects
       #
       def results
-        @results ||= maybe_will_paginate(verified_hits.map { |hit| hit.instance })
+        @results ||= paginate_collection(verified_hits.map { |hit| hit.instance })
       end
   
       # 
@@ -81,10 +84,10 @@ module Sunspot
             begin
               hits = if solr_response && solr_response['docs']
                 solr_response['docs'].map do |doc|
-                  Hit.new(doc, highlights_for(doc), distance_for(doc), self)
+                  Hit.new(doc, highlights_for(doc), self)
                 end
               end
-              maybe_will_paginate(hits || [])
+              paginate_collection(hits || [])
             end
         end
       end
@@ -268,24 +271,12 @@ module Sunspot
         end
       end
   
-      def distance_for(doc)
-        if @solr_result['distances']
-          @solr_result['distances'][doc['id']]
-        end
-      end
-  
       def verified_hits
-        @verified_hits ||= maybe_will_paginate(hits.select { |hit| hit.instance })
+        @verified_hits ||= paginate_collection(hits.select { |hit| hit.instance })
       end
   
-      def maybe_will_paginate(collection)
-        if defined?(WillPaginate::Collection)
-          WillPaginate::Collection.create(@query.page, @query.per_page, total) do |pager|
-            pager.replace(collection)
-          end
-        else
-          collection
-        end
+      def paginate_collection(collection)
+        PaginatedCollection.new(collection, @query.page, @query.per_page, total)
       end
   
       def add_facet(name, facet)

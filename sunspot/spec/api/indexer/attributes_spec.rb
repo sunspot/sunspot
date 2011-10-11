@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 require 'bigdecimal'
 
 describe 'indexing attribute fields', :type => :indexer do
@@ -135,9 +135,15 @@ describe 'indexing attribute fields', :type => :indexer do
       Sunspot.setup(Post) { integer :popularity, :more_like_this => true }
     end.should raise_error(ArgumentError)
   end
-  
+
   it 'should use a specified field name when the :as option is set' do
     session.index(post(:title => 'A Title'))
     connection.should have_add_with(:legacy_field_s => 'legacy A Title')
   end
+
+  it 'should use a specified field name when the :as option is set for array values' do
+    session.index(post(:title => 'Another Title'))
+    connection.should have_add_with(:legacy_array_field_sm => ['first string', 'second string'])
+ 	end
 end
+

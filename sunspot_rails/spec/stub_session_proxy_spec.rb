@@ -1,5 +1,5 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'rails', 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
+require File.expand_path('../lib/sunspot/rails/spec_helper', File.dirname(__FILE__))
 
 describe 'specs with Sunspot stubbed' do
   disconnect_sunspot

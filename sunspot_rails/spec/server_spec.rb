@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::Rails::Server do
   before :each do
@@ -16,7 +16,7 @@ describe Sunspot::Rails::Server do
   end
 
   it "sets the correct Solr PID path" do
-    @server.pid_path.should == File.join(Rails.root, 'tmp', 'pids', 'sunspot-solr-test.pid')
+    @server.pid_path.should == File.join(@server.pid_dir, 'sunspot-solr-test.pid')
   end
 
   it "sets the correct Solr data dir" do

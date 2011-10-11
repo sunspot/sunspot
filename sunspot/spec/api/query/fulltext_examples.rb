@@ -1,5 +1,3 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
-
 shared_examples_for 'fulltext query' do
   it 'searches by keywords' do
     search do

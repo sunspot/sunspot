@@ -1,3 +1,3 @@
 module Sunspot
-  VERSION = '1.2.rc4'
+  VERSION = '1.3.0.rc3'
 end

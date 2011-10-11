@@ -223,12 +223,25 @@ module Sunspot
         @__receiver__, @__calling_context__ = receiver, calling_context
       end
 
+      def id
+        @__calling_context__.__send__(:id)
+      end
+
+      # Special case due to `Kernel#sub`'s existence
+      def sub(*args, &block)
+        __proxy_method__(:sub, *args, &block)
+      end
+
       def method_missing(method, *args, &block)
+        __proxy_method__(method, *args, &block)
+      end
+
+      def __proxy_method__(method, *args, &block)
         begin
-          @__receiver__.send(method.to_sym, *args, &block)
+          @__receiver__.__send__(method.to_sym, *args, &block)
         rescue ::NoMethodError => e
           begin
-            @__calling_context__.send(method.to_sym, *args, &block)
+            @__calling_context__.__send__(method.to_sym, *args, &block)
           rescue ::NoMethodError
             raise(e)
           end

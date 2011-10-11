@@ -14,25 +14,34 @@ provides the following features:
 * Provide rake tasks for starting and stopping the development Solr instance,
   using the configuration in sunspot.yml
 
-Sunspot::Rails has been tested with Rails versions 2.1, 2.2, and 2.3
+Sunspot::Rails has been tested with Rails versions 2.3 and 3.0
 
-== Installation
+== Installation in Rails 3
 
-For recent versions of Rails, In your project's <code>config/environment.rb</code>, add the following gem dependencies:
+In your <code>Gemfile</code>:
 
-  config.gem 'sunspot', :lib => 'sunspot'
-  config.gem 'sunspot_rails', :lib => 'sunspot/rails'
-    
+  gem 'sunspot_rails'
+  # This is an optional packaged Solr:
+  group :test, :development do
+    gem 'sunspot_solr'
+  end
+
+== Installation in Rails 2
+
+In your project's <code>config/environment.rb</code>, add the following gem dependencies:
+
+  config.gem 'sunspot'
+  config.gem 'sunspot_rails'
+
+And in your project's <code>config/development.rb</code> and <code>config/test.rb</code>,
+add the following gem dependency to install the optional packaged Solr:
+
+  config.gem 'sunspot_solr'
+
 Install the gems with:
 
   rake gems:install
 
-If you are using an older version of Rails that doesn't support plugins-as-gems, install the gems manually and install the plugin:
-
-  sudo gem install sunspot sunspot_rails --source=http://gems.github.com
-  
-  script/plugin install git://github.com/outoftime/sunspot_rails.git
-  
 Generate the file <code>config/sunspot.yml</code>:
 
   script/generate sunspot
@@ -43,6 +52,8 @@ Sunspot::Rails as a gem, add the following line to your project's Rakefile:
 
   require 'sunspot/rails/tasks'
 
+== Using Sunspot::Rails
+
 If you wish to make modifications to the Solr schema, you can create a custom
 Solr home in your project directory. In order to do so, create the directory
 <code>RAILS_ROOT/solr/conf</code>, and copy in the contents of the Solr gem's
@@ -51,7 +62,8 @@ Sunspot::Rails will detect them and tell Solr to use your local configurations.
 Use caution when modifying <code>schema.xml</code> - Sunspot relies on the
 field naming scheme in the packaged schema file.
 
-To start up a Solr instance, issue the following:
+To start up a Solr instance, issue the following (requires sunspot_solr to be
+installed):
 
   rake sunspot:solr:start
 
@@ -146,7 +158,6 @@ without actually loading the models out of the database. For that, you can
 call +search_ids+, using the same block format as #search. This will return an
 array of IDs.
 
-
 === Searching for multiple types
 
 Sunspot is entirely agnostic about whether searches are for one or more types;
@@ -203,7 +214,6 @@ remove those documents from the index, use +clean_index_orphans+. Note that
 neither of these operations should be needed if Sunspot and Sunspot::Rails are
 used as intended.
 
-
 == Testing Solr integration using RSpec
 
 To disable the sunspot-solr integration for your active record models, require
@@ -215,7 +225,7 @@ Then, in your spec, use the #disconnect_sunspot method:
 
   describe Post do
     disconnect_sunspot
-    
+
     it 'should have some behavior'
       # ...
     end
@@ -236,8 +246,7 @@ Posts about Sunspot on my blog are available at http://outofti.me/tagged/sunspot
 
 == Bugs
 
-Please submit bug reports to
-http://outoftime.lighthouseapp.com/projects/20339-sunspot
+Please submit bug reports to https://github.com/sunspot/sunspot/issues
 
 == Contributors
 

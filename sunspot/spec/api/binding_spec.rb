@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe "DSL bindings" do
   it 'should give access to calling context\'s methods in search DSL' do
@@ -7,6 +7,14 @@ describe "DSL bindings" do
       value = test_method
     end
     value.should == 'value'
+  end
+
+  it 'should give access to calling context\'s id method in search DSL' do
+    value = nil
+    session.search(Post) do
+      value = id
+    end
+    value.should == 16
   end
 
   it 'should give access to calling context\'s methods in nested DSL block' do
@@ -34,5 +42,9 @@ describe "DSL bindings" do
 
   def test_method
     'value'
+  end
+
+  def id
+    16
   end
 end

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'function query' do
   it "should send query to solr with boost function" do
@@ -35,6 +35,15 @@ describe 'function query' do
       end
     end
     connection.should have_last_search_including(:bf, 'product(average_rating_ft,10)')
+  end
+
+  it "should handle the sub function in a function query block" do
+    session.search Post do
+      keywords('pizza') do
+        boost(function { sub(:average_rating, 10) })
+      end
+    end
+    connection.should have_last_search_including(:bf, 'sub(average_rating_ft,10)')
   end
  
   it "should handle nested functions in a function query block" do

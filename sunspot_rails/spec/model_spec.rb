@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'ActiveRecord mixin' do
   describe 'index()' do
@@ -14,6 +14,11 @@ describe 'ActiveRecord mixin' do
     it 'should index the model' do
       Sunspot.commit
       Post.search.results.should == [@post]
+    end
+
+    it "should not blow up if there's a default scope specifying order" do
+      posts = Array.new(2) { |j| PostWithDefaultScope.create! :title => (10-j).to_s }
+      lambda { PostWithDefaultScope.index(:batch_size => 1) }.should_not raise_error
     end
   end
 
@@ -70,7 +75,7 @@ describe 'ActiveRecord mixin' do
 
   describe 'remove_all_from_index' do
     before :each do
-      @posts = Array.new(10) { Post.create! }.each { |post| Sunspot.index(post) }
+      @posts = Array.new(2) { Post.create! }.each { |post| Sunspot.index(post) }
       Sunspot.commit
       Post.remove_all_from_index
     end
@@ -87,7 +92,7 @@ describe 'ActiveRecord mixin' do
 
   describe 'remove_all_from_index!' do
     before :each do
-      Array.new(10) { Post.create! }.each { |post| Sunspot.index(post) }
+      Array.new(2) { Post.create! }.each { |post| Sunspot.index(post) }
       Sunspot.commit
       Post.remove_all_from_index!
     end
@@ -278,7 +283,7 @@ describe 'ActiveRecord mixin' do
   describe "reindex()" do
   
     before(:each) do
-      @posts = Array.new(10) { Post.create }
+      @posts = Array.new(2) { Post.create }
     end
 
     describe "when not using batches" do
@@ -292,70 +297,51 @@ describe 'ActiveRecord mixin' do
         Post.should_receive(:all).with(:include => :author).and_return([])
         Post.reindex(:batch_size => nil, :include => :author)
       end
+
+      describe ':if constraints' do
+        before do
+          Post.sunspot_options[:if] = proc { |model| model.id != @posts.first.id }
+        end
+
+        after do
+          Post.sunspot_options[:if] = nil
+        end
+
+        it 'should only index those models where :if constraints pass' do
+          Post.reindex(:batch_size => nil)
+
+          Post.search.results.should_not include(@posts.first)
+        end
+      end
     
     end
 
     describe "when using batches" do
-      
-      it "should use the default options" do
-        Post.should_receive(:all).with do |params|
-          params[:limit].should == 500
-          params[:include].should == []
-          params[:conditions].should == ['posts.id > ?', 0]
-          params[:order].should == 'posts.id'
-        end.and_return(@posts)
-        Post.reindex
-      end
-
-      it "should set the conditions using the overridden table attributes" do
-        @posts = Array.new(10) { Author.create }
-        Author.should_receive(:all).with do |params|
-          params[:conditions].should == ['writers.writer_id > ?', 0]
-          params[:order].should == 'writers.writer_id'
-        end.and_return(@posts)
-        Author.reindex
-      end
-
-      it "should count the number of records to index" do
-        Post.should_receive(:count).and_return(10)
-        Post.reindex
-      end
-
-      it "should override the batch_size" do
-        Post.should_receive(:all).with do |params|
-          params[:limit].should == 20
-          @posts
-        end.and_return(@posts)
-        Post.reindex(:batch_size => 20)
-      end
-
-      it "should set the include option" do
-        Post.should_receive(:all).with do |params|
-          params[:include].should == [{:author => :address}]
-          @posts
-        end.and_return(@posts)
-        Post.reindex(:include => [{:author => :address}])
-      end
-      
-      it "should set the include option from the searchable options" do
-        @blogs = Array.new(10) { Blog.create }
-        Blog.should_receive(:all).with do |params|
-          params[:include].should == [{ :posts => :author }, :comments]
-          @blogs
-        end.and_return(@blogs)
-        Blog.reindex
-      end
-
       it "should commit after indexing each batch" do
         Sunspot.should_receive(:commit).twice
-        Post.reindex(:batch_size => 5)
+        Post.reindex(:batch_size => 1)
       end
 
       it "should commit after indexing everything" do
         Sunspot.should_receive(:commit).once
         Post.reindex(:batch_commit => false)
       end
-      
+
+      describe ':if constraints' do
+        before do
+          Post.sunspot_options[:if] = proc { |model| model.id != @posts.first.id }
+        end
+
+        after do
+          Post.sunspot_options[:if] = nil
+        end
+
+        it 'should only index those models where :if constraints pass' do
+          Post.reindex(:batch_size => 50)
+
+          Post.search.results.should_not include(@posts.first)
+        end
+      end
     end
   end
   
@@ -397,6 +383,213 @@ describe 'ActiveRecord mixin' do
 
     it 'should return IDs' do
       @posts.first.more_like_this_ids.to_set.should == [@posts[3], @posts[1]].map { |post| post.id }.to_set
+    end
+  end
+
+  describe ':if constraint' do
+    subject do
+      PostWithAuto.new(:title => 'Post123')
+    end
+
+    after do
+      subject.class.sunspot_options[:if] = nil
+    end
+
+    context 'Symbol' do
+      context 'constraint returns true' do
+        # searchable :if => :returns_true
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.class.sunspot_options[:if] = :returns_true
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :if => :returns_false
+        before do
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:if] = :returns_false
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+    end
+
+    context 'String' do
+      context 'constraint returns true' do
+        # searchable :if => 'returns_true'
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.class.sunspot_options[:if] = 'returns_true'
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :if => 'returns_false'
+        before do
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:if] = 'returns_false'
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+    end
+
+    context 'Proc' do
+      context 'constraint returns true' do
+        # searchable :if => proc { true }
+        before do
+          subject.class.sunspot_options[:if] = proc { true }
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :if => proc { false }
+        before do
+          subject.class.sunspot_options[:if] = proc { false }
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+    end
+
+    context 'Array' do
+      context 'all constraints returns true' do
+        # searchable :if => [:returns_true_1, :returns_true_2]
+        before do
+          subject.should_receive(:returns_true_1).and_return(true)
+          subject.should_receive(:returns_true_2).and_return(true)
+          subject.class.sunspot_options[:if] = [:returns_true_1, 'returns_true_2']
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+
+      context 'one constraint returns false' do
+        # searchable :if => [:returns_true, :returns_false]
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:if] = [:returns_true, 'returns_false']
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+    end
+
+    it 'removes the model from the index if the constraint does not match' do
+      subject.save!
+      Sunspot.commit
+      subject.class.search.results.should include(subject)
+
+      subject.class.sunspot_options[:if] = proc { false }
+      subject.save!
+      Sunspot.commit
+      subject.class.search.results.should_not include(subject)
+    end
+  end
+
+  describe ':unless constraint' do
+    subject do
+      PostWithAuto.new(:title => 'Post123')
+    end
+
+    after do
+      subject.class.sunspot_options[:unless] = nil
+    end
+
+    context 'Symbol' do
+      context 'constraint returns true' do
+        # searchable :unless => :returns_true
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.class.sunspot_options[:unless] = :returns_true
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :unless => :returns_false
+        before do
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:unless] = :returns_false
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+    end
+
+    context 'String' do
+      context 'constraint returns true' do
+        # searchable :unless => 'returns_true'
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.class.sunspot_options[:unless] = 'returns_true'
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :unless => 'returns_false'
+        before do
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:unless] = 'returns_false'
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+    end
+
+    context 'Proc' do
+      context 'constraint returns true' do
+        # searchable :unless => proc { true }
+        before do
+          subject.class.sunspot_options[:unless] = proc { |model| model == subject } # true
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+
+      context 'constraint returns false' do
+        # searchable :unless => proc { false }
+        before do
+          subject.class.sunspot_options[:unless] = proc { false }
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
+    end
+
+    context 'Array' do
+      context 'all constraints returns true' do
+        # searchable :unless => [:returns_true_1, :returns_true_2]
+        before do
+          subject.should_receive(:returns_true_1).and_return(true)
+          subject.should_receive(:returns_true_2).and_return(true)
+          subject.class.sunspot_options[:unless] = [:returns_true_1, 'returns_true_2']
+        end
+
+        it_should_behave_like 'not indexed after save'
+      end
+
+      context 'one constraint returns false' do
+        # searchable :unless => [:returns_true, :returns_false]
+        before do
+          subject.should_receive(:returns_true).and_return(true)
+          subject.should_receive(:returns_false).and_return(false)
+          subject.class.sunspot_options[:unless] = [:returns_true, 'returns_false']
+        end
+
+        it_should_behave_like 'indexed after save'
+      end
     end
   end
 end

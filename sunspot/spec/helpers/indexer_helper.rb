@@ -1,16 +1,4 @@
 module IndexerHelper
-  def config
-    Sunspot::Configuration.build
-  end
-
-  def connection
-    @connection ||= Mock::Connection.new
-  end
-
-  def session
-    @session ||= Sunspot::Session.new(config, connection)
-  end
-
   def post(attrs = {})
     @post ||= Post.new(attrs)
   end
