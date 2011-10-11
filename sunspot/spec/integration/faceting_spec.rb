@@ -146,24 +146,70 @@ describe 'search faceting' do
       )
     end
 
-    it 'should exclude filter from faceting' do
-      search = Sunspot.search(Post) do
-        with(:blog_id, 1)
-        category_filter = with(:category_ids, 1)
-        facet(:category_ids, :exclude => category_filter)
+    context 'field faceting' do
+      it 'should exclude filter from faceting' do
+        search = Sunspot.search(Post) do
+          with(:blog_id, 1)
+          category_filter = with(:category_ids, 1)
+          facet(:category_ids, :exclude => category_filter)
+        end
+        search.facet(:category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
       end
-      search.facet(:category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
+
+      it 'should use facet keys to facet more than once with different exclusions' do
+        search = Sunspot.search(Post) do
+          with(:blog_id, 1)
+          category_filter = with(:category_ids, 1)
+          facet(:category_ids)
+          facet(:category_ids, :exclude => category_filter, :name => :all_category_ids)
+        end
+        search.facet(:category_ids).rows.map { |row| row.value }.should == [1]
+        search.facet(:all_category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
+      end
     end
 
-    it 'should use facet keys to facet more than once with different exclusions' do
-      search = Sunspot.search(Post) do
-        with(:blog_id, 1)
-        category_filter = with(:category_ids, 1)
-        facet(:category_ids)
-        facet(:category_ids, :exclude => category_filter, :name => :all_category_ids)
+    context 'query faceting' do
+      it 'should exclude filter from faceting' do
+        search = Sunspot.search(Post) do
+          with(:blog_id, 1)
+          category_filter = with(:category_ids, 1)
+          facet :category_ids, :exclude => category_filter do
+            row(:category_1) do
+              with(:category_ids, 1)
+            end
+            row(:category_2) do
+              with(:category_ids, 2)
+            end
+          end
+        end
+        search.facet(:category_ids).rows.map { |row| [row.value, row.count] }.to_set.should == Set[[:category_1, 1], [:category_2, 1]]
       end
-      search.facet(:category_ids).rows.map { |row| row.value }.should == [1]
-      search.facet(:all_category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
+
+      it 'should use facet keys to facet more than once with different exclusions' do
+        search = Sunspot.search(Post) do
+          with(:blog_id, 1)
+          category_filter = with(:category_ids, 1)
+          facet :category_ids do
+            row(:category_1) do
+              with(:category_ids, 1)
+            end
+            row(:category_2) do
+              with(:category_ids, 2)
+            end
+          end
+
+          facet :all_category_ids, :exclude => category_filter do
+            row(:category_1) do
+              with(:category_ids, 1)
+            end
+            row(:category_2) do
+              with(:category_ids, 2)
+            end
+          end
+        end
+        search.facet(:category_ids).rows.map { |row| [row.value, row.count] }.to_set.should == Set[[:category_1, 1]]
+        search.facet(:all_category_ids).rows.map { |row| [row.value, row.count] }.to_set.should == Set[[:category_1, 1], [:category_2, 1]]
+      end
     end
   end
 
