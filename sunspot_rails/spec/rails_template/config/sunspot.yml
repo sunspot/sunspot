@@ -17,3 +17,5 @@ config_test:
     solr_home: /my_superior_path
   auto_commit_after_request: false
   auto_commit_after_delete_request: true
+disabled:
+  disable_solr: true

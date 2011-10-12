@@ -238,7 +238,19 @@ module Sunspot #:nodoc:
       def max_memory
         @max_memory ||= user_configuration_from_key('solr', 'max_memory')
       end
-      
+
+      #
+      # Whether or not to disable Solr.
+      # Defaults to false. 
+      #
+      def disable_solr?
+        @disable_solr ||= (user_configuration_from_key('disable_solr') || false)
+        if @disable_solr==true && Sunspot.session != Sunspot::Rails::StubSessionProxy
+          Sunspot.session = StubSessionProxy.new(Sunspot.session)
+        end
+        @disable_solr
+      end
+ 
       private
       
       #

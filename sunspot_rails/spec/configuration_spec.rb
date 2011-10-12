@@ -114,8 +114,32 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
   it "should handle the 'auto_commit_after_delete_request' propery when set" do
     @config.auto_commit_after_delete_request?.should == true
   end
+
+  it "should not change the session when false (the default value)" do
+    @config.disable_solr?.should == false
+    Sunspot.session.class.should == Sunspot::SessionProxy::ThreadLocalSessionProxy
+  end
 end
 
+describe "disable_solr" do
+  before(:each) do
+    ::Rails.stub!(:env => 'disabled')
+    @config = Sunspot::Rails::Configuration.new
+  end
+
+  after(:each) do
+    ::Rails.stub!(:env => 'config_test')
+    if Sunspot.session.class == Sunspot::Rails::StubSessionProxy
+      Sunspot.session = Sunspot.session.original_session
+    end
+  end
+
+  it "should should disable Solr when set to true" do
+    ::Rails.stub!(:env => 'disabled')
+    @config = Sunspot::Rails::Configuration.new
+    @config.disable_solr?.should == true
+  end
+end
 
 describe Sunspot::Rails::Configuration, "with ENV['SOLR_URL'] overriding sunspot.yml" do
   before(:all) do
