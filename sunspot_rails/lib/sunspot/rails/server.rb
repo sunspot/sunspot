@@ -45,6 +45,13 @@ module Sunspot
       end
 
       # 
+      # Host on which to run Solr
+      #
+      def host
+        configuration.hostname
+      end
+
+      # 
       # Port on which to run Solr
       #
       def port

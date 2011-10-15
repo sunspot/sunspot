@@ -22,6 +22,10 @@ OptionParser.new do |opts|
     server.port = p
   end
 
+  opts.on '-h', '--hostname=host', 'Host on which to run Solr (default 0.0.0.0)' do |h|
+    server.host = h
+  end
+
   opts.on '-d', '--data-directory=DIRECTORY', 'Solr data directory' do |d|
     server.solr_data_dir = File.expand_path(d)
   end
