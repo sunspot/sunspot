@@ -15,5 +15,6 @@ config_test:
     data_path: /my_superior_path/data
     pid_dir: /my_superior_path/pids
     solr_home: /my_superior_path
+    bind_address: 127.0.0.1
   auto_commit_after_request: false
   auto_commit_after_delete_request: true

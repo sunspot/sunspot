@@ -14,6 +14,7 @@ module Sunspot #:nodoc:
     #       min_memory: 512M
     #       max_memory: 1G
     #       solr_jar: /some/path/solr15/start.jar
+    #       bind_address: 0.0.0.0
     #   test:
     #     solr:
     #       hostname: localhost
@@ -237,6 +238,13 @@ module Sunspot #:nodoc:
       #
       def max_memory
         @max_memory ||= user_configuration_from_key('solr', 'max_memory')
+      end
+
+      #
+      # Interface on which to run Solr
+      #
+      def bind_address
+        @bind_address ||= user_configuration_from_key('solr', 'bind_address')
       end
       
       private

@@ -45,6 +45,13 @@ module Sunspot
       end
 
       # 
+      # Address on which to run Solr
+      #
+      def bind_address
+        configuration.bind_address
+      end
+
+      # 
       # Port on which to run Solr
       #
       def port
