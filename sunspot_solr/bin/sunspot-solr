@@ -15,8 +15,8 @@ end
 
 server = Sunspot::Solr::Server.new
 
-OptionParser.new do |opts|
-  opts.banner = "Usage: sunspot-solr start [options]"
+opts = OptionParser.new do |opts|
+  opts.banner = "Usage: sunspot-solr (start|stop|run) [options]"
 
   opts.on '-p', '--port=PORT', 'Port on which to run Solr (default 8983)' do |p|
     server.port = p
@@ -57,7 +57,9 @@ OptionParser.new do |opts|
   opts.on '--min-memory=MEMORY', 'Specify the initial size of the memory allocation pool' do |mm|
     server.min_memory = mm
   end
-end.parse!
+end
+
+opts.parse!
 
 begin
   case ARGV[0]
@@ -71,7 +73,7 @@ begin
     server.stop
     server.start
   else
-    abort("Usage: sunspot-solr (start|stop|run)")
+    abort(opts.help)
   end
 rescue Sunspot::Solr::Server::ServerError => e
   abort(e.message)
