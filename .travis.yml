@@ -12,9 +12,9 @@ env:
   - GEM=sunspot_rails RAILS=3.1.1
 
 notifications:
-  # irc: "irc.freenode.org#sunspot-ruby"
-  # recipients:
-  #   - nick@onemorecloud.com
+  irc: "irc.freenode.org#sunspot-ruby"
+  recipients:
+    - alindeman@gmail.com
 
 script:
   - ci/travis.sh
