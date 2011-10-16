@@ -1,7 +1,25 @@
+require 'thread'
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'Sunspot::Rails session' do
-  it 'should be a different object for each thread' do
+  it 'is a different object for each thread' do
+    # Queue is just a convenient thread-safe container
+    sessions_queue = Queue.new
+
+    # Create some threads which dump their session into the queue
+    Array.new(2) {
+      Thread.new { sessions_queue << Sunspot.session.session }
+    }.each { |thread| thread.join }
+
+    # Collect the items from the queue
+    sessions = []
+    until sessions_queue.empty?
+      sessions << sessions_queue.pop
+    end
+
+    # There should be no items in the queue with the same object_id
+    object_ids = sessions.map(&:object_id)
+    object_ids.uniq.should == object_ids
   end
 
   it 'should create a separate master/slave session if configured' do
