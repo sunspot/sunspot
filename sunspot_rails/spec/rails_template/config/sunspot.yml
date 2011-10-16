@@ -18,3 +18,5 @@ config_test:
     bind_address: 127.0.0.1
   auto_commit_after_request: false
   auto_commit_after_delete_request: true
+config_disabled_test:
+  disabled: true

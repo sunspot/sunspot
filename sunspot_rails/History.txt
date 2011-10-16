@@ -7,6 +7,8 @@
 * `sunspot:reindex` rake task correctly handles namespaced models (João Gradim)
 * `bind_address` parameter can be specified in `sunspot.yml` to bind Solr to a
   specific interface (Sylvain Utard)
+* `disabled` parameter can be specified in `sunspot.yml` to stub out the
+  connection to Solr (David B)
 
 == 1.2.1 2010-12-28
 * Decreased default reindexing batch size from 500 to 50

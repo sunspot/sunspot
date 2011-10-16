@@ -10,6 +10,21 @@ describe 'Sunspot::Rails session' do
   it 'should not create a separate master/slave session if no master configured' do
   end
 
+  context 'disabled' do
+    before do
+      Sunspot::Rails.reset
+      ::Rails.stub!(:env).and_return("config_disabled_test")
+    end
+
+    after do
+      Sunspot::Rails.reset
+    end
+
+    it 'sets the session proxy as a stub' do
+      Sunspot::Rails.build_session.should be_a_kind_of(Sunspot::Rails::StubSessionProxy)
+    end
+  end
+
   private
 
   def with_configuration(options)

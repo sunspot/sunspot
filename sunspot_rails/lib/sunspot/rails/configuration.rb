@@ -15,6 +15,7 @@ module Sunspot #:nodoc:
     #       max_memory: 1G
     #       solr_jar: /some/path/solr15/start.jar
     #       bind_address: 0.0.0.0
+    #     disabled: false
     #   test:
     #     solr:
     #       hostname: localhost
@@ -246,7 +247,15 @@ module Sunspot #:nodoc:
       def bind_address
         @bind_address ||= user_configuration_from_key('solr', 'bind_address')
       end
-      
+
+      #
+      # Whether or not to disable Solr.
+      # Defaults to false.
+      #
+      def disabled?
+        @disabled ||= (user_configuration_from_key('disabled') || false)
+      end
+
       private
       
       #
