@@ -9,6 +9,10 @@ namespace :spec do
     File.join(File.dirname(__FILE__), "..", "gemfiles", "rails-#{version}")
   end
 
+  def vendor_path(version)
+    File.expand_path("vendor/bundle", rails_app_path(version))
+  end
+
   def rails_template_path
     File.join(File.dirname(__FILE__), "..", "spec", "rails_template")
   end
@@ -18,19 +22,21 @@ namespace :spec do
   task :set_gemfile do
     version = ENV['VERSION']
 
+    ENV['BUNDLE_PATH']    = vendor_path(version)
     ENV['BUNDLE_GEMFILE'] = gemfile_path(version)
 
-    puts "Installing gems for Rails #{version}..."
-    `bundle install #{ENV['BUNDLE_ARGS']}`
+    unless File.exist?(ENV['BUNDLE_PATH'])
+      puts "Installing gems for Rails #{version} (this will only be done once)..."
+      `bundle install #{ENV['BUNDLE_ARGS']}`
+    end
   end
 
   task :generate_rails_app do
     version = ENV['VERSION']
     app_path = rails_app_path(version)
 
-    unless File.exist?(app_path)
-      ENV['BUNDLE_GEMFILE'] = gemfile_path(version)
-      rails_cmd = "rails _#{version}_"
+    unless File.exist?(File.expand_path("config/environment.rb", app_path))
+      rails_cmd = "bundle exec rails _#{version}_"
 
       puts "Generating Rails #{version} application..."
       if version.start_with?("2")
