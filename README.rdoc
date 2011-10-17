@@ -138,6 +138,22 @@ to define your own. See Sunspot::Adapters for more information.
 
 See Sunspot.search for more information.
 
+=== Working with spatial searches:
+
+  class Store
+    searchable do
+      latlon :location do
+        Sunspot::Util::Coordinates.new(lat, long)
+      end
+    end
+  end
+
+  In your controller:
+
+  Store.search do |search|
+    search.spatial(:location, lat, lon, :radius => 5)
+  end
+
 === Work with search results (Haml for readability):
 
   .facets
