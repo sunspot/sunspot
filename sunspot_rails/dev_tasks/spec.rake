@@ -91,8 +91,8 @@ end
 
 desc 'Run spec suite in all Rails versions'
 task :spec do
-  versions = if ENV['VERSIONS']
-               ENV['VERSIONS'].split(",")
+  versions = if ENV['RAILS']
+               ENV['RAILS'].split(",")
              else
                rails_all_versions
              end

@@ -48,7 +48,7 @@ case $GEM in
     
     # Install gems for test Rails application
     cd ../sunspot_rails
-    rake spec VERSIONS=$RAILS
+    rake spec RAILS=$RAILS
     
     # Cleanup Solr
     /bin/echo -n "Stopping Solr... "
