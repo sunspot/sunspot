@@ -1,6 +1,8 @@
 module Sunspot
   module Query #:nodoc:
     class CommonQuery
+      attr_accessor :store_options
+
       def initialize(types)
         @scope = Scope.new
         @sort = SortComposite.new
