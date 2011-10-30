@@ -6,7 +6,7 @@ describe 'pagination' do
     @posts = (0..19).map do |i|
       Post.new(:blog_id => i)
     end
-    Sunspot.index(*@posts)
+    Sunspot.index!(*@posts)
   end
 
   it 'should return all by default' do
