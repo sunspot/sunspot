@@ -25,6 +25,20 @@ shared_examples_for 'sortable query' do
     connection.should have_last_search_with(:rows => 15, :start => 0)
   end
 
+  it 'paginates with an offset' do
+    search do
+      paginate :per_page => 15, :offset => 3
+    end
+    connection.should have_last_search_with(:rows => 15, :start => 3)
+  end
+
+  it 'paginates with an offset as a string' do
+    search do
+      paginate :per_page => 15, :offset => '3'
+    end
+    connection.should have_last_search_with(:rows => 15, :start => 3)
+  end
+
   it 'paginates from string argument' do
     search do
       paginate :page => '3', :per_page => '15'

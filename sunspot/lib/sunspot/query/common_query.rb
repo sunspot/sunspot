@@ -35,12 +35,13 @@ module Sunspot
         function
       end
 
-      def paginate(page, per_page)
+      def paginate(page, per_page, offset = nil)
         if @pagination
+          @pagination.offset = offset
           @pagination.page = page
           @pagination.per_page = per_page
         else
-          @components << @pagination = Pagination.new(page, per_page)
+          @components << @pagination = Pagination.new(page, per_page, offset)
         end
       end
 

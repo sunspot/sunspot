@@ -29,4 +29,15 @@ describe 'pagination' do
     end.results
     results.should == @posts[10,10]
   end
+
+  it 'should return pages with offsets' do
+    results = Sunspot.search(Post) do
+      order_by :blog_id
+      paginate :page => 2, :per_page => 5, :offset => 3
+    end.results
+
+    # page 1 is 3, 4, 5, 6, 7
+    # page 2 is 8, 9, 10, 11, 12
+    results.should == @posts[8,5]
+  end
 end

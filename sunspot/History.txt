@@ -10,6 +10,7 @@
 * Packaged Solr correctly uses the `pid_dir` configuration option from `sunspot.yml` (Russen Guggemos)
 * Specs run correctly in 1.9.2 (Larry Sprock)
 * Documentation improvements (Thibaut Barrère, gjb83, Breno Santos Salgado)
+* Adds :offset option to paginate method (Benjamin Fleischer)
 
 == 1.2.1 2010-12-28
 * Decreased default reindexing batch size from 500 to 50
