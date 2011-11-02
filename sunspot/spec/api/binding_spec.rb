@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe "DSL bindings" do
   it 'should give access to calling context\'s methods in search DSL' do

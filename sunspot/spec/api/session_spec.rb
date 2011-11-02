@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 shared_examples_for 'all sessions' do
   context '#index()' do

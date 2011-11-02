@@ -1,5 +1,3 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
-
 shared_examples_for "query with highlighting support" do
   it 'should not send highlight parameter when highlight not requested' do
     search do
@@ -220,6 +218,28 @@ shared_examples_for "query with highlighting support" do
       :"hl.fl" => %w(title_text body_textsv),
       :"f.title_text.hl.snippets" => 2,
       :"f.body_textsv.hl.snippets" => 1
+    )
+  end
+
+  it 'sets the formatter for highlight output' do
+    search do
+      keywords 'test' do
+        highlight :title, :formatter => 'formatter'
+      end
+    end
+    connection.should have_last_search_with(
+      :"f.title_text.hl.formatter" => 'formatter'
+    )
+  end
+
+  it 'sets the text snippet generator for highlighted text' do
+    search do
+      keywords 'test' do
+        highlight :title, :fragmenter => 'example_fragmenter'
+      end
+    end
+    connection.should have_last_search_with(
+      :"f.title_text.hl.fragmenter" => 'example_fragmenter'
     )
   end
 end

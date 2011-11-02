@@ -1,35 +1,49 @@
 # Testing `sunspot_rails`
 
-Note: All the paths mentioned in here are relative to the current directory, or `sunspot/sunspot_rails`.
+All the paths mentioned in here are relative to the current directory,
+or `sunspot/sunspot_rails`.
 
-The `sunspot_rails` gem is tested with RSpec, and its spec suite is located in `spec`.
+The `sunspot_rails` gem is tested with RSpec, and its spec suite is
+located in `spec`.
 
-These specs are to be run against up to date Rails 2 and Rails 3 applications, included at `spec/rails2` and `spec/rails3`, respectively. The `spec_helper.rb` file loads the environment for these applications based on the `RAILS_ROOT` provided when invoking tests, outlined below.
+The specs are run against Rails 2 and Rails 3 applications which are
+dynamically generated in `tmp/`
+
+**NOTE:** Because the applications are dynamically generated, the specs
+must be run with the rake task (described below) and not simply with
+`rspec spec`.
 
 ## Start Solr
 
 Specs expect to connect to Solr on `http://localhost:8980/solr`
 
-    rake sunspot:solr:start
-
-## Install dependencies
-
-Each application uses Bundler to manage its dependencies. The `Gemfile` also installs the `sunspot` and `sunspot_rails` gems from your copies checked out locally. Because Bundler expands the full path to `sunspot` and `sunspot_rails`, we're excluding its generated `Gemfile.lock` file from version control.
-
-    pushd spec/rails2
-    bundle install
-    cd ../rails3
-    bundle install
-		popd
+    sunspot-solr start -p 8980
 
 ## Invoke specs
 
-The project contains wrapper scripts that set up the environment to run the
-specs under Rails 2 and Rails 3 respectively:
+To run the specs against every Rails version defined in
+`gemfiles/rails-*`:
 
-    rake spec:rails2
-    rake spec:rails3
+    rake spec
 
-Or you can run them both:
+### Focused on specific versions
 
-	 	rake spec
+To run the specs against a specific version or versions of Rails:
+
+    rake spec VERSIONS=2.3.14
+    rake spec VERSIONS=2.3.14,3.0.10
+
+To make a Rails the default for your shell session, export the
+environment variable:
+
+    export VERSIONS=2.3.14
+
+Though be sure to run the tests against all versions before submitting
+code!
+
+### Focused on specific specs
+
+To run a specific spec or spec file:
+
+    rake spec SPEC=spec/model_spec.rb
+    rake spec SPEC=spec/model_spec.rb:4 # run spec(s) that start on line 4

@@ -1,47 +1,15 @@
 module Sunspot
   module Rails
-    class Server < Sunspot::Server
+    class Server < Sunspot::Solr::Server
       # ActiveSupport log levels are integers; this array maps them to the
       # appropriate java.util.logging.Level constant
       LOG_LEVELS = %w(FINE INFO WARNING SEVERE SEVERE INFO)
-
-      def start
-        bootstrap
-        super
-      end
-
-      def run
-        bootstrap
-        super
-      end
-
-      #
-      # Bootstrap a new solr_home by creating all required
-      # directories. 
-      #
-      # ==== Returns
-      #
-      # Boolean:: success
-      #
-      def bootstrap
-        unless @bootstrapped
-          install_solr_home
-          @bootstrapped = true
-        end
-      end
-
-      # 
-      # Directory to store custom libraries for solr
-      #
-      def lib_path
-        File.join( solr_home, 'lib' )
-      end
 
       # 
       # Directory in which to store PID files
       #
       def pid_dir
-        File.join(::Rails.root, 'tmp', 'pids')
+        configuration.pid_dir || File.join(::Rails.root, 'tmp', 'pids')
       end
 
       # 
@@ -59,7 +27,7 @@ module Sunspot
       # String:: data_path
       #
       def solr_data_dir
-        File.join(solr_home, 'data', ::Rails.env)
+        configuration.data_path
       end
 
       # 
@@ -125,48 +93,6 @@ module Sunspot
       #
       def configuration
         Sunspot::Rails.configuration
-      end
-
-      # 
-      # Directory to store solr config files
-      #
-      # ==== Returns
-      #
-      # String:: config_path
-      #
-      def config_path
-        File.join(solr_home, 'conf')
-      end
-
-      #
-      # Copy default solr configuration files from sunspot
-      # gem to the new solr_home/config directory
-      #
-      # ==== Returns
-      #
-      # Boolean:: success
-      #
-      def install_solr_home
-        unless File.exists?(solr_home)
-          Sunspot::Installer.execute(
-            solr_home,
-            :force => true,
-            :verbose => true
-          )
-        end
-      end
-
-      # 
-      # Create new solr_home, config, log and pid directories
-      #
-      # ==== Returns
-      #
-      # Boolean:: success
-      #
-      def create_solr_directories
-        [solr_data_dir, pid_dir].each do |path|
-          FileUtils.mkdir_p( path )
-        end
       end
     end
   end

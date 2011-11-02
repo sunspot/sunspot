@@ -21,6 +21,10 @@ Sunspot::Rails has been tested with Rails versions 2.3 and 3.0
 In your <code>Gemfile</code>:
 
   gem 'sunspot_rails'
+  # This is an optional packaged Solr:
+  group :test, :development do
+    gem 'sunspot_solr'
+  end
 
 == Installation in Rails 2
 
@@ -28,7 +32,12 @@ In your project's <code>config/environment.rb</code>, add the following gem depe
 
   config.gem 'sunspot'
   config.gem 'sunspot_rails'
-    
+
+And in your project's <code>config/development.rb</code> and <code>config/test.rb</code>,
+add the following gem dependency to install the optional packaged Solr:
+
+  config.gem 'sunspot_solr'
+
 Install the gems with:
 
   rake gems:install
@@ -53,7 +62,8 @@ Sunspot::Rails will detect them and tell Solr to use your local configurations.
 Use caution when modifying <code>schema.xml</code> - Sunspot relies on the
 field naming scheme in the packaged schema file.
 
-To start up a Solr instance, issue the following:
+To start up a Solr instance, issue the following (requires sunspot_solr to be
+installed):
 
   rake sunspot:solr:start
 
@@ -148,7 +158,6 @@ without actually loading the models out of the database. For that, you can
 call +search_ids+, using the same block format as #search. This will return an
 array of IDs.
 
-
 === Searching for multiple types
 
 Sunspot is entirely agnostic about whether searches are for one or more types;
@@ -205,7 +214,6 @@ remove those documents from the index, use +clean_index_orphans+. Note that
 neither of these operations should be needed if Sunspot and Sunspot::Rails are
 used as intended.
 
-
 == Testing Solr integration using RSpec
 
 To disable the sunspot-solr integration for your active record models, require
@@ -217,7 +225,7 @@ Then, in your spec, use the #disconnect_sunspot method:
 
   describe Post do
     disconnect_sunspot
-    
+
     it 'should have some behavior'
       # ...
     end
@@ -238,8 +246,7 @@ Posts about Sunspot on my blog are available at http://outofti.me/tagged/sunspot
 
 == Bugs
 
-Please submit bug reports to
-http://outoftime.lighthouseapp.com/projects/20339-sunspot
+Please submit bug reports to https://github.com/sunspot/sunspot/issues
 
 == Contributors
 

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'search results', :type => :search do
   it 'loads single result' do
@@ -30,24 +30,11 @@ describe 'search results', :type => :search do
     session.search(Post).results.should == []
   end
 
-  if ENV['USE_WILL_PAGINATE']
-
-    it 'returns search total as attribute of results' do
-      stub_results(Post.new, 4)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.results.total_entries.should == 4
-    end
-
-  else
-
-    it 'returns vanilla array if WillPaginate is not available' do
-      stub_results(Post.new)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.results.should_not respond_to(:total_entries)
-    end
-
+  it 'returns search total as attribute of results' do
+    stub_results(Post.new, 4)
+    session.search(Post) do
+      paginate(:page => 1)
+    end.results.total_entries.should == 4
   end
 
   it 'returns total' do

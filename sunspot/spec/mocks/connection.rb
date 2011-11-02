@@ -54,16 +54,16 @@ module Mock
       @optims << Time.now
     end
 
-    def request(path, params)
-      unless path == "/#{@expected_handler}"
+    def post(path, params)
+      unless path == "#{@expected_handler}"
         raise ArgumentError, "Expected request to #{@expected_handler} request handler"
       end
-      @searches << @last_search = params
+      @searches << @last_search = params[:data]
       @response || {}
     end
 
     def method_missing(method, *args, &block)
-      request("/#{method}", *args)
+      get("#{method}", *args)
     end
 
     def has_add_with?(*documents)

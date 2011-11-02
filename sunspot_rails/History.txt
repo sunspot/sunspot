@@ -1,3 +1,14 @@
+== 1.3.0
+* `Model.index` correctly uses `:first_id` option (Hamza Khan-Cheema)
+* Solr request performance is instrumented in Rails (Paco Guzmán)
+* Reindexing tasks display a progress bar if `progress_bar` gem is available (Paul Carey)
+* Deprecated Rails syntax is removed from `Sunspot::Rails::Searchable` (Steve Schwartz)
+* Deprecated syntax is removed from rake tasks (Huned Botee)
+* `sunspot:reindex` rake task correctly handles namespaced models (João Gradim)
+
+== 1.2.1 2010-12-28
+* Decreased default reindexing batch size from 500 to 50
+
 == 1.2.0 2010-12-28
 * Compatible with both Rails 2 and Rails 3
 * Configure Sunspot with a SOLR_URL or WEBSOLR_URL environment variable, also

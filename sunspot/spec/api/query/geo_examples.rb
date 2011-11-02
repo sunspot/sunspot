@@ -1,4 +1,3 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'bigdecimal'
 
 shared_examples_for 'geohash query' do

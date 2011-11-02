@@ -195,9 +195,10 @@ module Sunspot #:nodoc:
         @data_path ||= user_configuration_from_key('solr', 'data_path') || File.join(::Rails.root, 'solr', 'data', ::Rails.env)
       end
       
-      def pid_path
-        @pids_path ||= user_configuration_from_key('solr', 'pid_path') || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
+      def pid_dir
+        @pid_dir ||= user_configuration_from_key('solr', 'pid_dir') || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
       end
+
       
       # 
       # The solr home directory. Sunspot::Rails expects this directory
@@ -279,7 +280,7 @@ module Sunspot #:nodoc:
             path = File.join(::Rails.root, 'config', 'sunspot.yml')
             if File.exist?(path)
               File.open(path) do |file|
-                processed = ERB.new(File.read(file)).result
+                processed = ERB.new(file.read).result
                 YAML.load(processed)[::Rails.env]
               end
             else
