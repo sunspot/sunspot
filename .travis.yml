@@ -28,6 +28,7 @@ notifications:
   irc: "irc.freenode.org#sunspot-ruby"
   recipients:
     - alindeman@gmail.com
+    - nick@onemorecloud.com
 
 script:
   - ci/travis.sh
