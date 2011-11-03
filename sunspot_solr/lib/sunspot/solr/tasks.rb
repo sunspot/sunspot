@@ -9,6 +9,8 @@ namespace :sunspot do
         			"Use rake sunspot:solr:run to run Solr in the foreground.")
 		  end
       Sunspot::Rails::Server.new.start
+
+      puts "Successfully started Solr ..."
     end
 
     desc 'Run the Solr instance in the foreground'
@@ -24,6 +26,8 @@ namespace :sunspot do
         			"Use rake sunspot:solr:run to run Solr in the foreground.")
 		  end
       Sunspot::Rails::Server.new.stop
+
+      puts "Successfully stopped Solr ..."
     end
 
 		# for backwards compatibility
