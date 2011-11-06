@@ -119,6 +119,17 @@ module Sunspot
       end
   
       # 
+      # The time elapsed to generate the Solr response
+      #
+      # ==== Returns
+      #
+      # Integer:: Query runtime in milliseconds
+      #
+      def query_time
+        @query_time ||= solr_response_header['QTime']
+      end
+  
+      # 
       # Get the facet object for the given name. `name` can either be the name
       # given to a query facet, or the field name of a field facet. Returns a
       # Sunspot::Facet object.
@@ -263,6 +274,10 @@ module Sunspot
   
       def solr_response
         @solr_response ||= @solr_result['response'] || {}
+      end
+  
+      def solr_response_header
+        @solr_response_header ||= @solr_result['responseHeader'] || {}
       end
   
       def highlights_for(doc)
