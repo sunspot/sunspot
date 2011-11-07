@@ -8,14 +8,14 @@ namespace :sunspot do
         abort("This command is not supported on #{RUBY_PLATFORM}. " +
               "Use rake sunspot:solr:run to run Solr in the foreground.")
       end
-      Sunspot::Rails::Server.new.start
+      Sunspot::Solr::Server.new.start
 
       puts "Successfully started Solr ..."
     end
 
     desc 'Run the Solr instance in the foreground'
     task :run => :environment do
-      Sunspot::Rails::Server.new.run
+      Sunspot::Solr::Server.new.run
     end
 
     desc 'Stop the Solr instance'
@@ -25,7 +25,7 @@ namespace :sunspot do
         abort("This command is not supported on #{RUBY_PLATFORM}. " +
               "Use rake sunspot:solr:run to run Solr in the foreground.")
       end
-      Sunspot::Rails::Server.new.stop
+      Sunspot::Solr::Server.new.stop
 
       puts "Successfully stopped Solr ..."
     end
