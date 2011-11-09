@@ -125,7 +125,8 @@ end
 ### Scoping (Scalar Fields)
 
 Fields not defined as `text` (e.g., `integer`, `boolean`, `time`,
-etc...) can be used to scope (restrict) queries.
+etc...) can be used to scope (restrict) queries before full-text
+matching is performed.
 
 #### Positive Restrictions
 
@@ -195,6 +196,78 @@ Post.search do
       with(:category_ids, 3)
     end
   end
+end
+```
+
+#### Combined with Full-Text
+
+Scopes/restrictions can be combined with full-text searching. The
+scope/restriction pares down the objects that are searched for the
+full-text term.
+
+```ruby
+# Posts with blog_id 1 and 'pizza' in the title
+Post.search do
+  with(:blog_id, 1)
+  fulltext("pizza")
+end
+```
+
+### Pagination
+
+
+### Faceting
+
+Faceting is a feature of Solr that determines the number of documents
+that match a given search *and* an additional criterion. This allows you
+to build powerful drill-down interfaces for search.
+
+Each facet returns zero or more rows, each of which represents a
+particular criterion conjoined with the actual query being performed.
+For **field facets**, each row represents a particular value for a given
+field. For **query facets**, each row represents an arbitrary scope; the
+facet itself is just a means of logically grouping the scopes.
+
+#### Field Facets
+
+```ruby
+# Posts that match 'pizza' returning counts for each :author_id
+search = Post.search do
+  fulltext "pizza"
+  facet :author_id
+end
+
+search.facet(:author_id).rows.each do |facet|
+  puts "Author #{facet.value} has #{facet.count} pizza posts!"
+end
+```
+
+#### Query Facets
+
+```ruby
+# Posts faceted by ranges of average ratings
+Post.search do
+  facet(:average_rating) do
+    row(1.0..2.0) do
+      with(:average_rating, 1.0..2.0)
+    end
+    row(2.0..3.0) do
+      with(:average_rating, 2.0..3.0)
+    end
+    row(3.0..4.0) do
+      with(:average_rating, 3.0..4.0)
+    end
+    row(4.0..5.0) do
+      with(:average_rating, 4.0..5.0)
+    end
+  end
+end
+
+# e.g.,
+# Number of posts with rating withing 1.0..2.0: 2
+# Number of posts with rating withing 2.0..3.0: 1
+search.facet(:average_rating).rows.each do |facet|
+  puts "Number of posts with rating withing #{facet.value}: #{facet.count}"
 end
 ```
 
