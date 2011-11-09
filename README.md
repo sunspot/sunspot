@@ -215,6 +215,7 @@ end
 
 ### Pagination
 
+TODO
 
 ### Faceting
 
@@ -268,6 +269,33 @@ end
 # Number of posts with rating withing 2.0..3.0: 1
 search.facet(:average_rating).rows.each do |facet|
   puts "Number of posts with rating withing #{facet.value}: #{facet.count}"
+end
+```
+
+### Ordering
+
+By default, Sunspot orders results by "score": the Solr-determined
+relevant score. Sorting can be customized with the `order_by` method:
+
+```ruby
+# Order by average rating, descending
+Post.search do
+  fulltext("pizza")
+  order_by(:average_rating, :desc)
+end
+
+# Order by relevancy score and in the case of a tie, average rating
+Post.search do
+  fulltext("pizza")
+
+  order_by(:score, :desc)
+  order_by(:average_rating, :desc)
+end
+
+# Randomized ordering
+Post.search do
+  fulltext("pizza")
+  order_by(:random)
 end
 ```
 
