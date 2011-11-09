@@ -420,11 +420,63 @@ TODO
 
 ### Stored Fields
 
-TODO
+Stored fields keep an original (untokenized/unanalyzed) version of their
+contents in Solr.
+
+Stored fields allow data to be retrieved without also hitting the
+underlying database (usually an SQL server). They are also required for
+highlighting and more like this queries.
+
+Stored fields come at some performance cost in the Solr index, so use
+them wisely.
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    text :body, :stored => true
+  end
+end
+
+# Retrieving stored contents without hitting the database
+Post.search.hits.each do |hit|
+  puts hit.stored(:body)
+end
+```
 
 ## Hits vs. Results
 
-TODO
+Sunspot simply stores the type and primary key of objects in Solr.
+When results are retrieved, those primary keys are used to load the
+actual object (usually from an SQL database).
+
+```ruby
+# Using #results pulls in the records from the object-relational
+# mapper (e.g., ActiveRecord + a SQL server)
+Post.search.results.each do |result|
+  puts result.body
+end
+```
+
+To access information about the results without querying the underlying
+database, use `hits`:
+
+```ruby
+# Using #hits gives back all information requested from Solr, but does
+# not load the object from the object-relational mapper
+Post.search.hits.each do |hit|
+  puts hit.stored(:body)
+end
+```
+
+If you need both the result (ORM-loaded object) and `Hit` (e.g., for
+faceting, highlighting, etc...), you can use the convenience method
+`each_hit_with_result`:
+
+```ruby
+Post.search.each_hit_with_result do |hit, result|
+  # ...
+end
+```
 
 ## Reindexing Objects
 
