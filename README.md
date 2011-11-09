@@ -305,7 +305,44 @@ TODO
 
 ### Highlighting
 
-TODO
+Highlighting allows you to display snippets of the part of the document
+that matched the query.
+
+The fields you wish to highlight must be **stored**.
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    # ...
+    text :body, :stored => true
+  end
+end
+```
+
+Highlighting matches on the `body` field, for instance, can be acheived
+like:
+
+```ruby
+search = Post.search do
+  fulltext "pizza" do
+    highlight :body
+  end
+end
+
+# Will output something similar to:
+# Post #1
+#   I really love *pizza*
+#   *Pizza* is my favorite thing
+# Post #2
+#   Pepperoni *pizza* is delicious
+search.hits.each do |hit|
+  puts "Post ##{hit.primary_key}"
+
+  hit.highlights(:body).each do |highlight|
+    puts "  " + highlight.format { |word| "*#{word}*" }
+  end
+end
+```
 
 ### Functions
 
