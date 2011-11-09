@@ -215,7 +215,65 @@ end
 
 ### Pagination
 
-TODO
+**All results from Solr are paginated**
+
+The results array that is returned has methods mixed in that allow it to
+operate seamlessly with common pagination libraries like will\_paginate
+and kaminari.
+
+By default, Sunspot requests the first 30 results from Solr.
+
+```ruby
+search = Post.search do
+  fulltext "pizza"
+end
+
+# Imagine there are 60 *total* results (at 30 results/page, that is two pages)
+results = search.results # => Array with 30 Post elements
+
+search.total           # => 60
+
+results.total_pages    # => 2
+results.first_page?    # => true
+results.last_page?     # => false
+results.previous_page  # => nil
+results.next_page      # => 2
+results.out_of_bounds? # => false
+results.offset         # => 0
+```
+
+To retrieve the next page of results, recreate the search and use the
+`paginate` method.
+
+```ruby
+search = Post.search do
+  fulltext "pizza"
+  paginate :page => 2
+end
+
+# Again, imagine there are 60 total results; this is the second page
+results = search.results # => Array with 30 Post elements
+
+search.total           # => 60
+
+results.total_pages    # => 2
+results.first_page?    # => false
+results.last_page?     # => true
+results.previous_page  # => 1
+results.next_page      # => nil
+results.out_of_bounds? # => false
+results.offset         # => 30
+```
+
+A custom number of results per page can be specified with the
+`:per_page` option to `paginate`:
+
+```ruby
+search = Post.search do
+  fulltext "pizza"
+  paginate :page => 1, :per_page => 50
+end
+```
 
 ### Faceting
 
