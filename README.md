@@ -416,7 +416,17 @@ TODO
 
 ### Index-Time Boosts
 
-TODO
+To specify that a field should be boosted in relation to other fields for
+all queries, you can specify the boost at index time:
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    text :title, :boost => 5.0
+    text :body
+  end
+end
+```
 
 ### Stored Fields
 
