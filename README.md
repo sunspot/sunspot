@@ -275,7 +275,7 @@ end
 ### Ordering
 
 By default, Sunspot orders results by "score": the Solr-determined
-relevant score. Sorting can be customized with the `order_by` method:
+relevancy metric. Sorting can be customized with the `order_by` method:
 
 ```ruby
 # Order by average rating, descending
