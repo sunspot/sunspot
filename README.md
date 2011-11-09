@@ -307,7 +307,27 @@ TODO
 
 TODO
 
+### Functions
+
+TODO
+
+### More Like This
+
+TODO
+
 ## Indexing In Depth
+
+TODO
+
+### Index-Time Boosts
+
+TODO
+
+### Stored Fields
+
+TODO
+
+## Hits vs. Results
 
 TODO
 
@@ -327,6 +347,26 @@ bundle exec rake sunspot:solr:reindex[500,Post] # some shells will require escap
 ```
 
 ## Use Without Rails
+
+TODO
+
+## Manually Adjusting Solr Parameters
+
+To add or modify parameters sent to Solr, use `adjust_solr_params`:
+
+```ruby
+Post.search do
+  adjust_solr_params do |params|
+    params[:q] += " AND something_s:more"
+  end
+end
+```
+
+## Session Proxies
+
+TODO
+
+## Type Reference
 
 TODO
 
