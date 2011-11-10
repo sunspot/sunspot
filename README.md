@@ -122,6 +122,10 @@ Post.search do
 end
 ```
 
+#### Phrases
+
+TODO: Slop, phrase boost, etc...
+
 ### Scoping (Scalar Fields)
 
 Fields not defined as `text` (e.g., `integer`, `boolean`, `time`,
