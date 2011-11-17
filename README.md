@@ -531,6 +531,67 @@ TODO
 
 TODO
 
+## Development
+
+### Running Tests
+
+#### sunspot
+
+Install the required gem dependencies:
+
+```bash
+cd /path/to/sunspot/sunspot
+bundle install
+```
+
+Start a Solr instance on port 8983:
+
+```bash
+bundle exec sunspot-solr start -p 8983
+# or `bundle exec sunspot-solr run -p 8983` to run in foreground
+```
+
+Run the tests:
+
+```bash
+bundle exec rake spec
+```
+
+If desired, stop the Solr instance:
+
+```bash
+bundle exec sunspot-solr stop
+```
+
+#### sunspot\_rails
+
+Install the gem dependencies for `sunspot`:
+
+```bash
+cd /path/to/sunspot/sunspot
+bundle install
+```
+
+Start a Solr instance on port 8983:
+
+```bash
+bundle exec sunspot-solr start -p 8983
+# or `bundle exec sunspot-solr run -p 8983` to run in foreground
+```
+
+Run the tests:
+
+```bash
+rake spec # all Rails versions
+rake spec RAILS=3.1.1 # specific Rails version only
+```
+
+If desired, stop the Solr instance:
+
+```bash
+bundle exec sunspot-solr stop
+```
+
 ## Tutorials and Articles
 
 * [Full Text Searching with Solr and Sunspot](http://collectiveidea.com/blog/archives/2011/03/08/full-text-searching-with-solr-and-sunspot/) (Collective Idea)
