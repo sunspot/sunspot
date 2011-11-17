@@ -572,6 +572,12 @@ cd /path/to/sunspot/sunspot
 bundle install
 ```
 
+Navigate to the `sunspot_rails` directory:
+
+```bash
+cd ../sunspot_rails
+```
+
 Start a Solr instance on port 8983:
 
 ```bash
