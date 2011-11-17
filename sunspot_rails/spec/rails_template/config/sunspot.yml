@@ -1,7 +1,7 @@
 test:
   solr:
     hostname: localhost
-    port: 8980
+    port: 8983
 development:
   solr:
     hostname: localhost

@@ -20,7 +20,7 @@ describe Sunspot::Rails::Server do
   end
 
   it "sets the correct port" do
-    @server.port.should == 8980
+    @server.port.should == 8983
   end
 
   it "sets the correct log level" do

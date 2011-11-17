@@ -38,12 +38,12 @@ case $GEM in
   "sunspot_rails")
   
     cd sunspot
-    /bin/echo -n "Starting Solr on port 8980 for Sunspot specs..."
+    /bin/echo -n "Starting Solr on port 8983 for Sunspot specs..."
     bundle install --quiet --path vendor/bundle
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
 
-    bundle exec sunspot-solr start -p 8980
-    wait_until_solr_responds 8980
+    bundle exec sunspot-solr start -p 8983
+    wait_until_solr_responds 8983
     /bin/echo "done."
     
     # Install gems for test Rails application
