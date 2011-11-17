@@ -572,17 +572,17 @@ cd /path/to/sunspot/sunspot
 bundle install
 ```
 
-Navigate to the `sunspot_rails` directory:
-
-```bash
-cd ../sunspot_rails
-```
-
 Start a Solr instance on port 8983:
 
 ```bash
 bundle exec sunspot-solr start -p 8983
 # or `bundle exec sunspot-solr run -p 8983` to run in foreground
+```
+
+Navigate to the `sunspot_rails` directory:
+
+```bash
+cd ../sunspot_rails
 ```
 
 Run the tests:
@@ -595,6 +595,7 @@ rake spec RAILS=3.1.1 # specific Rails version only
 If desired, stop the Solr instance:
 
 ```bash
+cd ../sunspot
 bundle exec sunspot-solr stop
 ```
 
