@@ -27,7 +27,7 @@ namespace :spec do
 
     unless File.exist?(ENV['BUNDLE_PATH'])
       puts "Installing gems for Rails #{version} (this will only be done once)..."
-      `bundle install #{ENV['BUNDLE_ARGS']}`
+      system("bundle install #{ENV['BUNDLE_ARGS']}") || exit(1)
     end
   end
 
@@ -40,9 +40,9 @@ namespace :spec do
 
       puts "Generating Rails #{version} application..."
       if version.start_with?("2")
-        `#{rails_cmd} \"#{app_path}\" --force`
+        system("#{rails_cmd} \"#{app_path}\" --force") || exit(1)
       elsif version.start_with?("3")
-        `#{rails_cmd} new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets`
+        system("#{rails_cmd} new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets") || exit(1)
       end
     end
   end
