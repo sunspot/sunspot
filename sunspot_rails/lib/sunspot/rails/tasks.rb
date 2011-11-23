@@ -1,3 +1,5 @@
+require 'progress_bar'
+
 namespace :sunspot do
   namespace :solr do
     desc 'Start the Solr instance'
@@ -38,7 +40,7 @@ namespace :sunspot do
   # $ rake sunspot:reindex[1000,Post]     # reindex only the Post model in
   #                                       # batchs of 1000
   # $ rake sunspot:reindex[,Post+Author]  # reindex Post and Author model
-  task :reindex, :batch_size, :models, :needs => :environment do |t, args|
+  task :reindex, [:batch_size, :models] => [:environment] do |t, args|
     reindex_options = {:batch_commit => false}
     case args[:batch_size]
     when 'false'
@@ -47,12 +49,15 @@ namespace :sunspot do
       reindex_options[:batch_size] = args[:batch_size].to_i if args[:batch_size].to_i > 0
     end
     unless args[:models]
-      all_files = Dir.glob(Rails.root.join('app', 'models', '*.rb'))
-      all_models = all_files.map { |path| File.basename(path, '.rb').camelize.constantize }
+      models_path = Rails.root.join('app', 'models')
+      all_files = Dir.glob(models_path.join('**', '*.rb'))
+      all_models = all_files.map { |path| path.sub(models_path.to_s, '')[0..-4].camelize.sub(/^::/, '').constantize rescue nil }.compact
       sunspot_models = all_models.select { |m| m < ActiveRecord::Base and m.searchable? }
     else
       sunspot_models = args[:models].split('+').map{|m| m.constantize}
     end
+    count=sunspot_models.map { | m | m.count }.sum
+    reindex_options[:progress_bar]= ProgressBar.new(count)
     sunspot_models.each do |model|
       model.solr_reindex reindex_options
     end

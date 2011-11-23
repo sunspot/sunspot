@@ -1,6 +1,6 @@
 module Sunspot
   module Rails
-    class Server < Sunspot::Server
+    class Server < Sunspot::Solr::Server
       # ActiveSupport log levels are integers; this array maps them to the
       # appropriate java.util.logging.Level constant
       LOG_LEVELS = %w(FINE INFO WARNING SEVERE SEVERE INFO)
@@ -41,7 +41,7 @@ module Sunspot
       # Directory in which to store PID files
       #
       def pid_dir
-        File.join(::Rails.root, 'tmp', 'pids')
+        configuration.pid_dir || File.join(::Rails.root, 'tmp', 'pids')
       end
 
       # 
@@ -59,7 +59,7 @@ module Sunspot
       # String:: data_path
       #
       def solr_data_dir
-        File.join(solr_home, 'data', ::Rails.env)
+        configuration.data_path
       end
 
       # 

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'ActiveRecord mixin' do
   describe 'index()' do
@@ -19,6 +19,32 @@ describe 'ActiveRecord mixin' do
     it "should not blow up if there's a default scope specifying order" do
       posts = Array.new(2) { |j| PostWithDefaultScope.create! :title => (10-j).to_s }
       lambda { PostWithDefaultScope.index(:batch_size => 1) }.should_not raise_error
+    end
+  end
+
+  describe 'index() with conditional indexing' do
+    describe 'when conditional is false' do
+      before :each do
+        @post = PostWithConditionalIndex.create!(:title => nil)
+        @post.index
+        Sunspot.commit
+      end
+
+      it 'should not index the model' do
+        PostWithConditionalIndex.search.results.should be_empty
+      end
+    end
+
+    describe 'when conditional is true' do
+      before :each do
+        @post = PostWithConditionalIndex.create!(:title => 'Present')
+        @post.index
+        Sunspot.commit
+      end
+
+      it 'should index the model' do
+        PostWithConditionalIndex.search.results.should == [@post]
+      end
     end
   end
 
@@ -44,6 +70,30 @@ describe 'ActiveRecord mixin' do
     end
   end
 
+  describe 'index!() with conditional indexing' do
+    describe 'when conditional is false' do
+      before :each do
+        @post = PostWithConditionalIndex.create!(:title => nil)
+        @post.index!
+      end
+
+      it 'should not index the model' do
+        PostWithConditionalIndex.search.results.should be_empty
+      end
+    end
+
+    describe 'when conditional is true' do
+      before :each do
+        @post = PostWithConditionalIndex.create!(:title => 'Present')
+        @post.index!
+      end
+
+      it 'should index the model' do
+        PostWithConditionalIndex.search.results.should == [@post]
+      end
+    end
+  end
+
   describe 'remove_from_index()' do
     before :each do
       @post = Post.create!
@@ -61,6 +111,33 @@ describe 'ActiveRecord mixin' do
     end
   end
 
+  describe 'remove_from_index() with conditional indexing' do
+    before :each do
+      @post = PostWithConditionalIndex.create!(:title => 'Present')
+      @post.index!
+    end
+
+    describe 'when conditional is false' do
+      before :each do
+        @post.title = nil
+      end
+
+      it 'should not remove the model from the index' do
+        @post.remove_from_index
+        Sunspot.commit
+        PostWithConditionalIndex.search.results.should == [@post]
+      end
+    end
+
+    describe 'when conditional is true' do
+      it 'should remove the model from the index' do
+        @post.remove_from_index
+        Sunspot.commit
+        PostWithConditionalIndex.search.results.should be_empty
+      end
+    end
+  end
+
   describe 'remove_from_index!()' do
     before :each do
       @post = Post.create!
@@ -70,6 +147,31 @@ describe 'ActiveRecord mixin' do
 
     it 'should immediately remove the model and commit' do
       Post.search.results.should be_empty
+    end
+  end
+
+  describe 'remove_from_index!() with conditional indexing' do
+    before :each do
+      @post = PostWithConditionalIndex.create!(:title => 'Present')
+      @post.index!
+    end
+
+    describe 'when conditional is false' do
+      before :each do
+        @post.title = nil
+      end
+
+      it 'should not remove the model from the index' do
+        @post.remove_from_index!
+        PostWithConditionalIndex.search.results.should == [@post]
+      end
+    end
+
+    describe 'when conditional is true' do
+      it 'should remove the model from the index' do
+        @post.remove_from_index!
+        PostWithConditionalIndex.search.results.should be_empty
+      end
     end
   end
 
@@ -246,7 +348,6 @@ describe 'ActiveRecord mixin' do
       Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
-    
   end
 
   describe 'reindex() with real data' do
@@ -278,7 +379,28 @@ describe 'ActiveRecord mixin' do
     end
   end
 
+  describe 'reindex() with conditional indexing' do
+    before :each do
+      @non_indexed_post = PostWithConditionalIndex.create!(:title => nil)
+      @indexed_post = PostWithConditionalIndex.create!(:title => 'Present')
+    end
 
+    describe "when not using batches" do
+      it 'should not include non indexed records' do
+        PostWithConditionalIndex.reindex(:batch_size => nil)
+        Sunspot.commit
+        PostWithConditionalIndex.search.results.should == [@indexed_post]
+      end
+    end
+
+    describe "when using batches" do
+      it 'should not include non indexed records' do
+        PostWithConditionalIndex.reindex(:batch_size => 1)
+        Sunspot.commit
+        PostWithConditionalIndex.search.results.should == [@indexed_post]
+      end
+    end
+  end
   
   describe "reindex()" do
   

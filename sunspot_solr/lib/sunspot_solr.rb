@@ -1,0 +1,1 @@
+require 'sunspot/solr/server'

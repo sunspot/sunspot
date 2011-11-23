@@ -1,0 +1,19 @@
+rvm:
+  - 1.8.7
+  # - 1.9.2
+  # - 1.9.3
+  # - rbx-2.0
+  # - jruby
+
+env:
+  - GEM=sunspot
+  - GEM=sunspot_rails RAILS=rails2
+  - GEM=sunspot_rails RAILS=rails3
+
+notifications:
+  # irc: "irc.freenode.org#sunspot-ruby"
+  # recipients:
+  #   - nick@onemorecloud.com
+
+script:
+  - ci/travis.sh

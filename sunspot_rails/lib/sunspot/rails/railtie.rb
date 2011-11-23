@@ -11,6 +11,16 @@ module Sunspot
         ActiveSupport.on_load(:action_controller) do
           include(Sunspot::Rails::RequestLifecycle)
         end
+        require 'sunspot/rails/log_subscriber'
+        RSolr::Connection.module_eval{ include Sunspot::Rails::SolrInstrumentation }
+      end
+
+      # Expose database runtime to controller for logging.
+      initializer "sunspot_rails.log_runtime" do |app|
+        require "sunspot/rails/railties/controller_runtime"
+        ActiveSupport.on_load(:action_controller) do
+          include Sunspot::Rails::Railties::ControllerRuntime
+        end
       end
 
       rake_tasks do

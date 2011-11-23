@@ -14,7 +14,7 @@ objects such as the filesystem.
 === Where to learn all about Sunspot: The Wiki!
 
 New to Sunspot and using Rails? Check out {Adding Sunspot search to Rails in 5
-minutes or less}[http://wiki.github.com/outoftime/sunspot/adding-sunspot-search-to-rails-in-5-minutes-or-less].
+minutes or less}[https://github.com/outoftime/sunspot/wiki/Adding-Sunspot-search-to-Rails-in-5-minutes-or-less].
 
 This README is intended as a quick primer on what Sunspot is capable of; for
 detailed treatment of Sunspot's full feature range, check out the wiki:
@@ -47,6 +47,10 @@ the library.
 == Installation
 
   gem install sunspot
+
+Optionally install the packaged Solr installation (recommended for development):
+
+  gem install sunspot_solr
 
 In order to start the packaged Solr installation, run:
 
@@ -105,9 +109,9 @@ an adapter for ActiveRecord objects, but for other types of models you will need
 to define your own. See Sunspot::Adapters for more information.
 
 === Search for objects:
-  
+
   @search = Sunspot.search Post do
-    keywords 'great pizza' do 
+    keywords 'great pizza' do
       highlight :title, :description
     end
     with :author_name, 'Mark Twain'
@@ -132,12 +136,17 @@ See Sunspot.search for more information.
 === Work with search results (Haml for readability):
 
   .facets
-    ul.blog_facet
+    %ul.blog_facet
       - @search.facet(:blog_id).rows.each do |row|
-        li.facet_row
+        %li.facet_row
           = link_to(row.instance.name, params.merge(:blog_id => row.value))
           %span.count== (#{row.count})
-  .page_info== Displaying page #{@search.hits.page} of #{@search.hits.per_page} out of #{@search.total} results
+
+  .page_info
+    %h4
+      %span.count= pluralize(@search.total, 'result')
+      %span.pages Page #{@search.hits.current_page} of #{@search.hits.total_pages} 
+
   - @search.each_hit_with_result do |hit, post|
     .search_result
       %h3.title
@@ -212,6 +221,7 @@ Sunspot repository at `upstream`:
 * {A Few Sunspot Tips}[http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/] (spiral_code)
 * {Sunspot: A Solr-Powered Search Engine for Ruby}[http://www.linux-mag.com/id/7341] (Linux Magazine)
 * {Sunspot Showed Me the Light}[http://bennyfreshness.com/2010/05/sunspot-helped-me-see-the-light/] (ben koonse)
+* {RubyGems.org — A case study in upgrading to full-text search}[http://blog.websolr.com/post/3505903537/rubygems-search-upgrade-1] (Websolr)
 * {How to Implement Spatial Search with Sunspot and Solr}[http://codequest.eu/articles/how-to-implement-spatial-search-with-sunspot-and-solr] (Code Quest)
 * {Sunspot 1.2 with Spatial Solr Plugin 2.0}[http://joelmats.wordpress.com/2011/02/23/getting-sunspot-1-2-with-spatial-solr-plugin-2-0-to-work/] (joelmats)
 * {rails3 + heroku + sunspot : madness}[http://anhaminha.tumblr.com/post/632682537/rails3-heroku-sunspot-madness] (anhaminha)
@@ -220,7 +230,9 @@ Sunspot repository at `upstream`:
 * {Using Sunspot for Free-Text Search with Redis}[http://masonoise.wordpress.com/2010/02/06/using-sunspot-for-free-text-search-with-redis/] (While I Pondered...)
 * {Fuzzy searching in SOLR with Sunspot}[http://www.pipetodevnull.com/past/2010/8/5/fuzzy_searching_in_solr_with_sunspot/] (pipe :to => /dev/null)
 * {Default scope with Sunspot}[http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/] (Cloudspace)
+* {Index External Models with Sunspot/Solr}[http://www.medihack.org/2011/03/19/index-external-models-with-sunspotsolr/] (Medihack)
 * {Chef recipe for Sunspot in production}[http://gist.github.com/336403]
+* {Testing with Sunspot and Cucumber}[http://collectiveidea.com/blog/archives/2011/05/25/testing-with-sunspot-and-cucumber/] (Collective Idea)
 * {Cucumber and Sunspot}[http://opensoul.org/2010/4/7/cucumber-and-sunspot] (opensoul.org)
 * {Testing Sunspot with Cucumber}[http://blog.trydionel.com/2010/02/06/testing-sunspot-with-cucumber/] (spiral_code)
 * {Running cucumber features with sunspot_rails}[http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails] (Kabisa Blog)

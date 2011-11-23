@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'hits', :type => :search do
   it 'should return hits without loading instances' do
@@ -12,44 +12,30 @@ describe 'hits', :type => :search do
     end.should == [['Post', post_1.id.to_s], ['Post', post_2.id.to_s]]
   end
 
-  if ENV['USE_WILL_PAGINATE']
+  it 'returns search total as attribute of hits' do
+    stub_results(Post.new, 4)
+    session.search(Post) do
+      paginate(:page => 1)
+    end.hits.total_entries.should == 4
+  end
 
-    it 'returns search total as attribute of hits' do
-      stub_results(Post.new, 4)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits.total_entries.should == 4
-    end
-
-    it 'returns search total as attribute of verified hits' do
-      stub_results(Post.new, 4)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits(:verify => true).total_entries.should == 4
-    end
-
-  else
-
-    it 'returns vanilla array of hits if WillPaginate is not available' do
-      stub_results(Post.new)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits.should_not respond_to(:total_entries)
-    end
-
-    it 'returns vanilla array of verified hits if WillPaginate is not available' do
-      stub_results(Post.new)
-      session.search(Post) do
-        paginate(:page => 1)
-      end.hits(:verified => true).should_not respond_to(:total_entries)
-    end
-
+  it 'returns search total as attribute of verified hits' do
+    stub_results(Post.new, 4)
+    session.search(Post) do
+      paginate(:page => 1)
+    end.hits(:verify => true).total_entries.should == 4
   end
 
   it 'should return instance from hit' do
     posts = Array.new(2) { Post.new }
     stub_results(*posts)
     session.search(Post).hits.first.instance.should == posts.first
+  end
+
+  it 'should return the instance primary key when you use it as a param' do
+    posts = Array.new(2) { Post.new }
+    stub_results(*posts)
+    session.search(Post).hits.first.to_param.should == posts.first.id.to_s
   end
 
   it 'should provide iterator over hits with instances' do
@@ -120,6 +106,11 @@ describe 'hits', :type => :search do
   it 'should return stored boolean fields' do
     stub_full_results('instance' => Post.new, 'featured_bs' => true)
     session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should be_true
+  end
+
+  it 'should return stored boolean fields that evaluate to false' do
+    stub_full_results('instance' => Post.new, 'featured_bs' => false)
+    session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should == false
   end
 
   it 'should return stored dynamic fields' do

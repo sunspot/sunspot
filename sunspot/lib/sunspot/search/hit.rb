@@ -96,6 +96,20 @@ module Sunspot
         "#<Sunspot::Search::Hit:#{@class_name} #{@primary_key}>"
       end
 
+      #
+      # Returns the instance primary key when the Hit is used to generate urls
+      # For example, using a search that stores the :name attribute:
+      #
+      #   hits = Sunspot.search(Object) do ...
+      #
+      #   hits.each do |hit|
+      #     link_to hit.stored(:name), edit_object_path(hit)
+      #   end
+      #
+      def to_param
+        self.primary_key
+      end
+
       private
 
       def setup
@@ -120,15 +134,15 @@ module Sunspot
 
       def stored_value(field_name, dynamic_field_name)
         setup.stored_fields(field_name, dynamic_field_name).each do |field|
-          if value = @stored_values[field.indexed_name]
-            case value
-            when Array
-              return value.map { |item| field.cast(item) }
-            else
-              return field.cast(value)
-            end
+          value = @stored_values[field.indexed_name]
+
+          if Array === value
+            return value.map { |item| field.cast(item) }
+          elsif !value.nil?
+            return field.cast(value)
           end
         end
+
         nil
       end
     end

@@ -1,5 +1,3 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
-
 shared_examples_for "query with highlighting support" do
   it 'should not send highlight parameter when highlight not requested' do
     search do

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'indexer', :type => :indexer do
   it 'should completely wipe setup if class redefined (reloaded)' do

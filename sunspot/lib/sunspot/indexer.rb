@@ -107,7 +107,7 @@ module Sunspot
     # pairs.
     #
     def document_for(model)
-      RSolr::Message::Document.new(
+      RSolr::Xml::Document.new(
         :id => Adapters::InstanceAdapter.adapt(model).index_id,
         :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }
       )

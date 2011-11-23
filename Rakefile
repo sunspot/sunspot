@@ -1,4 +1,4 @@
-desc 'Release Sunspot and Sunspot::Rails to Gemcutter'
+desc 'Release Sunspot, Sunspot::Rails and Sunspot::Solr to Gemcutter'
 task :release do
   FileUtils.cp('README.rdoc', 'sunspot/')
 
@@ -19,4 +19,18 @@ task :release do
     system "gem push sunspot_rails-#{Sunspot::VERSION}.gem"
     FileUtils.rm("sunspot_rails-#{Sunspot::VERSION}.gem")
   end
+
+  FileUtils.cd 'sunspot_solr' do
+    system "gem build sunspot_solr.gemspec"
+    system "gem push sunspot_solr-#{Sunspot::VERSION}.gem"
+    FileUtils.rm("sunspot_solr-#{Sunspot::VERSION}.gem")
+  end
+end
+
+
+desc 'Run all the tests'
+task :default do
+  exit system([ "GEM=sunspot ci/travis.sh",
+                "GEM=sunspot_rails RAILS=rails2 ci/travis.sh",
+                "GEM=sunspot_rails RAILS=rails3 ci/travis.sh" ].join(" && ")) ? 0 : 1
 end

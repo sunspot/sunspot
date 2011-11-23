@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" do
   before(:each) do
@@ -55,9 +55,9 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
     @config.data_path.should == '/some/path/solr/data/test'
   end
 
-  it "should handle the 'pid_path' property when not set" do
+  it "should handle the 'pid_dir' property when not set" do
     Rails.should_receive(:root).at_least(1).and_return('/some/path')
-    @config.pid_path.should == '/some/path/solr/pids/test'
+    @config.pid_dir.should == '/some/path/solr/pids/test'
   end
   
   it "should handle the 'auto_commit_after_request' propery when not set" do
@@ -99,8 +99,8 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
     @config.data_path.should == '/my_superior_path/data'
   end
 
-  it "should handle the 'pid_path' property when set" do
-    @config.pid_path.should == '/my_superior_path/pids'
+  it "should handle the 'pid_dir' property when set" do
+    @config.pid_dir.should == '/my_superior_path/pids'
   end
   
   it "should handle the 'solr_home' property when set" do

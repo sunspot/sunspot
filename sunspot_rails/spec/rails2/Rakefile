@@ -5,7 +5,7 @@ require(File.join(File.dirname(__FILE__), 'config', 'boot'))
 
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'tasks/rails'
 
 # Try to load gem tasks.  rake gems:install fails if these gems have not yet been
