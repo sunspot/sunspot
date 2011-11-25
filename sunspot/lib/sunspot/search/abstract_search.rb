@@ -14,15 +14,19 @@ module Sunspot
       # Retrieve all facet objects defined for this search, in order they were
       # defined. To retrieve an individual facet by name, use #facet()
       #
-      attr_reader :facets
+      attr_reader :facets, :groups
       attr_reader :query #:nodoc:
       attr_accessor :request_handler
   
       def initialize(connection, setup, query, configuration) #:nodoc:
         @connection, @setup, @query = connection, setup, query
         @query.paginate(1, configuration.pagination.default_per_page)
+
         @facets = []
         @facets_by_name = {}
+
+        @groups_by_name = {}
+        @groups = []
       end
   
       #
@@ -178,6 +182,12 @@ module Sunspot
           end
         end
       end
+
+      def group(name)
+        if name
+          @groups_by_name[name.to_sym]
+        end
+      end
   
       # 
       # Deprecated in favor of optional second argument to #facet
@@ -188,6 +198,10 @@ module Sunspot
   
       def facet_response #:nodoc:
         @solr_result['facet_counts']
+      end
+
+      def group_response #:nodoc:
+        @solr_result['grouped']
       end
   
       # 
@@ -247,6 +261,10 @@ module Sunspot
       def inspect #:nodoc:
         "<Sunspot::Search:#{query.to_params.inspect}>"
       end
+
+      def add_field_group(field, options = {}) #:nodoc:
+        add_group(field.name, FieldGroup.new(field, self, options))
+      end
   
       def add_field_facet(field, options = {}) #:nodoc:
         name = (options[:name] || field.name)
@@ -297,6 +315,11 @@ module Sunspot
       def add_facet(name, facet)
         @facets << facet
         @facets_by_name[name.to_sym] = facet
+      end
+
+      def add_group(name, group)
+        @groups << group
+        @groups_by_name[name.to_sym] = group
       end
       
       # Clear out all the cached ivars so the search can be called again.
