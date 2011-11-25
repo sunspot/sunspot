@@ -124,7 +124,56 @@ end
 
 #### Phrases
 
-TODO: Slop, phrase boost, etc...
+Solr allows searching for phrases: search terms that are close together.
+
+In the default query parser used by Sunspot (dismax), phrase searches
+are represented as a double quoted group of words.
+
+```ruby
+# Posts with the exact phrase "great pizza"
+Post.search do
+  fulltext '"great pizza"'
+end
+```
+
+If specified, **query_phrase_slop** sets the number of words that may
+appear between the words in a phrase.
+
+```ruby
+# One word can appear between the words in the phrase, so "great big pizza"
+# also matches, in addition to "great pizza"
+Post.search do
+  fulltext '"great pizza"' do
+    query_phrase_slop 1
+  end
+end
+```
+
+##### Phrase Boosts
+
+Phrase boosts add boost to terms that appear in close proximity;
+the terms do not *have* to appear in a phrase, but if they do, the
+document will score more highly.
+
+```ruby
+# Matches documents with great and pizza, and scores documents more
+# highly if the terms appear in a phrase in the title field
+Post.search do
+  fulltext 'great pizza' do
+    phrase_fields :title => 2.0
+  end
+end
+
+# Matches documents with great and pizza, and scores documents more
+# highly if the terms appear in a phrase (or with one word between them)
+# in the title field
+Post.search do
+  fulltext 'great pizza' do
+    phrase_fields :title => 2.0
+    phrase_slop   1
+  end
+end
+```
 
 ### Scoping (Scalar Fields)
 
