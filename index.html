@@ -57,78 +57,34 @@ Post.search do
   facet :category_ids, :author_id
 end
 {% endhighlight %}
-  
+
       <h3>Use it with or without Rails.</h3>
       <p>
-      The <strong>sunspot_rails</strong> gem integrates Sunspot into Rails with drop-in ease,
-      extending ActiveRecord objects for searchability and managing the commit
-      cycle transparently. <strong>sunspot_rails</strong> works with Rails 2.3 and Rails 3.0.
-      See the <a href="https://github.com/sunspot/sunspot/blob/master/README.md">Quickstart with Rails 3</a> in the README to get started.
+        The <strong>sunspot_rails</strong> gem integrates Sunspot into
+        Rails with drop-in ease, extending ActiveRecord objects for
+        searchability and managing the commit cycle transparently.
+        <strong>sunspot_rails</strong> works with Rails 2.3 and Rails
+        3.0.  See the <a href="https://github.com/sunspot/sunspot/blob/master/README.md">
+        Quickstart with Rails 3</a> in the README to get started.
       </p>
 
       <p>
-      If you're not using Rails, or you're using Rails without ActiveRecord,
-      the core Sunspot library can be hooked into your persistence layer with
-      <a href="https://github.com/jugyo/sunspot_mongoid/blob/master/lib/sunspot/mongoid.rb">just a few lines of code</a>.
+        If you're not using Rails, or you're using Rails without ActiveRecord,
+        the core Sunspot library can be hooked into your persistence layer with
+        <a href="https://github.com/jugyo/sunspot_mongoid/blob/master/lib/sunspot/mongoid.rb">
+        just a few lines of code</a>.
       </p>
-  
-      <h3>Get all this.</h3>
-      <ul>
-        <li>
-          Define searchable fields in an intuitive DSL, either indexing data
-          directly from attributes or defining virtual attributes for
-          search-specific information.
-        </li>
-        <li>
-          Use Sunspot's search DSL to restrict results using all the usual
-          logical operators, negate them, or exclude individual objects from the
-          results.
-        </li>
-        <li>
-          Harness Solr's powerful Dismax fulltext tool kit, including
-          index-time and search-time field boost, phrase fields for
-          extra-precise scoring, and boost queries for custom 
-          search-time relevance calculation.
-        </li>
-        <li>
-          Use Solr highlighting to show your users why you're returning the
-          results you are. Custom deferred formatting allows your view layer
-          to decide how to display the highlight.
-        </li>
-        <li>
-          Index subclasses, search for superclasses: Sunspot stores the entire
-          class hierarchy for each object that's indexed.
-        </li>
-        <li>
-          Use field facets for easy, powerful drill-down search. If the field
-          contains foreign keys, automatically get access to the referenced
-          model in each facet row.
-        </li>
-        <li>
-          Use query facets to define search refinement on arbitrary filters.
-        </li>
-        <li>
-        Compose fulltext and geographical searches, calculating result
-        scores using both proximity and keyword relevance.
-        </li>
-        <li>
-          If you've got WillPaginate installed, use it seamlessly with Sunspot's
-          search results.
-        </li>
-      </ul>
-  
+
       <h3>Get started.</h3>
       <p>
+        Start with the <a href="https://github.com/sunspot/sunspot/blob/master/README.md">README</a><br/>
         Learn more on the <a href="http://wiki.github.com/sunspot/sunspot">Wiki</a><br/>
-        Check out the <a href="docs/index.html">Sunspot documentation</a> and
-        Browse the
-        <a href="http://github.com/sunspot/sunspot">source</a>.<br/>
-        Report bugs on
-        <a href="http://github.com/sunspot/sunspot/issues">
-          GitHub Issues</a>.<br/>
+        Use the <a href="docs/index.html">API documentation</a> as a reference<br/>
+        Browse the <a href="http://github.com/sunspot/sunspot">source</a>.<br/>
+        Report bugs on <a href="http://github.com/sunspot/sunspot/issues"> GitHub Issues</a>.<br/>
         Discuss it on the <a href="http://groups.google.com/group/ruby-sunspot">Google Group</a>.<br/>
         Chat about it on <a href="irc://chat.freenode.net/%23sunspot-ruby">IRC #sunspot-ruby @ freenode</a><br/>
-        Give it a shout out on <a href='http://rubytrends.com/trend_votes/145'>RubyTrends</a>.<br/>
+        Give it a shout out on <a href="https://www.ruby-toolbox.com/projects/sunspot">Ruby Toolbox</a>.<br/>
       </p>
     </div>
   </div>
