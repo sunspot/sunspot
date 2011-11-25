@@ -4,30 +4,30 @@ title: "Sunspot: Solr-powered search for Ruby objects"
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-	<head>
-		<title>Sunspot: Solr-powered search for Ruby objects</title>
-		<link rel="stylesheet" type="text/css" href="main.css"/>
+  <head>
+    <title>Sunspot: Solr-powered search for Ruby objects</title>
+    <link rel="stylesheet" type="text/css" href="main.css"/>
     <link rel="stylesheet" type="text/css" href="ruby.css"/>
-	</head>
-	<body>
-		<div id="main">
+  </head>
+  <body>
+    <div id="main">
       <a href="http://github.com/sunspot/sunspot">
         <img src="forkme.png" class="forkme"/>
       </a>
       <div id="content">
-  			<h1>Sunspot</h1>
-  			<h4>Solr-powered search for Ruby objects</h4>
+        <h1>Sunspot</h1>
+        <h4>Solr-powered search for Ruby objects</h4>
   
-  			<p>
+        <p>
           All the power of the <a href="http://lucene.apache.org/solr/">Solr</a>
           search engine; all the beauty of Ruby.
           <a href="http://github.com/sunspot/sunspot">Sunspot</a> exposes all
           of Solr's most powerful search features using an API of elegant DSLs.
           That means robust, flexible fulltext search with no boolean queries
           and no string programming.
-  			</p>
+        </p>
   
-  			<h3>Index your objects.</h3>
+        <h3>Index your objects.</h3>
 {% highlight ruby %}
 class Post < ActiveRecord::Base
   searchable do
@@ -46,7 +46,7 @@ class Post < ActiveRecord::Base
 end
 {% endhighlight %}
 
-  		<h3>Search for them.</h3>
+      <h3>Search for them.</h3>
 {% highlight ruby %}
 Post.search do
   fulltext 'best pizza'
@@ -60,17 +60,17 @@ end
   
       <h3>Use it with or without Rails.</h3>
       <p>
-			The <strong>sunspot_rails</strong> gem integrates Sunspot into Rails with drop-in ease,
-			extending ActiveRecord objects for searchability and managing the commit
-			cycle transparently. <strong>sunspot_rails</strong> works with Rails 2.3 and Rails 3.0.
+      The <strong>sunspot_rails</strong> gem integrates Sunspot into Rails with drop-in ease,
+      extending ActiveRecord objects for searchability and managing the commit
+      cycle transparently. <strong>sunspot_rails</strong> works with Rails 2.3 and Rails 3.0.
       See the <a href="https://github.com/sunspot/sunspot/blob/master/README.md">Quickstart with Rails 3</a> in the README to get started.
       </p>
 
-			<p>
-			If you're not using Rails, or you're using Rails without ActiveRecord,
-			the core Sunspot library can be hooked into your persistence layer with
-			<a href="https://github.com/jugyo/sunspot_mongoid/blob/master/lib/sunspot/mongoid.rb">just a few lines of code</a>.
-			</p>
+      <p>
+      If you're not using Rails, or you're using Rails without ActiveRecord,
+      the core Sunspot library can be hooked into your persistence layer with
+      <a href="https://github.com/jugyo/sunspot_mongoid/blob/master/lib/sunspot/mongoid.rb">just a few lines of code</a>.
+      </p>
   
       <h3>Get all this.</h3>
       <ul>
@@ -108,8 +108,8 @@ end
           Use query facets to define search refinement on arbitrary filters.
         </li>
         <li>
-				Compose fulltext and geographical searches, calculating result
-				scores using both proximity and keyword relevance.
+        Compose fulltext and geographical searches, calculating result
+        scores using both proximity and keyword relevance.
         </li>
         <li>
           If you've got WillPaginate installed, use it seamlessly with Sunspot's
@@ -126,7 +126,7 @@ end
         Report bugs on
         <a href="http://github.com/sunspot/sunspot/issues">
           GitHub Issues</a>.<br/>
-				Discuss it on the <a href="http://groups.google.com/group/ruby-sunspot">Google Group</a>.<br/>
+        Discuss it on the <a href="http://groups.google.com/group/ruby-sunspot">Google Group</a>.<br/>
         Chat about it on <a href="irc://chat.freenode.net/%23sunspot-ruby">IRC #sunspot-ruby @ freenode</a><br/>
         Give it a shout out on <a href='http://rubytrends.com/trend_votes/145'>RubyTrends</a>.<br/>
       </p>
@@ -141,5 +141,5 @@ try {
 var pageTracker = _gat._getTracker("UA-7504578-2");
 pageTracker._trackPageview();
 } catch(err) {}</script>
-	</body>
+  </body>
 </html>
