@@ -23,7 +23,8 @@ case $GEM in
     bundle install --quiet --path vendor/bundle
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
 
-    bundle exec sunspot-solr start -p 8983
+    export SOLR_URL=http://localhost:8983/solr
+    bundle exec sunspot-solr start -p 8983 -d /tmp/solr
     wait_until_solr_responds 8983
     /bin/echo "done."
     
@@ -39,9 +40,10 @@ case $GEM in
   
     cd sunspot
     /bin/echo -n "Starting Solr on port 8983 for Sunspot specs..."
-    bundle install --quiet --path vendor/bundle
+    bundle install --quiet --path vendor/bundle -d /tmp/solr
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
 
+    export SOLR_URL=http://localhost:8983/solr
     bundle exec sunspot-solr start -p 8983
     wait_until_solr_responds 8983
     /bin/echo "done."
