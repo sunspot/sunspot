@@ -51,6 +51,7 @@ module Sunspot
     # Delete all documents of the class indexed by this indexer from Solr.
     #
     def remove_all(clazz = nil)
+      p @connection
       if clazz
         @connection.delete_by_query("type:#{escape(clazz.name)}")
       else
