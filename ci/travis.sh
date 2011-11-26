@@ -4,7 +4,7 @@ set -e
 
 solr_responding() {
   port=$1
-  curl "http://localhost:$port/solr/"
+  curl "http://localhost:$port/solr/admin/ping"
 }
 
 wait_until_solr_responds() {
