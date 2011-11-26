@@ -27,6 +27,7 @@ task :release do
   end
 end
 
+
 desc 'Run all the tests'
 task :default do
   exit system([ "GEM=sunspot ci/travis.sh",
