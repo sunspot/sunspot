@@ -52,7 +52,7 @@ class Post < ActiveRecord::Base
     integer :category_ids, :multiple => true
     time :published_at
     string :sort_title do
-      title.downcase.gsub(/^(an?|the)/, '')
+      title.downcase.gsub(/^(an?|the)\b/, '')
     end
   end
 end
