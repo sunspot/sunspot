@@ -4,7 +4,7 @@ set -e
 
 solr_responding() {
   port=$1
-  curl -o /dev/null "http://localhost:$port/solr" > /dev/null 2>&1
+  curl "http://localhost:$port/solr/"
 }
 
 wait_until_solr_responds() {
@@ -13,6 +13,8 @@ wait_until_solr_responds() {
     /bin/echo -n "."
     sleep 1
   done
+
+  sleep 3 # extra buffer?
 }
 
 case $GEM in
