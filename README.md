@@ -11,6 +11,10 @@ searching for them.
 Sunspot is designed to be easily plugged in to any ORM, or even non-database-backed
 objects such as the filesystem.
 
+This README provides a high level overview; class-by-class and
+method-by-method documentation is available in the [API
+reference](http://sunspot.github.com/sunspot/docs/).
+
 ## Quickstart with Rails 3
 
 Add to Gemfile:

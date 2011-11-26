@@ -27,11 +27,19 @@ task :release do
   end
 end
 
-
 desc 'Run all the tests'
 task :default do
   exit system([ "GEM=sunspot ci/travis.sh",
                 "GEM=sunspot_rails RAILS=2.3.14 ci/travis.sh",
                 "GEM=sunspot_rails RAILS=3.0.11 ci/travis.sh",
                 "GEM=sunspot_rails RAILS=3.1.3 ci/travis.sh" ].join(" && ")) ? 0 : 1
+end
+
+begin
+  require 'yard/rake/yardoc_task'
+  YARD::Rake::YardocTask.new do |t|
+    t.files   = ['*/lib/**/*.rb']
+    t.options = ['-o docs', '-M redcarpet']
+  end
+rescue LoadError
 end
