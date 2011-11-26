@@ -1,0 +1,722 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Query::Restriction::Base
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../../_index.html">Index (B)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Query.html" title="Sunspot::Query (module)">Query</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Restriction.html" title="Sunspot::Query::Restriction (module)">Restriction</a></span></span>
+     &raquo; 
+    <span class="title">Base</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Query::Restriction::Base
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Query::Restriction::Base</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+      <dt class="r2">Includes:</dt>
+      <dd class="r2">RSolr::Char, <span class='object_link'><a href="../Filter.html" title="Sunspot::Query::Filter (module)">Filter</a></span></dd>
+      
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot/lib/sunspot/query/restriction.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Subclasses of this class represent restrictions that can be applied to a
+Sunspot query. The Sunspot::DSL::Restriction class presents a builder API
+for instances of this class.
+</p>
+<p>
+Implementations of this class must respond to #to_params and
+#to_negated_params. Instead of implementing those methods, they may choose
+to implement any of:
+</p>
+<ul>
+<li><p>
+#to_positive_boolean_phrase, and optionally #to_negated_boolean_phrase
+</p>
+</li>
+<li><p>
+#to_solr_conditional
+</p>
+</li>
+</ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="AllOf.html" title="Sunspot::Query::Restriction::AllOf (class)">AllOf</a></span>, <span class='object_link'><a href="AnyOf.html" title="Sunspot::Query::Restriction::AnyOf (class)">AnyOf</a></span>, <span class='object_link'><a href="Between.html" title="Sunspot::Query::Restriction::Between (class)">Between</a></span>, <span class='object_link'><a href="EqualTo.html" title="Sunspot::Query::Restriction::EqualTo (class)">EqualTo</a></span>, <span class='object_link'><a href="GreaterThan.html" title="Sunspot::Query::Restriction::GreaterThan (class)">GreaterThan</a></span>, <span class='object_link'><a href="LessThan.html" title="Sunspot::Query::Restriction::LessThan (class)">LessThan</a></span>, <span class='object_link'><a href="StartingWith.html" title="Sunspot::Query::Restriction::StartingWith (class)">StartingWith</a></span></p>
+</div>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="RESERVED_WORDS-constant" class="">RESERVED_WORDS =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Set</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>AND</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>OR</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>NOT</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span></pre></dd>
+      
+    </dl>
+  
+
+
+  
+  
+  
+  
+  
+
+
+  
+  
+  
+  
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Base) <strong>initialize</strong>(negated, field, value) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of Base.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#negate-instance_method" title="#negate (instance method)">- (Object) <strong>negate</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return a new restriction that is the negated version of this one.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#negated%3F-instance_method" title="#negated? (instance method)">- (Boolean) <strong>negated?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Whether this restriction should be negated from its original meaning.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_boolean_phrase-instance_method" title="#to_boolean_phrase (instance method)">- (Object) <strong>to_boolean_phrase</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return the boolean phrase associated with this restriction object.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_negated_boolean_phrase-instance_method" title="#to_negated_boolean_phrase (instance method)">- (Object) <strong>to_negated_boolean_phrase</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Boolean phrase representing this restriction in the negated.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_params-instance_method" title="#to_params (instance method)">- (Object) <strong>to_params</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A hash representing this restriction in solr-ruby&#8217;s parameter format.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_positive_boolean_phrase-instance_method" title="#to_positive_boolean_phrase (instance method)">- (Object) <strong>to_positive_boolean_phrase</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Boolean phrase representing this restriction in the positive.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Filter.html" title="Sunspot::Query::Filter (module)">Filter</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Filter.html#tag-instance_method" title="Sunspot::Query::Filter#tag (method)">#tag</a></span>, <span class='object_link'><a href="../Filter.html#to_filter_query-instance_method" title="Sunspot::Query::Filter#to_filter_query (method)">#to_filter_query</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Query::Restriction::Base (class)">Base</a></span></tt>) <strong>initialize</strong>(negated, field, value) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of Base
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Raises:</h3>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+45
+46
+47
+48</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/restriction.rb', line 45</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id negated'>negated</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='id raise'>raise</span> <span class='const'>ArgumentError</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RFCTR</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id include?'>include?</span><span class='lparen'>(</span><span class='id negated'>negated</span><span class='rparen'>)</span>
+  <span class='ivar'>@negated</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='comma'>,</span> <span class='ivar'>@value</span> <span class='op'>=</span> <span class='id negated'>negated</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="negate-instance_method">
+  
+    - (<tt>Object</tt>) <strong>negate</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return a new restriction that is the negated version of this one. It is
+used by disjunction denormalization.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+119
+120
+121</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/restriction.rb', line 119</span>
+
+<span class='kw'>def</span> <span class='id negate'>negate</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id class'>class</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='op'>!</span><span class='ivar'>@negated</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='comma'>,</span> <span class='ivar'>@value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="negated?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>negated?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Whether this restriction should be negated from its original meaning
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+111
+112
+113</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/restriction.rb', line 111</span>
+
+<span class='kw'>def</span> <span class='id negated?'>negated?</span> <span class='comment'>#:nodoc:
+</span>  <span class='op'>!</span><span class='op'>!</span><span class='ivar'>@negated</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="to_boolean_phrase-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_boolean_phrase</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return the boolean phrase associated with this restriction object.
+Differentiates between positive and negated boolean phrases depending on
+whether this restriction is negated.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+70
+71
+72
+73
+74
+75
+76</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/restriction.rb', line 70</span>
+
+<span class='kw'>def</span> <span class='id to_boolean_phrase'>to_boolean_phrase</span>
+  <span class='kw'>unless</span> <span class='id negated?'>negated?</span>
+    <span class='id to_positive_boolean_phrase'>to_positive_boolean_phrase</span>
+  <span class='kw'>else</span>
+    <span class='id to_negated_boolean_phrase'>to_negated_boolean_phrase</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="to_negated_boolean_phrase-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_negated_boolean_phrase</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Boolean phrase representing this restriction in the negated. Subclasses may
+choose to implement this method, but it is not necessary, as the base
+implementation delegates to #to_positive_boolean_phrase.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+Boolean phrase for restriction in the negated
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+104
+105
+106</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/restriction.rb', line 104</span>
+
+<span class='kw'>def</span> <span class='id to_negated_boolean_phrase'>to_negated_boolean_phrase</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='id to_positive_boolean_phrase'>to_positive_boolean_phrase</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="to_params-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_params</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A hash representing this restriction in solr-ruby&#8217;s parameter format.
+All restriction implementations must respond to this method; however, the
+base implementation delegates to the #to_positive_boolean_phrase method, so
+subclasses may (and probably should) choose to implement that method
+instead.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Hash</td><td><p>
+Representation of this restriction as solr-ruby parameters
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+61
+62
+63</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/restriction.rb', line 61</span>
+
+<span class='kw'>def</span> <span class='id to_params'>to_params</span>
+  <span class='lbrace'>{</span> <span class='symbol'>:fq</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='id to_filter_query'>to_filter_query</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="to_positive_boolean_phrase-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_positive_boolean_phrase</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Boolean phrase representing this restriction in the positive. Subclasses
+may choose to implement this method rather than #to_params; however, this
+method delegates to the abstract #to_solr_conditional method, which in most
+cases will be what subclasses will want to implement. #to_solr_conditional
+contains the boolean phrase representing the condition but leaves out the
+field name (see built-in implementations for examples)
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+Boolean phrase for restriction in the positive
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+91
+92
+93</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/restriction.rb', line 91</span>
+
+<span class='kw'>def</span> <span class='id to_positive_boolean_phrase'>to_positive_boolean_phrase</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id escape'>escape</span><span class='lparen'>(</span><span class='ivar'>@field</span><span class='period'>.</span><span class='id indexed_name'>indexed_name</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>:</span><span class='embexpr_beg'>#{</span><span class='id to_solr_conditional'>to_solr_conditional</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:21 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

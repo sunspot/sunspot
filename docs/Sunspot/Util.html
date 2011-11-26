@@ -1,0 +1,912 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Sunspot::Util
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (U)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span>
+     &raquo; 
+    <span class="title">Util</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Sunspot::Util
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot/lib/sunspot/util.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+The Sunspot::Util module provides utility methods used elsewhere in the
+library.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Util/ContextBoundDelegate.html" title="Sunspot::Util::ContextBoundDelegate (class)">ContextBoundDelegate</a></span>, <span class='object_link'><a href="Util/Coordinates.html" title="Sunspot::Util::Coordinates (class)">Coordinates</a></span>
+    
+  
+</p>
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#Array-class_method" title="Array (class method)">+ (Object) <strong>Array</strong>(object) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Ruby&#8217;s treatment of Strings as Enumerables is heavily annoying.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#camel_case-class_method" title="camel_case (class method)">+ (Object) <strong>camel_case</strong>(string) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Convert a string to camel case.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deep_merge-class_method" title="deep_merge (class method)">+ (Object) <strong>deep_merge</strong>(left, right) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Perform a deep merge of hashes, returning the result as a new hash.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deep_merge%21-class_method" title="deep_merge! (class method)">+ (Object) <strong>deep_merge!</strong>(left, right) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Perform a deep merge of the right hash into the left hash.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#extract_options_from-class_method" title="extract_options_from (class method)">+ (Object) <strong>extract_options_from</strong>(args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#format_float-class_method" title="format_float (class method)">+ (Object) <strong>format_float</strong>(f, digits) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+When generating boosts, Solr requires that the values be in standard (not
+scientific) notation.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#full_const_get-class_method" title="full_const_get (class method)">+ (Object) <strong>full_const_get</strong>(string) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get a constant from a fully qualified name.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#instance_eval_or_call-class_method" title="instance_eval_or_call (class method)">+ (Object) <strong>instance_eval_or_call</strong>(object, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Evaluate the given proc in the context of the given object if the
+block&#8217;s arity is non-positive, or by passing the given object as an
+argument if it is negative.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#snake_case-class_method" title="snake_case (class method)">+ (Object) <strong>snake_case</strong>(string) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Convert a string to snake case.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#superclasses_for-class_method" title="superclasses_for (class method)">+ (Object) <strong>superclasses_for</strong>(clazz) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get all of the superclasses for a given class, including the class itself.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="Array-class_method">
+  
+    + (<tt>Object</tt>) <strong>Array</strong>(object) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Ruby&#8217;s treatment of Strings as Enumerables is heavily annoying. As
+far as I know the behavior of Kernel.Array() is otherwise fine.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+102
+103
+104
+105
+106
+107
+108
+109</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 102</span>
+
+<span class='kw'>def</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id object'>object</span><span class='rparen'>)</span>
+  <span class='kw'>case</span> <span class='id object'>object</span>
+  <span class='kw'>when</span> <span class='const'>String</span><span class='comma'>,</span> <span class='const'>Hash</span>
+    <span class='lbracket'>[</span><span class='id object'>object</span><span class='rbracket'>]</span>
+  <span class='kw'>else</span>
+    <span class='kw'>super</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="camel_case-class_method">
+  
+    + (<tt>Object</tt>) <strong>camel_case</strong>(string) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Convert a string to camel case
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">string<String></td><td><p>
+String to convert to camel case
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+String in camel case
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+52
+53
+54</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 52</span>
+
+<span class='kw'>def</span> <span class='id camel_case'>camel_case</span><span class='lparen'>(</span><span class='id string'>string</span><span class='rparen'>)</span>
+  <span class='id string'>string</span><span class='period'>.</span><span class='id split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>_</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id map!'>map!</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id word'>word</span><span class='op'>|</span> <span class='id word'>word</span><span class='period'>.</span><span class='id capitalize'>capitalize</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id join'>join</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="deep_merge-class_method">
+  
+    + (<tt>Object</tt>) <strong>deep_merge</strong>(left, right) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Perform a deep merge of hashes, returning the result as a new hash. See
+#deep_merge_into for rules used to merge the hashes
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">left<Hash></td><td><p>
+Hash to merge
+</p>
+</td></tr>
+<tr><td valign="top">right<Hash></td><td><p>
+The other hash to merge
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Hash</td><td><p>
+New hash containing the given hashes deep-merged.
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+138
+139
+140</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 138</span>
+
+<span class='kw'>def</span> <span class='id deep_merge'>deep_merge</span><span class='lparen'>(</span><span class='id left'>left</span><span class='comma'>,</span> <span class='id right'>right</span><span class='rparen'>)</span>
+  <span class='id deep_merge_into'>deep_merge_into</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='id left'>left</span><span class='comma'>,</span> <span class='id right'>right</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="deep_merge!-class_method">
+  
+    + (<tt>Object</tt>) <strong>deep_merge!</strong>(left, right) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Perform a deep merge of the right hash into the left hash
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">left</td><td><p>
+Hash to receive merge
+</p>
+</td></tr>
+<tr><td valign="top">right</td><td><p>
+Hash to merge into left
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Hash</td><td><p>
+left
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+154
+155
+156</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 154</span>
+
+<span class='kw'>def</span> <span class='id deep_merge!'>deep_merge!</span><span class='lparen'>(</span><span class='id left'>left</span><span class='comma'>,</span> <span class='id right'>right</span><span class='rparen'>)</span>
+  <span class='id deep_merge_into'>deep_merge_into</span><span class='lparen'>(</span><span class='id left'>left</span><span class='comma'>,</span> <span class='id left'>left</span><span class='comma'>,</span> <span class='id right'>right</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="extract_options_from-class_method">
+  
+    + (<tt>Object</tt>) <strong>extract_options_from</strong>(args) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+90
+91
+92
+93
+94
+95
+96</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 90</span>
+
+<span class='kw'>def</span> <span class='id extract_options_from'>extract_options_from</span><span class='lparen'>(</span><span class='id args'>args</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id args'>args</span><span class='period'>.</span><span class='id last'>last</span><span class='period'>.</span><span class='id is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span>
+    <span class='id args'>args</span><span class='period'>.</span><span class='id pop'>pop</span>
+  <span class='kw'>else</span>
+    <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="format_float-class_method">
+  
+    + (<tt>Object</tt>) <strong>format_float</strong>(f, digits) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+When generating boosts, Solr requires that the values be in standard (not
+scientific) notation. We would like to ensure a minimum number of
+significant digits (i.e., digits that are not prefix zeros) for small float
+values.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+117
+118
+119
+120
+121
+122
+123</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 117</span>
+
+<span class='kw'>def</span> <span class='id format_float'>format_float</span><span class='lparen'>(</span><span class='id f'>f</span><span class='comma'>,</span> <span class='id digits'>digits</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id f'>f</span> <span class='op'>&lt;</span> <span class='int'>1</span>
+    <span class='id sprintf'>sprintf</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>%.*f</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='id digits'>digits</span> <span class='op'>-</span> <span class='const'>Math</span><span class='period'>.</span><span class='id log10'>log10</span><span class='lparen'>(</span><span class='id f'>f</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id f'>f</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id f'>f</span><span class='period'>.</span><span class='id to_s'>to_s</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="full_const_get-class_method">
+  
+    + (<tt>Object</tt>) <strong>full_const_get</strong>(string) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get a constant from a fully qualified name
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">string<String></td><td><p>
+The fully qualified name of a constant
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Object</td><td><p>
+Value of constant named
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+67
+68
+69
+70
+71</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 67</span>
+
+<span class='kw'>def</span> <span class='id full_const_get'>full_const_get</span><span class='lparen'>(</span><span class='id string'>string</span><span class='rparen'>)</span>
+  <span class='id string'>string</span><span class='period'>.</span><span class='id split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>::</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id inject'>inject</span><span class='lparen'>(</span><span class='const'>Object</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id context'>context</span><span class='comma'>,</span> <span class='id const_name'>const_name</span><span class='op'>|</span>
+    <span class='id context'>context</span><span class='period'>.</span><span class='id const_defined?'>const_defined?</span><span class='lparen'>(</span><span class='id const_name'>const_name</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id context'>context</span><span class='period'>.</span><span class='id const_get'>const_get</span><span class='lparen'>(</span><span class='id const_name'>const_name</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id context'>context</span><span class='period'>.</span><span class='id const_missing'>const_missing</span><span class='lparen'>(</span><span class='id const_name'>const_name</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="instance_eval_or_call-class_method">
+  
+    + (<tt>Object</tt>) <strong>instance_eval_or_call</strong>(object, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Evaluate the given proc in the context of the given object if the
+block&#8217;s arity is non-positive, or by passing the given object as an
+argument if it is negative.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">object<Object></td><td><p>
+Object to pass to the proc
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+82
+83
+84
+85
+86
+87
+88</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 82</span>
+
+<span class='kw'>def</span> <span class='id instance_eval_or_call'>instance_eval_or_call</span><span class='lparen'>(</span><span class='id object'>object</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id block'>block</span><span class='period'>.</span><span class='id arity'>arity</span> <span class='op'>&gt;</span> <span class='int'>0</span>
+    <span class='id block'>block</span><span class='period'>.</span><span class='id call'>call</span><span class='lparen'>(</span><span class='id object'>object</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='const'>ContextBoundDelegate</span><span class='period'>.</span><span class='id instance_eval_with_context'>instance_eval_with_context</span><span class='lparen'>(</span><span class='id object'>object</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="snake_case-class_method">
+  
+    + (<tt>Object</tt>) <strong>snake_case</strong>(string) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Convert a string to snake case
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">string<String></td><td><p>
+String to convert to snake case
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+String in snake case
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+37
+38
+39</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 37</span>
+
+<span class='kw'>def</span> <span class='id snake_case'>snake_case</span><span class='lparen'>(</span><span class='id string'>string</span><span class='rparen'>)</span>
+  <span class='id string'>string</span><span class='period'>.</span><span class='id scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>(^|[A-Z])([^A-Z]+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id map!'>map!</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id word'>word</span><span class='op'>|</span> <span class='id word'>word</span><span class='period'>.</span><span class='id join'>join</span><span class='period'>.</span><span class='id downcase'>downcase</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>_</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="superclasses_for-class_method">
+  
+    + (<tt>Object</tt>) <strong>superclasses_for</strong>(clazz) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get all of the superclasses for a given class, including the class itself.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">clazz<Class></td><td><p>
+class for which to get superclasses
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+Collection containing class and its superclasses
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20
+21
+22
+23
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/util.rb', line 20</span>
+
+<span class='kw'>def</span> <span class='id superclasses_for'>superclasses_for</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span>
+  <span class='id superclasses'>superclasses</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id clazz'>clazz</span><span class='rbracket'>]</span>
+  <span class='id superclasses'>superclasses</span> <span class='op'>&lt;&lt;</span> <span class='lparen'>(</span><span class='id clazz'>clazz</span> <span class='op'>=</span> <span class='id clazz'>clazz</span><span class='period'>.</span><span class='id superclass'>superclass</span><span class='rparen'>)</span> <span class='kw'>while</span> <span class='id clazz'>clazz</span><span class='period'>.</span><span class='id superclass'>superclass</span> <span class='op'>!=</span> <span class='const'>Object</span>
+  <span class='id superclasses'>superclasses</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:18 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Adapters::DataAccessor
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (D)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Adapters.html" title="Sunspot::Adapters (module)">Adapters</a></span></span>
+     &raquo; 
+    <span class="title">DataAccessor</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Adapters::DataAccessor
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Adapters::DataAccessor</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/adapters.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Subclasses of the DataAccessor class take care of retreiving instances of
+the adapted class from (usually persistent) storage. Subclasses must
+implement the #load method, which takes an id (the value returned by
+InstanceAdapter#id, as a string), and returns the instance referenced by
+that ID. Optionally, it can also override the #load_all method, which takes
+an array of IDs and returns an array of instances in the order given.
+#load_all need only be implemented if it can be done more efficiently than
+simply iterating over the IDs and calling #load on each individually.
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='kw'>class</span> <span class='const'>FileAccessor</span> <span class='op'>&lt;</span> <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Adapters</span><span class='op'>::</span><span class='const'>InstanceAdapter</span>
+    <span class='kw'>def</span> <span class='id load'>load</span><span class='lparen'>(</span><span class='id id'>id</span><span class='rparen'>)</span>
+      <span class='ivar'>@clazz</span><span class='period'>.</span><span class='id open'>open</span><span class='lparen'>(</span><span class='id id'>id</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Adapters</span><span class='op'>::</span><span class='const'>DataAccessor</span><span class='period'>.</span><span class='id register'>register</span><span class='lparen'>(</span><span class='const'>FileAccessor</span><span class='comma'>,</span> <span class='const'>File</span><span class='rparen'>)</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="../Rails/Adapters/ActiveRecordDataAccessor.html" title="Sunspot::Rails::Adapters::ActiveRecordDataAccessor (class)">Rails::Adapters::ActiveRecordDataAccessor</a></span></p>
+</div>
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#create-class_method" title="create (class method)">+ (Object) <strong>create</strong>(clazz) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Create a DataAccessor for the given class, searching registered adapters
+for the best match.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#for-class_method" title="for (class method)">+ (Object) <strong>for</strong>(clazz) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Find the best DataAccessor implementation that adapts the given class.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#register-class_method" title="register (class method)">+ (Object) <strong>register</strong>(data_accessor, *classes) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Register data accessor for a set of classes.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (DataAccessor) <strong>initialize</strong>(clazz) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#load_all-instance_method" title="#load_all (instance method)">- (Object) <strong>load_all</strong>(ids) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Subclasses can override this class to provide more efficient bulk loading
+of instances.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Adapters::DataAccessor (class)">DataAccessor</a></span></tt>) <strong>initialize</strong>(clazz) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+169
+170
+171</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 169</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='ivar'>@clazz</span> <span class='op'>=</span> <span class='id clazz'>clazz</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="create-class_method">
+  
+    + (<tt>Object</tt>) <strong>create</strong>(clazz) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Create a DataAccessor for the given class, searching registered adapters
+for the best match. See InstanceAdapter#adapt for discussion of
+inheritence.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">clazz<Class></td><td><p>
+Class to create DataAccessor for
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">DataAccessor</td><td><p>
+DataAccessor implementation which provides access to given class
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+203
+204
+205</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 203</span>
+
+<span class='kw'>def</span> <span class='id create'>create</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='kw'>self</span><span class='period'>.</span><span class='id for'>for</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="for-class_method">
+  
+    + (<tt>Object</tt>) <strong>for</strong>(clazz) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Find the best DataAccessor implementation that adapts the given class.
+Starting with the class and then moving up the ancestor chain, looks for
+registered DataAccessor implementations.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">clazz<Class></td><td><p>
+The class to find a DataAccessor for
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Class</td><td><p>
+Implementation of DataAccessor
+</p>
+</td></tr>
+</table>
+<h4>Raises</h4>
+<table>
+<tr><td valign="top">Sunspot::NoAdapterError</td><td><p>
+If no data accessor exists for the given class
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Raises:</h3>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Sunspot.html#NoAdapterError-constant" title="Sunspot::NoAdapterError (constant)">Sunspot::NoAdapterError</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 240</span>
+
+<span class='kw'>def</span> <span class='kw'>for</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='id original_class_name'>original_class_name</span> <span class='op'>=</span> <span class='id clazz'>clazz</span><span class='period'>.</span><span class='id name'>name</span>
+  <span class='id clazz'>clazz</span><span class='period'>.</span><span class='id ancestors'>ancestors</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id ancestor_class'>ancestor_class</span><span class='op'>|</span>
+    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id ancestor_class'>ancestor_class</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id nil?'>nil?</span> <span class='op'>||</span> <span class='id ancestor_class'>ancestor_class</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+    <span class='id class_name'>class_name</span> <span class='op'>=</span> <span class='id ancestor_class'>ancestor_class</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span>
+    <span class='kw'>return</span> <span class='id data_accessors'>data_accessors</span><span class='lbracket'>[</span><span class='id class_name'>class_name</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id data_accessors'>data_accessors</span><span class='lbracket'>[</span><span class='id class_name'>class_name</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+  <span class='id raise'>raise</span><span class='lparen'>(</span><span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>NoAdapterError</span><span class='comma'>,</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No data accessor is configured for </span><span class='embexpr_beg'>#{</span><span class='id original_class_name'>original_class_name</span><span class='rbrace'>}</span><span class='tstring_content'> or its superclasses. See the documentation for Sunspot::Adapters</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="register-class_method">
+  
+    + (<tt>Object</tt>) <strong>register</strong>(data_accessor, *classes) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Register data accessor for a set of classes. When searching for an accessor
+for a given class, Sunspot starts with the class, and then searches for
+registered adapters up the class&#8217;s ancestor chain.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">data_accessor<Class></td><td><p>
+The data accessor class to register
+</p>
+</td></tr>
+<tr><td valign="top">classes&#8230;<Class></td><td><p>
+One or more classes that this data accessor providess access to
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+218
+219
+220
+221
+222</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 218</span>
+
+<span class='kw'>def</span> <span class='id register'>register</span><span class='lparen'>(</span><span class='id data_accessor'>data_accessor</span><span class='comma'>,</span> <span class='op'>*</span><span class='id classes'>classes</span><span class='rparen'>)</span>
+  <span class='id classes'>classes</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id clazz'>clazz</span><span class='op'>|</span>
+    <span class='id data_accessors'>data_accessors</span><span class='lbracket'>[</span><span class='id clazz'>clazz</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id data_accessor'>data_accessor</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="load_all-instance_method">
+  
+    - (<tt>Object</tt>) <strong>load_all</strong>(ids) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Subclasses can override this class to provide more efficient bulk loading
+of instances. Instances must be returned in the same order that the IDs
+were given.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">ids<Array></td><td><p>
+collection of IDs
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+collection of instances, in order of IDs given
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+185
+186
+187</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 185</span>
+
+<span class='kw'>def</span> <span class='id load_all'>load_all</span><span class='lparen'>(</span><span class='id ids'>ids</span><span class='rparen'>)</span>
+  <span class='id ids'>ids</span><span class='period'>.</span><span class='id map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id id'>id</span><span class='op'>|</span> <span class='kw'>self</span><span class='period'>.</span><span class='id load'>load</span><span class='lparen'>(</span><span class='id id'>id</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

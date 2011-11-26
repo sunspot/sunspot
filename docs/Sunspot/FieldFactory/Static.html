@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::FieldFactory::Static
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../FieldFactory.html" title="Sunspot::FieldFactory (module)">FieldFactory</a></span></span>
+     &raquo; 
+    <span class="title">Static</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::FieldFactory::Static
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName"><span class='object_link'><a href="Abstract.html" title="Sunspot::FieldFactory::Abstract (class)">Abstract</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="Abstract.html" title="Sunspot::FieldFactory::Abstract (class)">Abstract</a></span></li>
+          
+            <li class="next">Sunspot::FieldFactory::Static</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/field_factory.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+A StaticFieldFactory generates normal static fields. Each factory instance
+contains an eager-initialized field instance, which is returned by the
+#build method.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+  
+  
+  
+  
+
+
+  
+  
+  
+  <h2>Instance Attribute Summary</h2>
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="Abstract.html" title="Sunspot::FieldFactory::Abstract (class)">Abstract</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Abstract.html#name-instance_method" title="Sunspot::FieldFactory::Abstract#name (method)">name</a></span></p>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#build-instance_method" title="#build (instance method)">- (Object) <strong>build</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return the field instance built by this factory.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Static) <strong>initialize</strong>(name, type, options = {}, &amp;block) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of Static.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#populate_document-instance_method" title="#populate_document (instance method)">- (Object) <strong>populate_document</strong>(document, model) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Extract the encapsulated field&#8217;s data from the given model and add it
+into the Solr document for indexing.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#signature-instance_method" title="#signature (instance method)">- (Object) <strong>signature</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A unique signature identifying this field by name and type.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::FieldFactory::Static (class)">Static</a></span></tt>) <strong>initialize</strong>(name, type, options = {}, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of Static
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/field_factory.rb', line 33</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span><span class='comma'>,</span> <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>unless</span> <span class='id name'>name</span><span class='period'>.</span><span class='id to_s'>to_s</span> <span class='op'>=~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\w+$</span><span class='regexp_end'>/</span></span>
+    <span class='id raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid field name </span><span class='embexpr_beg'>#{</span><span class='id name'>name</span><span class='rbrace'>}</span><span class='tstring_content'>: only letters, numbers, and underscores are allowed.</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@field</span> <span class='op'>=</span>
+    <span class='kw'>if</span> <span class='id type'>type</span><span class='period'>.</span><span class='id is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Type</span><span class='op'>::</span><span class='const'>TextType</span><span class='rparen'>)</span>
+      <span class='const'>FulltextField</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id options'>options</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='const'>AttributeField</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span><span class='comma'>,</span> <span class='id options'>options</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="build-instance_method">
+  
+    - (<tt>Object</tt>) <strong>build</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return the field instance built by this factory
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+49
+50
+51</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/field_factory.rb', line 49</span>
+
+<span class='kw'>def</span> <span class='id build'>build</span>
+  <span class='ivar'>@field</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="populate_document-instance_method">
+  
+    - (<tt>Object</tt>) <strong>populate_document</strong>(document, model) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Extract the encapsulated field&#8217;s data from the given model and add it
+into the Solr document for indexing.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/field_factory.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id populate_document'>populate_document</span><span class='lparen'>(</span><span class='id document'>document</span><span class='comma'>,</span> <span class='id model'>model</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id value'>value</span> <span class='op'>=</span> <span class='ivar'>@data_extractor</span><span class='period'>.</span><span class='id value_for'>value_for</span><span class='lparen'>(</span><span class='id model'>model</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id nil?'>nil?</span>
+    <span class='const'>Util</span><span class='period'>.</span><span class='const'>Array</span><span class='lparen'>(</span><span class='ivar'>@field</span><span class='period'>.</span><span class='id to_indexed'>to_indexed</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id scalar_value'>scalar_value</span><span class='op'>|</span>
+      <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+      <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:boost</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@field</span><span class='period'>.</span><span class='id boost'>boost</span> <span class='kw'>if</span> <span class='ivar'>@field</span><span class='period'>.</span><span class='id boost'>boost</span>
+      <span class='id document'>document</span><span class='period'>.</span><span class='id add_field'>add_field</span><span class='lparen'>(</span>
+        <span class='ivar'>@field</span><span class='period'>.</span><span class='id indexed_name'>indexed_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='comma'>,</span>
+        <span class='id scalar_value'>scalar_value</span><span class='comma'>,</span>
+        <span class='id options'>options</span>
+      <span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="signature-instance_method">
+  
+    - (<tt>Object</tt>) <strong>signature</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A unique signature identifying this field by name and type.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+74
+75
+76</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/field_factory.rb', line 74</span>
+
+<span class='kw'>def</span> <span class='id signature'>signature</span>
+  <span class='lbracket'>[</span><span class='ivar'>@field</span><span class='period'>.</span><span class='id name'>name</span><span class='comma'>,</span> <span class='ivar'>@field</span><span class='period'>.</span><span class='id type'>type</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,1180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::DSL::Fulltext
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (F)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../DSL.html" title="Sunspot::DSL (module)">DSL</a></span></span>
+     &raquo; 
+    <span class="title">Fulltext</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::DSL::Fulltext
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::DSL::Fulltext</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+      <dt class="r2">Includes:</dt>
+      <dd class="r2"><span class='object_link'><a href="Functional.html" title="Sunspot::DSL::Functional (module)">Functional</a></span></dd>
+      
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot/lib/sunspot/dsl/fulltext.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+This DSL exposes the functionality provided by Solr&#8217;s fulltext Dismax
+handler.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+  
+  
+  
+  
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#exclude_fields-instance_method" title="#exclude_fields (instance method)">- (Object) <strong>exclude_fields</strong>(*field_names) </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Exclude the given fields from the search.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#boost-instance_method" title="#boost (instance method)">- (Object) <strong>boost</strong>(factor_or_function, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Boost queries allow specification of an arbitrary scope for which matching
+documents should receive an extra boost.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#boost_fields-instance_method" title="#boost_fields (instance method)">- (Object) <strong>boost_fields</strong>(boosts) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add boost to certain fields, without restricting which fields are searched.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fields-instance_method" title="#fields (instance method)">- (Object) <strong>fields</strong>(*field_names) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Specify which fields to search.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fields_added%3F-instance_method" title="#fields_added? (instance method)">- (Boolean) <strong>fields_added?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#highlight-instance_method" title="#highlight (instance method)">- (Object) <strong>highlight</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Enable keyword highlighting for this search.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Fulltext) <strong>initialize</strong>(query, setup) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#minimum_match-instance_method" title="#minimum_match (instance method)">- (Object) <strong>minimum_match</strong>(minimum_match) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The minimum number of search terms that a result must match.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#phrase_fields-instance_method" title="#phrase_fields (instance method)">- (Object) <strong>phrase_fields</strong>(boosted_fields) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Phrase fields are an awesome dismax feature that adds extra boost to
+documents for which all the fulltext keywords appear in close proximity in
+one of the given fields.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#phrase_slop-instance_method" title="#phrase_slop (instance method)">- (Object) <strong>phrase_slop</strong>(slop) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The maximum number of words that can appear between search terms for a
+field to qualify for phrase field boost.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#query_phrase_slop-instance_method" title="#query_phrase_slop (instance method)">- (Object) <strong>query_phrase_slop</strong>(slop) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The number of words that can appear between the words in a user-entered
+phrase (i.e., keywords in quotes) and still match.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tie-instance_method" title="#tie (instance method)">- (Object) <strong>tie</strong>(tie) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A tiebreaker coefficient for scores derived from subqueries that are
+lower-scoring than the maximum score subquery.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Functional.html" title="Sunspot::DSL::Functional (module)">Functional</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Functional.html#create_function_query-instance_method" title="Sunspot::DSL::Functional#create_function_query (method)">#create_function_query</a></span>, <span class='object_link'><a href="Functional.html#function-instance_method" title="Sunspot::DSL::Functional#function (method)">#function</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::DSL::Fulltext (class)">Fulltext</a></span></tt>) <strong>initialize</strong>(query, setup) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id query'>query</span><span class='comma'>,</span> <span class='id setup'>setup</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='ivar'>@query</span><span class='comma'>,</span> <span class='ivar'>@setup</span> <span class='op'>=</span> <span class='id query'>query</span><span class='comma'>,</span> <span class='id setup'>setup</span>
+  <span class='ivar'>@fields_added</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='ivar'>@exclude_fields</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="exclude_fields-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="exclude_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>exclude_fields</strong>(*field_names)  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Exclude the given fields from the search. All fields that are configured
+for the types under search and not listed here will be searched.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+8
+9
+10</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 8</span>
+
+<span class='kw'>def</span> <span class='id exclude_fields'>exclude_fields</span><span class='lparen'>(</span><span class='op'>*</span><span class='id field_names'>field_names</span><span class='rparen'>)</span>
+  <span class='ivar'>@exclude_fields</span><span class='period'>.</span><span class='id concat'>concat</span><span class='lparen'>(</span><span class='id field_names'>field_names</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="boost-instance_method">
+  
+    - (<tt>Object</tt>) <strong>boost</strong>(factor_or_function, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Boost queries allow specification of an arbitrary scope for which matching
+documents should receive an extra boost. You can either specify  a boost
+factor and a block, or a boost function. The block is evaluated in the
+usual scope DSL, and field names are attribute fields, not text fields, as
+in other scope.
+</p>
+<p>
+The boost function can be a constant (numeric or string literal),  a field
+name or another function. You can build arbitrarily complex  functions,
+which are passed transparently to solr.
+</p>
+<p>
+This method can be called more than once for different boost queries with
+different boosts.
+</p>
+<h3>Example</h3>
+<pre class="code">
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id search'>search</span><span class='lparen'>(</span><span class='const'>Post</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id keywords'>keywords</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>super fan</span><span class='tstring_end'>'</span></span> <span class='kw'>do</span>
+      <span class='id boost'>boost</span><span class='lparen'>(</span><span class='float'>2.0</span><span class='rparen'>)</span> <span class='kw'>do</span>
+        <span class='id with'>with</span><span class='lparen'>(</span><span class='symbol'>:featured</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+
+      <span class='id boost'>boost</span><span class='lparen'>(</span><span class='id function'>function</span> <span class='lbrace'>{</span> <span class='id sum'>sum</span><span class='lparen'>(</span><span class='symbol'>:average_rating</span><span class='comma'>,</span> <span class='id product'>product</span><span class='lparen'>(</span><span class='symbol'>:popularity</span><span class='comma'>,</span> <span class='int'>10</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+</pre>
+<p>
+In the above search, featured posts will receive a boost of 2.0 and all
+posts  will be boosted by (average_rating + popularity * 10).
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 172</span>
+
+<span class='kw'>def</span> <span class='id boost'>boost</span><span class='lparen'>(</span><span class='id factor_or_function'>factor_or_function</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id factor_or_function'>factor_or_function</span><span class='period'>.</span><span class='id is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Query</span><span class='op'>::</span><span class='const'>FunctionQuery</span><span class='rparen'>)</span>
+    <span class='ivar'>@query</span><span class='period'>.</span><span class='id add_boost_function'>add_boost_function</span><span class='lparen'>(</span><span class='id factor_or_function'>factor_or_function</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Util</span><span class='period'>.</span><span class='id instance_eval_or_call'>instance_eval_or_call</span><span class='lparen'>(</span>
+      <span class='const'>Scope</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='ivar'>@query</span><span class='period'>.</span><span class='id create_boost_query'>create_boost_query</span><span class='lparen'>(</span><span class='id factor_or_function'>factor_or_function</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='ivar'>@setup</span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='op'>&amp;</span><span class='id block'>block</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="boost_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>boost_fields</strong>(boosts) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add boost to certain fields, without restricting which fields are searched.
+</p>
+<h3>Example</h3>
+<pre class="code">
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id search'>search</span><span class='lparen'>(</span><span class='const'>Post</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id keywords'>keywords</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>pork sandwich</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='id boost_fields'>boost_fields</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='float'>1.5</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 195</span>
+
+<span class='kw'>def</span> <span class='id boost_fields'>boost_fields</span><span class='lparen'>(</span><span class='id boosts'>boosts</span><span class='rparen'>)</span>
+  <span class='id boosts'>boosts</span><span class='period'>.</span><span class='id each_pair'>each_pair</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field_name'>field_name</span><span class='comma'>,</span> <span class='id boost'>boost</span><span class='op'>|</span>
+    <span class='kw'>begin</span>
+      <span class='ivar'>@setup</span><span class='period'>.</span><span class='id text_fields'>text_fields</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field'>field</span><span class='op'>|</span>
+        <span class='ivar'>@query</span><span class='period'>.</span><span class='id add_fulltext_field'>add_fulltext_field</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id boost'>boost</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>rescue</span> <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>UnrecognizedFieldError</span>
+      <span class='comment'># We'll let this one slide.
+</span>    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>fields</strong>(*field_names) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Specify which fields to search. Field names specified as arguments are
+given default boost; field boosts can be specified by passing a hash of
+field names keyed to boost values as the last argument.
+</p>
+<p>
+If you wish to boost certain fields without restricting which fields are
+searched, use #boost_fields
+</p>
+<h3>Example</h3>
+<pre class="code">
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id search'>search</span><span class='lparen'>(</span><span class='const'>Post</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id keywords'>keywords</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>search is cool</span><span class='tstring_end'>'</span></span> <span class='kw'>do</span>
+      <span class='id fields'>fields</span><span class='lparen'>(</span><span class='symbol'>:body</span><span class='comma'>,</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='float'>2.0</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+</pre>
+<p>
+This would search the :body field with default boost (1.0), and the :title
+field with a boost of 2.0
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 38</span>
+
+<span class='kw'>def</span> <span class='id fields'>fields</span><span class='lparen'>(</span><span class='op'>*</span><span class='id field_names'>field_names</span><span class='rparen'>)</span>
+  <span class='ivar'>@fields_added</span> <span class='op'>=</span> <span class='kw'>true</span>
+  <span class='id boosted_fields'>boosted_fields</span> <span class='op'>=</span> <span class='id field_names'>field_names</span><span class='period'>.</span><span class='id pop'>pop</span> <span class='kw'>if</span> <span class='id field_names'>field_names</span><span class='period'>.</span><span class='id last'>last</span><span class='period'>.</span><span class='id is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span>
+  <span class='id field_names'>field_names</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field_name'>field_name</span><span class='op'>|</span>
+    <span class='ivar'>@setup</span><span class='period'>.</span><span class='id text_fields'>text_fields</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field'>field</span><span class='op'>|</span>
+      <span class='ivar'>@query</span><span class='period'>.</span><span class='id add_fulltext_field'>add_fulltext_field</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id field'>field</span><span class='period'>.</span><span class='id default_boost'>default_boost</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id boosted_fields'>boosted_fields</span>
+    <span class='id boosted_fields'>boosted_fields</span><span class='period'>.</span><span class='id each_pair'>each_pair</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field_name'>field_name</span><span class='comma'>,</span> <span class='id boost'>boost</span><span class='op'>|</span>
+      <span class='ivar'>@setup</span><span class='period'>.</span><span class='id text_fields'>text_fields</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field'>field</span><span class='op'>|</span>
+        <span class='ivar'>@query</span><span class='period'>.</span><span class='id add_fulltext_field'>add_fulltext_field</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id boost'>boost</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="fields_added?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>fields_added?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+238
+239
+240</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 238</span>
+
+<span class='kw'>def</span> <span class='id fields_added?'>fields_added?</span> <span class='comment'>#:nodoc:
+</span>  <span class='ivar'>@fields_added</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="highlight-instance_method">
+  
+    - (<tt>Object</tt>) <strong>highlight</strong>(*args) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Enable keyword highlighting for this search. By default, the fields  under
+search will be highlighted; you may also may pass one or more symbol
+arguments indicating fields to be highlighted (they don&#8217;t even have
+to be the same fields you&#8217;re searching).
+</p>
+<h3>Example</h3>
+<pre class="code">
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id search'>search</span><span class='lparen'>(</span><span class='const'>Post</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id keywords'>keywords</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>show me the highlighting</span><span class='tstring_end'>'</span></span> <span class='kw'>do</span>
+      <span class='id highlight'>highlight</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:body</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+</pre>
+<p>
+You may also pass a hash of options as the last argument. Options are the
+following:
+</p>
+<p>
+Full disclosure: I barely understand what these options actually do; this
+documentation is pretty much just copied from the (<a
+href="http://wiki.apache.org/solr/HighlightingParameters#head-23ecd5061bc2c86a561f85dc1303979fe614b956)[Solr">wiki.apache.org/solr/HighlightingParameters#head-23ecd5061bc2c86a561f85dc1303979fe614b956)[Solr</a>
+Wiki]
+</p>
+<table>
+<tr><td valign="top">:max_snippets</td><td><p>
+The maximum number of highlighted snippets to generate per field
+</p>
+</td></tr>
+<tr><td valign="top">:fragment_size</td><td><p>
+The number of characters to consider for a highlighted fragment
+</p>
+</td></tr>
+<tr><td valign="top">:merge_continuous_fragments</td><td><p>
+Collapse continuous fragments into a single fragment
+</p>
+</td></tr>
+<tr><td valign="top">:phrase_highlighter</td><td><p>
+Highlight phrase terms only when they appear within the query phrase in the
+document
+</p>
+</td></tr>
+<tr><td valign="top">:require_field_match</td><td><p>
+If true, a field will only be highlighted if the query matched in this
+particular field (only has an effect if :phrase_highlighter is true as
+well)
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+98
+99
+100
+101
+102
+103
+104</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 98</span>
+
+<span class='kw'>def</span> <span class='id highlight'>highlight</span><span class='lparen'>(</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
+  <span class='id options'>options</span> <span class='op'>=</span> <span class='id args'>args</span><span class='period'>.</span><span class='id last'>last</span><span class='period'>.</span><span class='id kind_of?'>kind_of?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id args'>args</span><span class='period'>.</span><span class='id pop'>pop</span> <span class='op'>:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='id fields'>fields</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id args'>args</span><span class='period'>.</span><span class='id each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id field_name'>field_name</span><span class='op'>|</span> <span class='id fields'>fields</span><span class='period'>.</span><span class='id concat'>concat</span><span class='lparen'>(</span><span class='ivar'>@setup</span><span class='period'>.</span><span class='id text_fields'>text_fields</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+
+  <span class='ivar'>@query</span><span class='period'>.</span><span class='id add_highlight'>add_highlight</span><span class='lparen'>(</span><span class='id fields'>fields</span><span class='comma'>,</span> <span class='id options'>options</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="minimum_match-instance_method">
+  
+    - (<tt>Object</tt>) <strong>minimum_match</strong>(minimum_match) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The minimum number of search terms that a result must match. By default,
+all search terms must match; if the number of search terms is less than
+this number, the default behavior applies.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+212
+213
+214</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 212</span>
+
+<span class='kw'>def</span> <span class='id minimum_match'>minimum_match</span><span class='lparen'>(</span><span class='id minimum_match'>minimum_match</span><span class='rparen'>)</span>
+  <span class='ivar'>@query</span><span class='period'>.</span><span class='id minimum_match'>minimum_match</span> <span class='op'>=</span> <span class='id minimum_match'>minimum_match</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="phrase_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>phrase_fields</strong>(boosted_fields) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Phrase fields are an awesome dismax feature that adds extra boost to
+documents for which all the fulltext keywords appear in close proximity in
+one of the given fields. Excellent for titles, headlines, etc.
+</p>
+<p>
+Boosted fields are specified in a hash of field names to a boost, as with
+the #fields and #boost_fields methods.
+</p>
+<h3>Example</h3>
+<pre class="code">
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id search'>search</span><span class='lparen'>(</span><span class='const'>Post</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id keywords'>keywords</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>nothing reveals like relevance</span><span class='tstring_end'>'</span></span> <span class='kw'>do</span>
+      <span class='id phrase_fields'>phrase_fields</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='float'>2.0</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+122
+123
+124
+125
+126
+127
+128
+129
+130</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 122</span>
+
+<span class='kw'>def</span> <span class='id phrase_fields'>phrase_fields</span><span class='lparen'>(</span><span class='id boosted_fields'>boosted_fields</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id boosted_fields'>boosted_fields</span>
+    <span class='id boosted_fields'>boosted_fields</span><span class='period'>.</span><span class='id each_pair'>each_pair</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field_name'>field_name</span><span class='comma'>,</span> <span class='id boost'>boost</span><span class='op'>|</span>
+      <span class='ivar'>@setup</span><span class='period'>.</span><span class='id text_fields'>text_fields</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field'>field</span><span class='op'>|</span>
+        <span class='ivar'>@query</span><span class='period'>.</span><span class='id add_phrase_field'>add_phrase_field</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id boost'>boost</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="phrase_slop-instance_method">
+  
+    - (<tt>Object</tt>) <strong>phrase_slop</strong>(slop) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The maximum number of words that can appear between search terms for a
+field to qualify for phrase field boost. See #query_phrase_slop for
+examples. Phrase slop is only meaningful if phrase fields are specified
+(see #phrase_fields), and it does not have an effect on which results are
+returned; only on what their respective boosts are.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+139
+140
+141</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 139</span>
+
+<span class='kw'>def</span> <span class='id phrase_slop'>phrase_slop</span><span class='lparen'>(</span><span class='id slop'>slop</span><span class='rparen'>)</span>
+  <span class='ivar'>@query</span><span class='period'>.</span><span class='id phrase_slop'>phrase_slop</span> <span class='op'>=</span> <span class='id slop'>slop</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="query_phrase_slop-instance_method">
+  
+    - (<tt>Object</tt>) <strong>query_phrase_slop</strong>(slop) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The number of words that can appear between the words in a user-entered
+phrase (i.e., keywords in quotes) and still match. For instance, in a
+search for &#8220;\&#8220;great pizza\&#8221;&#8220; with a query phrase
+slop of 1, &#8220;great pizza&#8221; and &#8220;great big pizza&#8221; will
+match, but &#8220;great monster of a pizza&#8221; will not. Default
+behavior is a query phrase slop of zero.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+223
+224
+225</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 223</span>
+
+<span class='kw'>def</span> <span class='id query_phrase_slop'>query_phrase_slop</span><span class='lparen'>(</span><span class='id slop'>slop</span><span class='rparen'>)</span>
+  <span class='ivar'>@query</span><span class='period'>.</span><span class='id query_phrase_slop'>query_phrase_slop</span> <span class='op'>=</span> <span class='id slop'>slop</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="tie-instance_method">
+  
+    - (<tt>Object</tt>) <strong>tie</strong>(tie) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A tiebreaker coefficient for scores derived from subqueries that are
+lower-scoring than the maximum score subquery. Typically a near-zero value
+is useful. See <a
+href="http://wiki.apache.org/solr/DisMaxRequestHandler#tie_.28Tie_breaker.29">wiki.apache.org/solr/DisMaxRequestHandler#tie_.28Tie_breaker.29</a>
+for more information.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+234
+235
+236</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/fulltext.rb', line 234</span>
+
+<span class='kw'>def</span> <span class='id tie'>tie</span><span class='lparen'>(</span><span class='id tie'>tie</span><span class='rparen'>)</span>
+  <span class='ivar'>@query</span><span class='period'>.</span><span class='id tie'>tie</span> <span class='op'>=</span> <span class='id tie'>tie</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

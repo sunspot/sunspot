@@ -1,0 +1,1078 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Query::Connective::Abstract
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../../_index.html">Index (A)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Query.html" title="Sunspot::Query (module)">Query</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Connective.html" title="Sunspot::Query::Connective (module)">Connective</a></span></span>
+     &raquo; 
+    <span class="title">Abstract</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Query::Connective::Abstract
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Query::Connective::Abstract</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+      <dt class="r2">Includes:</dt>
+      <dd class="r2"><span class='object_link'><a href="../Filter.html" title="Sunspot::Query::Filter (module)">Filter</a></span></dd>
+      
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot/lib/sunspot/query/connective.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Base class for connectives (conjunctions and disjunctions).
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="Conjunction.html" title="Sunspot::Query::Connective::Conjunction (class)">Conjunction</a></span>, <span class='object_link'><a href="Disjunction.html" title="Sunspot::Query::Connective::Disjunction (class)">Disjunction</a></span></p>
+</div>
+
+
+  
+  
+  
+  
+
+
+  
+  
+  
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_component-instance_method" title="#add_component (instance method)">- (Object) <strong>add_component</strong>(component) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add an arbitrary component to the conjunction, and return it.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_conjunction-instance_method" title="#add_conjunction (instance method)">- (Object) <strong>add_conjunction</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a new conjunction and return it.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_disjunction-instance_method" title="#add_disjunction (instance method)">- (Object) <strong>add_disjunction</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a new disjunction and return it.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_negated_restriction-instance_method" title="#add_negated_restriction (instance method)">- (Object) <strong>add_negated_restriction</strong>(field, restriction_type, value) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a negated restriction.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_negated_shorthand_restriction-instance_method" title="#add_negated_shorthand_restriction (instance method)">- (Object) <strong>add_negated_shorthand_restriction</strong>(field, value) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a negated shorthand restriction (see add_shorthand_restriction).
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_positive_restriction-instance_method" title="#add_positive_restriction (instance method)">- (Object) <strong>add_positive_restriction</strong>(field, restriction_type, value) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a positive restriction.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_positive_shorthand_restriction-instance_method" title="#add_positive_shorthand_restriction (instance method)">- (Object) <strong>add_positive_shorthand_restriction</strong>(field, value) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a positive shorthand restriction (see add_shorthand_restriction).
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_restriction-instance_method" title="#add_restriction (instance method)">- (Object) <strong>add_restriction</strong>(negated, field, restriction_type, *value) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a restriction to the connective.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_shorthand_restriction-instance_method" title="#add_shorthand_restriction (instance method)">- (Object) <strong>add_shorthand_restriction</strong>(negated, field, value) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a shorthand restriction; the restriction type is determined by the
+value.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Abstract) <strong>initialize</strong>(negated = false) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#negate-instance_method" title="#negate (instance method)">- (Object) <strong>negate</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns a new connective that&#8217;s a negated version of this one.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#negated%3F-instance_method" title="#negated? (instance method)">- (Boolean) <strong>negated?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Connectives can be negated during the process of denormalization that is
+performed when a disjunction contains a negated component.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_boolean_phrase-instance_method" title="#to_boolean_phrase (instance method)">- (Object) <strong>to_boolean_phrase</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Express the connective as a Lucene boolean phrase.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Filter.html" title="Sunspot::Query::Filter (module)">Filter</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Filter.html#tag-instance_method" title="Sunspot::Query::Filter#tag (method)">#tag</a></span>, <span class='object_link'><a href="../Filter.html#to_filter_query-instance_method" title="Sunspot::Query::Filter#to_filter_query (method)">#to_filter_query</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Query::Connective::Abstract (class)">Abstract</a></span></tt>) <strong>initialize</strong>(negated = false) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12
+13</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id negated'>negated</span> <span class='op'>=</span> <span class='kw'>false</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='ivar'>@negated</span> <span class='op'>=</span> <span class='id negated'>negated</span>
+  <span class='ivar'>@components</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="add_component-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_component</strong>(component) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add an arbitrary component to the conjunction, and return it. The component
+must respond to #to_boolean_phrase
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+84
+85
+86
+87</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 84</span>
+
+<span class='kw'>def</span> <span class='id add_component'>add_component</span><span class='lparen'>(</span><span class='id component'>component</span><span class='rparen'>)</span>
+  <span class='ivar'>@components</span> <span class='op'>&lt;&lt;</span> <span class='id component'>component</span>
+  <span class='id component'>component</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_conjunction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_conjunction</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a new conjunction and return it.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+69
+70
+71</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 69</span>
+
+<span class='kw'>def</span> <span class='id add_conjunction'>add_conjunction</span>
+  <span class='id add_component'>add_component</span><span class='lparen'>(</span><span class='const'>Conjunction</span><span class='period'>.</span><span class='id new'>new</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_disjunction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_disjunction</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a new disjunction and return it.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+76
+77
+78</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 76</span>
+
+<span class='kw'>def</span> <span class='id add_disjunction'>add_disjunction</span>
+  <span class='id add_component'>add_component</span><span class='lparen'>(</span><span class='const'>Disjunction</span><span class='period'>.</span><span class='id new'>new</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_negated_restriction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_negated_restriction</strong>(field, restriction_type, value) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a negated restriction. The added restriction will match all documents
+who do not match the terms of the restriction.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='id add_negated_restriction'>add_negated_restriction</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id restriction_type'>restriction_type</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='id add_restriction'>add_restriction</span><span class='lparen'>(</span><span class='kw'>true</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id restriction_type'>restriction_type</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_negated_shorthand_restriction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_negated_shorthand_restriction</strong>(field, value) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a negated shorthand restriction (see add_shorthand_restriction)
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id add_negated_shorthand_restriction'>add_negated_shorthand_restriction</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='id add_shorthand_restriction'>add_shorthand_restriction</span><span class='lparen'>(</span><span class='kw'>true</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_positive_restriction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_positive_restriction</strong>(field, restriction_type, value) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a positive restriction. The restriction will match all documents who
+match the terms fo the restriction.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+40
+41
+42</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 40</span>
+
+<span class='kw'>def</span> <span class='id add_positive_restriction'>add_positive_restriction</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id restriction_type'>restriction_type</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='id add_restriction'>add_restriction</span><span class='lparen'>(</span><span class='kw'>false</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id restriction_type'>restriction_type</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_positive_shorthand_restriction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_positive_shorthand_restriction</strong>(field, value) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a positive shorthand restriction (see add_shorthand_restriction)
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 47</span>
+
+<span class='kw'>def</span> <span class='id add_positive_shorthand_restriction'>add_positive_shorthand_restriction</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='id add_shorthand_restriction'>add_shorthand_restriction</span><span class='lparen'>(</span><span class='kw'>false</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_restriction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_restriction</strong>(negated, field, restriction_type, *value) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a restriction to the connective.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18
+19
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 18</span>
+
+<span class='kw'>def</span> <span class='id add_restriction'>add_restriction</span><span class='lparen'>(</span><span class='id negated'>negated</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id restriction_type'>restriction_type</span><span class='comma'>,</span> <span class='op'>*</span><span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='id add_component'>add_component</span><span class='lparen'>(</span><span class='id restriction_type'>restriction_type</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id negated'>negated</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='op'>*</span><span class='id value'>value</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_shorthand_restriction-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_shorthand_restriction</strong>(negated, field, value) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a shorthand restriction; the restriction type is determined by the
+value.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26
+27
+28
+29
+30
+31
+32
+33
+34</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 26</span>
+
+<span class='kw'>def</span> <span class='id add_shorthand_restriction'>add_shorthand_restriction</span><span class='lparen'>(</span><span class='id negated'>negated</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='id restriction_type'>restriction_type</span> <span class='op'>=</span>
+    <span class='kw'>case</span> <span class='id value'>value</span>
+    <span class='kw'>when</span> <span class='const'>Array</span> <span class='kw'>then</span> <span class='const'>Restriction</span><span class='op'>::</span><span class='const'>AnyOf</span>
+    <span class='kw'>when</span> <span class='const'>Range</span> <span class='kw'>then</span> <span class='const'>Restriction</span><span class='op'>::</span><span class='const'>Between</span>
+    <span class='kw'>else</span> <span class='const'>Restriction</span><span class='op'>::</span><span class='const'>EqualTo</span>
+    <span class='kw'>end</span>
+  <span class='id add_restriction'>add_restriction</span><span class='lparen'>(</span><span class='id negated'>negated</span><span class='comma'>,</span> <span class='id field'>field</span><span class='comma'>,</span> <span class='id restriction_type'>restriction_type</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="negate-instance_method">
+  
+    - (<tt>Object</tt>) <strong>negate</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns a new connective that&#8217;s a negated version of this one.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+123
+124
+125
+126
+127
+128
+129</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 123</span>
+
+<span class='kw'>def</span> <span class='id negate'>negate</span>
+  <span class='id negated'>negated</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id class'>class</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='op'>!</span><span class='id negated?'>negated?</span><span class='rparen'>)</span>
+  <span class='ivar'>@components</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id component'>component</span><span class='op'>|</span>
+    <span class='id negated'>negated</span><span class='period'>.</span><span class='id add_component'>add_component</span><span class='lparen'>(</span><span class='id component'>component</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id negated'>negated</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="negated?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>negated?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Connectives can be negated during the process of denormalization that is
+performed when a disjunction contains a negated component. This method
+conforms to the duck type for all boolean query components.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+116
+117
+118</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 116</span>
+
+<span class='kw'>def</span> <span class='id negated?'>negated?</span>
+  <span class='ivar'>@negated</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="to_boolean_phrase-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_boolean_phrase</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Express the connective as a Lucene boolean phrase.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/connective.rb', line 92</span>
+
+<span class='kw'>def</span> <span class='id to_boolean_phrase'>to_boolean_phrase</span> <span class='comment'>#:nodoc:
+</span>  <span class='kw'>unless</span> <span class='ivar'>@components</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+    <span class='id phrase'>phrase</span> <span class='op'>=</span>
+      <span class='kw'>if</span> <span class='ivar'>@components</span><span class='period'>.</span><span class='id length'>length</span> <span class='op'>==</span> <span class='int'>1</span>
+        <span class='ivar'>@components</span><span class='period'>.</span><span class='id first'>first</span><span class='period'>.</span><span class='id to_boolean_phrase'>to_boolean_phrase</span>
+      <span class='kw'>else</span>
+        <span class='id component_phrases'>component_phrases</span> <span class='op'>=</span> <span class='ivar'>@components</span><span class='period'>.</span><span class='id map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id component'>component</span><span class='op'>|</span>
+          <span class='id component'>component</span><span class='period'>.</span><span class='id to_boolean_phrase'>to_boolean_phrase</span>
+        <span class='kw'>end</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='embexpr_beg'>#{</span><span class='id component_phrases'>component_phrases</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id connector'>connector</span><span class='rbrace'>}</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>end</span>
+    <span class='kw'>if</span> <span class='id negated?'>negated?</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='id phrase'>phrase</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id phrase'>phrase</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:20 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

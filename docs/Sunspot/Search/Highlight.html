@@ -1,0 +1,400 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Search::Highlight
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (H)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Search.html" title="Sunspot::Search (module)">Search</a></span></span>
+     &raquo; 
+    <span class="title">Highlight</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Search::Highlight
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Search::Highlight</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/search/highlight.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+A Highlight represents a single highlighted fragment of text from a
+document. Depending on the highlighting parameters used for search, there
+may be more than one Highlight object for a given field in a given result.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="HIGHLIGHT_MATCHER-constant" class="">HIGHLIGHT_MATCHER =
+          <div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>@@@hl@@@(.*?)@@@endhl@@@</span><span class='regexp_end'>/</span></span></pre></dd>
+      
+    </dl>
+  
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#field_name-instance_method" title="#field_name (instance method)">- (Object) <strong>field_name</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The name of the field in which the highlight appeared.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#format-instance_method" title="#format (instance method)">- (Object) <strong>format</strong>(&amp;block) </a>
+    
+
+    
+      (also: #formatted)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the highlighted text with formatting according to the template
+given in &amp;block.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Highlight) <strong>initialize</strong>(field_name, highlight) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Search::Highlight (class)">Highlight</a></span></tt>) <strong>initialize</strong>(field_name, highlight) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+16
+17
+18
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/highlight.rb', line 16</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='comma'>,</span> <span class='id highlight'>highlight</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='ivar'>@field_name</span> <span class='op'>=</span> <span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span>
+  <span class='ivar'>@highlight</span> <span class='op'>=</span> <span class='id highlight'>highlight</span><span class='period'>.</span><span class='id to_s'>to_s</span><span class='period'>.</span><span class='id strip'>strip</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="field_name-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="field_name-instance_method">
+  
+    - (<tt>Object</tt>) <strong>field_name</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The name of the field in which the highlight appeared.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/highlight.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id field_name'>field_name</span>
+  <span class='ivar'>@field_name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="format-instance_method">
+  
+    - (<tt>Object</tt>) <strong>format</strong>(&amp;block) 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='formatted-instance_method'>formatted</span></span>
+    </span>
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the highlighted text with formatting according to the template
+given in &amp;block. When no block is given, &amp;lt;em&amp;gt; and
+&amp;lt;/em&amp;gt; are used to surround the highlight.
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='id search'>search</span><span class='period'>.</span><span class='id highlights'>highlights</span><span class='lparen'>(</span><span class='symbol'>:body</span><span class='rparen'>)</span><span class='period'>.</span><span class='id first'>first</span><span class='period'>.</span><span class='id format'>format</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id word'>word</span><span class='op'>|</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;strong&gt;</span><span class='embexpr_beg'>#{</span><span class='id word'>word</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/strong&gt;</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29
+30
+31
+32
+33
+34</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/highlight.rb', line 29</span>
+
+<span class='kw'>def</span> <span class='id format'>format</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='id block'>block</span> <span class='op'>||=</span> <span class='id proc'>proc</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id word'>word</span><span class='op'>|</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&lt;em&gt;</span><span class='embexpr_beg'>#{</span><span class='id word'>word</span><span class='rbrace'>}</span><span class='tstring_content'>&lt;/em&gt;</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span>
+  <span class='ivar'>@highlight</span><span class='period'>.</span><span class='id gsub'>gsub</span><span class='lparen'>(</span><span class='const'>HIGHLIGHT_MATCHER</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id block'>block</span><span class='period'>.</span><span class='id call'>call</span><span class='lparen'>(</span><span class='const'>Regexp</span><span class='period'>.</span><span class='id last_match'>last_match</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:20 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

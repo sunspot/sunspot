@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Sunspot::DSL::Paginatable
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (P)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../DSL.html" title="Sunspot::DSL (module)">DSL</a></span></span>
+     &raquo; 
+    <span class="title">Paginatable</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Sunspot::DSL::Paginatable
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+    <dt class="r1">Included in:</dt>
+    <dd class="r1"><span class='object_link'><a href="MoreLikeThisQuery.html" title="Sunspot::DSL::MoreLikeThisQuery (class)">MoreLikeThisQuery</a></span>, <span class='object_link'><a href="StandardQuery.html" title="Sunspot::DSL::StandardQuery (class)">StandardQuery</a></span></dd>
+    
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/dsl/paginatable.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#paginate-instance_method" title="#paginate (instance method)">- (Object) <strong>paginate</strong>(options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Paginate your search.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="paginate-instance_method">
+  
+    - (<tt>Object</tt>) <strong>paginate</strong>(options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Paginate your search. This works the same way as WillPaginate&#8217;s
+paginate().
+</p>
+<p>
+Note that Solr searches are <em>always</em> paginated. Not calling
+#paginate is the equivalent of calling:
+</p>
+<pre class="code">
+  <span class='id paginate'>paginate</span><span class='lparen'>(</span><span class='symbol'>:page</span> <span class='op'>=&gt;</span> <span class='int'>1</span><span class='comma'>,</span> <span class='symbol'>:per_page</span> <span class='op'>=&gt;</span> <span class='const'>Sunspot</span><span class='period'>.</span><span class='id config'>config</span><span class='period'>.</span><span class='id pagination'>pagination</span><span class='period'>.</span><span class='id default_per_page'>default_per_page</span><span class='rparen'>)</span>
+</pre>
+<h4>Options (options)</h4>
+<table>
+<tr><td valign="top">:page<Integer,String></td><td><p>
+The requested page. The default is 1.
+</p>
+</td></tr>
+<tr><td valign="top">:per_page<Integer,String></td><td><p>
+How many results to return per page. The default is the value in
+<tt>Sunspot.config.pagination.default_per_page</tt>
+</p>
+</td></tr>
+<tr><td valign="top">:offset<Integer,String></td><td><p>
+Applies a shift to paginated records. The default is 0.
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Raises:</h3>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25
+26
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/paginatable.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id paginate'>paginate</span><span class='lparen'>(</span><span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id page'>page</span> <span class='op'>=</span> <span class='id options'>options</span><span class='period'>.</span><span class='id delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:page</span><span class='rparen'>)</span>
+  <span class='id per_page'>per_page</span> <span class='op'>=</span> <span class='id options'>options</span><span class='period'>.</span><span class='id delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:per_page</span><span class='rparen'>)</span>
+  <span class='id offset'>offset</span> <span class='op'>=</span> <span class='id options'>options</span><span class='period'>.</span><span class='id delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:offset</span><span class='rparen'>)</span>
+  <span class='id raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>unknown argument </span><span class='embexpr_beg'>#{</span><span class='id options'>options</span><span class='period'>.</span><span class='id keys'>keys</span><span class='period'>.</span><span class='id first'>first</span><span class='period'>.</span><span class='id inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> passed to paginate</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id options'>options</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+  <span class='ivar'>@query</span><span class='period'>.</span><span class='id paginate'>paginate</span><span class='lparen'>(</span><span class='id page'>page</span><span class='comma'>,</span> <span class='id per_page'>per_page</span><span class='comma'>,</span> <span class='id offset'>offset</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:20 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

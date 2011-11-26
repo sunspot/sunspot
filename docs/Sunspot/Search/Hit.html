@@ -1,0 +1,918 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Search::Hit
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (H)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Search.html" title="Sunspot::Search (module)">Search</a></span></span>
+     &raquo; 
+    <span class="title">Hit</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Search::Hit
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Search::Hit</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/search/hit.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Hit objects represent the raw information returned by Solr for a single
+document. As well as the primary key and class name, hit objects give
+access to stored field values, keyword relevance score, and keyword
+highlighting.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="SPECIAL_KEYS-constant" class="">SPECIAL_KEYS =
+          <div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>Set</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w(</span><span class='tstring_content'>id</span><span class='words_sep'> </span><span class='tstring_content'>type</span><span class='words_sep'> </span><span class='tstring_content'>score</span><span class='words_sep'>)</span><span class='rparen'>)</span></pre></dd>
+      
+    </dl>
+  
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#class_name-instance_method" title="#class_name (instance method)">- (Object) <strong>class_name</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Class name of object associated with this hit, as string.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#primary_key-instance_method" title="#primary_key (instance method)">- (Object) <strong>primary_key</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Primary key of object associated with this hit, as string.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#result-instance_method" title="#result (instance method)">- (Object) <strong>result</strong> </a>
+    
+
+    
+      (also: #instance)
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Retrieve the instance associated with this hit.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#score-instance_method" title="#score (instance method)">- (Object) <strong>score</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Keyword relevance score associated with this result.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#highlight-instance_method" title="#highlight (instance method)">- (Object) <strong>highlight</strong>(field_name) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return the first highlight found for a given field, or nil if there is
+none.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#highlights-instance_method" title="#highlights (instance method)">- (Object) <strong>highlights</strong>(field_name = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns all highlights for this hit when called without parameters.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Hit) <strong>initialize</strong>(raw_hit, highlights, search) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inspect-instance_method" title="#inspect (instance method)">- (Object) <strong>inspect</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#stored-instance_method" title="#stored (instance method)">- (Object) <strong>stored</strong>(field_name, dynamic_field_name = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Retrieve stored field value.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_param-instance_method" title="#to_param (instance method)">- (Object) <strong>to_param</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the instance primary key when the Hit is used to generate urls For
+example, using a search that stores the :name attribute:.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Search::Hit (class)">Hit</a></span></tt>) <strong>initialize</strong>(raw_hit, highlights, search) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29
+30
+31
+32
+33
+34
+35
+36</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 29</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id raw_hit'>raw_hit</span><span class='comma'>,</span> <span class='id highlights'>highlights</span><span class='comma'>,</span> <span class='id search'>search</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='ivar'>@class_name</span><span class='comma'>,</span> <span class='ivar'>@primary_key</span> <span class='op'>=</span> <span class='op'>*</span><span class='id raw_hit'>raw_hit</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>id</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([^ ]+) (.+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>1</span><span class='op'>..</span><span class='int'>2</span><span class='rbracket'>]</span>
+  <span class='ivar'>@score</span> <span class='op'>=</span> <span class='id raw_hit'>raw_hit</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>score</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>
+  <span class='ivar'>@search</span> <span class='op'>=</span> <span class='id search'>search</span>
+  <span class='ivar'>@stored_values</span> <span class='op'>=</span> <span class='id raw_hit'>raw_hit</span>
+  <span class='ivar'>@stored_cache</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='ivar'>@highlights</span> <span class='op'>=</span> <span class='id highlights'>highlights</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="class_name-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="class_name-instance_method">
+  
+    - (<tt>Object</tt>) <strong>class_name</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Class name of object associated with this hit, as string.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id class_name'>class_name</span>
+  <span class='ivar'>@class_name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <span id="primary_key-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="primary_key-instance_method">
+  
+    - (<tt>Object</tt>) <strong>primary_key</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Primary key of object associated with this hit, as string.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id primary_key'>primary_key</span>
+  <span class='ivar'>@primary_key</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="result=-instance_method"></span>
+      <span id="result-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="result-instance_method">
+  
+    - (<tt>Object</tt>) <strong>result</strong> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='instance-instance_method'>instance</span></span>
+    </span>
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Retrieve the instance associated with this hit. This is lazy-loaded, but
+the first time it is called on any hit, all the hits for the search will
+load their instances using the adapter&#8217;s #load_all method.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+88
+89
+90
+91
+92</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 88</span>
+
+<span class='kw'>def</span> <span class='id result'>result</span>
+  <span class='kw'>return</span> <span class='ivar'>@result</span> <span class='kw'>if</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='ivar'>@result</span><span class='rparen'>)</span>
+  <span class='ivar'>@search</span><span class='period'>.</span><span class='id populate_hits'>populate_hits</span>
+  <span class='ivar'>@result</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <span id="score-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="score-instance_method">
+  
+    - (<tt>Object</tt>) <strong>score</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Keyword relevance score associated with this result. Nil if this hit is not
+from a keyword search.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+24
+25
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 24</span>
+
+<span class='kw'>def</span> <span class='id score'>score</span>
+  <span class='ivar'>@score</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="highlight-instance_method">
+  
+    - (<tt>Object</tt>) <strong>highlight</strong>(field_name) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return the first highlight found for a given field, or nil if there is
+none.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+54
+55
+56</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 54</span>
+
+<span class='kw'>def</span> <span class='id highlight'>highlight</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span>
+  <span class='id highlights'>highlights</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span><span class='period'>.</span><span class='id first'>first</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="highlights-instance_method">
+  
+    - (<tt>Object</tt>) <strong>highlights</strong>(field_name = nil) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns all highlights for this hit when called without parameters. When a
+field_name is provided, returns only the highlight for this field.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+42
+43
+44
+45
+46
+47
+48</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 42</span>
+
+<span class='kw'>def</span> <span class='id highlights'>highlights</span><span class='lparen'>(</span><span class='id field_name'>field_name</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id field_name'>field_name</span><span class='period'>.</span><span class='id nil?'>nil?</span>
+    <span class='id highlights_cache'>highlights_cache</span><span class='period'>.</span><span class='id values'>values</span><span class='period'>.</span><span class='id flatten'>flatten</span> 
+  <span class='kw'>else</span>
+    <span class='id highlights_cache'>highlights_cache</span><span class='lbracket'>[</span><span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span> <span class='op'>||</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="inspect-instance_method">
+  
+    - (<tt>Object</tt>) <strong>inspect</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+95
+96
+97</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 95</span>
+
+<span class='kw'>def</span> <span class='id inspect'>inspect</span> <span class='comment'>#:nodoc:
+</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>#&lt;Sunspot::Search::Hit:</span><span class='embexpr_beg'>#{</span><span class='ivar'>@class_name</span><span class='rbrace'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='ivar'>@primary_key</span><span class='rbrace'>}</span><span class='tstring_content'>&gt;</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="stored-instance_method">
+  
+    - (<tt>Object</tt>) <strong>stored</strong>(field_name, dynamic_field_name = nil) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Retrieve stored field value. For any attribute field configured with
+:stored => true, the Hit object will contain the stored value for that
+field. The value of this field will be typecast according to the type of
+the field.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">field_name<Symbol></td><td><p>
+The name of the field for which to retrieve the stored value.
+</p>
+</td></tr>
+<tr><td valign="top">dynamic_field_name<Symbol></td><td><p>
+If you want to access a stored dynamic field, this should be the dynamic
+component of the field name.
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 72</span>
+
+<span class='kw'>def</span> <span class='id stored'>stored</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='comma'>,</span> <span class='id dynamic_field_name'>dynamic_field_name</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id field_key'>field_key</span> <span class='op'>=</span>
+    <span class='kw'>if</span> <span class='id dynamic_field_name'>dynamic_field_name</span>
+      <span class='lbracket'>[</span><span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='comma'>,</span> <span class='id dynamic_field_name'>dynamic_field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span>
+    <span class='kw'>else</span>
+      <span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span>
+    <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='ivar'>@stored_cache</span><span class='lbracket'>[</span><span class='id field_key'>field_key</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='ivar'>@stored_cache</span><span class='period'>.</span><span class='id has_key?'>has_key?</span><span class='lparen'>(</span><span class='id field_key'>field_key</span><span class='rparen'>)</span>
+  <span class='ivar'>@stored_cache</span><span class='lbracket'>[</span><span class='id field_key'>field_key</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id stored_value'>stored_value</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='comma'>,</span> <span class='id dynamic_field_name'>dynamic_field_name</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="to_param-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_param</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the instance primary key when the Hit is used to generate urls For
+example, using a search that stores the :name attribute:
+</p>
+<pre class="code">
+  hits = Sunspot.search(Object) do ...
+
+  hits.each do |hit|
+    link_to hit.stored(:name), edit_object_path(hit)
+  end</pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+109
+110
+111</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/hit.rb', line 109</span>
+
+<span class='kw'>def</span> <span class='id to_param'>to_param</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id primary_key'>primary_key</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

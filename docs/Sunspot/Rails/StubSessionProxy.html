@@ -1,0 +1,1094 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Rails::StubSessionProxy
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Rails.html" title="Sunspot::Rails (module)">Rails</a></span></span>
+     &raquo; 
+    <span class="title">StubSessionProxy</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Rails::StubSessionProxy
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Rails::StubSessionProxy</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="StubSessionProxy/PaginatedCollection.html" title="Sunspot::Rails::StubSessionProxy::PaginatedCollection (class)">PaginatedCollection</a></span>, <span class='object_link'><a href="StubSessionProxy/Search.html" title="Sunspot::Rails::StubSessionProxy::Search (class)">Search</a></span>
+    
+  
+</p>
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#original_session-instance_method" title="#original_session (instance method)">- (Object) <strong>original_session</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute original_session.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#commit-instance_method" title="#commit (instance method)">- (Object) <strong>commit</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#commit_if_delete_dirty-instance_method" title="#commit_if_delete_dirty (instance method)">- (Object) <strong>commit_if_delete_dirty</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#commit_if_dirty-instance_method" title="#commit_if_dirty (instance method)">- (Object) <strong>commit_if_dirty</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#delete_dirty%3F-instance_method" title="#delete_dirty? (instance method)">- (Boolean) <strong>delete_dirty?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#dirty%3F-instance_method" title="#dirty? (instance method)">- (Boolean) <strong>dirty?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#index-instance_method" title="#index (instance method)">- (Object) <strong>index</strong>(*objects) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#index%21-instance_method" title="#index! (instance method)">- (Object) <strong>index!</strong>(*objects) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (StubSessionProxy) <strong>initialize</strong>(original_session) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of StubSessionProxy.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#new_more_like_this-instance_method" title="#new_more_like_this (instance method)">- (Object) <strong>new_more_like_this</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#new_search-instance_method" title="#new_search (instance method)">- (Object) <strong>new_search</strong>(*types) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove-instance_method" title="#remove (instance method)">- (Object) <strong>remove</strong>(*objects) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove%21-instance_method" title="#remove! (instance method)">- (Object) <strong>remove!</strong>(*objects) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove_all-instance_method" title="#remove_all (instance method)">- (Object) <strong>remove_all</strong>(clazz = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove_all%21-instance_method" title="#remove_all! (instance method)">- (Object) <strong>remove_all!</strong>(clazz = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove_by_id-instance_method" title="#remove_by_id (instance method)">- (Object) <strong>remove_by_id</strong>(clazz, id) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove_by_id%21-instance_method" title="#remove_by_id! (instance method)">- (Object) <strong>remove_by_id!</strong>(clazz, id) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#search-instance_method" title="#search (instance method)">- (Object) <strong>search</strong>(*types) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Rails::StubSessionProxy (class)">StubSessionProxy</a></span></tt>) <strong>initialize</strong>(original_session) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of StubSessionProxy
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+6
+7
+8</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 6</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id original_session'>original_session</span><span class='rparen'>)</span>
+  <span class='ivar'>@original_session</span> <span class='op'>=</span> <span class='id original_session'>original_session</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="original_session-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="original_session-instance_method">
+  
+    - (<tt>Object</tt>) <strong>original_session</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute original_session
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+4
+5
+6</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 4</span>
+
+<span class='kw'>def</span> <span class='id original_session'>original_session</span>
+  <span class='ivar'>@original_session</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="commit-instance_method">
+  
+    - (<tt>Object</tt>) <strong>commit</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 48</span>
+
+<span class='kw'>def</span> <span class='id commit'>commit</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="commit_if_delete_dirty-instance_method">
+  
+    - (<tt>Object</tt>) <strong>commit_if_delete_dirty</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+45
+46</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 45</span>
+
+<span class='kw'>def</span> <span class='id commit_if_delete_dirty'>commit_if_delete_dirty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="commit_if_dirty-instance_method">
+  
+    - (<tt>Object</tt>) <strong>commit_if_dirty</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+42
+43</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 42</span>
+
+<span class='kw'>def</span> <span class='id commit_if_dirty'>commit_if_dirty</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="delete_dirty?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>delete_dirty?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+38
+39
+40</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 38</span>
+
+<span class='kw'>def</span> <span class='id delete_dirty?'>delete_dirty?</span>
+  <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="dirty?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>dirty?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+34
+35
+36</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 34</span>
+
+<span class='kw'>def</span> <span class='id dirty?'>dirty?</span>
+  <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="index-instance_method">
+  
+    - (<tt>Object</tt>) <strong>index</strong>(*objects) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id index'>index</span><span class='lparen'>(</span><span class='op'>*</span><span class='id objects'>objects</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="index!-instance_method">
+  
+    - (<tt>Object</tt>) <strong>index!</strong>(*objects) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='id index!'>index!</span><span class='lparen'>(</span><span class='op'>*</span><span class='id objects'>objects</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="new_more_like_this-instance_method">
+  
+    - (<tt>Object</tt>) <strong>new_more_like_this</strong>(*args) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id new_more_like_this'>new_more_like_this</span><span class='lparen'>(</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
+  <span class='const'>Search</span><span class='period'>.</span><span class='id new'>new</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="new_search-instance_method">
+  
+    - (<tt>Object</tt>) <strong>new_search</strong>(*types) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='id new_search'>new_search</span><span class='lparen'>(</span><span class='op'>*</span><span class='id types'>types</span><span class='rparen'>)</span>
+  <span class='const'>Search</span><span class='period'>.</span><span class='id new'>new</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="remove-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove</strong>(*objects) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 16</span>
+
+<span class='kw'>def</span> <span class='id remove'>remove</span><span class='lparen'>(</span><span class='op'>*</span><span class='id objects'>objects</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="remove!-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove!</strong>(*objects) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id remove!'>remove!</span><span class='lparen'>(</span><span class='op'>*</span><span class='id objects'>objects</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="remove_all-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove_all</strong>(clazz = nil) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 28</span>
+
+<span class='kw'>def</span> <span class='id remove_all'>remove_all</span><span class='lparen'>(</span><span class='id clazz'>clazz</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="remove_all!-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove_all!</strong>(clazz = nil) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='id remove_all!'>remove_all!</span><span class='lparen'>(</span><span class='id clazz'>clazz</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="remove_by_id-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove_by_id</strong>(clazz, id) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22
+23</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 22</span>
+
+<span class='kw'>def</span> <span class='id remove_by_id'>remove_by_id</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="remove_by_id!-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove_by_id!</strong>(clazz, id) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='id remove_by_id!'>remove_by_id!</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="search-instance_method">
+  
+    - (<tt>Object</tt>) <strong>search</strong>(*types) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='id search'>search</span><span class='lparen'>(</span><span class='op'>*</span><span class='id types'>types</span><span class='rparen'>)</span>
+  <span class='const'>Search</span><span class='period'>.</span><span class='id new'>new</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:22 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>
