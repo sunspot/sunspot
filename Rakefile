@@ -34,12 +34,3 @@ task :default do
                 "GEM=sunspot_rails RAILS=3.0.11 ci/travis.sh",
                 "GEM=sunspot_rails RAILS=3.1.3 ci/travis.sh" ].join(" && ")) ? 0 : 1
 end
-
-begin
-  require 'yard/rake/yardoc_task'
-  YARD::Rake::YardocTask.new do |t|
-    t.files   = ['*/lib/**/*.rb']
-    t.options = ['-o docs', '-M redcarpet']
-  end
-rescue LoadError
-end
