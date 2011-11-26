@@ -10,8 +10,8 @@ end
 Rake::RDocTask.new(:doc) do |rdoc|
   version = Sunspot::VERSION
   rdoc.title = "Sunspot #{version} - Solr-powered search for Ruby objects - API Documentation"
-  rdoc.main = 'README.rdoc'
-  rdoc.rdoc_files.include('README.rdoc', 'lib/sunspot.rb', 'lib/sunspot/**/*.rb')
+  rdoc.main = 'README.md'
+  rdoc.rdoc_files.include('README.md', 'lib/sunspot.rb', 'lib/sunspot/**/*.rb')
   rdoc.rdoc_dir = 'doc'
   rdoc.options << "--webcvs=http://github.com/outoftime/sunspot/tree/v#{version}/%s" << '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation'
 end
