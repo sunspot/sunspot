@@ -12,7 +12,7 @@ module MockAdapter
       @clazz.get(id.to_i)
     end
 
-    def load_all(ids)
+    def load_all(ids, options = {})
       all = @clazz.get_all(ids.map { |id| id.to_i })
       if @custom_title
         all.each { |item| item.title = @custom_title }

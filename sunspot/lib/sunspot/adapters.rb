@@ -1,5 +1,5 @@
 module Sunspot
-  # 
+  #
   # Sunspot works by saving references to the primary key (or natural ID) of
   # each indexed object, and then retrieving the objects from persistent storage
   # when their IDs are referenced in search results. In order for Sunspot to
@@ -53,7 +53,7 @@ module Sunspot
         @instance = instance
       end
 
-      # 
+      #
       # The universally-unique ID for this instance that will be stored in solr
       #
       # ==== Returns
@@ -182,7 +182,7 @@ module Sunspot
       #
       # Array:: collection of instances, in order of IDs given
       #
-      def load_all(ids)
+      def load_all(ids, options = {})
         ids.map { |id| self.load(id) }
       end
 

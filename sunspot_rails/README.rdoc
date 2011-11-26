@@ -144,6 +144,7 @@ Do it like this:
     with :blog_id, 1
     with(:updated_at).greater_than(Time.now - 2.weeks)
     order :sort_title, :asc
+    store_options :activerecord_scope => Post.published
     paginate :page => 1, :per_page => 15
   end
 
