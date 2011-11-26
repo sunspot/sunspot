@@ -652,6 +652,26 @@ cd ../sunspot
 bundle exec sunspot-solr stop
 ```
 
+### Generating Documentation
+
+Install the `yard` and `redcarpet` gems:
+
+```bash
+$ gem install yard redcarpet
+```
+
+Uninstall the `rdiscount` gem, if installed:
+
+```bash
+$ gem uninstall rdiscount
+```
+
+Generate the documentation from topmost directory:
+
+```bash
+$ yardoc -o docs */lib/**/*.rb - README.md
+```
+
 ## Tutorials and Articles
 
 * [Full Text Searching with Solr and Sunspot](http://collectiveidea.com/blog/archives/2011/03/08/full-text-searching-with-solr-and-sunspot/) (Collective Idea)
