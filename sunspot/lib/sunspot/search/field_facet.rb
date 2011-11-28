@@ -39,7 +39,8 @@ module Sunspot
               if @search.facet_response['facet_fields']
                 if data = @search.facet_response['facet_fields'][key]
                   data.each_slice(2) do |value, count|
-                    row = FacetRow.new(@field.cast(value), count, (! @search.fq_response[key].nil? && @search.fq_response[key].include?(value)), self)
+                    selected? = ! @search.fq_response_header[key].nil? && @search.fq_response_header[key].include?(value)
+                    row = FacetRow.new(@field.cast(value), count, self, selected?)
                     rows << row
                   end
                 end

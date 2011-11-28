@@ -179,18 +179,39 @@ module Sunspot
         @solr_result['facet_counts']
       end
 
-      # pduey: a more correct name would be fq_response_header
-      def fq_response
-        # pduey: Split values into array for fields ending in _im and _s. Not sure if others are relevant.
-        @fq_response ||=
+      #
+      # Decomposes the Solr "Filter Query" (fq) parameter array further into a hash that can be easily
+      # digested when constructing FieldFacet.rows. Specifically, it is used to add a boolean "selected?"
+      # attribute on each row so it's easy to pick out which of the facets returned in a result are part
+      # of the originating query. This is useful for doing something like generating "undo" links, or
+      # showing checkbox initial state as checked.
+      #
+      # Filter query values with keys ending in '_im' and '_s' are processed into their constituent parts.
+      #
+      # solr_response_header['params']['fq'] is an array of strings of the form, for example:
+      # fq: ["type:Package",
+      #      "amenities_ids_im:(9 AND 12)",
+      #      "neighborhood_s:(East\ Village OR Chelsea)",
+      #      "capacity_max_is:[30 TO *]"
+      #     ]
+      #
+      # which is converted to the equivalent hash:
+      # fq_response_header: ["type" => "Package",
+      #                      "amenties_ids_im" => ["9", "12"],
+      #                      "neighborhood_s" => ["East Village", "Chelsea"],
+      #                      "capacity_max_is" => "[30 TO *]"
+      #                     ]
+      #
+      def fq_response_header
+        @fq_response_header ||=
           begin
             h = Hash.new
-            solr_response_header['params']['fq'].each do |f|
-              fs = f.split(':')
-              fs[0] = fs[0].gsub(/^\{\!tag=.*?\}/, '') # strip exclude tags
-              fs[1] = fs[1].gsub(/^\(|\)$|\\/, '') # strips surrounding parens and \,
-              fs[1] = fs[1].split(/ AND | OR /) if fs[0] =~ /_im$|_s$/
-              h[fs[0]] = fs[1]
+            solr_response_header['params']['fq'].each do |filter_query|
+              field, value = filter_query.split(':')
+              field = field.gsub(/^\{\!tag=.*?\}/, '') # strip exclude tags
+              value = value.gsub(/^\(|\)$|\\/, '') # strips surrounding parens and \,
+              value = value.split(/ AND | OR /) if facet_split[0] =~ /_im$|_s$/
+              h[field] = value
             end
             h
           end
