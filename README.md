@@ -448,13 +448,11 @@ search.group(:blog_id_str).groups.each do |group|
   # By default, there is only one document per group (the highest
   # scoring one); if `limit` is specified (see below), multiple
   # documents can be returned per group
-  group.hits.each do |hit|
+  group.results.each do |result|
     # ...
   end
 end
 ```
-
-TODO: `group.results` ?
 
 Additional options are supported by the DSL:
 
