@@ -4,8 +4,10 @@ module Sunspot
     class PaginatedCollection
       instance_methods.each { |m| undef_method m unless m =~ /^__|instance_eval|object_id/ }
 
-      attr_reader :total_count, :current_page, :per_page
+      attr_reader :current_page, :per_page
+      attr_accessor :total_count
       alias :total_entries :total_count
+      alias :total_entries= :total_count=
       alias :limit_value :per_page
 
       def initialize(collection, page, per_page, total)
@@ -34,12 +36,12 @@ module Sunspot
 
       def next_page
         current_page < total_pages ? (current_page + 1) : nil
-      end  
+      end
 
       def out_of_bounds?
         current_page > total_pages
       end
-      
+
       def offset
         (current_page - 1) * per_page
       end
