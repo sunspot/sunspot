@@ -14,6 +14,16 @@ describe "PaginatedCollection" do
     it { subject.next_page.should eql(2) }
     it { subject.out_of_bounds?.should_not be_true }
     it { subject.offset.should eql(0) }
+
+    it 'should allow setting total_count' do
+      subject.total_count = 1
+      subject.total_count.should eql(1)
+    end
+
+    it 'should allow setting total_entries' do
+      subject.total_entries = 1
+      subject.total_entries.should eql(1)
+    end
   end
 
   context "behaves like Kaminari" do
