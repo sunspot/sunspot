@@ -465,7 +465,19 @@ TODO
 
 ### More Like This
 
-TODO
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    text :body, :more_like_this => true
+  end
+end
+
+post = Post.first
+
+results = Sunspot.more_like_this(post) do
+  minimum_term_frequency 5
+end
+```
 
 ## Indexing In Depth
 
