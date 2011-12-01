@@ -14,11 +14,11 @@ objects such as the filesystem.
 === Where to learn all about Sunspot: The Wiki!
 
 New to Sunspot and using Rails? Check out {Adding Sunspot search to Rails in 5
-minutes or less}[https://github.com/outoftime/sunspot/wiki/Adding-Sunspot-search-to-Rails-in-5-minutes-or-less].
+minutes or less}[https://github.com/sunspot/sunspot/wiki/Adding-Sunspot-search-to-Rails-in-5-minutes-or-less].
 
 This README is intended as a quick primer on what Sunspot is capable of; for
 detailed treatment of Sunspot's full feature range, check out the wiki:
-http://wiki.github.com/outoftime/sunspot
+http://wiki.github.com/sunspot/sunspot
 
 The API documentation is also complete and up-to-date; however, because of the
 way Sunspot is structured, it's not the easiest way for new users to get to know
@@ -104,7 +104,7 @@ See Sunspot.setup for more information.
 Note that in order for a class to be searchable, it must have an adapter
 registered for itself or one of its subclasses. Adapters allow Sunspot to load
 objects out of persistent storage, and to determine their primary key for
-indexing. {Sunspot::Rails}[http://github.com/outoftime/sunspot_rails] comes with
+indexing. Sunspot::Rails comes with
 an adapter for ActiveRecord objects, but for other types of models you will need
 to define your own. See Sunspot::Adapters for more information.
 
@@ -175,7 +175,7 @@ JRuby 1.2.0
 == Bugs
 
 Please submit bug reports to
-http://outoftime.lighthouseapp.com/projects/20339-sunspot
+http://github.com/sunspot/sunspot/issues
 
 == Contribution Guidelines
 
