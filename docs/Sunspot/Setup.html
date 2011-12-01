@@ -1,0 +1,1934 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Setup
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span>
+     &raquo; 
+    <span class="title">Setup</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Setup
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Setup</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/setup.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+This class encapsulates the search/indexing setup for a given class. Its
+contents are built using the Sunspot.setup method.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#class_object_id-instance_method" title="#class_object_id (instance method)">- (Object) <strong>class_object_id</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#for-class_method" title="for (class method)">+ (Object) <strong>for</strong>(clazz) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Retrieve the setup instance for the given class, or for the nearest
+ancestor that has a setup, if any.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#setup-class_method" title="setup (class method)">+ (Object) <strong>setup</strong>(clazz, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Retrieve or create the Setup instance for the given class, evaluating the
+given block to add to the setup&#8217;s configuration.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_document_boost-instance_method" title="#add_document_boost (instance method)">- (Object) <strong>add_document_boost</strong>(attr_name, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a document boost to documents at index time.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_dynamic_field_factory-instance_method" title="#add_dynamic_field_factory (instance method)">- (Object) <strong>add_dynamic_field_factory</strong>(name, type, options = {}, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add dynamic field_factories.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_field_factory-instance_method" title="#add_field_factory (instance method)">- (Object) <strong>add_field_factory</strong>(name, type, options = {}, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add field factory for scope/ordering.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_text_field_factory-instance_method" title="#add_text_field_factory (instance method)">- (Object) <strong>add_text_field_factory</strong>(name, options = {}, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add field_factories for fulltext search.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#all_field_factories-instance_method" title="#all_field_factories (instance method)">- (Object) <strong>all_field_factories</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get all static, dynamic, and text field_factories associated with this
+setup as well as all inherited field_factories.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#all_more_like_this_fields-instance_method" title="#all_more_like_this_fields (instance method)">- (Object) <strong>all_more_like_this_fields</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return all more_like_this fields.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#all_text_fields-instance_method" title="#all_text_fields (instance method)">- (Object) <strong>all_text_fields</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return all text fields.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#clazz-instance_method" title="#clazz (instance method)">- (Object) <strong>clazz</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return the class associated with this setup.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#document_boost_for-instance_method" title="#document_boost_for (instance method)">- (Object) <strong>document_boost_for</strong>(model) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get the document boost for a given model.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#dynamic_field_factories-instance_method" title="#dynamic_field_factories (instance method)">- (Object) <strong>dynamic_field_factories</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get all dynamic field_factories for this and parent setups.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#dynamic_field_factory-instance_method" title="#dynamic_field_factory (instance method)">- (Object) <strong>dynamic_field_factory</strong>(field_name) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return the DynamicFieldFactory with the given base name.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#field-instance_method" title="#field (instance method)">- (Object) <strong>field</strong>(field_name) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return the Field with the given (public-facing) name.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#field_factories-instance_method" title="#field_factories (instance method)">- (Object) <strong>field_factories</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get the field_factories associated with this setup as well as all inherited
+field_factories.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fields-instance_method" title="#fields (instance method)">- (Object) <strong>fields</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return all attribute fields.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Setup) <strong>initialize</strong>(clazz) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of Setup.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#more_like_this_fields-instance_method" title="#more_like_this_fields (instance method)">- (Object) <strong>more_like_this_fields</strong>(field_name) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return one or more more_like_this fields (can be either attribute or text
+fields) for the given name.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#setup-instance_method" title="#setup (instance method)">- (Object) <strong>setup</strong>(&amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Builder method for evaluating the setup DSL.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#stored_fields-instance_method" title="#stored_fields (instance method)">- (Object) <strong>stored_fields</strong>(field_name, dynamic_field_name = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return one or more stored fields (can be either attribute or text fields)
+for the given name.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#text_field_factories-instance_method" title="#text_field_factories (instance method)">- (Object) <strong>text_field_factories</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get the text field_factories associated with this setup as well as all
+inherited text field_factories.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#text_fields-instance_method" title="#text_fields (instance method)">- (Object) <strong>text_fields</strong>(field_name) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return one or more text fields with the given public-facing name.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#type_names-instance_method" title="#type_names (instance method)">- (Object) <strong>type_names</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Setup (class)">Setup</a></span></tt>) <strong>initialize</strong>(clazz) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of Setup
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 8</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span>
+  <span class='ivar'>@class_object_id</span> <span class='op'>=</span> <span class='id clazz'>clazz</span><span class='period'>.</span><span class='id object_id'>object_id</span>
+  <span class='ivar'>@class_name</span> <span class='op'>=</span> <span class='id clazz'>clazz</span><span class='period'>.</span><span class='id name'>name</span>
+  <span class='ivar'>@field_factories</span><span class='comma'>,</span> <span class='ivar'>@text_field_factories</span><span class='comma'>,</span> <span class='ivar'>@dynamic_field_factories</span><span class='comma'>,</span>
+    <span class='ivar'>@field_factories_cache</span><span class='comma'>,</span> <span class='ivar'>@text_field_factories_cache</span><span class='comma'>,</span>
+    <span class='ivar'>@dynamic_field_factories_cache</span> <span class='op'>=</span> <span class='op'>*</span><span class='const'>Array</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='int'>6</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id new'>new</span> <span class='rbrace'>}</span>
+  <span class='ivar'>@stored_field_factories_cache</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id h'>h</span><span class='comma'>,</span> <span class='id k'>k</span><span class='op'>|</span> <span class='id h'>h</span><span class='lbracket'>[</span><span class='id k'>k</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+  <span class='ivar'>@more_like_this_field_factories_cache</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id h'>h</span><span class='comma'>,</span> <span class='id k'>k</span><span class='op'>|</span> <span class='id h'>h</span><span class='lbracket'>[</span><span class='id k'>k</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='rbrace'>}</span>
+  <span class='ivar'>@dsl</span> <span class='op'>=</span> <span class='const'>DSL</span><span class='op'>::</span><span class='const'>Fields</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
+  <span class='id add_field_factory'>add_field_factory</span><span class='lparen'>(</span><span class='symbol'>:class</span><span class='comma'>,</span> <span class='const'>Type</span><span class='op'>::</span><span class='const'>ClassType</span><span class='period'>.</span><span class='id instance'>instance</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="class_object_id-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="class_object_id-instance_method">
+  
+    - (<tt>Object</tt>) <strong>class_object_id</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+7
+8
+9</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 7</span>
+
+<span class='kw'>def</span> <span class='id class_object_id'>class_object_id</span>
+  <span class='ivar'>@class_object_id</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="for-class_method">
+  
+    + (<tt>Object</tt>) <strong>for</strong>(clazz) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Retrieve the setup instance for the given class, or for the nearest
+ancestor that has a setup, if any.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">clazz<Class></td><td><p>
+Class for which to retrieve a setup
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Sunspot::Setup</td><td><p>
+Setup instance associated with the given class or its nearest ancestor
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+311
+312
+313</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 311</span>
+
+<span class='kw'>def</span> <span class='kw'>for</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='id setups'>setups</span><span class='lbracket'>[</span><span class='id clazz'>clazz</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='kw'>self</span><span class='period'>.</span><span class='id for'>for</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='period'>.</span><span class='id superclass'>superclass</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id clazz'>clazz</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="setup-class_method">
+  
+    + (<tt>Object</tt>) <strong>setup</strong>(clazz, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Retrieve or create the Setup instance for the given class, evaluating the
+given block to add to the setup&#8217;s configuration
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+294
+295
+296</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 294</span>
+
+<span class='kw'>def</span> <span class='id setup'>setup</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='kw'>self</span><span class='period'>.</span><span class='id for!'>for!</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span><span class='period'>.</span><span class='id setup'>setup</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="add_document_boost-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_document_boost</strong>(attr_name, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a document boost to documents at index time. Document boost can be
+static (the same for all documents of this class), or extracted on a per-
+document basis using either attribute or block extraction as per usual.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 85</span>
+
+<span class='kw'>def</span> <span class='id add_document_boost'>add_document_boost</span><span class='lparen'>(</span><span class='id attr_name'>attr_name</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='ivar'>@document_boost_extractor</span> <span class='op'>=</span>
+    <span class='kw'>if</span> <span class='id attr_name'>attr_name</span>
+      <span class='kw'>if</span> <span class='id attr_name'>attr_name</span><span class='period'>.</span><span class='id respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:to_f</span><span class='rparen'>)</span>
+        <span class='const'>DataExtractor</span><span class='op'>::</span><span class='const'>Constant</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id attr_name'>attr_name</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='const'>DataExtractor</span><span class='op'>::</span><span class='const'>AttributeExtractor</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id attr_name'>attr_name</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>else</span>
+      <span class='const'>DataExtractor</span><span class='op'>::</span><span class='const'>BlockExtractor</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_dynamic_field_factory-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_dynamic_field_factory</strong>(name, type, options = {}, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add dynamic field_factories
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">field_factories<Array></td><td><p>
+Array of dynamic field objects
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 67</span>
+
+<span class='kw'>def</span> <span class='id add_dynamic_field_factory'>add_dynamic_field_factory</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span><span class='comma'>,</span> <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='id stored'>stored</span><span class='comma'>,</span> <span class='id more_like_this'>more_like_this</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:stored</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:more_like_this</span><span class='rbracket'>]</span>
+  <span class='id field_factory'>field_factory</span> <span class='op'>=</span> <span class='const'>FieldFactory</span><span class='op'>::</span><span class='const'>Dynamic</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span><span class='comma'>,</span> <span class='id options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='ivar'>@dynamic_field_factories</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id signature'>signature</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id field_factory'>field_factory</span>
+  <span class='ivar'>@dynamic_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>if</span> <span class='id stored'>stored</span>
+    <span class='ivar'>@stored_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id more_like_this'>more_like_this</span>
+    <span class='ivar'>@more_like_this_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_field_factory-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_field_factory</strong>(name, type, options = {}, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add field factory for scope/ordering
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='id add_field_factory'>add_field_factory</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span><span class='comma'>,</span> <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='id stored'>stored</span><span class='comma'>,</span> <span class='id more_like_this'>more_like_this</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:stored</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:more_like_this</span><span class='rbracket'>]</span>
+  <span class='id field_factory'>field_factory</span> <span class='op'>=</span> <span class='const'>FieldFactory</span><span class='op'>::</span><span class='const'>Static</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id type'>type</span><span class='comma'>,</span> <span class='id options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='ivar'>@field_factories</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id signature'>signature</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id field_factory'>field_factory</span>
+  <span class='ivar'>@field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>if</span> <span class='id stored'>stored</span>
+    <span class='ivar'>@stored_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id more_like_this'>more_like_this</span>
+    <span class='ivar'>@more_like_this_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_text_field_factory-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_text_field_factory</strong>(name, options = {}, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add field_factories for fulltext search
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">field_factories<Array></td><td><p>
+Array of Sunspot::Field objects
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 47</span>
+
+<span class='kw'>def</span> <span class='id add_text_field_factory'>add_text_field_factory</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='id stored'>stored</span><span class='comma'>,</span> <span class='id more_like_this'>more_like_this</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:stored</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:more_like_this</span><span class='rbracket'>]</span>
+  <span class='id field_factory'>field_factory</span> <span class='op'>=</span> <span class='const'>FieldFactory</span><span class='op'>::</span><span class='const'>Static</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='const'>Type</span><span class='op'>::</span><span class='const'>TextType</span><span class='period'>.</span><span class='id instance'>instance</span><span class='comma'>,</span> <span class='id options'>options</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='ivar'>@text_field_factories</span><span class='lbracket'>[</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id field_factory'>field_factory</span>
+  <span class='ivar'>@text_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>if</span> <span class='id stored'>stored</span>
+    <span class='ivar'>@stored_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id more_like_this'>more_like_this</span>
+    <span class='ivar'>@more_like_this_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id field_factory'>field_factory</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="all_field_factories-instance_method">
+  
+    - (<tt>Object</tt>) <strong>all_field_factories</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get all static, dynamic, and text field_factories associated with this
+setup as well as all inherited field_factories
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+Collection of all text and scope field_factories associated with this setup
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+225
+226
+227
+228
+229</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 225</span>
+
+<span class='kw'>def</span> <span class='id all_field_factories'>all_field_factories</span>
+  <span class='id all_field_factories'>all_field_factories</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='id all_field_factories'>all_field_factories</span><span class='period'>.</span><span class='id concat'>concat</span><span class='lparen'>(</span><span class='id field_factories'>field_factories</span><span class='rparen'>)</span><span class='period'>.</span><span class='id concat'>concat</span><span class='lparen'>(</span><span class='id text_field_factories'>text_field_factories</span><span class='rparen'>)</span><span class='period'>.</span><span class='id concat'>concat</span><span class='lparen'>(</span><span class='id dynamic_field_factories'>dynamic_field_factories</span><span class='rparen'>)</span>
+  <span class='id all_field_factories'>all_field_factories</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="all_more_like_this_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>all_more_like_this_fields</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return all more_like_this fields
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+188
+189
+190
+191
+192</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 188</span>
+
+<span class='kw'>def</span> <span class='id all_more_like_this_fields'>all_more_like_this_fields</span>
+  <span class='ivar'>@more_like_this_field_factories_cache</span><span class='period'>.</span><span class='id values'>values</span><span class='period'>.</span><span class='id map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field_factories'>field_factories</span><span class='op'>|</span> 
+    <span class='id field_factories'>field_factories</span><span class='period'>.</span><span class='id map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id field_factory'>field_factory</span><span class='op'>|</span> <span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id build'>build</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span><span class='period'>.</span><span class='id flatten'>flatten</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="all_text_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>all_text_fields</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return all text fields
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+181
+182
+183</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 181</span>
+
+<span class='kw'>def</span> <span class='id all_text_fields'>all_text_fields</span>
+  <span class='id text_field_factories'>text_field_factories</span><span class='period'>.</span><span class='id map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id text_field_factory'>text_field_factory</span><span class='op'>|</span> <span class='id text_field_factory'>text_field_factory</span><span class='period'>.</span><span class='id build'>build</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="clazz-instance_method">
+  
+    - (<tt>Object</tt>) <strong>clazz</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return the class associated with this setup.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">clazz<Class></td><td><p>
+Class setup is configured for
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+249
+250
+251</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 249</span>
+
+<span class='kw'>def</span> <span class='id clazz'>clazz</span>
+  <span class='const'>Util</span><span class='period'>.</span><span class='id full_const_get'>full_const_get</span><span class='lparen'>(</span><span class='ivar'>@class_name</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="document_boost_for-instance_method">
+  
+    - (<tt>Object</tt>) <strong>document_boost_for</strong>(model) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get the document boost for a given model
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+256
+257
+258
+259
+260</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 256</span>
+
+<span class='kw'>def</span> <span class='id document_boost_for'>document_boost_for</span><span class='lparen'>(</span><span class='id model'>model</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='ivar'>@document_boost_extractor</span>
+    <span class='ivar'>@document_boost_extractor</span><span class='period'>.</span><span class='id value_for'>value_for</span><span class='lparen'>(</span><span class='id model'>model</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="dynamic_field_factories-instance_method">
+  
+    - (<tt>Object</tt>) <strong>dynamic_field_factories</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get all dynamic field_factories for this and parent setups
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+Dynamic field_factories
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+238
+239
+240</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 238</span>
+
+<span class='kw'>def</span> <span class='id dynamic_field_factories'>dynamic_field_factories</span>
+  <span class='id collection_from_inheritable_hash'>collection_from_inheritable_hash</span><span class='lparen'>(</span><span class='symbol'>:dynamic_field_factories</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="dynamic_field_factory-instance_method">
+  
+    - (<tt>Object</tt>) <strong>dynamic_field_factory</strong>(field_name) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return the DynamicFieldFactory with the given base name
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+164
+165
+166
+167
+168
+169</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 164</span>
+
+<span class='kw'>def</span> <span class='id dynamic_field_factory'>dynamic_field_factory</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span>
+  <span class='ivar'>@dynamic_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id raise'>raise</span><span class='lparen'>(</span>
+    <span class='const'>UnrecognizedFieldError</span><span class='comma'>,</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No dynamic field configured for </span><span class='embexpr_beg'>#{</span><span class='ivar'>@class_name</span><span class='rbrace'>}</span><span class='tstring_content'> with name '</span><span class='embexpr_beg'>#{</span><span class='id field_name'>field_name</span><span class='rbrace'>}</span><span class='tstring_content'>'</span><span class='tstring_end'>&quot;</span></span>
+  <span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="field-instance_method">
+  
+    - (<tt>Object</tt>) <strong>field</strong>(field_name) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return the Field with the given (public-facing) name
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 108</span>
+
+<span class='kw'>def</span> <span class='id field'>field</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id field_factory'>field_factory</span> <span class='op'>=</span> <span class='ivar'>@field_factories_cache</span><span class='lbracket'>[</span><span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span>
+    <span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id build'>build</span>
+  <span class='kw'>else</span>
+    <span class='id raise'>raise</span><span class='lparen'>(</span>
+      <span class='const'>UnrecognizedFieldError</span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No field configured for </span><span class='embexpr_beg'>#{</span><span class='ivar'>@class_name</span><span class='rbrace'>}</span><span class='tstring_content'> with name '</span><span class='embexpr_beg'>#{</span><span class='id field_name'>field_name</span><span class='rbrace'>}</span><span class='tstring_content'>'</span><span class='tstring_end'>&quot;</span></span>
+    <span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="field_factories-instance_method">
+  
+    - (<tt>Object</tt>) <strong>field_factories</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get the field_factories associated with this setup as well as all inherited
+field_factories
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+Collection of all field_factories associated with this setup
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+201
+202
+203</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 201</span>
+
+<span class='kw'>def</span> <span class='id field_factories'>field_factories</span>
+  <span class='id collection_from_inheritable_hash'>collection_from_inheritable_hash</span><span class='lparen'>(</span><span class='symbol'>:field_factories</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>fields</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return all attribute fields
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+174
+175
+176</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 174</span>
+
+<span class='kw'>def</span> <span class='id fields'>fields</span>
+  <span class='id field_factories'>field_factories</span><span class='period'>.</span><span class='id map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id field_factory'>field_factory</span><span class='op'>|</span> <span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id build'>build</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="more_like_this_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>more_like_this_fields</strong>(field_name) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return one or more more_like_this fields (can be either attribute or text
+fields) for the given name.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+155
+156
+157
+158
+159</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 155</span>
+
+<span class='kw'>def</span> <span class='id more_like_this_fields'>more_like_this_fields</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span>
+  <span class='ivar'>@more_like_this_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field_factory'>field_factory</span><span class='op'>|</span>
+    <span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id build'>build</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="setup-instance_method">
+  
+    - (<tt>Object</tt>) <strong>setup</strong>(&amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Builder method for evaluating the setup DSL
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+101
+102
+103</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 101</span>
+
+<span class='kw'>def</span> <span class='id setup'>setup</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='const'>Util</span><span class='period'>.</span><span class='id instance_eval_or_call'>instance_eval_or_call</span><span class='lparen'>(</span><span class='ivar'>@dsl</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="stored_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>stored_fields</strong>(field_name, dynamic_field_name = nil) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return one or more stored fields (can be either attribute or text fields)
+for the given name.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+141
+142
+143
+144
+145
+146
+147
+148
+149</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 141</span>
+
+<span class='kw'>def</span> <span class='id stored_fields'>stored_fields</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='comma'>,</span> <span class='id dynamic_field_name'>dynamic_field_name</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@stored_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id field_factory'>field_factory</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id dynamic_field_name'>dynamic_field_name</span>
+      <span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id build'>build</span><span class='lparen'>(</span><span class='id dynamic_field_name'>dynamic_field_name</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id build'>build</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="text_field_factories-instance_method">
+  
+    - (<tt>Object</tt>) <strong>text_field_factories</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get the text field_factories associated with this setup as well as all
+inherited text field_factories
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+Collection of all text field_factories associated with this setup
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+213
+214
+215</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 213</span>
+
+<span class='kw'>def</span> <span class='id text_field_factories'>text_field_factories</span>
+  <span class='id collection_from_inheritable_hash'>collection_from_inheritable_hash</span><span class='lparen'>(</span><span class='symbol'>:text_field_factories</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="text_fields-instance_method">
+  
+    - (<tt>Object</tt>) <strong>text_fields</strong>(field_name) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return one or more text fields with the given public-facing name. This
+implementation will always return a single field (in an array), but
+CompositeSetup objects might return more than one.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 124</span>
+
+<span class='kw'>def</span> <span class='id text_fields'>text_fields</span><span class='lparen'>(</span><span class='id field_name'>field_name</span><span class='rparen'>)</span>
+  <span class='id text_field'>text_field</span> <span class='op'>=</span> 
+    <span class='kw'>if</span> <span class='id field_factory'>field_factory</span> <span class='op'>=</span> <span class='ivar'>@text_field_factories_cache</span><span class='lbracket'>[</span><span class='id field_name'>field_name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span>
+      <span class='id field_factory'>field_factory</span><span class='period'>.</span><span class='id build'>build</span>
+    <span class='kw'>else</span>
+      <span class='id raise'>raise</span><span class='lparen'>(</span>
+        <span class='const'>UnrecognizedFieldError</span><span class='comma'>,</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No text field configured for </span><span class='embexpr_beg'>#{</span><span class='ivar'>@class_name</span><span class='rbrace'>}</span><span class='tstring_content'> with name '</span><span class='embexpr_beg'>#{</span><span class='id field_name'>field_name</span><span class='rbrace'>}</span><span class='tstring_content'>'</span><span class='tstring_end'>&quot;</span></span>
+      <span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='lbracket'>[</span><span class='id text_field'>text_field</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="type_names-instance_method">
+  
+    - (<tt>Object</tt>) <strong>type_names</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20
+21
+22</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/setup.rb', line 20</span>
+
+<span class='kw'>def</span> <span class='id type_names'>type_names</span>
+  <span class='lbracket'>[</span><span class='ivar'>@class_name</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:18 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

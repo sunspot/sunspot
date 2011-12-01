@@ -1,0 +1,1200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Query::Dismax
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (D)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Query.html" title="Sunspot::Query (module)">Query</a></span></span>
+     &raquo; 
+    <span class="title">Dismax</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Query::Dismax
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Query::Dismax</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/query/dismax.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Solr full-text queries use Solr&#8217;s DisMaxRequestHandler, a search
+handler designed to process user-entered phrases, and search for individual
+words across a union of several fields.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#minimum_match%3D-instance_method" title="#minimum_match= (instance method)">- (Object) <strong>minimum_match</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    <span class="note title writeonly">writeonly</span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Sets the attribute minimum_match.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#phrase_slop%3D-instance_method" title="#phrase_slop= (instance method)">- (Object) <strong>phrase_slop</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    <span class="note title writeonly">writeonly</span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Sets the attribute phrase_slop.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#query_phrase_slop%3D-instance_method" title="#query_phrase_slop= (instance method)">- (Object) <strong>query_phrase_slop</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    <span class="note title writeonly">writeonly</span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Sets the attribute query_phrase_slop.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tie%3D-instance_method" title="#tie= (instance method)">- (Object) <strong>tie</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    <span class="note title writeonly">writeonly</span>
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Sets the attribute tie.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_boost_function-instance_method" title="#add_boost_function (instance method)">- (Object) <strong>add_boost_function</strong>(function_query) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a boost function.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_fulltext_field-instance_method" title="#add_fulltext_field (instance method)">- (Object) <strong>add_fulltext_field</strong>(field, boost = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a fulltext field to be searched, with optional boost.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_highlight-instance_method" title="#add_highlight (instance method)">- (Object) <strong>add_highlight</strong>(fields = [], options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Set highlighting options for the query.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_phrase_field-instance_method" title="#add_phrase_field (instance method)">- (Object) <strong>add_phrase_field</strong>(field, boost = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a phrase field for extra boost.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#create_boost_query-instance_method" title="#create_boost_query (instance method)">- (Object) <strong>create_boost_query</strong>(factor) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Assign a new boost query and return it.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#has_fulltext_field%3F-instance_method" title="#has_fulltext_field? (instance method)">- (Boolean) <strong>has_fulltext_field?</strong>(field) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Determine if a given field is being searched.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Dismax) <strong>initialize</strong>(keywords) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of Dismax.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_params-instance_method" title="#to_params (instance method)">- (Object) <strong>to_params</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The query as Solr parameters.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_subquery-instance_method" title="#to_subquery (instance method)">- (Object) <strong>to_subquery</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Serialize the query as a Solr nested subquery.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Query::Dismax (class)">Dismax</a></span></tt>) <strong>initialize</strong>(keywords) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of Dismax
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14
+15
+16
+17
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id keywords'>keywords</span><span class='rparen'>)</span>
+  <span class='ivar'>@keywords</span> <span class='op'>=</span> <span class='id keywords'>keywords</span>
+  <span class='ivar'>@fulltext_fields</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='ivar'>@boost_queries</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@boost_functions</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@highlights</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="minimum_match=-instance_method"></span>
+      <span id=""></span>
+      <div class="method_details first">
+  <p class="signature first" id="minimum_match=-instance_method">
+  
+    - (<tt>Object</tt>) <strong>minimum_match=</strong>(value)  <span class="extras">(writeonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Sets the attribute minimum_match
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Parameters:</h3>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+the value to set the attribute minimum_match to.
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id minimum_match='>minimum_match=</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='ivar'>@minimum_match</span> <span class='op'>=</span> <span class='id value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="phrase_slop=-instance_method"></span>
+      <span id=""></span>
+      <div class="method_details ">
+  <p class="signature " id="phrase_slop=-instance_method">
+  
+    - (<tt>Object</tt>) <strong>phrase_slop=</strong>(value)  <span class="extras">(writeonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Sets the attribute phrase_slop
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Parameters:</h3>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+the value to set the attribute phrase_slop to.
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id phrase_slop='>phrase_slop=</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='ivar'>@phrase_slop</span> <span class='op'>=</span> <span class='id value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="query_phrase_slop=-instance_method"></span>
+      <span id=""></span>
+      <div class="method_details ">
+  <p class="signature " id="query_phrase_slop=-instance_method">
+  
+    - (<tt>Object</tt>) <strong>query_phrase_slop=</strong>(value)  <span class="extras">(writeonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Sets the attribute query_phrase_slop
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Parameters:</h3>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+the value to set the attribute query_phrase_slop to.
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id query_phrase_slop='>query_phrase_slop=</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='ivar'>@query_phrase_slop</span> <span class='op'>=</span> <span class='id value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="tie=-instance_method"></span>
+      <span id=""></span>
+      <div class="method_details ">
+  <p class="signature " id="tie=-instance_method">
+  
+    - (<tt>Object</tt>) <strong>tie=</strong>(value)  <span class="extras">(writeonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Sets the attribute tie
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Parameters:</h3>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+the value to set the attribute tie to.
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id tie='>tie=</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='ivar'>@tie</span> <span class='op'>=</span> <span class='id value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="add_boost_function-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_boost_function</strong>(function_query) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a boost function
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+82
+83
+84</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 82</span>
+
+<span class='kw'>def</span> <span class='id add_boost_function'>add_boost_function</span><span class='lparen'>(</span><span class='id function_query'>function_query</span><span class='rparen'>)</span>
+  <span class='ivar'>@boost_functions</span> <span class='op'>&lt;&lt;</span> <span class='id function_query'>function_query</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_fulltext_field-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_fulltext_field</strong>(field, boost = nil) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a fulltext field to be searched, with optional boost.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+89
+90
+91</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 89</span>
+
+<span class='kw'>def</span> <span class='id add_fulltext_field'>add_fulltext_field</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id boost'>boost</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@fulltext_fields</span><span class='lbracket'>[</span><span class='id field'>field</span><span class='period'>.</span><span class='id indexed_name'>indexed_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>TextFieldBoost</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id boost'>boost</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_highlight-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_highlight</strong>(fields = [], options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Set highlighting options for the query. If fields is empty, the
+Highlighting object won&#8217;t pass field names at all, which means the
+dismax&#8217;s :qf parameter will be used by Solr.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+106
+107
+108</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 106</span>
+
+<span class='kw'>def</span> <span class='id add_highlight'>add_highlight</span><span class='lparen'>(</span><span class='id fields'>fields</span><span class='op'>=</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id options'>options</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='ivar'>@highlights</span> <span class='op'>&lt;&lt;</span> <span class='const'>Highlighting</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id fields'>fields</span><span class='comma'>,</span> <span class='id options'>options</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="add_phrase_field-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_phrase_field</strong>(field, boost = nil) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a phrase field for extra boost.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+96
+97
+98
+99</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 96</span>
+
+<span class='kw'>def</span> <span class='id add_phrase_field'>add_phrase_field</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id boost'>boost</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@phrase_fields</span> <span class='op'>||=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@phrase_fields</span> <span class='op'>&lt;&lt;</span> <span class='const'>TextFieldBoost</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id boost'>boost</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="create_boost_query-instance_method">
+  
+    - (<tt>Object</tt>) <strong>create_boost_query</strong>(factor) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Assign a new boost query and return it.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+74
+75
+76
+77</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 74</span>
+
+<span class='kw'>def</span> <span class='id create_boost_query'>create_boost_query</span><span class='lparen'>(</span><span class='id factor'>factor</span><span class='rparen'>)</span>
+  <span class='ivar'>@boost_queries</span> <span class='op'>&lt;&lt;</span> <span class='id boost_query'>boost_query</span> <span class='op'>=</span> <span class='const'>BoostQuery</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id factor'>factor</span><span class='rparen'>)</span>
+  <span class='id boost_query'>boost_query</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="has_fulltext_field?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>has_fulltext_field?</strong>(field) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Determine if a given field is being searched. Used by DSL to avoid
+overwriting boost parameters when injecting defaults.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+114
+115
+116</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 114</span>
+
+<span class='kw'>def</span> <span class='id has_fulltext_field?'>has_fulltext_field?</span><span class='lparen'>(</span><span class='id field'>field</span><span class='rparen'>)</span>
+  <span class='ivar'>@fulltext_fields</span><span class='period'>.</span><span class='id has_key?'>has_key?</span><span class='lparen'>(</span><span class='id field'>field</span><span class='period'>.</span><span class='id indexed_name'>indexed_name</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="to_params-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_params</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The query as Solr parameters
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id to_params'>to_params</span>
+  <span class='id params'>params</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='symbol'>:q</span> <span class='op'>=&gt;</span> <span class='ivar'>@keywords</span> <span class='rbrace'>}</span>
+  <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:fl</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>* score</span><span class='tstring_end'>'</span></span>
+  <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:qf</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@fulltext_fields</span><span class='period'>.</span><span class='id values'>values</span><span class='period'>.</span><span class='id map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id field'>field</span><span class='op'>|</span> <span class='id field'>field</span><span class='period'>.</span><span class='id to_boosted_field'>to_boosted_field</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'> </span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+  <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:defType</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>dismax</span><span class='tstring_end'>'</span></span>
+  <span class='kw'>if</span> <span class='ivar'>@phrase_fields</span>
+    <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:pf</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@phrase_fields</span><span class='period'>.</span><span class='id map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id field'>field</span><span class='op'>|</span> <span class='id field'>field</span><span class='period'>.</span><span class='id to_boosted_field'>to_boosted_field</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'> </span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>unless</span> <span class='ivar'>@boost_queries</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+    <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:bq</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@boost_queries</span><span class='period'>.</span><span class='id map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id boost_query'>boost_query</span><span class='op'>|</span>
+      <span class='id boost_query'>boost_query</span><span class='period'>.</span><span class='id to_boolean_phrase'>to_boolean_phrase</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>unless</span> <span class='ivar'>@boost_functions</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+    <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:bf</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@boost_functions</span><span class='period'>.</span><span class='id map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id boost_function'>boost_function</span><span class='op'>|</span>
+      <span class='id boost_function'>boost_function</span><span class='period'>.</span><span class='id to_s'>to_s</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='ivar'>@minimum_match</span>
+    <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:mm</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@minimum_match</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='ivar'>@phrase_slop</span>
+    <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:ps</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@phrase_slop</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='ivar'>@query_phrase_slop</span>
+    <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:qs</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@query_phrase_slop</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='ivar'>@tie</span>
+    <span class='id params'>params</span><span class='lbracket'>[</span><span class='symbol'>:tie</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@tie</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@highlights</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id highlight'>highlight</span><span class='op'>|</span>
+    <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Util</span><span class='period'>.</span><span class='id deep_merge!'>deep_merge!</span><span class='lparen'>(</span><span class='id params'>params</span><span class='comma'>,</span> <span class='id highlight'>highlight</span><span class='period'>.</span><span class='id to_params'>to_params</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id params'>params</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="to_subquery-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_subquery</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Serialize the query as a Solr nested subquery.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64
+65
+66
+67
+68
+69</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/dismax.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id to_subquery'>to_subquery</span>
+  <span class='id params'>params</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id to_params'>to_params</span>
+  <span class='id params'>params</span><span class='period'>.</span><span class='id delete'>delete</span> <span class='symbol'>:defType</span>
+  <span class='id params'>params</span><span class='period'>.</span><span class='id delete'>delete</span> <span class='symbol'>:fl</span>
+  <span class='id keywords'>keywords</span> <span class='op'>=</span> <span class='id params'>params</span><span class='period'>.</span><span class='id delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:q</span><span class='rparen'>)</span>
+  <span class='id options'>options</span> <span class='op'>=</span> <span class='id params'>params</span><span class='period'>.</span><span class='id map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id key'>key</span><span class='comma'>,</span> <span class='id value'>value</span><span class='op'>|</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id key'>key</span><span class='rbrace'>}</span><span class='tstring_content'>='</span><span class='embexpr_beg'>#{</span><span class='id escape_quotes'>escape_quotes</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>'</span><span class='tstring_end'>&quot;</span></span><span class='rbrace'>}</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'> </span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_query_:\&quot;{!dismax </span><span class='embexpr_beg'>#{</span><span class='id options'>options</span><span class='rbrace'>}</span><span class='tstring_content'>}</span><span class='embexpr_beg'>#{</span><span class='id escape_quotes'>escape_quotes</span><span class='lparen'>(</span><span class='id keywords'>keywords</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>\&quot;</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

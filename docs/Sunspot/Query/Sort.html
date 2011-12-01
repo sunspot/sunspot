@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Sunspot::Query::Sort
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Query.html" title="Sunspot::Query (module)">Query</a></span></span>
+     &raquo; 
+    <span class="title">Sort</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Sunspot::Query::Sort
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot/lib/sunspot/query/sort.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+The classes in this module implement query components that build sort
+parameters for Solr. As well as regular sort on fields, there are several
+&#8220;special&#8221; sorts that allow ordering for metrics calculated
+during the search.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Sort/Abstract.html" title="Sunspot::Query::Sort::Abstract (class)">Abstract</a></span>, <span class='object_link'><a href="Sort/FieldSort.html" title="Sunspot::Query::Sort::FieldSort (class)">FieldSort</a></span>, <span class='object_link'><a href="Sort/RandomSort.html" title="Sunspot::Query::Sort::RandomSort (class)">RandomSort</a></span>, <span class='object_link'><a href="Sort/ScoreSort.html" title="Sunspot::Query::Sort::ScoreSort (class)">ScoreSort</a></span>
+    
+  
+</p>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="DIRECTIONS-constant" class="">DIRECTIONS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='symbol'>:asc</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>asc</span><span class='tstring_end'>'</span></span><span class='comma'>,</span>
+  <span class='symbol'>:ascending</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>asc</span><span class='tstring_end'>'</span></span><span class='comma'>,</span>
+  <span class='symbol'>:desc</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>desc</span><span class='tstring_end'>'</span></span><span class='comma'>,</span>
+  <span class='symbol'>:descending</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>desc</span><span class='tstring_end'>'</span></span>
+<span class='rbrace'>}</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#special-class_method" title="special (class method)">+ (Object) <strong>special</strong>(name) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Certain field names are &#8220;special&#8221;, referring to specific
+non-field sorts, which are generally by other metrics associated with hits.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="special-class_method">
+  
+    + (<tt>Object</tt>) <strong>special</strong>(name) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Certain field names are &#8220;special&#8221;, referring to specific
+non-field sorts, which are generally by other metrics associated with hits.
+</p>
+<p>
+XXX I&#8217;m not entirely convinced it&#8217;s a good idea to prevent
+anyone from ever sorting by a field named &#8216;score&#8217;, etc.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27
+28
+29
+30</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/sort.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='id special'>special</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span>
+  <span class='id special_class_name'>special_class_name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>Util</span><span class='period'>.</span><span class='id camel_case'>camel_case</span><span class='lparen'>(</span><span class='id name'>name</span><span class='period'>.</span><span class='id to_s'>to_s</span><span class='rparen'>)</span><span class='rbrace'>}</span><span class='tstring_content'>Sort</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>if</span> <span class='id const_defined?'>const_defined?</span><span class='lparen'>(</span><span class='id special_class_name'>special_class_name</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id special_class_name'>special_class_name</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>FieldSort</span><span class='tstring_end'>'</span></span>
+    <span class='id const_get'>const_get</span><span class='lparen'>(</span><span class='id special_class_name'>special_class_name</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

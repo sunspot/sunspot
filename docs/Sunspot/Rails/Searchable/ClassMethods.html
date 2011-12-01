@@ -1,0 +1,1120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Sunspot::Rails::Searchable::ClassMethods
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../../_index.html">Index (C)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Rails.html" title="Sunspot::Rails (module)">Rails</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Searchable.html" title="Sunspot::Rails::Searchable (module)">Searchable</a></span></span>
+     &raquo; 
+    <span class="title">ClassMethods</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Sunspot::Rails::Searchable::ClassMethods
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot_rails/lib/sunspot/rails/searchable.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#extended-class_method" title="extended (class method)">+ (Object) <strong>extended</strong>(base) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#searchable%3F-instance_method" title="#searchable? (instance method)">- (Boolean) <strong>searchable?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Classes that have been defined as searchable return <tt>true</tt> for this
+method.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_clean_index_orphans-instance_method" title="#solr_clean_index_orphans (instance method)">- (Object) <strong>solr_clean_index_orphans</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Find IDs of records of this class that are indexed in Solr but do not exist
+in the database, and remove them from Solr.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_execute_search-instance_method" title="#solr_execute_search (instance method)">- (Object) <strong>solr_execute_search</strong>(options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_execute_search_ids-instance_method" title="#solr_execute_search_ids (instance method)">- (Object) <strong>solr_execute_search_ids</strong>(options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_index-instance_method" title="#solr_index (instance method)">- (Object) <strong>solr_index</strong>(opts = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add/update all existing records in the Solr index.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_index_orphans-instance_method" title="#solr_index_orphans (instance method)">- (Object) <strong>solr_index_orphans</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return the IDs of records of this class that are indexed in Solr but do not
+exist in the database.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_reindex-instance_method" title="#solr_reindex (instance method)">- (Object) <strong>solr_reindex</strong>(options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Completely rebuild the index for this class.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_remove_all_from_index-instance_method" title="#solr_remove_all_from_index (instance method)">- (Object) <strong>solr_remove_all_from_index</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Remove instances of this class from the Solr index.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_remove_all_from_index%21-instance_method" title="#solr_remove_all_from_index! (instance method)">- (Object) <strong>solr_remove_all_from_index!</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Remove all instances of this class from the Solr index and immediately
+commit.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_search-instance_method" title="#solr_search (instance method)">- (Object) <strong>solr_search</strong>(options = {}, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Search for instances of this class in Solr.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_search_ids-instance_method" title="#solr_search_ids (instance method)">- (Object) <strong>solr_search_ids</strong>(&amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get IDs of matching results without loading the result objects from the
+database.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="extended-class_method">
+  
+    + (<tt>Object</tt>) <strong>extended</strong>(base) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 117</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id extended'>extended</span><span class='lparen'>(</span><span class='id base'>base</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='kw'>class</span> <span class='op'>&lt;&lt;</span><span class='id base'>base</span>
+    <span class='id alias_method'>alias_method</span> <span class='symbol'>:search</span><span class='comma'>,</span> <span class='symbol'>:solr_search</span> <span class='kw'>unless</span> <span class='id method_defined?'>method_defined?</span> <span class='symbol'>:search</span>
+    <span class='id alias_method'>alias_method</span> <span class='symbol'>:search_ids</span><span class='comma'>,</span> <span class='symbol'>:solr_search_ids</span> <span class='kw'>unless</span> <span class='id method_defined?'>method_defined?</span> <span class='symbol'>:search_ids</span>
+    <span class='id alias_method'>alias_method</span> <span class='symbol'>:remove_all_from_index</span><span class='comma'>,</span> <span class='symbol'>:solr_remove_all_from_index</span> <span class='kw'>unless</span> <span class='id method_defined?'>method_defined?</span> <span class='symbol'>:remove_all_from_index</span>
+    <span class='id alias_method'>alias_method</span> <span class='symbol'>:remove_all_from_index!</span><span class='comma'>,</span> <span class='symbol'>:solr_remove_all_from_index!</span> <span class='kw'>unless</span> <span class='id method_defined?'>method_defined?</span> <span class='symbol'>:remove_all_from_index!</span>
+    <span class='id alias_method'>alias_method</span> <span class='symbol'>:reindex</span><span class='comma'>,</span> <span class='symbol'>:solr_reindex</span> <span class='kw'>unless</span> <span class='id method_defined?'>method_defined?</span> <span class='symbol'>:reindex</span>
+    <span class='id alias_method'>alias_method</span> <span class='symbol'>:index</span><span class='comma'>,</span> <span class='symbol'>:solr_index</span> <span class='kw'>unless</span> <span class='id method_defined?'>method_defined?</span> <span class='symbol'>:index</span>
+    <span class='id alias_method'>alias_method</span> <span class='symbol'>:index_orphans</span><span class='comma'>,</span> <span class='symbol'>:solr_index_orphans</span> <span class='kw'>unless</span> <span class='id method_defined?'>method_defined?</span> <span class='symbol'>:index_orphans</span>
+    <span class='id alias_method'>alias_method</span> <span class='symbol'>:clean_index_orphans</span><span class='comma'>,</span> <span class='symbol'>:solr_clean_index_orphans</span> <span class='kw'>unless</span> <span class='id method_defined?'>method_defined?</span> <span class='symbol'>:clean_index_orphans</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="searchable?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>searchable?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Classes that have been defined as searchable return <tt>true</tt> for this
+method.
+</p>
+<h4>Returns</h4>
+<p>
+<tt>true</tt>
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+312
+313
+314</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 312</span>
+
+<span class='kw'>def</span> <span class='id searchable?'>searchable?</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_clean_index_orphans-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_clean_index_orphans</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Find IDs of records of this class that are indexed in Solr but do not exist
+in the database, and remove them from Solr. Under normal circumstances,
+this should not be necessary; this method is provided in case something
+goes wrong.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+296
+297
+298
+299
+300
+301
+302</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 296</span>
+
+<span class='kw'>def</span> <span class='id solr_clean_index_orphans'>solr_clean_index_orphans</span>
+  <span class='id solr_index_orphans'>solr_index_orphans</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id id'>id</span><span class='op'>|</span>
+    <span class='id new'>new</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id fake_instance'>fake_instance</span><span class='op'>|</span>
+      <span class='id fake_instance'>fake_instance</span><span class='period'>.</span><span class='id id'>id</span> <span class='op'>=</span> <span class='id id'>id</span>
+    <span class='kw'>end</span><span class='period'>.</span><span class='id solr_remove_from_index'>solr_remove_from_index</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_execute_search-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_execute_search</strong>(options = {}) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 316</span>
+
+<span class='kw'>def</span> <span class='id solr_execute_search'>solr_execute_search</span><span class='lparen'>(</span><span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id options'>options</span><span class='period'>.</span><span class='id assert_valid_keys'>assert_valid_keys</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='symbol'>:select</span><span class='rparen'>)</span>
+  <span class='id search'>search</span> <span class='op'>=</span> <span class='kw'>yield</span>
+  <span class='kw'>unless</span> <span class='id options'>options</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+    <span class='id search'>search</span><span class='period'>.</span><span class='id build'>build</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id query'>query</span><span class='op'>|</span>
+      <span class='kw'>if</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span>
+        <span class='id query'>query</span><span class='period'>.</span><span class='id data_accessor_for'>data_accessor_for</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='period'>.</span><span class='id include'>include</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+      <span class='kw'>if</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:select</span><span class='rbracket'>]</span>
+        <span class='id query'>query</span><span class='period'>.</span><span class='id data_accessor_for'>data_accessor_for</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span><span class='period'>.</span><span class='id select'>select</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:select</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id search'>search</span><span class='period'>.</span><span class='id execute'>execute</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_execute_search_ids-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_execute_search_ids</strong>(options = {}) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+332
+333
+334
+335</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 332</span>
+
+<span class='kw'>def</span> <span class='id solr_execute_search_ids'>solr_execute_search_ids</span><span class='lparen'>(</span><span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id search'>search</span> <span class='op'>=</span> <span class='kw'>yield</span>
+  <span class='id search'>search</span><span class='period'>.</span><span class='id raw_results'>raw_results</span><span class='period'>.</span><span class='id map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id raw_result'>raw_result</span><span class='op'>|</span> <span class='id raw_result'>raw_result</span><span class='period'>.</span><span class='id primary_key'>primary_key</span><span class='period'>.</span><span class='id to_i'>to_i</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_index-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_index</strong>(opts = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add/update all existing records in the Solr index. The <tt>batch_size</tt>
+argument specifies how many records to load out of the database at a time.
+The default batch size is 50; if nil is passed, records will not be indexed
+in batches. By default, a commit is issued after each batch; passing
+<tt>false</tt> for <tt>batch_commit</tt> will disable this, and only issue
+a commit at the end of the process. If associated objects need to indexed
+also, you can specify <tt>include</tt> in format  accepted by ActiveRecord
+to improve your sql select performance
+</p>
+<h4>Options (passed as a hash)</h4>
+<table>
+<tr><td valign="top">batch_size<Integer></td><td><p>
+Batch size with which to load records. Passing &#8216;nil&#8217; will skip
+batches.  Default is 50.
+</p>
+</td></tr>
+<tr><td valign="top">batch_commit<Boolean></td><td><p>
+Flag signalling if a commit should be done after after each batch is
+indexed, default is &#8216;true&#8217;
+</p>
+</td></tr>
+<tr><td valign="top">include<Mixed></td><td><p>
+include option to be passed to the ActiveRecord find, used for including
+associated objects that need to be indexed with the parent object, accepts
+all formats ActiveRecord::Base.find does
+</p>
+</td></tr>
+<tr><td valign="top">first_id</td><td><p>
+The lowest possible ID for this class. Defaults to 0, which is fine for
+integer IDs; string primary keys will need to specify something reasonable
+here.
+</p>
+</td></tr>
+</table>
+<h4>Examples</h4>
+<pre class="code">
+  
+  <span class='comment'># index in batches of 50, commit after each
+</span>  <span class='const'>Post</span><span class='period'>.</span><span class='id index'>index</span> 
+
+  <span class='comment'># index all rows at once, then commit
+</span>  <span class='const'>Post</span><span class='period'>.</span><span class='id index'>index</span><span class='lparen'>(</span><span class='symbol'>:batch_size</span> <span class='op'>=&gt;</span> <span class='kw'>nil</span><span class='rparen'>)</span> 
+
+  <span class='comment'># index in batches of 50, commit when all batches complete
+</span>  <span class='const'>Post</span><span class='period'>.</span><span class='id index'>index</span><span class='lparen'>(</span><span class='symbol'>:batch_commit</span> <span class='op'>=&gt;</span> <span class='kw'>false</span><span class='rparen'>)</span> 
+
+  <span class='comment'># include the associated &lt;tt&gt;author&lt;/tt&gt; object when loading to index
+</span>  <span class='const'>Post</span><span class='period'>.</span><span class='id index'>index</span><span class='lparen'>(</span><span class='symbol'>:include</span> <span class='op'>=&gt;</span> <span class='symbol'>:author</span><span class='rparen'>)</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 239</span>
+
+<span class='kw'>def</span> <span class='id solr_index'>solr_index</span><span class='lparen'>(</span><span class='id opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+    <span class='symbol'>:batch_size</span> <span class='op'>=&gt;</span> <span class='int'>50</span><span class='comma'>,</span>
+    <span class='symbol'>:batch_commit</span> <span class='op'>=&gt;</span> <span class='kw'>true</span><span class='comma'>,</span>
+    <span class='symbol'>:include</span> <span class='op'>=&gt;</span> <span class='kw'>self</span><span class='period'>.</span><span class='id sunspot_options'>sunspot_options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='symbol'>:start</span> <span class='op'>=&gt;</span> <span class='id opts'>opts</span><span class='period'>.</span><span class='id delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:first_id</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='int'>0</span>
+  <span class='rbrace'>}</span><span class='period'>.</span><span class='id merge'>merge</span><span class='lparen'>(</span><span class='id opts'>opts</span><span class='rparen'>)</span>
+  <span class='id find_in_batch_options'>find_in_batch_options</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+    <span class='symbol'>:include</span> <span class='op'>=&gt;</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='symbol'>:batch_size</span> <span class='op'>=&gt;</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:batch_size</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='symbol'>:start</span> <span class='op'>=&gt;</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:first_id</span><span class='rbracket'>]</span>
+  <span class='rbrace'>}</span>
+  <span class='id progress_bar'>progress_bar</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:progress_bar</span><span class='rbracket'>]</span>
+  <span class='kw'>if</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:batch_size</span><span class='rbracket'>]</span>
+    <span class='id batch_counter'>batch_counter</span> <span class='op'>=</span> <span class='int'>0</span>
+    <span class='id find_in_batches'>find_in_batches</span><span class='lparen'>(</span><span class='id find_in_batch_options'>find_in_batch_options</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id records'>records</span><span class='op'>|</span>
+      <span class='id solr_benchmark'>solr_benchmark</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:batch_size</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id batch_counter'>batch_counter</span> <span class='kw'>do</span>
+        <span class='const'>Sunspot</span><span class='period'>.</span><span class='id index'>index</span><span class='lparen'>(</span><span class='id records'>records</span><span class='period'>.</span><span class='id select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id model'>model</span><span class='op'>|</span> <span class='id model'>model</span><span class='period'>.</span><span class='id indexable?'>indexable?</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
+        <span class='const'>Sunspot</span><span class='period'>.</span><span class='id commit'>commit</span> <span class='kw'>if</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:batch_commit</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+      <span class='comment'># track progress
+</span>      <span class='id progress_bar'>progress_bar</span><span class='period'>.</span><span class='id increment!'>increment!</span><span class='lparen'>(</span><span class='id records'>records</span><span class='period'>.</span><span class='id length'>length</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id progress_bar'>progress_bar</span>
+      <span class='id batch_counter'>batch_counter</span> <span class='op'>+=</span> <span class='int'>1</span>
+    <span class='kw'>end</span>
+  <span class='kw'>else</span>
+    <span class='id records'>records</span> <span class='op'>=</span> <span class='id all'>all</span><span class='lparen'>(</span><span class='symbol'>:include</span> <span class='op'>=&gt;</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id model'>model</span><span class='op'>|</span> <span class='id model'>model</span><span class='period'>.</span><span class='id indexable?'>indexable?</span> <span class='rbrace'>}</span>
+    <span class='const'>Sunspot</span><span class='period'>.</span><span class='id index!'>index!</span><span class='lparen'>(</span><span class='id records'>records</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='comment'># perform a final commit if not committing in batches
+</span>  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id commit'>commit</span> <span class='kw'>unless</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:batch_commit</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_index_orphans-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_index_orphans</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return the IDs of records of this class that are indexed in Solr but do not
+exist in the database. Under normal circumstances, this should never
+happen, but this method is provided in case something goes wrong. Usually
+you will want to rectify the situation by calling #clean_index_orphans or
+#reindex
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+Collection of IDs that exist in Solr but not in the database
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+281
+282
+283
+284
+285
+286
+287
+288</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 281</span>
+
+<span class='kw'>def</span> <span class='id solr_index_orphans'>solr_index_orphans</span>
+  <span class='id count'>count</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id count'>count</span>
+  <span class='id indexed_ids'>indexed_ids</span> <span class='op'>=</span> <span class='id solr_search_ids'>solr_search_ids</span> <span class='lbrace'>{</span> <span class='id paginate'>paginate</span><span class='lparen'>(</span><span class='symbol'>:page</span> <span class='op'>=&gt;</span> <span class='int'>1</span><span class='comma'>,</span> <span class='symbol'>:per_page</span> <span class='op'>=&gt;</span> <span class='id count'>count</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id to_set'>to_set</span>
+  <span class='id all'>all</span><span class='lparen'>(</span><span class='symbol'>:select</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>id</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id object'>object</span><span class='op'>|</span>
+    <span class='id indexed_ids'>indexed_ids</span><span class='period'>.</span><span class='id delete'>delete</span><span class='lparen'>(</span><span class='id object'>object</span><span class='period'>.</span><span class='id id'>id</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id indexed_ids'>indexed_ids</span><span class='period'>.</span><span class='id to_a'>to_a</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_reindex-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_reindex</strong>(options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Completely rebuild the index for this class. First removes all instances
+from the index, then loads records and indexes them.
+</p>
+<p>
+See #index for information on options, etc.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+196
+197
+198
+199</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 196</span>
+
+<span class='kw'>def</span> <span class='id solr_reindex'>solr_reindex</span><span class='lparen'>(</span><span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id solr_remove_all_from_index'>solr_remove_all_from_index</span>
+  <span class='id solr_index'>solr_index</span><span class='lparen'>(</span><span class='id options'>options</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_remove_all_from_index-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_remove_all_from_index</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Remove instances of this class from the Solr index.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+177
+178
+179</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 177</span>
+
+<span class='kw'>def</span> <span class='id solr_remove_all_from_index'>solr_remove_all_from_index</span>
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id remove_all'>remove_all</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_remove_all_from_index!-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_remove_all_from_index!</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Remove all instances of this class from the Solr index and immediately
+commit.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+186
+187
+188</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 186</span>
+
+<span class='kw'>def</span> <span class='id solr_remove_all_from_index!'>solr_remove_all_from_index!</span>
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id remove_all!'>remove_all!</span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_search-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_search</strong>(options = {}, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Search for instances of this class in Solr. The block is delegated to the
+Sunspot.search method - see the Sunspot documentation for the full API.
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='const'>Post</span><span class='period'>.</span><span class='id search'>search</span><span class='lparen'>(</span><span class='symbol'>:include</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:blog</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id keywords'>keywords</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>best pizza</span><span class='tstring_end'>'</span></span>
+    <span class='id with'>with</span> <span class='symbol'>:blog_id</span><span class='comma'>,</span> <span class='int'>1</span>
+    <span class='id order'>order</span> <span class='symbol'>:updated_at</span><span class='comma'>,</span> <span class='symbol'>:desc</span>
+    <span class='id facet'>facet</span> <span class='symbol'>:category_ids</span>
+  <span class='kw'>end</span>
+</pre>
+<h4>Options</h4>
+<table>
+<tr><td valign="top">:include</td><td><p>
+Specify associations to eager load
+</p>
+</td></tr>
+<tr><td valign="top">:select</td><td><p>
+Specify columns to select from database when loading results
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Sunspot::Search</td><td><p>
+Object containing results, totals, facets, etc.
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+152
+153
+154
+155
+156</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 152</span>
+
+<span class='kw'>def</span> <span class='id solr_search'>solr_search</span><span class='lparen'>(</span><span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='id solr_execute_search'>solr_execute_search</span><span class='lparen'>(</span><span class='id options'>options</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='const'>Sunspot</span><span class='period'>.</span><span class='id new_search'>new_search</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_search_ids-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_search_ids</strong>(&amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get IDs of matching results without loading the result objects from the
+database. This method may be useful if search is used as an intermediate
+step in a larger find operation. The block is the same as the block
+provided to the #search method.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+Array of IDs, in the order returned by the search
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+168
+169
+170
+171
+172</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 168</span>
+
+<span class='kw'>def</span> <span class='id solr_search_ids'>solr_search_ids</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='id solr_execute_search_ids'>solr_execute_search_ids</span> <span class='kw'>do</span>
+    <span class='id solr_search'>solr_search</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:22 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

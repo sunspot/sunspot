@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::SessionProxy::AbstractSessionProxy
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (A)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../SessionProxy.html" title="Sunspot::SessionProxy (module)">SessionProxy</a></span></span>
+     &raquo; 
+    <span class="title">AbstractSessionProxy</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::SessionProxy::AbstractSessionProxy
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::SessionProxy::AbstractSessionProxy</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/session_proxy/abstract_session_proxy.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="MasterSlaveSessionProxy.html" title="Sunspot::SessionProxy::MasterSlaveSessionProxy (class)">MasterSlaveSessionProxy</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html" title="Sunspot::SessionProxy::ShardingSessionProxy (class)">ShardingSessionProxy</a></span>, <span class='object_link'><a href="SilentFailSessionProxy.html" title="Sunspot::SessionProxy::SilentFailSessionProxy (class)">SilentFailSessionProxy</a></span>, <span class='object_link'><a href="ThreadLocalSessionProxy.html" title="Sunspot::SessionProxy::ThreadLocalSessionProxy (class)">ThreadLocalSessionProxy</a></span></p>
+</div>
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#delegate-class_method" title="delegate (class method)">+ (Object) <strong>delegate</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#not_supported-class_method" title="not_supported (class method)">+ (Object) <strong>not_supported</strong>(*methods) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="delegate-class_method">
+  
+    + (<tt>Object</tt>) <strong>delegate</strong>(*args) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/session_proxy/abstract_session_proxy.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id delegate'>delegate</span><span class='lparen'>(</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
+  <span class='id options'>options</span> <span class='op'>=</span> <span class='const'>Util</span><span class='period'>.</span><span class='id extract_options_from'>extract_options_from</span><span class='lparen'>(</span><span class='id args'>args</span><span class='rparen'>)</span>
+  <span class='id delegate'>delegate</span> <span class='op'>=</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:to</span><span class='rbracket'>]</span>
+  <span class='id args'>args</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id method'>method</span><span class='op'>|</span>
+    <span class='id module_eval'>module_eval</span><span class='lparen'>(</span><span class='heredoc_beg'>&lt;&lt;-RUBY</span><span class='comma'>,</span> <span class='kw'>__FILE__</span><span class='comma'>,</span> <span class='kw'>__LINE__</span> <span class='op'>+</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='tstring_content'>      def </span><span class='embexpr_beg'>#{</span><span class='id method'>method</span><span class='rbrace'>}</span><span class='tstring_content'>(*args, &amp;block)
+</span><span class='embexpr_beg'>        #{</span><span class='id delegate'>delegate</span><span class='rbrace'>}</span><span class='tstring_content'>.</span><span class='embexpr_beg'>#{</span><span class='id method'>method</span><span class='rbrace'>}</span><span class='tstring_content'>(*args, &amp;block)
+      end
+</span><span class='heredoc_end'>    RUBY
+</span>  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="not_supported-class_method">
+  
+    + (<tt>Object</tt>) <strong>not_supported</strong>(*methods) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19
+20
+21
+22
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/session_proxy/abstract_session_proxy.rb', line 17</span>
+
+<span class='kw'>def</span> <span class='id not_supported'>not_supported</span><span class='lparen'>(</span><span class='op'>*</span><span class='id methods'>methods</span><span class='rparen'>)</span>
+  <span class='id methods'>methods</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id method'>method</span><span class='op'>|</span>
+    <span class='id module_eval'>module_eval</span><span class='lparen'>(</span><span class='heredoc_beg'>&lt;&lt;-RUBY</span><span class='comma'>,</span> <span class='kw'>__FILE__</span><span class='comma'>,</span> <span class='kw'>__LINE__</span> <span class='op'>+</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='tstring_content'>      def </span><span class='embexpr_beg'>#{</span><span class='id method'>method</span><span class='rbrace'>}</span><span class='tstring_content'>(*args, &amp;block)
+</span><span class='embexpr_beg'>        raise NotSupportedError, &quot;#{</span><span class='id name'>name</span><span class='rbrace'>}</span><span class='tstring_content'> does not support </span><span class='embexpr_beg'>#{</span><span class='id method'>method</span><span class='period'>.</span><span class='id inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'>&quot;
+      end
+</span><span class='heredoc_end'>    RUBY
+</span>  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:23 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

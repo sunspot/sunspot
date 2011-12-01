@@ -1,0 +1,656 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Adapters::InstanceAdapter
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (I)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Adapters.html" title="Sunspot::Adapters (module)">Adapters</a></span></span>
+     &raquo; 
+    <span class="title">InstanceAdapter</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Adapters::InstanceAdapter
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Adapters::InstanceAdapter</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/adapters.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Subclasses of the InstanceAdapter class should implement the #id method,
+which returns the primary key of the instance stored in the @instance
+variable. The primary key must be unique within the scope of the
+instance&#8217;s class.
+</p>
+<h4>Example:</h4>
+<pre class="code">
+  <span class='kw'>class</span> <span class='const'>FileAdapter</span> <span class='op'>&lt;</span> <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Adapters</span><span class='op'>::</span><span class='const'>InstanceAdapter</span>
+    <span class='kw'>def</span> <span class='id id'>id</span>
+      <span class='const'>File</span><span class='period'>.</span><span class='id expand_path'>expand_path</span><span class='lparen'>(</span><span class='ivar'>@instance</span><span class='period'>.</span><span class='id path'>path</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># then in your initializer
+</span>  <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Adapters</span><span class='op'>::</span><span class='const'>InstanceAdapter</span><span class='period'>.</span><span class='id register'>register</span><span class='lparen'>(</span><span class='const'>MyAdapter</span><span class='comma'>,</span> <span class='const'>File</span><span class='rparen'>)</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="../Rails/Adapters/ActiveRecordInstanceAdapter.html" title="Sunspot::Rails::Adapters::ActiveRecordInstanceAdapter (class)">Rails::Adapters::ActiveRecordInstanceAdapter</a></span></p>
+</div>
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#adapt-class_method" title="adapt (class method)">+ (Object) <strong>adapt</strong>(instance) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Instantiate an InstanceAdapter for the given object, searching for
+registered adapters for the object&#8217;s class.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#for-class_method" title="for (class method)">+ (Object) <strong>for</strong>(clazz) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Find the best InstanceAdapter implementation that adapts the given class.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#index_id_for-class_method" title="index_id_for (class method)">+ (Object) <strong>index_id_for</strong>(class_name, id) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#register-class_method" title="register (class method)">+ (Object) <strong>register</strong>(instance_adapter, *classes) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Register an instance adapter for a set of classes.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#index_id-instance_method" title="#index_id (instance method)">- (Object) <strong>index_id</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The universally-unique ID for this instance that will be stored in solr.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (InstanceAdapter) <strong>initialize</strong>(instance) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Adapters::InstanceAdapter (class)">InstanceAdapter</a></span></tt>) <strong>initialize</strong>(instance) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+52
+53
+54</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 52</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id instance'>instance</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='ivar'>@instance</span> <span class='op'>=</span> <span class='id instance'>instance</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="adapt-class_method">
+  
+    + (<tt>Object</tt>) <strong>adapt</strong>(instance) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Instantiate an InstanceAdapter for the given object, searching for
+registered adapters for the object&#8217;s class.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">instance<Object></td><td><p>
+The instance to adapt
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">InstanceAdapter</td><td><p>
+An instance of an InstanceAdapter implementation that wraps the given
+instance
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+81
+82
+83</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 81</span>
+
+<span class='kw'>def</span> <span class='id adapt'>adapt</span><span class='lparen'>(</span><span class='id instance'>instance</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='kw'>self</span><span class='period'>.</span><span class='id for'>for</span><span class='lparen'>(</span><span class='id instance'>instance</span><span class='period'>.</span><span class='id class'>class</span><span class='rparen'>)</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id instance'>instance</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="for-class_method">
+  
+    + (<tt>Object</tt>) <strong>for</strong>(clazz) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Find the best InstanceAdapter implementation that adapts the given class. 
+Starting with the class and then moving up the ancestor chain, looks for
+registered InstanceAdapter implementations.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">clazz<Class></td><td><p>
+The class to find an InstanceAdapter for
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Class</td><td><p>
+Subclass of InstanceAdapter, or nil if none found
+</p>
+</td></tr>
+</table>
+<h4>Raises</h4>
+<table>
+<tr><td valign="top">Sunspot::NoAdapterError</td><td><p>
+If no adapter is registered for this class
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Raises:</h3>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Sunspot.html#NoAdapterError-constant" title="Sunspot::NoAdapterError (constant)">Sunspot::NoAdapterError</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 118</span>
+
+<span class='kw'>def</span> <span class='kw'>for</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='id original_class_name'>original_class_name</span> <span class='op'>=</span> <span class='id clazz'>clazz</span><span class='period'>.</span><span class='id name'>name</span>
+  <span class='id clazz'>clazz</span><span class='period'>.</span><span class='id ancestors'>ancestors</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id ancestor_class'>ancestor_class</span><span class='op'>|</span>
+    <span class='kw'>next</span> <span class='kw'>if</span> <span class='id ancestor_class'>ancestor_class</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id nil?'>nil?</span> <span class='op'>||</span> <span class='id ancestor_class'>ancestor_class</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+    <span class='id class_name'>class_name</span> <span class='op'>=</span> <span class='id ancestor_class'>ancestor_class</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span>
+    <span class='kw'>return</span> <span class='id instance_adapters'>instance_adapters</span><span class='lbracket'>[</span><span class='id class_name'>class_name</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id instance_adapters'>instance_adapters</span><span class='lbracket'>[</span><span class='id class_name'>class_name</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+
+  <span class='id raise'>raise</span><span class='lparen'>(</span><span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>NoAdapterError</span><span class='comma'>,</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No adapter is configured for </span><span class='embexpr_beg'>#{</span><span class='id original_class_name'>original_class_name</span><span class='rbrace'>}</span><span class='tstring_content'> or its superclasses. See the documentation for Sunspot::Adapters</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="index_id_for-class_method">
+  
+    + (<tt>Object</tt>) <strong>index_id_for</strong>(class_name, id) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+130
+131
+132</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 130</span>
+
+<span class='kw'>def</span> <span class='id index_id_for'>index_id_for</span><span class='lparen'>(</span><span class='id class_name'>class_name</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id class_name'>class_name</span><span class='rbrace'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id id'>id</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="register-class_method">
+  
+    + (<tt>Object</tt>) <strong>register</strong>(instance_adapter, *classes) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Register an instance adapter for a set of classes. When searching for an
+adapter for a given instance, Sunspot starts with the instance&#8217;s
+class, and then searches for registered adapters up the class&#8217;s
+ancestor chain.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">instance_adapter<Class></td><td><p>
+The instance adapter class to register
+</p>
+</td></tr>
+<tr><td valign="top">classes&#8230;<Class></td><td><p>
+One or more classes that this instance adapter adapts
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+96
+97
+98
+99
+100</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 96</span>
+
+<span class='kw'>def</span> <span class='id register'>register</span><span class='lparen'>(</span><span class='id instance_adapter'>instance_adapter</span><span class='comma'>,</span> <span class='op'>*</span><span class='id classes'>classes</span><span class='rparen'>)</span>
+  <span class='id classes'>classes</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id clazz'>clazz</span><span class='op'>|</span>
+    <span class='id instance_adapters'>instance_adapters</span><span class='lbracket'>[</span><span class='id clazz'>clazz</span><span class='period'>.</span><span class='id name'>name</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id instance_adapter'>instance_adapter</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="index_id-instance_method">
+  
+    - (<tt>Object</tt>) <strong>index_id</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The universally-unique ID for this instance that will be stored in solr
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+ID for use in Solr
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+63
+64
+65</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/adapters.rb', line 63</span>
+
+<span class='kw'>def</span> <span class='id index_id'>index_id</span> <span class='comment'>#:nodoc:
+</span>  <span class='const'>InstanceAdapter</span><span class='period'>.</span><span class='id index_id_for'>index_id_for</span><span class='lparen'>(</span><span class='ivar'>@instance</span><span class='period'>.</span><span class='id class'>class</span><span class='period'>.</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Sunspot::Rails
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (R)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span>
+     &raquo; 
+    <span class="title">Rails</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Sunspot::Rails
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot_rails/lib/sunspot/rails.rb<span class="defines">,<br />
+  sunspot_rails/lib/sunspot/rails/server.rb,<br /> sunspot_rails/lib/sunspot/rails/railtie.rb,<br /> sunspot_rails/lib/sunspot/rails/adapters.rb,<br /> sunspot_rails/lib/sunspot/rails/searchable.rb,<br /> sunspot_rails/lib/sunspot/rails/spec_helper.rb,<br /> sunspot_rails/lib/sunspot/rails/solr_logging.rb,<br /> sunspot_rails/lib/sunspot/rails/configuration.rb,<br /> sunspot_rails/lib/sunspot/rails/log_subscriber.rb,<br /> sunspot_rails/lib/sunspot/rails/request_lifecycle.rb,<br /> sunspot_rails/lib/sunspot/rails/stub_session_proxy.rb,<br /> sunspot_rails/lib/sunspot/rails/solr_instrumentation.rb,<br /> sunspot_rails/lib/sunspot/rails/railties/controller_runtime.rb</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc: :nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Rails/Adapters.html" title="Sunspot::Rails::Adapters (module)">Adapters</a></span>, <span class='object_link'><a href="Rails/Railties.html" title="Sunspot::Rails::Railties (module)">Railties</a></span>, <span class='object_link'><a href="Rails/RequestLifecycle.html" title="Sunspot::Rails::RequestLifecycle (module)">RequestLifecycle</a></span>, <span class='object_link'><a href="Rails/Searchable.html" title="Sunspot::Rails::Searchable (module)">Searchable</a></span>, <span class='object_link'><a href="Rails/SolrInstrumentation.html" title="Sunspot::Rails::SolrInstrumentation (module)">SolrInstrumentation</a></span>, <span class='object_link'><a href="Rails/SolrLogging.html" title="Sunspot::Rails::SolrLogging (module)">SolrLogging</a></span>, <span class='object_link'><a href="Rails/SpecHelper.html" title="Sunspot::Rails::SpecHelper (module)">SpecHelper</a></span>
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Rails/Configuration.html" title="Sunspot::Rails::Configuration (class)">Configuration</a></span>, <span class='object_link'><a href="Rails/LogSubscriber.html" title="Sunspot::Rails::LogSubscriber (class)">LogSubscriber</a></span>, <span class='object_link'><a href="Rails/Railtie.html" title="Sunspot::Rails::Railtie (class)">Railtie</a></span>, <span class='object_link'><a href="Rails/Server.html" title="Sunspot::Rails::Server (class)">Server</a></span>, <span class='object_link'><a href="Rails/StubSessionProxy.html" title="Sunspot::Rails::StubSessionProxy (class)">StubSessionProxy</a></span>
+    
+  
+</p>
+
+
+  <h2>Class Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#configuration-class_method" title="configuration (class method)">+ (Object) <strong>configuration</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#build_session-class_method" title="build_session (class method)">+ (Object) <strong>build_session</strong>(configuration = self.configuration) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#reset-class_method" title="reset (class method)">+ (Object) <strong>reset</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  <div id="class_attr_details" class="attr_details">
+    <h2>Class Attribute Details</h2>
+    
+      
+      <span id="configuration=-class_method"></span>
+      <span id="configuration-class_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="configuration-class_method">
+  
+    + (<tt>Object</tt>) <strong>configuration</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21
+22
+23</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails.rb', line 21</span>
+
+<span class='kw'>def</span> <span class='id configuration'>configuration</span>
+  <span class='ivar'>@configuration</span> <span class='op'>||=</span> <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Rails</span><span class='op'>::</span><span class='const'>Configuration</span><span class='period'>.</span><span class='id new'>new</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="build_session-class_method">
+  
+    + (<tt>Object</tt>) <strong>build_session</strong>(configuration = self.configuration) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails.rb', line 29</span>
+
+<span class='kw'>def</span> <span class='id build_session'>build_session</span><span class='lparen'>(</span><span class='id configuration'>configuration</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id configuration'>configuration</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id configuration'>configuration</span><span class='period'>.</span><span class='id disabled?'>disabled?</span>
+    <span class='const'>StubSessionProxy</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='const'>Sunspot</span><span class='period'>.</span><span class='id session'>session</span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='id configuration'>configuration</span><span class='period'>.</span><span class='id has_master?'>has_master?</span>
+    <span class='const'>SessionProxy</span><span class='op'>::</span><span class='const'>MasterSlaveSessionProxy</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span>
+      <span class='const'>SessionProxy</span><span class='op'>::</span><span class='const'>ThreadLocalSessionProxy</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id master_config'>master_config</span><span class='lparen'>(</span><span class='id configuration'>configuration</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='const'>SessionProxy</span><span class='op'>::</span><span class='const'>ThreadLocalSessionProxy</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id slave_config'>slave_config</span><span class='lparen'>(</span><span class='id configuration'>configuration</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='const'>SessionProxy</span><span class='op'>::</span><span class='const'>ThreadLocalSessionProxy</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id slave_config'>slave_config</span><span class='lparen'>(</span><span class='id configuration'>configuration</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="reset-class_method">
+  
+    + (<tt>Object</tt>) <strong>reset</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='id reset'>reset</span>
+  <span class='ivar'>@configuration</span> <span class='op'>=</span> <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

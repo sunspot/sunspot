@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::DSL::RestrictionWithNear
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (R)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../DSL.html" title="Sunspot::DSL (module)">DSL</a></span></span>
+     &raquo; 
+    <span class="title">RestrictionWithNear</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::DSL::RestrictionWithNear
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName"><span class='object_link'><a href="Restriction.html" title="Sunspot::DSL::Restriction (class)">Restriction</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="Restriction.html" title="Sunspot::DSL::Restriction (class)">Restriction</a></span></li>
+          
+            <li class="next">Sunspot::DSL::RestrictionWithNear</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/dsl/restriction_with_near.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+  
+  
+  
+  
+
+
+  
+  
+  
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (RestrictionWithNear) <strong>initialize</strong>(field, scope, query, negated) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of RestrictionWithNear.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#near-instance_method" title="#near (instance method)">- (Object) <strong>near</strong>(lat, lng, options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Perform a Geohash-based location restriction for the given `location`
+field.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::DSL::RestrictionWithNear (class)">RestrictionWithNear</a></span></tt>) <strong>initialize</strong>(field, scope, query, negated) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of RestrictionWithNear
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+4
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/restriction_with_near.rb', line 4</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id scope'>scope</span><span class='comma'>,</span> <span class='id query'>query</span><span class='comma'>,</span> <span class='id negated'>negated</span><span class='rparen'>)</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id scope'>scope</span><span class='comma'>,</span> <span class='id negated'>negated</span><span class='rparen'>)</span>
+  <span class='ivar'>@query</span> <span class='op'>=</span> <span class='id query'>query</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="near-instance_method">
+  
+    - (<tt>Object</tt>) <strong>near</strong>(lat, lng, options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Perform a Geohash-based location restriction for the given `location`
+field. Though this uses the same API as other attribute-field restrictions,
+there are several differences between this and other scoping methods:
+</p>
+<ul>
+<li><p>
+It can only be called from the top-level query; it cannot be nested in a
+`dynamic`, `any_of`, or `all_of` block. This is because geohash queries are
+not sent to Solr as filter queries like other scopes, but rather are part
+of the fulltext query sent to Solr.
+</p>
+</li>
+<li><p>
+Because it is included with the fulltext query (if any), location
+restrictions can be given boost. By default, an &#8220;exact&#8221;
+(maximum-precision) match will give the result a boost of 1.0; each lower
+level of precision gives a boost of 1/2 the next highest precision. See
+below for options to modify this behavior.
+</p>
+</li>
+</ul>
+<h4>What is a Geohash?</h4>
+<p>
+Geohash is a clever algorithm that creates a decodable digest of a
+geographical point. It does this by dividing the globe into quadrants,
+encoding the quadrant in which the point sits in the hash, dividing the
+quadrant into smaller quadrants, and repeating an arbitrary number of times
+(the &#8220;precision&#8221;). Because of the way Geohash are built, the
+shared Geohash prefix length of two locations will <em>usually</em>
+increase as the distance between the points decreases. Put another way, the
+geohashes of two nearby points will <em>usually</em> have a longer shared
+prefix than two points which are distant from one another.
+</p>
+<p>
+Read more about Geohashes on <a
+href="http://en.wikipedia.org/wiki/Geohash">Wikipedia</a> or play around
+with generating your own at <a href="http://geohash.org/">geohash.org</a>.
+</p>
+<p>
+In Sunspot, GeoHashes can have a precision between 3 and 12; this is the
+number of characters in the hash. The precisions have the following maximum
+bounding box sizes, in miles:
+</p>
+<p>
+<dt>3</dt> <dd>389.07812</dd> <dt>4</dt> <dd>97.26953</dd> <dt>5</dt>
+<dd>24.31738</dd> <dt>6</dt> <dd>6.07935</dd> <dt>7</dt> <dd>1.51984
+<dt>8</dt> <dd>0.37996</dd> <dt>9</dt> <dd>0.09499</dd> <dt>10</dt>
+<dd>0.02375</dd> <dt>11</dt> <dd>0.00594</dd> <dt>12</dt> <dd>0.00148</dd>
+</p>
+<h4>Score, boost, and sorting with location search</h4>
+<p>
+The concept of relevance scoring is a familiar one from fulltext search;
+Solr (or Lucene, actually) gives each result document a score based on how
+relevant the document&#8217;s text is to the search phrase. Sunspot&#8217;s
+location search also uses scoring to determine geographical relevance;
+using boosts, longer prefix matches (which are, in general, geographically
+closer to the search origin) are assigned higher relevance. This means that
+the results of a pure location search are <em>roughly</em> in order of
+geographical distance, as long as no other sort is specified explicitly.
+</p>
+<p>
+This geographical relevance plays on the same field as fulltext scoring; if
+you use both fulltext and geographical components in a single search, both
+types of relevance will be taken into account when scoring the matches.
+Thus, a very close fulltext match that&#8217;s further away from the
+geographical origin will be scored similarly to a less precise fulltext
+match that is very close to the geographical origin. That&#8217;s likely to
+be consistent with the way most users would expect a fulltext geographical
+search to work.
+</p>
+<h4>Options</h4>
+<p>
+<dt><tt>:precision</tt></dt> <dd>The minimum precision at which locations
+should match. See the table of precisions and bounding-box sizes above; the
+proximity value will ensure that all matching documents share a bounding
+box of the corresponding maximum size with your origin point. The default
+value is 7, meaning all results will share a bounding box with edges of
+about one and a half miles with the origin.</dd> <dt><tt>:boost</tt></dt>
+<dd>The boost to apply to maximum-precision matches. Default is 1.0. You
+can use this option to adjust the weight given to geographic proximity
+versus fulltext matching, if you are doing both in a search.</dd>
+<dt><tt>:precision_factor</tt></dt> <dd>This option determines how much
+boost is applied to matches at lower precisions. The default value, 16.0,
+means that a match at precision N is 1/16 as relevant as a match at
+precision N+1 (this is consistent with the fact that each precision&#8217;s
+bounding box is about sixteen times the size of the next highest
+precision.)</dd>
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id search'>search</span><span class='lparen'>(</span><span class='const'>Post</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id fulltext'>fulltext</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>pizza</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+    <span class='id with'>with</span><span class='lparen'>(</span><span class='symbol'>:location</span><span class='rparen'>)</span><span class='period'>.</span><span class='id near'>near</span><span class='lparen'>(</span><span class='op'>-</span><span class='float'>40.0</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>70.0</span><span class='comma'>,</span> <span class='symbol'>:boost</span> <span class='op'>=&gt;</span> <span class='int'>2</span><span class='comma'>,</span> <span class='symbol'>:precision</span> <span class='op'>=&gt;</span> <span class='int'>6</span><span class='rparen'>)</span>
+  <span class='kw'>end</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+116
+117
+118</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/dsl/restriction_with_near.rb', line 116</span>
+
+<span class='kw'>def</span> <span class='id near'>near</span><span class='lparen'>(</span><span class='id lat'>lat</span><span class='comma'>,</span> <span class='id lng'>lng</span><span class='comma'>,</span> <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='ivar'>@query</span><span class='period'>.</span><span class='id fulltext'>fulltext</span><span class='period'>.</span><span class='id add_location'>add_location</span><span class='lparen'>(</span><span class='ivar'>@field</span><span class='comma'>,</span> <span class='id lat'>lat</span><span class='comma'>,</span> <span class='id lng'>lng</span><span class='comma'>,</span> <span class='id options'>options</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:22 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

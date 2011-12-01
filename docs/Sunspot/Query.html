@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Sunspot::Query
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (Q)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span>
+     &raquo; 
+    <span class="title">Query</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Sunspot::Query
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot/lib/sunspot/query.rb<span class="defines">,<br />
+  sunspot/lib/sunspot/query/geo.rb,<br /> sunspot/lib/sunspot/query/sort.rb,<br /> sunspot/lib/sunspot/query/scope.rb,<br /> sunspot/lib/sunspot/query/filter.rb,<br /> sunspot/lib/sunspot/query/dismax.rb,<br /> sunspot/lib/sunspot/query/connective.rb,<br /> sunspot/lib/sunspot/query/pagination.rb,<br /> sunspot/lib/sunspot/query/field_facet.rb,<br /> sunspot/lib/sunspot/query/boost_query.rb,<br /> sunspot/lib/sunspot/query/restriction.rb,<br /> sunspot/lib/sunspot/query/query_facet.rb,<br /> sunspot/lib/sunspot/query/common_query.rb,<br /> sunspot/lib/sunspot/query/highlighting.rb,<br /> sunspot/lib/sunspot/query/standard_query.rb,<br /> sunspot/lib/sunspot/query/more_like_this.rb,<br /> sunspot/lib/sunspot/query/function_query.rb,<br /> sunspot/lib/sunspot/query/sort_composite.rb,<br /> sunspot/lib/sunspot/query/text_field_boost.rb,<br /> sunspot/lib/sunspot/query/date_field_facet.rb,<br /> sunspot/lib/sunspot/query/composite_fulltext.rb,<br /> sunspot/lib/sunspot/query/more_like_this_query.rb,<br /> sunspot/lib/sunspot/query/abstract_field_facet.rb</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Query/Connective.html" title="Sunspot::Query::Connective (module)">Connective</a></span>, <span class='object_link'><a href="Query/Filter.html" title="Sunspot::Query::Filter (module)">Filter</a></span>, <span class='object_link'><a href="Query/Restriction.html" title="Sunspot::Query::Restriction (module)">Restriction</a></span>, <span class='object_link'><a href="Query/Sort.html" title="Sunspot::Query::Sort (module)">Sort</a></span>
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Query/AbstractFieldFacet.html" title="Sunspot::Query::AbstractFieldFacet (class)">AbstractFieldFacet</a></span>, <span class='object_link'><a href="Query/BoostQuery.html" title="Sunspot::Query::BoostQuery (class)">BoostQuery</a></span>, <span class='object_link'><a href="Query/CommonQuery.html" title="Sunspot::Query::CommonQuery (class)">CommonQuery</a></span>, <span class='object_link'><a href="Query/CompositeFulltext.html" title="Sunspot::Query::CompositeFulltext (class)">CompositeFulltext</a></span>, <span class='object_link'><a href="Query/ConstantFunctionQuery.html" title="Sunspot::Query::ConstantFunctionQuery (class)">ConstantFunctionQuery</a></span>, <span class='object_link'><a href="Query/DateFieldFacet.html" title="Sunspot::Query::DateFieldFacet (class)">DateFieldFacet</a></span>, <span class='object_link'><a href="Query/Dismax.html" title="Sunspot::Query::Dismax (class)">Dismax</a></span>, <span class='object_link'><a href="Query/FieldFacet.html" title="Sunspot::Query::FieldFacet (class)">FieldFacet</a></span>, <span class='object_link'><a href="Query/FieldFunctionQuery.html" title="Sunspot::Query::FieldFunctionQuery (class)">FieldFunctionQuery</a></span>, <span class='object_link'><a href="Query/FunctionQuery.html" title="Sunspot::Query::FunctionQuery (class)">FunctionQuery</a></span>, <span class='object_link'><a href="Query/FunctionalFunctionQuery.html" title="Sunspot::Query::FunctionalFunctionQuery (class)">FunctionalFunctionQuery</a></span>, <span class='object_link'><a href="Query/Geo.html" title="Sunspot::Query::Geo (class)">Geo</a></span>, <span class='object_link'><a href="Query/Highlighting.html" title="Sunspot::Query::Highlighting (class)">Highlighting</a></span>, <span class='object_link'><a href="Query/MoreLikeThis.html" title="Sunspot::Query::MoreLikeThis (class)">MoreLikeThis</a></span>, <span class='object_link'><a href="Query/MoreLikeThisQuery.html" title="Sunspot::Query::MoreLikeThisQuery (class)">MoreLikeThisQuery</a></span>, <span class='object_link'><a href="Query/Pagination.html" title="Sunspot::Query::Pagination (class)">Pagination</a></span>, <span class='object_link'><a href="Query/QueryFacet.html" title="Sunspot::Query::QueryFacet (class)">QueryFacet</a></span>, <span class='object_link'><a href="Query/Scope.html" title="Sunspot::Query::Scope (class)">Scope</a></span>, <span class='object_link'><a href="Query/SortComposite.html" title="Sunspot::Query::SortComposite (class)">SortComposite</a></span>, <span class='object_link'><a href="Query/StandardQuery.html" title="Sunspot::Query::StandardQuery (class)">StandardQuery</a></span>, <span class='object_link'><a href="Query/TextFieldBoost.html" title="Sunspot::Query::TextFieldBoost (class)">TextFieldBoost</a></span>
+    
+  
+</p>
+
+
+
+
+
+
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:18 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Sunspot::SessionProxy
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span>
+     &raquo; 
+    <span class="title">SessionProxy</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Sunspot::SessionProxy
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot/lib/sunspot/session_proxy.rb<span class="defines">,<br />
+  sunspot/lib/sunspot/session_proxy/sharding_session_proxy.rb,<br /> sunspot/lib/sunspot/session_proxy/abstract_session_proxy.rb,<br /> sunspot/lib/sunspot/session_proxy/id_sharding_session_proxy.rb,<br /> sunspot/lib/sunspot/session_proxy/silent_fail_session_proxy.rb,<br /> sunspot/lib/sunspot/session_proxy/master_slave_session_proxy.rb,<br /> sunspot/lib/sunspot/session_proxy/thread_local_session_proxy.rb,<br /> sunspot/lib/sunspot/session_proxy/class_sharding_session_proxy.rb</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+This module contains several Session Proxy implementations, which can be
+used to decorate one or more Session objects and add extra functionality.
+The user can also implement their own Session Proxy classes; a Session
+Proxy must simply implement the same public API as the Sunspot::Session
+class.
+</p>
+<p>
+When implementing a session proxy, some methods of Session may not be
+practical, or even logical, to implement. In this case, the method should
+raise a Sunspot::SessionProxy::NotSupportedError (several methods in the
+built-in session proxies raise this error).
+</p>
+<p>
+To use a session proxy in normal Sunspot usage, you can use the
+Sunspot.session= method, which will cause Sunspot to delegate all of its
+session-related class methods (most of them) to the proxy. Session proxies
+can also easily be chained, although the details of chaining depend on the
+proxy implementation.
+</p>
+<h5>Example: Chain a MasterSlaveSessionProxy with a ThreadLocalSessionProxy</h5>
+<pre class="code">
+  <span class='id master_session'>master_session</span> <span class='op'>=</span> <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>SessionProxy</span><span class='op'>::</span><span class='const'>ThreadLocalSessionProxy</span><span class='period'>.</span><span class='id new'>new</span>
+  <span class='id slave_session'>slave_session</span> <span class='op'>=</span> <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>SessionProxy</span><span class='op'>::</span><span class='const'>ThreadLocalSessionProxy</span><span class='period'>.</span><span class='id new'>new</span>
+  <span class='id master_session'>master_session</span><span class='period'>.</span><span class='id config'>config</span><span class='period'>.</span><span class='id solr'>solr</span><span class='period'>.</span><span class='id url'>url</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>http://master-solr.local:9080/solr</span><span class='tstring_end'>'</span></span>
+  <span class='id slave_session'>slave_session</span><span class='period'>.</span><span class='id config'>config</span><span class='period'>.</span><span class='id solr'>solr</span><span class='period'>.</span><span class='id url'>url</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>http://slave-solr.local:9080/solr</span><span class='tstring_end'>'</span></span>
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id session'>session</span> <span class='op'>=</span> <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>SessionProxy</span><span class='op'>::</span><span class='const'>MasterSlaveSessionProxy</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id master_session'>master_session</span><span class='comma'>,</span> <span class='id slave_session'>slave_session</span><span class='rparen'>)</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="SessionProxy/AbstractSessionProxy.html" title="Sunspot::SessionProxy::AbstractSessionProxy (class)">AbstractSessionProxy</a></span>, <span class='object_link'><a href="SessionProxy/ClassShardingSessionProxy.html" title="Sunspot::SessionProxy::ClassShardingSessionProxy (class)">ClassShardingSessionProxy</a></span>, <span class='object_link'><a href="SessionProxy/IdShardingSessionProxy.html" title="Sunspot::SessionProxy::IdShardingSessionProxy (class)">IdShardingSessionProxy</a></span>, <span class='object_link'><a href="SessionProxy/MasterSlaveSessionProxy.html" title="Sunspot::SessionProxy::MasterSlaveSessionProxy (class)">MasterSlaveSessionProxy</a></span>, <span class='object_link'><a href="SessionProxy/ShardingSessionProxy.html" title="Sunspot::SessionProxy::ShardingSessionProxy (class)">ShardingSessionProxy</a></span>, <span class='object_link'><a href="SessionProxy/SilentFailSessionProxy.html" title="Sunspot::SessionProxy::SilentFailSessionProxy (class)">SilentFailSessionProxy</a></span>, <span class='object_link'><a href="SessionProxy/ThreadLocalSessionProxy.html" title="Sunspot::SessionProxy::ThreadLocalSessionProxy (class)">ThreadLocalSessionProxy</a></span>
+    
+  
+</p>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="NotSupportedError-constant" class="">NotSupportedError =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Class</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='const'>StandardError</span><span class='rparen'>)</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::SessionProxy::IdShardingSessionProxy
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (I)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../SessionProxy.html" title="Sunspot::SessionProxy (module)">SessionProxy</a></span></span>
+     &raquo; 
+    <span class="title">IdShardingSessionProxy</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::SessionProxy::IdShardingSessionProxy
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName"><span class='object_link'><a href="ShardingSessionProxy.html" title="Sunspot::SessionProxy::ShardingSessionProxy (class)">ShardingSessionProxy</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="AbstractSessionProxy.html" title="Sunspot::SessionProxy::AbstractSessionProxy (class)">AbstractSessionProxy</a></span></li>
+          
+            <li class="next"><span class='object_link'><a href="ShardingSessionProxy.html" title="Sunspot::SessionProxy::ShardingSessionProxy (class)">ShardingSessionProxy</a></span></li>
+          
+            <li class="next">Sunspot::SessionProxy::IdShardingSessionProxy</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/session_proxy/id_sharding_session_proxy.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+A concrete implementation of ShardingSessionProxy that determines the shard
+for a given object based on the hash of its class and ID.
+</p>
+<p>
+<strong>If you change the number of shard sessions that this proxy
+encapsulates, all objects will point to a different shard.</strong> If you
+plan on adding more shards over time, consider your own
+ShardingSessionProxy implementation that does not determine the session
+using modular arithmetic (e.g., IDs 1-10000 go to shard 1, 10001-20000 go
+to shard 2, etc.)
+</p>
+<p>
+This implementation will, on average, yield an even distribution of objects
+across shards.
+</p>
+<p>
+Unlike the abstract ShardingSessionProxy, this proxy supports the
+#remove_by_id method.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sessions-instance_method" title="#sessions (instance method)">- (Object) <strong>sessions</strong> </a>
+    
+
+    
+      (also: #all_sessions)
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The shard sessions encapsulated by this class.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  
+  
+  
+  
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#id_hash-instance_method" title="#id_hash (instance method)">- (Object) <strong>id_hash</strong>(id) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (IdShardingSessionProxy) <strong>initialize</strong>(search_session, shard_sessions) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Initialize with a search session (see ShardingSessionProxy.new) and a
+collection of one or more shard sessions.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove_by_id-instance_method" title="#remove_by_id (instance method)">- (Object) <strong>remove_by_id</strong>(clazz, id) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+See Sunspot.remove_by_id.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove_by_id%21-instance_method" title="#remove_by_id! (instance method)">- (Object) <strong>remove_by_id!</strong>(clazz, id) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+See Sunspot.remove_by_id!.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#session_for-instance_method" title="#session_for (instance method)">- (Object) <strong>session_for</strong>(object) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Return a session based on the hash of the class and ID, modulo the number
+of shard sessions.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="ShardingSessionProxy.html" title="Sunspot::SessionProxy::ShardingSessionProxy (class)">ShardingSessionProxy</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="ShardingSessionProxy.html#commit-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#commit (method)">#commit</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#commit_if_delete_dirty-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#commit_if_delete_dirty (method)">#commit_if_delete_dirty</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#commit_if_dirty-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#commit_if_dirty (method)">#commit_if_dirty</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#delete_dirty%3F-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#delete_dirty? (method)">#delete_dirty?</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#dirty%3F-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#dirty? (method)">#dirty?</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#index-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#index (method)">#index</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#index%21-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#index! (method)">#index!</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#more_like_this-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#more_like_this (method)">#more_like_this</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#new_more_like_this-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#new_more_like_this (method)">#new_more_like_this</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#new_search-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#new_search (method)">#new_search</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#optimize-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#optimize (method)">#optimize</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#remove-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#remove (method)">#remove</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#remove%21-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#remove! (method)">#remove!</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#remove_all-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#remove_all (method)">#remove_all</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#remove_all%21-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#remove_all! (method)">#remove_all!</a></span>, <span class='object_link'><a href="ShardingSessionProxy.html#search-instance_method" title="Sunspot::SessionProxy::ShardingSessionProxy#search (method)">#search</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="AbstractSessionProxy.html" title="Sunspot::SessionProxy::AbstractSessionProxy (class)">AbstractSessionProxy</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="AbstractSessionProxy.html#delegate-class_method" title="Sunspot::SessionProxy::AbstractSessionProxy.delegate (method)">delegate</a></span>, <span class='object_link'><a href="AbstractSessionProxy.html#not_supported-class_method" title="Sunspot::SessionProxy::AbstractSessionProxy.not_supported (method)">not_supported</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::SessionProxy::IdShardingSessionProxy (class)">IdShardingSessionProxy</a></span></tt>) <strong>initialize</strong>(search_session, shard_sessions) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Initialize with a search session (see ShardingSessionProxy.new) and a
+collection of one or more shard sessions. See note about changing the
+number of shard sessions in the documentation for this class.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+32
+33
+34
+35</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/session_proxy/id_sharding_session_proxy.rb', line 32</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id search_session'>search_session</span><span class='comma'>,</span> <span class='id shard_sessions'>shard_sessions</span><span class='rparen'>)</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='id search_session'>search_session</span><span class='rparen'>)</span>
+  <span class='ivar'>@sessions</span> <span class='op'>=</span> <span class='id shard_sessions'>shard_sessions</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="sessions-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="sessions-instance_method">
+  
+    - (<tt>Object</tt>) <strong>sessions</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='all_sessions-instance_method'>all_sessions</span></span>
+    </span>
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The shard sessions encapsulated by this class.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+24
+25
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/session_proxy/id_sharding_session_proxy.rb', line 24</span>
+
+<span class='kw'>def</span> <span class='id sessions'>sessions</span>
+  <span class='ivar'>@sessions</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="id_hash-instance_method">
+  
+    - (<tt>Object</tt>) <strong>id_hash</strong>(id) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+74
+75
+76
+77
+78
+79
+80
+81</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/session_proxy/id_sharding_session_proxy.rb', line 74</span>
+
+<span class='kw'>def</span> <span class='id id_hash'>id_hash</span><span class='lparen'>(</span><span class='id id'>id</span><span class='rparen'>)</span>
+  <span class='id hash'>hash</span><span class='comma'>,</span> <span class='id i'>i</span><span class='comma'>,</span> <span class='id len'>len</span> <span class='op'>=</span> <span class='int'>0</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='id id'>id</span><span class='period'>.</span><span class='id length'>length</span>
+  <span class='kw'>while</span> <span class='id i'>i</span> <span class='op'>&lt;</span> <span class='id len'>len</span>
+    <span class='id hash'>hash</span> <span class='op'>=</span> <span class='id hash'>hash</span> <span class='op'>*</span> <span class='int'>31</span> <span class='op'>+</span> <span class='id id'>id</span><span class='lbracket'>[</span><span class='id i'>i</span><span class='rbracket'>]</span>
+    <span class='id i'>i</span> <span class='op'>+=</span> <span class='int'>1</span>
+  <span class='kw'>end</span>
+  <span class='id hash'>hash</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="remove_by_id-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove_by_id</strong>(clazz, id) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+See Sunspot.remove_by_id
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+48
+49
+50
+51
+52</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/session_proxy/id_sharding_session_proxy.rb', line 48</span>
+
+<span class='kw'>def</span> <span class='id remove_by_id'>remove_by_id</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+  <span class='id session_for_index_id'>session_for_index_id</span><span class='lparen'>(</span>
+    <span class='const'>Adapters</span><span class='op'>::</span><span class='const'>InstanceAdapter</span><span class='period'>.</span><span class='id index_id_for'>index_id_for</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+  <span class='rparen'>)</span><span class='period'>.</span><span class='id remove_by_id'>remove_by_id</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="remove_by_id!-instance_method">
+  
+    - (<tt>Object</tt>) <strong>remove_by_id!</strong>(clazz, id) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+See Sunspot.remove_by_id!
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/session_proxy/id_sharding_session_proxy.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id remove_by_id!'>remove_by_id!</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+  <span class='id session_for_index_id'>session_for_index_id</span><span class='lparen'>(</span>
+    <span class='const'>Adapters</span><span class='op'>::</span><span class='const'>InstanceAdapter</span><span class='period'>.</span><span class='id index_id_for'>index_id_for</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+  <span class='rparen'>)</span><span class='period'>.</span><span class='id remove_by_id!'>remove_by_id!</span><span class='lparen'>(</span><span class='id clazz'>clazz</span><span class='comma'>,</span> <span class='id id'>id</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="session_for-instance_method">
+  
+    - (<tt>Object</tt>) <strong>session_for</strong>(object) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Return a session based on the hash of the class and ID, modulo the number
+of shard sessions.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+41
+42
+43</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/session_proxy/id_sharding_session_proxy.rb', line 41</span>
+
+<span class='kw'>def</span> <span class='id session_for'>session_for</span><span class='lparen'>(</span><span class='id object'>object</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='id session_for_index_id'>session_for_index_id</span><span class='lparen'>(</span><span class='const'>Adapters</span><span class='op'>::</span><span class='const'>InstanceAdapter</span><span class='period'>.</span><span class='id adapt'>adapt</span><span class='lparen'>(</span><span class='id object'>object</span><span class='rparen'>)</span><span class='period'>.</span><span class='id index_id'>index_id</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:23 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Sunspot::Rails::Searchable::ActsAsMethods
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../../_index.html">Index (A)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Rails.html" title="Sunspot::Rails (module)">Rails</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Searchable.html" title="Sunspot::Rails::Searchable (module)">Searchable</a></span></span>
+     &raquo; 
+    <span class="title">ActsAsMethods</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Module: Sunspot::Rails::Searchable::ActsAsMethods
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">sunspot_rails/lib/sunspot/rails/searchable.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#searchable-instance_method" title="#searchable (instance method)">- (Object) <strong>searchable</strong>(options = {}, &amp;block) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Makes a class searchable if it is not already, or adds search configuration
+if it is.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#searchable%3F-instance_method" title="#searchable? (instance method)">- (Boolean) <strong>searchable?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+This method is defined on all ActiveRecord::Base subclasses.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="searchable-instance_method">
+  
+    - (<tt>Object</tt>) <strong>searchable</strong>(options = {}, &amp;block) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Makes a class searchable if it is not already, or adds search configuration
+if it is. Note that the options passed in are only used the first time this
+method is called for a particular class; so, search should be defined
+before activating any mixins that extend search configuration.
+</p>
+<p>
+The block passed into this method is evaluated by the
+<tt>Sunspot.setup</tt> method. See the Sunspot documentation for complete
+information on the functionality provided by that method.
+</p>
+<h4>Options (<tt>options</tt>)</h4>
+<table>
+<tr><td valign="top">:auto_index<Boolean></td><td><p>
+Automatically index models in Solr when they are saved. Default: true
+</p>
+</td></tr>
+<tr><td valign="top">:auto_remove<Boolean></td><td><p>
+Automatically remove models from the Solr index when they are destroyed.
+<b>Setting this option to <tt>false</tt> is not recommended </b>(see the
+README).
+</p>
+</td></tr>
+<tr><td valign="top">:if<Mixed></td><td><p>
+Only index models in Solr if the method, proc or string evaluates to true
+(e.g. <tt>:if =&gt; :should_index?</tt> or <tt>:if =&gt; proc { |model|
+model.foo &gt; 2 }</tt>).  Models that do not match the constraint will be
+removed from the index upon save.  Multiple constraints can be specified by
+passing an array (e.g. <tt>:if =&gt; [:method1, :method2]</tt>).
+</p>
+</td></tr>
+<tr><td valign="top">:ignore_attribute_changes_of<Array></td><td><p>
+Define attributes, that should not trigger a reindex of that object. Usual
+suspects are updated_at or counters.
+</p>
+</td></tr>
+<tr><td valign="top">:include<Mixed></td><td><p>
+Define default ActiveRecord includes, set this to allow ActiveRecord to
+load required associations when indexing. See ActiveRecord&#8217;s 
+documentation on eager-loading for examples on how to set this Default: [] 
+</p>
+</td></tr>
+<tr><td valign="top">:unless<Mixed></td><td><p>
+Only index models in Solr if the method, proc or string evaluates to false
+(e.g. <tt>:unless =&gt; :should_not_index?</tt> or <tt> :unless =&gt; proc
+{ |model| model.foo &lt;= 2 }</tt>).  Models that do not match the
+constraint will be removed from the index upon save. Multiple constraints
+can be specified by passing an array (e.g. <tt>:unless =&gt; [:method1,
+:method2]</tt>).
+</p>
+</td></tr>
+</table>
+<h4>Example</h4>
+<pre class="code">
+  <span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+    <span class='id searchable'>searchable</span> <span class='kw'>do</span>
+      <span class='id text'>text</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:body</span>
+      <span class='id string'>string</span> <span class='symbol'>:sort_title</span> <span class='kw'>do</span>
+        <span class='id title'>title</span><span class='period'>.</span><span class='id downcase'>downcase</span><span class='period'>.</span><span class='id sub'>sub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^(an?|the)</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+      <span class='id integer'>integer</span> <span class='symbol'>:blog_id</span>
+      <span class='id time'>time</span> <span class='symbol'>:updated_at</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 75</span>
+
+<span class='kw'>def</span> <span class='id searchable'>searchable</span><span class='lparen'>(</span><span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='const'>Sunspot</span><span class='period'>.</span><span class='id setup'>setup</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+
+  <span class='kw'>if</span> <span class='id searchable?'>searchable?</span>
+    <span class='id sunspot_options'>sunspot_options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id concat'>concat</span><span class='lparen'>(</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>Array</span><span class='lparen'>(</span><span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id extend'>extend</span> <span class='const'>ClassMethods</span>
+    <span class='id include'>include</span> <span class='const'>InstanceMethods</span>
+
+    <span class='id class_attribute'>class_attribute</span> <span class='symbol'>:sunspot_options</span>
+
+    <span class='kw'>unless</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:auto_index</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='kw'>false</span>
+      <span class='id before_save'>before_save</span> <span class='symbol'>:mark_for_auto_indexing_or_removal</span>
+      <span class='id after_save'>after_save</span> <span class='symbol'>:perform_index_tasks</span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>unless</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:auto_remove</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='kw'>false</span>
+      <span class='id after_destroy'>after_destroy</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id searchable'>searchable</span><span class='op'>|</span>
+        <span class='id searchable'>searchable</span><span class='period'>.</span><span class='id remove_from_index'>remove_from_index</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>Util</span><span class='op'>::</span><span class='const'>Array</span><span class='lparen'>(</span><span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:include</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    
+    <span class='kw'>self</span><span class='period'>.</span><span class='id sunspot_options'>sunspot_options</span> <span class='op'>=</span> <span class='id options'>options</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="searchable?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>searchable?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+This method is defined on all ActiveRecord::Base subclasses. It is false
+for classes on which #searchable has not been called, and true for classes
+on which #searchable has been called.
+</p>
+<h4>Returns</h4>
+<p>
+<tt>false</tt>
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+111
+112
+113</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/searchable.rb', line 111</span>
+
+<span class='kw'>def</span> <span class='id searchable?'>searchable?</span>
+  <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:21 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

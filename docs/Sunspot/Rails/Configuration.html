@@ -1,0 +1,1552 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Rails::Configuration
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (C)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Rails.html" title="Sunspot::Rails (module)">Rails</a></span></span>
+     &raquo; 
+    <span class="title">Configuration</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Rails::Configuration
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Rails::Configuration</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot_rails/lib/sunspot/rails/configuration.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+Sunspot::Rails is configured via the config/sunspot.yml file, which
+contains properties keyed by environment name. A sample sunspot.yml file
+would look like:
+</p>
+<pre class="code">
+  development:
+    solr:
+      hostname: localhost
+      port: 8982
+      min_memory: 512M
+      max_memory: 1G
+      solr_jar: /some/path/solr15/start.jar
+      bind_address: 0.0.0.0
+    disabled: false
+  test:
+    solr:
+      hostname: localhost
+      port: 8983
+      log_level: OFF
+  production:
+    solr:
+      hostname: localhost
+      port: 8983
+      path: /solr/myindex
+      log_level: WARNING
+      solr_home: /some/path
+    master_solr:
+      hostname: localhost
+      port: 8982
+      path: /solr
+    auto_commit_after_request: true
+</pre>
+<p>
+Sunspot::Rails uses the configuration to set up the Solr connection, as
+well as for starting Solr with the appropriate port using the <tt>rake
+sunspot:solr:start</tt> task.
+</p>
+<p>
+If the <tt>master_solr</tt> configuration is present, Sunspot will use the
+Solr instance specified here for all write operations, and the Solr
+configured under <tt>solr</tt> for all read operations.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#auto_commit_after_delete_request%3F-instance_method" title="#auto_commit_after_delete_request? (instance method)">- (Boolean) <strong>auto_commit_after_delete_request?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+As for #auto_commit_after_request? but only for deletes Default false.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#auto_commit_after_request%3F-instance_method" title="#auto_commit_after_request? (instance method)">- (Boolean) <strong>auto_commit_after_request?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Should the solr index receive a commit after each http-request.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bind_address-instance_method" title="#bind_address (instance method)">- (Object) <strong>bind_address</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Interface on which to run Solr.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#data_path-instance_method" title="#data_path (instance method)">- (Object) <strong>data_path</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#disabled%3F-instance_method" title="#disabled? (instance method)">- (Boolean) <strong>disabled?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Whether or not to disable Solr.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#has_master%3F-instance_method" title="#has_master? (instance method)">- (Boolean) <strong>has_master?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+True if there is a master Solr instance configured, otherwise false.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#hostname-instance_method" title="#hostname (instance method)">- (Object) <strong>hostname</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The host name at which to connect to Solr.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#log_file-instance_method" title="#log_file (instance method)">- (Object) <strong>log_file</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The log directory for solr logfiles.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#log_level-instance_method" title="#log_level (instance method)">- (Object) <strong>log_level</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The default log_level that should be passed to solr.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#master_hostname-instance_method" title="#master_hostname (instance method)">- (Object) <strong>master_hostname</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The host name at which to connect to the master Solr instance.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#master_path-instance_method" title="#master_path (instance method)">- (Object) <strong>master_path</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The path to the master Solr servlet (useful if you are running multicore).
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#master_port-instance_method" title="#master_port (instance method)">- (Object) <strong>master_port</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The port at which to connect to the master Solr instance.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#max_memory-instance_method" title="#max_memory (instance method)">- (Object) <strong>max_memory</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Maximum java heap size for Solr instance.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#min_memory-instance_method" title="#min_memory (instance method)">- (Object) <strong>min_memory</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Minimum java heap size for Solr instance.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#path-instance_method" title="#path (instance method)">- (Object) <strong>path</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The url path to the Solr servlet (useful if you are running multicore).
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pid_dir-instance_method" title="#pid_dir (instance method)">- (Object) <strong>pid_dir</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#port-instance_method" title="#port (instance method)">- (Object) <strong>port</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The port at which to connect to Solr.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_home-instance_method" title="#solr_home (instance method)">- (Object) <strong>solr_home</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The solr home directory.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_jar-instance_method" title="#solr_jar (instance method)">- (Object) <strong>solr_jar</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Solr start jar.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="auto_commit_after_delete_request?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>auto_commit_after_delete_request?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+As for #auto_commit_after_request? but only for deletes Default false
+</p>
+<h4>Returns</h4>
+<p>
+Boolean: auto_commit_after_delete_request?
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+179
+180
+181
+182</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 179</span>
+
+<span class='kw'>def</span> <span class='id auto_commit_after_delete_request?'>auto_commit_after_delete_request?</span>
+  <span class='ivar'>@auto_commit_after_delete_request</span> <span class='op'>||=</span> 
+    <span class='lparen'>(</span><span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>auto_commit_after_delete_request</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='kw'>false</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="auto_commit_after_request?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>auto_commit_after_request?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Should the solr index receive a commit after each http-request. Default
+true
+</p>
+<h4>Returns</h4>
+<p>
+Boolean: auto_commit_after_request?
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+166
+167
+168
+169</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 166</span>
+
+<span class='kw'>def</span> <span class='id auto_commit_after_request?'>auto_commit_after_request?</span>
+  <span class='ivar'>@auto_commit_after_request</span> <span class='op'>||=</span> 
+    <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>auto_commit_after_request</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>!=</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="bind_address-instance_method">
+  
+    - (<tt>Object</tt>) <strong>bind_address</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Interface on which to run Solr
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+247
+248
+249</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 247</span>
+
+<span class='kw'>def</span> <span class='id bind_address'>bind_address</span>
+  <span class='ivar'>@bind_address</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>bind_address</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="data_path-instance_method">
+  
+    - (<tt>Object</tt>) <strong>data_path</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+196
+197
+198</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 196</span>
+
+<span class='kw'>def</span> <span class='id data_path'>data_path</span>
+  <span class='ivar'>@data_path</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>data_path</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='const'>File</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Rails</span><span class='period'>.</span><span class='id root'>root</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>data</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='op'>::</span><span class='const'>Rails</span><span class='period'>.</span><span class='id env'>env</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="disabled?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>disabled?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Whether or not to disable Solr. Defaults to false.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+255
+256
+257</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 255</span>
+
+<span class='kw'>def</span> <span class='id disabled?'>disabled?</span>
+  <span class='ivar'>@disabled</span> <span class='op'>||=</span> <span class='lparen'>(</span><span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>disabled</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='kw'>false</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="has_master?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>has_master?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+True if there is a master Solr instance configured, otherwise false.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean</td><td><p>
+bool
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+141
+142
+143</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 141</span>
+
+<span class='kw'>def</span> <span class='id has_master?'>has_master?</span>
+  <span class='ivar'>@has_master</span> <span class='op'>=</span> <span class='op'>!</span><span class='op'>!</span><span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>master_solr</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="hostname-instance_method">
+  
+    - (<tt>Object</tt>) <strong>hostname</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The host name at which to connect to Solr. Default &#8216;localhost&#8217;.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+host name
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+54
+55
+56
+57
+58
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 54</span>
+
+<span class='kw'>def</span> <span class='id hostname'>hostname</span>
+  <span class='kw'>unless</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='ivar'>@hostname</span><span class='rparen'>)</span>
+    <span class='ivar'>@hostname</span>   <span class='op'>=</span> <span class='id solr_url'>solr_url</span><span class='period'>.</span><span class='id host'>host</span> <span class='kw'>if</span> <span class='id solr_url'>solr_url</span>
+    <span class='ivar'>@hostname</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>hostname</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+    <span class='ivar'>@hostname</span> <span class='op'>||=</span> <span class='id default_hostname'>default_hostname</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@hostname</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="log_file-instance_method">
+  
+    - (<tt>Object</tt>) <strong>log_file</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The log directory for solr logfiles
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+log_dir
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+192
+193
+194</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 192</span>
+
+<span class='kw'>def</span> <span class='id log_file'>log_file</span>
+  <span class='ivar'>@log_file</span> <span class='op'>||=</span> <span class='lparen'>(</span><span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>log_file</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id default_log_file_location'>default_log_file_location</span> <span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="log_level-instance_method">
+  
+    - (<tt>Object</tt>) <strong>log_level</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The default log_level that should be passed to solr. You can change the
+individual log_levels in the solr admin interface. Default
+&#8216;INFO&#8217;.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+log_level
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+154
+155
+156</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 154</span>
+
+<span class='kw'>def</span> <span class='id log_level'>log_level</span>
+  <span class='ivar'>@log_level</span> <span class='op'>||=</span> <span class='lparen'>(</span><span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>log_level</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>INFO</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="master_hostname-instance_method">
+  
+    - (<tt>Object</tt>) <strong>master_hostname</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The host name at which to connect to the master Solr instance. Defaults to
+the &#8216;hostname&#8217; configuration option.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+host name
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+106
+107
+108</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 106</span>
+
+<span class='kw'>def</span> <span class='id master_hostname'>master_hostname</span>
+  <span class='ivar'>@master_hostname</span> <span class='op'>||=</span> <span class='lparen'>(</span><span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>master_solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>hostname</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id hostname'>hostname</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="master_path-instance_method">
+  
+    - (<tt>Object</tt>) <strong>master_path</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The path to the master Solr servlet (useful if you are running multicore).
+Defaults to the value of the &#8216;path&#8217; configuration option.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+path
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+130
+131
+132</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 130</span>
+
+<span class='kw'>def</span> <span class='id master_path'>master_path</span>
+  <span class='ivar'>@master_path</span> <span class='op'>||=</span> <span class='lparen'>(</span><span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>master_solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>path</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id path'>path</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="master_port-instance_method">
+  
+    - (<tt>Object</tt>) <strong>master_port</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The port at which to connect to the master Solr instance. Defaults to the
+&#8216;port&#8217; configuration option.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Integer</td><td><p>
+port
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+118
+119
+120</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 118</span>
+
+<span class='kw'>def</span> <span class='id master_port'>master_port</span>
+  <span class='ivar'>@master_port</span> <span class='op'>||=</span> <span class='lparen'>(</span><span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>master_solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>port</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id port'>port</span><span class='rparen'>)</span><span class='period'>.</span><span class='id to_i'>to_i</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="max_memory-instance_method">
+  
+    - (<tt>Object</tt>) <strong>max_memory</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Maximum java heap size for Solr instance
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+240
+241
+242</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 240</span>
+
+<span class='kw'>def</span> <span class='id max_memory'>max_memory</span>
+  <span class='ivar'>@max_memory</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>max_memory</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="min_memory-instance_method">
+  
+    - (<tt>Object</tt>) <strong>min_memory</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Minimum java heap size for Solr instance
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+233
+234
+235</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 233</span>
+
+<span class='kw'>def</span> <span class='id min_memory'>min_memory</span>
+  <span class='ivar'>@min_memory</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>min_memory</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="path-instance_method">
+  
+    - (<tt>Object</tt>) <strong>path</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The url path to the Solr servlet (useful if you are running multicore).
+Default &#8217;/solr&#8217;.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+path
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+89
+90
+91
+92
+93
+94
+95
+96</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 89</span>
+
+<span class='kw'>def</span> <span class='id path'>path</span>
+  <span class='kw'>unless</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='ivar'>@path</span><span class='rparen'>)</span>
+    <span class='ivar'>@path</span>   <span class='op'>=</span> <span class='id solr_url'>solr_url</span><span class='period'>.</span><span class='id path'>path</span> <span class='kw'>if</span> <span class='id solr_url'>solr_url</span>
+    <span class='ivar'>@path</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>path</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+    <span class='ivar'>@path</span> <span class='op'>||=</span> <span class='id default_path'>default_path</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@path</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="pid_dir-instance_method">
+  
+    - (<tt>Object</tt>) <strong>pid_dir</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+200
+201
+202</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 200</span>
+
+<span class='kw'>def</span> <span class='id pid_dir'>pid_dir</span>
+  <span class='ivar'>@pid_dir</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>pid_dir</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='const'>File</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Rails</span><span class='period'>.</span><span class='id root'>root</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>pids</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='op'>::</span><span class='const'>Rails</span><span class='period'>.</span><span class='id env'>env</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="port-instance_method">
+  
+    - (<tt>Object</tt>) <strong>port</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The port at which to connect to Solr. Defaults to 8981 in test, 8982 in
+development and 8983 in production.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Integer</td><td><p>
+port
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+71
+72
+73
+74
+75
+76
+77
+78
+79</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 71</span>
+
+<span class='kw'>def</span> <span class='id port'>port</span>
+  <span class='kw'>unless</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='ivar'>@port</span><span class='rparen'>)</span>
+    <span class='ivar'>@port</span>   <span class='op'>=</span> <span class='id solr_url'>solr_url</span><span class='period'>.</span><span class='id port'>port</span> <span class='kw'>if</span> <span class='id solr_url'>solr_url</span>
+    <span class='ivar'>@port</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>port</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+    <span class='ivar'>@port</span> <span class='op'>||=</span> <span class='id default_port'>default_port</span>
+    <span class='ivar'>@port</span>   <span class='op'>=</span> <span class='ivar'>@port</span><span class='period'>.</span><span class='id to_i'>to_i</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@port</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_home-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_home</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The solr home directory. Sunspot::Rails expects this directory to contain a
+config, data and pids directory. See  Sunspot::Rails::Server.bootstrap for
+more information.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">String</td><td><p>
+solr_home
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+214
+215
+216
+217
+218
+219
+220
+221</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 214</span>
+
+<span class='kw'>def</span> <span class='id solr_home'>solr_home</span>
+  <span class='ivar'>@solr_home</span> <span class='op'>||=</span>
+    <span class='kw'>if</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr_home</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+      <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr_home</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='const'>File</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>Rails</span><span class='period'>.</span><span class='id root'>root</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="solr_jar-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_jar</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Solr start jar
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+226
+227
+228</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_rails/lib/sunspot/rails/configuration.rb', line 226</span>
+
+<span class='kw'>def</span> <span class='id solr_jar'>solr_jar</span>
+  <span class='ivar'>@solr_jar</span> <span class='op'>||=</span> <span class='id user_configuration_from_key'>user_configuration_from_key</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr_jar</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:22 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

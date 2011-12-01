@@ -1,0 +1,418 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Query::StandardQuery
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Query.html" title="Sunspot::Query (module)">Query</a></span></span>
+     &raquo; 
+    <span class="title">StandardQuery</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Query::StandardQuery
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName"><span class='object_link'><a href="CommonQuery.html" title="Sunspot::Query::CommonQuery (class)">CommonQuery</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="CommonQuery.html" title="Sunspot::Query::CommonQuery (class)">CommonQuery</a></span></li>
+          
+            <li class="next">Sunspot::Query::StandardQuery</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/query/standard_query.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+
+  
+  
+  
+  
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fulltext-instance_method" title="#fulltext (instance method)">- (Object) <strong>fulltext</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute fulltext.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#scope-instance_method" title="#scope (instance method)">- (Object) <strong>scope</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute scope.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_fulltext-instance_method" title="#add_fulltext (instance method)">- (Object) <strong>add_fulltext</strong>(keywords) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (StandardQuery) <strong>initialize</strong>(types) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of StandardQuery.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="CommonQuery.html" title="Sunspot::Query::CommonQuery (class)">CommonQuery</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="CommonQuery.html#%5B%5D-instance_method" title="Sunspot::Query::CommonQuery#[] (method)">#[]</a></span>, <span class='object_link'><a href="CommonQuery.html#add_field_facet-instance_method" title="Sunspot::Query::CommonQuery#add_field_facet (method)">#add_field_facet</a></span>, <span class='object_link'><a href="CommonQuery.html#add_function-instance_method" title="Sunspot::Query::CommonQuery#add_function (method)">#add_function</a></span>, <span class='object_link'><a href="CommonQuery.html#add_query_facet-instance_method" title="Sunspot::Query::CommonQuery#add_query_facet (method)">#add_query_facet</a></span>, <span class='object_link'><a href="CommonQuery.html#add_sort-instance_method" title="Sunspot::Query::CommonQuery#add_sort (method)">#add_sort</a></span>, <span class='object_link'><a href="CommonQuery.html#page-instance_method" title="Sunspot::Query::CommonQuery#page (method)">#page</a></span>, <span class='object_link'><a href="CommonQuery.html#paginate-instance_method" title="Sunspot::Query::CommonQuery#paginate (method)">#paginate</a></span>, <span class='object_link'><a href="CommonQuery.html#per_page-instance_method" title="Sunspot::Query::CommonQuery#per_page (method)">#per_page</a></span>, <span class='object_link'><a href="CommonQuery.html#solr_parameter_adjustment%3D-instance_method" title="Sunspot::Query::CommonQuery#solr_parameter_adjustment= (method)">#solr_parameter_adjustment=</a></span>, <span class='object_link'><a href="CommonQuery.html#to_params-instance_method" title="Sunspot::Query::CommonQuery#to_params (method)">#to_params</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Query::StandardQuery (class)">StandardQuery</a></span></tt>) <strong>initialize</strong>(types) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of StandardQuery
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+6
+7
+8
+9</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/standard_query.rb', line 6</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id types'>types</span><span class='rparen'>)</span>
+  <span class='kw'>super</span>
+  <span class='ivar'>@components</span> <span class='op'>&lt;&lt;</span> <span class='ivar'>@fulltext</span> <span class='op'>=</span> <span class='const'>CompositeFulltext</span><span class='period'>.</span><span class='id new'>new</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="fulltext=-instance_method"></span>
+      <span id="fulltext-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="fulltext-instance_method">
+  
+    - (<tt>Object</tt>) <strong>fulltext</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute fulltext
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+4
+5
+6</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/standard_query.rb', line 4</span>
+
+<span class='kw'>def</span> <span class='id fulltext'>fulltext</span>
+  <span class='ivar'>@fulltext</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="scope=-instance_method"></span>
+      <span id="scope-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="scope-instance_method">
+  
+    - (<tt>Object</tt>) <strong>scope</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute scope
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+4
+5
+6</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/standard_query.rb', line 4</span>
+
+<span class='kw'>def</span> <span class='id scope'>scope</span>
+  <span class='ivar'>@scope</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="add_fulltext-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add_fulltext</strong>(keywords) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+11
+12
+13</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/query/standard_query.rb', line 11</span>
+
+<span class='kw'>def</span> <span class='id add_fulltext'>add_fulltext</span><span class='lparen'>(</span><span class='id keywords'>keywords</span><span class='rparen'>)</span>
+  <span class='ivar'>@fulltext</span><span class='period'>.</span><span class='id add'>add</span><span class='lparen'>(</span><span class='id keywords'>keywords</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:21 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

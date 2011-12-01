@@ -1,0 +1,1597 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Solr::Server
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Solr.html" title="Sunspot::Solr (module)">Solr</a></span></span>
+     &raquo; 
+    <span class="title">Server</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Solr::Server
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sunspot::Solr::Server</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot_solr/lib/sunspot/solr/server.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="../Rails/Server.html" title="Sunspot::Rails::Server (class)">Rails::Server</a></span></p>
+</div>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="ServerError-constant" class="">ServerError =
+          <div class="docstring">
+  <div class="discussion">
+    <p>
+Raised if #stop is called but the server is not running
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>Class</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='const'>RuntimeError</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="AlreadyRunningError-constant" class="">AlreadyRunningError =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Class</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='const'>ServerError</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="NotRunningError-constant" class="">NotRunningError =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Class</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='const'>ServerError</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="JavaMissing-constant" class="">JavaMissing =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Class</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='const'>ServerError</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="SOLR_START_JAR-constant" class="">SOLR_START_JAR =
+          <div class="docstring">
+  <div class="discussion">
+    <p>
+Name of the sunspot executable (shell script)
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>File</span><span class='period'>.</span><span class='id expand_path'>expand_path</span><span class='lparen'>(</span>
+  <span class='const'>File</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id dirname'>dirname</span><span class='lparen'>(</span><span class='kw'>__FILE__</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>..</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>..</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>..</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>start.jar</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='rparen'>)</span></pre></dd>
+      
+        <dt id="LOG_LEVELS-constant" class="">LOG_LEVELS =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Set</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>SEVERE</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>WARNING</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>INFO</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>CONFIG</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>FINE</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>FINER</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>FINEST</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span></pre></dd>
+      
+    </dl>
+  
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bind_address-instance_method" title="#bind_address (instance method)">- (Object) <strong>bind_address</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute bind_address.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#log_file-instance_method" title="#log_file (instance method)">- (Object) <strong>log_file</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute log_file.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#log_level-instance_method" title="#log_level (instance method)">- (Object) <strong>log_level</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#max_memory-instance_method" title="#max_memory (instance method)">- (Object) <strong>max_memory</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute max_memory.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#min_memory-instance_method" title="#min_memory (instance method)">- (Object) <strong>min_memory</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute min_memory.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pid_dir-instance_method" title="#pid_dir (instance method)">- (Object) <strong>pid_dir</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pid_file-instance_method" title="#pid_file (instance method)">- (Object) <strong>pid_file</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#port-instance_method" title="#port (instance method)">- (Object) <strong>port</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute port.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_data_dir-instance_method" title="#solr_data_dir (instance method)">- (Object) <strong>solr_data_dir</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute solr_data_dir.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_home-instance_method" title="#solr_home (instance method)">- (Object) <strong>solr_home</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute solr_home.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#solr_jar-instance_method" title="#solr_jar (instance method)">- (Object) <strong>solr_jar</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bootstrap-instance_method" title="#bootstrap (instance method)">- (Object) <strong>bootstrap</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Bootstrap a new solr_home by creating all required directories.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#create_solr_directories-instance_method" title="#create_solr_directories (instance method)">- (Object) <strong>create_solr_directories</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Create new solr_home, config, log and pid directories.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Server) <strong>initialize</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of Server.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#install_solr_home-instance_method" title="#install_solr_home (instance method)">- (Object) <strong>install_solr_home</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Copy default solr configuration files from sunspot gem to the new
+solr_home/config directory.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pid_path-instance_method" title="#pid_path (instance method)">- (Object) <strong>pid_path</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#run-instance_method" title="#run (instance method)">- (Object) <strong>run</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Run the sunspot-solr server in the foreground.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#start-instance_method" title="#start (instance method)">- (Object) <strong>start</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Start the sunspot-solr server.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#stop-instance_method" title="#stop (instance method)">- (Object) <strong>stop</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Stop the sunspot-solr server.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Solr::Server (class)">Server</a></span></tt>) <strong>initialize</strong>(*args) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of Server
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 26</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
+  <span class='id ensure_java_installed'>ensure_java_installed</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="bind_address=-instance_method"></span>
+      <span id="bind_address-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="bind_address-instance_method">
+  
+    - (<tt>Object</tt>) <strong>bind_address</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute bind_address
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id bind_address'>bind_address</span>
+  <span class='ivar'>@bind_address</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="log_file=-instance_method"></span>
+      <span id="log_file-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="log_file-instance_method">
+  
+    - (<tt>Object</tt>) <strong>log_file</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute log_file
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id log_file'>log_file</span>
+  <span class='ivar'>@log_file</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="log_level=-instance_method"></span>
+      <span id="log_level-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="log_level-instance_method">
+  
+    - (<tt>Object</tt>) <strong>log_level</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+137
+138
+139</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 137</span>
+
+<span class='kw'>def</span> <span class='id log_level'>log_level</span>
+  <span class='ivar'>@log_level</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>WARNING</span><span class='tstring_end'>'</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="max_memory=-instance_method"></span>
+      <span id="max_memory-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="max_memory-instance_method">
+  
+    - (<tt>Object</tt>) <strong>max_memory</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute max_memory
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id max_memory'>max_memory</span>
+  <span class='ivar'>@max_memory</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="min_memory=-instance_method"></span>
+      <span id="min_memory-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="min_memory-instance_method">
+  
+    - (<tt>Object</tt>) <strong>min_memory</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute min_memory
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id min_memory'>min_memory</span>
+  <span class='ivar'>@min_memory</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="pid_dir=-instance_method"></span>
+      <span id="pid_dir-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="pid_dir-instance_method">
+  
+    - (<tt>Object</tt>) <strong>pid_dir</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+149
+150
+151</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 149</span>
+
+<span class='kw'>def</span> <span class='id pid_dir'>pid_dir</span>
+  <span class='const'>File</span><span class='period'>.</span><span class='id expand_path'>expand_path</span><span class='lparen'>(</span><span class='ivar'>@pid_dir</span> <span class='op'>||</span> <span class='const'>FileUtils</span><span class='period'>.</span><span class='id pwd'>pwd</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="pid_file=-instance_method"></span>
+      <span id="pid_file-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="pid_file-instance_method">
+  
+    - (<tt>Object</tt>) <strong>pid_file</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+145
+146
+147</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 145</span>
+
+<span class='kw'>def</span> <span class='id pid_file'>pid_file</span>
+  <span class='ivar'>@pid_file</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>sunspot-solr.pid</span><span class='tstring_end'>'</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="port=-instance_method"></span>
+      <span id="port-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="port-instance_method">
+  
+    - (<tt>Object</tt>) <strong>port</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute port
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id port'>port</span>
+  <span class='ivar'>@port</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="solr_data_dir=-instance_method"></span>
+      <span id="solr_data_dir-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="solr_data_dir-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_data_dir</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute solr_data_dir
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id solr_data_dir'>solr_data_dir</span>
+  <span class='const'>File</span><span class='period'>.</span><span class='id expand_path'>expand_path</span><span class='lparen'>(</span><span class='ivar'>@solr_data_dir</span> <span class='op'>||</span> <span class='const'>Dir</span><span class='period'>.</span><span class='id tmpdir'>tmpdir</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="solr_home=-instance_method"></span>
+      <span id="solr_home-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="solr_home-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_home</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute solr_home
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id solr_home'>solr_home</span>
+  <span class='const'>File</span><span class='period'>.</span><span class='id expand_path'>expand_path</span><span class='lparen'>(</span><span class='ivar'>@solr_home</span> <span class='op'>||</span> <span class='const'>File</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id dirname'>dirname</span><span class='lparen'>(</span><span class='id solr_jar'>solr_jar</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>solr</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="solr_jar=-instance_method"></span>
+      <span id="solr_jar-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="solr_jar-instance_method">
+  
+    - (<tt>Object</tt>) <strong>solr_jar</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+161
+162
+163</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 161</span>
+
+<span class='kw'>def</span> <span class='id solr_jar'>solr_jar</span>
+  <span class='ivar'>@solr_jar</span> <span class='op'>||</span> <span class='const'>SOLR_START_JAR</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="bootstrap-instance_method">
+  
+    - (<tt>Object</tt>) <strong>bootstrap</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Bootstrap a new solr_home by creating all required directories. 
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean</td><td><p>
+success
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+39
+40
+41
+42
+43
+44
+45</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 39</span>
+
+<span class='kw'>def</span> <span class='id bootstrap'>bootstrap</span>
+  <span class='kw'>unless</span> <span class='ivar'>@bootstrapped</span>
+    <span class='id install_solr_home'>install_solr_home</span>
+    <span class='id create_solr_directories'>create_solr_directories</span>
+    <span class='ivar'>@bootstrapped</span> <span class='op'>=</span> <span class='kw'>true</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="create_solr_directories-instance_method">
+  
+    - (<tt>Object</tt>) <strong>create_solr_directories</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Create new solr_home, config, log and pid directories
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean</td><td><p>
+success
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+190
+191
+192
+193
+194</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 190</span>
+
+<span class='kw'>def</span> <span class='id create_solr_directories'>create_solr_directories</span>
+  <span class='lbracket'>[</span><span class='id solr_data_dir'>solr_data_dir</span><span class='comma'>,</span> <span class='id pid_dir'>pid_dir</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id path'>path</span><span class='op'>|</span>
+    <span class='const'>FileUtils</span><span class='period'>.</span><span class='id mkdir_p'>mkdir_p</span><span class='lparen'>(</span><span class='id path'>path</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='const'>File</span><span class='period'>.</span><span class='id exists?'>exists?</span><span class='lparen'>(</span><span class='id path'>path</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="install_solr_home-instance_method">
+  
+    - (<tt>Object</tt>) <strong>install_solr_home</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Copy default solr configuration files from sunspot gem to the new
+solr_home/config directory
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean</td><td><p>
+success
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+173
+174
+175
+176
+177
+178
+179
+180
+181</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 173</span>
+
+<span class='kw'>def</span> <span class='id install_solr_home'>install_solr_home</span>
+  <span class='kw'>unless</span> <span class='const'>File</span><span class='period'>.</span><span class='id exists?'>exists?</span><span class='lparen'>(</span><span class='id solr_home'>solr_home</span><span class='rparen'>)</span>
+    <span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Solr</span><span class='op'>::</span><span class='const'>Installer</span><span class='period'>.</span><span class='id execute'>execute</span><span class='lparen'>(</span>
+      <span class='id solr_home'>solr_home</span><span class='comma'>,</span>
+      <span class='symbol'>:force</span> <span class='op'>=&gt;</span> <span class='kw'>true</span><span class='comma'>,</span>
+      <span class='symbol'>:verbose</span> <span class='op'>=&gt;</span> <span class='kw'>true</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="pid_path-instance_method">
+  
+    - (<tt>Object</tt>) <strong>pid_path</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+141
+142
+143</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 141</span>
+
+<span class='kw'>def</span> <span class='id pid_path'>pid_path</span>
+  <span class='const'>File</span><span class='period'>.</span><span class='id join'>join</span><span class='lparen'>(</span><span class='id pid_dir'>pid_dir</span><span class='comma'>,</span> <span class='id pid_file'>pid_file</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="run-instance_method">
+  
+    - (<tt>Object</tt>) <strong>run</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Run the sunspot-solr server in the foreground. Boostrap solr_home first, if
+neccessary.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean</td><td><p>
+success
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 91</span>
+
+<span class='kw'>def</span> <span class='id run'>run</span>
+  <span class='id bootstrap'>bootstrap</span>
+
+  <span class='id command'>command</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>java</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>
+  <span class='id command'>command</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-Xms</span><span class='embexpr_beg'>#{</span><span class='id min_memory'>min_memory</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id min_memory'>min_memory</span>
+  <span class='id command'>command</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-Xmx</span><span class='embexpr_beg'>#{</span><span class='id max_memory'>max_memory</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id max_memory'>max_memory</span>
+  <span class='id command'>command</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-Djetty.port=</span><span class='embexpr_beg'>#{</span><span class='id port'>port</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id port'>port</span>
+  <span class='id command'>command</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-Djetty.host=</span><span class='embexpr_beg'>#{</span><span class='id bind_address'>bind_address</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id bind_address'>bind_address</span>
+  <span class='id command'>command</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-Dsolr.data.dir=</span><span class='embexpr_beg'>#{</span><span class='id solr_data_dir'>solr_data_dir</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id solr_data_dir'>solr_data_dir</span>
+  <span class='id command'>command</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-Dsolr.solr.home=</span><span class='embexpr_beg'>#{</span><span class='id solr_home'>solr_home</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id solr_home'>solr_home</span>
+  <span class='id command'>command</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-Djava.util.logging.config.file=</span><span class='embexpr_beg'>#{</span><span class='id logging_config_path'>logging_config_path</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id logging_config_path'>logging_config_path</span>
+  <span class='id command'>command</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>-jar</span><span class='tstring_end'>'</span></span> <span class='op'>&lt;&lt;</span> <span class='const'>File</span><span class='period'>.</span><span class='id basename'>basename</span><span class='lparen'>(</span><span class='id solr_jar'>solr_jar</span><span class='rparen'>)</span>
+  <span class='const'>FileUtils</span><span class='period'>.</span><span class='id cd'>cd</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id dirname'>dirname</span><span class='lparen'>(</span><span class='id solr_jar'>solr_jar</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='id exec'>exec</span><span class='lparen'>(</span><span class='const'>Escape</span><span class='period'>.</span><span class='id shell_command'>shell_command</span><span class='lparen'>(</span><span class='id command'>command</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="start-instance_method">
+  
+    - (<tt>Object</tt>) <strong>start</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Start the sunspot-solr server. Bootstrap solr_home first, if neccessary.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean</td><td><p>
+success
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='id start'>start</span>
+  <span class='id bootstrap'>bootstrap</span>
+
+  <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id exist?'>exist?</span><span class='lparen'>(</span><span class='id pid_path'>pid_path</span><span class='rparen'>)</span>
+    <span class='id existing_pid'>existing_pid</span> <span class='op'>=</span> <span class='const'>IO</span><span class='period'>.</span><span class='id read'>read</span><span class='lparen'>(</span><span class='id pid_path'>pid_path</span><span class='rparen'>)</span><span class='period'>.</span><span class='id to_i'>to_i</span>
+    <span class='kw'>begin</span>
+      <span class='const'>Process</span><span class='period'>.</span><span class='id kill'>kill</span><span class='lparen'>(</span><span class='int'>0</span><span class='comma'>,</span> <span class='id existing_pid'>existing_pid</span><span class='rparen'>)</span>
+      <span class='id raise'>raise</span><span class='lparen'>(</span><span class='const'>AlreadyRunningError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Server is already running with PID </span><span class='embexpr_beg'>#{</span><span class='id existing_pid'>existing_pid</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>rescue</span> <span class='const'>Errno</span><span class='op'>::</span><span class='const'>ESRCH</span>
+      <span class='const'>STDERR</span><span class='period'>.</span><span class='id puts'>puts</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Removing stale PID file at </span><span class='embexpr_beg'>#{</span><span class='id pid_path'>pid_path</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='const'>FileUtils</span><span class='period'>.</span><span class='id rm'>rm</span><span class='lparen'>(</span><span class='id pid_path'>pid_path</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id fork'>fork</span> <span class='kw'>do</span>
+    <span class='id pid'>pid</span> <span class='op'>=</span> <span class='id fork'>fork</span> <span class='kw'>do</span>
+      <span class='const'>Process</span><span class='period'>.</span><span class='id setsid'>setsid</span>
+      <span class='const'>STDIN</span><span class='period'>.</span><span class='id reopen'>reopen</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>/dev/null</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+      <span class='const'>STDOUT</span><span class='period'>.</span><span class='id reopen'>reopen</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>/dev/null</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>a</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+      <span class='const'>STDERR</span><span class='period'>.</span><span class='id reopen'>reopen</span><span class='lparen'>(</span><span class='const'>STDOUT</span><span class='rparen'>)</span>
+      <span class='id run'>run</span>
+    <span class='kw'>end</span>
+    <span class='const'>FileUtils</span><span class='period'>.</span><span class='id mkdir_p'>mkdir_p</span><span class='lparen'>(</span><span class='id pid_dir'>pid_dir</span><span class='rparen'>)</span>
+    <span class='const'>File</span><span class='period'>.</span><span class='id open'>open</span><span class='lparen'>(</span><span class='id pid_path'>pid_path</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>w</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id file'>file</span><span class='op'>|</span>
+      <span class='id file'>file</span> <span class='op'>&lt;&lt;</span> <span class='id pid'>pid</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="stop-instance_method">
+  
+    - (<tt>Object</tt>) <strong>stop</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Stop the sunspot-solr server.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean</td><td><p>
+success
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot_solr/lib/sunspot/solr/server.rb', line 115</span>
+
+<span class='kw'>def</span> <span class='id stop'>stop</span>
+  <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id exist?'>exist?</span><span class='lparen'>(</span><span class='id pid_path'>pid_path</span><span class='rparen'>)</span>
+    <span class='id pid'>pid</span> <span class='op'>=</span> <span class='const'>IO</span><span class='period'>.</span><span class='id read'>read</span><span class='lparen'>(</span><span class='id pid_path'>pid_path</span><span class='rparen'>)</span><span class='period'>.</span><span class='id to_i'>to_i</span>
+    <span class='kw'>begin</span>
+      <span class='const'>Process</span><span class='period'>.</span><span class='id kill'>kill</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>TERM</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='id pid'>pid</span><span class='rparen'>)</span>
+    <span class='kw'>rescue</span> <span class='const'>Errno</span><span class='op'>::</span><span class='const'>ESRCH</span>
+      <span class='id raise'>raise</span> <span class='const'>NotRunningError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Process with PID </span><span class='embexpr_beg'>#{</span><span class='id pid'>pid</span><span class='rbrace'>}</span><span class='tstring_content'> is no longer running</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>ensure</span>
+      <span class='const'>FileUtils</span><span class='period'>.</span><span class='id rm'>rm</span><span class='lparen'>(</span><span class='id pid_path'>pid_path</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>else</span>
+    <span class='id raise'>raise</span> <span class='const'>NotRunningError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No PID file at </span><span class='embexpr_beg'>#{</span><span class='id pid_path'>pid_path</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:20 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

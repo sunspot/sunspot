@@ -1,0 +1,492 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sunspot::Search::FieldFacet
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (F)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Sunspot.html" title="Sunspot (module)">Sunspot</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Search.html" title="Sunspot::Search (module)">Search</a></span></span>
+     &raquo; 
+    <span class="title">FieldFacet</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Sunspot::Search::FieldFacet
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName"><span class='object_link'><a href="QueryFacet.html" title="Sunspot::Search::QueryFacet (class)">QueryFacet</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="QueryFacet.html" title="Sunspot::Search::QueryFacet (class)">QueryFacet</a></span></li>
+          
+            <li class="next">Sunspot::Search::FieldFacet</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">sunspot/lib/sunspot/search/field_facet.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+A FieldFacet is a facet whose rows are all values for a certain field, in
+contrast to a QueryFacet, whose rows represent arbitrary queries.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+  
+  
+  
+  
+
+
+  
+  
+  
+  <h2>Instance Attribute Summary</h2>
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="QueryFacet.html" title="Sunspot::Search::QueryFacet (class)">QueryFacet</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="QueryFacet.html#name-instance_method" title="Sunspot::Search::QueryFacet#name (method)">name</a></span></p>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#field_name-instance_method" title="#field_name (instance method)">- (Object) <strong>field_name</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (FieldFacet) <strong>initialize</strong>(field, search, options) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+:nodoc:.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#populate_instances-instance_method" title="#populate_instances (instance method)">- (Object) <strong>populate_instances</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+If this facet references a model class, populate the rows with instances of
+the model class by loading them out of the appropriate adapter.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#rows-instance_method" title="#rows (instance method)">- (Object) <strong>rows</strong>(options = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Get the rows returned for this facet.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="QueryFacet.html" title="Sunspot::Search::QueryFacet (class)">QueryFacet</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="QueryFacet.html#add_row-instance_method" title="Sunspot::Search::QueryFacet#add_row (method)">#add_row</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Sunspot::Search::FieldFacet (class)">FieldFacet</a></span></tt>) <strong>initialize</strong>(field, search, options) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+:nodoc:
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+8
+9
+10
+11</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/field_facet.rb', line 8</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id field'>field</span><span class='comma'>,</span> <span class='id search'>search</span><span class='comma'>,</span> <span class='id options'>options</span><span class='rparen'>)</span> <span class='comment'>#:nodoc:
+</span>  <span class='kw'>super</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id field'>field</span><span class='period'>.</span><span class='id name'>name</span><span class='rparen'>)</span><span class='period'>.</span><span class='id to_sym'>to_sym</span><span class='comma'>,</span> <span class='id search'>search</span><span class='comma'>,</span> <span class='id options'>options</span><span class='rparen'>)</span>
+  <span class='ivar'>@field</span> <span class='op'>=</span> <span class='id field'>field</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="field_name-instance_method">
+  
+    - (<tt>Object</tt>) <strong>field_name</strong> 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14
+15</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/field_facet.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='id field_name'>field_name</span>
+  <span class='ivar'>@field</span><span class='period'>.</span><span class='id name'>name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="populate_instances-instance_method">
+  
+    - (<tt>Object</tt>) <strong>populate_instances</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+If this facet references a model class, populate the rows with instances of
+the model class by loading them out of the appropriate adapter.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/field_facet.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id populate_instances'>populate_instances</span> <span class='comment'>#:nodoc:
+</span>  <span class='kw'>if</span> <span class='id reference'>reference</span> <span class='op'>=</span> <span class='ivar'>@field</span><span class='period'>.</span><span class='id reference'>reference</span>
+    <span class='id values_hash'>values_hash</span> <span class='op'>=</span> <span class='id rows'>rows</span><span class='period'>.</span><span class='id inject'>inject</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id hash'>hash</span><span class='comma'>,</span> <span class='id row'>row</span><span class='op'>|</span>
+      <span class='id hash'>hash</span><span class='lbracket'>[</span><span class='id row'>row</span><span class='period'>.</span><span class='id value'>value</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id row'>row</span>
+      <span class='id hash'>hash</span>
+    <span class='kw'>end</span>
+    <span class='id instances'>instances</span> <span class='op'>=</span> <span class='const'>Adapters</span><span class='op'>::</span><span class='const'>DataAccessor</span><span class='period'>.</span><span class='id create'>create</span><span class='lparen'>(</span><span class='const'>Sunspot</span><span class='op'>::</span><span class='const'>Util</span><span class='period'>.</span><span class='id full_const_get'>full_const_get</span><span class='lparen'>(</span><span class='id reference'>reference</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id load_all'>load_all</span><span class='lparen'>(</span>
+      <span class='id values_hash'>values_hash</span><span class='period'>.</span><span class='id keys'>keys</span>
+    <span class='rparen'>)</span>
+    <span class='id instances'>instances</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id instance'>instance</span><span class='op'>|</span>
+      <span class='id values_hash'>values_hash</span><span class='lbracket'>[</span><span class='const'>Adapters</span><span class='op'>::</span><span class='const'>InstanceAdapter</span><span class='period'>.</span><span class='id adapt'>adapt</span><span class='lparen'>(</span><span class='id instance'>instance</span><span class='rparen'>)</span><span class='period'>.</span><span class='id id'>id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id instance'>instance</span> <span class='op'>=</span> <span class='id instance'>instance</span>
+    <span class='kw'>end</span>
+    <span class='kw'>true</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="rows-instance_method">
+  
+    - (<tt>Object</tt>) <strong>rows</strong>(options = {}) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Get the rows returned for this facet.
+</p>
+<h4>Options (options)</h4>
+<table>
+<tr><td valign="top">:verify</td><td><p>
+Only return rows for which the referenced object exists in the data store.
+This option is ignored unless the field associated with this facet is
+configured with a :references argument.
+</p>
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array</td><td><p>
+Array of FacetRow objects
+</p>
+</td></tr>
+</table>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'sunspot/lib/sunspot/search/field_facet.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='id rows'>rows</span><span class='lparen'>(</span><span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id options'>options</span><span class='lbracket'>[</span><span class='symbol'>:verify</span><span class='rbracket'>]</span>
+    <span class='id verified_rows'>verified_rows</span>
+  <span class='kw'>else</span>
+    <span class='ivar'>@rows</span> <span class='op'>||=</span>
+      <span class='kw'>begin</span>
+        <span class='id rows'>rows</span> <span class='op'>=</span> <span class='kw'>super</span>
+        <span class='id has_query_facets'>has_query_facets</span> <span class='op'>=</span> <span class='op'>!</span><span class='id rows'>rows</span><span class='period'>.</span><span class='id empty?'>empty?</span>
+        <span class='kw'>if</span> <span class='ivar'>@search</span><span class='period'>.</span><span class='id facet_response'>facet_response</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>facet_fields</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>
+          <span class='kw'>if</span> <span class='id data'>data</span> <span class='op'>=</span> <span class='ivar'>@search</span><span class='period'>.</span><span class='id facet_response'>facet_response</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>facet_fields</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='id key'>key</span><span class='rbracket'>]</span>
+            <span class='id data'>data</span><span class='period'>.</span><span class='id each_slice'>each_slice</span><span class='lparen'>(</span><span class='int'>2</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id value'>value</span><span class='comma'>,</span> <span class='id count'>count</span><span class='op'>|</span>
+              <span class='id row'>row</span> <span class='op'>=</span> <span class='const'>FacetRow</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='ivar'>@field</span><span class='period'>.</span><span class='id cast'>cast</span><span class='lparen'>(</span><span class='id value'>value</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id count'>count</span><span class='comma'>,</span> <span class='kw'>self</span><span class='rparen'>)</span>
+              <span class='id rows'>rows</span> <span class='op'>&lt;&lt;</span> <span class='id row'>row</span>
+            <span class='kw'>end</span>
+          <span class='kw'>end</span>
+        <span class='kw'>end</span>
+        <span class='id sort_rows!'>sort_rows!</span><span class='lparen'>(</span><span class='id rows'>rows</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id has_query_facets'>has_query_facets</span>
+        <span class='id rows'>rows</span>
+      <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Nov 26 13:47:21 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>
