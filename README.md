@@ -465,7 +465,32 @@ TODO
 
 ### More Like This
 
-TODO
+Sunspot can extract related items using more_like_this. When searching 
+for similar items, you can pass a block with the following options:
+
+* fields :field_1[, :field_2, ...]
+* minimum_term_frequency ##
+* minimum_document_frequency ##
+* minimum_word_length ##
+* maximum_word_length ##
+* maximum_query_terms ##
+* boost_by_relevance true/false
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    # The :more_like_this option must be set to true
+    text :body, :more_like_this => true
+  end
+end
+
+post = Post.first
+
+results = Sunspot.more_like_this(post) do
+  fields :body
+  minimum_term_frequency 5
+end
+```
 
 ## Indexing In Depth
 
