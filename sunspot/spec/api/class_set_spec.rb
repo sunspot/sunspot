@@ -7,7 +7,7 @@ describe Sunspot::ClassSet do
     set = described_class.new
     set << class1 << class2
 
-    set.to_a.should == [class1, class2]
+    set.to_a.should =~ [class1, class2]
   end
 
   it "replaces classes with the same name" do
