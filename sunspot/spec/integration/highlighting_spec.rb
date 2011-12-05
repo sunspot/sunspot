@@ -24,6 +24,7 @@ describe 'keyword highlighting' do
   end
   
   it "should process multiple keyword request on different fields with highlights correctly" do
+    search_results = nil
     lambda do
       search_results = Sunspot.search(Post) do 
         keywords 'Lorem ipsum', :fields => [:body] do
@@ -34,6 +35,10 @@ describe 'keyword highlighting' do
         end
       end
     end.should_not raise_error(RSolr::Error::Http)
+    search_results.results.length.should eq(1)
+    search_results.results.first.should eq(@posts.last)
+    # this one might be a Solr bug, therefore not related to Sunspot itself
+    # search_results.hits.first.highlights.should_not be_empty
   end
   
 end
