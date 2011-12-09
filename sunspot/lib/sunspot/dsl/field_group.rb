@@ -13,6 +13,26 @@ module Sunspot
         @group.limit = num
       end
 
+      #
+      # If set, facet counts are based on the most relevant document of
+      # each group matching the query.
+      #
+      # Supported in Solr 3.4 and above.
+      #
+      # ==== Example
+      #
+      #     Sunspot.search(Post) do
+      #       group :title do
+      #         truncate
+      #       end
+      #
+      #       facet :title, :extra => :any
+      #     end
+      #
+      def truncate
+        @group.truncate = true
+      end
+
       # Specify the order that results should be returned in. This method can
       # be called multiple times; precedence will be in the order given.
       #

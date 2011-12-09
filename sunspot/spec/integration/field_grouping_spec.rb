@@ -1,4 +1,5 @@
 require File.expand_path("../spec_helper", File.dirname(__FILE__))
+require File.expand_path("../helpers/search_helper", File.dirname(__FILE__))
 
 describe "field grouping" do
   before :each do
