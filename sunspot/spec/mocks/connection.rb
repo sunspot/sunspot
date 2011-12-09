@@ -58,7 +58,7 @@ module Mock
       unless path == "#{@expected_handler}"
         raise ArgumentError, "Expected request to #{@expected_handler} request handler"
       end
-      @searches << @last_search = params[:params]
+      @searches << @last_search = params[:data]
       @response || {}
     end
 

@@ -67,6 +67,14 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   it "should handle the 'auto_commit_after_delete_request' propery when not set" do
     @config.auto_commit_after_delete_request?.should == false
   end
+
+  it "should handle the 'bind_address' property when not set" do
+    @config.bind_address.should be_nil
+  end
+
+  it "should handle the 'disabled' property when not set" do
+    @config.disabled?.should be_false
+  end
 end
 
 describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
@@ -114,8 +122,22 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
   it "should handle the 'auto_commit_after_delete_request' propery when set" do
     @config.auto_commit_after_delete_request?.should == true
   end
+
+  it "should handle the 'bind_address' property when set" do
+    @config.bind_address.should == "127.0.0.1"
+  end
 end
 
+describe Sunspot::Rails::Configuration, "with disabled: true in sunspot.yml" do
+  before(:each) do
+    ::Rails.stub!(:env => 'config_disabled_test')
+    @config = Sunspot::Rails::Configuration.new
+  end
+
+  it "should handle the 'disabled' property when set" do
+    @config.disabled?.should be_true
+  end
+end
 
 describe Sunspot::Rails::Configuration, "with ENV['SOLR_URL'] overriding sunspot.yml" do
   before(:all) do

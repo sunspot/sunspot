@@ -17,11 +17,15 @@ module Sunspot
       #   How many results to return per page. The default is the value in
       #   +Sunspot.config.pagination.default_per_page+
       #
+      # :offset<Integer,String>::
+      #   Applies a shift to paginated records. The default is 0.
+      #
       def paginate(options = {})
         page = options.delete(:page)
         per_page = options.delete(:per_page)
+        offset = options.delete(:offset)
         raise ArgumentError, "unknown argument #{options.keys.first.inspect} passed to paginate" unless options.empty?
-        @query.paginate(page, per_page)
+        @query.paginate(page, per_page, offset)
       end
     end
   end

@@ -7,3 +7,5 @@ sunspot_rails/spec/rails3/vendor
 **/*/vendor/bundle
 sunspot-solr.pid
 tags
+.yardoc
+docs

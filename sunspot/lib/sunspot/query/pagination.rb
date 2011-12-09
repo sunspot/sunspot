@@ -6,10 +6,10 @@ module Sunspot
     # reference to it and updates it if pagination is changed.
     #
     class Pagination #:nodoc:
-      attr_reader :page, :per_page
+      attr_reader :page, :per_page, :offset
 
-      def initialize(page = nil, per_page = nil)
-        self.page, self.per_page = page, per_page
+      def initialize(page = nil, per_page = nil, offset = nil)
+        self.offset, self.page, self.per_page = offset, page, per_page
       end
 
       def to_params
@@ -24,10 +24,14 @@ module Sunspot
         @per_page = per_page.to_i if per_page
       end
 
+      def offset=(offset)
+        @offset = offset.to_i
+      end
+
       private
 
       def start
-        (@page - 1) * @per_page
+        (@page - 1) * @per_page + @offset
       end
 
       def rows

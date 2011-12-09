@@ -35,7 +35,7 @@ module Sunspot
       def execute
         reset
         params = @query.to_params
-        @solr_result = @connection.post "#{request_handler}", :params => params, :headers => { 'Content-Type' => 'application/x-www-form-urlencoded' }
+        @solr_result = @connection.post "#{request_handler}", :data => params
         self
       end
 
@@ -116,6 +116,17 @@ module Sunspot
       #
       def total
         @total ||= solr_response['numFound'] || 0
+      end
+  
+      # 
+      # The time elapsed to generate the Solr response
+      #
+      # ==== Returns
+      #
+      # Integer:: Query runtime in milliseconds
+      #
+      def query_time
+        @query_time ||= solr_response_header['QTime']
       end
   
       # 
@@ -263,6 +274,10 @@ module Sunspot
   
       def solr_response
         @solr_response ||= @solr_result['response'] || {}
+      end
+  
+      def solr_response_header
+        @solr_response_header ||= @solr_result['responseHeader'] || {}
       end
   
       def highlights_for(doc)

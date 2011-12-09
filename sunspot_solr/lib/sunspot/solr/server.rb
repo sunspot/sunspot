@@ -2,6 +2,7 @@ require 'escape'
 require 'set'
 require 'tempfile'
 require 'sunspot/solr/java'
+require 'sunspot/solr/installer'
 
 module Sunspot
   module Solr
@@ -19,12 +20,28 @@ module Sunspot
 
       LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
-      attr_accessor :min_memory, :max_memory, :port, :solr_data_dir, :solr_home, :log_file
+      attr_accessor :min_memory, :max_memory, :bind_address, :port, :solr_data_dir, :solr_home, :log_file
       attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :solr_jar
 
       def initialize(*args)
         ensure_java_installed
         super(*args)
+      end
+
+      #
+      # Bootstrap a new solr_home by creating all required
+      # directories. 
+      #
+      # ==== Returns
+      #
+      # Boolean:: success
+      #
+      def bootstrap
+        unless @bootstrapped
+          install_solr_home
+          create_solr_directories
+          @bootstrapped = true
+        end
       end
 
       #
@@ -36,6 +53,8 @@ module Sunspot
       # Boolean:: success
       #
       def start
+        bootstrap
+
         if File.exist?(pid_path)
           existing_pid = IO.read(pid_path).to_i
           begin
@@ -70,10 +89,13 @@ module Sunspot
       # Boolean:: success
       #
       def run
+        bootstrap
+
         command = ['java']
         command << "-Xms#{min_memory}" if min_memory
         command << "-Xmx#{max_memory}" if max_memory
         command << "-Djetty.port=#{port}" if port
+        command << "-Djetty.host=#{bind_address}" if bind_address
         command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
         command << "-Dsolr.solr.home=#{solr_home}" if solr_home
         command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
@@ -138,6 +160,37 @@ module Sunspot
 
       def solr_jar
         @solr_jar || SOLR_START_JAR
+      end
+
+      #
+      # Copy default solr configuration files from sunspot
+      # gem to the new solr_home/config directory
+      #
+      # ==== Returns
+      #
+      # Boolean:: success
+      #
+      def install_solr_home
+        unless File.exists?(solr_home)
+          Sunspot::Solr::Installer.execute(
+            solr_home,
+            :force => true,
+            :verbose => true
+          )
+        end
+      end
+
+      # 
+      # Create new solr_home, config, log and pid directories
+      #
+      # ==== Returns
+      #
+      # Boolean:: success
+      #
+      def create_solr_directories
+        [solr_data_dir, pid_dir].each do |path|
+          FileUtils.mkdir_p(path) unless File.exists?(path)
+        end
       end
 
       private

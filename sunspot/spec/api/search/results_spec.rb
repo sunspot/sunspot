@@ -42,6 +42,12 @@ describe 'search results', :type => :search do
     session.search(Post) { paginate(:page => 1) }.total.should == 4
   end
 
+  it 'returns query time' do
+    stub_nil_results
+    connection.response['responseHeader'] = { 'QTime' => 42 }
+    session.search(Post) { paginate(:page => 1) }.query_time.should == 42
+  end
+
   it 'returns total for nil search' do
     stub_nil_results
     session.search(Post).total.should == 0

@@ -1,20 +1,34 @@
 rvm:
   - 1.8.7
-  # - 1.9.2
-  # - 1.9.3
+  - 1.9.2
+  - 1.9.3
   # - rbx-2.0
   # - jruby
 
 env:
   - GEM=sunspot
   - GEM=sunspot_rails RAILS=2.3.14
-  - GEM=sunspot_rails RAILS=3.0.10
-  - GEM=sunspot_rails RAILS=3.1.1
+  - GEM=sunspot_rails RAILS=3.0.11
+  - GEM=sunspot_rails RAILS=3.1.3
+
+# Limit the size of the matrix by only performing one build against
+# 1.8.7 and 1.9.2
+matrix:
+  exclude:
+    - rvm: 1.8.7
+      env: GEM=sunspot_rails RAILS=3.0.11
+    - rvm: 1.8.7
+      env: GEM=sunspot_rails RAILS=3.1.3
+    - rvm: 1.9.2
+      env: GEM=sunspot_rails RAILS=3.0.11
+    - rvm: 1.9.2
+      env: GEM=sunspot_rails RAILS=3.1.3
 
 notifications:
-  # irc: "irc.freenode.org#sunspot-ruby"
-  # recipients:
-  #   - nick@onemorecloud.com
+  irc: "irc.freenode.org#sunspot-ruby"
+  recipients:
+    - alindeman@gmail.com
+    - nick@onemorecloud.com
 
 script:
   - ci/travis.sh

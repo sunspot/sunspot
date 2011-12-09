@@ -27,7 +27,9 @@ module Sunspot #:nodoc:
       end
 
       def build_session(configuration = self.configuration)
-        if configuration.has_master?
+        if configuration.disabled?
+          StubSessionProxy.new(Sunspot.session)
+        elsif configuration.has_master?
           SessionProxy::MasterSlaveSessionProxy.new(
             SessionProxy::ThreadLocalSessionProxy.new(master_config(configuration)),
             SessionProxy::ThreadLocalSessionProxy.new(slave_config(configuration))
