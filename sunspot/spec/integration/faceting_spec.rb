@@ -69,6 +69,13 @@ describe 'search faceting' do
       search.facet(:title).should have(3).rows
     end
 
+    it 'should limit the number of facet rows for facet with :name option set' do
+      search = Sunspot.search(Post) do
+        facet :title, :limit => 3, :name => :title_facet
+      end
+      search.facet(:title_facet).should have(3).rows
+    end
+
     it 'should not return zeros by default' do
       search = Sunspot.search(Post) do
         with :blog_id, 1
@@ -91,6 +98,14 @@ describe 'search faceting' do
         facet :title, :minimum_count => 2
       end
       search.facet(:title).rows.map { |row| row.value }.should == %w(four three two)
+    end
+
+    it 'should return a specified minimum count for facet with :name option set' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :minimum_count => 2, :name => :title_facet
+      end
+      search.facet(:title_facet).rows.map { |row| row.value }.should == %w(four three two)
     end
 
     it 'should order facets lexically' do
