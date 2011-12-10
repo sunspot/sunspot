@@ -64,7 +64,7 @@ module Sunspot
         params.delete :defType
         params.delete :fl
         keywords = params.delete(:q)
-        options = params.map { |key, value| escape_param(key, value)}.join(' ')
+        options = params.map { |key, value| escape_param(key, value) }.join(' ')
         "_query_:\"{!dismax #{options}}#{escape_quotes(keywords)}\""
       end
 
@@ -119,10 +119,7 @@ module Sunspot
       private
       
       def escape_param(key, value)
-        escaped_param = []
-        value = [value] unless value.respond_to? :each
-        escaped_param = "#{key}='#{escape_quotes(value.join(" "))}'"
-        return escaped_param
+        "#{key}='#{escape_quotes(Array(value).join(" "))}'"
       end
 
       def escape_quotes(value)
