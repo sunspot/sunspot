@@ -420,6 +420,8 @@ end
 
 Sunspot 2.0 supports geospatial features of Solr 3.1 and above.
 
+Geospatial features require a field defined with `latlon`:
+
 ```ruby
 class Post < ActiveRecord::Base
   searchable do
@@ -429,10 +431,21 @@ class Post < ActiveRecord::Base
 end
 ```
 
+#### Filter By Radius
+
 ```ruby
 # Searches posts within 100 kilometers of (32, -68)
 Post.search do
-  with(location).in_radius(32, -68, 100)
+  with(:location).in_radius(32, -68, 100)
+end
+```
+
+#### Sort By Distance
+
+```
+# Orders documents by closeness to (32, -68)
+Post.search do
+  order_by_geodist(:location, 32, -68)
 end
 ```
 
