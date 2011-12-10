@@ -1,13 +1,11 @@
 require 'bigdecimal'
 
 shared_examples_for "spatial query" do
-  it 'searches by spatial' do
+  it 'filters by radius' do
     search do
-      spatial(:coordinates, 23, -46, :radius => 100)
+      with(:coordinates_new).in_radius(23, -46, 100)
     end
 
-    connection.should have_last_search_including(:sort, "geodist() asc")
-    connection.should have_last_search_including(:fq, "{!geofilt}")
-    connection.should have_last_search_including(:pt, "23,-46")
+    connection.should have_last_search_including(:fq, "{!geofilt sfield=coordinates_new_ll pt=23,-46 d=100}")
   end
 end

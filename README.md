@@ -491,18 +491,7 @@ end
 ```ruby
 # Searches posts within 100 kilometers of (32, -68)
 Post.search do
-  spatial(:location, 32, -68, :radius => 100)
-end
-```
-
-TODO: I think I'd favor replacing the geohash functionality in 2.0 so
-this would have the same effect:
-
-```ruby
-Post.search do
-  with(:location).near(32, -68, :radius => 100)
-  # or leave the geohash functionality, and use something like
-  # with(:location).bounded_by(32, -68, :radius => 100)
+  with(location).in_radius(32, -68, 100)
 end
 ```
 
