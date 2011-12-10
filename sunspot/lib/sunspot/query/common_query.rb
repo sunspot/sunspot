@@ -20,6 +20,11 @@ module Sunspot
         @sort << sort
       end
 
+      def add_group(group)
+        @components << group
+        group
+      end
+
       def add_field_facet(facet)
         @components << facet
         facet

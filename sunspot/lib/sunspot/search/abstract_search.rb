@@ -1,4 +1,5 @@
 require 'sunspot/search/paginated_collection'
+require 'sunspot/search/hit_enumerable'
 
 module Sunspot
   module Search #:nodoc:
@@ -14,15 +15,21 @@ module Sunspot
       # Retrieve all facet objects defined for this search, in order they were
       # defined. To retrieve an individual facet by name, use #facet()
       #
-      attr_reader :facets
+      attr_reader :facets, :groups
       attr_reader :query #:nodoc:
       attr_accessor :request_handler
+
+      include HitEnumerable
   
       def initialize(connection, setup, query, configuration) #:nodoc:
         @connection, @setup, @query = connection, setup, query
         @query.paginate(1, configuration.pagination.default_per_page)
+
         @facets = []
         @facets_by_name = {}
+
+        @groups_by_name = {}
+        @groups = []
       end
   
       #
@@ -78,35 +85,13 @@ module Sunspot
       #
       def hits(options = {})
         if options[:verify]
-          verified_hits
+          super
         else
-          @hits ||=
-            begin
-              hits = if solr_response && solr_response['docs']
-                solr_response['docs'].map do |doc|
-                  Hit.new(doc, highlights_for(doc), self)
-                end
-              end
-              paginate_collection(hits || [])
-            end
+          @hits ||= paginate_collection(super)
         end
       end
       alias_method :raw_results, :hits
-  
-      #
-      # Convenience method to iterate over hit and result objects. Block is
-      # yielded a Sunspot::Server::Hit instance and a Sunspot::Server::Result
-      # instance.
-      #
-      # Note that this method iterates over verified hits (see #hits method
-      # for more information).
-      #
-      def each_hit_with_result
-        verified_hits.each do |hit|
-          yield(hit, hit.result)
-        end
-      end
-  
+
       # 
       # The total number of documents matching the query parameters
       #
@@ -178,6 +163,12 @@ module Sunspot
           end
         end
       end
+
+      def group(name)
+        if name
+          @groups_by_name[name.to_sym]
+        end
+      end
   
       # 
       # Deprecated in favor of optional second argument to #facet
@@ -189,19 +180,9 @@ module Sunspot
       def facet_response #:nodoc:
         @solr_result['facet_counts']
       end
-  
-      # 
-      # Get the data accessor that will be used to load a particular class out of
-      # persistent storage. Data accessors can implement any methods that may be
-      # useful for refining how data is loaded out of storage. When building a
-      # search manually (e.g., using the Sunspot#new_search method), this should
-      # be used before calling #execute(). Use the
-      # Sunspot::DSL::Search#data_accessor_for method when building searches using
-      # the block DSL.
-      #
-      def data_accessor_for(clazz) #:nodoc:
-        (@data_accessors ||= {})[clazz.name.to_sym] ||=
-          Adapters::DataAccessor.create(clazz)
+
+      def group_response #:nodoc:
+        @solr_result['grouped']
       end
   
       # 
@@ -222,30 +203,13 @@ module Sunspot
         self
       end
   
-      # 
-      # Populate the Hit objects with their instances. This is invoked the first
-      # time any hit has its instance requested, and all hits are loaded as a
-      # batch.
-      #
-      def populate_hits #:nodoc:
-        id_hit_hash = Hash.new { |h, k| h[k] = {} }
-        hits.each do |hit|
-          id_hit_hash[hit.class_name][hit.primary_key] = hit
-        end
-        id_hit_hash.each_pair do |class_name, hits|
-          ids = hits.map { |id, hit| hit.primary_key }
-          data_accessor = data_accessor_for(Util.full_const_get(class_name))
-          hits_for_class = id_hit_hash[class_name]
-          data_accessor.load_all(ids).each do |result|
-            hit = hits_for_class.delete(Adapters::InstanceAdapter.adapt(result).id.to_s)
-            hit.result = result
-          end
-          hits_for_class.values.each { |hit| hit.result = nil }
-        end
-      end
   
       def inspect #:nodoc:
         "<Sunspot::Search:#{query.to_params.inspect}>"
+      end
+
+      def add_field_group(field, options = {}) #:nodoc:
+        add_group(field.name, FieldGroup.new(field, self, options))
       end
   
       def add_field_facet(field, options = {}) #:nodoc:
@@ -260,6 +224,12 @@ module Sunspot
       def add_date_facet(field, options) #:nodoc:
         name = (options[:name] || field.name)
         add_facet(name, DateFacet.new(field, self, options))
+      end
+
+      def highlights_for(doc) #:nodoc:
+        if @solr_result['highlighting']
+          @solr_result['highlighting'][doc['id']]
+        end
       end
   
       private
@@ -279,15 +249,13 @@ module Sunspot
       def solr_response_header
         @solr_response_header ||= @solr_result['responseHeader'] || {}
       end
-  
-      def highlights_for(doc)
-        if @solr_result['highlighting']
-          @solr_result['highlighting'][doc['id']]
-        end
+
+      def solr_docs
+        solr_response['docs']
       end
   
       def verified_hits
-        @verified_hits ||= paginate_collection(hits.select { |hit| hit.instance })
+        @verified_hits ||= paginate_collection(super)
       end
   
       def paginate_collection(collection)
@@ -297,6 +265,11 @@ module Sunspot
       def add_facet(name, facet)
         @facets << facet
         @facets_by_name[name.to_sym] = facet
+      end
+
+      def add_group(name, group)
+        @groups << group
+        @groups_by_name[name.to_sym] = group
       end
       
       # Clear out all the cached ivars so the search can be called again.
