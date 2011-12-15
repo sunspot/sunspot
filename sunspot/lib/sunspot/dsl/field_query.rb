@@ -234,15 +234,9 @@ module Sunspot
               "wrong number of arguments (#{field_names.length} for 1)"
             )
           end
-          if options.has_key?(:exclude)
-            raise(
-              ArgumentError,
-              "can't use :exclude with query facets"
-            )
-          end
           search_facet = @search.add_query_facet(field_names.first, options)
           Sunspot::Util.instance_eval_or_call(
-            QueryFacet.new(@query, @setup, search_facet),
+            QueryFacet.new(@query, @setup, search_facet, options),
             &block
           )
         elsif options[:only]
