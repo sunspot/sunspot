@@ -40,6 +40,11 @@ module Sunspot
         function
       end
 
+      def add_geo(geo)
+        @components << geo
+        geo
+      end
+
       def paginate(page, per_page, offset = nil)
         if @pagination
           @pagination.offset = offset
