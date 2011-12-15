@@ -27,6 +27,10 @@ module Sunspot
         @search.highlights_for(doc)
       end
 
+      def total
+        @doclist['numFound']
+      end
+
       def solr_docs
         @doclist['docs']
       end

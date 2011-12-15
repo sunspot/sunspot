@@ -29,4 +29,24 @@ describe "field grouping" do
 
     connection.should have_last_search_including(:"group.sort", "average_rating_ft asc")
   end
+
+  it "sends ngroups parameters to solr" do
+    session.search Post do
+      group :title do
+        ngroups true
+      end
+    end
+
+    connection.should have_last_search_including(:"group.ngroups", true)
+  end
+
+  it "sends truncate parameters to solr" do
+    session.search Post do
+      group :title do
+        truncate true
+      end
+    end
+
+    connection.should have_last_search_including(:"group.truncate", true)
+  end
 end

@@ -22,6 +22,10 @@ module Sunspot
         end
       end
 
+      def ngroups
+        solr_response['ngroups'].to_i if solr_response
+      end
+
       private
 
       def solr_response
