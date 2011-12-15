@@ -38,6 +38,33 @@ module Sunspot
         order_by(:random)
       end
 
+      # Specify a field for result grouping. Grouping groups documents
+      # with a common field value, return only the top document per
+      # group.
+      #
+      # More information in the Solr documentation:
+      # <http://wiki.apache.org/solr/FieldCollapsing>
+      #
+      # ==== Parameters
+      #
+      # field_name<Symbol>:: the field to use for grouping
+      def group(*field_names, &block)
+        options = Sunspot::Util.extract_options_from(field_names)
+
+        field_names.each do |field_name|
+          field = @setup.field(field_name)
+          group = @query.add_group(Sunspot::Query::FieldGroup.new(field))
+          @search.add_field_group(field)
+
+          if block
+            Sunspot::Util.instance_eval_or_call(
+              FieldGroup.new(@query, @setup, group),
+              &block
+            )
+          end
+        end
+      end
+
       #
       # Request a facet on the search query. A facet is a feature of Solr that
       # determines the number of documents that match the existing search *and*
