@@ -1,7 +1,8 @@
 == 2.0.0
+* Adds support for field grouping (Andy Lindeman)
+* Bundled Solr installation (`sunspot_solr`) is version 3.5.0 (Chris Parker)
 * Adds #query_time method to retrieve the Solr query time in
   milliseconds (Jason Weathered)
-* Bundled Solr installation (`sunspot_solr`) is version 3.5.0 (Chris Parker)
 * Fixes syntax of highlighting when used with nested dismax queries (Marco Crepaldi)
 
 == 1.3.0 2011-11-26
