@@ -501,7 +501,7 @@ end
 
 #### Sort By Distance
 
-```
+```ruby
 # Orders documents by closeness to (32, -68)
 Post.search do
   order_by_geodist(:location, 32, -68)
