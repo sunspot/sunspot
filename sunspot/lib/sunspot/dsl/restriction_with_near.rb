@@ -116,6 +116,23 @@ module Sunspot
       def near(lat, lng, options = {})
         @query.fulltext.add_location(@field, lat, lng, options)
       end
+
+      #
+      # Performs a query that is filtered by a radius around a given
+      # latitude and longitude.
+      #
+      # ==== Parameters
+      #
+      # :lat<Numeric>::
+      #   Latitude (in degrees)
+      # :lon<Numeric>::
+      #   Longitude (in degrees)
+      # :radius<Numeric>::
+      #   Radius (in kilometers)
+      #
+      def in_radius(lat, lon, radius)
+        @query.add_geo(Sunspot::Query::Geofilt.new(@field, lat, lon, radius))
+      end
     end
   end
 end

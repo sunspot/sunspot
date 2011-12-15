@@ -75,6 +75,13 @@ shared_examples_for 'sortable query' do
     connection.should have_last_search_with(:sort => 'score desc')
   end
 
+  it 'orders by geodist' do
+    search do
+      order_by_geodist :coordinates_new, 32, -68, :desc
+    end
+    connection.should have_last_search_with(:sort => 'geodist(coordinates_new_ll,32,-68) desc')
+  end
+
   it 'throws an ArgumentError if a bogus order direction is given' do
     lambda do
       search do

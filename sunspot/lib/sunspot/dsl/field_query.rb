@@ -31,6 +31,27 @@ module Sunspot
         @query.add_sort(sort)
       end
 
+      #
+      # Specify that the results should be ordered based on their
+      # distance from a given point.
+      #
+      # ==== Parameters
+      #
+      # field_name<Symbol>::
+      #   the field that stores the location (declared as `latlon`)
+      # lat<Numeric>::
+      #   the reference latitude
+      # lon<Numeric>::
+      #   the reference longitude
+      # direction<Symbol>::
+      #   :asc or :desc (default :asc)
+      # 
+      def order_by_geodist(field_name, lat, lon, direction = nil)
+        @query.add_sort(
+          Sunspot::Query::Sort::GeodistSort.new(@setup.field(field_name), lat, lon, direction)
+        )
+      end
+
       # 
       # DEPRECATED Use <code>order_by(:random)</code>
       #
