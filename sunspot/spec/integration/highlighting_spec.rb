@@ -5,6 +5,7 @@ describe 'keyword highlighting' do
     @posts = []
     @posts << Post.new(:body => 'And the fox laughed')
     @posts << Post.new(:body => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit', :blog_id => 1)
+    @posts << Post.new(:body => 'Lorem ipsum dolor sit amet', :title => 'consectetur adipiscing elit', :blog_id => 1)
     Sunspot.index!(*@posts)
     @search_result = Sunspot.search(Post) { keywords 'fox', :highlight => true }
   end
@@ -21,4 +22,23 @@ describe 'keyword highlighting' do
     search_result = Sunspot.search(Post){ with :blog_id, 1 }
     search_result.hits.first.highlights.should be_empty
   end
+  
+  it "should process multiple keyword request on different fields with highlights correctly" do
+    search_results = nil
+    lambda do
+      search_results = Sunspot.search(Post) do 
+        keywords 'Lorem ipsum', :fields => [:body] do
+          highlight :body
+        end
+        keywords 'consectetur', :fields => [:title] do
+          highlight :title
+        end
+      end
+    end.should_not raise_error(RSolr::Error::Http)
+    search_results.results.length.should eq(1)
+    search_results.results.first.should eq(@posts.last)
+    # this one might be a Solr bug, therefore not related to Sunspot itself
+    # search_results.hits.first.highlights.should_not be_empty
+  end
+  
 end
