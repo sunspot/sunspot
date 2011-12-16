@@ -471,6 +471,16 @@ Post.search do
     order_by(:average_rating, :desc)
   end
 end
+
+# Facet count is based on the most relevant document of each group
+# matching the query (>= Solr 3.4)
+Post.search do
+  group :blog_id_str do
+    truncate
+  end
+
+  facet :blog_id_str, :extra => :any
+end
 ```
 
 ### Geospatial

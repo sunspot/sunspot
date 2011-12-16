@@ -134,6 +134,19 @@ describe 'search faceting' do
       search.facet(:title).rows.first.value.should == :none
       search.facet(:title).rows.first.count.should == 1
     end
+
+    it 'gives correct facet count when group == true and truncate == true' do
+      search = Sunspot.search(Post) do
+        group :title do
+          truncate
+        end
+
+        facet :title, :extra => :any
+      end
+
+      # Should be 5 instead of 11
+      search.facet(:title).rows.first.count.should == 5
+    end
   end
 
   context 'multiselect faceting' do
