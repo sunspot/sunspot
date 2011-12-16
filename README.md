@@ -501,8 +501,6 @@ end
 
 #### Filter By Radius (inexact with bbox)
 
-**TODO: Yet to be implemented**
-
 ```ruby
 # Searches posts within 100 kilometers of (32, -68) with `bbox`. This is
 # an approximation so searches run quicker, but it may include other
