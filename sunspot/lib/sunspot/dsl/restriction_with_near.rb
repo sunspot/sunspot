@@ -133,6 +133,20 @@ module Sunspot
       def in_radius(lat, lon, radius)
         @query.add_geo(Sunspot::Query::Geofilt.new(@field, lat, lon, radius))
       end
+
+      #
+      # Performs a query that is filtered by a bounding box
+      #
+      # ==== Parameters
+      # 
+      # :first_corner<Array>::
+      #   First corner (expressed as an array `[latitude, longitude]`)
+      # :second_corner<Array>::
+      #   Second corner (expressed as an array `[latitude, longitude]`)
+      #
+      def in_bounding_box(first_corner, second_corner)
+        @query.add_geo(Sunspot::Query::Bbox.new(@field, first_corner, second_corner))
+      end
     end
   end
 end

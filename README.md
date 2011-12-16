@@ -499,6 +499,29 @@ Post.search do
 end
 ```
 
+#### Filter By Radius (inexact with bbox)
+
+**TODO: Yet to be implemented**
+
+```ruby
+# Searches posts within 100 kilometers of (32, -68) with `bbox`. This is
+# an approximation so searches run quicker, but it may include other
+# points that are slightly outside of the required distance
+Post.search do
+  with(:location).in_radius(32, -68, 100, :bbox => true)
+end
+```
+
+#### Filter By Bounding Box
+
+```ruby
+# Searches posts within the bounding box defined by the corners (45,
+# -94) to (46, -93)
+Post.search do
+  with(:location).in_bounding_box([45, -94], [46, -93])
+end
+```
+
 #### Sort By Distance
 
 ```ruby
