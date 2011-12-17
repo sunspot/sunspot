@@ -7,14 +7,15 @@ module Sunspot
     # words across a union of several fields.
     #
     class Dismax
-      attr_writer :minimum_match, :phrase_slop, :query_phrase_slop, :tie
+      attr_writer :minimum_match, :phrase_slop, :query_phrase_slop, :tie, :extended_syntax
 
       def initialize(keywords)
-        @keywords = keywords
+        @keywords = keywords && !(keywords.to_s =~ /^\s*$/) ? keywords : '*:*'
         @fulltext_fields = {}
         @boost_queries = []
         @boost_functions = []
         @highlights = []
+        @extended_syntax = false
       end
 
       #
@@ -24,7 +25,7 @@ module Sunspot
         params = { :q => @keywords }
         params[:fl] = '* score'
         params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
-        params[:defType] = 'dismax'
+        params[:defType] = @extended_syntax ? 'edismax' : 'dismax'
         if @phrase_fields
           params[:pf] = @phrase_fields.map { |field| field.to_boosted_field }.join(' ')
         end

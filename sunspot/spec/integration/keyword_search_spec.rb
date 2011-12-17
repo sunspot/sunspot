@@ -88,6 +88,35 @@ describe 'keyword search' do
     end
   end
 
+  describe 'extended query syntax' do
+    before :all do
+      Sunspot.remove_all
+      Sunspot.index!(
+        @posts = [
+          Post.new(:title => 'Rhino & Crocodile', :ratings_average => 1.1),
+          Post.new(:title => 'Rhino', :ratings_average => 3.3),
+          Post.new(:title => 'Rhino & Whale', :ratings_average => 2.2)
+        ]
+      )
+    end
+
+    it 'matches query with Lucene syntax' do
+      search = Sunspot.search(Post) do
+        keywords '+Rhino -Crocodile', :extended_syntax => true
+      end
+      search.results.should == [@posts[1], @posts[2]]
+    end
+
+    it 'applies boosts specified in keywords block even if keywords are ignored' do
+      search = Sunspot.search(Post) do
+        keywords nil, :extended_syntax => true do
+          boost(function{div(:average_rating, 10)})
+        end
+      end
+      search.results.should == [@posts[1], @posts[2], @posts[0]]
+    end
+  end
+
   describe 'with field boost' do
     before :all do
       Sunspot.remove_all

@@ -6,39 +6,81 @@ shared_examples_for 'fulltext query' do
     connection.should have_last_search_with(:q => 'keyword search')
   end
 
-  it 'ignores keywords if empty' do
-    search do
-      keywords ''
+  describe 'standard dismax query' do
+    it 'ignores keywords if empty' do
+      search do
+        keywords ''
+      end
+      connection.should_not have_last_search_with(:defType => 'dismax')
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
-  end
 
-  it 'ignores keywords if nil' do
-    search do
-      keywords nil
+    it 'ignores keywords if nil' do
+      search do
+        keywords nil
+      end
+      connection.should_not have_last_search_with(:defType => 'dismax')
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
-  end
 
-  it 'ignores keywords with only whitespace' do
-    search do
-      keywords "  \t"
+    it 'ignores keywords with only whitespace' do
+      search do
+        keywords "  \t"
+      end
+      connection.should_not have_last_search_with(:defType => 'dismax')
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
-  end
 
-  it 'gracefully ignores keywords block if keywords ignored' do
-    search do
-      keywords(nil) { fields(:title) }
+    it 'gracefully ignores keywords block if keywords ignored' do
+      search do
+        keywords(nil) { fields(:title) }
+      end
     end
-  end
 
-  it 'sets default query parser to dismax when keywords used' do
-    search do
-      keywords 'keyword search'
+    it 'sets default query parser to dismax when keywords used' do
+      search do
+        keywords 'keyword search'
+      end
+      connection.should have_last_search_with(:defType => 'dismax')
     end
-    connection.should have_last_search_with(:defType => 'dismax')
-  end
+  end 
+
+  describe 'extended dismax query' do
+    it 'builds extended dismax query with q parameter set to \'*:*\' if keywords is empty' do
+      search do
+        keywords '', :extended_syntax  => true
+      end
+      connection.should have_last_search_with(:defType => 'edismax')
+      connection.should have_last_search_with(:q => '*:*')
+    end
+
+    it 'builds extended dismax query with q parameter set to \'*:*\' if keywords is nil' do
+      search do
+        keywords nil, :extended_syntax  => true
+      end
+      connection.should have_last_search_with(:defType => 'edismax')
+      connection.should have_last_search_with(:q => '*:*')
+    end
+
+    it 'builds extended dismax query with q parameter set to \'*:*\' if keywords are whitespaces' do
+      search do
+        keywords "   \t", :extended_syntax  => true
+      end
+      connection.should have_last_search_with(:defType => 'edismax')
+      connection.should have_last_search_with(:q => '*:*')
+    end
+
+    it 'executes blocks keywords block if keywords ignored' do
+      search do
+        keywords(nil, :extended_syntax => true) { fields(:title)}
+      end
+      connection.should have_last_search_with(:qf => 'title_text')
+    end
+
+    it 'sets query parser to edismax when keywords used' do
+      search do
+        keywords 'keyword search', :extended_syntax => true
+      end
+      connection.should have_last_search_with(:defType => 'edismax')
+    end
+  end 
 
   it 'searches types in filter query if keywords used' do
     search do

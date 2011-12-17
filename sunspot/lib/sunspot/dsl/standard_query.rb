@@ -54,10 +54,22 @@ module Sunspot
       #   instance, in a search for "\"great pizza\"" with a phrase slop of 1,
       #   "great pizza" and "great big pizza" will match, but "great monster of
       #   a pizza" will not. Default behavior is a query phrase slop of zero.
+      # :extended_syntax<Boolean>::
+      #   If true, use the new 'edismax' handler instead of the old 'dismax'. More
+      #   information about edismax handler can be found here:
+      #   
+      #   https://issues.apache.org/jira/browse/SOLR-1553
+      #   
+      #   Basically, it's an improved version of 'dismax' that supports Lucene query
+      #   syntax (e.g. allows operators like '+', '-' etc. in 'q' parameter).
       #
       def fulltext(keywords, options = {}, &block)
-        if keywords && !(keywords.to_s =~ /^\s*$/)
+        extended_syntax = options.delete(:extended_syntax) || false
+
+        if keywords && !(keywords.to_s =~ /^\s*$/) || extended_syntax
           fulltext_query = @query.add_fulltext(keywords)
+          fulltext_query.extended_syntax = extended_syntax
+
           if field_names = options.delete(:fields)
             Util.Array(field_names).each do |field_name|
               @setup.text_fields(field_name).each do |field|
