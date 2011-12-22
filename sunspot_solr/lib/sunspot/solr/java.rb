@@ -2,7 +2,7 @@ module Sunspot
   module Solr
     module Java
       def self.installed?
-        `java -version &> /dev/null`
+        `java -version`
         $?.success?
       end
     end
