@@ -90,6 +90,11 @@ describe 'Session' do
       Sunspot.commit
       connection.opts[:read_timeout].should == 0.5
     end
+    it 'should open a connection with custom open timeout' do
+      Sunspot.config.solr.open_timeout = 0.5
+      Sunspot.commit
+      connection.opts[:open_timeout].should == 0.5
+    end
   end
 
   context 'custom session' do

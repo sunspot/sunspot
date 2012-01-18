@@ -41,6 +41,10 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
     @config.read_timeout == nil
   end
 
+  it "should set the open timeout to nil when not set" do
+    @config.open_timeout == nil
+  end
+
   it "should handle the 'log_level' property when not set" do
     @config.log_level.should == 'INFO'
   end
@@ -131,7 +135,10 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
     @config.bind_address.should == "127.0.0.1"
   end
   it "should handle the 'read_timeout' property when set" do
-    @config.read_timeout.should == 0.5
+    @config.read_timeout.should == 2
+  end
+  it "should handle the 'open_timeout' property when set" do
+    @config.open_timeout.should == 0.5
   end
 end
 

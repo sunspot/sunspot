@@ -240,7 +240,7 @@ module Sunspot
     def connection
       args = 
       @connection ||=
-        self.class.connection_class.connect(:url => config.solr.url, :read_timeout=>config.solr.read_timeout)
+        self.class.connection_class.connect(:url => config.solr.url, :read_timeout=>config.solr.read_timeout, :open_timeout=>config.solr.open_timeout)
     end
 
     def indexer
