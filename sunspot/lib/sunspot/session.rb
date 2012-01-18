@@ -238,8 +238,9 @@ module Sunspot
     # RSolr::Connection::Base:: The connection for this session
     #
     def connection
+      args = 
       @connection ||=
-        self.class.connection_class.connect(:url => config.solr.url)
+        self.class.connection_class.connect(:url => config.solr.url, :read_timeout=>config.solr.read_timeout)
     end
 
     def indexer
