@@ -16,6 +16,7 @@ config_test:
     pid_dir: /my_superior_path/pids
     solr_home: /my_superior_path
     bind_address: 127.0.0.1
+    read_timeout: 0.5
   auto_commit_after_request: false
   auto_commit_after_delete_request: true
 config_disabled_test:

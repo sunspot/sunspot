@@ -85,6 +85,11 @@ describe 'Session' do
       Sunspot.commit
       connection.opts[:url].should == 'http://127.0.0.1:8981/solr'
     end
+    it 'should open a connection with custom read timeout' do
+      Sunspot.config.solr.read_timeout = 0.5
+      Sunspot.commit
+      connection.opts[:read_timeout].should == 0.5
+    end
   end
 
   context 'custom session' do
