@@ -53,6 +53,23 @@ module Sunspot
         string.split('_').map! { |word| word.capitalize }.join
       end
 
+
+      # 
+      # Convert snake case string to method case (Java style)
+      #
+      # ==== Parameters
+      #
+      # string<String>:: String to convert to method case
+      #
+      # ==== Returns
+      #
+      # String:: String in method case
+      #
+      def method_case(string)
+        first = true
+        string.split('_').map! { |word| word = first ? word : word.capitalize; first = false; word }.join
+      end
+
       # 
       # Get a constant from a fully qualified name
       #
