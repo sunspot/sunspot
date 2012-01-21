@@ -1,3 +1,5 @@
+require 'sunspot/batcher'
+
 module Sunspot
   # 
   # This class presents a service for adding, updating, and removing data
