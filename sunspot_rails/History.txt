@@ -1,4 +1,10 @@
-== 1.3.0
+== 2.0.0
+* Finds orphaned objects in batches to avoid excessive memory use (Peer Allan)
+* Default batch size can be specified by setting `Sunspot.config.indexing.default_batch_size`
+  (Peer Allan)
+* Explanation of `progress_bar` is written to stdout instead of stderr (Matt Gornick)
+
+== 1.3.0 2011-11-26
 * `Model.index` correctly uses `:first_id` option (Hamza Khan-Cheema)
 * Solr request performance is instrumented in Rails (Paco Guzmán)
 * Reindexing tasks display a progress bar if `progress_bar` gem is available (Paul Carey)

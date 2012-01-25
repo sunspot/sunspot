@@ -20,6 +20,11 @@ module Sunspot
         @sort << sort
       end
 
+      def add_group(group)
+        @components << group
+        group
+      end
+
       def add_field_facet(facet)
         @components << facet
         facet
@@ -33,6 +38,11 @@ module Sunspot
       def add_function(function)
         @components << function
         function
+      end
+
+      def add_geo(geo)
+        @components << geo
+        geo
       end
 
       def paginate(page, per_page, offset = nil)

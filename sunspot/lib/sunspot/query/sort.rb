@@ -90,6 +90,20 @@ module Sunspot
           "score #{direction_for_solr}"
         end
       end
+
+      #
+      # A GeodistSort sorts by distance from a given point.
+      #
+      class GeodistSort < FieldSort
+        def initialize(field, lat, lon, direction)
+          @lat, @lon = lat, lon
+          super(field, direction)
+        end
+
+        def to_param
+          "geodist(#{@field.indexed_name.to_sym},#{@lat},#{@lon}) #{direction_for_solr}"
+        end
+      end
     end
   end
 end
