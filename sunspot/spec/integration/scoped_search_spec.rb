@@ -1,4 +1,4 @@
-require File.expand_path('spec_helper', File.dirname(__FILE__))
+require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'scoped_search' do
   def self.test_field_type(name, attribute, field, *values)

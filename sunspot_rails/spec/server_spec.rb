@@ -11,10 +11,6 @@ describe Sunspot::Rails::Server do
     @server.solr_home.should == @solr_home
   end
 
-  it "sets the correct Solr library path" do
-    @server.lib_path.should == File.join(@solr_home, 'lib')
-  end
-
   it "sets the correct Solr PID path" do
     @server.pid_path.should == File.join(@server.pid_dir, 'sunspot-solr-test.pid')
   end
@@ -24,7 +20,7 @@ describe Sunspot::Rails::Server do
   end
 
   it "sets the correct port" do
-    @server.port.should == 8980
+    @server.port.should == 8983
   end
 
   it "sets the correct log level" do

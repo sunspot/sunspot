@@ -1,4 +1,4 @@
-require File.expand_path('spec_helper', File.dirname(__FILE__))
+require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'local search' do
   ORIGIN = [40.7246062, -73.9969018]

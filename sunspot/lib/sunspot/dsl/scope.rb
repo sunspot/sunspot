@@ -3,9 +3,9 @@ module Sunspot
     # 
     # This DSL presents methods for constructing restrictions and other query
     # elements that are specific to fields. As well as being a superclass of
-    # Sunspot::DSL::Query, which presents the main query block, this DSL class
-    # is also used directly inside the #dynamic() block, which only allows
-    # operations on specific fields.
+    # Sunspot::DSL::StandardQuery, which presents the main query block, this
+    # DSL class is also used directly inside the #dynamic() block, which only
+    # allows operations on specific fields.
     #
     class Scope
       NONE = Object.new
@@ -41,7 +41,7 @@ module Sunspot
       #
       # ==== Returns
       #
-      # Sunspot::DSL::Query::Restriction::
+      # Sunspot::DSL::Restriction::
       #   Restriction DSL object (if only one argument is passed which is a
       #   field name)
       #

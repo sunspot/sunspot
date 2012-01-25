@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require File.join(File.dirname(__FILE__), '..', 'lib', 'sunspot', 'solr', 'installer')
+
+home = ARGV.select { |arg| arg !~ /^-/ }.last || File.join(Dir.pwd, "solr")
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: sunspot-installer [options] [solr-home]"
+  opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
+    options[:verbose] = v
+  end
+  opts.on('-f', '--[no-]force', 'Overwrite schema and solrconfig files with Sunspot default, instead of modifying them (recommended for new Solr installation)') do |f|
+    options[:force] = f
+  end
+end.parse!
+
+Sunspot::Solr::Installer.execute(home, options)
+puts "Installed to #{home}"

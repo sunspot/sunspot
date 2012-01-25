@@ -36,6 +36,13 @@ module Sunspot #:nodoc:
         #   Automatically remove models from the Solr index when they are
         #   destroyed. <b>Setting this option to +false+ is not recommended
         #   </b>(see the README).
+        # :if<Mixed>::
+        #   Only index models in Solr if the method, proc or string evaluates
+        #   to true (e.g. <code>:if => :should_index?</code> or <code>:if =>
+        #   proc { |model| model.foo > 2 }</code>).  Models that do not match
+        #   the constraint will be removed from the index upon save.  Multiple
+        #   constraints can be specified by passing an array (e.g. <code>:if =>
+        #   [:method1, :method2]</code>).
         # :ignore_attribute_changes_of<Array>::
         #   Define attributes, that should not trigger a reindex of that
         #   object. Usual suspects are updated_at or counters.
@@ -44,6 +51,13 @@ module Sunspot #:nodoc:
         #   to load required associations when indexing. See ActiveRecord's 
         #   documentation on eager-loading for examples on how to set this
         #   Default: [] 
+        # :unless<Mixed>::
+        #   Only index models in Solr if the method, proc or string evaluates
+        #   to false (e.g. <code>:unless => :should_not_index?</code> or <code>
+        #   :unless => proc { |model| model.foo <= 2 }</code>).  Models that do
+        #   not match the constraint will be removed from the index upon save.
+        #   Multiple constraints can be specified by passing an array (e.g.
+        #   <code>:unless => [:method1, :method2]</code>).
         #
         # ==== Example
         #
@@ -70,8 +84,8 @@ module Sunspot #:nodoc:
             class_attribute :sunspot_options
 
             unless options[:auto_index] == false
-              before_save :maybe_mark_for_auto_indexing
-              after_save :maybe_auto_index
+              before_save :mark_for_auto_indexing_or_removal
+              after_save :perform_index_tasks
             end
 
             unless options[:auto_remove] == false
@@ -227,25 +241,31 @@ module Sunspot #:nodoc:
             :batch_size => 50,
             :batch_commit => true,
             :include => self.sunspot_options[:include],
-            :first_id => 0
+            :start => opts.delete(:first_id) || 0
           }.merge(opts)
+          find_in_batch_options = {
+            :include => options[:include],
+            :batch_size => options[:batch_size],
+            :start => options[:first_id]
+          }
           progress_bar = options[:progress_bar]
           if options[:batch_size]
-            counter = 0
-            find_in_batches(:include => options[:include], :batch_size => options[:batch_size], :start => options[:first_id]) do |records|
-              solr_benchmark options[:batch_size], counter do
-                records = records.select{ |r| r.indexable? }
-                Sunspot.index(records)
+            batch_counter = 0
+            find_in_batches(find_in_batch_options) do |records|
+              solr_benchmark options[:batch_size], batch_counter do
+                Sunspot.index(records.select { |model| model.indexable? })
+                Sunspot.commit if options[:batch_commit]
               end
-              Sunspot.commit if options[:batch_commit]
-              counter += 1
-              progress_bar.increment! records.size unless progress_bar.nil?
+              # track progress
+              progress_bar.increment!(records.length) if progress_bar
+              batch_counter += 1
             end
-            Sunspot.commit unless options[:batch_commit]
           else
-            records = all(:include => options[:include]).select{ |r| r.indexable? }
+            records = all(:include => options[:include]).select { |model| model.indexable? }
             Sunspot.index!(records)
           end
+          # perform a final commit if not committing in batches
+          Sunspot.commit unless options[:batch_commit]
         end
 
         # 
@@ -349,14 +369,14 @@ module Sunspot #:nodoc:
         # manually.
         #
         def solr_index
-          Sunspot.index(self) if indexable?
+          Sunspot.index(self)
         end
 
         # 
         # Index the model in Solr and immediately commit. See #index
         #
         def solr_index!
-          Sunspot.index!(self) if indexable?
+          Sunspot.index!(self)
         end
         
         # 
@@ -367,7 +387,7 @@ module Sunspot #:nodoc:
         # manually.
         #
         def solr_remove_from_index
-          Sunspot.remove(self) if indexable?
+          Sunspot.remove(self)
         end
 
         # 
@@ -375,7 +395,7 @@ module Sunspot #:nodoc:
         # #remove_from_index
         #
         def solr_remove_from_index!
-          Sunspot.remove!(self) if indexable?
+          Sunspot.remove!(self)
         end
 
         def solr_more_like_this(*args, &block)
@@ -392,26 +412,66 @@ module Sunspot #:nodoc:
         end
 
         def indexable?
-          return true unless sunspot_options.has_key?(:if)
-          send(sunspot_options[:if])
+          # options[:if] is not specified or they successfully pass
+          if_passes = self.class.sunspot_options[:if].nil? ||
+                      constraint_passes?(self.class.sunspot_options[:if])
+
+          # options[:unless] is not specified or they successfully pass
+          unless_passes = self.class.sunspot_options[:unless].nil? ||
+                          !constraint_passes?(self.class.sunspot_options[:unless])
+
+          if_passes and unless_passes
         end
 
         private
 
-        def maybe_mark_for_auto_indexing
-          @marked_for_auto_indexing =
-            if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
-              @marked_for_auto_indexing = !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
+        def constraint_passes?(constraint)
+          case constraint
+          when Symbol
+            self.__send__(constraint)
+          when String
+            self.__send__(constraint.to_sym)
+          when Enumerable
+            # All constraints must pass
+            constraint.all? { |inner_constraint| constraint_passes?(inner_constraint) }
+          else
+            if constraint.respond_to?(:call) # could be a Proc or anything else that responds to call
+              constraint.call(self)
             else
-              true
+              raise ArgumentError, "Unknown constraint type: #{constraint} (#{constraint.class})"
             end
+          end
+        end
+
+        def mark_for_auto_indexing_or_removal
+          if indexable?
+            # :if/:unless constraints pass or were not present
+
+            @marked_for_auto_indexing =
+              if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
+                !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
+              else
+                true
+              end
+
+            @marked_for_auto_removal = false
+          else
+            # :if/:unless constraints did not pass; do not auto index and
+            # actually go one step further by removing it from the index
+            @marked_for_auto_indexing = false
+            @marked_for_auto_removal = true
+          end
+
           true
         end
 
-        def maybe_auto_index
+        def perform_index_tasks
           if @marked_for_auto_indexing
             solr_index
             remove_instance_variable(:@marked_for_auto_indexing)
+          elsif @marked_for_auto_removal
+            solr_remove_from_index
+            remove_instance_variable(:@marked_for_auto_removal)
           end
         end
       end

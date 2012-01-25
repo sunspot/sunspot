@@ -36,6 +36,15 @@ describe 'function query' do
     end
     connection.should have_last_search_including(:bf, 'product(average_rating_ft,10)')
   end
+
+  it "should handle the sub function in a function query block" do
+    session.search Post do
+      keywords('pizza') do
+        boost(function { sub(:average_rating, 10) })
+      end
+    end
+    connection.should have_last_search_including(:bf, 'sub(average_rating_ft,10)')
+  end
  
   it "should handle nested functions in a function query block" do
     session.search Post do

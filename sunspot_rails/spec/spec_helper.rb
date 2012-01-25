@@ -1,5 +1,4 @@
 ENV['RAILS_ENV'] = 'test'
-ENV['RAILS_ROOT'] ||= File.join(File.dirname(__FILE__), 'rails3')
 if rsolr_version = ENV['RSOLR_GEM_VERSION']
   STDERR.puts("Forcing RSolr version #{rsolr_version}")
   gem "rsolr", rsolr_version
@@ -31,12 +30,15 @@ def silence_stderr(&block)
   $stderr = stderr
 end
 
-rspec = 
+rspec =
   begin
     RSpec
   rescue NameError, ArgumentError
     Spec::Runner
   end
+
+# Load all shared examples
+Dir[File.expand_path("shared_examples/*.rb", File.dirname(__FILE__))].each {|f| require f}
 
 rspec.configure do |config|
   config.before(:each) do

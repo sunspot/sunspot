@@ -14,7 +14,7 @@ require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(util adapters configuration setup composite_setup text_field_setup field
    field_factory data_extractor indexer query search session session_proxy
-   type dsl).each do |filename|
+   type dsl class_set).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
 
@@ -43,6 +43,10 @@ module Sunspot
 
   autoload :Installer, File.join(File.dirname(__FILE__), 'sunspot', 'installer')
 
+  # Array to track classes that have been set up for searching.
+  # Used by, e.g., Sunspot::Rails for reindexing all searchable classes.
+  @searchable = ClassSet.new
+
   class <<self
     # 
     # Clients can inject a session proxy, allowing them to implement custom
@@ -51,6 +55,11 @@ module Sunspot
     # respond to all of the public methods of the Sunspot::Session class.
     #
     attr_writer :session
+
+    #
+    # Access the list of classes set up to be searched.
+    #
+    attr_reader :searchable
 
     # Configures indexing and search for a given class.
     #
@@ -153,6 +162,7 @@ module Sunspot
     # the dynamic name, which is the part that is specified at indexing time.
     # 
     def setup(clazz, &block)
+      Sunspot.searchable << clazz
       Setup.setup(clazz, &block)
     end
 
@@ -328,7 +338,8 @@ module Sunspot
     #   end
     #
     # See Sunspot::DSL::Search, Sunspot::DSL::Scope, Sunspot::DSL::FieldQuery
-    # and Sunspot::DSL::Query for the full API presented inside the block.
+    # and Sunspot::DSL::StandardQuery for the full API presented inside the
+    # block.
     #
     def search(*types, &block)
       session.search(*types, &block)

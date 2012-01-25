@@ -1,0 +1,22 @@
+test:
+  solr:
+    hostname: localhost
+    port: 8983
+development:
+  solr:
+    hostname: localhost
+    port: 8981
+config_test:
+  solr:
+    hostname: some.host
+    port: 1234
+    path: /solr/idx
+    log_level: WARNING
+    data_path: /my_superior_path/data
+    pid_dir: /my_superior_path/pids
+    solr_home: /my_superior_path
+    bind_address: 127.0.0.1
+  auto_commit_after_request: false
+  auto_commit_after_delete_request: true
+config_disabled_test:
+  disabled: true
