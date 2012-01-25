@@ -180,7 +180,6 @@ module Sunspot
         @solr_result['facet_counts']
       end
 
-<<<<<<< HEAD:sunspot/lib/sunspot/search/abstract_search.rb
       #
       # Decompose the Solr "Filter Query" (fq) facet field parameter array further into a hash that can be easily
       # digested when constructing FieldFacet.rows. Specifically, it is used to add a boolean "selected"
