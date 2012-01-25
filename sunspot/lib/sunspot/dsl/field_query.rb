@@ -31,11 +31,59 @@ module Sunspot
         @query.add_sort(sort)
       end
 
+      #
+      # Specify that the results should be ordered based on their
+      # distance from a given point.
+      #
+      # ==== Parameters
+      #
+      # field_name<Symbol>::
+      #   the field that stores the location (declared as `latlon`)
+      # lat<Numeric>::
+      #   the reference latitude
+      # lon<Numeric>::
+      #   the reference longitude
+      # direction<Symbol>::
+      #   :asc or :desc (default :asc)
+      # 
+      def order_by_geodist(field_name, lat, lon, direction = nil)
+        @query.add_sort(
+          Sunspot::Query::Sort::GeodistSort.new(@setup.field(field_name), lat, lon, direction)
+        )
+      end
+
       # 
       # DEPRECATED Use <code>order_by(:random)</code>
       #
       def order_by_random
         order_by(:random)
+      end
+
+      # Specify a field for result grouping. Grouping groups documents
+      # with a common field value, return only the top document per
+      # group.
+      #
+      # More information in the Solr documentation:
+      # <http://wiki.apache.org/solr/FieldCollapsing>
+      #
+      # ==== Parameters
+      #
+      # field_name<Symbol>:: the field to use for grouping
+      def group(*field_names, &block)
+        options = Sunspot::Util.extract_options_from(field_names)
+
+        field_names.each do |field_name|
+          field = @setup.field(field_name)
+          group = @query.add_group(Sunspot::Query::FieldGroup.new(field))
+          @search.add_field_group(field)
+
+          if block
+            Sunspot::Util.instance_eval_or_call(
+              FieldGroup.new(@query, @setup, group),
+              &block
+            )
+          end
+        end
       end
 
       #

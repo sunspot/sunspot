@@ -362,7 +362,7 @@ end
 
 ```ruby
 # Posts faceted by ranges of average ratings
-Post.search do
+search = Post.search do
   facet(:average_rating) do
     row(1.0..2.0) do
       with(:average_rating, 1.0..2.0)
@@ -414,9 +414,130 @@ Post.search do
 end
 ```
 
+### Grouping
+
+**Solr 3.3 and above**
+
+Solr supports grouping documents, similar to an SQL `GROUP BY`. More
+information about result grouping/field collapsing is available on the
+[Solr Wiki](http://wiki.apache.org/solr/FieldCollapsing).
+
+**Grouping is only supported on `string` fields that are not
+multivalued. To group on a field of a different type (e.g., integer),
+add a denormalized `string` type**
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    # Denormalized `string` field because grouping can only be performed
+    # on string fields
+    string(:blog_id_str) { |p| p.blog_id.to_s }
+  end
+end
+
+# Returns only the top scoring document per blog_id
+search = Post.search do
+  group :blog_id_str
+end
+
+search.group(:blog_id_str).matches # Total number of matches to the query
+
+search.group(:blog_id_str).groups.each do |group|
+  puts group.value # blog_id of the each document in the group
+
+  # By default, there is only one document per group (the highest
+  # scoring one); if `limit` is specified (see below), multiple
+  # documents can be returned per group
+  group.results.each do |result|
+    # ...
+  end
+end
+```
+
+Additional options are supported by the DSL:
+
+```ruby
+# Returns the top 3 scoring documents per blog_id
+Post.search do
+  group :blog_id_str do
+    limit 3
+  end
+end
+
+# Returns document ordered within each group by published_at (by
+# default, the ordering is score)
+Post.search do
+  group :blog_id_str do
+    order_by(:average_rating, :desc)
+  end
+end
+
+# Facet count is based on the most relevant document of each group
+# matching the query (>= Solr 3.4)
+Post.search do
+  group :blog_id_str do
+    truncate
+  end
+
+  facet :blog_id_str, :extra => :any
+end
+```
+
 ### Geospatial
 
-TODO
+**Experimental and unreleased. The DSL may change.**
+
+Sunspot 2.0 supports geospatial features of Solr 3.1 and above.
+
+Geospatial features require a field defined with `latlon`:
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    # ...
+    latlon(:location) { Sunspot::Util::Coordinates.new(lat, lon) }
+  end
+end
+```
+
+#### Filter By Radius
+
+```ruby
+# Searches posts within 100 kilometers of (32, -68)
+Post.search do
+  with(:location).in_radius(32, -68, 100)
+end
+```
+
+#### Filter By Radius (inexact with bbox)
+
+```ruby
+# Searches posts within 100 kilometers of (32, -68) with `bbox`. This is
+# an approximation so searches run quicker, but it may include other
+# points that are slightly outside of the required distance
+Post.search do
+  with(:location).in_radius(32, -68, 100, :bbox => true)
+end
+```
+
+#### Filter By Bounding Box
+
+```ruby
+# Searches posts within the bounding box defined by the corners (45,
+# -94) to (46, -93)
+Post.search do
+  with(:location).in_bounding_box([45, -94], [46, -93])
+end
+```
+
+#### Sort By Distance
+
+```ruby
+# Orders documents by closeness to (32, -68)
+Post.search do
+  order_by_geodist(:location, 32, -68)
+end
+```
 
 ### Highlighting
 
