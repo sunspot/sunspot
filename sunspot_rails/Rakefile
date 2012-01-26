@@ -9,4 +9,4 @@ end
 task :environment do
 end
 
-FileList['dev_tasks/*.rake', 'lib/sunspot/rails/tasks.rb'].each { |file| load(file) }
+FileList['dev_tasks/*.rake', 'lib/sunspot/rails/tasks.rake'].each { |file| load(file) }
