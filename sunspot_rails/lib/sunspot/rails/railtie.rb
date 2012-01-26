@@ -24,7 +24,7 @@ module Sunspot
       end
 
       rake_tasks do
-        load 'sunspot/rails/tasks.rb'
+        load 'sunspot/rails/tasks.rake'
       end
       
       generators do
