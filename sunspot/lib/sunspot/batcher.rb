@@ -1,5 +1,4 @@
 module Sunspot
-
   #
   # Keeps a stack of batches and helps out when Indexer is asked to batch documents.
   #
@@ -21,41 +20,34 @@ module Sunspot
     # Raised if you ask to end current, but no current exists
     class NoCurrentBatchError < StandardError; end
 
-
     def initialize
       @stack = []
     end
 
-
-
     def current
-      stack.last or start_new
+      @stack.last or start_new
     end
 
     def start_new
-      (stack << []).last
+      (@stack << []).last
     end
 
     def end_current
-      fail NoCurrentBatchError if stack.empty?
+      fail NoCurrentBatchError if @stack.empty?
 
-      stack.pop
+      @stack.pop
     end
 
-
-
     def depth
-      stack.length
+      @stack.length
     end
 
     def batching?
       depth > 0
     end
 
-
-
-    def each
-      current.each { |v| yield v }
+    def each(&block)
+      current.each(&block)
     end
 
     def push(value)
@@ -66,11 +58,5 @@ module Sunspot
     def concat(values)
       current.concat values
     end
-
-
-
-    private
-
-    attr_reader :stack
   end
 end
