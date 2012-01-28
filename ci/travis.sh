@@ -29,10 +29,13 @@ case $GEM in
     
     # Invoke the sunspot specs
     bundle exec rake spec
+    rv=$?
     
     /bin/echo -n "Stopping Solr... "
     bundle exec sunspot-solr stop
     /bin/echo "done."
+
+    exit $rv
     ;;
     
   "sunspot_rails")
@@ -49,12 +52,15 @@ case $GEM in
     # Install gems for test Rails application
     cd ../sunspot_rails
     rake spec RAILS=$RAILS
+    rv=$?
     
     # Cleanup Solr
     /bin/echo -n "Stopping Solr... "
     cd ../sunspot
     bundle exec sunspot-solr stop
     /bin/echo "done."
+
+    exit $rv
     ;;
     
   *)
