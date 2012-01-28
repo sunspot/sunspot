@@ -2,6 +2,14 @@
 
 [![Build Status](http://travis-ci.org/sunspot/sunspot.png)](http://travis-ci.org/sunspot/sunspot)
 
+This fork of Sunspot adds support for in-place reindexing of models in parallel via Resque jobs.
+It also changes the way reindexing happens to avoid making the index unavailable to searchers.
+Completely deleting a model's records in Solr and then adding them back in causes potentially long periods of
+time where the information is unavailable to queries. This version changes the way reindexing is done by first
+removing in batches any orphaned records from Solr that do not exist in the DB, and then iterating through the DB
+for each model and indexing in batches. Each batch is sent to a Resque job for parallel indexing. Existing records
+in Solr are overwritten.
+
 Sunspot is a Ruby library for expressive, powerful interaction with the Solr
 search engine. Sunspot is built on top of the RSolr library, which
 provides a low-level interface for Solr interaction; Sunspot provides a simple,
@@ -586,7 +594,7 @@ TODO
 
 ### More Like This
 
-Sunspot can extract related items using more_like_this. When searching 
+Sunspot can extract related items using more_like_this. When searching
 for similar items, you can pass a block with the following options:
 
 * fields :field_1[, :field_2, ...]
@@ -704,6 +712,9 @@ bundle exec rake sunspot:solr:reindex
 
 # or, to be specific to a certain model with a certain batch size:
 bundle exec rake sunspot:solr:reindex[500,Post] # some shells will require escaping [ with \[ and ] with \]
+
+# or, to index certain models via Resque with a certain batch size:
+bundle exec rake sunspot:solr:reindex[500,Post+Author,true]
 ```
 
 ## Use Without Rails
