@@ -21,6 +21,8 @@ module Sunspot #:nodoc:
     #       hostname: localhost
     #       port: 8983
     #       log_level: OFF
+    #       open_timeout: 0.5
+    #       read_timeout: 2
     #   production:
     #     solr:
     #       hostname: localhost
@@ -28,6 +30,8 @@ module Sunspot #:nodoc:
     #       path: /solr/myindex
     #       log_level: WARNING
     #       solr_home: /some/path
+    #       open_timeout: 0.5
+    #       read_timeout: 2
     #     master_solr:
     #       hostname: localhost
     #       port: 8982
@@ -246,6 +250,14 @@ module Sunspot #:nodoc:
       #
       def bind_address
         @bind_address ||= user_configuration_from_key('solr', 'bind_address')
+      end
+      
+      def read_timeout
+        @read_timeout ||= user_configuration_from_key('solr', 'read_timeout')
+      end
+
+      def open_timeout
+        @open_timeout ||= user_configuration_from_key('solr', 'open_timeout')
       end
 
       #
