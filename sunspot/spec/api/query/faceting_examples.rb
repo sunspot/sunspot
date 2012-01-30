@@ -255,6 +255,58 @@ shared_examples_for "facetable query" do
     end
   end
 
+  describe 'on range facets' do
+    before :each do
+      @range = 2..4
+    end
+
+    it 'does not send range facet parameters if integer range is not specified' do
+      search do |query|
+        query.facet :average_rating
+      end
+      connection.should_not have_last_search_with(:"facet.range")
+    end
+
+    it 'sets the facet to a range facet if the range is specified' do
+      search do |query|
+        query.facet :average_rating, :range => @range
+      end
+      connection.should have_last_search_with(:"facet.range" => ['average_rating_ft'])
+    end
+
+    it 'sets the facet start and end' do
+      search do |query|
+        query.facet :average_rating, :range => @range
+      end
+      connection.should have_last_search_with(
+        :"f.average_rating_ft.facet.range.start" => '2.0',
+        :"f.average_rating_ft.facet.range.end" => '4.0'
+      )
+    end
+
+    it 'defaults the range interval to 10' do
+      search do |query|
+        query.facet :average_rating, :range => @range
+      end
+      connection.should have_last_search_with(:"f.average_rating_ft.facet.range.gap" => "10")
+    end
+
+    it 'uses custom range interval' do
+      search do |query|
+        query.facet :average_rating, :range => @range, :range_interval => 1
+      end
+      connection.should have_last_search_with(:"f.average_rating_ft.facet.range.gap" => "1")
+    end
+
+    it 'does not allow date faceting on a non-continuous field' do
+      lambda do
+        search do |query|
+          query.facet :title, :range => @range
+        end
+      end.should raise_error(ArgumentError)
+    end
+  end
+
   describe 'using queries' do
     it 'turns faceting on' do
       search do

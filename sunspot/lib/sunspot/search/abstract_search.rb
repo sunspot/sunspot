@@ -226,6 +226,11 @@ module Sunspot
         add_facet(name, DateFacet.new(field, self, options))
       end
 
+      def add_range_facet(field, options) #:nodoc:
+        name = (options[:name] || field.name)
+        add_facet(name, RangeFacet.new(field, self, options))
+      end
+
       def highlights_for(doc) #:nodoc:
         if @solr_result['highlighting']
           @solr_result['highlighting'][doc['id']]
