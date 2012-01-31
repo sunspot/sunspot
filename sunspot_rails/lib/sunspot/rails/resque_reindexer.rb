@@ -6,7 +6,7 @@ module Sunspot #:nodoc:
       def self.perform(klass, start_id, end_id)
         model = klass.constantize
         records = model.find(:all, :conditions => ["id between ? and ?", start_id, end_id])
-        model.index(records)
+        Sunspot.index(records)
       end
     end
   end
