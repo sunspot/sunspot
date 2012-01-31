@@ -35,7 +35,7 @@ namespace :sunspot do
     sunspot_models = Sunspot.searchable
 
     # Choose a specific subset of models, if requested
-    if args[:models]
+    unless args[:models].blank?
       model_names = args[:models].split('+')
       sunspot_models = model_names.map { |m| m.constantize }
     end

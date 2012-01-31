@@ -287,7 +287,7 @@ module Sunspot #:nodoc:
           batch_size = opts[:batch_size] || Sunspot.config.indexing.default_batch_size
           count = solr_search_ids.count
           indexed_ids = solr_search_ids { paginate(:page => 1, :per_page => count) }.to_set
-          find_each(:select => 'id', :batch_size => batch_size) do |object|
+          find_each(:select => primary_key, :batch_size => batch_size) do |object|
             indexed_ids.delete(object.id)
           end
           indexed_ids.to_a
