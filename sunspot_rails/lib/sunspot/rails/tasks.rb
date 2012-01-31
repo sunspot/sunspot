@@ -48,15 +48,20 @@ namespace :sunspot do
     rescue Exception => e
       $stderr.puts "Error using progress bar: #{e.message}"
     end
-    
+
     # Finally, invoke the class-level solr_reindex on each model
     sunspot_models.each do |model|
       model.solr_reindex(reindex_options)
     end
   end
 
+  # Assume that if the sunspot_solr gem is in the load path that this deprication warning is
+  # redundant.
+  def sunspot_solr_in_load_path
+    $:.any? { |path| path =~ %r{sunspot_solr/lib$} }
+  end
 
-  unless defined?(Sunspot::Solr)
+  unless sunspot_solr_in_load_path
     namespace :solr do
   		task :moved_to_sunspot_solr do
   	    abort %(
