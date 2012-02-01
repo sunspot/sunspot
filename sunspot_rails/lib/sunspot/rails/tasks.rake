@@ -42,10 +42,12 @@ namespace :sunspot do
 
     if args[:use_resque] == 'true'
       sunspot_models.each do |model|
-        model.solr_clean_index_orphans(reindex_options)
         model.find_in_batches(:batch_size => reindex_options[:batch_size]) do |records|
           Resque.enqueue(Sunspot::Rails::ResqueReindexer, model.name, records.first.id, records.last.id)
         end
+      end
+      sunspot_models.each do |model|
+        model.solr_clean_index_orphans(reindex_options)
       end
     else
       # Set up progress_bar to, ah, report progress
