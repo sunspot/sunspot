@@ -4,8 +4,22 @@ describe "Sunspot rake tasks" do
   before do
     @rake = Rake::Application.new
     Rake.application = @rake
-    Rake.application.rake_require "lib/sunspot/rails/tasks"
-    Rake::Task.define_task(:environment)
+    @rake.init
+    @rake.load_rakefile
+  end
+
+  describe "sunspot:got_orphans" do
+    before do
+      @task_name = "sunspot:got_orphans"
+      posts = Array.new(2) { Post.create }.each { |post| post.index }
+      Sunspot.commit
+      posts.first.destroy
+    end
+
+    it "should report models whose DB counts differ from their Solr doc counts" do
+      STDOUT.should_receive(:puts).with("Post has 1 orphans in Solr.")
+      @rake[@task_name].invoke
+    end
   end
 
   describe "sunspot:reindex" do
@@ -25,4 +39,5 @@ describe "Sunspot rake tasks" do
       @rake[@task_name].invoke("2", "", 'true')
     end
   end
+
 end

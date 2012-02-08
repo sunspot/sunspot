@@ -1,4 +1,16 @@
 namespace :sunspot do
+  desc "Report all Solr models whose document counts differ from the ActiveRecord model count"
+  # This task prints out all Searchable models (if any) whose database counts differ from their 
+  # Solr document counts. The output is to stdout.
+  # $ rake sunspot:got_orphans
+  #
+  task :got_orphans => :environment do
+    Dir.glob(Rails.root.join('app/models/**/*.rb')).each { |path| require path }
+    Sunspot.searchable.each do |model|
+      orphancount = model.solr_index_orphans.count
+      STDOUT.puts "#{model.name} has #{orphancount} orphans in Solr." unless orphancount.zero?
+    end
+  end
 
   desc "Reindex all solr models that are located in your application's models directory."
   # This task depends on the standard Rails file naming \
