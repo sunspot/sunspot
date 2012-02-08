@@ -221,15 +221,16 @@ describe 'ActiveRecord mixin' do
 
   describe 'clean_index_orphans()' do
     before :each do
-      @posts = Array.new(3) { Post.create }.each { |post| post.index }
+      @posts = Array.new(61) { Post.create }.each { |post| post.index }
       Sunspot.commit
-      @posts.first(2).each { |post| post.destroy }
+      @posts.first(30).each { |post| post.destroy }
     end
 
     it 'should remove orphans from the index' do
+      Post.search.total.should == 61
       Post.clean_index_orphans
       Sunspot.commit
-      Post.search.hits.count.should == 1
+      Post.search.total.should == 31
     end
   end
 
