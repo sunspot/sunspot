@@ -1,7 +1,7 @@
 module Sunspot
   module Rails
     class Railtie < ::Rails::Railtie
-      initializer 'sunspot_rails.init' do
+      initializer 'sunspot_rails.init', :after=> "active_record.initialize_database" do
         Sunspot.session = Sunspot::Rails.build_session
         ActiveSupport.on_load(:active_record) do
           Sunspot::Adapters::InstanceAdapter.register(Sunspot::Rails::Adapters::ActiveRecordInstanceAdapter, ActiveRecord::Base)
