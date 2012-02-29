@@ -23,6 +23,14 @@ describe "field grouping" do
     search.group(:title).groups.should include { |g| g.value == "Title2" }
   end
 
+  it "returns the number of matches unique groups" do
+    search = Sunspot.search(Post) do
+      group :title
+    end
+
+    search.group(:title).total.should == 2
+  end
+
   it "provides access to the number of matches before grouping" do
     search = Sunspot.search(Post) do
       group :title
