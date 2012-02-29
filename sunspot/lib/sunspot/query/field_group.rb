@@ -21,8 +21,9 @@ module Sunspot
 
       def to_params
         params = {
-          :group         => "true",
-          :"group.field" => @field.indexed_name,
+          :group            => "true",
+          :"group.ngroups"  => "true",
+          :"group.field"    => @field.indexed_name
         }
 
         params.merge!(@sort.to_params("group."))
