@@ -27,7 +27,7 @@ module Sunspot
         end
         id_hit_hash.each_pair do |class_name, hits|
           ids = hits.map { |id, hit| hit.primary_key }
-          data_accessor = data_accessor_for(Util.full_const_get(class_name))
+          data_accessor = data_accessor_for(Util.full_const_get(class_name))          
           hits_for_class = id_hit_hash[class_name]
           data_accessor.load_all(ids).each do |result|
             hit = hits_for_class.delete(Adapters::InstanceAdapter.adapt(result).id.to_s)
@@ -61,11 +61,8 @@ module Sunspot
       # the block DSL.
       #
       def data_accessor_for(clazz) #:nodoc:
-        # FIXME: This method does not belong here, but I was getting bogged
-        # down trying to figure out where it should go. Punted for now.
-        # - AL 27 Nov 2011
-        (@data_accessors ||= {})[clazz.name.to_sym] ||=
-          Adapters::DataAccessor.create(clazz)
+        @regitry ||= Sunspot::Adapters::Registry.new
+        @regitry.retrieve(clazz)
       end
     end
   end

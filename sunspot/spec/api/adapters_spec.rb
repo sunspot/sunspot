@@ -31,3 +31,29 @@ describe Sunspot::Adapters::DataAccessor do
     end.should raise_error(Sunspot::NoAdapterError)
   end
 end
+
+describe Sunspot::Adapters::Registry, focus:true do
+  let(:registry){ Sunspot::Adapters::Registry.new }
+  let(:abstractclass_accessor){ Sunspot::Adapters::DataAccessor::for(AbstractModel) }
+  let(:superclass_accessor){ Sunspot::Adapters::DataAccessor::for(Model) }
+  let(:mixin_accessor){ Sunspot::Adapters::DataAccessor::for(MixModel) }
+
+  it "registers and retrieves a data accessor for abstractclass" do
+      registry.retrieve(AbstractModel).should be_a(abstractclass_accessor)
+  end
+
+  it "registers and retrieves a data accessor for superclass" do
+      registry.retrieve(Model).should be_a(superclass_accessor)
+  end
+
+  it "registers and retrieves a data accessor for mixin" do
+      registry.retrieve(MixModel).should be_a(mixin_accessor)
+  end
+
+  it "injects inherited attributes" do
+    AbstractModelDataAccessor.any_instance.stub(:inherited_attributes).and_return([:to_be_injected])
+    in_registry_data_accessor = registry.retrieve(AbstractModel)
+    in_registry_data_accessor.stub(:to_be_injected){ "value" }
+    registry.retrieve(Model).to_be_injected.should == "value"
+  end
+end
