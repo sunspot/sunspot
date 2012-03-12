@@ -15,8 +15,9 @@ module Sunspot
       def to_params
         params = {
           :hl => 'on',
-          :"hl.simple.pre" => '@@@hl@@@',
-          :"hl.simple.post" => '@@@endhl@@@'
+          :"hl.tag.pre" => '@@@hl@@@',
+          :"hl.tag.post" => '@@@endhl@@@',
+          :"hl.useFastVectorHighlighter" => true
         }
         unless @fields.empty?
           params[:"hl.fl"] = @fields.map { |field| field.indexed_name }
