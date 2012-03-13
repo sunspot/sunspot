@@ -43,6 +43,9 @@ module Sunspot
         if fragmenter = @options[:fragmenter]
           params.merge!(make_params('fragmenter', fragmenter))
         end
+        if frag_list_builder = @options[:frag_list_builder]
+          params.merge!(make_params('fragListBuilder', frag_list_builder))
+        end
 
         params
       end
