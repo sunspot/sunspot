@@ -53,7 +53,16 @@ describe Sunspot::Adapters::Registry do
   it "injects inherited attributes" do
     AbstractModelDataAccessor.any_instance.stub(:inherited_attributes).and_return([:to_be_injected])
     in_registry_data_accessor = registry.retrieve(AbstractModel)
-    in_registry_data_accessor.stub(:to_be_injected){ "value" }
+    in_registry_data_accessor.to_be_injected = "value"
     registry.retrieve(Model).to_be_injected.should == "value"
+  end
+
+  it "not overrrides inherited attributes" do
+    AbstractModelDataAccessor.any_instance.stub(:inherited_attributes).and_return([:to_be_injected])
+    parent_data_accessor = registry.retrieve(AbstractModel)
+    current_data_accessor = registry.retrieve(Model)
+    parent_data_accessor.to_be_injected = "value"
+    current_data_accessor.to_be_injected = "safe-value"
+    registry.retrieve(Model).to_be_injected.should == "safe-value"
   end
 end

@@ -1,5 +1,5 @@
 module Sunspot
-  # 
+  #
   # Sunspot works by saving references to the primary key (or natural ID) of
   # each indexed object, and then retrieving the objects from persistent storage
   # when their IDs are referenced in search results. In order for Sunspot to
@@ -53,7 +53,7 @@ module Sunspot
         @instance = instance
       end
 
-      # 
+      #
       # The universally-unique ID for this instance that will be stored in solr
       #
       # ==== Returns
@@ -285,20 +285,19 @@ module Sunspot
         @reg[key]
       end
 
-      # It will inject declared attributes to be inherited from ancestors 
+      # It will inject declared attributes to be inherited from ancestors
       # only if they are not already present in the data_accessor for each class.
       def inject_inherited_attributes_for(data_accessor)
         return data_accessor if @reg.empty?
 
         data_accessor.inherited_attributes.each do |attribute|
-          if try_attribute_for(attribute, data_accessor).nil?
+          if data_accessor.send(attribute).nil? # Inject only if the current class didn't define one.
             inherited_value = nil
-            clazz = data_accessor.clazz
-            original_class_name = clazz.name
-            clazz.ancestors.each do |ancestor_class|
-              next if ancestor_class.name.nil? || ancestor_class.name.empty?
-              key = ancestor_class.name.to_sym
-              inherited_value = try_attribute_for(attribute, @reg[key]) if @reg[key]
+            # Now try to find a value for the attribute in the chain of ancestors
+            data_accessor.clazz.ancestors.each do |ancestor|
+              next if ancestor.name.nil? || ancestor.name.empty?
+              key = ancestor.name.to_sym
+              inherited_value = @reg[key].send(attribute) if @reg[key]
               break unless inherited_value.nil?
             end
             data_accessor.send("#{attribute.to_s}=", inherited_value) unless inherited_value.nil?
@@ -306,14 +305,6 @@ module Sunspot
         end
         data_accessor
       end
-
-      private
-
-      def try_attribute_for(attribute, data_accessor)
-        data_accessor.send(attribute)
-      rescue NoMethodError
-        nil
-      end
-    end    
+    end
   end
 end
