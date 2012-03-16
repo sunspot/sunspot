@@ -35,6 +35,10 @@ module Sunspot
         @doclist['docs']
       end
       
+      def data_accessor_for(clazz)
+        @search.data_accessor_for(clazz)
+      end      
+      
       #
       # The total number of documents matching the query for this group
       #
