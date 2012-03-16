@@ -32,7 +32,7 @@ describe Sunspot::Adapters::DataAccessor do
   end
 end
 
-describe Sunspot::Adapters::Registry, focus:true do
+describe Sunspot::Adapters::Registry do
   let(:registry){ Sunspot::Adapters::Registry.new }
   let(:abstractclass_accessor){ Sunspot::Adapters::DataAccessor::for(AbstractModel) }
   let(:superclass_accessor){ Sunspot::Adapters::DataAccessor::for(Model) }
