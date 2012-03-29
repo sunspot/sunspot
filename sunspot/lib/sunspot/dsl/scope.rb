@@ -8,8 +8,6 @@ module Sunspot
     # allows operations on specific fields.
     #
     class Scope
-      NONE = Object.new
-
       def initialize(scope, setup) #:nodoc:
         @scope, @setup = scope, setup
       end
