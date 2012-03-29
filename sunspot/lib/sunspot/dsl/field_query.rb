@@ -79,7 +79,7 @@ module Sunspot
 
           if block
             Sunspot::Util.instance_eval_or_call(
-              FieldGroup.new(@query, @setup, group),
+              FieldGroup.new(@setup, group),
               &block
             )
           end
