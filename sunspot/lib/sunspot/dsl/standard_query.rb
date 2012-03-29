@@ -109,8 +109,8 @@ module Sunspot
         case args.first
         when String, Symbol
           if args.length == 1 # NONE
-            field_name = args[0]
-            return DSL::RestrictionWithNear.new(@setup.field(field_name.to_sym), @scope, @query, false)
+            field = @setup.field(args[0].to_sym)
+            return DSL::RestrictionWithNear.new(field, @scope, @query, false)
           end
         end
 
