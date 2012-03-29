@@ -7,11 +7,9 @@ module Sunspot
 
       def groups
         @groups ||=
-          begin
-            if solr_response
-              solr_response['groups'].map do |group|
-                Group.new(group['groupValue'], group['doclist'], @search)
-              end
+          if solr_response
+            solr_response['groups'].map do |group|
+              Group.new(group['groupValue'], group['doclist'], @search)
             end
           end
       end
