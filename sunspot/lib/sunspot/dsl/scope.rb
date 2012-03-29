@@ -194,11 +194,11 @@ module Sunspot
         when String, Symbol
           raise ArgumentError if args.length > 2
           field_name = args[0]
-          value = args.length > 1 ? args[1] : NONE
-          if value == NONE
-            DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, negated)
-          else
+          if args.length > 1
+            value = args[1]
             @scope.add_shorthand_restriction(negated, @setup.field(field_name.to_sym), value)
+          else # NONE
+            DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, negated)
           end
         else # args are instances
           @scope.add_restriction(
