@@ -208,8 +208,8 @@ module Sunspot
         "<Sunspot::Search:#{query.to_params.inspect}>"
       end
 
-      def add_field_group(field, options = {}) #:nodoc:
-        add_group(field.name, FieldGroup.new(field, self, options))
+      def add_field_group(field) #:nodoc:
+        add_group(field.name, FieldGroup.new(field, self))
       end
   
       def add_field_facet(field, options = {}) #:nodoc:

@@ -1,8 +1,8 @@
 module Sunspot
   module Search
     class FieldGroup
-      def initialize(field, search, options) #:nodoc:
-        @field, @search, @options = field, search, options
+      def initialize(field, search) #:nodoc:
+        @field, @search = field, search
       end
 
       def groups
