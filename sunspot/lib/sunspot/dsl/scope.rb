@@ -200,13 +200,12 @@ module Sunspot
           else
             @scope.add_shorthand_restriction(negated, @setup.field(field_name.to_sym), value)
           end
-        else
-          instances = args.flatten
+        else # args are instances
           @scope.add_restriction(
             negated,
             IdField.instance,
             Sunspot::Query::Restriction::AnyOf,
-            instances.flatten.map { |instance|
+            args.flatten.map { |instance|
               Sunspot::Adapters::InstanceAdapter.adapt(instance).index_id }
           )
         end
