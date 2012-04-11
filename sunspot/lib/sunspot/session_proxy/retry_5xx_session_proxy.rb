@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'abstract_session_proxy')
 
 module Sunspot
   module SessionProxy
-    class RetryFailSessionProxy < AbstractSessionProxy
+    class Retry5xxSessionProxy < AbstractSessionProxy
 
       attr_reader :search_session
 
@@ -31,10 +31,17 @@ module Sunspot
             retry_count = 1
             begin
               search_session.#{method}(*args, &block)
-            rescue => e
-              sleep 0.5
+            rescue RSolr::Error::Http => e
               self.rescued_exception(:#{method}, e)
-              retry if (retry_count -= 1) >= 0
+              if e.response[:status] && e.response[:status] == 503
+                sleep 0.5
+                if (retry_count -= 1) >= 0
+                  $stderr.puts "Attempting to retry..."
+                  retry
+                else
+                  $stderr.puts "Giving up."
+                end
+              end
             end
           end
         RUBY
