@@ -15,6 +15,10 @@ namespace :sunspot do
   #                                       # batchs of 1000
   # $ rake sunspot:reindex[,Post+Author]  # reindex Post and Author model
   task :reindex, [:batch_size, :models] => [:environment] do |t, args|
+
+    # Retry once or gracefully fail for a 5xx error so we don't break reindexing
+    Sunspot.session = Sunspot::SessionProxy::Retry5xxSessionProxy.new(Sunspot.session)
+
     # Set up general options for reindexing
     reindex_options = { :batch_commit => false }
     
