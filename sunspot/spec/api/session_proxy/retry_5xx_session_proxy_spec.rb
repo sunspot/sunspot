@@ -1,6 +1,6 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
-describe Sunspot::SessionProxy::ShardingSessionProxy do
+describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   
   before :each do
     Sunspot::Session.connection_class = Mock::ConnectionFactory.new
