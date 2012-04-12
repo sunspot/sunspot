@@ -33,7 +33,7 @@ module Sunspot
               search_session.#{method}(*args, &block)
             rescue RSolr::Error::Http => e
               self.rescued_exception(:#{method}, e)
-              if e.response[:status] && e.response[:status] == 503
+              if e.response[:status] && (500..599).includes?(e.response[:status].to_i)
                 sleep 0.5
                 if (retry_count -= 1) >= 0
                   $stderr.puts "Attempting to retry..."
