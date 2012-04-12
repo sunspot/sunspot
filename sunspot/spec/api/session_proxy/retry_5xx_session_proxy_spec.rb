@@ -5,8 +5,8 @@ describe Sunspot::SessionProxy::ShardingSessionProxy do
   before :each do
     Sunspot::Session.connection_class = Mock::ConnectionFactory.new
     @sunspot_session = Sunspot.session
-    @session_proxy = Sunspot::SessionProxy::Retry5xxSessionProxy.new(@sunspot_session)
-    Sunspot.session = @session_proxy
+    @proxy = Sunspot::SessionProxy::Retry5xxSessionProxy.new(@sunspot_session)
+    Sunspot.session = @proxy
   end
 
   class FakeException < RSolr::Error::Http
