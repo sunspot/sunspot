@@ -4,7 +4,34 @@ module Sunspot
   module SessionProxy
     class Retry5xxSessionProxy < AbstractSessionProxy
 
+      class RetryHandler
+        attr_reader :search_session
+
+        def initialize(search_session)
+          @search_session = search_session
+        end
+
+        def method_missing(m, *args, &block)
+          retry_count = 1
+          begin
+            search_session.send(m, args, block)
+          rescue RSolr::Error::Http => e
+            if (500..599).include?(e.response[:status].to_i)
+              if retry_count > 0
+                retry_count -= 1
+                retry
+              else
+                e.response
+              end
+            else
+              raise e
+            end
+          end
+        end
+      end
+
       attr_reader :search_session
+      attr_reader :retry_handler
 
       delegate :new_search, :search, :config,
                 :new_more_like_this, :more_like_this,
@@ -13,40 +40,18 @@ module Sunspot
 
       def initialize(search_session = Sunspot.session)
         @search_session = search_session
+        @retry_handler = RetryHandler.new(search_session)
       end
 
       def rescued_exception(method, e)
         $stderr.puts("Exception in #{method}: #{e.message}")
       end
 
-      SUPPORTED_METHODS = [
-        :batch, :commit, :commit_if_dirty, :commit_if_delete_dirty, :dirty?,
-        :index!, :index, :optimize, :remove!, :remove, :remove_all!, :remove_all,
-        :remove_by_id!, :remove_by_id
-      ]
+      delegate :batch, :commit, :commit_if_dirty, :commit_if_delete_dirty,
+        :dirty?, :index!, :index, :optimize, :remove!, :remove, :remove_all!,
+        :remove_all, :remove_by_id!, :remove_by_id,
+        :to => :retry_handler
 
-      SUPPORTED_METHODS.each do |method|
-        module_eval(<<-RUBY)
-          def #{method}(*args, &block)
-            retry_count = 1
-            begin
-              search_session.#{method}(*args, &block)
-            rescue RSolr::Error::Http => e
-              self.rescued_exception(:#{method}, e)
-              if e.response[:status] && (500..599).includes?(e.response[:status].to_i)
-                sleep 0.5
-                if (retry_count -= 1) >= 0
-                  $stderr.puts "Attempting to retry..."
-                  retry
-                else
-                  $stderr.puts "Giving up."
-                end
-              end
-            end
-          end
-        RUBY
-      end
-      
     end
   end
 end
