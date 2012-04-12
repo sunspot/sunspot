@@ -14,7 +14,7 @@ module Sunspot
         def method_missing(m, *args, &block)
           retry_count = 1
           begin
-            search_session.send(m, args, block)
+            search_session.send(m, *args, &block)
           rescue RSolr::Error::Http => e
             if (500..599).include?(e.response[:status].to_i)
               if retry_count > 0
