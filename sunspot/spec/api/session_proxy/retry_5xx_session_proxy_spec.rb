@@ -62,7 +62,7 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   it "should not retry a 4xx" do
     e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_rsolr_response(400))
     @sunspot_session.should_receive(:index).and_raise(e)
-    lambda { Sunspot.index(post) }.should raise_error(e)
+    lambda { Sunspot.index(post) }.should raise_error
   end
 
   # TODO: try against more than just Sunspot.index? but that's just testing the
