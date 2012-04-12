@@ -15,12 +15,22 @@ module Sunspot
           retry_count = 1
           begin
             search_session.send(m, *args, &block)
+          rescue Errno::ECONNRESET => e
+            if retry_count > 0
+              $stderr.puts "Error - #{e.message[/^.*$/]} - retrying..."
+              retry_count -= 1
+              retry
+            else
+              $stderr.puts "Error - #{e.message[/^.*$/]} - ignoring..."
+            end
           rescue RSolr::Error::Http => e
             if (500..599).include?(e.response[:status].to_i)
               if retry_count > 0
+                $stderr.puts "Error - #{e.message[/^.*$/]} - retrying..."
                 retry_count -= 1
                 retry
               else
+                $stderr.puts "Error - #{e.message[/^.*$/]} - ignoring..."
                 e.response
               end
             else
