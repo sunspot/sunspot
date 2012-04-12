@@ -9,7 +9,7 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
     Sunspot.session = @proxy
   end
 
-  class FakeException < RSolr::Error::Http
+  class FakeRSolrErrorHttp < RSolr::Error::Http
     def backtrace
       []
     end
@@ -33,7 +33,7 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   end
 
   it "should be successful with a single exception followed by a sucess" do
-    e = FakeException.new(fake_rsolr_request, fake_rsolr_response(503))
+    e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_rsolr_response(503))
     @sunspot_session.should_receive(:index).and_return do
       @sunspot_session.should_receive(:index).and_return(mock)
       raise e
@@ -43,7 +43,7 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
 
   it "should return the error response after two exceptions" do
     fake_response = fake_rsolr_response(503)
-    e = FakeException.new(fake_rsolr_request, fake_response)
+    e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_response)
     fake_success = mock('success')
 
     @sunspot_session.should_receive(:index).and_return do
@@ -60,7 +60,7 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   end
 
   it "should not retry a 4xx" do
-    e = FakeException.new(fake_rsolr_request, fake_rsolr_response(400))
+    e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_rsolr_response(400))
     @sunspot_session.should_receive(:index).and_raise(e)
     lambda { Sunspot.index(post) }.should raise_error(e)
   end
