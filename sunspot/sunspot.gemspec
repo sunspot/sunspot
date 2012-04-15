@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency 'rsolr', '~>1.0.6'
-  s.add_dependency 'escape', '~>0.0.4'
   s.add_dependency 'pr_geohash', '~>1.0'
 
   s.add_development_dependency 'rspec', '~>2.6.0'
