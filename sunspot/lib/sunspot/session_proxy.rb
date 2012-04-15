@@ -83,5 +83,13 @@ module Sunspot
         'silent_fail_session_proxy'
       )
     )
+    autoload(
+      :Retry5xxSessionProxy,
+      File.join(
+        File.dirname(__FILE__),
+        'session_proxy',
+        'retry_5xx_session_proxy'
+      )
+    )
   end
 end
