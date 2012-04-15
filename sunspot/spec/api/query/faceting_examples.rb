@@ -54,6 +54,13 @@ shared_examples_for "facetable query" do
       end
       connection.should have_last_search_with(:"f.category_ids_im.facet.limit" => 10)
     end
+    
+    it 'sets the facet offset' do
+      search do
+        facet :category_ids, :offset => 10
+      end
+      connection.should have_last_search_with(:"f.category_ids_im.facet.offset" => 10)
+    end
 
     it 'sets the facet minimum count' do
       search do
