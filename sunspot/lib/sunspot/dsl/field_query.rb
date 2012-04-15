@@ -195,6 +195,8 @@ module Sunspot
       #   Either :count (values matching the most terms first) or :index (lexical)
       # :limit<Integer>::
       #   The maximum number of facet rows to return
+      # :offset<Integer>::
+      #   The offset from which to start returning facet rows
       # :minimum_count<Integer>::
       #   The minimum count a facet row must have to be returned
       # :zeros<Boolean>::
