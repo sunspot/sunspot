@@ -387,6 +387,15 @@ search.facet(:average_rating).rows.each do |facet|
 end
 ```
 
+#### Range Facets
+
+```ruby
+# Posts faceted by range of average ratings
+Sunspot.search(Post) do
+  facet :average_rating, :range => 1..5, :range_interval => 1
+end
+```
+
 ### Ordering
 
 By default, Sunspot orders results by "score": the Solr-determined
