@@ -59,16 +59,15 @@ namespace :sunspot do
     end
   end
 
-  # Assume that if the sunspot_solr gem is in the load path that this deprication warning is
-  # redundant.
-  def sunspot_solr_in_load_path
-    $:.any? { |path| path =~ %r{sunspot_solr/lib$} }
+  def sunspot_solr_in_load_path?
+    # http://www.rubular.com/r/rJGDh7eOSc
+    $:.any? { |path| path =~ %r{sunspot_solr(-[^/]+)?/lib$} }
   end
 
-  unless sunspot_solr_in_load_path
+  unless sunspot_solr_in_load_path?
     namespace :solr do
-  		task :moved_to_sunspot_solr do
-  	    abort %(
+      task :moved_to_sunspot_solr do
+        abort %(
   Note: This task has been moved to the sunspot_solr gem. To install, start and
   stop a local Solr instance, please add sunspot_solr to your Gemfile:
 
@@ -77,17 +76,19 @@ namespace :sunspot do
   end
 
 )
-  		end
-  		
+      end
+
       desc 'Start the Solr instance'
       task :start => :moved_to_sunspot_solr
+
       desc 'Run the Solr instance in the foreground'
       task :run => :moved_to_sunspot_solr
+
       desc 'Stop the Solr instance'
       task :stop => :moved_to_sunspot_solr
-  		# for backwards compatibility
+
+      # for backwards compatibility
       task :reindex => :"sunspot:reindex"
     end
   end
-  
 end
