@@ -201,6 +201,7 @@ module Sunspot
             @scope.add_shorthand_restriction(negated, @setup.field(field_name.to_sym), value)
           end
         else
+          return if args.empty?
           instances = args.flatten
           @scope.add_restriction(
             negated,
