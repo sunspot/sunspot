@@ -143,6 +143,20 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'Legacy (static) fields' do
+    it "allows for using symbols in defining static field names" do
+      class Legacy < SuperClass
+        attr_accessor :legacy
+      end
+      Sunspot.setup(Legacy) do
+        string :legacy, :as => :legacy_field_s
+      end
+      Sunspot.remove_all
+      Sunspot.index!(legacy = Legacy.new(:legacy => "doesn't matter"))
+      expect { Sunspot.search(Legacy) { with(:legacy, "doesn't matter") } }.to_not raise_error
+    end
+  end
+
   describe 'reserved words' do
     %w(AND OR NOT TO).each do |word|
       it "should successfully search for #{word.inspect}" do
