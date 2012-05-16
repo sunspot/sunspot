@@ -143,6 +143,14 @@ describe 'scoped_search' do
     end
   end
 
+  describe 'Legacy (static) fields' do
+    it "allows for using symbols in defining static field names" do
+      Sunspot.remove_all
+      Sunspot.index!(legacy = Post.new(:title => "foo"))
+      Sunspot.search(Post) { with(:legacy, "legacy foo") }.results.should == [legacy]
+    end
+  end
+
   describe 'reserved words' do
     %w(AND OR NOT TO).each do |word|
       it "should successfully search for #{word.inspect}" do
