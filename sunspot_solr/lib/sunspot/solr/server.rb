@@ -1,4 +1,4 @@
-require 'escape'
+require 'shellwords'
 require 'set'
 require 'tempfile'
 require 'sunspot/solr/java'
@@ -101,7 +101,7 @@ module Sunspot
         command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
         command << '-jar' << File.basename(solr_jar)
         FileUtils.cd(File.dirname(solr_jar)) do
-          exec(Escape.shell_command(command))
+          exec(Shellwords.shelljoin(command))
         end
       end
 

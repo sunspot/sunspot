@@ -224,7 +224,7 @@ shared_examples_for 'fulltext query' do
         end
       end
     end
-    connection.should have_last_search_with(:bq => ['average_rating_ft:[2\.0 TO *]^2.0'])
+    connection.should have_last_search_with(:bq => ['average_rating_ft:{2\.0 TO *}^2.0'])
   end
 
   it 'creates multiple boost queries' do
@@ -240,7 +240,7 @@ shared_examples_for 'fulltext query' do
     end
     connection.should have_last_search_with(
       :bq => [
-        'average_rating_ft:[2\.0 TO *]^2.0',
+        'average_rating_ft:{2\.0 TO *}^2.0',
         'featured_bs:true^1.5'
       ]
     )

@@ -8,6 +8,10 @@
 * Adds ability to nest `Sunspot.batch` calls (Thorbjørn Hermansen)
 * Adds `open_timeout` and `read_timeout` configuration options (Rob Di
   Marco)
+* Adds `offset` options to facets (Federico Gonzalez)
+* Adds `Retry5xxSessionProxy` to retry requests when an internal server error
+  occurs (Nick Zadrozny)
+* Adds support for range queries (Jan Ulrich)
 
 == 1.3.0 2011-11-26
 * Requests to Solr use HTTP POST verb by default to avoid issues when the query string grows too large for GET (Johan Van Ryseghem)

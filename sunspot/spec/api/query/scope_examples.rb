@@ -46,21 +46,21 @@ shared_examples_for "scoped query" do
     search do
       with(:average_rating).less_than 3.0
     end
-    connection.should have_last_search_including(:fq, 'average_rating_ft:[* TO 3\.0]')
+    connection.should have_last_search_including(:fq, 'average_rating_ft:{* TO 3\.0}')
   end
 
   it 'should quote string with space in a less than match' do
     search do
       with(:title).less_than('test value')
     end
-    connection.should have_last_search_including(:fq, 'title_ss:[* TO "test\ value"]')
+    connection.should have_last_search_including(:fq, 'title_ss:{* TO "test\ value"}')
   end
 
   it 'scopes by greater than match with float' do
     search do
       with(:average_rating).greater_than 3.0
     end
-    connection.should have_last_search_including(:fq, 'average_rating_ft:[3\.0 TO *]')
+    connection.should have_last_search_including(:fq, 'average_rating_ft:{3\.0 TO *}')
   end
 
   it 'scopes by short-form between match with integers' do
@@ -116,14 +116,14 @@ shared_examples_for "scoped query" do
     search do
       without(:average_rating).less_than 3.0
     end
-    connection.should have_last_search_including(:fq, '-average_rating_ft:[* TO 3\.0]')
+    connection.should have_last_search_including(:fq, '-average_rating_ft:{* TO 3\.0}')
   end
 
   it 'scopes by not greater than match with float' do
     search do
       without(:average_rating).greater_than 3.0
     end
-    connection.should have_last_search_including(:fq, '-average_rating_ft:[3\.0 TO *]')
+    connection.should have_last_search_including(:fq, '-average_rating_ft:{3\.0 TO *}')
   end
   
   it 'scopes by not between match with shorthand' do
