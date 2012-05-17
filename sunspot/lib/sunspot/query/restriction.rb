@@ -185,6 +185,23 @@ module Sunspot
         end
 
         def to_solr_conditional
+          "{* TO #{solr_value}}"
+        end
+      end
+
+      # 
+      # Results must have field with value less or equal to than given value
+      #
+      class LessThanOrEqualTo < Base
+        private
+
+        def solr_value(value = @value)
+          solr_value = super
+          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
+          solr_value
+        end
+
+        def to_solr_conditional
           "[* TO #{solr_value}]"
         end
       end
@@ -193,6 +210,23 @@ module Sunspot
       # Results must have field with value greater than given value
       #
       class GreaterThan < Base
+        private
+
+        def solr_value(value = @value)
+          solr_value = super
+          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
+          solr_value
+        end
+
+        def to_solr_conditional
+          "{#{solr_value} TO *}"
+        end
+      end
+
+      # 
+      # Results must have field with value greater than or equal to given value
+      #
+      class GreaterThanOrEqualTo < Base
         private
 
         def solr_value(value = @value)

@@ -84,6 +84,13 @@ describe 'search faceting' do
       end
       search.facet(:title).rows.map { |row| row.value }.should include('zero')
     end
+    
+    it 'should return facet rows from an offset' do
+      search = Sunspot.search(Post) do
+        facet :title, :offset => 3
+      end
+      search.facet(:title).rows.map { |row| row.value }.should == %w(one zero)
+    end
 
     it 'should return a specified minimum count' do
       search = Sunspot.search(Post) do

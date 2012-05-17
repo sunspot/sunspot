@@ -143,7 +143,7 @@ Do it like this:
   Post.search do
     with :blog_id, 1
     with(:updated_at).greater_than(Time.now - 2.weeks)
-    order :sort_title, :asc
+    order_by :sort_title, :asc
     paginate :page => 1, :per_page => 15
   end
 
@@ -168,7 +168,7 @@ be added, so just use the interface provided by Sunspot:
 
   Sunspot.search(Post, Comment) do
     with :blog_id, 1
-    order :created_at, :asc
+    order_by :created_at, :asc
   end
 
 Be sure to check out the Sunspot documentation for all the details.

@@ -14,7 +14,7 @@ shared_examples_for "query with dynamic field support" do
         with(:test).less_than(1)
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_integer\:test_i:[* TO 1]')
+    connection.should have_last_search_including(:fq, 'custom_integer\:test_i:{* TO 1}')
   end
 
   it 'restricts by dynamic float field with between restriction' do
