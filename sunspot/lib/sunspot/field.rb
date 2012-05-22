@@ -104,7 +104,7 @@ module Sunspot
     def set_indexed_name(options)
       @indexed_name =
         if options[:as]
-          options.delete(:as)
+          options.delete(:as).to_s
         else
           "#{@type.indexed_name(@name).to_s}#{'m' if @multiple }#{'s' if @stored}#{'v' if more_like_this?}"
         end

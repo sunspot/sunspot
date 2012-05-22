@@ -147,7 +147,7 @@ describe 'scoped_search' do
     it "allows for using symbols in defining static field names" do
       Sunspot.remove_all
       Sunspot.index!(Post.new)
-      expect { Sunspot.search(Post) { with(:legacy, "doesn't matter") } }.to_not raise_error
+      expect { Sunspot.search(Post) { with(:legacy, "doesn't matter") } }.to_not raise_error(NoMethodError, /undefined method.*gsub.*Symbol/)
     end
   end
 

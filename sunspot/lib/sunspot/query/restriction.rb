@@ -89,7 +89,7 @@ module Sunspot
         # String:: Boolean phrase for restriction in the positive
         #
         def to_positive_boolean_phrase
-          "#{escape(@field.indexed_name.to_s)}:#{to_solr_conditional}"
+          "#{escape(@field.indexed_name)}:#{to_solr_conditional}"
         end
 
         # 
