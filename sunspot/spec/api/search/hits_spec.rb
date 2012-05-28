@@ -114,7 +114,7 @@ describe 'hits', :type => :search do
   end
 
   it 'should return stored dynamic fields' do
-    stub_full_results('instance' => Post.new, 'custom_string:test_ss' => 'Custom')
+    stub_full_results('instance' => Post.new, 'custom_string_test_ss' => 'Custom')
     session.search(Post, Namespaced::Comment).hits.first.stored(:custom_string, :test).should == 'Custom'
   end
 

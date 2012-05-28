@@ -13,6 +13,9 @@ end
 require File.join(File.dirname(__FILE__), 'ext')
 
 RSpec.configure do |config|
+  #Color
+  config.color_enabled = true
+  
   # Mock session available to all spec/api tests
   config.include MockSessionHelper,
                  :type => :api,
