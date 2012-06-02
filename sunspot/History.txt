@@ -12,6 +12,7 @@
 * Adds `Retry5xxSessionProxy` to retry requests when an internal server error
   occurs (Nick Zadrozny)
 * Adds support for range queries (Jan Ulrich)
+* Allows custom field names specified with :as to be symbols (David Oliver)
 
 == 1.3.0 2011-11-26
 * Requests to Solr use HTTP POST verb by default to avoid issues when the query string grows too large for GET (Johan Van Ryseghem)
