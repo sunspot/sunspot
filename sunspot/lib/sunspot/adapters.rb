@@ -79,7 +79,11 @@ module Sunspot
         #   wraps the given instance
         #
         def adapt(instance) #:nodoc:
-          self.for(instance.class).new(instance)
+          @known_adapters ||= {}
+          clazz = instance.class
+          adapter = @known_adapters[clazz.name.to_sym] || self.for(clazz)
+          @known_adapters[clazz.name.to_sym] ||= adapter
+          adapter.new(instance)
         end
 
         # Register an instance adapter for a set of classes. When searching for
