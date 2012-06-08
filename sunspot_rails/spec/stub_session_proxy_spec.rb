@@ -79,11 +79,6 @@ describe 'specs with Sunspot stubbed' do
     Post.search
   end
 
-  it 'should not execute a search when #search called' do
-    @session.should_not_receive(:search)
-    Post.search
-  end
-
   it 'should not execute a search when #search called with parameters' do
     @session.should_not_receive(:search)
     Post.search(:include => :blog, :select => 'id, title')
