@@ -94,6 +94,11 @@ describe 'specs with Sunspot stubbed' do
     Sunspot.new_search(Post).should respond_to(:execute)
   end
 
+  it 'should not send more_like_this to session' do
+    @session.should_not_receive(:more_like_this)
+    Sunspot.more_like_this(@post)
+  end
+
   describe 'stub search' do
     before :each do
       @search = Post.search
