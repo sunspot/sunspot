@@ -55,7 +55,11 @@ module Sunspot
       def new_search(*types)
         Search.new
       end
-      
+
+      def more_like_this(*args)
+        Search.new
+      end
+
       def new_more_like_this(*args)
         Search.new
       end
