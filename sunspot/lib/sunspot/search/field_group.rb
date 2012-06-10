@@ -1,3 +1,5 @@
+require 'sunspot/search/paginated_collection'
+
 module Sunspot
   module Search
     class FieldGroup
@@ -9,9 +11,11 @@ module Sunspot
         @groups ||=
           begin
             if solr_response
-              solr_response['groups'].map do |group|
-                Group.new(group['groupValue'], group['doclist'], @search)
-              end
+              paginate_collection(
+                solr_response['groups'].map do |group|
+                  Group.new(group['groupValue'], group['doclist'], @search)
+                end
+              )
             end
           end
       end
@@ -32,6 +36,10 @@ module Sunspot
 
       def solr_response
         @search.group_response[@field.indexed_name.to_s]
+      end
+
+      def paginate_collection(collection)
+        PaginatedCollection.new(collection, @search.query.page, @search.query.per_page, total)
       end
     end
   end
