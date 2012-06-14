@@ -31,7 +31,7 @@ end
 desc 'Run all the tests'
 task :default do
   exit system([ "GEM=sunspot ci/travis.sh",
-                "GEM=sunspot_rails RAILS=2.3.14 ci/travis.sh",
-                "GEM=sunspot_rails RAILS=3.0.11 ci/travis.sh",
-                "GEM=sunspot_rails RAILS=3.1.3 ci/travis.sh" ].join(" && ")) ? 0 : 1
+                "GEM=sunspot_rails RAILS=3.0.15 ci/travis.sh",
+                "GEM=sunspot_rails RAILS=3.1.6  ci/travis.sh",
+                "GEM=sunspot_rails RAILS=3.2.6  ci/travis.sh" ].join(" && ")) ? 0 : 1
 end
