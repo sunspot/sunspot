@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set +e
 
 solr_responding() {
   port=$1
