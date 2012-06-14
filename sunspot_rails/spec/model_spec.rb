@@ -370,7 +370,7 @@ describe 'ActiveRecord mixin' do
       @posts.first.more_like_this.results.should == [@posts[3], @posts[1]]
     end
 
-    it "should return results for specified classes" do
+    it "should return results for specified classes", :persisted => true do
       @posts.first.more_like_this(Post, PostWithAuto).results.to_set.should ==
         Set[@posts_with_auto[0], @posts[1], @posts[3]]
     end
@@ -392,7 +392,7 @@ describe 'ActiveRecord mixin' do
     end
   end
 
-  describe ':if constraint' do
+  describe ':if constraint', :persisted => true do
     subject do
       PostWithAuto.new(:title => 'Post123')
     end
@@ -446,7 +446,7 @@ describe 'ActiveRecord mixin' do
     end
 
     context 'Proc' do
-      context 'constraint returns true' do
+      context 'constraint returns true', :persisted => true do
         # searchable :if => proc { true }
         before do
           subject.class.sunspot_options[:if] = proc { true }
@@ -489,7 +489,7 @@ describe 'ActiveRecord mixin' do
       end
     end
 
-    it 'removes the model from the index if the constraint does not match' do
+    it 'removes the model from the index if the constraint does not match', :persisted => true do
       subject.save!
       Sunspot.commit
       subject.class.search.results.should include(subject)
@@ -501,7 +501,7 @@ describe 'ActiveRecord mixin' do
     end
   end
 
-  describe ':unless constraint' do
+  describe ':unless constraint', :persisted => true do
     subject do
       PostWithAuto.new(:title => 'Post123')
     end
