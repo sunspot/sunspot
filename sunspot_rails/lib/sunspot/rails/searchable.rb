@@ -85,16 +85,27 @@ module Sunspot #:nodoc:
 
             unless options[:auto_index] == false
               before_save :mark_for_auto_indexing_or_removal
-              after_save :perform_index_tasks
+
+              if respond_to?(:after_commit)
+                after_commit :perform_index_tasks, :if => :persisted?
+              else
+                after_save :perform_index_tasks
+              end
             end
 
             unless options[:auto_remove] == false
-              after_destroy do |searchable|
+              remove_searchable = Proc.new do |searchable|
                 searchable.remove_from_index
+              end
+
+              if respond_to?(:after_commit)
+                after_commit remove_searchable, :on => :destroy
+              else
+                after_destroy remove_searchable
               end
             end
             options[:include] = Util::Array(options[:include])
-            
+
             self.sunspot_options = options
           end
         end

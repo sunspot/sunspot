@@ -1,6 +1,6 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
-describe 'searchable with lifecycle' do
+describe 'searchable with lifecycle', :persisted => true do
   describe 'on create' do
     before :each do
       @post = PostWithAuto.create
@@ -12,7 +12,7 @@ describe 'searchable with lifecycle' do
     end
   end
 
-  describe 'on update' do
+  describe 'on update', :persisted => true do
     before :each do
       @post = PostWithAuto.create
       @post.update_attributes(:title => 'Test 1')
