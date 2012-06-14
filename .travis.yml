@@ -28,6 +28,8 @@ matrix:
       env: GEM=sunspot_rails RAILS=3.1.6
     - rvm: 1.9.2
       env: GEM=sunspot_rails RAILS=3.2.6
+    - rvm: 1.9.3
+      env: GEM=sunspot_rails RAILS=2.3.14
 
 notifications:
   irc: "irc.freenode.org#sunspot-ruby"
