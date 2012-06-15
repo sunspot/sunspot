@@ -43,6 +43,9 @@ module Sunspot #:nodoc:
         #   the constraint will be removed from the index upon save.  Multiple
         #   constraints can be specified by passing an array (e.g. <code>:if =>
         #   [:method1, :method2]</code>).
+        # :only_attribute_changes_of<Array>::
+        #   Define the only attributes that should trigger a reindex of that
+        #   object. Should be at least the indexed attributes.
         # :ignore_attribute_changes_of<Array>::
         #   Define attributes, that should not trigger a reindex of that
         #   object. Usual suspects are updated_at or counters.
@@ -459,8 +462,10 @@ module Sunspot #:nodoc:
             # :if/:unless constraints pass or were not present
 
             @marked_for_auto_indexing =
-              if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
-                !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
+              if !new_record? && only_attributes = self.class.sunspot_options[:only_attribute_changes_of]
+                (only_attributes & changed.map(&:to_sym)).any?
+              elsif !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
+                !(changed.map(&:to_sym) - ignore_attributes).blank?
               else
                 true
               end
