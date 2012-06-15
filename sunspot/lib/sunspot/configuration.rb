@@ -10,6 +10,9 @@ module Sunspot
   #   count per page if it is not explicitly specified in the query.
   # Sunspot.config.indexing.default_batch_size::
   #   This sets the batch size for indexing, default is 50
+  # Sunspot.config.indexing.auto_index_callback::
+  #   This sets the activerecord callback to use when indexing. The default is
+  #   :after_save but :after_commit is highly recommended.
   #
   module Configuration
     class <<self
@@ -34,6 +37,7 @@ module Sunspot
           end
           indexing do
             default_batch_size 50
+            auto_index_callback :after_save
           end
         end
       end
