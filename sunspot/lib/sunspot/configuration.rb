@@ -8,6 +8,9 @@ module Sunspot
   # Sunspot.config.pagination.default_per_page::
   #   Solr always paginates its results. This sets Sunspot's default result
   #   count per page if it is not explicitly specified in the query.
+  # Sunspot.config.indexing.auto_index_callback::
+  #   This sets the activerecord callback to use when indexing. The default is
+  #   :after_save but :after_commit is highly recommended.
   #
   module Configuration
     class <<self
@@ -27,6 +30,9 @@ module Sunspot
           end
           pagination do
             default_per_page 30
+          end
+          indexing do
+            auto_index_callback :after_save
           end
         end
       end

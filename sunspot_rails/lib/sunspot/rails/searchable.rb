@@ -86,7 +86,7 @@ module Sunspot #:nodoc:
             unless options[:auto_index] == false
               before_save :mark_for_auto_indexing_or_removal
 
-              if respond_to?(:after_commit)
+              if index_after_commit?
                 after_commit :perform_index_tasks, :if => :persisted?
               else
                 after_save :perform_index_tasks
@@ -98,7 +98,7 @@ module Sunspot #:nodoc:
                 searchable.remove_from_index
               end
 
-              if respond_to?(:after_commit)
+              if index_after_commit?
                 after_commit remove_searchable, :on => :destroy
               else
                 after_destroy remove_searchable
@@ -108,6 +108,10 @@ module Sunspot #:nodoc:
 
             self.sunspot_options = options
           end
+        end
+
+        def index_after_commit?
+          Sunspot.config.indexing.auto_index_callback == :after_commit
         end
 
         # 
