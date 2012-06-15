@@ -7,7 +7,7 @@ describe 'searchable with lifecycle' do
       Sunspot.commit
     end
 
-    it 'should automatically index' do
+    it 'should automatically index', :persisted => true do
       PostWithAuto.search.results.should == [@post]
     end
   end
@@ -19,11 +19,11 @@ describe 'searchable with lifecycle' do
       Sunspot.commit
     end
 
-    it 'should automatically update index' do
+    it 'should automatically update index', :persisted => true do
       PostWithAuto.search { with :title, 'Test 1' }.results.should == [@post]
     end
 
-    it "should index model if relevant attribute changed" do
+    it "should index model if relevant attribute changed", :persisted => true do
       @post = PostWithAuto.create!
       @post.title = 'new title'
       @post.should_receive :solr_index
