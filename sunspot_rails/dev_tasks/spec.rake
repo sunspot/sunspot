@@ -53,7 +53,7 @@ namespace :spec do
 
     FileUtils.cp_r File.join(rails_template_path, "."), app_path
 
-    rails_major_version = version[0..0]
+    rails_major_version = version.split(".").first
     FileUtils.cp File.join(app_path, "config", "sunspot_rails#{rails_major_version}.yml"),
                  File.join(app_path, "config", "sunspot.yml")
   end
