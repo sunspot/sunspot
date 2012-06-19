@@ -89,7 +89,7 @@ module Sunspot #:nodoc:
               # after_commit :perform_index_tasks, :if => :persisted?
               __send__ Sunspot::Rails.configuration.auto_index_callback,
                        :perform_index_tasks,
-                       :if => :persisted?
+                       :unless => :new_record?
             end
 
             unless options[:auto_remove] == false
