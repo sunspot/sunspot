@@ -75,6 +75,14 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   it "should handle the 'disabled' property when not set" do
     @config.disabled?.should be_false
   end
+
+  it "should handle the 'auto_index_callback' property when not set" do
+    @config.auto_index_callback.should == "after_save"
+  end
+
+  it "should handle the 'auto_remove_callback' property when not set" do
+    @config.auto_remove_callback.should == "after_destroy"
+  end
 end
 
 describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
@@ -125,6 +133,21 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
 
   it "should handle the 'bind_address' property when set" do
     @config.bind_address.should == "127.0.0.1"
+  end
+end
+
+describe Sunspot::Rails::Configuration, "with auto_index_callback and auto_remove_callback set" do
+  before do
+    ::Rails.stub!(:env => 'config_commit_test')
+    @config = Sunspot::Rails::Configuration.new
+  end
+
+  it "should handle the 'auto_index_callback' property when set" do
+    @config.auto_index_callback.should == "after_commit"
+  end
+
+  it "should handle the 'auto_remove_callback' property when set" do
+    @config.auto_remove_callback.should == "after_commit"
   end
 end
 
