@@ -1,8 +1,8 @@
 module Sunspot
   module DSL
     class FieldGroup
-      def initialize(query, setup, group)
-        @query, @setup, @group = query, setup, group
+      def initialize(setup, group)
+        @setup, @group = setup, group
       end
 
       #

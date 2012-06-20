@@ -1,17 +1,15 @@
 module Sunspot
   module Search
     class FieldGroup
-      def initialize(field, search, options) #:nodoc:
-        @field, @search, @options = field, search, options
+      def initialize(field, search) #:nodoc:
+        @field, @search = field, search
       end
 
       def groups
         @groups ||=
-          begin
-            if solr_response
-              solr_response['groups'].map do |group|
-                Group.new(group['groupValue'], group['doclist'], @search)
-              end
+          if solr_response
+            solr_response['groups'].map do |group|
+              Group.new(group['groupValue'], group['doclist'], @search)
             end
           end
       end
