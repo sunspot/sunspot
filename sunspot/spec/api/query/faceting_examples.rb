@@ -179,7 +179,6 @@ shared_examples_for "facetable query" do
       connection.should have_last_search_with(:"f.blog.facet.sort" => 'true')
     end
 
-
     it 'raises an ArgumentError if exclusion attempted on a restricted field facet' do
       lambda do
         search do
