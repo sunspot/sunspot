@@ -71,4 +71,30 @@ describe "field grouping" do
     title1_group = search.group(:title).groups.detect { |g| g.value == "Title1" }
     title1_group.hits.first.primary_key.to_i.should == highest_ranked_post.id
   end
+
+  it "allows pagination within groups" do
+    search = Sunspot.search(Post) do
+      group :title
+      paginate :per_page => 1, :page => 2
+    end
+
+    search.group(:title).groups.length.should eql(1)
+    search.group(:title).groups.first.results.should == [ @posts.last ]
+  end
+
+  context "returns a paginated collection" do
+    subject do
+      search = Sunspot.search(Post) do
+        group :title
+        paginate :per_page => 1, :page => 2
+      end
+      search.group(:title).groups
+    end
+
+    it { subject.per_page.should      eql(1)   }
+    it { subject.total_pages.should   eql(2)   }
+    it { subject.current_page.should  eql(2)   }
+    it { subject.first_page?.should   be_false }
+    it { subject.last_page?.should    be_true  }
+  end
 end
