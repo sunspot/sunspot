@@ -331,9 +331,11 @@ module Sunspot #:nodoc:
             search.build do |query|
               if options[:include]
                 query.data_accessor_for(self).include = options[:include]
+                self.descendants.each{|sub| query.data_accessor_for(sub).include = options[:include]}
               end
               if options[:select]
                 query.data_accessor_for(self).select = options[:select]
+                self.descendants.each{|sub| query.data_accessor_for(sub).include = options[:select]}
               end
             end
           end
