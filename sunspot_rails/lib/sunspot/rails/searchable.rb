@@ -285,12 +285,13 @@ module Sunspot #:nodoc:
         # Array:: Collection of IDs that exist in Solr but not in the database
         def solr_index_orphans(opts={})
           batch_size = opts[:batch_size] || Sunspot.config.indexing.default_batch_size
-          count = solr_search.total
-          indexed_ids = solr_search_ids { paginate(:page => 1, :per_page => count) }.to_set
-          find_each(:select => primary_key, :batch_size => batch_size) do |object|
-            indexed_ids.delete(object.id)
+          orphaned_indexed_ids = []
+          (solr_search.total / batch_size.to_f).ceil.times do |page|
+            solr_ids = solr_search_ids { paginate(:page => page + 1, :per_page => batch_size) }
+            db_ids = select(:id).where(["id in (?)",solr_ids]).collect(&:id)
+            orphaned_indexed_ids += solr_ids - db_ids
           end
-          indexed_ids.to_a
+          orphaned_indexed_ids
         end
 
         #

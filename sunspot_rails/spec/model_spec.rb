@@ -203,18 +203,13 @@ describe 'ActiveRecord mixin' do
 
   describe 'index_orphans()' do
     before :each do
-      @posts = Array.new(2) { Post.create }.each { |post| post.index }
+      @posts = Array.new(7) { Post.create }.each { |post| post.index }
       Sunspot.commit
       @posts.first.destroy
     end
 
     it 'should return IDs of objects that are in the index but not the database' do
-      Post.index_orphans.should == [@posts.first.id]
-    end
-
-    it 'should find the orphans in batches to improve performance' do
-      Post.should_receive(:find_each).with(hash_including(:batch_size => 10)).and_return([])
-      Post.index_orphans(:batch_size => 10)
+      Post.index_orphans(:batch_size => 3).should == [@posts.first.id]
     end
 
   end

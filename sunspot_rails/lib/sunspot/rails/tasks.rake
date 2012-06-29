@@ -54,7 +54,7 @@ namespace :sunspot do
 
     if args[:use_resque] == 'true'
       sunspot_models.each do |model|
-        model.find_in_batches(:batch_size => reindex_options[:batch_size]) do |records|
+        model.select(model.primary_key.to_sym).find_in_batches(:batch_size => reindex_options[:batch_size]) do |records|
           Resque.enqueue(Sunspot::Rails::ResqueReindexer, model.name, records.first.id, records.last.id)
         end
       end
