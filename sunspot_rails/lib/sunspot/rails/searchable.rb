@@ -342,7 +342,7 @@ module Sunspot #:nodoc:
 
         def solr_execute_search_ids(options = {})
           search = yield
-          search.raw_results.map { |raw_result| raw_result.primary_key.to_i }
+          search.hits.map { |hit| hit.primary_key.to_i }
         end
         
         protected
