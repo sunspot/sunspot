@@ -15,6 +15,8 @@ module Sunspot
       @more_like_this_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @dsl = DSL::Fields.new(self)
       add_field_factory(:class, Type::ClassType.instance)
+      [:field_factories_cache, :text_field_factories_cache, 
+       :dynamic_field_factories_cache, :more_like_this_field_factories_cache].each { |cache| get_inheritable_hash(cache)}
     end
 
     def type_names
