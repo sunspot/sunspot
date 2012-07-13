@@ -90,13 +90,6 @@ shared_examples_for "facetable query" do
       connection.should have_last_search_with(:"f.title_ss.facet.prefix" => 'Test')
     end
 
-    it 'escapes the facet prefix' do
-      search do
-        facet :title, :prefix => 'Test Title'
-      end
-      connection.should have_last_search_with(:"f.title_ss.facet.prefix" => 'Test\ Title')
-    end
-
     it 'sends a query facet for :any extra' do
       search do
         facet :category_ids, :extra => :any

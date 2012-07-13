@@ -156,6 +156,32 @@ describe 'search faceting' do
     end
   end
 
+  context 'prefix escaping' do
+    before do
+      Sunspot.remove_all
+      ["title1", "title2", "title with spaces 1", "title with spaces 2", "title/with/slashes/1", "title/with/slashes/2"].each do |value|
+        Sunspot.index(Post.new(:title => value, :blog_id => 1))
+      end
+      Sunspot.commit
+    end
+
+    it 'should limit facet values by a prefix with spaces' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :prefix => 'title '
+      end
+      search.facet(:title).rows.map { |row| row.value }.sort.should == ["title with spaces 1", "title with spaces 2"]
+    end
+
+    it 'should limit facet values by a prefix with slashes' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :prefix => 'title/'
+      end
+      search.facet(:title).rows.map { |row| row.value }.sort.should == ["title/with/slashes/1", "title/with/slashes/2"]
+    end
+  end
+
   context 'multiselect faceting' do
     before do
       Sunspot.remove_all

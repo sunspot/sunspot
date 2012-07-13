@@ -30,7 +30,7 @@ module Sunspot
           params[qualified_param('offset')] = @options[:offset].to_i
         end
         if @options[:prefix]
-          params[qualified_param('prefix')] = escape(@options[:prefix].to_s)
+          params[qualified_param('prefix')] = @options[:prefix].to_s
         end
         params[qualified_param('mincount')] = 
           case
