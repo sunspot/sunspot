@@ -287,6 +287,13 @@ shared_examples_for "facetable query" do
       connection.should have_last_search_with(:"f.average_rating_ft.facet.range.gap" => "1")
     end
 
+    it 'sets the include if one is specified' do
+      search do |query|
+        query.facet :average_rating, :range => @range, :include => :edge
+      end
+      connection.should have_last_search_with(:"f.average_rating_ft.facet.range.include" => "edge")
+    end
+
     it 'does not allow date faceting on a non-continuous field' do
       lambda do
         search do |query|

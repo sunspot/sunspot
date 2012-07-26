@@ -7,6 +7,7 @@ module Sunspot
         params[qualified_param('range.start')] = @field.to_indexed(@options[:range].first)
         params[qualified_param('range.end')] = @field.to_indexed(@options[:range].last)
         params[qualified_param('range.gap')] = "#{@options[:range_interval] || 10}"
+        params[qualified_param('range.include')] = @options[:include].to_s if @options[:include]
         params
       end
     end
