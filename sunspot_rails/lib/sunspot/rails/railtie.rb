@@ -30,6 +30,11 @@ module Sunspot
       generators do
         load "generators/sunspot_rails.rb"
       end
+      
+      # When loading console, make it output to STDERR.
+      console do
+        Sunspot::Rails::LogSubscriber.logger = Logger.new(STDERR)
+      end
 
     end
   end
