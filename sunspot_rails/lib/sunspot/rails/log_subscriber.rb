@@ -13,6 +13,18 @@ module Sunspot
         rt, self.runtime = runtime, 0
         rt
       end
+      
+      def self.logger=(logger)
+        @logger = logger
+      end
+      
+      def self.logger
+        @logger
+      end
+      
+      def logger
+        self.class.logger || Rails.logger
+      end
 
       def request(event)
         self.class.runtime += event.duration
