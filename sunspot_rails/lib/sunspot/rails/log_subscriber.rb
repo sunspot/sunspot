@@ -23,7 +23,7 @@ module Sunspot
       end
       
       def logger
-        self.class.logger || Rails.logger
+        self.class.logger || ::Rails.logger
       end
 
       def request(event)
