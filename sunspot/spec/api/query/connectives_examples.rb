@@ -186,4 +186,16 @@ shared_examples_for "query with connective scope" do
     end
     connection.should_not have_last_search_including(:fq, '')
   end
+
+  it 'creates a conjunction of in_radius queries' do
+    search do
+      any_of do
+        with(:coordinates_new).in_radius(23, -46, 100)
+        with(:coordinates_new).in_radius(42, 56, 50)
+      end
+    end
+    connection.should have_last_search_including(
+      :fq, '(_query_:"{!geofilt sfield=coordinates_new_ll pt=23,-46 d=100}" OR _query_:"{!geofilt sfield=coordinates_new_ll pt=42,56 d=50}")'
+    )
+  end
 end
