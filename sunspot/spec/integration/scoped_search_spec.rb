@@ -33,24 +33,48 @@ describe 'scoped_search' do
 
       it 'should filter by less than' do
         results = Sunspot.search(clazz) { with(field).less_than values[2] }.results
-        (0..2).each { |i| results.should include(@objects[i]) }
-        (3..4).each { |i| results.should_not include(@objects[i]) }
+        (0..1).each { |i| results.should include(@objects[i]) }
+        (2..4).each { |i| results.should_not include(@objects[i]) }
       end
 
       it 'should reject by less than' do
         results = Sunspot.search(clazz) { without(field).less_than values[2] }.results
+        (0..1).each { |i| results.should_not include(@objects[i]) }
+        (2..4).each { |i| results.should include(@objects[i]) }
+      end
+
+      it 'should filter by less than or equal to' do
+        results = Sunspot.search(clazz) { with(field).less_than_or_equal_to values[2] }.results
+        (0..2).each { |i| results.should include(@objects[i]) }
+        (3..4).each { |i| results.should_not include(@objects[i]) }
+      end
+
+      it 'should reject by less than or equal to' do
+        results = Sunspot.search(clazz) { without(field).less_than_or_equal_to values[2] }.results
         (0..2).each { |i| results.should_not include(@objects[i]) }
         (3..4).each { |i| results.should include(@objects[i]) }
       end
 
       it 'should filter by greater than' do
         results = Sunspot.search(clazz) { with(field).greater_than values[2] }.results
+        (3..4).each { |i| results.should include(@objects[i]) }
+        (0..2).each { |i| results.should_not include(@objects[i]) }
+      end
+
+      it 'should reject by greater than' do
+        results = Sunspot.search(clazz) { without(field).greater_than values[2] }.results
+        (3..4).each { |i| results.should_not include(@objects[i]) }
+        (0..2).each { |i| results.should include(@objects[i]) }
+      end
+
+      it 'should filter by greater than or equal to' do
+        results = Sunspot.search(clazz) { with(field).greater_than_or_equal_to values[2] }.results
         (2..4).each { |i| results.should include(@objects[i]) }
         (0..1).each { |i| results.should_not include(@objects[i]) }
       end
 
       it 'should reject by greater than' do
-        results = Sunspot.search(clazz) { without(field).greater_than values[2] }.results
+        results = Sunspot.search(clazz) { without(field).greater_than_or_equal_to values[2] }.results
         (2..4).each { |i| results.should_not include(@objects[i]) }
         (0..1).each { |i| results.should include(@objects[i]) }
       end
@@ -116,6 +140,14 @@ describe 'scoped_search' do
 
     it 'should filter for exact match for false' do
       Sunspot.search(Post) { with(:featured, false) }.results.should == [@posts[1]]
+    end
+  end
+
+  describe 'Legacy (static) fields' do
+    it "allows for using symbols in defining static field names" do
+      Sunspot.remove_all
+      Sunspot.index!(legacy = Post.new(:title => "foo"))
+      Sunspot.search(Post) { with(:legacy, "legacy foo") }.results.should == [legacy]
     end
   end
 

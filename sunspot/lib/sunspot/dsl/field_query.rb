@@ -185,6 +185,19 @@ module Sunspot
       # semantic meaning is attached to them. The label for +facet+ should be
       # a symbol; the label for +row+ can be whatever you'd like.
       #
+      # ==== Range Facets
+      #
+      # One can use the Range Faceting feature on any date field or any numeric
+      # field that supports range queries. This is particularly useful for the
+      # cases in the past where one might stitch together a series of range
+      # queries (as facet by query) for things like prices, etc.
+      #
+      # For example faceting over average ratings can be done as follows:
+      #
+      #   Sunspot.search(Post) do
+      #     facet :average_rating, :range => 1..5, :range_interval => 1
+      #   end
+      #
       # ==== Parameters
       #
       # field_names...<Symbol>:: fields for which to return field facets
@@ -195,6 +208,8 @@ module Sunspot
       #   Either :count (values matching the most terms first) or :index (lexical)
       # :limit<Integer>::
       #   The maximum number of facet rows to return
+      # :offset<Integer>::
+      #   The offset from which to start returning facet rows
       # :minimum_count<Integer>::
       #   The minimum count a facet row must have to be returned
       # :zeros<Boolean>::
@@ -270,6 +285,15 @@ module Sunspot
                 end
                 search_facet = @search.add_date_facet(field, options)
                 Sunspot::Query::DateFieldFacet.new(field, options)
+              elsif options[:range]
+                unless [Sunspot::Type::TimeType, Sunspot::Type::FloatType, Sunspot::Type::IntegerType ].inject(false){|res,type| res || field.type.is_a?(type)}
+                  raise(
+                    ArgumentError,
+                    ':range can only be specified for date or numeric fields'
+                  )
+                end
+                search_facet = @search.add_range_facet(field, options)
+                Sunspot::Query::RangeFacet.new(field, options)
               else
                 search_facet = @search.add_field_facet(field, options)
                 Sunspot::Query::FieldFacet.new(field, options)

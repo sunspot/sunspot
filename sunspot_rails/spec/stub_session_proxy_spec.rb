@@ -79,11 +79,6 @@ describe 'specs with Sunspot stubbed' do
     Post.search
   end
 
-  it 'should not execute a search when #search called' do
-    @session.should_not_receive(:search)
-    Post.search
-  end
-
   it 'should not execute a search when #search called with parameters' do
     @session.should_not_receive(:search)
     Post.search(:include => :blog, :select => 'id, title')
@@ -92,6 +87,11 @@ describe 'specs with Sunspot stubbed' do
   it 'should return a new search' do
     @session.should_not_receive(:new_search)
     Sunspot.new_search(Post).should respond_to(:execute)
+  end
+
+  it 'should not send more_like_this to session' do
+    @session.should_not_receive(:more_like_this)
+    Sunspot.more_like_this(@post)
   end
 
   describe 'stub search' do

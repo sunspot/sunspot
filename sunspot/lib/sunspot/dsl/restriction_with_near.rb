@@ -130,8 +130,30 @@ module Sunspot
       # :radius<Numeric>::
       #   Radius (in kilometers)
       #
-      def in_radius(lat, lon, radius)
-        @query.add_geo(Sunspot::Query::Geofilt.new(@field, lat, lon, radius))
+      # ==== Options
+      #
+      # <dt><code>:bbox</code></dt>
+      # <dd>If `true`, performs the search using `bbox`. `bbox` is
+      # more performant, but also more inexact (guaranteed to encompass
+      # all of the points of interest, but may also include other points
+      # that are slightly outside of the required distance).</dd>
+      #
+      def in_radius(lat, lon, radius, options = {})
+        @query.add_geo(Sunspot::Query::Geofilt.new(@field, lat, lon, radius, options))
+      end
+
+      #
+      # Performs a query that is filtered by a bounding box
+      #
+      # ==== Parameters
+      # 
+      # :first_corner<Array>::
+      #   First corner (expressed as an array `[latitude, longitude]`)
+      # :second_corner<Array>::
+      #   Second corner (expressed as an array `[latitude, longitude]`)
+      #
+      def in_bounding_box(first_corner, second_corner)
+        @query.add_geo(Sunspot::Query::Bbox.new(@field, first_corner, second_corner))
       end
     end
   end

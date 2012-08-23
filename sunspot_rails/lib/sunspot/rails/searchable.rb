@@ -246,7 +246,7 @@ module Sunspot #:nodoc:
           find_in_batch_options = {
             :include => options[:include],
             :batch_size => options[:batch_size],
-            :start => options[:first_id]
+            :start => options[:start]
           }
           progress_bar = options[:progress_bar]
           if options[:batch_size]

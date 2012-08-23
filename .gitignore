@@ -9,3 +9,4 @@ sunspot-solr.pid
 tags
 .yardoc
 docs
+*.swp

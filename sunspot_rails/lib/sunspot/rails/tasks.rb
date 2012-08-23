@@ -15,6 +15,10 @@ namespace :sunspot do
   #                                       # batchs of 1000
   # $ rake sunspot:reindex[,Post+Author]  # reindex Post and Author model
   task :reindex, [:batch_size, :models] => [:environment] do |t, args|
+
+    # Retry once or gracefully fail for a 5xx error so we don't break reindexing
+    Sunspot.session = Sunspot::SessionProxy::Retry5xxSessionProxy.new(Sunspot.session)
+
     # Set up general options for reindexing
     reindex_options = { :batch_commit => false }
     
@@ -48,18 +52,22 @@ namespace :sunspot do
     rescue Exception => e
       $stderr.puts "Error using progress bar: #{e.message}"
     end
-    
+
     # Finally, invoke the class-level solr_reindex on each model
     sunspot_models.each do |model|
       model.solr_reindex(reindex_options)
     end
   end
 
+  def sunspot_solr_in_load_path?
+    # http://www.rubular.com/r/rJGDh7eOSc
+    $:.any? { |path| path =~ %r{sunspot_solr(-[^/]+)?/lib$} }
+  end
 
-  unless defined?(Sunspot::Solr)
+  unless sunspot_solr_in_load_path?
     namespace :solr do
-  		task :moved_to_sunspot_solr do
-  	    abort %(
+      task :moved_to_sunspot_solr do
+        abort %(
   Note: This task has been moved to the sunspot_solr gem. To install, start and
   stop a local Solr instance, please add sunspot_solr to your Gemfile:
 
@@ -68,17 +76,19 @@ namespace :sunspot do
   end
 
 )
-  		end
-  		
+      end
+
       desc 'Start the Solr instance'
       task :start => :moved_to_sunspot_solr
+
       desc 'Run the Solr instance in the foreground'
       task :run => :moved_to_sunspot_solr
+
       desc 'Stop the Solr instance'
       task :stop => :moved_to_sunspot_solr
-  		# for backwards compatibility
+
+      # for backwards compatibility
       task :reindex => :"sunspot:reindex"
     end
   end
-  
 end

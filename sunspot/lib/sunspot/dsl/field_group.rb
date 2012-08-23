@@ -14,20 +14,23 @@ module Sunspot
       end
 
       #
-      # If true, includes the number of groups that have matched the query.
-      # Defaults to false.
+      # If set, facet counts are based on the most relevant document of
+      # each group matching the query.
       #
-      def ngroups(val)
-        @group.ngroups = val 
-      end
-
+      # Supported in Solr 3.4 and above.
       #
-      # If true, facet counts are based on the most relevant document of each group matching the query.
-      # This feature is only available on Solr 3.4+
-      # Defaults to false.
+      # ==== Example
       #
-      def truncate(val)
-        @group.truncate = val 
+      #     Sunspot.search(Post) do
+      #       group :title do
+      #         truncate
+      #       end
+      #
+      #       facet :title, :extra => :any
+      #     end
+      #
+      def truncate
+        @group.truncate = true
       end
 
       # Specify the order that results should be returned in. This method can

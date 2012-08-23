@@ -91,6 +91,13 @@ describe 'search faceting' do
       end
       search.facet(:title).rows.map { |row| row.value }.should include('zero')
     end
+    
+    it 'should return facet rows from an offset' do
+      search = Sunspot.search(Post) do
+        facet :title, :offset => 3
+      end
+      search.facet(:title).rows.map { |row| row.value }.should == %w(one zero)
+    end
 
     it 'should return a specified minimum count' do
       search = Sunspot.search(Post) do
@@ -148,6 +155,45 @@ describe 'search faceting' do
       end
       search.facet(:title).rows.first.value.should == :none
       search.facet(:title).rows.first.count.should == 1
+    end
+
+    it 'gives correct facet count when group == true and truncate == true' do
+      search = Sunspot.search(Post) do
+        group :title do
+          truncate
+        end
+
+        facet :title, :extra => :any
+      end
+
+      # Should be 5 instead of 11
+      search.facet(:title).rows.first.count.should == 5
+    end
+  end
+
+  context 'prefix escaping' do
+    before do
+      Sunspot.remove_all
+      ["title1", "title2", "title with spaces 1", "title with spaces 2", "title/with/slashes/1", "title/with/slashes/2"].each do |value|
+        Sunspot.index(Post.new(:title => value, :blog_id => 1))
+      end
+      Sunspot.commit
+    end
+
+    it 'should limit facet values by a prefix with spaces' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :prefix => 'title '
+      end
+      search.facet(:title).rows.map { |row| row.value }.sort.should == ["title with spaces 1", "title with spaces 2"]
+    end
+
+    it 'should limit facet values by a prefix with slashes' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        facet :title, :prefix => 'title/'
+      end
+      search.facet(:title).rows.map { |row| row.value }.sort.should == ["title/with/slashes/1", "title/with/slashes/2"]
     end
   end
 
