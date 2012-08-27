@@ -145,7 +145,7 @@ module Sunspot
       end
     end
 
-    # Subclasses of the DataAccessor class take care of retreiving instances of
+    # Subclasses of the DataAccessor class take care of retrieving instances of
     # the adapted class from (usually persistent) storage. Subclasses must
     # implement the #load method, which takes an id (the value returned by
     # InstanceAdapter#id, as a string), and returns the instance referenced by
@@ -194,7 +194,7 @@ module Sunspot
       class <<self
         # Create a DataAccessor for the given class, searching registered
         # adapters for the best match. See InstanceAdapter#adapt for discussion
-        # of inheritence.
+        # of inheritance.
         #
         # ==== Parameters
         #
@@ -218,7 +218,7 @@ module Sunspot
         #
         # data_accessor<Class>:: The data accessor class to register
         # classes...<Class>::
-        #   One or more classes that this data accessor providess access to
+        #   One or more classes that this data accessor provides access to
         #
         def register(data_accessor, *classes)
           classes.each do |clazz|
@@ -267,6 +267,41 @@ module Sunspot
       end
     end
 
+    # Allows to have a registry of the classes adapted by a DataAccessor. This
+    # registry does the class registration using DataAccessor's #create and while
+    # doing so also allows a registered class to notify which attributes
+    # should be inherited by its subclasses. 
+    # This is useful in cases such us ActiveRecord's #include option, where 
+    # you may need to run a search in all the subclasses of a searchable model 
+    # and including some associations for all of them when it loads.
+    #
+    # ==== Example
+    #
+    # # ActiveRecordDataAccessor marks :include and :select as inherited_attributes
+    # class ActiveRecordDataAccessor < Sunspot::Adapters::DataAccessor
+    #   # options for the find
+    #   attr_accessor :include, :select
+    #
+    #   def initialize(clazz)
+    #     super(clazz)
+    #     @inherited_attributes = [:include, :select]
+    #   end
+    # end
+    #
+    # class Event < ActiveRecord::Base
+    #   searchable do
+    #    #stuff here
+    #   end
+    # end
+    # class Play < Event ; end
+    # class Movie < Event ; end
+    #
+    # # This will push the :include to ALL of the Event's subclasses
+    # @search = Event.search(include: [:images])
+    #
+    # # You can also set the value just one class's attribute
+    # @search.data_accessor_for(Play).include = [ :images, :location]
+    #
     class Registry
       extend Forwardable
 
