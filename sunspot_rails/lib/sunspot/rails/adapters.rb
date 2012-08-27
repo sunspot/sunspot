@@ -22,6 +22,11 @@ module Sunspot #:nodoc:
         # options for the find
         attr_accessor :include, :select
 
+        def initialize(clazz)
+          super(clazz)
+          @inherited_attributes = [:include, :select]
+        end
+
         #
         # Set the fields to select from the database. This will be passed
         # to ActiveRecord.

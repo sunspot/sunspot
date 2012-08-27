@@ -8,6 +8,7 @@ class AbstractModelInstanceAdapter < Sunspot::Adapters::InstanceAdapter
 end
 
 class AbstractModelDataAccessor < Sunspot::Adapters::DataAccessor
+  attr_accessor :to_be_injected
 end
 
 Sunspot::Adapters::InstanceAdapter.register(AbstractModelInstanceAdapter, AbstractModel)
