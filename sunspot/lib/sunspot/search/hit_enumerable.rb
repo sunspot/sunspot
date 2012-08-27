@@ -61,8 +61,8 @@ module Sunspot
       # the block DSL.
       #
       def data_accessor_for(clazz) #:nodoc:
-        @registry ||= Sunspot::Adapters::Registry.new
-        @registry.retrieve(clazz)
+        @regitry ||= Sunspot::Adapters::Registry.new
+        @regitry.retrieve(clazz)
       end
     end
   end
