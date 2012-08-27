@@ -1,5 +1,5 @@
 module Sunspot
-  #
+  # 
   # Sunspot works by saving references to the primary key (or natural ID) of
   # each indexed object, and then retrieving the objects from persistent storage
   # when their IDs are referenced in search results. In order for Sunspot to
@@ -53,7 +53,7 @@ module Sunspot
         @instance = instance
       end
 
-      #
+      # 
       # The universally-unique ID for this instance that will be stored in solr
       #
       # ==== Returns
@@ -170,13 +170,8 @@ module Sunspot
     #   Sunspot::Adapters::DataAccessor.register(FileAccessor, File)
     #
     class DataAccessor
-      # Attributes that should be passed to other adapted subclasses
-      attr_accessor :inherited_attributes
-      attr_reader :clazz
-
       def initialize(clazz) #:nodoc:
         @clazz = clazz
-        @inherited_attributes = []
       end
 
       # Subclasses can override this class to provide more efficient bulk
@@ -268,46 +263,6 @@ module Sunspot
         def data_accessors #:nodoc:
           @adapters ||= {}
         end
-      end
-    end
-
-    class Registry
-      extend Forwardable
-
-      def initialize
-        @reg = {}
-      end
-      def_delegator :@reg, :keys, :registered
-      def_delegators :@reg, :include?
-
-      def retrieve(clazz)
-        key = clazz.name.to_sym
-        if !@reg.include?(key)
-          data_accessor = inject_inherited_attributes_for( Adapters::DataAccessor.create(clazz) )
-          @reg[key] ||= data_accessor
-        end
-        @reg[key]
-      end
-
-      # It will inject declared attributes to be inherited from ancestors
-      # only if they are not already present in the data_accessor for each class.
-      def inject_inherited_attributes_for(data_accessor)
-        return data_accessor if @reg.empty?
-
-        data_accessor.inherited_attributes.each do |attribute|
-          if data_accessor.send(attribute).nil? # Inject only if the current class didn't define one.
-            inherited_value = nil
-            # Now try to find a value for the attribute in the chain of ancestors
-            data_accessor.clazz.ancestors.each do |ancestor|
-              next if ancestor.name.nil? || ancestor.name.empty?
-              key = ancestor.name.to_sym
-              inherited_value = @reg[key].send(attribute) if @reg[key]
-              break unless inherited_value.nil?
-            end
-            data_accessor.send("#{attribute.to_s}=", inherited_value) unless inherited_value.nil?
-          end
-        end
-        data_accessor
       end
     end
   end
