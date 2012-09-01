@@ -46,9 +46,7 @@ module Sunspot
       # for more information).
       #
       def each_hit_with_result
-        verified_hits.each do |hit|
-          yield(hit, hit.result)
-        end
+        verified_hits.map { |h| [h, h.result] }.each
       end
 
       # 
