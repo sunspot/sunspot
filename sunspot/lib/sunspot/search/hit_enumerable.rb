@@ -46,8 +46,12 @@ module Sunspot
       # for more information).
       #
       def each_hit_with_result
-        verified_hits.each do |hit|
-          yield(hit, hit.result)
+        if block_given?
+          verified_hits.each do |hit|
+            yield(hit, hit.result)
+          end
+        else
+          verified_hits.each
         end
       end
 
