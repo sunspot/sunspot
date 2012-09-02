@@ -11,7 +11,7 @@ describe 'scoped_search' do
     raise(ArgumentError, 'Please supply five values') unless values.length == 5
 
     context "with field of type #{name}" do
-      before do
+      before :all do
         Sunspot.remove_all
         @objects = values.map do |value|
           object = clazz.new(attribute => value)
@@ -128,7 +128,7 @@ describe 'scoped_search' do
                                                                    '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
 
   describe 'Boolean field type' do
-    before do
+    before :all do
       Sunspot.remove_all
       @posts = [Post.new(:featured => true), Post.new(:featured => false), Post.new]
       Sunspot.index!(@posts)
@@ -161,7 +161,7 @@ describe 'scoped_search' do
   end
 
   describe 'passing nil value to equal' do
-    before do
+    before :all do
       Sunspot.remove_all
       @posts = [Post.new(:title => 'apple'), Post.new]
       Sunspot.index!(@posts)

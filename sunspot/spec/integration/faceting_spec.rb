@@ -10,7 +10,7 @@ describe 'search faceting' do
       end
 
     context "with field of type #{name}" do
-      before do
+      before :all do
         Sunspot.remove_all
         2.times do
           Sunspot.index(clazz.new(attribute => value1))
@@ -51,7 +51,7 @@ describe 'search faceting' do
   test_field_type('Boolean', :featured, :featured, true, false)
 
   context 'facet options' do
-    before do
+    before :all do
       Sunspot.remove_all
       facet_values = %w(zero one two three four)
       facet_values.each_with_index do |value, i|
@@ -260,7 +260,7 @@ describe 'search faceting' do
   end
 
   context 'date facets' do
-    before do
+    before :all do
       Sunspot.remove_all
       time = Time.utc(2009, 7, 8)
       Sunspot.index!(
@@ -281,7 +281,7 @@ describe 'search faceting' do
   end
 
   context 'class facets' do
-    before do
+    before :all do
       Sunspot.remove_all
       Sunspot.index!(Post.new, Post.new, Namespaced::Comment.new)
     end
@@ -298,7 +298,7 @@ describe 'search faceting' do
   end
 
   context 'query facets' do
-    before do
+    before :all do
       Sunspot.remove_all
       Sunspot.index!(
         [1.1, 1.2, 3.2, 3.4, 3.9, 4.1].map do |rating|

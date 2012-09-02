@@ -2,7 +2,7 @@ require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'keyword search' do
   describe 'generally' do
-    before do
+    before :all do
       Sunspot.remove_all
       @posts = []
       @posts << Post.new(:title => 'The toast elects the insufficient spirit',
@@ -89,7 +89,7 @@ describe 'keyword search' do
   end
 
   describe 'with field boost' do
-    before do
+    before :all do
       Sunspot.remove_all
       @posts = [:title, :body].map { |field| Post.new(field => 'rhinoceros') }
       Sunspot.index!(*@posts)
@@ -104,7 +104,7 @@ describe 'keyword search' do
   end
 
   describe 'with document boost' do
-    before do
+    before :all do
       Sunspot.remove_all
       @posts = [4.0, 2.0].map do |rating|
         Post.new(:title => 'Test', :ratings_average => rating)
@@ -162,7 +162,7 @@ describe 'keyword search' do
   end
 
   describe 'boost query' do
-    before do
+    before :all do
       Sunspot.remove_all
       Sunspot.index!(
         @posts = [
