@@ -1,7 +1,7 @@
 require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'stored fields' do
-  before :all do
+  before do
     Sunspot.remove_all
     Sunspot.index!(Post.new(:title => 'A Title'))
   end

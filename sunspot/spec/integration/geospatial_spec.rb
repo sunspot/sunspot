@@ -2,7 +2,7 @@ require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe "geospatial search" do
   describe "filtering by radius" do
-    before :all do
+    before do
       Sunspot.remove_all
 
       @post = Post.new(:title       => "Howdy",
@@ -28,7 +28,7 @@ describe "geospatial search" do
   end
 
   describe "filtering by bounding box" do
-    before :all do
+    before do
       Sunspot.remove_all
 
       @post = Post.new(:title       => "Howdy",
@@ -54,7 +54,7 @@ describe "geospatial search" do
   end
 
   describe "ordering by geodist" do
-    before :all do
+    before do
       Sunspot.remove_all
 
       @posts = [

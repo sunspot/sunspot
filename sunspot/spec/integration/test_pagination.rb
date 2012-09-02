@@ -1,7 +1,7 @@
 require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'pagination' do
-  before :all do
+  before do
     Sunspot.remove_all
     @posts = (0..19).map do |i|
       Post.new(:blog_id => i)

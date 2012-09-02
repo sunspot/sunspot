@@ -154,7 +154,7 @@ describe Sunspot::Rails::Configuration, "with disabled: true in sunspot.yml" do
 end
 
 describe Sunspot::Rails::Configuration, "with ENV['SOLR_URL'] overriding sunspot.yml" do
-  before(:all) do
+  before do
     ENV['SOLR_URL'] = 'http://environment.host:5432/solr/env'
   end
 
@@ -181,7 +181,7 @@ describe Sunspot::Rails::Configuration, "with ENV['SOLR_URL'] overriding sunspot
 end
 
 describe Sunspot::Rails::Configuration, "with ENV['WEBSOLR_URL'] overriding sunspot.yml" do
-  before(:all) do
+  before do
     ENV['WEBSOLR_URL'] = 'http://index.websolr.test/solr/a1b2c3d4e5f'
   end
 

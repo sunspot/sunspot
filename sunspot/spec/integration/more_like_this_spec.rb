@@ -1,7 +1,7 @@
 require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'more_like_this' do
-  before :all do
+  before do
     Sunspot.remove_all
     @posts = [
       Post.new(:body => "one two three", :tags => %w(ruby sunspot rsolr)),

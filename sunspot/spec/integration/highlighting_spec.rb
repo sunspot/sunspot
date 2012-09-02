@@ -1,7 +1,9 @@
 require File.expand_path('../spec_helper', File.dirname(__FILE__))
 
 describe 'keyword highlighting' do
-  before :all do
+  before do
+    Sunspot.remove_all
+
     @posts = []
     @posts << Post.new(:body => 'And the fox laughed')
     @posts << Post.new(:body => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit', :blog_id => 1)
