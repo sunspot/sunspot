@@ -264,10 +264,10 @@ module Sunspot
         private
 
         def to_solr_conditional
-          if @value.is_a?(String)
-            "(#{@value})"
+          if @valud.is_a?(Enumerable)
+            "(#{@value.map { |v| solr_value v } * ' OR '})"
           else
-            "(#{@value.to_a.map { |v| solr_value v } * ' OR '})"
+            "(#{@value})"
           end
         end
       end
@@ -280,10 +280,10 @@ module Sunspot
         private
 
         def to_solr_conditional
-          if @value.is_a?(String)
-            "(#{@value})"
-          else
+          if @valud.is_a?(Enumerable)
             "(#{@value.map { |v| solr_value v } * ' AND '})"
+          else
+            "(#{@value})"
           end
         end
       end
