@@ -1,5 +1,5 @@
 module Sunspot
-  #
+  # 
   # Sunspot works by saving references to the primary key (or natural ID) of
   # each indexed object, and then retrieving the objects from persistent storage
   # when their IDs are referenced in search results. In order for Sunspot to
@@ -53,7 +53,7 @@ module Sunspot
         @instance = instance
       end
 
-      #
+      # 
       # The universally-unique ID for this instance that will be stored in solr
       #
       # ==== Returns
@@ -149,7 +149,7 @@ module Sunspot
       end
     end
 
-    # Subclasses of the DataAccessor class take care of retrieving instances of
+    # Subclasses of the DataAccessor class take care of retreiving instances of
     # the adapted class from (usually persistent) storage. Subclasses must
     # implement the #load method, which takes an id (the value returned by
     # InstanceAdapter#id, as a string), and returns the instance referenced by
@@ -170,13 +170,8 @@ module Sunspot
     #   Sunspot::Adapters::DataAccessor.register(FileAccessor, File)
     #
     class DataAccessor
-      # Attributes that should be passed to other adapted subclasses
-      attr_accessor :inherited_attributes
-      attr_reader :clazz
-
       def initialize(clazz) #:nodoc:
         @clazz = clazz
-        @inherited_attributes = []
       end
 
       # Subclasses can override this class to provide more efficient bulk
@@ -198,7 +193,7 @@ module Sunspot
       class <<self
         # Create a DataAccessor for the given class, searching registered
         # adapters for the best match. See InstanceAdapter#adapt for discussion
-        # of inheritance.
+        # of inheritence.
         #
         # ==== Parameters
         #
@@ -222,7 +217,7 @@ module Sunspot
         #
         # data_accessor<Class>:: The data accessor class to register
         # classes...<Class>::
-        #   One or more classes that this data accessor provides access to
+        #   One or more classes that this data accessor providess access to
         #
         def register(data_accessor, *classes)
           classes.each do |clazz|
@@ -268,81 +263,6 @@ module Sunspot
         def data_accessors #:nodoc:
           @adapters ||= {}
         end
-      end
-    end
-
-    # Allows to have a registry of the classes adapted by a DataAccessor. This
-    # registry does the class registration using DataAccessor's #create and while
-    # doing so also allows a registered class to notify which attributes
-    # should be inherited by its subclasses. 
-    # This is useful in cases such us ActiveRecord's #include option, where 
-    # you may need to run a search in all the subclasses of a searchable model 
-    # and including some associations for all of them when it loads.
-    #
-    # ==== Example
-    #
-    # # ActiveRecordDataAccessor marks :include and :select as inherited_attributes
-    # class ActiveRecordDataAccessor < Sunspot::Adapters::DataAccessor
-    #   # options for the find
-    #   attr_accessor :include, :select
-    #
-    #   def initialize(clazz)
-    #     super(clazz)
-    #     @inherited_attributes = [:include, :select]
-    #   end
-    # end
-    #
-    # class Event < ActiveRecord::Base
-    #   searchable do
-    #    #stuff here
-    #   end
-    # end
-    # class Play < Event ; end
-    # class Movie < Event ; end
-    #
-    # # This will push the :include to ALL of the Event's subclasses
-    # @search = Event.search(include: [:images])
-    #
-    # # You can also set the value just one class's attribute
-    # @search.data_accessor_for(Play).include = [ :images, :location]
-    #
-    class Registry
-      extend Forwardable
-
-      def initialize
-        @reg = {}
-      end
-      def_delegator :@reg, :keys, :registered
-      def_delegators :@reg, :include?
-
-      def retrieve(clazz)
-        key = clazz.name.to_sym
-        if !@reg.include?(key)
-          data_accessor = inject_inherited_attributes_for( Adapters::DataAccessor.create(clazz) )
-          @reg[key] ||= data_accessor
-        end
-        @reg[key]
-      end
-
-      # It will inject declared attributes to be inherited from ancestors
-      # only if they are not already present in the data_accessor for each class.
-      def inject_inherited_attributes_for(data_accessor)
-        return data_accessor if @reg.empty?
-
-        data_accessor.inherited_attributes.each do |attribute|
-          if data_accessor.send(attribute).nil? # Inject only if the current class didn't define one.
-            inherited_value = nil
-            # Now try to find a value for the attribute in the chain of ancestors
-            data_accessor.clazz.ancestors.each do |ancestor|
-              next if ancestor.name.nil? || ancestor.name.empty?
-              key = ancestor.name.to_sym
-              inherited_value = @reg[key].send(attribute) if @reg[key]
-              break unless inherited_value.nil?
-            end
-            data_accessor.send("#{attribute.to_s}=", inherited_value) unless inherited_value.nil?
-          end
-        end
-        data_accessor
       end
     end
   end
