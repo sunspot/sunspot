@@ -3,20 +3,18 @@ require 'sunspot/search/paginated_collection'
 module Sunspot
   module Search
     class FieldGroup
-      def initialize(field, search, options) #:nodoc:
-        @field, @search, @options = field, search, options
+      def initialize(field, search) #:nodoc:
+        @field, @search = field, search
       end
 
       def groups
         @groups ||=
-          begin
-            if solr_response
-              paginate_collection(
-                solr_response['groups'].map do |group|
-                  Group.new(group['groupValue'], group['doclist'], @search)
-                end
-              )
-            end
+          if solr_response
+            paginate_collection(
+              solr_response['groups'].map do |group|
+                Group.new(group['groupValue'], group['doclist'], @search)
+              end
+            )
           end
       end
 
@@ -33,7 +31,7 @@ module Sunspot
       end
 
       #
-      # It populates all grouped hits at once. 
+      # It populates all grouped hits at once.
       # Useful for eager loading fall grouped results at once.
       #
       def populate_all_hits
