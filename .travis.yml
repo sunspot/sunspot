@@ -31,11 +31,5 @@ matrix:
     - rvm: 1.9.3
       env: GEM=sunspot_rails RAILS=2.3.14
 
-notifications:
-  irc: "irc.freenode.org#sunspot-ruby"
-  recipients:
-    - alindeman@gmail.com
-    - nick@onemorecloud.com
-
 script:
   - ci/travis.sh
