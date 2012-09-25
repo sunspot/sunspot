@@ -287,6 +287,17 @@ shared_examples_for "facetable query" do
       connection.should have_last_search_with(:"f.average_rating_ft.facet.range.gap" => "1")
     end
 
+    it 'tags and excludes a scope filter in a range facet' do
+      search do |query|
+        blog_filter = query.with(:blog_id, 1)
+        query.facet(:average_rating, :range => @range, :exclude => blog_filter)
+      end
+      filter_tag = get_filter_tag('blog_id_i:1')
+      connection.should have_last_search_with(
+        :"facet.range" => %W({!ex=#{filter_tag}}average_rating_ft)
+      )
+    end
+
     it 'sets the include if one is specified' do
       search do |query|
         query.facet :average_rating, :range => @range, :include => :edge
