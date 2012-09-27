@@ -38,7 +38,22 @@ module Sunspot
         string.scan(/(^|[A-Z])([^A-Z]+)/).map! { |word| word.join.downcase }.join('_')
       end
 
-      # 
+      #
+      # Check to see if a string contains only valid ruby constant or variable characters
+      #
+      # ==== Parameters
+      #
+      # string<String>:: String to check for valid characters
+      #
+      # ==== Returns
+      #
+      # Boolean:: true if parameter is a valid variable name, false otherwise
+      #
+      def valid_variable_name?(string)
+        !/^[a-z_][a-zA-Z_0-9]*$/.match(string).nil?
+      end
+
+      #
       # Convert a string to camel case
       #
       # ==== Parameters
