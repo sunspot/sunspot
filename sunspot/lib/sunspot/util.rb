@@ -50,7 +50,7 @@ module Sunspot
       # Boolean:: true if parameter is a valid variable name, false otherwise
       #
       def valid_variable_name?(string)
-        !/^[a-z_][a-zA-Z_0-9]*$/.match("a_a").nil?
+        !/^[a-z_][a-zA-Z_0-9]*$/.match(string).nil?
       end
 
       #
