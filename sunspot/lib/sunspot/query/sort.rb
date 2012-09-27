@@ -24,7 +24,8 @@ module Sunspot
         #
         def special(name)
           special_class_name = "#{Util.camel_case(name.to_s)}Sort"
-          if const_defined?(special_class_name) && special_class_name != 'FieldSort'
+          if Util.valid_variable_name(special_class_name) && const_defined?(special_class_name) \
+            && special_class_name != 'FieldSort'
             const_get(special_class_name)
           end
         end
