@@ -10,6 +10,15 @@ describe 'function query' do
     connection.should have_last_search_including(:bf, 'average_rating_ft')
   end
 
+  it "should send query to solr with boost function and boost amount" do
+    session.search Post do
+      keywords('pizza') do
+        boost(function { :average_rating }^5)
+      end
+    end
+    connection.should have_last_search_including(:bf, 'average_rating_ft^5')
+  end
+
   it "should handle boost function with constant float" do
     session.search Post do
       keywords('pizza') do
@@ -17,6 +26,15 @@ describe 'function query' do
       end
     end
     connection.should have_last_search_including(:bf, '10.5')
+  end
+
+  it "should handle boost function with constant float and boost amount" do
+    session.search Post do
+      keywords('pizza') do
+        boost(function { 10.5 }^5)
+      end
+    end
+    connection.should have_last_search_including(:bf, '10.5^5')
   end
 
   it "should handle boost function with time literal" do
@@ -44,6 +62,15 @@ describe 'function query' do
       end
     end
     connection.should have_last_search_including(:bf, 'sub(average_rating_ft,10)')
+  end
+
+  it "should handle boost amounts on function query block" do
+    session.search Post do
+      keywords('pizza') do
+        boost(function { sub(:average_rating, 10)^5 })
+      end
+    end
+    connection.should have_last_search_including(:bf, 'sub(average_rating_ft,10)^5')
   end
  
   it "should handle nested functions in a function query block" do
