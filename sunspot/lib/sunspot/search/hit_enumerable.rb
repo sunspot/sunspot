@@ -46,9 +46,8 @@ module Sunspot
       # for more information).
       #
       def each_hit_with_result
-        verified_hits.each do |hit|
-          yield(hit, hit.result)
-        end
+        return enum_for(:each_hit_with_result) unless block_given?
+        verified_hits.each { |hit| yield hit, hit.result }
       end
 
       # 

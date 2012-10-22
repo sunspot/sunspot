@@ -25,6 +25,17 @@ describe "geospatial search" do
 
       results.should_not include(@post)
     end
+
+    it "allows conjunction queries" do
+      results = Sunspot.search(Post) {
+        any_of do
+          with(:coordinates_new).in_radius(32, -68, 1)
+          with(:coordinates_new).in_radius(35, 68, 1)
+        end
+      }.results
+
+      results.should include(@post)
+    end
   end
 
   describe "filtering by bounding box" do
