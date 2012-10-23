@@ -9,6 +9,7 @@ module Sunspot
       alias :total_entries :total_count
       alias :total_entries= :total_count=
       alias :limit_value :per_page
+      alias :offset_value :offset
 
       def initialize(collection, page, per_page, total)
         @collection   = collection
