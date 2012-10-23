@@ -46,6 +46,11 @@ module Sunspot #:nodoc:
         # :ignore_attribute_changes_of<Array>::
         #   Define attributes, that should not trigger a reindex of that
         #   object. Usual suspects are updated_at or counters.
+        # :only_reindex_attribute_changes_of<Array>::
+        #   Define attributes, that are the only attributes that should
+        #   trigger a reindex of that object. Useful if there are a small
+        #   number of searchable attributes and a large number of attributes
+        #   to ignore.
         # :include<Mixed>::
         #   Define default ActiveRecord includes, set this to allow ActiveRecord
         #   to load required associations when indexing. See ActiveRecord's 
@@ -465,6 +470,8 @@ module Sunspot #:nodoc:
             @marked_for_auto_indexing =
               if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
                 !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
+              elsif !new_record? && only_attributes = self.class.sunspot_options[:only_reindex_attribute_changes_of]
+                !(changed.map { |attr| attr.to_sym } & only_attributes).blank?
               else
                 true
               end

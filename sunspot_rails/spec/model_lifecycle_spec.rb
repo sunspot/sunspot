@@ -37,7 +37,7 @@ describe 'searchable with lifecycle' do
       @post.save!
     end
   end
-  
+
   describe 'on destroy' do
     before :each do
       @post = PostWithAuto.create
@@ -49,15 +49,33 @@ describe 'searchable with lifecycle' do
       PostWithAuto.search_ids.should be_empty
     end
   end
+
+  describe 'ignoring specific attributes' do
+    before(:each) do
+      @post = PostWithAuto.create
+    end
+
+    it "should not reindex the object on an update_at change, because it is marked as to-ignore" do
+      Sunspot.should_not_receive(:index).with(@post)
+      @post.update_attribute :updated_at, 123.seconds.from_now
+    end
+  end
+
+  describe 'only paying attention to specific attributes' do
+    before(:each) do
+      @post = PostWithOnlySomeAttributesTriggeringReindex.create
+    end
+
+    it "should not reindex the object on an update_at change, because it is not in the whitelist" do
+      Sunspot.should_not_receive(:index).with(@post)
+      @post.update_attribute :updated_at, 123.seconds.from_now
+    end
+
+    it "should reindex the object on a title change, because it is in the whitelist" do
+      Sunspot.should_receive(:index).with(@post)
+      @post.update_attribute :title, "brand new title"
+    end
+
+  end
 end
 
-describe 'searchable with lifecycle - ignoring specific attributes' do
-  before(:each) do
-    @post = PostWithAuto.create
-  end
-  
-  it "should not reindex the object on an update_at change, because it is marked as to-ignore" do
-    Sunspot.should_not_receive(:index).with(@post)
-    @post.update_attribute :updated_at, 123.seconds.from_now
-  end
-end
