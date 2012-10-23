@@ -60,5 +60,22 @@ describe 'searchable with lifecycle' do
       @post.update_attribute :updated_at, 123.seconds.from_now
     end
   end
+
+  describe 'only paying attention to specific attributes' do
+    before(:each) do
+      @post = PostWithOnlySomeAttributesTriggeringReindex.create
+    end
+
+    it "should not reindex the object on an update_at change, because it is not in the whitelist" do
+      Sunspot.should_not_receive(:index).with(@post)
+      @post.update_attribute :updated_at, 123.seconds.from_now
+    end
+
+    it "should reindex the object on a title change, because it is in the whitelist" do
+      Sunspot.should_receive(:index).with(@post)
+      @post.update_attribute :title, "brand new title"
+    end
+
+  end
 end
 
