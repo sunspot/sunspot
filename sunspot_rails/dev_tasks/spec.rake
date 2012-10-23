@@ -27,7 +27,7 @@ namespace :spec do
 
     unless File.exist?(ENV['BUNDLE_PATH'])
       puts "Installing gems for Rails #{version} (this will only be done once)..."
-      system("bundle install #{ENV['BUNDLE_ARGS']}") || exit(1)
+      sh "bundle install #{ENV['BUNDLE_ARGS']}"
     end
   end
 
@@ -40,9 +40,9 @@ namespace :spec do
 
       puts "Generating Rails #{version} application..."
       if version.start_with?("2")
-        system("#{rails_cmd} \"#{app_path}\" --force") || exit(1)
+        sh "#{rails_cmd} \"#{app_path}\" --force"
       elsif version.start_with?("3")
-        system("#{rails_cmd} new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets") || exit(1)
+        sh "#{rails_cmd} new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets"
       end
     end
   end
@@ -66,7 +66,7 @@ namespace :spec do
                      "rspec"
                    end
 
-    system "bundle exec #{spec_command} #{ENV['SPEC'] || 'spec/*_spec.rb'} --color"
+    sh "bundle exec #{spec_command} #{ENV['SPEC'] || 'spec/*_spec.rb'} --color"
   end
 end
 
