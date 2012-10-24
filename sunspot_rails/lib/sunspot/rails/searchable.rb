@@ -294,7 +294,7 @@ module Sunspot #:nodoc:
             solr_ids.concat ids
           end
 
-          return solr_ids - self.connection.select_values(select(:id).arel).collect(&:to_i)
+          return solr_ids - self.connection.select_values(select(:id).to_sql).collect(&:to_i)
         end
 
         # 
