@@ -45,6 +45,7 @@ module Sunspot
       def offset
         (current_page - 1) * per_page
       end
+      alias :offset_value :offset
 
       private
 
