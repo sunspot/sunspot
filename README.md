@@ -494,7 +494,7 @@ end
 
 ### Geospatial
 
-**Experimental and unreleased. The DSL may change.**
+**Sunspot 2.0 only**
 
 Sunspot 2.0 supports geospatial features of Solr 3.1 and above.
 
