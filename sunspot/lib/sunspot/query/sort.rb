@@ -104,6 +104,41 @@ module Sunspot
           "geodist(#{@field.indexed_name.to_sym},#{@lat},#{@lon}) #{direction_for_solr}"
         end
       end
+
+      #
+      # A FunctionSort sorts by solr function.
+      # FunctionComp recursively parses arguments for nesting
+      #
+      class FunctionSort < Abstract
+        attr_reader :comp
+        def initialize(setup, direction,*fields)
+          @comp = FunctionComp.new(setup,*fields)
+          @direction = direction
+        end
+        def to_param
+          "#{comp.to_s} #{direction_for_solr}"
+        end
+      end
+      class FunctionComp
+        attr_accessor :function,:fields
+        def initialize(setup,f,*args)
+          @function=f
+          @fields = []
+          args.each do |a|
+            case a.class.name
+            when "Array"
+              @fields<< FunctionComp.new(setup,*a)
+            when "Symbol"
+              @fields<< setup.field(*a).indexed_name
+            when "String"
+              @fields<< a
+            end
+          end
+        end
+        def to_s
+          "#{function}(#{fields.map(&:to_s).join(",")})"
+        end
+      end
     end
   end
 end

@@ -383,4 +383,24 @@ describe 'scoped_search' do
       result_sets[0].should_not == result_sets[1]
     end
   end
+
+  describe 'ordering by function' do
+    before :all do
+      Sunspot.remove_all
+      @p1 = Post.new(:blog_id => 1, :category_ids => [3])
+      @p2 = Post.new(:blog_id => 2, :category_ids => [1])
+      Sunspot.index([@p1,@p2])
+      Sunspot.commit
+    end
+    it 'should order by sum' do
+      # 1+3 > 2+1
+      search = Sunspot.search(Post) {order_by_function :desc, :sum, :blog_id, :primary_category_id}
+      search.results.first.should == @p1
+    end
+    it 'should order by product and sum' do
+      # 1 * (1+3) < 2 * (2+1)
+      search = Sunspot.search(Post) { order_by_function :desc, :product, :blog_id, [:sum,:blog_id,:primary_category_id]}
+      search.results.first.should == @p2
+    end
+  end
 end
