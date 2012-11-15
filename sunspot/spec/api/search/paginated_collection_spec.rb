@@ -5,8 +5,16 @@ describe "PaginatedCollection" do
 
   it { subject.should be_an(Array) }
 
-  it 'should allow send' do
-    subject.send(:current_page).should eql(1)
+  describe "#send" do
+    it 'should allow send' do
+      expect { subject.send(:current_page) }.not_to raise_error(NoMethodError)
+    end
+  end
+
+  describe "#respond_to?" do
+    it 'should return true for current_page' do
+      subject.respond_to?(:current_page).should be_true
+    end
   end
 
   context "behaves like a WillPaginate::Collection" do
