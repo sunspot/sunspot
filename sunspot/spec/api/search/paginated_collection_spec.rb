@@ -5,6 +5,10 @@ describe "PaginatedCollection" do
 
   it { subject.should be_an(Array) }
 
+  it 'should allow send' do
+    subject.send(:current_page).should eql(1)
+  end
+
   context "behaves like a WillPaginate::Collection" do
     it { subject.total_entries.should eql(20) }
     it { subject.total_pages.should eql(2) }
