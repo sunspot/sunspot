@@ -2,7 +2,7 @@ module Sunspot
   module Search
 
     class PaginatedCollection
-      instance_methods.each { |m| undef_method m unless m =~ /^__|instance_eval|object_id/ }
+      instance_methods.each { |m| undef_method m unless m =~ /^__|instance_eval|object_id|send/ }
 
       attr_reader :current_page, :per_page
       attr_accessor :total_count
