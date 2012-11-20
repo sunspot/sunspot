@@ -10,7 +10,7 @@ env:
   - GEM=sunspot_rails RAILS=2.3.14
   - GEM=sunspot_rails RAILS=3.0.17
   - GEM=sunspot_rails RAILS=3.1.8
-  - GEM=sunspot_rails RAILS=3.2.8
+  - GEM=sunspot_rails RAILS=3.2.9
 
 # Limit the size of the matrix by only performing one build against
 # 1.8.7 and 1.9.2
@@ -21,13 +21,13 @@ matrix:
     - rvm: 1.8.7
       env: GEM=sunspot_rails RAILS=3.1.8
     - rvm: 1.8.7
-      env: GEM=sunspot_rails RAILS=3.2.8
+      env: GEM=sunspot_rails RAILS=3.2.9
     - rvm: 1.9.2
       env: GEM=sunspot_rails RAILS=3.0.17
     - rvm: 1.9.2
       env: GEM=sunspot_rails RAILS=3.1.8
     - rvm: 1.9.2
-      env: GEM=sunspot_rails RAILS=3.2.8
+      env: GEM=sunspot_rails RAILS=3.2.9
     - rvm: 1.9.3
       env: GEM=sunspot_rails RAILS=2.3.14
 
