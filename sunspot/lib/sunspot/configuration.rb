@@ -23,6 +23,7 @@ module Sunspot
         LightConfig.build do
           solr do
             url 'http://127.0.0.1:8983/solr'
+            http_method  'get'
             read_timeout nil
             open_timeout nil
           end
@@ -37,7 +38,7 @@ module Sunspot
           end
         end
       end
-      
+
       # Location for the default solr configuration files,
       # required for bootstrapping a new solr installation
       #
