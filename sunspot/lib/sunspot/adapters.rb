@@ -124,7 +124,10 @@ module Sunspot
           clazz.ancestors.each do |ancestor_class|
             next if ancestor_class.name.nil? || ancestor_class.name.empty?
             class_name = ancestor_class.name.to_sym
-            return instance_adapters[class_name] if instance_adapters[class_name]
+            if adapter = instance_adapters[class_name]
+              register(adapter, clazz)
+              return adapter
+            end
           end
 
           raise(Sunspot::NoAdapterError,
@@ -251,7 +254,10 @@ module Sunspot
           clazz.ancestors.each do |ancestor_class|
             next if ancestor_class.name.nil? || ancestor_class.name.empty?
             class_name = ancestor_class.name.to_sym
-            return data_accessors[class_name] if data_accessors[class_name]
+            if accessor = data_accessors[class_name]
+              register(accessor, clazz)
+              return accessor
+            end
           end
           raise(Sunspot::NoAdapterError,
                 "No data accessor is configured for #{original_class_name} or its superclasses. See the documentation for Sunspot::Adapters")
