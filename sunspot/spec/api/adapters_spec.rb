@@ -5,6 +5,11 @@ describe Sunspot::Adapters::InstanceAdapter do
     Sunspot::Adapters::InstanceAdapter::for(Model).should be(AbstractModelInstanceAdapter)
   end
 
+  it "registers adapters found by ancestor lookup with the descendant class" do
+    Sunspot::Adapters::InstanceAdapter.should_receive(:register).with(AbstractModelInstanceAdapter, Model)
+    Sunspot::Adapters::InstanceAdapter::for(Model)
+  end
+
   it "finds adapter by mixin" do
     Sunspot::Adapters::InstanceAdapter::for(MixModel).should be(MixInModelInstanceAdapter)
   end
@@ -19,6 +24,11 @@ end
 describe Sunspot::Adapters::DataAccessor do
   it "finds adapter by superclass" do
     Sunspot::Adapters::DataAccessor::for(Model).should be(AbstractModelDataAccessor)
+  end
+
+  it "registers adapters found by ancestor lookup with the descendant class" do
+    Sunspot::Adapters::DataAccessor.should_receive(:register).with(AbstractModelDataAccessor, Model)
+    Sunspot::Adapters::DataAccessor::for(Model)
   end
 
   it "finds adapter by mixin" do
