@@ -20,7 +20,8 @@ module Sunspot #:nodoc:
 
       class ActiveRecordDataAccessor < Sunspot::Adapters::DataAccessor
         # options for the find
-        attr_accessor :include, :select
+        attr_accessor :include
+        attr_reader :select
 
         def initialize(clazz)
           super(clazz)
@@ -78,8 +79,8 @@ module Sunspot #:nodoc:
         
         def options_for_find
           options = {}
-          options[:include] = @include unless @include.blank?
-          options[:select]  =  @select unless  @select.blank?
+          options[:include] = @include unless !defined?(@include) || @include.blank?
+          options[:select]  =  @select unless !defined?(@select)  || @select.blank?
           options
         end
       end

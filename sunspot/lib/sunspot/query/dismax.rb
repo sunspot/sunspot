@@ -15,6 +15,12 @@ module Sunspot
         @boost_queries = []
         @boost_functions = []
         @highlights = []
+
+        @minimum_match = nil
+        @phrase_fields = nil
+        @phrase_slop = nil
+        @query_phrase_slop = nil
+        @tie = nil
       end
 
       #
