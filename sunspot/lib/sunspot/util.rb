@@ -202,7 +202,7 @@ module Sunspot
       class <<self
         def instance_eval_with_context(receiver, &block)
           calling_context = eval('self', block.binding)
-          if parent_calling_context = calling_context.instance_eval{@__calling_context__}
+          if parent_calling_context = calling_context.instance_eval{@__calling_context__ if defined?(@__calling_context__)}
             calling_context = parent_calling_context
           end
           new(receiver, calling_context).instance_eval(&block)

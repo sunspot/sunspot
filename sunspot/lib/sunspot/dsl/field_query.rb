@@ -70,8 +70,6 @@ module Sunspot
       #
       # field_name<Symbol>:: the field to use for grouping
       def group(*field_names, &block)
-        options = Sunspot::Util.extract_options_from(field_names)
-
         field_names.each do |field_name|
           field = @setup.field(field_name)
           group = @query.add_group(Sunspot::Query::FieldGroup.new(field))

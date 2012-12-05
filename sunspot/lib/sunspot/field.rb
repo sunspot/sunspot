@@ -12,6 +12,7 @@ module Sunspot
       @name, @type = name.to_sym, type
       @stored = !!options.delete(:stored)
       @more_like_this = !!options.delete(:more_like_this)
+      @multiple ||= false
       set_indexed_name(options)
       raise ArgumentError, "Field of type #{type} cannot be used for more_like_this" unless type.accepts_more_like_this? or !@more_like_this
     end
@@ -34,7 +35,7 @@ module Sunspot
     #
     def to_indexed(value)
       if value.is_a? Array
-        if @multiple
+        if multiple?
           value.map { |val| to_indexed(val) }
         else
           raise ArgumentError, "#{name} is not a multiple-value field, so it cannot index values #{value.inspect}"
@@ -106,7 +107,7 @@ module Sunspot
         if options[:as]
           options.delete(:as).to_s
         else
-          "#{@type.indexed_name(@name).to_s}#{'m' if @multiple }#{'s' if @stored}#{'v' if more_like_this?}"
+          "#{@type.indexed_name(@name).to_s}#{'m' if multiple? }#{'s' if @stored}#{'v' if more_like_this?}"
         end
     end
 
