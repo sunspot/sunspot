@@ -31,7 +31,7 @@ module Sunspot
       # to include a tag in the local params.
       #
       def tagged?
-        !!@tag
+        defined?(@tag) && !!@tag
       end
     end
   end

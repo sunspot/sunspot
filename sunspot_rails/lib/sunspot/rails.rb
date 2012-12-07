@@ -11,7 +11,7 @@ module Sunspot #:nodoc:
     begin
       require 'sunspot_solr'
       autoload :Server, File.join(File.dirname(__FILE__), 'rails', 'server')
-    rescue LoadError => e
+    rescue LoadError
       # We're fine
     end
 

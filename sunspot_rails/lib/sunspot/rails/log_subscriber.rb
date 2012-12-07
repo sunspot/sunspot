@@ -19,7 +19,7 @@ module Sunspot
       end
       
       def self.logger
-        @logger
+        @logger if defined?(@logger)
       end
       
       def logger

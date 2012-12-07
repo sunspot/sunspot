@@ -19,8 +19,9 @@ module Sunspot
 
       LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
-      attr_accessor :min_memory, :max_memory, :bind_address, :port, :solr_data_dir, :solr_home, :log_file
-      attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :solr_jar
+      attr_accessor :min_memory, :max_memory, :bind_address, :port, :log_file
+
+      attr_writer :pid_dir, :pid_file, :solr_data_dir, :solr_home, :solr_jar
 
       def initialize(*args)
         ensure_java_installed
