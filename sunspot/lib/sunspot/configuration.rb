@@ -37,7 +37,7 @@ module Sunspot
           end
         end
       end
-      
+
       # Location for the default solr configuration files,
       # required for bootstrapping a new solr installation
       #

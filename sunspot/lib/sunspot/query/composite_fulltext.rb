@@ -9,7 +9,7 @@ module Sunspot
         @components << dismax = Dismax.new(keywords)
         dismax
       end
-      
+
       def add_location(field, lat, lng, options)
         @components << location = Geo.new(field, lat, lng, options)
         location

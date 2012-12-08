@@ -1,6 +1,6 @@
 module Sunspot
   module DSL
-    # 
+    #
     # This top-level DSL class is the context in which the block passed to
     # Sunspot.query. See Sunspot::DSL::StandardQuery, Sunspot::DSL::FieldQuery,
     # and Sunspot::DSL::Scope for the full API presented.
@@ -11,7 +11,7 @@ module Sunspot
         super(search, search.query, setup)
       end
 
-      # 
+      #
       # Retrieve the data accessor used to load instances of the given class
       # out of persistent storage. Data accessors are free to implement any
       # extra methods that may be useful in this context.

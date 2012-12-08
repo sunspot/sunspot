@@ -1,5 +1,5 @@
 module Sunspot
-  # 
+  #
   # The CompositeSetup class encapsulates a collection of setups, and responds
   # to a subset of the methods that Setup responds to (in particular, the
   # methods required to build queries).
@@ -13,7 +13,7 @@ module Sunspot
       @types = types
     end
 
-    # 
+    #
     # Collection of Setup objects for the enclosed types
     #
     # ==== Returns
@@ -24,7 +24,7 @@ module Sunspot
       @setups ||= @types.map { |type| Setup.for(type) }
     end
 
-    # 
+    #
     # Return the names of the encapsulated types
     #
     # ==== Returns
@@ -35,7 +35,7 @@ module Sunspot
       @type_names ||= @types.map { |clazz| clazz.name }
     end
 
-    # 
+    #
     # Get a text field object by its public name. A field will be returned if
     # it is configured for any of the enclosed types.
     #
@@ -59,7 +59,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # Get a Sunspot::AttributeField instance corresponding to the given field name
     #
     # ==== Parameters
@@ -82,7 +82,7 @@ module Sunspot
       )
     end
 
-    # 
+    #
     # Get a dynamic field factory for the given base name.
     #
     # ==== Returns
@@ -101,7 +101,7 @@ module Sunspot
       )
     end
 
-    # 
+    #
     # Collection of all text fields configured for any of the enclosed types.
     #
     # === Returns
@@ -118,7 +118,7 @@ module Sunspot
 
     private
 
-    # 
+    #
     # Return a hash of field names to text field objects, containing all fields
     # that are configured for any of the types enclosed.
     #
@@ -146,7 +146,7 @@ module Sunspot
         end
     end
 
-    # 
+    #
     # Return a hash of field names to field objects, containing all fields
     # that are common to all of the classes enclosed. In order for fields
     # to be common, they must be of the same type and have the same
@@ -175,7 +175,7 @@ module Sunspot
         end
     end
 
-    # 
+    #
     # Return a hash of dynamic field base names to dynamic field factories for
     # those base names. Criteria for the inclusion are the same as for
     # #fields_hash()

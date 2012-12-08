@@ -1,6 +1,6 @@
 module Sunspot
   module DSL
-    # 
+    #
     # This DSL exposes the functionality provided by Solr's fulltext Dismax
     # handler.
     #
@@ -14,7 +14,7 @@ module Sunspot
         @exclude_fields = []
       end
 
-      # 
+      #
       # Specify which fields to search. Field names specified as arguments are
       # given default boost; field boosts can be specified by passing a hash of
       # field names keyed to boost values as the last argument.
@@ -50,7 +50,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Exclude the given fields from the search. All fields that are configured
       # for the types under search and not listed here will be searched.
       #
@@ -58,8 +58,8 @@ module Sunspot
         @exclude_fields.concat(field_names)
       end
 
-      # 
-      # Enable keyword highlighting for this search. By default, the fields 
+      #
+      # Enable keyword highlighting for this search. By default, the fields
       # under search will be highlighted; you may also may pass one or more
       # symbol arguments indicating fields to be highlighted (they don't even
       # have to be the same fields you're searching).
@@ -78,7 +78,7 @@ module Sunspot
       # Full disclosure: I barely understand what these options actually do;
       # this documentation is pretty much just copied from the
       # (http://wiki.apache.org/solr/HighlightingParameters#head-23ecd5061bc2c86a561f85dc1303979fe614b956)[Solr Wiki]
-      # 
+      #
       # :max_snippets::
       #   The maximum number of highlighted snippets to generate per field
       # :fragment_size::
@@ -101,7 +101,7 @@ module Sunspot
         @query.add_highlight(fields, options)
       end
 
-      # 
+      #
       # Phrase fields are an awesome dismax feature that adds extra boost to
       # documents for which all the fulltext keywords appear in close proximity
       # in one of the given fields. Excellent for titles, headlines, etc.
@@ -127,7 +127,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # The maximum number of words that can appear between search terms for a
       # field to qualify for phrase field boost. See #query_phrase_slop for
       # examples. Phrase slop is only meaningful if phrase fields are specified
@@ -138,15 +138,15 @@ module Sunspot
         @query.phrase_slop = slop
       end
 
-      # 
+      #
       # Boost queries allow specification of an arbitrary scope for which
-      # matching documents should receive an extra boost. You can either specify 
+      # matching documents should receive an extra boost. You can either specify
       # a boost factor and a block, or a boost function. The block is evaluated
       # in the usual scope DSL, and field names are attribute fields, not text
       # fields, as in other scope.
       #
-      # The boost function can be a constant (numeric or string literal), 
-      # a field name or another function. You can build arbitrarily complex 
+      # The boost function can be a constant (numeric or string literal),
+      # a field name or another function. You can build arbitrarily complex
       # functions, which are passed transparently to solr.
       #
       # This method can be called more than once for different boost queries
@@ -164,7 +164,7 @@ module Sunspot
       #     end
       #   end
       #
-      # In the above search, featured posts will receive a boost of 2.0 and all posts 
+      # In the above search, featured posts will receive a boost of 2.0 and all posts
       # will be boosted by (average_rating + popularity * 10).
       #
       def boost(factor_or_function, &block)
@@ -201,7 +201,7 @@ module Sunspot
           end
         end
       end
-      
+
       #
       # The minimum number of search terms that a result must match. By
       # default, all search terms must match; if the number of search terms

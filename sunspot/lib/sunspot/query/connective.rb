@@ -1,7 +1,7 @@
 module Sunspot
   module Query
     module Connective #:nodoc:all
-      # 
+      #
       # Base class for connectives (conjunctions and disjunctions).
       #
       class Abstract
@@ -12,14 +12,14 @@ module Sunspot
           @components = []
         end
 
-        # 
+        #
         # Add a restriction to the connective.
         #
         def add_restriction(negated, field, restriction_type, *value)
           add_component(restriction_type.new(negated, field, *value))
         end
 
-        # 
+        #
         # Add a shorthand restriction; the restriction type is determined by
         # the value.
         #
@@ -33,7 +33,7 @@ module Sunspot
           add_restriction(negated, field, restriction_type, value)
         end
 
-        # 
+        #
         # Add a positive restriction. The restriction will match all
         # documents who match the terms fo the restriction.
         #
@@ -41,14 +41,14 @@ module Sunspot
           add_restriction(false, field, restriction_type, value)
         end
 
-        # 
+        #
         # Add a positive shorthand restriction (see add_shorthand_restriction)
         #
         def add_positive_shorthand_restriction(field, value)
           add_shorthand_restriction(false, field, value)
         end
 
-        # 
+        #
         # Add a negated restriction. The added restriction will match all
         # documents who do not match the terms of the restriction.
         #
@@ -56,28 +56,28 @@ module Sunspot
           add_restriction(true, field, restriction_type, value)
         end
 
-        # 
+        #
         # Add a negated shorthand restriction (see add_shorthand_restriction)
         #
         def add_negated_shorthand_restriction(field, value)
           add_shorthand_restriction(true, field, value)
         end
 
-        # 
+        #
         # Add a new conjunction and return it.
         #
         def add_conjunction
           add_component(Conjunction.new)
         end
 
-        # 
+        #
         # Add a new disjunction and return it.
         #
         def add_disjunction
           add_component(Disjunction.new)
         end
 
-        # 
+        #
         # Add an arbitrary component to the conjunction, and return it.
         # The component must respond to #to_boolean_phrase
         #
@@ -86,7 +86,7 @@ module Sunspot
           component
         end
 
-        # 
+        #
         # Express the connective as a Lucene boolean phrase.
         #
         def to_boolean_phrase #:nodoc:
@@ -108,7 +108,7 @@ module Sunspot
           end
         end
 
-        # 
+        #
         # Connectives can be negated during the process of denormalization that
         # is performed when a disjunction contains a negated component. This
         # method conforms to the duck type for all boolean query components.
@@ -117,7 +117,7 @@ module Sunspot
           @negated
         end
 
-        # 
+        #
         # Returns a new connective that's a negated version of this one.
         #
         def negate
@@ -129,7 +129,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Disjunctions combine their components with an OR operator.
       #
       class Disjunction < Abstract
@@ -139,7 +139,7 @@ module Sunspot
           end
         end
 
-        # 
+        #
         # Express this disjunction as a Lucene boolean phrase
         #
         def to_boolean_phrase
@@ -150,7 +150,7 @@ module Sunspot
           end
         end
 
-        # 
+        #
         # No-op - this is already a disjunction
         #
         def add_disjunction
@@ -163,7 +163,7 @@ module Sunspot
           'OR'
         end
 
-        # 
+        #
         # If a disjunction contains negated components, it must be
         # "denormalized", because the Lucene parser interprets any negated
         # boolean phrase using AND semantics (this isn't a bug, it's just a
@@ -181,7 +181,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Conjunctions combine their components with an AND operator.
       #
       class Conjunction < Abstract

@@ -595,7 +595,7 @@ TODO
 
 ### More Like This
 
-Sunspot can extract related items using more_like_this. When searching 
+Sunspot can extract related items using more_like_this. When searching
 for similar items, you can pass a block with the following options:
 
 * fields :field_1[, :field_2, ...]

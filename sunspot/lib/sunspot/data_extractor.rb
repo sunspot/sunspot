@@ -1,11 +1,11 @@
 module Sunspot
-  # 
+  #
   # DataExtractors present an internal API for the indexer to use to extract
   # field values from models for indexing. They must implement the #value_for
   # method, which takes an object and returns the value extracted from it.
   #
   module DataExtractor #:nodoc: all
-    # 
+    #
     # AttributeExtractors extract data by simply calling a method on the block.
     #
     class AttributeExtractor
@@ -18,7 +18,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # BlockExtractors extract data by evaluating a block in the context of the
     # object instance, or if the block takes an argument, by passing the object
     # as the argument to the block. Either way, the return value of the block is
@@ -34,7 +34,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # Constant data extractors simply return the same value for every object.
     #
     class Constant

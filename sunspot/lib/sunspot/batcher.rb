@@ -2,8 +2,8 @@ module Sunspot
   #
   # Keeps a stack of batches and helps out when Indexer is asked to batch documents.
   #
-  # If the client does something like 
-  #   
+  # If the client does something like
+  #
   #   Sunspot.batch do
   #     some_code_here
   #     which_triggers_some_other_code

@@ -3,7 +3,7 @@ module Sunspot
     # The Fields class provides a DSL for specifying field definitions in the
     # Sunspot.setup block. As well as the #text method, which creates fulltext
     # fields, uses #method_missing to allow definition of typed fields. The
-    # available methods are determined by the constants defined in 
+    # available methods are determined by the constants defined in
     # Sunspot::Type - in theory (though this is untested), plugin developers
     # should be able to add support for new types simply by creating new
     # implementations in Sunspot::Type
@@ -43,7 +43,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Specify a document-level boost. As with fields, you have the option of
       # passing an attribute name which will be called on each model, or a block
       # to be evaluated in the model's context. As well as these two options,

@@ -26,7 +26,7 @@ module Sunspot
         @query.more_like_this.minimum_term_frequency = value
       end
       alias_method :mintf, :minimum_term_frequency
-      
+
       def minimum_document_frequency(value)
         @query.more_like_this.minimum_document_frequency = value
       end
@@ -41,7 +41,7 @@ module Sunspot
         @query.more_like_this.maximum_word_length = value
       end
       alias_method :maxwl, :maximum_word_length
-      
+
       def maximum_query_terms(value)
         @query.more_like_this.maximum_query_terms = value
       end

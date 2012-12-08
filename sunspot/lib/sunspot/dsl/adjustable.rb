@@ -26,7 +26,7 @@ module Sunspot
       #       params["mlt.match.include"] = true
       #     end
       #   end
-      # 
+      #
       def adjust_solr_params( &block )
         @query.solr_parameter_adjustment = block
       end
