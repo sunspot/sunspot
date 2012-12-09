@@ -68,6 +68,27 @@ shared_examples_for 'sortable query' do
     connection.searches.last[:sort].should =~ /^random_\d+ asc$/
   end
 
+  it 'orders by random with declared direction' do
+    search do
+      order_by :random, :desc
+    end
+    connection.searches.last[:sort].should =~ /^random_\d+ desc$/
+  end
+
+  it 'orders by random with provided seed value' do
+    search do
+      order_by :random, :seed => 9001
+    end
+    connection.searches.last[:sort].should =~ /^random_9001 asc$/
+  end
+
+  it 'orders by random with provided seed value and direction' do
+    search do
+      order_by :random, :seed => 12345, :direction => :desc
+    end
+    connection.searches.last[:sort].should =~ /^random_12345 desc$/
+  end
+
   it 'orders by score' do
     search do
       order_by :score, :desc
