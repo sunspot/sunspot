@@ -77,10 +77,10 @@ module Sunspot
       #
       class RandomSort < Abstract
         def initialize(options_or_direction=nil)
-          if options_or_direction.is_a?(Symbol) || options_or_direction.nil?
-            @direction = options_or_direction
-          elsif options_or_direction.is_a?(Hash)
+          if options_or_direction.is_a?(Hash)
             @seed, @direction = options_or_direction[:seed], options_or_direction[:direction]
+					else
+            @direction = options_or_direction
           end
 
           @direction = (@direction || :asc).to_sym
