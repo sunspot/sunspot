@@ -5,7 +5,7 @@ require 'active_support/core_ext/object/to_json' if Rails::VERSION::MAJOR == 3
 
 require 'sunspot/rails'
 
-if Rails::VERSION::MAJOR == 3
+if Rails::VERSION::MAJOR >= 3
   require 'sunspot/rails/railtie'
 else
   require 'sunspot/rails/init'
