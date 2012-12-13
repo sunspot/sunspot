@@ -347,21 +347,21 @@ module Sunspot
       #
       #  For example, to order by field1 + (field2*field3):
       #
-      #    order_by_function :desc, :sum, :field1, [:product, :field2, :field3]
+      #    order_by_function :sum, :field1, [:product, :field2, :field3], :desc
       #
       # ==== Parameters
-      # direction<Symbol>::
-      #   :asc or :desc
       # function_name<Symbol>::
       #   the function to run
-      # parameters<Array>::
-      #   the parameters for this function.
-      #   - Symbol for a field_name
+      # arguments::
+      #   the arguments for this function.
+      #   - Symbol for a field or function name
       #   - Array for a nested function
       #   - String for a literal constant
-      def order_by_function(direction,*args)
+      # direction<Symbol>::
+      #   :asc or :desc
+      def order_by_function(*args)
         @query.add_sort(
-          Sunspot::Query::Sort::FunctionSort.new(@setup,direction,*args)
+          Sunspot::Query::Sort::FunctionSort.new(@setup,args)
         )
       end
     end

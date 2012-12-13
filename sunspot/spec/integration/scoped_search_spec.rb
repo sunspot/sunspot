@@ -394,12 +394,12 @@ describe 'scoped_search' do
     end
     it 'should order by sum' do
       # 1+3 > 2+1
-      search = Sunspot.search(Post) {order_by_function :desc, :sum, :blog_id, :primary_category_id}
+      search = Sunspot.search(Post) {order_by_function :sum, :blog_id, :primary_category_id, :desc}
       search.results.first.should == @p1
     end
     it 'should order by product and sum' do
       # 1 * (1+3) < 2 * (2+1)
-      search = Sunspot.search(Post) { order_by_function :desc, :product, :blog_id, [:sum,:blog_id,:primary_category_id]}
+      search = Sunspot.search(Post) { order_by_function :product, :blog_id, [:sum,:blog_id,:primary_category_id], :desc}
       search.results.first.should == @p2
     end
   end

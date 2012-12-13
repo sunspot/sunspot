@@ -111,9 +111,9 @@ module Sunspot
       #
       class FunctionSort < Abstract
         attr_reader :comp
-        def initialize(setup, direction,*fields)
-          @comp = FunctionComp.new(setup,*fields)
-          @direction = direction
+        def initialize(setup,args)
+          @direction = args.pop
+          @comp = FunctionComp.new(setup,args)
         end
         def to_param
           "#{comp.to_s} #{direction_for_solr}"
@@ -121,17 +121,17 @@ module Sunspot
       end
       class FunctionComp
         attr_accessor :function,:fields
-        def initialize(setup,f,*args)
-          @function=f
+        def initialize(setup,args)
+          @function=args.shift
           @fields = []
-          args.each do |a|
-            case a.class.name
+          args.each do |argument|
+            case argument.class.name
             when "Array"
-              @fields<< FunctionComp.new(setup,*a)
+              @fields<< FunctionComp.new(setup,argument)
             when "Symbol"
-              @fields<< setup.field(*a).indexed_name
+              @fields<< setup.field(argument).indexed_name
             when "String"
-              @fields<< a
+              @fields<< argument
             end
           end
         end
