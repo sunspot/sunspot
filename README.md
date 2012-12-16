@@ -622,7 +622,7 @@ results = Sunspot.more_like_this(post) do
 end
 ```
 
-## Indexing In Depth
+## Indexes In Depth
 
 TODO
 
@@ -704,6 +704,21 @@ end
 
 If you are using Rails, objects are automatically indexed to Solr as a
 part of the `save` callbacks.
+
+There are a number of ways to index manually within Ruby:
+```ruby
+# On a class itself
+Person.solr_reindex
+Sunspot.commit
+
+# On mixed objects
+Sunspot.index [post1, item2]
+Sunspot.index person3
+Sunspot.commit
+
+# With autocommit
+Sunspot.index! [post1, item2, person3]
+```
 
 If you make a change to the object's "schema" (code in the `searchable` block),
 you must reindex all objects so the changes are reflected in Solr:
