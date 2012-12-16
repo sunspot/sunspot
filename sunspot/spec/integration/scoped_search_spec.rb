@@ -266,6 +266,22 @@ describe 'scoped_search' do
       end.results.should == posts[0..1]
     end
 
+    it 'should return results that match any restriction in a disjunction even when passed an empty array' do
+      posts = (1..3).map { |i| Post.new(:blog_id => i)}
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        with(:blog_id, [])
+      end.results.should == []
+    end
+
+    it 'should return results that match any negative restriction in a disjunction even when passed an empty array' do
+      posts = (1..3).map { |i| Post.new(:blog_id => i)}
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        without(:blog_id, [])
+      end.results.should == posts
+    end 
+
     it 'should return results that match a nested conjunction in a disjunction' do
       posts = [
         Post.new(:title => 'No', :blog_id => 1),
