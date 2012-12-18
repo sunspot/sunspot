@@ -708,7 +708,7 @@ part of the `save` callbacks.
 There are a number of ways to index manually within Ruby:
 ```ruby
 # On a class itself
-Person.solr_reindex
+Person.reindex
 Sunspot.commit
 
 # On mixed objects
