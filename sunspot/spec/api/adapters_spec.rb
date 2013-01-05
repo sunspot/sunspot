@@ -5,11 +5,6 @@ describe Sunspot::Adapters::InstanceAdapter do
     Sunspot::Adapters::InstanceAdapter::for(Model).should be(AbstractModelInstanceAdapter)
   end
 
-  it "registers adapters found by ancestor lookup with the descendant class" do
-    Sunspot::Adapters::InstanceAdapter.should_receive(:register).with(AbstractModelInstanceAdapter, Model)
-    Sunspot::Adapters::InstanceAdapter::for(Model)
-  end
-
   it "finds adapter by mixin" do
     Sunspot::Adapters::InstanceAdapter::for(MixModel).should be(MixInModelInstanceAdapter)
   end
@@ -19,16 +14,17 @@ describe Sunspot::Adapters::InstanceAdapter do
       Sunspot::Adapters::InstanceAdapter::for(Module.new)
     end.should raise_error(Sunspot::NoAdapterError)
   end
+
+  it "registers adapters found by ancestor lookup with the descendant class" do
+    Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel).should be(nil)
+    Sunspot::Adapters::InstanceAdapter::for(UnseenModel)
+    Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel).should be(AbstractModelInstanceAdapter)
+  end
 end
 
 describe Sunspot::Adapters::DataAccessor do
   it "finds adapter by superclass" do
     Sunspot::Adapters::DataAccessor::for(Model).should be(AbstractModelDataAccessor)
-  end
-
-  it "registers adapters found by ancestor lookup with the descendant class" do
-    Sunspot::Adapters::DataAccessor.should_receive(:register).with(AbstractModelDataAccessor, Model)
-    Sunspot::Adapters::DataAccessor::for(Model)
   end
 
   it "finds adapter by mixin" do
@@ -39,6 +35,12 @@ describe Sunspot::Adapters::DataAccessor do
     lambda do
       Sunspot::Adapters::DataAccessor::for(Module.new)
     end.should raise_error(Sunspot::NoAdapterError)
+  end
+
+  it "registers adapters found by ancestor lookup with the descendant class" do
+    Sunspot::Adapters::DataAccessor::registered_accessor_for(UnseenModel).should be(nil)
+    Sunspot::Adapters::DataAccessor::for(UnseenModel)
+    Sunspot::Adapters::DataAccessor::registered_accessor_for(UnseenModel).should be(AbstractModelDataAccessor)
   end
 end
 
