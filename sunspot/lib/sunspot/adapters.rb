@@ -160,7 +160,7 @@ module Sunspot
         end
 
         def registered_adapter_for_ancestors_of(clazz) # :nodoc:
-          clazz.ancestors.drop(1).each do |ancestor_class|
+          clazz.ancestors.each do |ancestor_class|
             if adapter = registered_adapter_for(ancestor_class)
               register(adapter, clazz)
               return adapter
@@ -305,7 +305,7 @@ module Sunspot
         end
 
         def registered_accessor_for_ancestors_of(clazz) # :nodoc:
-          clazz.ancestors.drop(1).each do |ancestor_class|
+          clazz.ancestors.each do |ancestor_class|
             if accessor = registered_accessor_for(ancestor_class)
               register(accessor, clazz)
               return accessor
