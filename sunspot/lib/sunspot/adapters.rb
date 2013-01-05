@@ -120,7 +120,7 @@ module Sunspot
         # Sunspot::NoAdapterError:: If no adapter is registered for this class
         #
         def for(clazz)
-          adapter = registered_adapter_for(clazz) || for_ancestors_of(clazz)
+          adapter = registered_adapter_for(clazz) || registered_adapter_for_ancestors_of(clazz)
           return adapter if adapter
           raise(Sunspot::NoAdapterError,
                 "No adapter is configured for #{clazz.name} or its superclasses. See the documentation for Sunspot::Adapters")
@@ -159,7 +159,7 @@ module Sunspot
           @instance_adapters ||= {}
         end
 
-        def for_ancestors_of(clazz) # :nodoc:
+        def registered_adapter_for_ancestors_of(clazz) # :nodoc:
           clazz.ancestors.drop(1).each do |ancestor_class|
             if adapter = registered_adapter_for(ancestor_class)
               register(adapter, clazz)
@@ -269,7 +269,7 @@ module Sunspot
         # Sunspot::NoAdapterError:: If no data accessor exists for the given class
         #
         def for(clazz) #:nodoc:
-          accessor = registered_accessor_for(clazz) || for_ancestors_of(clazz)
+          accessor = registered_accessor_for(clazz) || registered_accessor_for_ancestors_of(clazz)
           return accessor if accessor
           raise(Sunspot::NoAdapterError,
                 "No data accessor is configured for #{clazz.name} or its superclasses. See the documentation for Sunspot::Adapters")
@@ -304,7 +304,7 @@ module Sunspot
           @adapters ||= {}
         end
 
-        def for_ancestors_of(clazz) # :nodoc:
+        def registered_accessor_for_ancestors_of(clazz) # :nodoc:
           clazz.ancestors.drop(1).each do |ancestor_class|
             if accessor = registered_accessor_for(ancestor_class)
               register(accessor, clazz)
