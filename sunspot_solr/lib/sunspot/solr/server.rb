@@ -189,7 +189,7 @@ module Sunspot
       #
       def create_solr_directories
         [solr_data_dir, pid_dir].each do |path|
-          FileUtils.mkdir_p(path) unless File.exists?(path)
+          FileUtils.mkdir_p(path) unless File.exists?(path) || File.symlink?(path)
         end
       end
 
