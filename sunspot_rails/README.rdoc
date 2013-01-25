@@ -226,7 +226,7 @@ Then, in your spec, use the #disconnect_sunspot method:
   describe Post do
     disconnect_sunspot
 
-    it 'should have some behavior'
+    it 'should have some behavior' do
       # ...
     end
   end
