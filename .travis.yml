@@ -9,7 +9,7 @@ rvm:
 env:
   - GEM=sunspot
   - GEM=sunspot_rails RAILS=2.3.14
-  - GEM=sunspot_rails RAILS=3.0.17
+  - GEM=sunspot_rails RAILS=3.0.20
   - GEM=sunspot_rails RAILS=3.1.8
   - GEM=sunspot_rails RAILS=3.2.11
 
@@ -18,13 +18,13 @@ env:
 matrix:
   exclude:
     - rvm: 1.8.7
-      env: GEM=sunspot_rails RAILS=3.0.17
+      env: GEM=sunspot_rails RAILS=3.0.20
     - rvm: 1.8.7
       env: GEM=sunspot_rails RAILS=3.1.8
     - rvm: 1.8.7
       env: GEM=sunspot_rails RAILS=3.2.11
     - rvm: 1.9.2
-      env: GEM=sunspot_rails RAILS=3.0.17
+      env: GEM=sunspot_rails RAILS=3.0.20
     - rvm: 1.9.2
       env: GEM=sunspot_rails RAILS=3.1.8
     - rvm: 1.9.2
