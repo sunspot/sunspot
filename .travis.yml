@@ -8,7 +8,7 @@ rvm:
 
 env:
   - GEM=sunspot
-  - GEM=sunspot_rails RAILS=2.3.14
+  - GEM=sunspot_rails RAILS=2.3.16
   - GEM=sunspot_rails RAILS=3.0.20
   - GEM=sunspot_rails RAILS=3.1.8
   - GEM=sunspot_rails RAILS=3.2.11
@@ -30,7 +30,7 @@ matrix:
     - rvm: 1.9.2
       env: GEM=sunspot_rails RAILS=3.2.11
     - rvm: 1.9.3
-      env: GEM=sunspot_rails RAILS=2.3.14
+      env: GEM=sunspot_rails RAILS=2.3.16
 
   allow_failures:
     - rvm: 2.0.0
