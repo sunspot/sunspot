@@ -595,7 +595,7 @@ TODO
 
 ### More Like This
 
-Sunspot can extract related items using more_like_this. When searching 
+Sunspot can extract related items using more_like_this. When searching
 for similar items, you can pass a block with the following options:
 
 * fields :field_1[, :field_2, ...]
@@ -875,4 +875,4 @@ $ yardoc -o docs */lib/**/*.rb - README.md
 
 ## License
 
-Sunspot is distributed under the MIT License, copyright (c) 2008-2009 Mat Brown
+Sunspot is distributed under the MIT License, copyright (c) 2008-2013 Mat Brown
