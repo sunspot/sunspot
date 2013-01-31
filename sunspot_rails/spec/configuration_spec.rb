@@ -45,8 +45,9 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
     @config.open_timeout == nil
   end
 
-  it "should handle the 'log_level' property when not set" do
-    @config.log_level.should == 'INFO'
+  it "should set 'log_level' property using Rails log level when not set" do
+    ::Rails.logger.stub(:level){ 3 }
+    @config.log_level.should == 'SEVERE'
   end
   
   it "should handle the 'log_file' property" do
