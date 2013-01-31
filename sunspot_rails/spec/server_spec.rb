@@ -4,6 +4,7 @@ describe Sunspot::Rails::Server do
   before :each do
     @server = Sunspot::Rails::Server.new
     @config = Sunspot::Rails::Configuration.new
+    @server.stub(:configuration){ @config }
     @solr_home = File.join(@config.solr_home)
   end
 
@@ -23,8 +24,9 @@ describe Sunspot::Rails::Server do
     @server.port.should == 8983
   end
 
-  it "sets the correct log level" do
-    @server.log_level.should == "FINE"
+  it "sets the log level using configuration" do
+    @config.stub(:log_level){ 'WARNING' }
+    @server.log_level.should == "WARNING"
   end
 
   it "sets the correct log file" do
