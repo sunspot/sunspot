@@ -11,7 +11,7 @@ gems.  See those gems' documentation for more information.
 
 In order to start the daemon, run:
 
-  sunspot-solr start -- [-d /path/to/data/directory] [-p port] [-s path/to/solr/home] [--pid-dir=path/to/pid/dir]
+  sunspot-solr start -- [-d /path/to/data/directory] [-b ip4_address] [-p port] [-s path/to/solr/home] [--pid-dir=path/to/pid/dir]
 
 If you don't specify a data directory, your Solr index will be stored in your
 operating system's temporary directory.
