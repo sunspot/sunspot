@@ -1,13 +1,13 @@
 source :rubygems
 
 gem 'rails', '2.3.16'
-gem 'sqlite3', '~> 1.3.1'
+gem 'sqlite3', '~> 1.3.7'
 
 gem 'sunspot', :path => File.expand_path('../../../sunspot', __FILE__)
 gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)
 gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
 
 group :test do
-	gem 'rspec-rails', '~> 1.3.4'
+  gem 'rspec-rails', '~> 1.3.4'
   gem 'test-unit', '~> 1.2.3', :platform => :mri_19
 end
