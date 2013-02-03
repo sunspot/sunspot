@@ -1,12 +1,12 @@
 namespace :sunspot do
 
-  desc "Reindex all solr models that are located in your application's models directory."
+  desc "Drop and then reindex all solr models that are located in your application's models directory."
   # This task depends on the standard Rails file naming \
   # conventions, in that the file name matches the defined class name. \
   # By default the indexing system works in batches of 50 records, you can \
   # set your own value for this by using the batch_size argument. You can \
   # also optionally define a list of models to separated by a forward slash '/'
-  # 
+  #
   # $ rake sunspot:reindex                # reindex all models
   # $ rake sunspot:reindex[1000]          # reindex in batches of 1000
   # $ rake sunspot:reindex[false]         # reindex without batching
@@ -15,17 +15,23 @@ namespace :sunspot do
   #                                       # batchs of 1000
   # $ rake sunspot:reindex[,Post+Author]  # reindex Post and Author model
   task :reindex, [:batch_size, :models] => [:environment] do |t, args|
+    puts "*Note: the reindex task will remove your current indexes and start from scratch."
+    puts "If you have a large dataset, reindexing can take a very long time, possibly weeks."
+    puts "This is not encouraged if you have anywhere near or over 1 million rows."
+    puts "Are you sure you want to drop your indexes and completely reindex? (y/n)"
+    answer = STDIN.gets.chomp
+    return false if answer == "n"
 
     # Retry once or gracefully fail for a 5xx error so we don't break reindexing
     Sunspot.session = Sunspot::SessionProxy::Retry5xxSessionProxy.new(Sunspot.session)
 
     # Set up general options for reindexing
     reindex_options = { :batch_commit => false }
-    
+
     case args[:batch_size]
     when 'false'
       reindex_options[:batch_size] = nil
-    when /^\d+$/ 
+    when /^\d+$/
       reindex_options[:batch_size] = args[:batch_size].to_i if args[:batch_size].to_i > 0
     end
 
@@ -41,7 +47,7 @@ namespace :sunspot do
       model_names = args[:models].split('+')
       sunspot_models = model_names.map{ |m| m.constantize }
     end
-    
+
     # Set up progress_bar to, ah, report progress
     begin
       require 'progress_bar'
