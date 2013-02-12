@@ -1,16 +1,16 @@
 module Sunspot #:nodoc:
   module Rails #:nodoc:
-    # 
+    #
     # This module provides Sunspot Adapter implementations for ActiveRecord
     # models.
     #
     module Adapters
       class ActiveRecordInstanceAdapter < Sunspot::Adapters::InstanceAdapter
-        # 
+        #
         # Return the primary key for the adapted instance
         #
         # ==== Returns
-        # 
+        #
         # Integer:: Database ID of model
         #
         def id
@@ -40,8 +40,8 @@ module Sunspot #:nodoc:
           value = value.join(', ') if value.respond_to?(:join)
           @select = value
         end
-        
-        # 
+
+        #
         # Get one ActiveRecord instance out of the database by ID
         #
         # ==== Parameters
@@ -51,14 +51,14 @@ module Sunspot #:nodoc:
         # ==== Returns
         #
         # ActiveRecord::Base:: ActiveRecord model
-        # 
+        #
         def load(id)
           @clazz.first(options_for_find.merge(
             :conditions => { @clazz.primary_key => id}
           ))
         end
 
-        # 
+        #
         # Get a collection of ActiveRecord instances out of the database by ID
         #
         # ==== Parameters
@@ -74,9 +74,9 @@ module Sunspot #:nodoc:
             :conditions => { @clazz.primary_key => ids.map { |id| id }}
           ))
         end
-        
+
         private
-        
+
         def options_for_find
           options = {}
           options[:include] = @include unless !defined?(@include) || @include.blank?
