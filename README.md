@@ -40,7 +40,7 @@ If `sunspot_solr` was installed, start the packaged Solr distribution
 with:
 
 ```bash
-bundle exec   # or sunspot:solr:run to start in foreground
+bundle exec rake sunspot:solr:start # or sunspot:solr:run to start in foreground
 ```
 
 ## Setting Up Objects
