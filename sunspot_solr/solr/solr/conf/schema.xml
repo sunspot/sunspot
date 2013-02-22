@@ -85,6 +85,18 @@
     <fieldType name="tfloat" class="solr.TrieFloatField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true"/>
+    <!-- *** This fieldType is used by Sunspot! *** -->
+    <fieldType name="actext" class="solr.TextField" positionIncrementGap="100">
+     <analyzer type="index">
+       <tokenizer class="solr.KeywordTokenizerFactory"/>
+       <filter class="solr.LowerCaseFilterFactory"/>
+       <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="25" />
+     </analyzer>
+     <analyzer type="query">
+       <tokenizer class="solr.KeywordTokenizerFactory"/>
+       <filter class="solr.LowerCaseFilterFactory"/>
+     </analyzer>
+    </fieldType>
 
     <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
     <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
@@ -133,6 +145,8 @@
     <dynamicField name="_local*" stored="false" type="tdouble" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_text" stored="false" type="text" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_ac" stored="false" type="actext" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_texts" stored="true" type="text" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
