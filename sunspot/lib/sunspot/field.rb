@@ -129,6 +129,10 @@ module Sunspot
       @multiple = true
       @boost = options.delete(:boost)
       @default_boost = options.delete(:default_boost)
+      @autocomplete = options.delete(:autocomplete)
+      @autocomplete = options.delete(:exact)
+      @autocomplete = options.delete(:phonetic)
+      @autocomplete = options.delete(:lang)
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
 
