@@ -29,6 +29,13 @@ module Sunspot
       #   Index-time boost that should be applied to this field for keyword search
       # :autocomplete<Boolean>::
       #   Index "edge ngrams" to facilitate autocomplete queries.
+      # :phonetic<Boolean>::
+      #   Index the double-metaphone (http://en.wikipedia.org/wiki/Metaphone#Double_Metaphone)
+      #   representation of each token.  This will cause the lang and autocomplete options
+      #   to be ignored.
+      # :exact<Boolean>::
+      #   Index the exact representation of the text, split on regex word boundaries (\b).  This may
+      #   be useful to index source code or similar data.
       # :lang<String>::
       #   Adapt the indexing process to optimize for this language.  This turns on 
       #   language-specific stemming (http://en.wikipedia.org/wiki/Stemming) and 
