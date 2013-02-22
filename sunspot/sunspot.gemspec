@@ -26,8 +26,6 @@ Gem::Specification.new do |s|
     Rakefile
     TODO
     VERSION.yml
-    bin/sunspot-installer
-    bin/sunspot-solr
     installer/config/schema.yml
     lib/light_config.rb
     lib/sunspot.rb
