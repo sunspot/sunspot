@@ -27,6 +27,12 @@ module Sunspot
       #
       # :boost<Float>::
       #   Index-time boost that should be applied to this field for keyword search
+      # :autocomplete<Boolean>::
+      #   Index "edge ngrams" to facilitate autocomplete queries.
+      # :lang<String>::
+      #   Adapt the indexing process to optimize for this language.  This turns on 
+      #   language-specific stemming (http://en.wikipedia.org/wiki/Stemming) and 
+      #   stopwords (http://en.wikipedia.org/wiki/Stopwords).
       # :default_boost<Float>::
       #   Default search-time boost to apply to this field during keyword
       #   search. Can be overriden with DSL::Fulltext#fields or
