@@ -240,7 +240,7 @@ Gem::Specification.new do |s|
   ]
 
   s.test_files    = []
-  s.executables   = %w[ sunspot-installer sunspot-solr ]
+  s.executables   = []
 
   s.require_paths = ["lib"]
 
