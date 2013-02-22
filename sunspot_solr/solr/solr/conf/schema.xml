@@ -31,15 +31,6 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="rand" class="solr.RandomSortField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
-    <!-- legacy text field type for backwords compatibility -->
-    <fieldType name="text" class="solr.TextField" omitNorms="false">
-      <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StandardFilterFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.PorterStemFilterFactory"/>
-      </analyzer>
-    </fieldType>
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="boolean" class="solr.BoolField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
@@ -59,7 +50,7 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
-    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
@@ -75,7 +66,7 @@
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
-    <fieldType name="text_general_ac" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="text_ac" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
@@ -865,10 +856,6 @@
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="_local*" stored="false" type="tdouble" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_text" stored="false" type="text" multiValued="true" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_texts" stored="true" type="text" multiValued="true" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_b" stored="false" type="boolean" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_bm" stored="false" type="boolean" multiValued="true" indexed="true"/>
@@ -949,10 +936,6 @@
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_dtms" stored="true" type="tdate" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_textv" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_textsv" stored="true" termVectors="true" type="text" multiValued="true" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_et" stored="false" termVectors="true" type="tdouble" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_etm" stored="false" termVectors="true" type="tdouble" multiValued="true" indexed="true"/>
@@ -969,14 +952,14 @@
     <dynamicField name="*_llms" stored="true" type="location" multiValued="true" indexed="true"/>
     <!-- required by Solr 4 -->
     <field name="_version_" type="string" indexed="true" stored="true" multiValued="false"/>
-    <dynamicField name="*_text_general" stored="false" termVectors="false" type="text_general" multiValued="true" indexed="true"/>
-    <dynamicField name="*_text_general_ac" stored="false" termVectors="false" type="text_general_ac" multiValued="true" indexed="true"/>
-    <dynamicField name="*_text_generals" stored="true" termVectors="false" type="text_general" multiValued="true" indexed="true"/>
-    <dynamicField name="*_text_general_acs" stored="true" termVectors="false" type="text_general_ac" multiValued="true" indexed="true"/>
-    <dynamicField name="*_text_generalv" stored="false" termVectors="true" type="text_general" multiValued="true" indexed="true"/>
-    <dynamicField name="*_text_general_acv" stored="false" termVectors="true" type="text_general_ac" multiValued="true" indexed="true"/>
-    <dynamicField name="*_text_generalsv" stored="true" termVectors="true" type="text_general" multiValued="true" indexed="true"/>
-    <dynamicField name="*_text_general_acsv" stored="true" termVectors="true" type="text_general_ac" multiValued="true" indexed="true"/>
+    <dynamicField name="*_text" stored="false" termVectors="false" type="text" multiValued="true" indexed="true"/>
+    <dynamicField name="*_text_ac" stored="false" termVectors="false" type="text_ac" multiValued="true" indexed="true"/>
+    <dynamicField name="*_texts" stored="true" termVectors="false" type="text" multiValued="true" indexed="true"/>
+    <dynamicField name="*_text_acs" stored="true" termVectors="false" type="text_ac" multiValued="true" indexed="true"/>
+    <dynamicField name="*_textv" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
+    <dynamicField name="*_text_acv" stored="false" termVectors="true" type="text_ac" multiValued="true" indexed="true"/>
+    <dynamicField name="*_textsv" stored="true" termVectors="true" type="text" multiValued="true" indexed="true"/>
+    <dynamicField name="*_text_acsv" stored="true" termVectors="true" type="text_ac" multiValued="true" indexed="true"/>
     <dynamicField name="*_text_exact" stored="false" termVectors="false" type="text_exact" multiValued="true" indexed="true"/>
     <dynamicField name="*_text_exact_ac" stored="false" termVectors="false" type="text_exact_ac" multiValued="true" indexed="true"/>
     <dynamicField name="*_text_exacts" stored="true" termVectors="false" type="text_exact" multiValued="true" indexed="true"/>
@@ -1233,6 +1216,8 @@
     <dynamicField name="*_text_tr_acv" stored="false" termVectors="true" type="text_tr_ac" multiValued="true" indexed="true"/>
     <dynamicField name="*_text_trsv" stored="true" termVectors="true" type="text_tr" multiValued="true" indexed="true"/>
     <dynamicField name="*_text_tr_acsv" stored="true" termVectors="true" type="text_tr_ac" multiValued="true" indexed="true"/>
+    
+    <dynamicField name="*_phonetic" stored="false" termVectors="false" type="phonetic" multiValued="true" indexed="true"/>
   </fields>
   <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field

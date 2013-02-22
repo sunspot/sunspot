@@ -91,8 +91,29 @@ module Sunspot
     # available to keyword search.
     #
     class TextType < AbstractType
+      VALID_LANGUAGES = %w[
+        ar bg ca cjk cz da de el en es eu exact fa fi fr ga gl hi hu hy 
+        id it ja phonetic lv nl no pt ro ru sv th tr
+        ]
+        
       def indexed_name(name, options = {}) #:nodoc:
-        "#{name}_text"
+        lang = options[:lang]
+        if options[:phonetic]
+          lang = "phonetic" 
+          options[:autocomplete] = false
+          if options[:exact]
+            raise "Cannot specify both exact and phonetic on #{name}"
+          end
+        end
+        lang = "exact" if options[:exact]
+        
+        if lang && !VALID_LANGUAGES.include?(lang)
+          raise "#{lang} is not a recognized language"
+        end
+        
+        lang_str = lang ? "_#{lang}" : ""
+        ac_str = options[:autocomplete] ? "_ac" : ""
+        "#{name}_text#{lang_str}#{ac_str}"
       end
 
       def to_indexed(value) #:nodoc:

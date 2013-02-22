@@ -39,7 +39,8 @@ module Sunspot
       # :lang<String>::
       #   Adapt the indexing process to optimize for this language.  This turns on 
       #   language-specific stemming (http://en.wikipedia.org/wiki/Stemming) and 
-      #   stopwords (http://en.wikipedia.org/wiki/Stopwords).
+      #   stopwords (http://en.wikipedia.org/wiki/Stopwords).  The language should be called
+      #   by its ISO code (e.g. English is en).
       # :default_boost<Float>::
       #   Default search-time boost to apply to this field during keyword
       #   search. Can be overriden with DSL::Fulltext#fields or
