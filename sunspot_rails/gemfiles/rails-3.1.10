@@ -1,7 +1,7 @@
 source :rubygems
 
 gem 'rails', '3.1.10'
-gem 'sqlite3', '~> 1.3.1'
+gem 'sqlite3', '~> 1.3.7'
 
 gem 'sunspot', :path => File.expand_path('../../../sunspot', __FILE__)
 gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)

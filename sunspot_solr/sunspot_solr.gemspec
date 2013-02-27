@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.email       = ["mat@patch.com"]
   s.homepage    = 'https://github.com/outoftime/sunspot/tree/master/sunspot_solr'
   s.summary     = 'Bundled Solr distribution for Sunspot'
+  s.license     = 'MIT'
   s.description = <<-TEXT
     Sunspot::Solr provides a bundled Solr distribution for use with Sunspot.
     Typical deployment environments will require more configuration, but this
