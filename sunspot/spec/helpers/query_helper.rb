@@ -8,10 +8,10 @@ module QueryHelper
     nil
   end
 
-  def subqueries(param)
+  def subqueries(param,parser=:dismax)
     q = connection.searches.last[:q]
     subqueries = []
-    subqueries = q.scan(%r(_query_:"\{!dismax (.*?)\}(.*?)"))
+    subqueries = q.scan(%r(_query_:"\{!#{parser} (.*?)\}(.*?)"))
     subqueries.map do |subquery|
       params = {}
       subquery[0].scan(%r((\S+?)='(.+?)')) do |key, value|

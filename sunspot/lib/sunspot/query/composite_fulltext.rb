@@ -5,11 +5,12 @@ module Sunspot
         @components = []
       end
 
-      def add(keywords)
-        @components << dismax = Dismax.new(keywords)
+      def add(keywords,parser=nil)
+        parser = RegisteredParser.get_parser(parser) || Dismax
+        @components << dismax = parser.new(keywords)
         dismax
       end
-      
+
       def add_location(field, lat, lng, options)
         @components << location = Geo.new(field, lat, lng, options)
         location

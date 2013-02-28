@@ -82,7 +82,7 @@ module Sunspot
         boost_query
       end
 
-      # 
+      #
       # Add a boost function
       #
       def add_boost_function(function_query)
@@ -123,7 +123,7 @@ module Sunspot
 
 
       private
-      
+
       def escape_param(key, value)
         "#{key}='#{escape_quotes(Array(value).join(" "))}'"
       end
@@ -134,5 +134,7 @@ module Sunspot
       end
 
     end
+
+    RegisteredParser.register(:dismax,Dismax)
   end
 end
