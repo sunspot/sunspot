@@ -276,7 +276,7 @@ module Sunspot
 
         def negated?
           if @value.empty?
-            !super
+            false
           else
             super
           end
@@ -300,7 +300,7 @@ module Sunspot
       class AllOf < Base
         def negated?
           if @value.empty?
-            !super
+            false
           else
             super
           end

@@ -220,6 +220,25 @@ end
 # All examples in "positive" also work negated using `without`
 ```
 
+#### Empty Restrictions
+
+```ruby
+# Passing an empty array is equivalent to a no-op, allowing you to replace this...
+Post.search do
+  with(:category_ids, id_list) if id_list.present?
+end
+
+# ...with this
+Post.search do
+  with(:category_ids, id_list)
+end
+```
+
+
+# All examples in "positive" also work negated using `without`
+```
+
+
 #### Disjunctions and Conjunctions
 
 ```ruby
