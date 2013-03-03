@@ -273,10 +273,23 @@ module Sunspot
       # Results must have field with value included in given collection
       #
       class AnyOf < Base
+
+        def negated?
+          if @value.empty?
+            false
+          else
+            super
+          end
+        end
+
         private
 
         def to_solr_conditional
-          "(#{@value.map { |v| solr_value v } * ' OR '})"
+          if @value.empty?
+            "[* TO *]"
+          else
+            "(#{@value.map { |v| solr_value v } * ' OR '})"
+          end
         end
       end
 
@@ -285,10 +298,22 @@ module Sunspot
       # collection (only makes sense for fields with multiple values)
       #
       class AllOf < Base
+        def negated?
+          if @value.empty?
+            false
+          else
+            super
+          end
+        end
+        
         private
 
         def to_solr_conditional
-          "(#{@value.map { |v| solr_value v } * ' AND '})"
+          if @value.empty?
+            "[* TO *]"
+          else
+            "(#{@value.map { |v| solr_value v } * ' AND '})"
+          end
         end
       end
 
