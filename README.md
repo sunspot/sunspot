@@ -235,10 +235,6 @@ end
 ```
 
 
-# All examples in "positive" also work negated using `without`
-```
-
-
 #### Disjunctions and Conjunctions
 
 ```ruby
