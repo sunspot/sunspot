@@ -4,6 +4,9 @@ end
 class Model < AbstractModel
 end
 
+class UnseenModel < AbstractModel
+end
+
 class AbstractModelInstanceAdapter < Sunspot::Adapters::InstanceAdapter
 end
 
