@@ -14,6 +14,12 @@ describe Sunspot::Adapters::InstanceAdapter do
       Sunspot::Adapters::InstanceAdapter::for(Module.new)
     end.should raise_error(Sunspot::NoAdapterError)
   end
+
+  it "registers adapters found by ancestor lookup with the descendant class" do
+    Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel).should be(nil)
+    Sunspot::Adapters::InstanceAdapter::for(UnseenModel)
+    Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel).should be(AbstractModelInstanceAdapter)
+  end
 end
 
 describe Sunspot::Adapters::DataAccessor do
@@ -29,6 +35,12 @@ describe Sunspot::Adapters::DataAccessor do
     lambda do
       Sunspot::Adapters::DataAccessor::for(Module.new)
     end.should raise_error(Sunspot::NoAdapterError)
+  end
+
+  it "registers adapters found by ancestor lookup with the descendant class" do
+    Sunspot::Adapters::DataAccessor::registered_accessor_for(UnseenModel).should be(nil)
+    Sunspot::Adapters::DataAccessor::for(UnseenModel)
+    Sunspot::Adapters::DataAccessor::registered_accessor_for(UnseenModel).should be(AbstractModelDataAccessor)
   end
 end
 
