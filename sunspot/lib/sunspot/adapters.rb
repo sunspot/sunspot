@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module Sunspot
   #
   # Sunspot works by saving references to the primary key (or natural ID) of
