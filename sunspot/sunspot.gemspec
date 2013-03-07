@@ -22,14 +22,14 @@ Gem::Specification.new do |s|
 
   s.files         = %w[
     Gemfile
+    History.txt
     LICENSE
     Rakefile
     TODO
-    VERSION.yml
-    installer/config/schema.yml
     lib/light_config.rb
     lib/sunspot.rb
     lib/sunspot/adapters.rb
+    lib/sunspot/class_set.rb
     lib/sunspot/composite_setup.rb
     lib/sunspot/configuration.rb
     lib/sunspot/data_extractor.rb
@@ -51,11 +51,6 @@ Gem::Specification.new do |s|
     lib/sunspot/field.rb
     lib/sunspot/field_factory.rb
     lib/sunspot/indexer.rb
-    lib/sunspot/installer.rb
-    lib/sunspot/installer/library_installer.rb
-    lib/sunspot/installer/schema_builder.rb
-    lib/sunspot/installer/solrconfig_updater.rb
-    lib/sunspot/installer/task_helper.rb
     lib/sunspot/query.rb
     lib/sunspot/query/abstract_field_facet.rb
     lib/sunspot/query/boost_query.rb
@@ -91,13 +86,13 @@ Gem::Specification.new do |s|
     lib/sunspot/search/paginated_collection.rb
     lib/sunspot/search/query_facet.rb
     lib/sunspot/search/standard_search.rb
-    lib/sunspot/server.rb
     lib/sunspot/session.rb
     lib/sunspot/session_proxy.rb
     lib/sunspot/session_proxy/abstract_session_proxy.rb
     lib/sunspot/session_proxy/class_sharding_session_proxy.rb
     lib/sunspot/session_proxy/id_sharding_session_proxy.rb
     lib/sunspot/session_proxy/master_slave_session_proxy.rb
+    lib/sunspot/session_proxy/retry_5xx_session_proxy.rb
     lib/sunspot/session_proxy/sharding_session_proxy.rb
     lib/sunspot/session_proxy/silent_fail_session_proxy.rb
     lib/sunspot/session_proxy/thread_local_session_proxy.rb
@@ -109,59 +104,9 @@ Gem::Specification.new do |s|
     log/.gitignore
     pkg/.gitignore
     script/console
-    solr-1.3/etc/jetty.xml
-    solr-1.3/etc/webdefault.xml
-    solr-1.3/lib/jetty-6.1.3.jar
-    solr-1.3/lib/jetty-util-6.1.3.jar
-    solr-1.3/lib/jsp-2.1/ant-1.6.5.jar
-    solr-1.3/lib/jsp-2.1/core-3.1.1.jar
-    solr-1.3/lib/jsp-2.1/jsp-2.1.jar
-    solr-1.3/lib/jsp-2.1/jsp-api-2.1.jar
-    solr-1.3/lib/servlet-api-2.5-6.1.3.jar
-    solr-1.3/solr/conf/elevate.xml
-    solr-1.3/solr/conf/protwords.txt
-    solr-1.3/solr/conf/schema.xml
-    solr-1.3/solr/conf/solrconfig.xml
-    solr-1.3/solr/conf/stopwords.txt
-    solr-1.3/solr/conf/synonyms.txt
-    solr-1.3/solr/lib/geoapi-nogenerics-2.1-M2.jar
-    solr-1.3/solr/lib/gt2-referencing-2.3.1.jar
-    solr-1.3/solr/lib/jsr108-0.01.jar
-    solr-1.3/solr/lib/locallucene.jar
-    solr-1.3/solr/lib/localsolr.jar
-    solr-1.3/start.jar
-    solr-1.3/webapps/solr.war
-    solr/README.txt
-    solr/etc/jetty.xml
-    solr/etc/webdefault.xml
-    solr/lib/jetty-6.1.3.jar
-    solr/lib/jetty-util-6.1.3.jar
-    solr/lib/jsp-2.1/ant-1.6.5.jar
-    solr/lib/jsp-2.1/core-3.1.1.jar
-    solr/lib/jsp-2.1/jsp-2.1.jar
-    solr/lib/jsp-2.1/jsp-api-2.1.jar
-    solr/lib/servlet-api-2.5-6.1.3.jar
-    solr/logs/.gitignore
-    solr/solr/.gitignore
-    solr/solr/README.txt
-    solr/solr/conf/admin-extra.html
-    solr/solr/conf/elevate.xml
-    solr/solr/conf/mapping-ISOLatin1Accent.txt
-    solr/solr/conf/protwords.txt
-    solr/solr/conf/schema.xml
-    solr/solr/conf/scripts.conf
-    solr/solr/conf/solrconfig.xml
-    solr/solr/conf/spellings.txt
-    solr/solr/conf/stopwords.txt
-    solr/solr/conf/synonyms.txt
-    solr/solr/conf/xslt/example.xsl
-    solr/solr/conf/xslt/example_atom.xsl
-    solr/solr/conf/xslt/example_rss.xsl
-    solr/solr/conf/xslt/luke.xsl
-    solr/start.jar
-    solr/webapps/solr.war
     spec/api/adapters_spec.rb
     spec/api/binding_spec.rb
+    spec/api/class_set_spec.rb
     spec/api/indexer/attributes_spec.rb
     spec/api/indexer/batch_spec.rb
     spec/api/indexer/dynamic_fields_spec.rb
@@ -194,10 +139,10 @@ Gem::Specification.new do |s|
     spec/api/search/results_spec.rb
     spec/api/search/search_spec.rb
     spec/api/search/spec_helper.rb
-    spec/api/server_spec.rb
     spec/api/session_proxy/class_sharding_session_proxy_spec.rb
     spec/api/session_proxy/id_sharding_session_proxy_spec.rb
     spec/api/session_proxy/master_slave_session_proxy_spec.rb
+    spec/api/session_proxy/retry_5xx_session_proxy_spec.rb
     spec/api/session_proxy/sharding_session_proxy_spec.rb
     spec/api/session_proxy/silent_fail_session_proxy_spec.rb
     spec/api/session_proxy/spec_helper.rb
@@ -207,6 +152,8 @@ Gem::Specification.new do |s|
     spec/api/sunspot_spec.rb
     spec/ext.rb
     spec/helpers/indexer_helper.rb
+    spec/helpers/integration_helper.rb
+    spec/helpers/mock_session_helper.rb
     spec/helpers/query_helper.rb
     spec/helpers/search_helper.rb
     spec/integration/dynamic_fields_spec.rb
@@ -217,9 +164,9 @@ Gem::Specification.new do |s|
     spec/integration/local_search_spec.rb
     spec/integration/more_like_this_spec.rb
     spec/integration/scoped_search_spec.rb
-    spec/integration/spec_helper.rb
     spec/integration/stored_fields_spec.rb
     spec/integration/test_pagination.rb
+    spec/integration/unicode_spec.rb
     spec/mocks/adapters.rb
     spec/mocks/blog.rb
     spec/mocks/comment.rb
