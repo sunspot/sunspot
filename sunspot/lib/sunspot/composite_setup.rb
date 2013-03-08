@@ -116,6 +116,14 @@ module Sunspot
       @more_like_this_fields ||= more_like_this_fields_hash.values.map { |set| set.to_a }.flatten
     end
 
+    #
+    # Return one or more more_like_this fields (can be either attribute or text fields)
+    # for the given name.
+    #
+    def more_like_this_fields(field_name)
+      more_like_this_fields_hash[field_name].to_a
+    end
+
     private
 
     # 
