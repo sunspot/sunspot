@@ -46,6 +46,8 @@ module Sunspot
         (current_page - 1) * per_page
       end
 
+      alias :offset_value :offset
+
       private
 
       def method_missing(method, *args, &block)
