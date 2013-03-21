@@ -11,7 +11,7 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   end  
   
   it "should handle the 'path' property when not set" do
-    @config.path.should == '/solr'
+    @config.path.should == '/solr/default'
   end
 
   describe "port" do
