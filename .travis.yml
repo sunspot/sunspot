@@ -25,8 +25,8 @@ matrix:
     - rvm: 1.9.3
       env: GEM=sunspot_rails RAILS=2.3.16
     # Not supporting Ruby 2.0 and Rails < 3
-    # - rvm: 2.0.0
-    #   env: GEM=sunspot_rails RAILS=2.3.16
+    - rvm: 2.0.0
+      env: GEM=sunspot_rails RAILS=2.3.16
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=3.0.20
     - rvm: 2.0.0
