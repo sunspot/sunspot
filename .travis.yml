@@ -16,6 +16,7 @@ env:
 # 1.8.7 and 1.9.2
 matrix:
   exclude:
+    # Not supporting Ruby 1.8.7 + Rails >= 3
     - rvm: 1.8.7
       env: GEM=sunspot_rails RAILS=3.0.20
     - rvm: 1.8.7
@@ -24,10 +25,9 @@ matrix:
       env: GEM=sunspot_rails RAILS=3.2.11
     - rvm: 1.9.3
       env: GEM=sunspot_rails RAILS=2.3.16
-
-  allow_failures:
+    # Not supporting Ruby 2.0 and Rails < 3
     - rvm: 2.0.0
-
+      env: GEM=sunspot_rails RAILS=2.3.16
 
 script:
   - ci/travis.sh
