@@ -41,8 +41,10 @@ case $GEM in
   "sunspot_rails")
   
     cd sunspot
-    /bin/echo -n "Starting Solr on port 8983 for Sunspot specs..."
+    /bin/echo -n "Installing sunspot gems..."
     bundle install --quiet --path vendor/bundle
+    /bin/echo "done."
+    /bin/echo -n "Starting Solr on port 8983 for Sunspot specs..."
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
 
     bundle exec sunspot-solr start -p 8983 -d /tmp/solr
@@ -51,6 +53,7 @@ case $GEM in
     
     # Install gems for test Rails application
     cd ../sunspot_rails
+    rm -rf tmp/rails_`/bin/echo -n $RAILS|tr . _`_app
     rake spec RAILS=$RAILS
     rv=$?
     
