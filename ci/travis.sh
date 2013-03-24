@@ -2,6 +2,8 @@
 
 set +e
 
+gem update --system 1.8.25
+
 solr_responding() {
   port=$1
   curl -o /dev/null "http://localhost:$port/solr/admin/ping" > /dev/null 2>&1
