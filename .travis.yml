@@ -12,8 +12,7 @@ env:
   - GEM=sunspot_rails RAILS=3.1.10
   - GEM=sunspot_rails RAILS=3.2.11
 
-# Limit the size of the matrix by only performing one build against
-# 1.8.7 and 1.9.2
+# Limit the size of the matrix by only performing the most common builds
 matrix:
   exclude:
     # Not supporting Ruby 1.8.7 + Rails >= 3
@@ -28,6 +27,10 @@ matrix:
     # Not supporting Ruby 2.0 and Rails < 3
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=2.3.16
+    - rvm: 2.0.0
+      env: GEM=sunspot_rails RAILS=3.0.20
+    - rvm: 2.0.0
+      env: GEM=sunspot_rails RAILS=3.1.10
 
 script:
   - ci/travis.sh
