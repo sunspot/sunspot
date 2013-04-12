@@ -54,7 +54,8 @@ module Sunspot #:nodoc:
         #
         def load(id)
           @clazz.where(@clazz.primary_key => id).
-            merge(scope_with_options)
+            merge(scope_with_options).
+            first
         end
 
         #
@@ -70,7 +71,8 @@ module Sunspot #:nodoc:
         #
         def load_all(ids)
           @clazz.where(@clazz.primary_key => ids).
-            merge(scope_with_options)
+            merge(scope_with_options).
+            to_a
         end
 
         private
