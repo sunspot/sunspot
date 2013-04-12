@@ -79,8 +79,8 @@ module Sunspot #:nodoc:
 
         def scope_with_options
           scope = relation
-          scope = scope.includes(@include) unless !defined?(@include) || @include.blank?
-          scope = scope.select(@select)    unless !defined?(@select)  || @select.blank?
+          scope = scope.includes(@include) if defined?(@include) && !@include.blank?
+          scope = scope.select(@select)    if defined?(@select)  && !@select.blank?
           scope
         end
 
