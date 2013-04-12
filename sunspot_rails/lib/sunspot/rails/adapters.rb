@@ -78,10 +78,18 @@ module Sunspot #:nodoc:
         private
 
         def scope_with_options
-          scope = @clazz.all
+          scope = relation
           scope = scope.includes(@include) unless !defined?(@include) || @include.blank?
           scope = scope.select(@select)    unless !defined?(@select)  || @select.blank?
           scope
+        end
+
+        def relation
+          if ::Rails.version >= '4'
+            @clazz.all
+          else
+            @clazz.scoped
+          end
         end
       end
     end
