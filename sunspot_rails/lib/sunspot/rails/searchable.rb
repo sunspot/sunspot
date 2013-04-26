@@ -262,7 +262,7 @@ module Sunspot #:nodoc:
                 Sunspot.commit if options[:batch_commit]
               end
               # track progress
-              progress_bar.increment!(records.length) if progress_bar
+              progress_bar.progress += records.length if progress_bar
               batch_counter += 1
             end
           else

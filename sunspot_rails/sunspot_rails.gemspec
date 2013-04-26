@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'sunspot', Sunspot::VERSION
   s.add_dependency 'nokogiri'
+  s.add_dependency 'ruby-progressbar', '~> 1.0'
 
   s.add_development_dependency 'rspec', '~> 1.2'
   s.add_development_dependency 'rspec-rails', '~> 1.2'
