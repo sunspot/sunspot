@@ -9,6 +9,11 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
     Sunspot.session = @proxy
   end
 
+  after :each do
+    Sunspot::Session.connection_class = nil
+    Sunspot.reset!(true)
+  end
+
   class FakeRSolrErrorHttp < RSolr::Error::Http
     def backtrace
       []

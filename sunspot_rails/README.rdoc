@@ -226,7 +226,7 @@ Then, in your spec, use the #disconnect_sunspot method:
   describe Post do
     disconnect_sunspot
 
-    it 'should have some behavior'
+    it 'should have some behavior' do
       # ...
     end
   end
@@ -262,4 +262,4 @@ Please submit bug reports to https://github.com/sunspot/sunspot/issues
 
 == License
 
-Sunspot::Rails is distributed under the MIT License, copyright (c) 2009 Mat Brown
+Sunspot::Rails is distributed under the MIT License, copyright (c) 2013 Mat Brown

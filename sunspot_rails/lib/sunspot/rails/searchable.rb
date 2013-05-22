@@ -46,6 +46,11 @@ module Sunspot #:nodoc:
         # :ignore_attribute_changes_of<Array>::
         #   Define attributes, that should not trigger a reindex of that
         #   object. Usual suspects are updated_at or counters.
+        # :only_reindex_attribute_changes_of<Array>::
+        #   Define attributes, that are the only attributes that should
+        #   trigger a reindex of that object. Useful if there are a small
+        #   number of searchable attributes and a large number of attributes
+        #   to ignore.
         # :include<Mixed>::
         #   Define default ActiveRecord includes, set this to allow ActiveRecord
         #   to load required associations when indexing. See ActiveRecord's 
@@ -244,14 +249,16 @@ module Sunspot #:nodoc:
             :start => opts.delete(:first_id) || 0
           }.merge(opts)
           find_in_batch_options = {
-            :include => options[:include],
             :batch_size => options[:batch_size],
             :start => options[:start]
           }
+          find_in_batch_options[:include] = options[:include] unless ::Rails.version >= '3'
           progress_bar = options[:progress_bar]
+
           if options[:batch_size]
             batch_counter = 0
-            find_in_batches(find_in_batch_options) do |records|
+
+            batch_block = Proc.new do |records|
               solr_benchmark options[:batch_size], batch_counter do
                 Sunspot.index(records.select { |model| model.indexable? })
                 Sunspot.commit if options[:batch_commit]
@@ -260,10 +267,17 @@ module Sunspot #:nodoc:
               progress_bar.increment!(records.length) if progress_bar
               batch_counter += 1
             end
+
+            if ::Rails.version >= '3'
+              includes(options[:include]).find_in_batches(find_in_batch_options, &batch_block)
+            else
+              find_in_batches(find_in_batch_options, &batch_block)
+            end
           else
             records = all(:include => options[:include]).select { |model| model.indexable? }
             Sunspot.index!(records)
           end
+
           # perform a final commit if not committing in batches
           Sunspot.commit unless options[:batch_commit]
         end
@@ -284,13 +298,17 @@ module Sunspot #:nodoc:
         #
         # Array:: Collection of IDs that exist in Solr but not in the database
         def solr_index_orphans(opts={})
-          batch_size = opts[:batch_size] || Sunspot.config.indexing.default_batch_size
-          count = self.count
-          indexed_ids = solr_search_ids { paginate(:page => 1, :per_page => count) }.to_set
-          find_each(:select => 'id', :batch_size => batch_size) do |object|
-            indexed_ids.delete(object.id)
+          batch_size = opts[:batch_size] || Sunspot.config.indexing.default_batch_size          
+
+          solr_page = 0
+          solr_ids = []
+          while (solr_page = solr_page.next)
+            ids = solr_search_ids { paginate(:page => solr_page, :per_page => 1000) }.to_a
+            break if ids.empty?
+            solr_ids.concat ids
           end
-          indexed_ids.to_a
+
+          return solr_ids - self.connection.select_values("SELECT id FROM #{quoted_table_name}").collect(&:to_i)
         end
 
         # 
@@ -461,6 +479,8 @@ module Sunspot #:nodoc:
             @marked_for_auto_indexing =
               if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
                 !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
+              elsif !new_record? && only_attributes = self.class.sunspot_options[:only_reindex_attribute_changes_of]
+                !(changed.map { |attr| attr.to_sym } & only_attributes).blank?
               else
                 true
               end

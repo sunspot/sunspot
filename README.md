@@ -220,6 +220,21 @@ end
 # All examples in "positive" also work negated using `without`
 ```
 
+#### Empty Restrictions
+
+```ruby
+# Passing an empty array is equivalent to a no-op, allowing you to replace this...
+Post.search do
+  with(:category_ids, id_list) if id_list.present?
+end
+
+# ...with this
+Post.search do
+  with(:category_ids, id_list)
+end
+```
+
+
 #### Disjunctions and Conjunctions
 
 ```ruby
@@ -494,7 +509,7 @@ end
 
 ### Geospatial
 
-**Experimental and unreleased. The DSL may change.**
+**Sunspot 2.0 only**
 
 Sunspot 2.0 supports geospatial features of Solr 3.1 and above.
 
@@ -595,7 +610,7 @@ TODO
 
 ### More Like This
 
-Sunspot can extract related items using more_like_this. When searching 
+Sunspot can extract related items using more_like_this. When searching
 for similar items, you can pass a block with the following options:
 
 * fields :field_1[, :field_2, ...]
@@ -622,7 +637,7 @@ results = Sunspot.more_like_this(post) do
 end
 ```
 
-## Indexing In Depth
+## Indexes In Depth
 
 TODO
 
@@ -704,6 +719,21 @@ end
 
 If you are using Rails, objects are automatically indexed to Solr as a
 part of the `save` callbacks.
+
+There are a number of ways to index manually within Ruby:
+```ruby
+# On a class itself
+Person.reindex
+Sunspot.commit
+
+# On mixed objects
+Sunspot.index [post1, item2]
+Sunspot.index person3
+Sunspot.commit
+
+# With autocommit
+Sunspot.index! [post1, item2, person3]
+```
 
 If you make a change to the object's "schema" (code in the `searchable` block),
 you must reindex all objects so the changes are reflected in Solr:
@@ -837,27 +867,26 @@ $ yardoc -o docs */lib/**/*.rb - README.md
 * [Sunspot: A Solr-Powered Search Engine for Ruby](http://www.linux-mag.com/id/7341) (Linux Magazine)
 * [Sunspot Showed Me the Light](http://bennyfreshness.com/2010/05/sunspot-helped-me-see-the-light/) (ben koonse)
 * [RubyGems.org — A case study in upgrading to full-text search](http://blog.websolr.com/post/3505903537/rubygems-search-upgrade-1) (Websolr)
-* [How to Implement Spatial Search with Sunspot and Solr](http://codequest.eu/articles/how-to-implement-spatial-search-with-sunspot-and-solr) (Code Quest)
+* [How to Implement Spatial Search with Sunspot and Solr](http://web.archive.org/web/20120708071427/http://codequest.eu/articles/how-to-implement-spatial-search-with-sunspot-and-solr) (Code Quest)
 * [Sunspot 1.2 with Spatial Solr Plugin 2.0](http://joelmats.wordpress.com/2011/02/23/getting-sunspot-1-2-with-spatial-solr-plugin-2-0-to-work/) (joelmats)
-* [rails3 + heroku + sunspot : madness](http://anhaminha.tumblr.com/post/632682537/rails3-heroku-sunspot-madness) (anhaminha)
+* [rails3 + heroku + sunspot : madness](http://web.archive.org/web/20100727041141/http://anhaminha.tumblr.com/post/632682537/rails3-heroku-sunspot-madness) (anhaminha)
+* [heroku + websolr + sunspot](https://devcenter.heroku.com/articles/websolr) (Onemorecloud)
 * [How to get full text search working with Sunspot](http://cookbook.hobocentral.net/recipes/57-how-to-get-full-text-search) (Hobo Cookbook)
-* [Full text search with Sunspot in Rails](http://hemju.com/2011/01/04/full-text-search-with-sunspot-in-rail/) (hemju)
+* [Full text search with Sunspot in Rails](http://web.archive.org/web/20120311015358/http://hemju.com/2011/01/04/full-text-search-with-sunspot-in-rails/) (hemju)
 * [Using Sunspot for Free-Text Search with Redis](http://masonoise.wordpress.com/2010/02/06/using-sunspot-for-free-text-search-with-redis/) (While I Pondered...)
 * [Fuzzy searching in SOLR with Sunspot](http://www.pipetodevnull.com/past/2010/8/5/fuzzy_searching_in_solr_with_sunspot/) (pipe :to => /dev/null)
 * [Default scope with Sunspot](http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/) (Cloudspace)
 * [Index External Models with Sunspot/Solr](http://www.medihack.org/2011/03/19/index-external-models-with-sunspotsolr/) (Medihack)
-* [Chef recipe for Sunspot in production](http://gist.github.com/336403)
 * [Testing with Sunspot and Cucumber](http://collectiveidea.com/blog/archives/2011/05/25/testing-with-sunspot-and-cucumber/) (Collective Idea)
 * [Cucumber and Sunspot](http://opensoul.org/2010/4/7/cucumber-and-sunspot) (opensoul.org)
 * [Testing Sunspot with Cucumber](http://blog.trydionel.com/2010/02/06/testing-sunspot-with-cucumber/) (spiral_code)
 * [Running cucumber features with sunspot_rails](http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails) (Kabisa Blog)
 * [Testing Sunspot with Test::Unit](http://timcowlishaw.co.uk/post/3179661158/testing-sunspot-with-test-unit) (Type Slowly)
-* [How To Use Twitter Lists to Determine Influence](http://www.untitledstartup.com/2010/01/how-to-use-twitter-lists-to-determine-influence/) (Untitled Startup)
-* [Sunspot Quickstart](http://wiki.websolr.com/index.php/Sunspot_Quickstart) (WebSolr)
+* [Sunspot Quickstart](http://wiki.websolr.com/guides/Sunspot-Quick-Start) (WebSolr)
 * [Solr, and Sunspot](http://www.kuahyeow.com/2009/08/solr-and-sunspot.html) (YT!)
-* [The Saga of the Switch](http://mrb.github.com/2010/04/08/the-saga-of-the-switch.html) (mrb -- includes comparison of Sunspot and Ultrasphinx)
+* [The Saga of the Switch](http://web.archive.org/web/20100427135335/http://mrb.github.com/2010/04/08/the-saga-of-the-switch.html) (mrb -- includes comparison of Sunspot and Ultrasphinx)
 * [Conditional Indexing with Sunspot](http://mikepackdev.com/blog_posts/19-conditional-indexing-with-sunspot) (mikepack)
 
 ## License
 
-Sunspot is distributed under the MIT License, copyright (c) 2008-2009 Mat Brown
+Sunspot is distributed under the MIT License, copyright (c) 2008-2013 Mat Brown
