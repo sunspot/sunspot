@@ -104,7 +104,12 @@ module Sunspot
         end
       end
       alias_method :keywords, :fulltext
-
+      def def_type(type)
+        adjust_solr_params do |q|
+          q[:defType] = type
+          q
+        end
+      end
       def with(*args)
         case args.first
         when String, Symbol
