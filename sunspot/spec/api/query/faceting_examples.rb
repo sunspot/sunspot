@@ -477,6 +477,21 @@ shared_examples_for "facetable query" do
       )
     end
 
+    it 'tags and excludes a geo filter in a query facet' do
+      search do
+        geo_filter = with(:coordinates_new).in_radius(23, -46, 100)
+        facet :foo, :exclude => geo_filter do
+          row(:bar) do
+            with(:coordinates_new).in_radius(23, -46, 50)
+          end
+        end
+      end
+      filter_tag = get_filter_tag('_query_:"{!geofilt sfield=coordinates_new_ll pt=23,-46 d=100}"')
+      connection.should have_last_search_with(
+        :"facet.query" => "{!ex=#{filter_tag}}_query_:\"{!geofilt sfield=coordinates_new_ll pt=23,-46 d=50}\""
+      )
+    end
+
 
     it 'ignores facet query with only empty rows' do
       search do
