@@ -411,6 +411,34 @@ Sunspot.search(Post) do
 end
 ```
 
+#### Multi Select Facets
+
+In some cases you may want your facets to include the results that would be available
+if the user had not filtered by some of the current filters. In order to build such facets
+you can name your filters then build a facet which excludes the given filter, like so:
+
+```ruby
+# Filter the highest rated Posts but still build a facet for each average rating.
+search = Post.search do
+  rating_filter = with(:average_rating, 4.0..5.0)
+
+  facet(:average_rating, :exclude => rating_filter) do
+    row(1.0..2.0) do
+      with(:average_rating, 1.0..2.0)
+    end
+    row(2.0..3.0) do
+      with(:average_rating, 2.0..3.0)
+    end
+    row(3.0..4.0) do
+      with(:average_rating, 3.0..4.0)
+    end
+    row(4.0..5.0) do
+      with(:average_rating, 4.0..5.0)
+    end
+  end
+end
+```
+
 ### Ordering
 
 By default, Sunspot orders results by "score": the Solr-determined
