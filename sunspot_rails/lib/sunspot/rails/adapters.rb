@@ -1,16 +1,16 @@
 module Sunspot #:nodoc:
   module Rails #:nodoc:
-    # 
+    #
     # This module provides Sunspot Adapter implementations for ActiveRecord
     # models.
     #
     module Adapters
       class ActiveRecordInstanceAdapter < Sunspot::Adapters::InstanceAdapter
-        # 
+        #
         # Return the primary key for the adapted instance
         #
         # ==== Returns
-        # 
+        #
         # Integer:: Database ID of model
         #
         def id
@@ -40,8 +40,8 @@ module Sunspot #:nodoc:
           value = value.join(', ') if value.respond_to?(:join)
           @select = value
         end
-        
-        # 
+
+        #
         # Get one ActiveRecord instance out of the database by ID
         #
         # ==== Parameters
@@ -51,14 +51,14 @@ module Sunspot #:nodoc:
         # ==== Returns
         #
         # ActiveRecord::Base:: ActiveRecord model
-        # 
+        #
         def load(id)
-          @clazz.first(options_for_find.merge(
-            :conditions => { @clazz.primary_key => id}
-          ))
+          @clazz.where(@clazz.primary_key => id).
+            merge(scope_with_options).
+            first
         end
 
-        # 
+        #
         # Get a collection of ActiveRecord instances out of the database by ID
         #
         # ==== Parameters
@@ -70,18 +70,26 @@ module Sunspot #:nodoc:
         # Array:: Collection of ActiveRecord models
         #
         def load_all(ids)
-          @clazz.all(options_for_find.merge(
-            :conditions => { @clazz.primary_key => ids.map { |id| id }}
-          ))
+          @clazz.where(@clazz.primary_key => ids).
+            merge(scope_with_options).
+            to_a
         end
-        
+
         private
-        
-        def options_for_find
-          options = {}
-          options[:include] = @include unless !defined?(@include) || @include.blank?
-          options[:select]  =  @select unless !defined?(@select)  || @select.blank?
-          options
+
+        def scope_with_options
+          scope = relation
+          scope = scope.includes(@include) if defined?(@include) && !@include.blank?
+          scope = scope.select(@select)    if defined?(@select)  && !@select.blank?
+          scope
+        end
+
+        def relation
+          if ::Rails.version >= '4'
+            @clazz.all
+          else
+            @clazz.scoped
+          end
         end
       end
     end
