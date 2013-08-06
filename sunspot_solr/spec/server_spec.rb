@@ -66,8 +66,8 @@ describe Sunspot::Solr::Server do
       Tempfile.should_receive(:new).with('logging.properties').and_return(@tempfile = StringIO.new)
       @tempfile.should_receive(:flush)
       @tempfile.should_receive(:close)
-      @tempfile.stub!(:path).and_return('/tmp/logging.properties.12345')
-      @server.stub!(:exec)
+      @tempfile.stub(:path).and_return('/tmp/logging.properties.12345')
+      @server.stub(:exec)
     end
 
     it 'runs Solr with logging properties file' do

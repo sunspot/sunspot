@@ -53,7 +53,7 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
 
     @sunspot_session.should_receive(:index).and_return do
       @sunspot_session.should_receive(:index).and_return do
-        @sunspot_session.stub!(:index).and_return(fake_success)
+        @sunspot_session.stub(:index).and_return(fake_success)
         raise e
       end
       raise e

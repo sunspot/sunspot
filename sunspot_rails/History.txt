@@ -1,3 +1,6 @@
+== 2.1.0
+* Dropped Rails 2 support in favour of supporting Rails 4
+
 == 2.0.0
 * Finds orphaned objects in batches to avoid excessive memory use (Peer Allan)
 * Default batch size can be specified by setting `Sunspot.config.indexing.default_batch_size`

@@ -217,7 +217,7 @@ describe 'Session' do
 
   context 'session proxy' do
     it 'should send messages to manually assigned session proxy' do
-      stub_session = stub!('session')
+      stub_session = stub('session')
       Sunspot.session = stub_session
       post = Post.new
       stub_session.should_receive(:index).with(post)

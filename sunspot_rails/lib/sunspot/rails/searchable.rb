@@ -248,34 +248,20 @@ module Sunspot #:nodoc:
             :include => self.sunspot_options[:include],
             :start => opts.delete(:first_id) || 0
           }.merge(opts)
-          find_in_batch_options = {
-            :batch_size => options[:batch_size],
-            :start => options[:start]
-          }
-          find_in_batch_options[:include] = options[:include] unless ::Rails.version >= '3'
-          progress_bar = options[:progress_bar]
 
-          if options[:batch_size]
+          if options[:batch_size].to_i > 0
             batch_counter = 0
-
-            batch_block = Proc.new do |records|
-              solr_benchmark options[:batch_size], batch_counter do
+            self.includes(options[:include]).find_in_batches(options.slice(:batch_size, :start)) do |records|
+              
+              solr_benchmark(options[:batch_size], batch_counter += 1) do
                 Sunspot.index(records.select { |model| model.indexable? })
                 Sunspot.commit if options[:batch_commit]
               end
-              # track progress
-              progress_bar.increment!(records.length) if progress_bar
-              batch_counter += 1
-            end
 
-            if ::Rails.version >= '3'
-              includes(options[:include]).find_in_batches(find_in_batch_options, &batch_block)
-            else
-              find_in_batches(find_in_batch_options, &batch_block)
+              options[:progress_bar].increment!(records.length) if options[:progress_bar]
             end
           else
-            records = all(:include => options[:include]).select { |model| model.indexable? }
-            Sunspot.index!(records)
+            Sunspot.index! self.includes(options[:include]).select(&:indexable?)
           end
 
           # perform a final commit if not committing in batches

@@ -26,32 +26,6 @@ In your <code>Gemfile</code>:
     gem 'sunspot_solr'
   end
 
-== Installation in Rails 2
-
-In your project's <code>config/environment.rb</code>, add the following gem dependencies:
-
-  config.gem 'sunspot'
-  config.gem 'sunspot_rails'
-
-And in your project's <code>config/development.rb</code> and <code>config/test.rb</code>,
-add the following gem dependency to install the optional packaged Solr:
-
-  config.gem 'sunspot_solr'
-
-Install the gems with:
-
-  rake gems:install
-
-Generate the file <code>config/sunspot.yml</code>:
-
-  script/generate sunspot
-
-Rails doesn't automatically load rake tasks from plugins installed as gems
-(https://rails.lighthouseapp.com/projects/8994/tickets/59). If you installed
-Sunspot::Rails as a gem, add the following line to your project's Rakefile:
-
-  require 'sunspot/rails/tasks'
-
 == Using Sunspot::Rails
 
 If you wish to make modifications to the Solr schema, you can create a custom
