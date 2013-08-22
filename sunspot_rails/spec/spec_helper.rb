@@ -6,7 +6,6 @@ end
 
 require File.expand_path('config/environment', ENV['RAILS_ROOT'])
 
-require 'rspec'
 require 'rspec/rails'
 require 'rake'
 require File.join('sunspot', 'rails', 'solr_logging')

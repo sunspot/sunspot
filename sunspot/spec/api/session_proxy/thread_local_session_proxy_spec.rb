@@ -28,7 +28,7 @@ describe Sunspot::SessionProxy::ThreadLocalSessionProxy do
   (Sunspot::Session.public_instance_methods(false) - ['config', :config]).each do |method|
     it "should delegate #{method.inspect} to its session" do
       args = Array.new(Sunspot::Session.instance_method(method).arity.abs) do
-        stub('arg')
+        double('arg')
       end
       @proxy.session.should_receive(method).with(*args)
       @proxy.send(method, *args)

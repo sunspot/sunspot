@@ -8,5 +8,5 @@ gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)
 gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
 
 group :test do
-  gem 'rspec-rails', '~> 2.8.1'
+  gem 'rspec-rails', '~> 2.14.0'
 end
