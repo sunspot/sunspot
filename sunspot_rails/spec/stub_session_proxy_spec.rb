@@ -9,6 +9,15 @@ describe 'specs with Sunspot stubbed' do
     @post = Post.create!
   end
 
+  it 'should batch' do
+    foo = mock('Foo')
+    block = lambda { foo.bar }
+
+    foo.should_receive(:bar)
+
+    Sunspot.batch(&block)
+  end
+
   it 'should not send index to session' do
     @session.should_not_receive(:index)
     @post.index
