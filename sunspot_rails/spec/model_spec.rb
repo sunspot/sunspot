@@ -145,11 +145,11 @@ describe 'ActiveRecord mixin' do
 
     it 'should use the select option from search call to data accessor' do
       scope_with_include = double
-      Post.should_receive(:select).with('title, published_at') { scope_with_include }
+      Post.should_receive(:select).with('title, updated_at') { scope_with_include }
       Post.should_receive(:merge).with(scope_with_include) { [@post] }
       Post.stub(:scoped) { Post }
       Post.stub(:where) { Post }
-      Post.search(:select => 'title, published_at') do
+      Post.search(:select => 'title, updated_at') do
         with :title, 'Test Post'
       end.results.should == [@post]
     end
@@ -160,18 +160,18 @@ describe 'ActiveRecord mixin' do
 
     it 'should use the select option on the data accessor when specified' do
       scope_with_include = double
-      Post.should_receive(:select).with('title, published_at') { scope_with_include }
+      Post.should_receive(:select).with('title, updated_at') { scope_with_include }
       Post.should_receive(:merge).with(scope_with_include) { [@post] }
       Post.stub(:scoped) { Post }
       Post.stub(:where) { Post }
       Post.search do
         with :title, 'Test Post'
-        data_accessor_for(Post).select = [:title, :published_at]
+        data_accessor_for(Post).select = [:title, :updated_at]
       end.results.should == [@post]
     end
 
     it 'should not use the select option on the data accessor when not specified' do
-      Post.should_not_receive(:select).with('title, published_at')
+      Post.should_not_receive(:select).with('title, updated_at')
       Post.should_receive(:merge).with(Post) { [@post] }
       Post.stub(:scoped) { Post }
       Post.stub(:where) { Post }
