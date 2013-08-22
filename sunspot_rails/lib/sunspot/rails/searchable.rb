@@ -269,7 +269,7 @@ module Sunspot #:nodoc:
 
             includes(options[:include]).find_in_batches(find_in_batch_options, &batch_block)
           else
-            records = all(:include => options[:include]).select { |model| model.indexable? }
+            records = includes(options[:include]).to_a.select { |model| model.indexable? }
             Sunspot.index!(records)
           end
 

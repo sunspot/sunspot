@@ -304,12 +304,12 @@ describe 'ActiveRecord mixin' do
     describe "when not using batches" do
 
       it "should select all if the batch_size is nil" do
-        Post.should_receive(:all).with(:include => []).and_return([])
+        Post.should_receive(:includes).with([]).and_return([])
         Post.reindex(:batch_size => nil)
       end
 
       it "should search for models with includes" do
-        Post.should_receive(:all).with(:include => :author).and_return([])
+        Post.should_receive(:includes).with(:author).and_return([])
         Post.reindex(:batch_size => nil, :include => :author)
       end
 
