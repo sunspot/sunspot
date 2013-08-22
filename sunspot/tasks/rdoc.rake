@@ -1,13 +1,7 @@
-begin
-  require 'hanna/rdoctask'
-rescue LoadError
-  if require 'rubygems'
-    retry
-  end
-  # It's OK if hanna isn't installed.
-end
+require 'rdoc/task'
+require 'sunspot/version'
 
-Rake::RDocTask.new(:doc) do |rdoc|
+RDoc::Task.new(:doc) do |rdoc|
   version = Sunspot::VERSION
   rdoc.title = "Sunspot #{version} - Solr-powered search for Ruby objects - API Documentation"
   rdoc.main = 'README.md'
