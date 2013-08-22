@@ -39,11 +39,7 @@ namespace :spec do
       rails_cmd = "bundle exec rails _#{version}_"
 
       puts "Generating Rails #{version} application..."
-      if version.start_with?("2")
-        sh("#{rails_cmd} \"#{app_path}\" --force") || exit(1)
-      elsif version.start_with?("3")
-        sh("#{rails_cmd} new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets") || exit(1)
-      end
+      sh("#{rails_cmd} new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets") || exit(1)
     end
   end
 
@@ -60,13 +56,7 @@ namespace :spec do
     ENV['BUNDLE_GEMFILE'] = gemfile_path(version)
     ENV['RAILS_ROOT']     = rails_app_path(version)
 
-    spec_command = if version.start_with?("2")
-                     "spec"
-                   elsif version.start_with?("3")
-                     "rspec"
-                   end
-
-    sh "bundle exec #{spec_command} #{ENV['SPEC'] || 'spec/*_spec.rb'} --color"
+    sh "bundle exec rspec #{ENV['SPEC'] || 'spec/*_spec.rb'} --color"
   end
 end
 
