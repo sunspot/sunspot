@@ -120,64 +120,60 @@ describe 'ActiveRecord mixin' do
       end.results.should be_empty
     end
 
-    it 'should use the include option on the data accessor when specified' do
-      scope_with_include = double
-      Post.should_receive(:includes).with([:blog]) { scope_with_include }
-      Post.should_receive(:merge).with(scope_with_include) { [@post] }
-      Post.stub(:scoped) { Post }
-      Post.stub(:where) { Post }
-      Post.search do
-        with :title, 'Test Post'
-        data_accessor_for(Post).include = [:blog]
-      end.results.should == [@post]
-    end
+    context 'with scope options' do
+      let(:scope_with_include) { double }
 
-    it 'should pass :include option from search call to data accessor' do
-      scope_with_include = double
-      Post.should_receive(:includes).with([:blog]) { scope_with_include }
-      Post.should_receive(:merge).with(scope_with_include) { [@post] }
-      Post.stub(:scoped) { Post }
-      Post.stub(:where) { Post }
-      Post.search(:include => [:blog]) do
-        with :title, 'Test Post'
-      end.results.should == [@post]
-    end
+      before do
+        Post.stub(:all) { Post }
+        Post.stub(:scoped) { Post }
+        Post.stub(:where) { Post }
+      end
 
-    it 'should use the select option from search call to data accessor' do
-      scope_with_include = double
-      Post.should_receive(:select).with('title, updated_at') { scope_with_include }
-      Post.should_receive(:merge).with(scope_with_include) { [@post] }
-      Post.stub(:scoped) { Post }
-      Post.stub(:where) { Post }
-      Post.search(:select => 'title, updated_at') do
-        with :title, 'Test Post'
-      end.results.should == [@post]
+      it 'should use the include option on the data accessor when specified' do
+        Post.should_receive(:includes).with([:blog]) { scope_with_include }
+        Post.should_receive(:merge).with(scope_with_include) { [@post] }
+        Post.search do
+          with :title, 'Test Post'
+          data_accessor_for(Post).include = [:blog]
+        end.results.should == [@post]
+      end
+
+      it 'should pass :include option from search call to data accessor' do
+        Post.should_receive(:includes).with([:blog]) { scope_with_include }
+        Post.should_receive(:merge).with(scope_with_include) { [@post] }
+        Post.search(:include => [:blog]) do
+          with :title, 'Test Post'
+        end.results.should == [@post]
+      end
+
+      it 'should use the select option from search call to data accessor' do
+        Post.should_receive(:select).with('title, updated_at') { scope_with_include }
+        Post.should_receive(:merge).with(scope_with_include) { [@post] }
+        Post.search(:select => 'title, updated_at') do
+          with :title, 'Test Post'
+        end.results.should == [@post]
+      end
+
+      it 'should use the select option on the data accessor when specified' do
+        Post.should_receive(:select).with('title, updated_at') { scope_with_include }
+        Post.should_receive(:merge).with(scope_with_include) { [@post] }
+        Post.search do
+          with :title, 'Test Post'
+          data_accessor_for(Post).select = [:title, :updated_at]
+        end.results.should == [@post]
+      end
+
+      it 'should not use the select option on the data accessor when not specified' do
+        Post.should_not_receive(:select).with('title, updated_at')
+        Post.should_receive(:merge).with(Post) { [@post] }
+        Post.search do
+          with :title, 'Test Post'
+        end.results.should == [@post]
+      end
     end
 
     it 'should not allow bogus options to search' do
       lambda { Post.search(:bogus => :option) }.should raise_error(ArgumentError)
-    end
-
-    it 'should use the select option on the data accessor when specified' do
-      scope_with_include = double
-      Post.should_receive(:select).with('title, updated_at') { scope_with_include }
-      Post.should_receive(:merge).with(scope_with_include) { [@post] }
-      Post.stub(:scoped) { Post }
-      Post.stub(:where) { Post }
-      Post.search do
-        with :title, 'Test Post'
-        data_accessor_for(Post).select = [:title, :updated_at]
-      end.results.should == [@post]
-    end
-
-    it 'should not use the select option on the data accessor when not specified' do
-      Post.should_not_receive(:select).with('title, updated_at')
-      Post.should_receive(:merge).with(Post) { [@post] }
-      Post.stub(:scoped) { Post }
-      Post.stub(:where) { Post }
-      Post.search do
-        with :title, 'Test Post'
-      end.results.should == [@post]
     end
 
     it 'should gracefully handle nonexistent records' do
