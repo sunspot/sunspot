@@ -1,15 +1,7 @@
 require 'sunspot/version'
+require 'rdoc/task'
 
-rdoc_task =
-  begin
-    require 'rdoc/task'
-    RDoc::Task
-  rescue LoadError
-    require 'rake/rdoctask'
-    Rake::RDocTask
-  end
-
-rdoc_task.new(:doc) do |rdoc|
+RDoc::Task.new(:doc) do |rdoc|
   version = Sunspot::VERSION
   rdoc.title = "Sunspot #{version} - Solr-powered search for Ruby objects - API Documentation"
   rdoc.main = '../README.md'

@@ -6,4 +6,5 @@ gemspec
 
 group :development do
   gem 'rake'
+  gem 'rdoc', '>= 2.4.2' # for RDoc::Task on Travis CI
 end
