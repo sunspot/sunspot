@@ -1,8 +1,8 @@
 require 'rdoc/task'
 
 RDoc::Task.new(:doc) do |rdoc|
-  rdoc.main = 'README.md'
-  rdoc.rdoc_files.include('README.md', 'lib/sunspot/rails/**/*.rb', 'lib/sunspot/rails.rb')
+  rdoc.main = '../README.md'
+  rdoc.rdoc_files.include('../README.md', 'lib/sunspot/rails/**/*.rb', 'lib/sunspot/rails.rb')
   rdoc.rdoc_dir = 'doc'
 end
 
