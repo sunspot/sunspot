@@ -16,7 +16,7 @@ group :test do
 end
 
 group :postgres do
-	gem 'pg'
+	gem 'pg', '< 0.16.0' # 0.16.0 is failing travis CI under ruby 2 with "cannot load such file -- pg_ext"
 end
 
 group :sqlite do
