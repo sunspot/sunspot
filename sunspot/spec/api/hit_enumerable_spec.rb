@@ -27,13 +27,13 @@ describe Sunspot::Search::HitEnumerable do
     end
 
     it "returns only verified hits if :verify => true is passed" do
-      Sunspot::Search::Hit.any_instance.stub(result: nil)
+      Sunspot::Search::Hit.any_instance.stub(:result).and_return(nil)
 
       subject.hits(:verify => true).should be_empty
     end
 
     it "returns an empty array if no results are available from Solr" do
-      subject.stub(solr_docs: nil)
+      subject.stub(:solr_docs).and_return(nil)
 
       subject.hits.should == []
     end
