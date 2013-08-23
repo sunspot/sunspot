@@ -417,8 +417,8 @@ module Sunspot
     #
     # objects...<Object>:: Objects to remove from the index
     #
-    def remove!(*objects)
-      session.remove!(*objects)
+    def remove!(*objects, &block)
+      session.remove!(*objects, &block)
     end
 
     # 

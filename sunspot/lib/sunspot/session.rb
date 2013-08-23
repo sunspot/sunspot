@@ -142,8 +142,8 @@ module Sunspot
     # 
     # See Sunspot.remove!
     #
-    def remove!(*objects)
-      remove(*objects)
+    def remove!(*objects, &block)
+      remove(*objects, &block)
       commit
     end
 
