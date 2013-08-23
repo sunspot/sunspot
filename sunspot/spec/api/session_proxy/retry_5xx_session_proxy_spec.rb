@@ -33,14 +33,14 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   end
 
   it "should behave normally without a stubbed exception" do
-    @sunspot_session.should_receive(:index).and_return(mock)
+    @sunspot_session.should_receive(:index).and_return(double)
     Sunspot.index(post)
   end
 
   it "should be successful with a single exception followed by a sucess" do
     e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_rsolr_response(503))
     @sunspot_session.should_receive(:index).and_return do
-      @sunspot_session.should_receive(:index).and_return(mock)
+      @sunspot_session.should_receive(:index).and_return(double)
       raise e
     end
     Sunspot.index(post)
