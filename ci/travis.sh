@@ -30,7 +30,6 @@ case $GEM in
     /bin/echo "done."
 
     # Invoke the sunspot specs
-    gem install rdoc
     bundle exec rake spec
     rv=$?
 
@@ -57,7 +56,6 @@ case $GEM in
     # things like the random test seed in order to replicate results from failed tests.
     # e.g. GEM=sunspot_rails RAILS=4.0.0 SPEC_OPTS="--order random:64549" travis.sh
     cd ../sunspot_rails
-    gem install rdoc
     rake spec RAILS=$RAILS SPEC_OPTS="$SPEC_OPTS"
     rv=$?
 

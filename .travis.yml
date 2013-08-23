@@ -1,5 +1,4 @@
 rvm:
-  - 1.8.7
   - 1.9.3
   - 2.0.0
   # - rbx-2.0
@@ -20,9 +19,6 @@ matrix:
       env: GEM=sunspot_rails RAILS=3.0.0 DB=postgres
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=3.1.0 DB=postgres
-    # Not supporting Ruby 1.8.7 and Rails >= 4
-    - rvm: 1.8.7
-      env: GEM=sunspot_rails RAILS=4.0.0 DB=postgres
   allow_failures:
     # SQLITE fails to load correctly on Travis in Ruby 2.0
 

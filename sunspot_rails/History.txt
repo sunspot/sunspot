@@ -5,6 +5,7 @@
   #facet(field)#rows - sunspot/sunspot#439
 * Support StubSessionProxy#batch - sunspot/sunspot#375
 * Let Rails handle defaults for custom primary keys - sunspot/sunspot#373
+* Drop support for ruby 1.8.7
 
 == 2.0.0
 * Finds orphaned objects in batches to avoid excessive memory use (Peer Allan)
