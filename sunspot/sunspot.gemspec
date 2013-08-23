@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rspec', '~>2.6.0'
 
-  s.required_ruby_version '>= 1.9.0'
+  s.required_ruby_version = '>= 1.9.0'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                   '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation' <<
