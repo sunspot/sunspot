@@ -1,6 +1,13 @@
-require 'rdoc/task'
+rdoc_task =
+  begin
+    require 'rdoc/task'
+    RDoc::Task
+  rescue LoadError
+    require 'rake/rdoctask'
+    Rake::RDocTask
+  end
 
-RDoc::Task.new(:doc) do |rdoc|
+rdoc_task.new(:doc) do |rdoc|
   rdoc.main = '../README.md'
   rdoc.rdoc_files.include('../README.md', 'lib/sunspot/rails/**/*.rb', 'lib/sunspot/rails.rb')
   rdoc.rdoc_dir = 'doc'
