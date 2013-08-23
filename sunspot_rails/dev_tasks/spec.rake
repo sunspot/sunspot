@@ -44,7 +44,7 @@ namespace :spec do
 
   task :initialize_database do
     if ENV['DB'] == 'postgres'
-      sh "bundle exec db:test:prepare"
+      sh "bundle exec rake db:test:prepare"
     end
   end
 
