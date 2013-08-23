@@ -30,6 +30,7 @@ case $GEM in
     /bin/echo "done."
 
     # Invoke the sunspot specs
+    gem install rdoc
     bundle exec rake spec
     rv=$?
 
