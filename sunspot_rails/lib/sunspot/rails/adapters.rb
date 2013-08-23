@@ -53,9 +53,7 @@ module Sunspot #:nodoc:
         # ActiveRecord::Base:: ActiveRecord model
         #
         def load(id)
-          @clazz.where(@clazz.primary_key => id).
-            merge(scope_with_options).
-            first
+          @clazz.where(@clazz.primary_key => id).merge(scope_for_load).first
         end
 
         #
@@ -70,26 +68,21 @@ module Sunspot #:nodoc:
         # Array:: Collection of ActiveRecord models
         #
         def load_all(ids)
-          @clazz.where(@clazz.primary_key => ids).
-            merge(scope_with_options).
-            to_a
+          @clazz.where(@clazz.primary_key => ids).merge(scope_for_load)
         end
 
         private
 
-        def scope_with_options
+        def scope_for_load
           scope = relation
-          scope = scope.includes(@include) if defined?(@include) && !@include.blank?
-          scope = scope.select(@select)    if defined?(@select)  && !@select.blank?
+          scope = scope.includes(@include) if @include.present?
+          scope = scope.select(@select)    if @select.present?
           scope
         end
 
+        # COMPATIBILITY: Rails 4 has deprecated the 'scoped' method in favour of 'all'
         def relation
-          if ::Rails.version >= '4'
-            @clazz.all
-          else
-            @clazz.scoped
-          end
+          ::Rails.version >= '4' ? @clazz.all : @clazz.scoped
         end
       end
     end

@@ -1,5 +1,5 @@
-== Unreleased
-* Remove support for Rails 2.3.* - ce237363a328de53356d5af124106a35a4b0d13d
+== 2.1.0 - Unreleased
+* Dropped Rails 2 support in favour of supporting Rails 4
 * Fix Rails 4 deprecations - sunspot/sunspot#360
 * Improve StubSessionProxy#facet & #dynamic_facet to support, as documented
   #facet(field)#rows - sunspot/sunspot#439

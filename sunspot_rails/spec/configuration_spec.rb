@@ -2,7 +2,7 @@ require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" do
   before(:each) do
-    File.stub(exist?: false) # simulate sunspot.yml not existing
+    File.stub(:exist?).and_return(false) # simulate sunspot.yml not existing
     @config = Sunspot::Rails::Configuration.new
   end
 

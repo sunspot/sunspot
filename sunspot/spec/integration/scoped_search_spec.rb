@@ -417,7 +417,7 @@ describe 'scoped_search' do
 
     it 'should order randomly (run this test again if it fails)' do
       result_sets = Array.new(2) do
-        Sunspot.search(Post) { order_by_random }.results.map do |result|
+        Sunspot.search(Post) { order_by(:random) }.results.map do |result|
           result.id
         end
       end
