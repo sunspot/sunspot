@@ -1,7 +1,7 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::SessionProxy::Retry5xxSessionProxy do
-  
+
   before :each do
     Sunspot::Session.connection_class = Mock::ConnectionFactory.new
     @sunspot_session = Sunspot.session
@@ -33,14 +33,14 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   end
 
   it "should behave normally without a stubbed exception" do
-    @sunspot_session.should_receive(:index).and_return(mock)
+    @sunspot_session.should_receive(:index).and_return(double)
     Sunspot.index(post)
   end
 
   it "should be successful with a single exception followed by a sucess" do
     e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_rsolr_response(503))
     @sunspot_session.should_receive(:index).and_return do
-      @sunspot_session.should_receive(:index).and_return(mock)
+      @sunspot_session.should_receive(:index).and_return(double)
       raise e
     end
     Sunspot.index(post)
@@ -49,7 +49,7 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   it "should return the error response after two exceptions" do
     fake_response = fake_rsolr_response(503)
     e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_response)
-    fake_success = mock('success')
+    fake_success = double('success')
 
     @sunspot_session.should_receive(:index).and_return do
       @sunspot_session.should_receive(:index).and_return do
@@ -74,5 +74,5 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   # invocation of delegate, so probably not important. -nz 11Apr12
 
   it_should_behave_like 'session proxy'
-  
+
 end

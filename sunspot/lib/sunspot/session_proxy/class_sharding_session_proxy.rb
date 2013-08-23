@@ -1,6 +1,6 @@
 module Sunspot
   module SessionProxy
-    # 
+    #
     # An abstract subclass of ShardingSessionProxy that shards by class.
     # Concrete subclasses should not override the #session_for method, but
     # should instead implement the #session_for_class method. They must also
@@ -10,7 +10,7 @@ module Sunspot
     # #remove_by_id and all flavors of #remove_all.
     #
     class ClassShardingSessionProxy < ShardingSessionProxy
-      # 
+      #
       # Remove the Session object pointing at the shard that indexes the given
       # class.
       #
@@ -20,21 +20,23 @@ module Sunspot
         raise NotImplementedError
       end
 
-      # 
+      #
       # See Sunspot.remove_by_id
       #
-      def remove_by_id(clazz, id)
-        session_for_class(clazz).remove_by_id(clazz, id)
+      def remove_by_id(clazz, *ids)
+        ids.flatten!
+        session_for_class(clazz).remove_by_id(clazz, ids)
       end
 
-      # 
+      #
       # See Sunspot.remove_by_id!
       #
-      def remove_by_id!(clazz, id)
-        session_for_class(clazz).remove_by_id!(clazz, id)
+      def remove_by_id!(clazz, *ids)
+        ids.flatten!
+        session_for_class(clazz).remove_by_id!(clazz, ids)
       end
 
-      # 
+      #
       # See Sunspot.remove_all
       #
       def remove_all(clazz = nil)
@@ -45,7 +47,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # See Sunspot.remove_all!
       #
       def remove_all!(clazz = nil)

@@ -1,7 +1,7 @@
 require 'sunspot/batcher'
 
 module Sunspot
-  # 
+  #
   # This class presents a service for adding, updating, and removing data
   # from the Solr index. An Indexer instance is associated with a particular
   # setup, and thus is capable of indexing instances of a certain class (and its
@@ -14,7 +14,7 @@ module Sunspot
       @connection = connection
     end
 
-    # 
+    #
     # Construct a representation of the model for indexing and send it to the
     # connection for indexing
     #
@@ -31,7 +31,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # Remove the given model from the Solr index
     #
     def remove(*models)
@@ -40,16 +40,17 @@ module Sunspot
       )
     end
 
-    # 
+    #
     # Remove the model from the Solr index by specifying the class and ID
     #
     def remove_by_id(class_name, *ids)
+      ids.flatten!
       @connection.delete_by_id(
         ids.map { |id| Adapters::InstanceAdapter.index_id_for(class_name, id) }
       )
     end
 
-    # 
+    #
     # Delete all documents of the class indexed by this indexer from Solr.
     #
     def remove_all(clazz = nil)
@@ -60,14 +61,14 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # Remove all documents that match the scope given in the Query
     #
     def remove_by_scope(scope)
       @connection.delete_by_query(scope.to_boolean_phrase)
     end
 
-    # 
+    #
     # Start batch processing
     #
     def start_batch
@@ -87,7 +88,7 @@ module Sunspot
       @batcher ||= Batcher.new
     end
 
-    # 
+    #
     # Convert documents into hash of indexed properties
     #
     def prepare(model)
@@ -106,7 +107,7 @@ module Sunspot
       @connection.add(documents)
     end
 
-    # 
+    #
     # All indexed documents index and store the +id+ and +type+ fields.
     # This method constructs the document hash containing those key-value
     # pairs.
@@ -118,7 +119,7 @@ module Sunspot
       )
     end
 
-    # 
+    #
     # Get the Setup object for the given object's class.
     #
     # ==== Parameters

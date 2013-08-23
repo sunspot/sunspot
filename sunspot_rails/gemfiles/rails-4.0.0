@@ -6,6 +6,10 @@ gem 'sunspot', :path => File.expand_path('../../../sunspot', __FILE__)
 gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)
 gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
 
+group :dev do
+  gem 'rdoc', '>= 2.4.2' # for RDoc::Task on Travis CI
+end
+
 group :test do
 	gem 'protected_attributes' # Rails 4 support for attr_accessor so specs still work
   gem 'rspec-rails', '~> 2.14.0'

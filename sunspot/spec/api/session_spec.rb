@@ -123,7 +123,7 @@ describe 'Session' do
     it 'should start out not dirty' do
       @session.dirty?.should be_false
     end
-    
+
     it 'should start out not delete_dirty' do
       @session.delete_dirty?.should be_false
     end
@@ -132,7 +132,7 @@ describe 'Session' do
       @session.index(Post.new)
       @session.dirty?.should be_true
     end
-    
+
     it 'should be not be delete_dirty after adding an item' do
       @session.index(Post.new)
       @session.delete_dirty?.should be_false
@@ -162,12 +162,12 @@ describe 'Session' do
       @session.remove_all
       @session.dirty?.should be_true
     end
-    
+
     it 'should be delete_dirty after a global remove_all' do
       @session.remove_all
       @session.delete_dirty?.should be_true
     end
-    
+
     it 'should not be dirty after a commit' do
       @session.index(Post.new)
       @session.commit
@@ -207,7 +207,7 @@ describe 'Session' do
       @session.commit_if_dirty
       connection.should have(1).commits
     end
-    
+
     it 'should commit when commit_if_delete_dirty called on delete_dirty session' do
       @session.remove(Post.new)
       @session.commit_if_delete_dirty
@@ -217,7 +217,7 @@ describe 'Session' do
 
   context 'session proxy' do
     it 'should send messages to manually assigned session proxy' do
-      stub_session = stub('session')
+      stub_session = double('session')
       Sunspot.session = stub_session
       post = Post.new
       stub_session.should_receive(:index).with(post)

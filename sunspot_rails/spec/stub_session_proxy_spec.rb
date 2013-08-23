@@ -9,6 +9,15 @@ describe 'specs with Sunspot stubbed' do
     @post = Post.create!
   end
 
+  it 'should batch' do
+    foo = double('Foo')
+    block = lambda { foo.bar }
+
+    foo.should_receive(:bar)
+
+    Sunspot.batch(&block)
+  end
+
   it 'should not send index to session' do
     @session.should_not_receive(:index)
     @post.index
@@ -111,12 +120,12 @@ describe 'specs with Sunspot stubbed' do
       @search.total.should == 0
     end
 
-    it 'should return nil for a given facet' do
-      @search.facet(:category_id).should be_nil
+    it 'should return empty results for a given facet' do
+      @search.facet(:category_id).rows.should == []
     end
 
-    it 'should return nil for a given dynamic facet' do
-      @search.dynamic_facet(:custom).should be_nil
+    it 'should return empty results for a given dynamic facet' do
+      @search.dynamic_facet(:custom).rows.should == []
     end
   end
 end

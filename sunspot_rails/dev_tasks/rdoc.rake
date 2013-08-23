@@ -1,15 +1,8 @@
-begin
-  require 'hanna/rdoctask'
-rescue LoadError
-  if require 'rubygems'
-    retry
-  end
-  # It's OK if hanna isn't installed.
-end
+require 'rdoc/task'
 
-Rake::RDocTask.new(:doc) do |rdoc|
-  rdoc.main = 'README.md'
-  rdoc.rdoc_files.include('README.md', 'lib/sunspot/rails/**/*.rb', 'lib/sunspot/rails.rb')
+RDoc::Task.new(:doc) do |rdoc|
+  rdoc.main = '../README.md'
+  rdoc.rdoc_files.include('../README.md', 'lib/sunspot/rails/**/*.rb', 'lib/sunspot/rails.rb')
   rdoc.rdoc_dir = 'doc'
 end
 

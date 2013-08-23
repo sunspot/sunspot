@@ -5,7 +5,11 @@ class PostWithDefaultScope < ActiveRecord::Base
 
   attr_accessible :title, :type, :location_id, :body, :blog
 
-  default_scope :order => :title # Don't worry about Rails 4.0 deprecation warning as this is also used in Rails 3.x tests
+  if ::Rails.version >= '4'
+    default_scope { order(:title) }
+  else
+    default_scope :order => :title
+  end
 
   searchable :auto_index => false, :auto_remove => false do
     string :title

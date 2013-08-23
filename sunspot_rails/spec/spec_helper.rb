@@ -9,6 +9,7 @@ end
 ENV['DB'] ||= 'sqlite'
 Bundler.require(ENV['DB'])
 
+
 require File.expand_path('config/environment', ENV['RAILS_ROOT'])
 require 'rspec/rails'
 require 'rspec/autorun'
@@ -60,7 +61,7 @@ RSpec.configure do |config|
   config.before(:each) do
     empty_tables
     Sunspot.remove_all!
-  end  
+  end
 end
 
 def empty_tables

@@ -13,7 +13,7 @@ describe Sunspot::SessionProxy::MasterSlaveSessionProxy do
     methods.each do |method|
       it "should delegate #{method} to #{delegate}" do
         args = Array.new(Sunspot::Session.instance_method(method).arity.abs) do
-          stub('arg')
+          double('arg')
         end
         instance_variable_get(:"@#{delegate}").should_receive(method).with(*args)
         @proxy.send(method, *args)
