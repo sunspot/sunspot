@@ -41,15 +41,15 @@ namespace :sunspot do
 
     # Load all the application's models. Models which invoke 'searchable' will register themselves
     # in Sunspot.searchable.
-    Dir.glob(Rails.root.join('app/models/**/*.rb')).each { |path| require path }
+    Rails.application.eager_load!
 
-    # By default, reindex all searchable models
-    sunspot_models = Sunspot.searchable
-
-    # Choose a specific subset of models, if requested
     if args[:models]
+      # Choose a specific subset of models, if requested
       model_names = args[:models].split('+')
       sunspot_models = model_names.map{ |m| m.constantize }
+    else
+      # By default, reindex all searchable models
+      sunspot_models = Sunspot.searchable
     end
 
     # Set up progress_bar to, ah, report progress
