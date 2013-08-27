@@ -41,7 +41,7 @@ namespace :sunspot do
 
     # Load all the application's models. Models which invoke 'searchable' will register themselves
     # in Sunspot.searchable.
-    Dir.glob(Rails.root.join('app/models/**/*.rb')).each { |path| require path }
+    Dir.glob(Rails.root.join('app/models/**/*.rb')).sort_by { |path| path.length }.each { |path| require path }
 
     # By default, reindex all searchable models
     sunspot_models = Sunspot.searchable
