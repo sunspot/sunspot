@@ -46,7 +46,7 @@ module Sunspot
     #   end
     #
     #   # then in your initializer
-    #   Sunspot::Adapters::InstanceAdapter.register(MyAdapter, File)
+    #   Sunspot::Adapters::InstanceAdapter.register(FileAdapter, File)
     #
     class InstanceAdapter
       def initialize(instance) #:nodoc:
