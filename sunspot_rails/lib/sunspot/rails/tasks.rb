@@ -27,46 +27,58 @@ namespace :sunspot do
     end
 
     # Retry once or gracefully fail for a 5xx error so we don't break reindexing
-    Sunspot.session = Sunspot::SessionProxy::Retry5xxSessionProxy.new(Sunspot.session)
+    with_session(Sunspot::SessionProxy::Retry5xxSessionProxy.new(Sunspot.session)) do
 
-    # Set up general options for reindexing
-    reindex_options = { :batch_commit => false }
+      # Set up general options for reindexing
+      reindex_options = { :batch_commit => false }
 
-    case args[:batch_size]
-    when 'false'
-      reindex_options[:batch_size] = nil
-    when /^\d+$/
-      reindex_options[:batch_size] = args[:batch_size].to_i if args[:batch_size].to_i > 0
+      case args[:batch_size]
+      when 'false'
+        reindex_options[:batch_size] = nil
+      when /^\d+$/
+        reindex_options[:batch_size] = args[:batch_size].to_i if args[:batch_size].to_i > 0
+      end
+
+      # Load all the application's models. Models which invoke 'searchable' will register themselves
+      # in Sunspot.searchable.
+      Rails.application.eager_load!
+
+      if args[:models]
+        # Choose a specific subset of models, if requested
+        model_names = args[:models].split('+')
+        sunspot_models = model_names.map{ |m| m.constantize }
+      else
+        # By default, reindex all searchable models
+        sunspot_models = Sunspot.searchable
+      end
+
+      # Set up progress_bar to, ah, report progress
+      begin
+        require 'progress_bar'
+        total_documents = sunspot_models.map { | m | m.count }.sum
+        reindex_options[:progress_bar] = ProgressBar.new(total_documents)
+      rescue LoadError => e
+        $stdout.puts "Skipping progress bar: for progress reporting, add gem 'progress_bar' to your Gemfile"
+      rescue Exception => e
+        $stderr.puts "Error using progress bar: #{e.message}"
+      end
+
+      # Finally, invoke the class-level solr_reindex on each model
+      sunspot_models.each do |model|
+        model.solr_reindex(reindex_options)
+      end
     end
+  end
 
-    # Load all the application's models. Models which invoke 'searchable' will register themselves
-    # in Sunspot.searchable.
-    Rails.application.eager_load!
-
-    if args[:models]
-      # Choose a specific subset of models, if requested
-      model_names = args[:models].split('+')
-      sunspot_models = model_names.map{ |m| m.constantize }
-    else
-      # By default, reindex all searchable models
-      sunspot_models = Sunspot.searchable
-    end
-
-    # Set up progress_bar to, ah, report progress
-    begin
-      require 'progress_bar'
-      total_documents = sunspot_models.map { | m | m.count }.sum
-      reindex_options[:progress_bar] = ProgressBar.new(total_documents)
-    rescue LoadError => e
-      $stdout.puts "Skipping progress bar: for progress reporting, add gem 'progress_bar' to your Gemfile"
-    rescue Exception => e
-      $stderr.puts "Error using progress bar: #{e.message}"
-    end
-
-    # Finally, invoke the class-level solr_reindex on each model
-    sunspot_models.each do |model|
-      model.solr_reindex(reindex_options)
-    end
+  # Swaps sunspot sessions for the duration of the block
+  # Ensures the session is returned to normal in case this task is called from within the rails app
+  # and not just a one-off from the command line
+  def with_session(new_session)
+    original_session = Sunspot.session
+    Sunspot.session = new_session
+    yield
+  ensure
+    Sunspot.session = original_session
   end
 
   def sunspot_solr_in_load_path?
