@@ -1,5 +1,6 @@
 == 2.1.0
 * Dropped Rails 2 support in favour of supporting Rails 4
+* Passing :silence => true while invoking the rake sunspot:reindex will no longer show the Progress Bar
 
 == 2.0.0
 * Finds orphaned objects in batches to avoid excessive memory use (Peer Allan)
@@ -70,7 +71,7 @@
 == 0.10.6
 * Added script/generate sunspot support to generate the required sunspot.yml
   file [Brandon Keepers]
-  
+
 == 0.10.5
 * Added a auto_commit_after_request option to sunspot.yml. Sunspot will not
   automatically commit any changes in solr if you set this value to false.
