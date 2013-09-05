@@ -52,7 +52,7 @@ namespace :sunspot do
         sunspot_models = Sunspot.searchable
       end
 
-      # Set up progress_bar to, ah, report progress
+      # Set up progress_bar to, ah, report progress unless the user has chosen to silence output
       begin
         require 'progress_bar'
         total_documents = sunspot_models.map { | m | m.count }.sum
@@ -61,7 +61,7 @@ namespace :sunspot do
         $stdout.puts "Skipping progress bar: for progress reporting, add gem 'progress_bar' to your Gemfile"
       rescue Exception => e
         $stderr.puts "Error using progress bar: #{e.message}"
-      end
+      end unless args[:silence]
 
       # Finally, invoke the class-level solr_reindex on each model
       sunspot_models.each do |model|
