@@ -43,9 +43,9 @@ namespace :sunspot do
       # in Sunspot.searchable.
       Rails.application.eager_load!
 
-      if args[:models]
+      if args[:models].present?
         # Choose a specific subset of models, if requested
-        model_names = args[:models].split('+')
+        model_names = args[:models].split(/[+ ]/)
         sunspot_models = model_names.map{ |m| m.constantize }
       else
         # By default, reindex all searchable models

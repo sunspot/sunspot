@@ -1,6 +1,7 @@
 == 2.1.0
 * Dropped Rails 2 support in favour of supporting Rails 4
-* Passing :silence => true while invoking the rake sunspot:reindex will no longer show the Progress Bar
+* Passing :silence => true while invoking sunspot:reindex task will no longer show the Progress Bar
+* Model names can now also be delimited with spaces when passing them the sunspot:reindex task
 
 == 2.0.0
 * Finds orphaned objects in batches to avoid excessive memory use (Peer Allan)
