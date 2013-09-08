@@ -245,7 +245,7 @@ module Sunspot #:nodoc:
           options = {
             :batch_size => Sunspot.config.indexing.default_batch_size,
             :batch_commit => true,
-            :include => self.sunspot_options[:include],
+            :include => Array.wrap(self.sunspot_options[:include]).uniq,
             :start => opts.delete(:first_id) || 0
           }.merge(opts)
 
