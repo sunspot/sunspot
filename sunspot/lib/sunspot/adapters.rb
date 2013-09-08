@@ -319,9 +319,9 @@ module Sunspot
     # Allows to have a registry of the classes adapted by a DataAccessor. This
     # registry does the class registration using DataAccessor's #create and while
     # doing so also allows a registered class to notify which attributes
-    # should be inherited by its subclasses. 
-    # This is useful in cases such us ActiveRecord's #include option, where 
-    # you may need to run a search in all the subclasses of a searchable model 
+    # should be inherited by its subclasses.
+    # This is useful in cases such us ActiveRecord's #include option, where
+    # you may need to run a search in all the subclasses of a searchable model
     # and including some associations for all of them when it loads.
     #
     # ==== Example

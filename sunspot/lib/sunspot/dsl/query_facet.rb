@@ -1,6 +1,6 @@
 module Sunspot
   module DSL
-    # 
+    #
     # This tiny DSL class implements the DSL for the FieldQuery.facet
     # method.
     #
@@ -9,7 +9,7 @@ module Sunspot
         @query, @setup, @facet, @options = query, setup, facet, options
       end
 
-      # 
+      #
       # Add a row to this query facet. The label argument can be anything; it's
       # simply the value that's passed into the Sunspot::QueryFacetRow object
       # corresponding to the row that's created. Use whatever seems most

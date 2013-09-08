@@ -1,6 +1,6 @@
 module Sunspot
   module Query
-    # 
+    #
     # Representation of a BoostQuery, which allows the searcher to specify a
     # scope for which matching documents should have an extra boost. This is
     # essentially a conjunction, with an extra instance variable containing

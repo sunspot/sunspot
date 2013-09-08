@@ -32,7 +32,7 @@ module Sunspot
         if @options[:prefix]
           params[qualified_param('prefix')] = @options[:prefix].to_s
         end
-        params[qualified_param('mincount')] = 
+        params[qualified_param('mincount')] =
           case
           when @options[:minimum_count] then @options[:minimum_count].to_i
           when @options[:zeros] then 0
@@ -46,7 +46,7 @@ module Sunspot
       def qualified_param(param)
         :"f.#{key}.facet.#{param}"
       end
-      
+
       def key
         @key ||= @options[:name] || @field.indexed_name
       end

@@ -1,6 +1,6 @@
 module Sunspot
   module DSL
-    # 
+    #
     # This class presents an API for building restrictions in the query DSL. The
     # methods exposed are the snake-cased names of the classes defined in the
     # Sunspot::Restriction module, with the exception of Base. All

@@ -1,6 +1,6 @@
 module Sunspot
   module DSL
-    # 
+    #
     # Mixin DSL to accept functions.
     #
     module Functional

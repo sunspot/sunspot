@@ -1,6 +1,6 @@
 module Sunspot
   module DSL #:nodoc:
-    # 
+    #
     # This DSL presents methods for constructing restrictions and other query
     # elements that are specific to fields. As well as being a superclass of
     # Sunspot::DSL::StandardQuery, which presents the main query block, this
@@ -12,7 +12,7 @@ module Sunspot
         @scope, @setup = scope, setup
       end
 
-      # 
+      #
       # Build a positive restriction. This method can take three forms: equality
       # restriction, restriction by another restriction, or identity
       # restriction.
@@ -62,7 +62,7 @@ module Sunspot
       #   Sunspot.search do
       #     with(:category_ids, [1, 5, 9])
       #   end
-      # 
+      #
       # Other restriction types:
       #
       #   Sunspot.search(Post) do
@@ -87,7 +87,7 @@ module Sunspot
         add_restriction(true, *args)
       end
 
-      # 
+      #
       # Create a disjunction, scoping the results to documents that match any
       # of the enclosed restrictions.
       #
@@ -109,7 +109,7 @@ module Sunspot
         disjunction
       end
 
-      # 
+      #
       # Create a conjunction, scoping the results to documents that match all of
       # the enclosed restrictions. When called from the top level of a search
       # block, this has no effect, but can be useful for grouping a conjunction
@@ -138,9 +138,9 @@ module Sunspot
       # The block API is implemented by Sunspot::DSL::FieldQuery, which is a
       # superclass of the Query DSL (thus providing a subset of the API, in
       # particular only methods that refer to particular fields).
-      # 
+      #
       # ==== Parameters
-      # 
+      #
       # base_name<Symbol>:: The base name for the dynamic field definition
       #
       # ==== Example
@@ -160,14 +160,14 @@ module Sunspot
         )
       end
 
-      # 
+      #
       # Apply scope-type restrictions on fulltext fields. In certain situations,
       # it may be desirable to place logical restrictions on text fields.
       # Remember that text fields are tokenized; your mileage may very.
       #
       # The block works exactly like a normal scope, except that the field names
       # refer to text fields instead of attribute fields.
-      # 
+      #
       # === Example
       #
       #   Sunspot.search(Post) do

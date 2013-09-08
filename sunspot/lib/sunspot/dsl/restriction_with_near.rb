@@ -6,7 +6,7 @@ module Sunspot
         @query = query
       end
 
-      # 
+      #
       # Perform a Geohash-based location restriction for the given `location`
       # field. Though this uses the same API as other attribute-field
       # restrictions, there are several differences between this and other
@@ -146,7 +146,7 @@ module Sunspot
       # Performs a query that is filtered by a bounding box
       #
       # ==== Parameters
-      # 
+      #
       # :first_corner<Array>::
       #   First corner (expressed as an array `[latitude, longitude]`)
       # :second_corner<Array>::
