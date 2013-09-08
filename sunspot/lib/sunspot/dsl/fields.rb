@@ -33,14 +33,7 @@ module Sunspot
       #   DSL::Fulltext#boost_fields method.
       #
       def text(*names, &block)
-        options = names.pop if names.last.is_a?(Hash)
-        names.each do |name|
-          @setup.add_text_field_factory(
-            name,
-            options || {},
-            &block
-          )
-        end
+        method_missing("text", *names, &block)
       end
 
       # 
@@ -87,15 +80,20 @@ module Sunspot
           end
         end
         type = type_class.instance
-        name = args.shift
-        if method.to_s =~ /^dynamic_/
-          if type.accepts_dynamic?
-            @setup.add_dynamic_field_factory(name, type, options, &block)
+        args.each do |name|
+          if method.to_s =~ /^dynamic_/
+            if type.accepts_dynamic?
+              @setup.add_dynamic_field_factory(name, type, options, &block)
+            else
+              super(method, *args, &block)
+            end
           else
-            super(method, *args, &block)
+            if type.is_a?(Sunspot::Type::TextType)
+              @setup.add_text_field_factory(name, type, options, &block)
+            else
+              @setup.add_field_factory(name, type, options, &block)
+            end
           end
-        else
-          @setup.add_field_factory(name, type, options, &block)
         end
       end
     end

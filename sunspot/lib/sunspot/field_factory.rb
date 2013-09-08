@@ -37,7 +37,7 @@ module Sunspot
         end
         @field =
           if type.is_a?(Type::TextType)
-            FulltextField.new(name, options)
+            FulltextField.new(name, type, options)
           else
             AttributeField.new(name, type, options)
           end

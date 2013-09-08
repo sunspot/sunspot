@@ -122,13 +122,14 @@ module Sunspot
   # to do otherwise). FulltextField instances always have the type TextType.
   #
   class FulltextField < Field #:nodoc:
-    attr_reader :default_boost
+    attr_reader :default_boost, :search_by_default
 
-    def initialize(name, options = {})
-      super(name, Type::TextType.instance, options)
+    def initialize(name, type, options = {})
+      super(name, type, options)
       @multiple = true
       @boost = options.delete(:boost)
       @default_boost = options.delete(:default_boost)
+      @search_by_default = options.delete(:search_by_default)
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
 
