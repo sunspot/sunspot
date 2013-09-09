@@ -246,7 +246,7 @@ module Sunspot #:nodoc:
             :batch_size => Sunspot.config.indexing.default_batch_size,
             :batch_commit => true,
             :include => self.sunspot_options[:include],
-            :start => opts.delete(:first_id) || 0
+            :start => opts.delete(:first_id)
           }.merge(opts)
 
           if options[:batch_size].to_i > 0
