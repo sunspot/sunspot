@@ -102,6 +102,20 @@ module Sunspot #:nodoc:
             
             self.sunspot_options = options
           end
+          # By default, auto_index => true will cause sunspot_rails to reindex
+          # an instance even if its indexed fields have not changed. There is an
+          # undocumented option :only_reindex_attribute_changes_of that can be
+          # found in lib/sunspot/rails/searchable.rb that will cause Sunspot to
+          # reindex the instance only if the given fields have changed. Instead
+          # of manually listing all of the fields both in the searchable block
+          # and in the searchable options, it makes more sense to check the
+          # searchable fields and put them in :only_reindex_attribute_changes_of
+          # if :only_reindex_attribute_changes_of is not otherwise specified.
+          #
+          # nil.empty? isn't defined here.
+          if (only_reindex_on = self.sunspot_options[:only_reindex_attribute_changes_of]).nil? || only_reindex_on.empty?
+            self.sunspot_options[:only_reindex_attribute_changes_of] = Sunspot::Setup.for(self).fields.map(&:name)
+          end
         end
 
         # 
