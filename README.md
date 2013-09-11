@@ -15,8 +15,9 @@ This README provides a high level overview; class-by-class and
 method-by-method documentation is available in the [API
 reference](http://sunspot.github.com/sunspot/docs/).
 
-For questions about how to use Sunspot in your app, please use the Sunspot mailing list at 
-http://groups.google.com/group/ruby-sunspot.
+For questions about how to use Sunspot in your app, please use the
+[Sunspot Mailing List](http://groups.google.com/group/ruby-sunspot) or search
+[Stack Overflow](http://www.stackoverflow.com).
 
 ## Quickstart with Rails 3 / 4
 
