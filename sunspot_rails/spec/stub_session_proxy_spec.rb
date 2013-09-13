@@ -118,5 +118,9 @@ describe 'specs with Sunspot stubbed' do
     it 'should return empty results for a given dynamic facet' do
       @search.dynamic_facet(:custom).rows.should == []
     end
+
+    it 'should return empty array if listing facets' do
+      @search.facets.should == []
+    end
   end
 end
