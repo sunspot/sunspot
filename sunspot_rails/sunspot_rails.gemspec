@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.email       = ["mat@patch.com"]
   s.homepage = 'http://github.com/outoftime/sunspot/tree/master/sunspot_rails'
   s.summary     = 'Rails integration for the Sunspot Solr search library'
+  s.license     = 'MIT'
   s.description = <<-TEXT
     Sunspot::Rails is an extension to the Sunspot library for Solr search.
     Sunspot::Rails adds integration between Sunspot and ActiveRecord, including
@@ -31,6 +32,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
+  s.add_dependency 'rails', '>= 3'
   s.add_dependency 'sunspot', Sunspot::VERSION
   s.add_dependency 'nokogiri'
 

@@ -8,8 +8,6 @@ module Sunspot
     # allows operations on specific fields.
     #
     class Scope
-      NONE = Object.new
-
       def initialize(scope, setup) #:nodoc:
         @scope, @setup = scope, setup
       end
@@ -193,20 +191,19 @@ module Sunspot
         case args.first
         when String, Symbol
           raise ArgumentError if args.length > 2
-          field_name = args[0]
-          value = args.length > 1 ? args[1] : NONE
-          if value == NONE
-            DSL::Restriction.new(@setup.field(field_name.to_sym), @scope, negated)
-          else
-            @scope.add_shorthand_restriction(negated, @setup.field(field_name.to_sym), value)
+          field = @setup.field(args[0].to_sym)
+          if args.length > 1
+            value = args[1]
+            @scope.add_shorthand_restriction(negated, field, value)
+          else # NONE
+            DSL::Restriction.new(field, @scope, negated)
           end
-        else
-          instances = args.flatten
+        else # args are instances
           @scope.add_restriction(
             negated,
             IdField.instance,
             Sunspot::Query::Restriction::AnyOf,
-            instances.flatten.map { |instance|
+            args.flatten.map { |instance|
               Sunspot::Adapters::InstanceAdapter.adapt(instance).index_id }
           )
         end

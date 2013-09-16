@@ -17,56 +17,47 @@ namespace :spec do
     File.join(File.dirname(__FILE__), "..", "spec", "rails_template")
   end
 
-  task :run_with_rails => [:set_gemfile, :generate_rails_app, :setup_rails_app, :run]
+  def version
+    ENV['VERSION']
+  end
+
+  task :run_with_rails => [:set_gemfile, :generate_rails_app, :initialize_database, :setup_rails_app, :run]
 
   task :set_gemfile do
-    version = ENV['VERSION']
-
     ENV['BUNDLE_PATH']    = vendor_path(version)
     ENV['BUNDLE_GEMFILE'] = gemfile_path(version)
 
     unless File.exist?(ENV['BUNDLE_PATH'])
       puts "Installing gems for Rails #{version} (this will only be done once)..."
-      system("bundle install #{ENV['BUNDLE_ARGS']}") || exit(1)
+      sh("bundle install #{ENV['BUNDLE_ARGS']}") || exit(1)
     end
   end
 
   task :generate_rails_app do
-    version = ENV['VERSION']
     app_path = rails_app_path(version)
 
     unless File.exist?(File.expand_path("config/environment.rb", app_path))
-      rails_cmd = "bundle exec rails _#{version}_"
-
       puts "Generating Rails #{version} application..."
-      if version.start_with?("2")
-        system("#{rails_cmd} \"#{app_path}\" --force") || exit(1)
-      elsif version.start_with?("3")
-        system("#{rails_cmd} new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets") || exit(1)
-      end
+      sh("bundle exec rails _#{version}_ new \"#{app_path}\" --force --skip-git --skip-javascript --skip-gemfile --skip-sprockets") || exit(1)
+    end
+  end
+
+  task :initialize_database do
+    if ENV['DB'] == 'postgres'
+      sh "psql -c 'DROP DATABASE IF EXISTS sunspot_test;' -d template1"
+      sh "psql -c 'create database sunspot_test;' -d template1"
     end
   end
 
   task :setup_rails_app do
-    version = ENV['VERSION']
-    app_path = rails_app_path(version)
-
-    FileUtils.cp_r File.join(rails_template_path, "."), app_path
+    FileUtils.cp_r File.join(rails_template_path, "."), rails_app_path(version)
   end
 
   task :run do
-    version = ENV['VERSION']
-
     ENV['BUNDLE_GEMFILE'] = gemfile_path(version)
     ENV['RAILS_ROOT']     = rails_app_path(version)
 
-    spec_command = if version.start_with?("2")
-                     "spec"
-                   elsif version.start_with?("3")
-                     "rspec"
-                   end
-
-    system "bundle exec #{spec_command} #{ENV['SPEC'] || 'spec/*_spec.rb'} --color"
+    sh "bundle exec rspec #{ENV['SPEC'] || 'spec/*_spec.rb'} --color"
   end
 end
 

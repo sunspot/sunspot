@@ -1,8 +1,7 @@
 module Sunspot
   module Search
 
-    class PaginatedCollection
-      instance_methods.each { |m| undef_method m unless m =~ /^__|instance_eval|object_id/ }
+    class PaginatedCollection < Array
 
       attr_reader :current_page, :per_page
       attr_accessor :total_count
@@ -11,10 +10,10 @@ module Sunspot
       alias :limit_value :per_page
 
       def initialize(collection, page, per_page, total)
-        @collection   = collection
         @current_page = page
         @per_page     = per_page
         @total_count  = total
+        replace collection
       end
 
       def total_pages
@@ -45,14 +44,7 @@ module Sunspot
       def offset
         (current_page - 1) * per_page
       end
-
       alias :offset_value :offset
-
-      private
-
-      def method_missing(method, *args, &block)
-        @collection.send(method, *args, &block)
-      end
 
     end
   end

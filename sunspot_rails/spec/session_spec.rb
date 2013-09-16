@@ -31,7 +31,7 @@ describe 'Sunspot::Rails session' do
   context 'disabled' do
     before do
       Sunspot::Rails.reset
-      ::Rails.stub!(:env).and_return("config_disabled_test")
+      ::Rails.stub(:env).and_return("config_disabled_test")
     end
 
     after do

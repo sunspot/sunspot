@@ -43,9 +43,25 @@ describe 'hits', :type => :search do
     stub_results(*posts)
     search = session.search(Post)
     hits, results = [], []
+
     search.each_hit_with_result do |hit, result|
       hits << hit
       results << result
+    end
+
+    hits.should have(2).hits
+    results.should have(2).results
+  end
+
+  it 'should provide an Enumerator over hits with instances' do
+    posts = Array.new(2) { Post.new }
+    stub_results(*posts)
+    search = session.search(Post)
+    hits, results = [], []
+    search.each_hit_with_result.with_index do |(hit, result), index|
+      hit.should be_kind_of(Sunspot::Search::Hit)
+      result.should be_kind_of(Post)
+      index.should be_kind_of(Integer)
     end
   end
 

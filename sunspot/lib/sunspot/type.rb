@@ -1,7 +1,7 @@
 require 'singleton'
 begin
   require 'geohash'
-rescue LoadError => e
+rescue LoadError
   require 'pr_geohash'
 end
 

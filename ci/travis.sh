@@ -2,6 +2,8 @@
 
 set +e
 
+gem update --system 1.8.25
+
 solr_responding() {
   port=$1
   curl -o /dev/null "http://localhost:$port/solr/admin/ping" > /dev/null 2>&1
@@ -50,8 +52,11 @@ case $GEM in
     /bin/echo "done."
     
     # Install gems for test Rails application
+    # Allow user to pass in SPEC_OPTS that are passed to spec in order to specify
+    # things like the random test seed in order to replicate results from failed tests.
+    # e.g. GEM=sunspot_rails RAILS=4.0.0 SPEC_OPTS="--order random:64549" travis.sh
     cd ../sunspot_rails
-    rake spec RAILS=$RAILS
+    rake spec RAILS=$RAILS SPEC_OPTS="$SPEC_OPTS"
     rv=$?
     
     # Cleanup Solr

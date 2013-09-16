@@ -120,10 +120,9 @@ module Sunspot
       def with(*args)
         case args.first
         when String, Symbol
-          field_name = args[0]
-          value = args.length > 1 ? args[1] : Scope::NONE
-          if value == Scope::NONE
-            return DSL::RestrictionWithNear.new(@setup.field(field_name.to_sym), @scope, @query, false)
+          if args.length == 1 # NONE
+            field = @setup.field(args[0].to_sym)
+            return DSL::RestrictionWithNear.new(field, @scope, @query, false)
           end
         end
 

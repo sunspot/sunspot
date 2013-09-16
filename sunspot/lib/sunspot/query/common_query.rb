@@ -10,6 +10,9 @@ module Sunspot
         else
           @scope.add_positive_restriction(TypeField.instance, Restriction::AnyOf, types)
         end
+
+        @pagination = nil
+        @parameter_adjustment = nil
       end
 
       def solr_parameter_adjustment=(block)

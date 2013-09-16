@@ -5,7 +5,9 @@ class PostWithDefaultScope < ActiveRecord::Base
 
   attr_accessible :title, :type, :location_id, :body, :blog
 
-  default_scope :order => :title
+	def self.default_scope
+		order(:title)
+  end
 
   searchable :auto_index => false, :auto_remove => false do
     string :title

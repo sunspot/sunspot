@@ -1,3 +1,8 @@
+== 2.1.0
+* Dropped Rails 2 support in favour of supporting Rails 4
+* Passing :silence => true while invoking sunspot:reindex task will no longer show the Progress Bar
+* Model names can now also be delimited with spaces when passing them the sunspot:reindex task
+
 == 2.0.0
 * Finds orphaned objects in batches to avoid excessive memory use (Peer Allan)
 * Default batch size can be specified by setting `Sunspot.config.indexing.default_batch_size`
@@ -67,7 +72,7 @@
 == 0.10.6
 * Added script/generate sunspot support to generate the required sunspot.yml
   file [Brandon Keepers]
-  
+
 == 0.10.5
 * Added a auto_commit_after_request option to sunspot.yml. Sunspot will not
   automatically commit any changes in solr if you set this value to false.

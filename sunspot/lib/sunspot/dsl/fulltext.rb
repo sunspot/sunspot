@@ -5,8 +5,6 @@ module Sunspot
     # handler.
     #
     class Fulltext
-      attr_reader :exclude_fields #:nodoc:
-
       # accept function in boost
       include Functional
 

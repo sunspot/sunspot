@@ -13,7 +13,7 @@ describe Sunspot::SessionProxy::ShardingSessionProxy do
   it "should call rescued_exception when an exception is caught" do
     SUPPORTED_METHODS.each do |method|
       e = FakeException.new(method)
-      @search_session.stub!(method).and_raise(e)
+      @search_session.stub(method).and_raise(e)
       @proxy.should_receive(:rescued_exception).with(method, e)
       @proxy.send(method)
     end

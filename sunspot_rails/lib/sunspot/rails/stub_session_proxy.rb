@@ -83,9 +83,11 @@ module Sunspot
         end
 
         def facet(name)
+          FacetStub.new
         end
 
         def dynamic_facet(name)
+          FacetStub.new
         end
 
         def execute
@@ -139,6 +141,14 @@ module Sunspot
           0
         end
         
+      end
+
+      class FacetStub
+
+        def rows
+          []
+        end
+
       end
       
     end

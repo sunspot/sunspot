@@ -68,7 +68,7 @@ describe Sunspot::SessionProxy::ClassShardingSessionProxy do
 
   [:dirty, :delete_dirty].each do |method|
     it "should be dirty if any of the sessions are dirty" do
-      @proxy.post_session.stub!(:"#{method}?").and_return(true)
+      @proxy.post_session.stub(:"#{method}?").and_return(true)
       @proxy.should send("be_#{method}")
     end
 

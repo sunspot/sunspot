@@ -2,7 +2,7 @@ require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" do
   before(:each) do
-    File.stub!(:exist?).and_return(false) # simulate sunspot.yml not existing
+    File.stub(:exist?).and_return(false) # simulate sunspot.yml not existing
     @config = Sunspot::Rails::Configuration.new
   end
   
@@ -11,27 +11,27 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   end  
   
   it "should handle the 'path' property when not set" do
-    @config.path.should == '/solr'
+    @config.path.should == '/solr/default'
   end
 
   describe "port" do
     it "should default to port 8981 in test" do
-      ::Rails.stub!(:env => 'test')
+      ::Rails.stub(:env => 'test')
       @config = Sunspot::Rails::Configuration.new
       @config.port.should == 8981
     end
     it "should default to port 8982 in development" do
-      ::Rails.stub!(:env => 'development')
+      ::Rails.stub(:env => 'development')
       @config = Sunspot::Rails::Configuration.new
       @config.port.should == 8982
     end
     it "should default to 8983 in production" do
-      ::Rails.stub!(:env => 'production')
+      ::Rails.stub(:env => 'production')
       @config = Sunspot::Rails::Configuration.new
       @config.port.should == 8983
     end
     it "should generally default to 8983" do
-      ::Rails.stub!(:env => 'staging')
+      ::Rails.stub(:env => 'staging')
       @config = Sunspot::Rails::Configuration.new
       @config.port.should == 8983
     end
@@ -45,8 +45,9 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
     @config.open_timeout == nil
   end
 
-  it "should handle the 'log_level' property when not set" do
-    @config.log_level.should == 'INFO'
+  it "should set 'log_level' property using Rails log level when not set" do
+    ::Rails.logger.stub(:level){ 3 }
+    @config.log_level.should == 'SEVERE'
   end
   
   it "should handle the 'log_file' property" do
@@ -87,7 +88,7 @@ end
 
 describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
   before(:each) do
-    ::Rails.stub!(:env => 'config_test')
+    ::Rails.stub(:env => 'config_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
@@ -144,7 +145,7 @@ end
 
 describe Sunspot::Rails::Configuration, "with disabled: true in sunspot.yml" do
   before(:each) do
-    ::Rails.stub!(:env => 'config_disabled_test')
+    ::Rails.stub(:env => 'config_disabled_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
@@ -159,7 +160,7 @@ describe Sunspot::Rails::Configuration, "with ENV['SOLR_URL'] overriding sunspot
   end
 
   before(:each) do
-    ::Rails.stub!(:env => 'config_test')
+    ::Rails.stub(:env => 'config_test')
     @config = Sunspot::Rails::Configuration.new
   end
   
@@ -186,7 +187,7 @@ describe Sunspot::Rails::Configuration, "with ENV['WEBSOLR_URL'] overriding suns
   end
 
   before(:each) do
-    ::Rails.stub!(:env => 'config_test')
+    ::Rails.stub(:env => 'config_test')
     @config = Sunspot::Rails::Configuration.new
   end
   

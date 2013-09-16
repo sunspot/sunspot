@@ -47,6 +47,10 @@ module Sunspot #:nodoc:
     # configured under <code>solr</code> for all read operations.
     #
     class Configuration
+      # ActiveSupport log levels are integers; this array maps them to the
+      # appropriate java.util.logging.Level constant
+      LOG_LEVELS = %w(FINE INFO WARNING SEVERE SEVERE INFO)
+
       attr_writer :user_configuration
       #
       # The host name at which to connect to Solr. Default 'localhost'.
@@ -84,7 +88,7 @@ module Sunspot #:nodoc:
 
       #
       # The url path to the Solr servlet (useful if you are running multicore).
-      # Default '/solr'.
+      # Default '/solr/default'.
       #
       # ==== Returns
       #
@@ -146,17 +150,21 @@ module Sunspot #:nodoc:
         @has_master = !!user_configuration_from_key('master_solr')
       end
 
-      # 
+      #
       # The default log_level that should be passed to solr. You can
       # change the individual log_levels in the solr admin interface.
-      # Default 'INFO'.
+      # If no level is specified in the sunspot configuration file, 
+      # use a level similar to Rails own logging level.
       #
       # ==== Returns
       #
       # String:: log_level
       #
       def log_level
-        @log_level ||= (user_configuration_from_key('solr', 'log_level') || 'INFO')
+        @log_level ||= (
+          user_configuration_from_key('solr', 'log_level') ||
+          LOG_LEVELS[::Rails.logger.level]
+        )
       end
       
       #
@@ -344,7 +352,7 @@ module Sunspot #:nodoc:
       end
       
       def default_path
-        '/solr'
+        '/solr/default'
       end
       
     end
