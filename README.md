@@ -753,6 +753,16 @@ bundle exec rake sunspot:solr:reindex[500,Post] # some shells will require escap
 
 TODO
 
+## Threading
+
+The default Sunspot Session is not thread-safe. If used in a multi-threaded
+environment (such as sidekiq), you should configure Sunspot to use the
+[ThreadLocalSessionProxy](http://sunspot.github.io/sunspot/docs/Sunspot/SessionProxy/ThreadLocalSessionProxy.html):
+
+```ruby
+Sunspot.session = Sunspot::SessionProxy::ThreadLocalSessionProxy.new
+```
+
 ## Manually Adjusting Solr Parameters
 
 To add or modify parameters sent to Solr, use `adjust_solr_params`:
