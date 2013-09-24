@@ -164,7 +164,7 @@ module Sunspot
 
         private
           def to_positive_boolean_phrase
-            "\{!join #{@field.join_string}\}#{@field.indexed_name}:to_solr_conditional"
+            "\{!join #{@field.join_string}\}#{@field.indexed_name}:#{solr_value @query}"
           end
       end
 
