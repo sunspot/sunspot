@@ -38,6 +38,12 @@ module Sunspot
       end
     end
 
+    def add_join_field_factory(name, type, options = {}, &block)
+      field_factory = FieldFactory::Join.new(name, type, options, &block)
+      @field_factories[field_factory.signature] = field_factory
+      @field_factories_cache[field_factory.name] = field_factory
+    end
+
     # 
     # Add field_factories for fulltext search
     #
@@ -110,6 +116,7 @@ module Sunspot
       if field_factory = @field_factories_cache[field_name.to_sym]
         field_factory.build
       else
+        # raise @field_factories_cache.inspect
         raise(
           UnrecognizedFieldError,
           "No field configured for #{@class_name} with name '#{field_name}'"

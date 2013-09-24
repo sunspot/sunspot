@@ -272,4 +272,13 @@ shared_examples_for "scoped query" do
       end
     end.should raise_error(ArgumentError)
   end
+
+  it 'should search by join' do
+    session.search PhotoContainer do
+      with(:caption).from_join('photo', 'blah')
+    end
+    # raise connection.inspect
+    connection.should have_last_search_including(
+      :fq, "!")
+  end
 end

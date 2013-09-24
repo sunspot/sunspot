@@ -156,6 +156,18 @@ module Sunspot
           end
       end
 
+      class FromJoin < Base
+        def initialize(negated, field, namespace, query)
+          @namespace, @query = namespace, query
+          super negated, field, [namespace, query]
+        end
+
+        private
+          def to_positive_boolean_phrase
+            "\{!join #{@field.join_string}\}#{@field.indexed_name}:to_solr_conditional"
+          end
+      end
+
       # 
       # Results must have field with value equal to given value. If the value
       # is nil, results must have no value for the given field.
