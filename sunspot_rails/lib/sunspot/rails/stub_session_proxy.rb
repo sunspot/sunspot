@@ -82,6 +82,10 @@ module Sunspot
           0
         end
 
+        def facets
+          []
+        end
+
         def facet(name)
           FacetStub.new
         end
