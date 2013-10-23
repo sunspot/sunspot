@@ -872,6 +872,29 @@ TODO
 
 TODO
 
+## Configuration
+
+Configure Sunspot by creating a *config/sunspot.yml* file or by setting a `SOLR_URL` or a `WEBSOLR_URL` environment variable.
+The defaults are as follows.
+
+```yaml
+development:
+  solr:
+    hostname: localhost
+    port: 8982
+    log_level: INFO
+
+test:
+  solr:
+    hostname: localhost
+    port: 8981
+    log_level: WARNING
+```
+
+You may want to use SSL for production environments with a username and password. For example, set `SOLR_URL` to `https://username:password@production.solr.example.com/solr`.
+
+You can examine the value of `Sunspot::Rails::Configuration.solr_url` at runtime.
+
 ## Development
 
 ### Running Tests

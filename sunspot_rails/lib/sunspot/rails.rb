@@ -43,10 +43,12 @@ module Sunspot #:nodoc:
 
       def master_config(sunspot_rails_configuration)
         config = Sunspot::Configuration.build
-        config.solr.url = URI::HTTP.build(
+        builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
+        config.solr.url = builder.build(
           :host => sunspot_rails_configuration.master_hostname,
           :port => sunspot_rails_configuration.master_port,
-          :path => sunspot_rails_configuration.master_path
+          :path => sunspot_rails_configuration.master_path,
+          :userinfo => sunspot_rails_configuration.userinfo
         ).to_s
         config.solr.read_timeout = sunspot_rails_configuration.read_timeout
         config.solr.open_timeout = sunspot_rails_configuration.open_timeout
@@ -55,10 +57,12 @@ module Sunspot #:nodoc:
 
       def slave_config(sunspot_rails_configuration)
         config = Sunspot::Configuration.build
-        config.solr.url = URI::HTTP.build(
+        builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
+        config.solr.url = builder.build(
           :host => sunspot_rails_configuration.hostname,
           :port => sunspot_rails_configuration.port,
-          :path => sunspot_rails_configuration.path
+          :path => sunspot_rails_configuration.path,
+          :userinfo => sunspot_rails_configuration.userinfo
         ).to_s
         config.solr.read_timeout = sunspot_rails_configuration.read_timeout
         config.solr.open_timeout = sunspot_rails_configuration.open_timeout
