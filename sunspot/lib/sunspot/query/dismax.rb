@@ -30,7 +30,7 @@ module Sunspot
         params = { :q => @keywords }
         params[:fl] = '* score'
         params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
-        params[:defType] = 'dismax'
+        params[:defType] = 'edismax'
         if @phrase_fields
           params[:pf] = @phrase_fields.map { |field| field.to_boosted_field }.join(' ')
         end
@@ -71,7 +71,7 @@ module Sunspot
         params.delete :fl
         keywords = params.delete(:q)
         options = params.map { |key, value| escape_param(key, value) }.join(' ')
-        "_query_:\"{!dismax #{options}}#{escape_quotes(keywords)}\""
+        "_query_:\"{!edismax #{options}}#{escape_quotes(keywords)}\""
       end
 
       #
@@ -82,7 +82,7 @@ module Sunspot
         boost_query
       end
 
-      # 
+      #
       # Add a boost function
       #
       def add_boost_function(function_query)
@@ -123,7 +123,7 @@ module Sunspot
 
 
       private
-      
+
       def escape_param(key, value)
         "#{key}='#{escape_quotes(Array(value).join(" "))}'"
       end
