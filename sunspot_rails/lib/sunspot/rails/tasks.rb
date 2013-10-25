@@ -55,7 +55,7 @@ namespace :sunspot do
       # Set up progress_bar to, ah, report progress unless the user has chosen to silence output
       begin
         require 'progress_bar'
-        total_documents = sunspot_models.map { | m | m.count }.sum
+        total_documents = sunspot_models.map { | m | m.unscoped.count }.sum
         reindex_options[:progress_bar] = ProgressBar.new(total_documents)
       rescue LoadError => e
         $stdout.puts "Skipping progress bar: for progress reporting, add gem 'progress_bar' to your Gemfile"
