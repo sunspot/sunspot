@@ -57,7 +57,8 @@ module Sunspot
       #
       def fulltext(keywords, options = {}, &block)
         if keywords && !(keywords.to_s =~ /^\s*$/)
-          fulltext_query = @query.add_fulltext(keywords)
+          parser = (options.delete(:parser) || @parser)
+          fulltext_query = @query.add_fulltext(keywords,parser)
           if field_names = options.delete(:fields)
             Util.Array(field_names).each do |field_name|
               @setup.text_fields(field_name).each do |field|
@@ -104,6 +105,10 @@ module Sunspot
         end
       end
       alias_method :keywords, :fulltext
+
+      def parser(parser)
+        @parser ||= parser
+      end
 
       def with(*args)
         case args.first

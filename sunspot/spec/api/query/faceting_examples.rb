@@ -54,7 +54,7 @@ shared_examples_for "facetable query" do
       end
       connection.should have_last_search_with(:"f.category_ids_im.facet.limit" => 10)
     end
-    
+
     it 'sets the facet offset' do
       search do
         facet :category_ids, :offset => 10
@@ -89,7 +89,7 @@ shared_examples_for "facetable query" do
       end
       connection.should have_last_search_with(:"f.title_ss.facet.prefix" => 'Test')
     end
-    
+
     it 'sends a query facet for :any extra' do
       search do
         facet :category_ids, :extra => :any

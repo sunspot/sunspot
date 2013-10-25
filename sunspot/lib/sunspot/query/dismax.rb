@@ -134,5 +134,7 @@ module Sunspot
       end
 
     end
+
+    RegisteredParser.register(:dismax,Dismax)
   end
 end

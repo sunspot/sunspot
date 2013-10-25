@@ -1,7 +1,7 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
-describe 'standard query', :type => :query do
-  let(:def_type) { 'dismax' }
+describe 'extended dismax query', :type => :query do
+  let(:def_type) {'edismax'}
   it_should_behave_like "scoped query"
   it_should_behave_like "query with advanced manipulation"
   it_should_behave_like "query with connective scope"
@@ -14,17 +14,16 @@ describe 'standard query', :type => :query do
   it_should_behave_like "geohash query"
   it_should_behave_like "spatial query"
 
-  it 'adds a no-op query to :q parameter when no :q provided' do
-    session.search Post do
-      with :title, 'My Pet Post'
-    end
-    connection.should have_last_search_with(:q => '*:*')
-  end
-
-  private
-
   def search(*classes, &block)
     classes[0] ||= Post
-    session.search(*classes, &block)
+    session.search(*classes) do |search|
+      instance_variables.each do |ivar|
+        ival = instance_variable_get(ivar)
+        search.instance_variable_set(ivar,ival)
+      end
+      search.parser :edismax
+      search.instance_eval &block if block_given?
+    end
   end
+
 end
