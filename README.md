@@ -134,7 +134,7 @@ end
 
 Solr allows searching for phrases: search terms that are close together.
 
-In the default query parser used by Sunspot (dismax), phrase searches
+In the default query parser used by Sunspot (edismax), phrase searches
 are represented as a double quoted group of words.
 
 ```ruby
