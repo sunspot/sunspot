@@ -92,14 +92,17 @@ module Sunspot
         bootstrap
 
         command = ['java']
-        command << "-Xms#{min_memory}" if min_memory
-        command << "-Xmx#{max_memory}" if max_memory
-        command << "-Djetty.port=#{port}" if port
-        command << "-Djetty.host=#{bind_address}" if bind_address
-        command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
-        command << "-Dsolr.solr.home=#{solr_home}" if solr_home
-        command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
-        command << '-jar' << File.basename(solr_jar)
+        opts = []
+        opts << ENV['JAVA_OPTS'] if ENV['JAVA_OPTS']
+        opts << "-Xms#{min_memory}" if min_memory
+        opts << "-Xmx#{max_memory}" if max_memory
+        opts << "-Djetty.port=#{port}" if port
+        opts << "-Djetty.host=#{bind_address}" if bind_address
+        opts << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
+        opts << "-Dsolr.solr.home=#{solr_home}" if solr_home
+        opts << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
+
+        command = (command + opts) << '-jar' << File.basename(solr_jar)
         FileUtils.cd(File.dirname(solr_jar)) do
           exec(*command)
         end
