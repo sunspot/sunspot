@@ -443,6 +443,40 @@ Post.search do
 end
 ```
 
+**Solr 3.1 and above**
+
+Solr supports sorting on multiple fields using custom functions. Supported
+operators and more details are available on the [Solr Wiki](http://wiki.apache.org/solr/FunctionQuery) 
+
+To sort results by a custom function use the `order_by_function` method.
+Functions are defined with prefix notation:
+
+```ruby
+# Order by sum of two example fields: rating1 + rating2
+Post.search do
+  fulltext("pizza")
+  order_by_function(:sum, :rating1, :rating2, :desc)
+end
+
+# Order by nested functions: rating1 + (rating2*rating3)
+Post.search do
+  fulltext("pizza")
+  order_by_function(:sum, :rating1, [:product, :rating2, :rating3], :desc)
+end
+
+# Order by fields and constants: rating1 + (rating2 * 5)
+Post.search do
+  fulltext("pizza")
+  order_by_function(:sum, :rating1, [:product, :rating2, '5'], :desc)
+end
+
+# Order by average of three fields: (rating1 + rating2 + rating3) / 3
+Post.search do
+  fulltext("pizza")
+  order_by_function(:div, [:sum, :rating1, :rating2, :rating3], '3', :desc)
+end
+```
+
 ### Grouping
 
 **Solr 3.3 and above**
