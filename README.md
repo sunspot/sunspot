@@ -676,8 +676,8 @@ search = Post.search do
   end
 end
 
-search.stats(:average_rating).facet(:featured).rows do |value, stats|
-  puts "Minimum average rating for featured=#{value}: #{stats.min}"
+search.stats(:average_rating).facet(:featured).rows do |row|
+  puts "Minimum average rating for featured=#{row.value}: #{row.min}"
 end
 ```
 

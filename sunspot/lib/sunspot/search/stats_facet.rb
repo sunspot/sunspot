@@ -6,9 +6,7 @@ module Sunspot
       end
 
       def rows
-        @rows ||= @data.each_with_object({}) do |(value, data), hash|
-          hash[value] = StatsRow.new(@field, data)
-        end
+        @rows ||= @data.map { |value, data| StatsRow.new(@field, data, value) }
       end
     end
   end

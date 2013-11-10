@@ -1,44 +1,20 @@
 module Sunspot
   module Search
-    class FieldStats
+    class FieldStats < StatsRow
       def initialize(field, search) #:nodoc:
-        @field, @search = field, search
-        @facets = []
+        @field, @search, @facet_fields = field, search, []
       end
 
       def add_facet field
-        @facets << field
+        @facet_fields << field
       end
 
       def field_name
         @field.name
       end
 
-      def min
-        row.min
-      end
-
-      def max
-        row.max
-      end
-
-      def count
-        row.count
-      end
-
-      def sum
-        row.sum
-      end
-
-      def facet name
-        row.facet(name)
-      end
-
-      private
-      def row
-        @row ||= StatsRow.new(
-          @field, @search.stats_response[@field.indexed_name], @facets
-        )
+      def data
+        @search.stats_response[@field.indexed_name]
       end
     end
   end

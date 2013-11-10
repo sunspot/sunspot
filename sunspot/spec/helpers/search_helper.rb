@@ -89,10 +89,10 @@ module SearchHelper
   end
 
   def stats_facet_values(result, field_name, facet_name)
-    result.stats(field_name).facet(facet_name).rows.keys
+    result.stats(field_name).facet(facet_name).rows.map(&:value)
   end
 
   def stats_facet_stats(result, field_name, facet_name, value)
-    result.stats(field_name).facet(facet_name).rows[value]
+    result.stats(field_name).facet(facet_name).rows.find { |r| r.value == value }
   end
 end
