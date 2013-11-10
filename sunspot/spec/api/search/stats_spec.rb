@@ -51,7 +51,7 @@ describe 'stats', :type => :search do
         facet :featured
       end
     end
-    stats_facet_values(result, :average_rating, :featured).should == %w{ false true }
+    stats_facet_values(result, :average_rating, :featured).should == [false, true]
   end
 
   it 'returns facet stats for stats field' do
@@ -63,7 +63,32 @@ describe 'stats', :type => :search do
         facet :featured
       end
     end
-    stats_facet_stats(result, :average_rating, :featured, 'true').min.should == 2.0
-    stats_facet_stats(result, :average_rating, :featured, 'true').max.should == 4.0
+    stats_facet_stats(result, :average_rating, :featured, true).min.should == 2.0
+    stats_facet_stats(result, :average_rating, :featured, true).max.should == 4.0
+  end
+
+  it 'returns instantiated stats facet values' do
+    blogs = 2.times.map { Blog.new }
+    stub_stats_facets(:average_rating_ft, 'blog_id_i' => {
+      blogs[0].id.to_s => {}, blogs[1].id.to_s => {} })
+    search = session.search(Post) do
+      stats :average_rating do
+        facet :blog_id
+      end
+    end
+    search.stats(:average_rating).facet(:blog_id).rows.map { |row| row.instance }.should == blogs
+  end
+
+  it 'only returns verified instances when requested' do
+    blog = Blog.new
+    stub_stats_facets(:average_rating_ft, 'blog_id_i' => {
+      blog.id.to_s => {}, '0' => {} })
+
+    search = session.search(Post) do
+      stats :average_rating do
+        facet :blog_id
+      end
+    end
+    search.stats(:average_rating).facet(:blog_id).rows(verified: true).map { |row| row.instance }.should == [blog]
   end
 end

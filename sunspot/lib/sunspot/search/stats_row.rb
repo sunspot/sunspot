@@ -2,9 +2,11 @@ module Sunspot
   module Search
     class StatsRow
       attr_reader :data, :value
+      attr_writer :instance #:nodoc:
 
-      def initialize(field, data, value, facet_fields = []) #:nodoc:
-        @field, @data, @value, @facet_fields = field, data, value, facet_fields
+      def initialize(data, facet = nil, value = nil) #:nodoc:
+        @data, @facet, @value = data, facet, value
+        @facet_fields = []
       end
 
       def min
@@ -49,6 +51,13 @@ module Sunspot
             field, data['facets'][field.indexed_name]
           )
         end
+      end
+
+      def instance
+        if !defined?(@instance)
+          @facet.populate_instances
+        end
+        @instance
       end
 
       def inspect
