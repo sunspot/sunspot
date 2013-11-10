@@ -89,6 +89,6 @@ describe 'stats', :type => :search do
         facet :blog_id
       end
     end
-    search.stats(:average_rating).facet(:blog_id).rows(verified: true).map { |row| row.instance }.should == [blog]
+    search.stats(:average_rating).facet(:blog_id).rows(:verified => true).map { |row| row.instance }.should == [blog]
   end
 end
