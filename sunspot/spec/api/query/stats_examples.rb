@@ -49,7 +49,7 @@ shared_examples_for 'stats query' do
     end
     connection.should have_last_search_with(
       :"f.average_rating_ft.stats.facet" => %w{featured_bs},
-      :"f.published_at_dt.stats.facet" => %w{featured_bs},
+      :"f.published_at_dt.stats.facet" => %w{featured_bs}
     )
   end
 
