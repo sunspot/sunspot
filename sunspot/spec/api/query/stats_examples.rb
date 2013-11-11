@@ -22,7 +22,7 @@ shared_examples_for 'stats query' do
     search do
       stats :average_rating, :published_at
     end
-    connection.should have_last_search_with(:"stats.field" => %w(average_rating_ft published_at_dt))
+    connection.should have_last_search_with(:"stats.field" => %w{average_rating_ft published_at_dt})
   end
 
   it 'facets on a stats field' do
