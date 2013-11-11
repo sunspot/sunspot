@@ -42,14 +42,12 @@ module Sunspot
       end
 
       def facet name
-        facets[name.to_sym]
+        facets.find { |facet| facet.field.name == name.to_sym }
       end
 
       def facets
-        @facets ||= @facet_fields.each_with_object({}) do |field, hash|
-          hash[field.name] = StatsFacet.new(
-            field, data['facets'][field.indexed_name]
-          )
+        @facets ||= @facet_fields.map do |field|
+          StatsFacet.new(field, data['facets'][field.indexed_name])
         end
       end
 

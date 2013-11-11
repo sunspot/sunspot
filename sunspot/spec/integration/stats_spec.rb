@@ -33,7 +33,7 @@ describe 'search stats' do
         stats :average_rating do
           facet :blog_id
         end
-      end.stats(:average_rating).facet(:blog_id).rows[0].min.should == 3.0
+      end.stats(:average_rating).facet(:blog_id).rows[1].min.should == 3.0
     end
 
     it 'returns maximum on facet row with two blog ids' do
@@ -41,7 +41,7 @@ describe 'search stats' do
         stats :average_rating do
           facet :blog_id
         end
-      end.stats(:average_rating).facet(:blog_id).rows[0].max.should == 4.0
+      end.stats(:average_rating).facet(:blog_id).rows[1].max.should == 4.0
     end
   end
 end
