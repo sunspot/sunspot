@@ -7,6 +7,10 @@ module Sunspot
         @original_session = original_session
       end
 
+      def batch
+        yield
+      end
+
       def index(*objects)
       end
 
