@@ -140,7 +140,7 @@ module Sunspot
               @fields<< FunctionComp.new(setup,argument)
             when "Symbol"
               @fields<< setup.field(argument).indexed_name
-            when "String"
+            else
               @fields<< argument
             end
           end
