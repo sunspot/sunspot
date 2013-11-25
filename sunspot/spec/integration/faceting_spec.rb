@@ -154,6 +154,18 @@ describe 'search faceting' do
       # Should be 5 instead of 11
       search.facet(:title).rows.first.count.should == 5
     end
+
+    it 'gives correct facet count when group == true and facet == true' do
+      search = Sunspot.search(Post) do
+        group :blog_id do
+          facet
+        end
+
+        facet :title
+      end
+
+      search.facet(:title).rows.count.should == 5
+    end
   end
 
   context 'prefix escaping' do

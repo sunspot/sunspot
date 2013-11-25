@@ -416,6 +416,23 @@ Sunspot.search(Post) do
 end
 ```
 
+#### Grouped Facets
+
+**Solr 4.0 and above**
+
+When grouping documents, it is often desirable to have facets by unique occurences within
+groups, rather than the occurences in document. Grouped facets are computed based on the first
+specified group. More information about result grouping/field collapsing is available
+on the [Solr Wiki](http://wiki.apache.org/solr/FieldCollapsing) - see `group.facet`.
+
+```ruby
+Post.search do
+  group :title
+    facet
+  end
+end
+```
+
 ### Ordering
 
 By default, Sunspot orders results by "score": the Solr-determined
@@ -543,6 +560,14 @@ Post.search do
   end
 
   facet :blog_id_str, :extra => :any
+end
+
+# Facet count is based on unique occurences in all documents of each
+# group matching the query (>= Solr 4)
+Post.search do
+  group :blog_id_str do
+    facet
+  end
 end
 ```
 
