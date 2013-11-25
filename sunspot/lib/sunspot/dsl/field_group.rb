@@ -33,6 +33,27 @@ module Sunspot
         @group.truncate = true
       end
 
+      # Computes grouped facets for the field facets specified in facet
+      # parameters. Grouped facets are computed based on the first specified
+      # group. Default for Solr is false.  Solr4.0
+      #
+      # Supported in Solr 4.0 and above.
+      #
+      # ==== Example
+      #
+      #     Sunspot.search(Post) do
+      #       group :title do
+      #         facet
+      #       end
+      #
+      #       facet :title
+      #     end
+      #
+      def facet
+        @group.facet = true
+      end
+
+
       # Specify the order that results should be returned in. This method can
       # be called multiple times; precedence will be in the order given.
       #
