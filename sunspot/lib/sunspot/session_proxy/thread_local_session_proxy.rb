@@ -24,7 +24,7 @@ module Sunspot
       # passed, a default configuration is used; it can then be modified using
       # the #config attribute.
       #
-      def initialize(config = Sunspot::Configuration.new)
+      def initialize(config = Sunspot::Configuration.build)
         @config = config
         ObjectSpace.define_finalizer(self, FINALIZER)
       end
