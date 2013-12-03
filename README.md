@@ -400,10 +400,10 @@ search = Post.search do
 end
 
 # e.g.,
-# Number of posts with rating withing 1.0..2.0: 2
-# Number of posts with rating withing 2.0..3.0: 1
+# Number of posts with rating within 1.0..2.0: 2
+# Number of posts with rating within 2.0..3.0: 1
 search.facet(:average_rating).rows.each do |facet|
-  puts "Number of posts with rating withing #{facet.value}: #{facet.count}"
+  puts "Number of posts with rating within #{facet.value}: #{facet.count}"
 end
 ```
 
@@ -618,7 +618,7 @@ class Post < ActiveRecord::Base
 end
 ```
 
-Highlighting matches on the `body` field, for instance, can be acheived
+Highlighting matches on the `body` field, for instance, can be achieved
 like:
 
 ```ruby
