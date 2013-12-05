@@ -148,14 +148,15 @@ module Sunspot
       end
 
       class InRadius < Base
-        def initialize(negated, field, lat, lon, radius)
-          @lat, @lon, @radius = lat, lon, radius
+        def initialize(negated, field, lat, lon, radius, options = {})
+          @lat, @lon, @radius, @options = lat, lon, radius, options
           super negated, field, [lat, lon, radius]
         end
 
         private
           def to_positive_boolean_phrase
-            "_query_:\"{!geofilt sfield=#{@field.indexed_name} pt=#{@lat},#{@lon} d=#{@radius}}\""
+            geofilt = Geofilt.new(@field, @lat, @lon, @radius, @options).to_params[:fq]
+            "_query_:\"#{geofilt}\""
           end
       end
 
