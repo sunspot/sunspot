@@ -476,5 +476,15 @@ describe 'scoped_search' do
       search = Sunspot.search(Post) { order_by_function :product, :blog_id, [:sum,:blog_id,:primary_category_id], :desc}
       search.results.first.should == @p2
     end
+    it 'should accept string literals' do
+      # (1 * -2) > (2 * -2)
+      search = Sunspot.search(Post) {order_by_function :product, :blog_id, '-2', :desc}
+      search.results.first.should == @p1
+    end
+    it 'should accept non-string literals' do
+      # (1 * -2) > (2 * -2)
+      search = Sunspot.search(Post) {order_by_function :product, :blog_id, -2, :desc}
+      search.results.first.should == @p1
+    end
   end
 end
