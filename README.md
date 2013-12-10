@@ -446,7 +446,7 @@ end
 **Solr 3.1 and above**
 
 Solr supports sorting on multiple fields using custom functions. Supported
-operators and more details are available on the [Solr Wiki](http://wiki.apache.org/solr/FunctionQuery) 
+operators and more details are available on the [Solr Wiki](http://wiki.apache.org/solr/FunctionQuery)
 
 To sort results by a custom function use the `order_by_function` method.
 Functions are defined with prefix notation:
@@ -639,6 +639,60 @@ search.hits.each do |hit|
 
   hit.highlights(:body).each do |highlight|
     puts "  " + highlight.format { |word| "*#{word}*" }
+  end
+end
+```
+
+### Stats
+
+Solr can return some statistics on indexed numeric fields. Fetching statistics
+for `average_rating`:
+
+```ruby
+search = Post.search do
+  stats :average_rating
+end
+
+puts "Minimum average rating: #{search.stats(:average_rating).min}"
+puts "Maximum average rating: #{search.stats(:average_rating).max}"
+```
+
+#### Stats on multiple fields
+
+```ruby
+search = Post.search do
+  stats :average_rating, :blog_id
+end
+```
+
+#### Faceting on stats
+
+It's possible to facet field stats on another field:
+
+```ruby
+search = Post.search do
+  stats :average_rating do
+    facet :featured
+  end
+end
+
+search.stats(:average_rating).facet(:featured).rows do |row|
+  puts "Minimum average rating for featured=#{row.value}: #{row.min}"
+end
+```
+
+Take care when requesting facets on a stats field, since all facet results are
+returned by Solr!
+
+#### Multiple stats and selective faceting
+
+```ruby
+search = Post.search do
+  stats :average_rating do
+    facet :featured
+  end
+  stats :blog_id do
+    facet :average_rating
   end
 end
 ```
