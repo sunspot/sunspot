@@ -78,10 +78,9 @@ module Sunspot
 
     class Join < Abstract
       def initialize(name, type, options = {}, &block)
-        namespaced_name = "#{options[:namespace]}_#{name}"
         super(name, options, &block)
         unless name.to_s =~ /^\w+$/
-          raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
+          raise ArgumentError, "Invalid field name #{namespaced_name}: only letters, numbers, and underscores are allowed."
         end
         @field =
           JoinField.new(name, type, options)
@@ -96,7 +95,7 @@ module Sunspot
 
       # 
       # Extract the encapsulated field's data from the given model and add it
-      # into the Solr document for indexing.
+      # into the Solr document for indexing. (noop here for joins)
       #
       def populate_document(document, model) #:nodoc:
 

@@ -584,12 +584,12 @@ end
 class PhotoContainer < ActiveRecord::Base
   searchable do
     text :name
-    join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id', :namespace => :photo)
+    join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id')
   end
 end
 
 PhotoContainer.search do
-  with(:caption).from_join('photo', 'blah')
+  with(:caption).from_join('blah')
 end
 ```
 

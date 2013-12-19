@@ -19,5 +19,5 @@ class PhotoContainer < MockRecord
 end
 
 Sunspot.setup(PhotoContainer) do
-  join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id', :namespace => :photo)
+  join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id')
 end

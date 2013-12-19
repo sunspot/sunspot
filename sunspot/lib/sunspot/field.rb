@@ -165,7 +165,6 @@ module Sunspot
 
     def initialize(name, type, options = {})
       @multiple = !!options.delete(:multiple)
-      @namespace = options.delete(:namespace)
       super(name, type, options)
       @join_string = options.delete(:join_string)
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?

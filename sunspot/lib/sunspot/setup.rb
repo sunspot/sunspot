@@ -116,7 +116,6 @@ module Sunspot
       if field_factory = @field_factories_cache[field_name.to_sym]
         field_factory.build
       else
-        # raise @field_factories_cache.inspect
         raise(
           UnrecognizedFieldError,
           "No field configured for #{@class_name} with name '#{field_name}'"

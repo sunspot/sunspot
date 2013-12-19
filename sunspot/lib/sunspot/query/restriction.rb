@@ -157,9 +157,9 @@ module Sunspot
       end
 
       class FromJoin < Base
-        def initialize(negated, field, namespace, query)
-          @namespace, @query = namespace, query
-          super negated, field, [namespace, query]
+        def initialize(negated, field, query)
+          @query = query
+          super negated, field, [query]
         end
 
         private
