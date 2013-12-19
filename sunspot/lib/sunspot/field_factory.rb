@@ -80,7 +80,7 @@ module Sunspot
       def initialize(name, type, options = {}, &block)
         super(name, options, &block)
         unless name.to_s =~ /^\w+$/
-          raise ArgumentError, "Invalid field name #{namespaced_name}: only letters, numbers, and underscores are allowed."
+          raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
         end
         @field =
           JoinField.new(name, type, options)

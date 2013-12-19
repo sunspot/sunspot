@@ -20,4 +20,5 @@ end
 
 Sunspot.setup(PhotoContainer) do
   join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id')
+  join(:photo_rating, :type => :trie_float, :join_string => 'from=photo_container_id to=id', :as => 'average_rating_ft')
 end

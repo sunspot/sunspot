@@ -68,11 +68,14 @@ module Sunspot
         # on whether this restriction is negated.
         #
         def to_boolean_phrase
+          phrase = []
+          phrase << @field.local_params if @field.respond_to? :local_params
           unless negated?
-            to_positive_boolean_phrase
+            phrase << to_positive_boolean_phrase
           else
-            to_negated_boolean_phrase
+            phrase << to_negated_boolean_phrase
           end
+          phrase.join
         end
 
         # 
@@ -153,18 +156,6 @@ module Sunspot
         private
           def to_positive_boolean_phrase
             "_query_:\"{!geofilt sfield=#{@field.indexed_name} pt=#{@lat},#{@lon} d=#{@radius}}\""
-          end
-      end
-
-      class FromJoin < Base
-        def initialize(negated, field, query)
-          @query = query
-          super negated, field, [query]
-        end
-
-        private
-          def to_positive_boolean_phrase
-            "\{!join #{@field.join_string}\}#{@field.indexed_name}:#{solr_value @query}"
           end
       end
 
