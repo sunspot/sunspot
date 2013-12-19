@@ -272,5 +272,4 @@ shared_examples_for "scoped query" do
       end
     end.should raise_error(ArgumentError)
   end
-
 end
