@@ -602,6 +602,35 @@ Post.search do
 end
 ```
 
+### Joins
+
+**Solr 4 and above**
+
+Solr joins allow you to filter objects by joining on additional documents.  More information can be found on the [Solr Wiki](http://wiki.apache.org/solr/Join).
+
+```ruby
+class Photo < ActiveRecord::Base
+  searchable do
+    text :caption, :default_boost => 1.5
+    time :created_at
+    integer :photo_container_id
+  end
+end
+
+class PhotoContainer < ActiveRecord::Base
+  searchable do
+    text :name
+    join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id')
+    join(:photos_created, :type => :time, :join_string => 'from=photo_container_id to=id', :as => 'created_at_d')
+  end
+end
+
+PhotoContainer.search do
+  with(:caption).from_join('blah')
+  with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
+end
+```
+
 ### Highlighting
 
 Highlighting allows you to display snippets of the part of the document

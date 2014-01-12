@@ -11,6 +11,11 @@ describe 'indexing fixed fields', :type => :indexer do
     connection.should have_add_with(:type => ['Post', 'SuperClass', 'MockRecord'])
   end
 
+  it 'should not index join fields' do
+    session.index PhotoContainer.new
+    connection.should_not have_add_with(:photo_caption => 'blah')
+  end
+
   it 'should index class name' do
     session.index post
     connection.should have_add_with(:class_name => 'Post')
