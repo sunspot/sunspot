@@ -836,6 +836,9 @@ bundle exec rake sunspot:solr:reindex
 
 # or, to be specific to a certain model with a certain batch size:
 bundle exec rake sunspot:solr:reindex[500,Post] # some shells will require escaping [ with \[ and ] with \]
+
+# to skip the prompt asking you if you want to proceed with the reindexing:
+bundle exec rake sunspot:solr:reindex[,,true] # some shells will require escaping [ with \[ and ] with \]
 ```
 
 ## Use Without Rails
