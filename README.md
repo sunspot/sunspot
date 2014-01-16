@@ -626,7 +626,7 @@ class PhotoContainer < ActiveRecord::Base
 end
 
 PhotoContainer.search do
-  with(:caption).from_join('blah')
+  with(:caption, 'blah')
   with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
 end
 ```
