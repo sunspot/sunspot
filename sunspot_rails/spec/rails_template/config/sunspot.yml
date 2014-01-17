@@ -2,6 +2,8 @@ test:
   solr:
     hostname: localhost
     port: 8983
+  auto_index_callback: after_save
+  auto_remove_callback: after_destroy
 development:
   solr:
     hostname: localhost
@@ -25,3 +27,6 @@ config_test:
   auto_commit_after_delete_request: true
 config_disabled_test:
   disabled: true
+config_commit_test:
+  auto_index_callback: after_commit
+  auto_remove_callback: after_commit
