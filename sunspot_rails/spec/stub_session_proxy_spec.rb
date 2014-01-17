@@ -116,6 +116,10 @@ describe 'specs with Sunspot stubbed' do
       @search.hits.should == []
     end
 
+    it 'should return the same for raw_results as hits' do
+      @search.raw_results.should == @search.hits
+    end
+
     it 'should return zero total' do
       @search.total.should == 0
     end
