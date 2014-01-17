@@ -90,7 +90,6 @@ def empty_tables
   end
 end
 
-
 # COMPATIBILITY: Rails 4 has deprecated the 'scoped' method in favour of 'all'
 def relation(clazz)
   ::Rails.version >= '4' ? clazz.all : clazz.scoped
