@@ -10,7 +10,7 @@ describe 'specs with Sunspot stubbed' do
   end
 
   it 'should batch' do
-    foo = mock('Foo')
+    foo = double('Foo')
     block = lambda { foo.bar }
 
     foo.should_receive(:bar)
