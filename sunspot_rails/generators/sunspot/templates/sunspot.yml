@@ -6,6 +6,8 @@ production:
     path: /solr/production
     read_timeout: 20
     open_timeout: 1
+  auto_index_callback: after_commit
+  auto_remove_callback: after_commit
 
 development:
   solr:
@@ -13,6 +15,8 @@ development:
     port: 8983
     log_level: INFO
     path: /solr/development
+  auto_index_callback: after_commit
+  auto_remove_callback: after_commit
 
 test:
   solr:
@@ -20,4 +24,5 @@ test:
     port: 8983
     log_level: WARNING
     path: /solr/test
-    
+  auto_index_callback: after_commit
+  auto_remove_callback: after_commit

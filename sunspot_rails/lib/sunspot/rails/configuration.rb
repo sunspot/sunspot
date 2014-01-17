@@ -39,6 +39,8 @@ module Sunspot #:nodoc:
     #       hostname: localhost
     #       port: 8982
     #       path: /solr
+    #     auto_index_callback: after_commit
+    #     auto_remove_callback: after_commit
     #     auto_commit_after_request: true
     #
     # Sunspot::Rails uses the configuration to set up the Solr connection, as
