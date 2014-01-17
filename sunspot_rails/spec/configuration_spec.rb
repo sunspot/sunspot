@@ -169,19 +169,12 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
     @config.open_timeout.should == 0.5
   end
 
-  context "with auto_index_callback and auto_remove_callback set" do
-    before do
-      ::Rails.stub(:env => 'config_commit_test')
-      @config = Sunspot::Rails::Configuration.new
-    end
+  it "should handle the 'auto_index_callback' property when set" do
+    @config.auto_index_callback.should == "after_commit"
+  end
 
-    it "should handle the 'auto_index_callback' property when set" do
-      @config.auto_index_callback.should == "after_commit"
-    end
-
-    it "should handle the 'auto_remove_callback' property when set" do
-      @config.auto_remove_callback.should == "after_commit"
-    end
+  it "should handle the 'auto_remove_callback' property when set" do
+    @config.auto_remove_callback.should == "after_commit"
   end
 end
 
