@@ -81,6 +81,7 @@ module Sunspot
         def hits(options = {})
           PaginatedCollection.new
         end
+        alias_method :raw_results, :hits
 
         def total
           0
