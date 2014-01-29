@@ -35,6 +35,9 @@ module Sunspot
       def remove_all!(clazz = nil)
       end
 
+      def optimize
+      end
+
       def dirty?
         false
       end
