@@ -67,7 +67,11 @@ module Sunspot
         end
 
         def to_param
-          "#{@field.indexed_name.to_sym} #{direction_for_solr}"
+          if @field.external_file_field?
+            "field(#{@field.indexed_name.to_sym}) #{direction_for_solr}"
+          else
+            "#{@field.indexed_name.to_sym} #{direction_for_solr}"
+          end
         end
       end
 
