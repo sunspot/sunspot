@@ -36,7 +36,9 @@ module Sunspot
           raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
         end
         @field =
-          if type.is_a?(Type::TextType)
+          if options[:external_file] == true
+            ExternalFileField.new(name, type, options)
+          elsif type.is_a?(Type::TextType)
             FulltextField.new(name, options)
           else
             AttributeField.new(name, type, options)

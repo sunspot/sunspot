@@ -82,6 +82,18 @@ module Sunspot
       !!@more_like_this
     end
 
+    #
+    # Whether this field is stored via an ExternalFileField
+    # solr conditionals are complete different when using effs
+    #
+    # ==== Returns
+    #
+    # Boolean:: True if this field is stored as an external file field
+    #
+    def external_file_field?
+      !!@external_file_field
+    end
+
     def hash
       indexed_name.hash
     end
@@ -156,7 +168,37 @@ module Sunspot
         end
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
+  end
 
+  #
+  # ExternalFielField instances are extermely similar to AttributeFields,
+  # except its value is stored in an ExternalFileField separately from the
+  # document index. As of solr 4.6, the only supported types are
+  # pfloat|float|tfloat, or in Sunspot terms, a FloatType. ExternalFileFields
+  # can never be multivalued, and are always treated as a stored field.
+  # The indexed_name will reference a key=value file stored in the
+  # data directory (a sibiling of the index directory) of a given core.
+  # If using the predefined dynamic_field in the packaged schema.xml then:
+  #   - the name of the file should be "external_#{indexed_name}_ext"
+  #   - the stored key should be be a reference to sunspot's id field
+  #
+  class ExternalFileField < AttributeField #:nodoc:
+    def initialize(name, type, options = {})
+      @external_file_field = options.delete(:external_file)
+      options[:stored] = true
+      options[:multiple] = false
+      raise TypeError, 'External file field is only supported on float types' unless type.is_a?(Type::FloatType)
+      super(name, type, options)
+    end
+
+    def set_indexed_name(options)
+      @indexed_name =
+        if options[:as]
+          options.delete(:as).to_s
+        else
+          "#{@name}_ext"
+        end
+    end
   end
 
   class JoinField < Field #:nodoc:
@@ -188,6 +230,10 @@ module Sunspot
     def to_indexed(clazz)
       clazz.name
     end
+
+    def external_file_field?
+      false
+    end
   end
 
   class IdField #:nodoc:
@@ -203,6 +249,10 @@ module Sunspot
 
     def to_indexed(id)
       id.to_s
+    end
+
+    def external_file_field?
+      false
     end
   end
 end

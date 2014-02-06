@@ -88,6 +88,9 @@
 
     <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
     <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+
+    <!-- A specialized field for ExternalFileFields -->
+    <fieldType name="ext_file_field" keyField="id" class="solr.ExternalFileField" valType="float" />
   </types>
   <fields>
     <!-- Valid attributes for fields:
@@ -236,7 +239,10 @@
     <dynamicField name="*_llm" stored="false" type="location" multiValued="true" indexed="true"/>
     <dynamicField name="*_lls" stored="true" type="location" multiValued="false" indexed="true"/>
     <dynamicField name="*_llms" stored="true" type="location" multiValued="true" indexed="true"/>
-    
+
+    <!-- Dynamic field for use with external_file_fields. -->
+    <dynamicField name="*_ext" type="ext_file_field" />
+
     <!-- required by Solr 4 -->
     <field name="_version_" type="string" indexed="true" stored="true" multiValued="false" />
   </fields>

@@ -47,7 +47,20 @@ module Sunspot
           @negated, @field, @value = negated, field, value
         end
 
-        # 
+        #
+        # A factory method for creating an instance of a particular Restriction.
+        # This allows FieldType specific restrictions to be used when necessary.
+        #
+        def self.build(negated, field, value)
+          if field.external_file_field?
+            restriction_class_name = self.name.gsub('::Restriction::', '::ExternalFileRestriction::')
+            const_get(restriction_class_name).new(negated, field, value)
+          else
+            self.new(negated, field, value)
+          end
+        end
+
+        #
         # A hash representing this restriction in solr-ruby's parameter format.
         # All restriction implementations must respond to this method; however,
         # the base implementation delegates to the #to_positive_boolean_phrase method, so

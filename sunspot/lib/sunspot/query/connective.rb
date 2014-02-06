@@ -16,7 +16,7 @@ module Sunspot
         # Add a restriction to the connective.
         #
         def add_restriction(negated, field, restriction_type, *value)
-          add_component(restriction_type.new(negated, field, *value))
+          add_component(restriction_type.build(negated, field, *value))
         end
 
         # 
