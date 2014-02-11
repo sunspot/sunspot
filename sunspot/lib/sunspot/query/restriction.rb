@@ -51,12 +51,12 @@ module Sunspot
         # A factory method for creating an instance of a particular Restriction.
         # This allows FieldType specific restrictions to be used when necessary.
         #
-        def self.build(negated, field, value)
+        def self.build(negated, field, *value)
           if field.external_file_field?
             restriction_class_name = self.name.gsub('::Restriction::', '::ExternalFileRestriction::')
-            const_get(restriction_class_name).new(negated, field, value)
+            const_get(restriction_class_name).new(negated, field, *value)
           else
-            self.new(negated, field, value)
+            self.new(negated, field, *value)
           end
         end
 
