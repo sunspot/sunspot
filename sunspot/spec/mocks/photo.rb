@@ -1,5 +1,5 @@
 class Photo < MockRecord
-  attr_accessor :caption, :lat, :lng, :size, :average_rating, :created_at, :post_id, :photo_container_id
+  attr_accessor :caption, :lat, :lng, :size, :average_rating, :created_at, :post_id, :photo_container_id, :popularity
 end
 
 Sunspot.setup(Photo) do
