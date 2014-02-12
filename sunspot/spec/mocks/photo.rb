@@ -10,7 +10,7 @@ Sunspot.setup(Photo) do
   integer :size, :trie => true
   float :average_rating, :trie => true
   time :created_at, :trie => true
-  float :popularity, :external_file => true
+  float :popularity, :external_file => true, :stored => true
 end
 
 class PhotoContainer < MockRecord

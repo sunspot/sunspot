@@ -175,7 +175,7 @@ module Sunspot
   # except its value is stored in an ExternalFileField separately from the
   # document index. As of solr 4.6, the only supported types are
   # pfloat|float|tfloat, or in Sunspot terms, a FloatType. ExternalFileFields
-  # can never be multivalued, and are always treated as a stored field.
+  # can never be multivalued, and can optionally be a stored field (most typical)
   # The indexed_name will reference a key=value file stored in the
   # data directory (a sibiling of the index directory) of a given core.
   # If using the predefined dynamic_field in the packaged schema.xml then:
@@ -185,7 +185,6 @@ module Sunspot
   class ExternalFileField < AttributeField #:nodoc:
     def initialize(name, type, options = {})
       @external_file_field = options.delete(:external_file)
-      options[:stored] = true
       options[:multiple] = false
       raise TypeError, 'External file field is only supported on float types' unless type.is_a?(Type::FloatType)
       super(name, type, options)
