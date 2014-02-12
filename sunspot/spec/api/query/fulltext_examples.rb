@@ -136,7 +136,7 @@ shared_examples_for 'fulltext query' do
 
   it 'does not request score when keywords not used' do
     search Post
-    connection.should_not have_last_search_with(:fl)
+    connection.searches.last[:fl].split(' ').should_not include('score')
   end
 
   it 'sets phrase fields' do

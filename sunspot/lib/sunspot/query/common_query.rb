@@ -4,6 +4,7 @@ module Sunspot
       def initialize(types)
         @scope = Scope.new
         @sort = SortComposite.new
+        @select = SelectFieldComposite.new
         @components = [@scope, @sort]
         if types.length == 1
           @scope.add_positive_restriction(TypeField.instance, Restriction::EqualTo, types.first)
@@ -21,6 +22,10 @@ module Sunspot
 
       def add_sort(sort)
         @sort << sort
+      end
+
+      def add_select(name, source = nil)
+        @select << [name, source]
       end
 
       def add_group(group)
@@ -68,6 +73,7 @@ module Sunspot
         @components.each do |component|
           Sunspot::Util.deep_merge!(params, component.to_params)
         end
+        params.merge!(@select.to_params(params[:fl]))
         @parameter_adjustment.call(params) if @parameter_adjustment
         params[:q] ||= '*:*'
         params

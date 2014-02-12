@@ -31,6 +31,22 @@ module Sunspot
         @query.add_sort(sort)
       end
 
+      # Specify which fields should be returned during query
+      #
+      # ==== Parameters
+      #
+      # name<Symbol>:: the name to select on and to be populated in document
+      # options<Hash>::
+      #   from <Sybmol>:: the source field or function
+      #
+      def select(name, options = {})
+        name = (@setup.field(name.to_sym).indexed_name.to_sym rescue nil) || name
+        if from = options.delete(:from)
+          from = (@setup.field(from.to_sym).indexed_name.to_sym rescue nil) || from
+        end
+        @query.add_select(name, from)
+      end
+
       #
       # Specify that the results should be ordered based on their
       # distance from a given point.

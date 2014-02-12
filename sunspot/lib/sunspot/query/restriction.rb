@@ -39,6 +39,7 @@ module Sunspot
       class Base #:nodoc:
         include Filter
         include RSolr::Char
+        attr_reader :field
 
         RESERVED_WORDS = Set['AND', 'OR', 'NOT']
 
