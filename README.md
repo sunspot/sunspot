@@ -364,6 +364,10 @@ For **field facets**, each row represents a particular value for a given
 field. For **query facets**, each row represents an arbitrary scope; the
 facet itself is just a means of logically grouping the scopes.
 
+By default Sunspot will only return the first 100 facet values.  You can
+increase this limit, or force it to return *all* facets by setting
+**limit** to **-1**.
+
 #### Field Facets
 
 ```ruby
@@ -371,6 +375,24 @@ facet itself is just a means of logically grouping the scopes.
 search = Post.search do
   fulltext "pizza"
   facet :author_id
+end
+
+search.facet(:author_id).rows.each do |facet|
+  puts "Author #{facet.value} has #{facet.count} pizza posts!"
+end
+```
+
+If you are searching by a specific field and you still want to see all
+the options available in that field you can **exclude** it in the
+faceting.
+
+```ruby
+# Posts that match 'pizza' and author with id 42
+# Returning counts for each :author_id (even those not in the search result)
+search = Post.search do
+  fulltext "pizza"
+  author_filter = with(:author_id, 42)
+  facet :author_id, exclude: [author_filter]
 end
 
 search.facet(:author_id).rows.each do |facet|
