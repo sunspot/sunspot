@@ -97,6 +97,26 @@ module Sunspot
       end
 
       #
+      # Returns hash of raw solr document with each field transforming
+      # field.indexed_name to field.name and casting value based on
+      # field defintion.
+      #
+      def document
+        @document ||= {}.tap do |doc|
+          @stored_values.each do |key, value|
+            field = (setup.field_from_indexed_name(key) rescue nil)
+            if field
+              doc[field.name.to_s] = Array(value).map { |val|
+                field.cast(val)
+              }.send((field.multiple? ? :to_a: :first))
+            else
+              doc[key] = value
+            end
+          end
+        end
+      end
+
+      #
       # Returns the instance primary key when the Hit is used to generate urls
       # For example, using a search that stores the :name attribute:
       #
