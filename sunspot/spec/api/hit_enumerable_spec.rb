@@ -44,4 +44,9 @@ describe Sunspot::Search::HitEnumerable do
       subject.populate_hits
     end
   end
+
+  it 'can return a set of documents' do
+    subject.stub(:solr_docs).and_return(nil)
+    subject.documents.should == []
+  end
 end

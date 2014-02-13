@@ -15,6 +15,16 @@ module Sunspot
         hits.select { |h| h.result }
       end
 
+      #
+      # Return raw solr documents with each field transforming field.indexed_name
+      # to field.name and casting value based on field defintion. See Hit.document
+      #
+      def documents
+        @documents ||= hits.map do |hit|
+          hit.document
+        end
+      end
+
       # 
       # Populate the Hit objects with their instances. This is invoked the first
       # time any hit has its instance requested, and all hits are loaded as a

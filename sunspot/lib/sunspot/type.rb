@@ -81,6 +81,10 @@ module Sunspot
           "#{self.class.name} cannot be used as a Solr literal"
         )
       end
+
+      def cast(value)
+        value
+      end
     end
 
     # 

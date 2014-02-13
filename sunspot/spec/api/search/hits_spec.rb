@@ -144,4 +144,27 @@ describe 'hits', :type => :search do
     stub_full_results('instance' => User.new, 'role_ids_ims' => %w(1 4 5))
     session.search(User).hits.first.stored(:role_ids).should == [1, 4, 5]
   end
+
+  it 'should return a full solr document with fields casted' do
+    time = Time.utc(2008, 7, 8, 2, 45)
+    stub_full_results('instance' => Post.new,
+      'title_ss' => 'Post 1',
+      'featured_bs' => 'true',
+      'last_indexed_at_ds' => time.xmlschema,
+      'body_textsv' => nil,
+      'custom_string:tag1_ss' => 'popular',
+      'score' => 4,
+      'distance' => 3.42,
+    )
+    document = session.search(Post).hits.first.document
+    document.should include(
+      'title' => 'Post 1',
+      'featured' => true,
+      'last_indexed_at' => time,
+      'body_text' => nil,
+      'custom_string:tag1' => 'popular',
+      'score' => 4,
+      'distance' => 3.42,
+    )
+  end
 end
