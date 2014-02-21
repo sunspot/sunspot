@@ -231,6 +231,7 @@ module Sunspot
       end
 
       def add_query_facet(name, options) #:nodoc:
+        name = (options[:name] || name)
         add_facet(name, QueryFacet.new(name, self, options))
       end
 

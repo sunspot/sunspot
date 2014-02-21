@@ -349,6 +349,18 @@ describe 'faceting', :type => :search do
     search.facet(:blog_id).rows.map { |row| row.instance }.should == blogs
   end
 
+  it 'returns query facet with custom name' do
+    blogs = Array.new(2) { Blog.new }
+    stub_query_facet(
+      "blog_id_i:#{blogs[0].id}" => 3,
+      "blog_id_i:#{blogs[1].id}" => 1
+    )
+    search = session.search(Post) do
+      facet(:blog_id, :only => blogs.map { |blog| blog.id }, name: :weblogs)
+    end
+    search.facet(:weblogs).rows.map { |row| row.instance }.should == blogs
+  end
+
   it 'only queries the persistent store once for an instantiated facet' do
     query_count = Blog.query_count
     blogs = Array.new(2) { Blog.new }
