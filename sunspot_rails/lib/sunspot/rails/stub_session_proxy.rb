@@ -97,6 +97,10 @@ module Sunspot
         def group(name)
           EmptyGroup.new
         end
+
+        def spellcheck_collation
+          ''
+        end
       end
       
       
@@ -149,6 +153,10 @@ module Sunspot
 
       class EmptyGroup
         def ngroups
+          0
+        end
+
+        def total
           0
         end
 
