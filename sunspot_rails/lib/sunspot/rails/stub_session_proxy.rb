@@ -93,6 +93,10 @@ module Sunspot
         def execute
           self
         end
+
+        def group(name)
+          EmptyGroup.new
+        end
       end
       
       
@@ -141,6 +145,16 @@ module Sunspot
           0
         end
         
+      end
+
+      class EmptyGroup
+        def ngroups
+          0
+        end
+
+        def groups
+          []
+        end
       end
 
       class FacetStub

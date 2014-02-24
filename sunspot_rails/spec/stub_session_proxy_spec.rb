@@ -118,5 +118,11 @@ describe 'specs with Sunspot stubbed' do
     it 'should return empty results for a given dynamic facet' do
       @search.dynamic_facet(:custom).rows.should == []
     end
+
+    it 'should return empty group' do
+      group = @search.group('abc')
+      group.ngroups.should == 0
+      group.groups.should == []
+    end
   end
 end
