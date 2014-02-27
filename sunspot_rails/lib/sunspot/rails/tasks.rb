@@ -5,7 +5,7 @@ namespace :sunspot do
   # conventions, in that the file name matches the defined class name. \
   # By default the indexing system works in batches of 50 records, you can \
   # set your own value for this by using the batch_size argument. You can \
-  # also optionally define a list of models to separated by a forward slash '/'
+  # also optionally define a list of models separated by a plus sign '+'
   #
   # $ rake sunspot:reindex                # reindex all models
   # $ rake sunspot:reindex[1000]          # reindex in batches of 1000
