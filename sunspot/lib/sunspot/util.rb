@@ -155,6 +155,12 @@ module Sunspot
         deep_merge_into(left, left, right)
       end
 
+      def method_case(string_or_symbol)
+        string = string_or_symbol.to_s
+        first = true
+        string.split('_').map! { |word| word = first ? word : word.capitalize; first = false; word }.join
+      end
+
       private
 
       # 

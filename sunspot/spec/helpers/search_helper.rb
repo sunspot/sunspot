@@ -75,6 +75,23 @@ module SearchHelper
       }
     }
   end
+  
+  def stub_spellcheck
+    connection.response = {
+      'spellcheck' => {
+        'suggestions' => [
+          "wrng",
+          {"numFound"=>1, "startOffset"=>0, "endOffset"=>1, "origFreq"=>0, "suggestion"=>[{"word"=>"wrong", "freq"=>15}]},
+          "spellng", 
+          {"numFound"=>1, "startOffset"=>0, "endOffset"=>1,"origFreq"=>0,"suggestion"=>[{"word"=>"spelling", "freq"=>15}]},
+          "correctlySpelled",
+          false,
+          "collation",
+          "wrong spelling"
+        ]
+      } 
+    }
+  end
 
   def stub_query_facet(values)
     connection.response = { 'facet_counts' => { 'facet_queries' => values } }
