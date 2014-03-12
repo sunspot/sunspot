@@ -278,7 +278,7 @@ module Sunspot
       end
 
       def collation
-        suggestions["collation"] || ""
+        suggestions["collation"] || "" if suggestions
       end
 
       private
