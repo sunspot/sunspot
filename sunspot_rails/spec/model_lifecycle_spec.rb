@@ -36,6 +36,20 @@ describe 'searchable with lifecycle' do
       @post.should_not_receive :solr_index
       @post.save!
     end
+
+    it "should index model whose relevant attributes are not specified if relevant attribute changed" do
+      @blog = Blog.create!
+      @blog.subdomain = 'subdomain'
+      @blog.should_receive :solr_index
+      @blog.save!
+    end
+
+    it "should not index model whose relevant attributes are not specified if relevant attribute not changed" do
+      @blog = Blog.create!
+      @blog.updated_at = 123.seconds.from_now
+      @blog.should_not_receive :solr_index
+      @blog.save!
+    end
   end
 
   describe 'on destroy' do
