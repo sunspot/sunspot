@@ -98,7 +98,7 @@ module Sunspot
           EmptyGroup.new
         end
 
-        def spellcheck_collation
+        def spellcheck_collation(*terms)
           ''
         end
       end
