@@ -13,6 +13,8 @@ module Sunspot
       @stored = !!options.delete(:stored)
       @more_like_this = !!options.delete(:more_like_this)
       @multiple ||= false
+      @dynamic_root ||= options.delete(:dynamic_root)
+      @dynamic_name ||= options.delete(:dynamic_name)
       set_indexed_name(options)
       raise ArgumentError, "Field of type #{type} cannot be used for more_like_this" unless type.accepts_more_like_this? or !@more_like_this
     end
@@ -92,6 +94,39 @@ module Sunspot
     #
     def external_file_field?
       !!@external_file_field
+    end
+
+    #
+    # Whether this field is a dynamic field
+    #
+    # ==== Returns
+    #
+    # Boolean:: True if this field is a dynamic field
+    #
+    def dynamic_field?
+      !!(@dynamic_root || @dynamic_name)
+    end
+
+    #
+    # Get the parent dynamic root name (before semicolon)
+    #
+    # ==== Returns
+    #
+    # String:: Dynamic root name
+    #
+    def dynamic_root
+      @dynamic_root
+    end
+
+    #
+    # Get the dynamic name of this field (after semicolon)
+    #
+    # ==== Returns
+    #
+    # String:: Dynamic name of this field
+    #
+    def dynamic_name
+      @dynamic_name
     end
 
     def hash

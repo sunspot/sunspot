@@ -127,7 +127,8 @@ module Sunspot
       # Build a field based on the dynamic name given.
       #
       def build(dynamic_name)
-        AttributeField.new("#{@name}:#{dynamic_name}", @type, @options.dup)
+        opts = @options.dup.merge({dynamic_root: @name, dynamic_name: dynamic_name})
+        AttributeField.new("#{@name}:#{dynamic_name}", @type, opts)
       end
       # 
       # This alias allows a DynamicFieldFactory to be used in place of a Setup

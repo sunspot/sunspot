@@ -104,11 +104,15 @@ module Sunspot
       def document
         @document ||= {}.tap do |doc|
           @stored_values.each do |key, value|
-            field = (setup.field_from_indexed_name(key) rescue nil)
+            field = setup.field_from_indexed_name(key)
             if field
-              doc[field.name.to_s] = Array(value).map { |val|
-                field.cast(val)
-              }.send((field.multiple? ? :to_a: :first))
+              if field.dynamic_field?
+                doc[field.dynamic_root.to_s] ||= {}
+                doc[field.dynamic_root.to_s][field.dynamic_name.to_s] =\
+                                                 cast_stored_value(value, field)
+              else
+                doc[field.name.to_s] = cast_stored_value(value, field)
+              end
             else
               doc[key] = value
             end
@@ -131,6 +135,12 @@ module Sunspot
       end
 
       private
+
+      def cast_stored_value(value, field)
+        Array(value).map { |val|
+          field.cast(val)
+        }.send((field.multiple? ? :to_a: :first))
+      end
 
       def setup
         @setup ||= Sunspot::Setup.for(Util.full_const_get(@class_name))
