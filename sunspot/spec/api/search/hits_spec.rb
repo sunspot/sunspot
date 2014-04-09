@@ -158,13 +158,14 @@ describe 'hits', :type => :search do
     )
     document = session.search(Post).hits.first.document
     document.should include(
-      'title' => 'Post 1',
-      'featured' => true,
-      'last_indexed_at' => time,
-      'body_text' => nil,
-      'custom_string:tag1' => 'popular',
-      'score' => 4,
-      'distance' => 3.42,
+      "title"=>"Post 1",
+      "featured"=>true,
+      "last_indexed_at"=> time,
+      "body"=>[],
+      "custom_string"=>{"tag1"=>"popular"},
+      "score"=>4,
+      "distance"=>3.42,
+      "id"=>"Post 27"
     )
   end
 end
