@@ -72,7 +72,7 @@ namespace :sunspot do
 
   def sunspot_solr_in_load_path?
     # http://www.rubular.com/r/rJGDh7eOSc
-    $:.any? { |path| path =~ %r{sunspot_solr(-[^/]+)?/lib$} }
+    $:.any? { |path| path.to_s =~ %r{sunspot_solr(-[^/]+)?/lib$} }
   end
 
   unless sunspot_solr_in_load_path?
