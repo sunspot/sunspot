@@ -63,6 +63,11 @@ describe 'specs with Sunspot stubbed' do
     Post.remove_all_from_index!
   end
 
+  it 'should not send optimize to session' do
+    @session.should_not_receive(:optimize)
+    Sunspot.optimize
+  end
+
   it 'should return false for dirty?' do
     @session.should_not_receive(:dirty?)
     Sunspot.dirty?.should == false
