@@ -461,8 +461,8 @@ describe 'scoped_search' do
   describe 'ordering by function' do
     before :all do
       Sunspot.remove_all
-      @p1 = Post.new(:blog_id => 1, :category_ids => [3])
-      @p2 = Post.new(:blog_id => 2, :category_ids => [1])
+      @p1 = Post.new(:title => 'Post Test', :blog_id => 1, :category_ids => [3])
+      @p2 = Post.new(:title => 'Test', :blog_id => 2, :category_ids => [1])
       Sunspot.index([@p1,@p2])
       Sunspot.commit
     end
@@ -485,6 +485,20 @@ describe 'scoped_search' do
       # (1 * -2) > (2 * -2)
       search = Sunspot.search(Post) {order_by_function :product, :blog_id, -2, :desc}
       search.results.first.should == @p1
+    end
+    context 'when ordering by strdist' do
+      # Reference: http://wiki.apache.org/solr/FunctionQuery#strdist
+      it 'should only accept valid values as measures' do
+        [:jw, :edit, :ngram].each do |measure|
+          search = Sunspot.search(Post) {order_by_function :strdist, :title, "'Test'", measure, :desc}
+          search.results.first.should == @p2
+        end
+      end
+      it 'should not accept invalid values as measures' do
+        lambda do
+          Sunspot.search(Post) {order_by_function :strdist, :title, "'Test'", :wrong_measure, :desc}
+        end.should raise_error(Sunspot::UnrecognizedRestrictionError)
+      end
     end
   end
 end
