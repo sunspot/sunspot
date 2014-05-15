@@ -1,5 +1,6 @@
 # Sunspot
 
+[![Gem Version](https://badge.fury.io/rb/sunspot.png)](http://badge.fury.io/rb/sunspot)
 [![Build Status](https://secure.travis-ci.org/sunspot/sunspot.png)](http://travis-ci.org/sunspot/sunspot)
 
 Sunspot is a Ruby library for expressive, powerful interaction with the Solr
@@ -15,8 +16,9 @@ This README provides a high level overview; class-by-class and
 method-by-method documentation is available in the [API
 reference](http://sunspot.github.com/sunspot/docs/).
 
-For questions about how to use Sunspot in your app, please use the Sunspot mailing list at 
-http://groups.google.com/group/ruby-sunspot.
+For questions about how to use Sunspot in your app, please use the
+[Sunspot Mailing List](http://groups.google.com/group/ruby-sunspot) or search
+[Stack Overflow](http://www.stackoverflow.com).
 
 ## Quickstart with Rails 3 / 4
 
@@ -133,7 +135,7 @@ end
 
 Solr allows searching for phrases: search terms that are close together.
 
-In the default query parser used by Sunspot (dismax), phrase searches
+In the default query parser used by Sunspot (edismax), phrase searches
 are represented as a double quoted group of words.
 
 ```ruby
@@ -362,6 +364,10 @@ For **field facets**, each row represents a particular value for a given
 field. For **query facets**, each row represents an arbitrary scope; the
 facet itself is just a means of logically grouping the scopes.
 
+By default Sunspot will only return the first 100 facet values.  You can
+increase this limit, or force it to return *all* facets by setting
+**limit** to **-1**.
+
 #### Field Facets
 
 ```ruby
@@ -369,6 +375,24 @@ facet itself is just a means of logically grouping the scopes.
 search = Post.search do
   fulltext "pizza"
   facet :author_id
+end
+
+search.facet(:author_id).rows.each do |facet|
+  puts "Author #{facet.value} has #{facet.count} pizza posts!"
+end
+```
+
+If you are searching by a specific field and you still want to see all
+the options available in that field you can **exclude** it in the
+faceting.
+
+```ruby
+# Posts that match 'pizza' and author with id 42
+# Returning counts for each :author_id (even those not in the search result)
+search = Post.search do
+  fulltext "pizza"
+  author_filter = with(:author_id, 42)
+  facet :author_id, exclude: [author_filter]
 end
 
 search.facet(:author_id).rows.each do |facet|
@@ -398,10 +422,10 @@ search = Post.search do
 end
 
 # e.g.,
-# Number of posts with rating withing 1.0..2.0: 2
-# Number of posts with rating withing 2.0..3.0: 1
+# Number of posts with rating within 1.0..2.0: 2
+# Number of posts with rating within 2.0..3.0: 1
 search.facet(:average_rating).rows.each do |facet|
-  puts "Number of posts with rating withing #{facet.value}: #{facet.count}"
+  puts "Number of posts with rating within #{facet.value}: #{facet.count}"
 end
 ```
 
@@ -438,6 +462,40 @@ end
 Post.search do
   fulltext("pizza")
   order_by(:random)
+end
+```
+
+**Solr 3.1 and above**
+
+Solr supports sorting on multiple fields using custom functions. Supported
+operators and more details are available on the [Solr Wiki](http://wiki.apache.org/solr/FunctionQuery)
+
+To sort results by a custom function use the `order_by_function` method.
+Functions are defined with prefix notation:
+
+```ruby
+# Order by sum of two example fields: rating1 + rating2
+Post.search do
+  fulltext("pizza")
+  order_by_function(:sum, :rating1, :rating2, :desc)
+end
+
+# Order by nested functions: rating1 + (rating2*rating3)
+Post.search do
+  fulltext("pizza")
+  order_by_function(:sum, :rating1, [:product, :rating2, :rating3], :desc)
+end
+
+# Order by fields and constants: rating1 + (rating2 * 5)
+Post.search do
+  fulltext("pizza")
+  order_by_function(:sum, :rating1, [:product, :rating2, '5'], :desc)
+end
+
+# Order by average of three fields: (rating1 + rating2 + rating3) / 3
+Post.search do
+  fulltext("pizza")
+  order_by_function(:div, [:sum, :rating1, :rating2, :rating3], '3', :desc)
 end
 ```
 
@@ -566,6 +624,35 @@ Post.search do
 end
 ```
 
+### Joins
+
+**Solr 4 and above**
+
+Solr joins allow you to filter objects by joining on additional documents.  More information can be found on the [Solr Wiki](http://wiki.apache.org/solr/Join).
+
+```ruby
+class Photo < ActiveRecord::Base
+  searchable do
+    text :caption, :default_boost => 1.5
+    time :created_at
+    integer :photo_container_id
+  end
+end
+
+class PhotoContainer < ActiveRecord::Base
+  searchable do
+    text :name
+    join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id')
+    join(:photos_created, :type => :time, :join_string => 'from=photo_container_id to=id', :as => 'created_at_d')
+  end
+end
+
+PhotoContainer.search do
+  with(:caption, 'blah')
+  with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
+end
+```
+
 ### Highlighting
 
 Highlighting allows you to display snippets of the part of the document
@@ -582,7 +669,7 @@ class Post < ActiveRecord::Base
 end
 ```
 
-Highlighting matches on the `body` field, for instance, can be acheived
+Highlighting matches on the `body` field, for instance, can be achieved
 like:
 
 ```ruby
@@ -603,6 +690,60 @@ search.hits.each do |hit|
 
   hit.highlights(:body).each do |highlight|
     puts "  " + highlight.format { |word| "*#{word}*" }
+  end
+end
+```
+
+### Stats
+
+Solr can return some statistics on indexed numeric fields. Fetching statistics
+for `average_rating`:
+
+```ruby
+search = Post.search do
+  stats :average_rating
+end
+
+puts "Minimum average rating: #{search.stats(:average_rating).min}"
+puts "Maximum average rating: #{search.stats(:average_rating).max}"
+```
+
+#### Stats on multiple fields
+
+```ruby
+search = Post.search do
+  stats :average_rating, :blog_id
+end
+```
+
+#### Faceting on stats
+
+It's possible to facet field stats on another field:
+
+```ruby
+search = Post.search do
+  stats :average_rating do
+    facet :featured
+  end
+end
+
+search.stats(:average_rating).facet(:featured).rows do |row|
+  puts "Minimum average rating for featured=#{row.value}: #{row.min}"
+end
+```
+
+Take care when requesting facets on a stats field, since all facet results are
+returned by Solr!
+
+#### Multiple stats and selective faceting
+
+```ruby
+search = Post.search do
+  stats :average_rating do
+    facet :featured
+  end
+  stats :blog_id do
+    facet :average_rating
   end
 end
 ```
@@ -746,11 +887,24 @@ bundle exec rake sunspot:solr:reindex
 
 # or, to be specific to a certain model with a certain batch size:
 bundle exec rake sunspot:solr:reindex[500,Post] # some shells will require escaping [ with \[ and ] with \]
+
+# to skip the prompt asking you if you want to proceed with the reindexing:
+bundle exec rake sunspot:solr:reindex[,,true] # some shells will require escaping [ with \[ and ] with \]
 ```
 
 ## Use Without Rails
 
 TODO
+
+## Threading
+
+The default Sunspot Session is not thread-safe. If used in a multi-threaded
+environment (such as sidekiq), you should configure Sunspot to use the
+[ThreadLocalSessionProxy](http://sunspot.github.io/sunspot/docs/Sunspot/SessionProxy/ThreadLocalSessionProxy.html):
+
+```ruby
+Sunspot.session = Sunspot::SessionProxy::ThreadLocalSessionProxy.new
+```
 
 ## Manually Adjusting Solr Parameters
 
@@ -771,6 +925,29 @@ TODO
 ## Type Reference
 
 TODO
+
+## Configuration
+
+Configure Sunspot by creating a *config/sunspot.yml* file or by setting a `SOLR_URL` or a `WEBSOLR_URL` environment variable.
+The defaults are as follows.
+
+```yaml
+development:
+  solr:
+    hostname: localhost
+    port: 8982
+    log_level: INFO
+
+test:
+  solr:
+    hostname: localhost
+    port: 8981
+    log_level: WARNING
+```
+
+You may want to use SSL for production environments with a username and password. For example, set `SOLR_URL` to `https://username:password@production.solr.example.com/solr`.
+
+You can examine the value of `Sunspot::Rails.configuration` at runtime.
 
 ## Development
 
@@ -889,6 +1066,7 @@ $ yardoc -o docs */lib/**/*.rb - README.md
 * [Solr, and Sunspot](http://www.kuahyeow.com/2009/08/solr-and-sunspot.html) (YT!)
 * [The Saga of the Switch](http://web.archive.org/web/20100427135335/http://mrb.github.com/2010/04/08/the-saga-of-the-switch.html) (mrb -- includes comparison of Sunspot and Ultrasphinx)
 * [Conditional Indexing with Sunspot](http://mikepackdev.com/blog_posts/19-conditional-indexing-with-sunspot) (mikepack)
+* [Introduction to Full Text Search for Rails Developers](http://valve.github.io/blog/2014/02/22/rails-developer-guide-to-full-text-search-with-solr/) (Valve's)
 
 ## License
 

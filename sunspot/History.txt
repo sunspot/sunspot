@@ -1,3 +1,13 @@
+== 2.1.0
+* Dropped support for rails 2.x. Added support for Rails 4.
+* Bundled Solr installation (`sunspot_solr`) is version 4.2.0
+* Upgrade to Jetty 8 and changed solr config directory structure.
+* Removed interactive warning prompt from sunspot:reindex rake task.
+* Support Rails 4 custom primary keys i.e. UUID
+* Switch to EDismax query parser from dismax.
+* Extend Sunspot.remove! to accept a block, and enable .remove_by_id! to accept multiple ids.
+* add 'order_by_function' method to field queries. Allowing for Solr FunctionQuery, nesting, and literal constants.
+
 == 2.0.0
 * Adds support for field grouping (Andy Lindeman)
 * Adds support for native geospatial searches and ordering (Eric Tang, Bruno Miranda, Andy Lindeman)

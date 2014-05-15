@@ -112,6 +112,25 @@ shared_examples_for "facetable query" do
       end.should raise_error(ArgumentError)
     end
 
+    it 'tags and excludes a geofilt in a field facet' do
+      search do
+        post_geo = with(:coordinates_new).in_radius(32, -68, 1)
+        facet(:coordinates_new, :exclude => post_geo) do
+          row(0..10) do
+            with(:coordinates_new).in_radius(32, -68, 10)
+          end
+        end
+      end
+      if connection.searches.last.has_key?(:"mlt.fl")
+        filter_tag = get_filter_tag('_query_:"{!geofilt sfield=coordinates_new_ll pt=32,-68 d=1}"')
+      else
+        filter_tag = get_filter_tag('{!geofilt sfield=coordinates_new_ll pt=32,-68 d=1}')
+      end
+      connection.should have_last_search_with(
+        :"facet.query" => "{!ex=#{filter_tag}}_query_:\"{!geofilt sfield=coordinates_new_ll pt=32,-68 d=10}\""
+      )
+    end
+
     it 'tags and excludes a scope filter in a field facet' do
       search do
         blog_filter = with(:blog_id, 1)

@@ -68,11 +68,14 @@ module Sunspot
         # on whether this restriction is negated.
         #
         def to_boolean_phrase
+          phrase = []
+          phrase << @field.local_params if @field.respond_to? :local_params
           unless negated?
-            to_positive_boolean_phrase
+            phrase << to_positive_boolean_phrase
           else
-            to_negated_boolean_phrase
+            phrase << to_negated_boolean_phrase
           end
+          phrase.join
         end
 
         # 

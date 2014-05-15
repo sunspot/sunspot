@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Marcel de Graaf', 'Brandon Keepers', 'Peter Berkenbosch',
                   'Brian Atkinson', 'Tom Coleman', 'Matt Mitchell', 'Nathan Beyer', 'Kieran Topping', 'Nicolas Braem', 'Jeremy Ashkenas',
-                  'Dylan Vaughn', 'Brian Durand', 'Sam Granieri', 'Nick Zadrozny', 'Jason Ronallo']
+                  'Dylan Vaughn', 'Brian Durand', 'Sam Granieri', 'Nick Zadrozny', 'Jason Ronallo', 'Ryan Wallace', 'Nicholas Jakobsen']
   s.email       = ["mat@patch.com"]
   s.homepage    = "http://outoftime.github.com/sunspot"
   s.summary = 'Library for expressive, powerful interaction with the Solr search engine'
@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'pr_geohash', '~>1.0'
 
   s.add_development_dependency 'rspec', '~>2.6.0'
-  s.add_development_dependency 'hanna'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                   '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation' <<

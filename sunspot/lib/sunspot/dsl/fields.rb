@@ -74,10 +74,17 @@ module Sunspot
       #
       def method_missing(method, *args, &block)
         options = Util.extract_options_from(args)
-        type_const_name = "#{Util.camel_case(method.to_s.sub(/^dynamic_/, ''))}Type"
+        if method.to_s == 'join'
+          type_string = options.delete(:type).to_s
+        else
+          type_string = method.to_s
+        end
+        type_const_name = "#{Util.camel_case(type_string.sub(/^dynamic_/, ''))}Type"
         trie = options.delete(:trie)
         type_const_name = "Trie#{type_const_name}" if trie
         begin
+          
+            type_class = options[:type]
           type_class = Type.const_get(type_const_name)
         rescue(NameError)
           if trie
@@ -94,6 +101,8 @@ module Sunspot
           else
             super(method, *args, &block)
           end
+        elsif method.to_s == 'join'
+          @setup.add_join_field_factory(name, type, options, &block)
         else
           @setup.add_field_factory(name, type, options, &block)
         end

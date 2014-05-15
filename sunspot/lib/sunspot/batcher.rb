@@ -12,7 +12,7 @@ module Sunspot
   #   end
   #
   # it is the Batcher's job to keep track of these nestings. The inner will
-  # be sent of to be indexed first.
+  # be sent off to be indexed first.
   #
   class Batcher
     include Enumerable

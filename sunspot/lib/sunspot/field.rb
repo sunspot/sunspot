@@ -159,6 +159,21 @@ module Sunspot
 
   end
 
+  class JoinField < Field #:nodoc:
+
+    def initialize(name, type, options = {})
+      @multiple = !!options.delete(:multiple)
+      super(name, type, options)
+      @join_string = options.delete(:join_string)
+      raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
+    end
+
+    def local_params
+      "{!join #{@join_string}}"
+    end
+
+  end
+
   class TypeField #:nodoc:
     class <<self
       def instance

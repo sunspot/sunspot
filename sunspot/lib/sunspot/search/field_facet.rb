@@ -1,6 +1,6 @@
 module Sunspot
   module Search
-    # 
+    #
     # A FieldFacet is a facet whose rows are all values for a certain field, in
     # contrast to a QueryFacet, whose rows represent arbitrary queries.
     #
@@ -14,7 +14,7 @@ module Sunspot
         @field.name
       end
 
-      # 
+      #
       # Get the rows returned for this facet.
       #
       # ==== Options (options)
@@ -50,7 +50,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # If this facet references a model class, populate the rows with instances
       # of the model class by loading them out of the appropriate adapter.
       #
@@ -79,7 +79,7 @@ module Sunspot
           rows
         end
       end
-      
+
       def key
         @key ||= (@options[:name] || @field.indexed_name).to_s
       end

@@ -9,6 +9,15 @@ describe 'specs with Sunspot stubbed' do
     @post = Post.create!
   end
 
+  it 'should batch' do
+    foo = mock('Foo')
+    block = lambda { foo.bar }
+
+    foo.should_receive(:bar)
+
+    Sunspot.batch(&block)
+  end
+
   it 'should not send index to session' do
     @session.should_not_receive(:index)
     @post.index
@@ -52,6 +61,11 @@ describe 'specs with Sunspot stubbed' do
   it 'should not send remove_all! to session' do
     @session.should_not_receive(:remove_all!)
     Post.remove_all_from_index!
+  end
+
+  it 'should not send optimize to session' do
+    @session.should_not_receive(:optimize)
+    Sunspot.optimize
   end
 
   it 'should return false for dirty?' do
@@ -107,6 +121,10 @@ describe 'specs with Sunspot stubbed' do
       @search.hits.should == []
     end
 
+    it 'should return the same for raw_results as hits' do
+      @search.raw_results.should == @search.hits
+    end
+
     it 'should return zero total' do
       @search.total.should == 0
     end
@@ -117,6 +135,10 @@ describe 'specs with Sunspot stubbed' do
 
     it 'should return empty results for a given dynamic facet' do
       @search.dynamic_facet(:custom).rows.should == []
+    end
+
+    it 'should return empty array if listing facets' do
+      @search.facets.should == []
     end
   end
 end

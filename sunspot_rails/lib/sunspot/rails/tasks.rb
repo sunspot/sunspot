@@ -5,7 +5,7 @@ namespace :sunspot do
   # conventions, in that the file name matches the defined class name. \
   # By default the indexing system works in batches of 50 records, you can \
   # set your own value for this by using the batch_size argument. You can \
-  # also optionally define a list of models to separated by a forward slash '/'
+  # also optionally define a list of models separated by a plus sign '+'
   #
   # $ rake sunspot:reindex                # reindex all models
   # $ rake sunspot:reindex[1000]          # reindex in batches of 1000
@@ -14,18 +14,7 @@ namespace :sunspot do
   # $ rake sunspot:reindex[1000,Post]     # reindex only the Post model in
   #                                       # batchs of 1000
   # $ rake sunspot:reindex[,Post+Author]  # reindex Post and Author model
-  # $ rake sunspot:reindex[,,true]        # reindex silencing/skipping the boolean prompt
   task :reindex, [:batch_size, :models, :silence] => [:environment] do |t, args|
-    args.with_defaults(:silence => false)
-    if args[:silence] == false
-      puts "*Note: the reindex task will remove your current indexes and start from scratch."
-      puts "If you have a large dataset, reindexing can take a very long time, possibly weeks."
-      puts "This is not encouraged if you have anywhere near or over 1 million rows."
-      puts "Are you sure you want to drop your indexes and completely reindex? (y/n)"
-      answer = STDIN.gets.chomp
-      return false unless answer.match(/^y/)
-    end
-
     # Retry once or gracefully fail for a 5xx error so we don't break reindexing
     with_session(Sunspot::SessionProxy::Retry5xxSessionProxy.new(Sunspot.session)) do
 
@@ -83,7 +72,7 @@ namespace :sunspot do
 
   def sunspot_solr_in_load_path?
     # http://www.rubular.com/r/rJGDh7eOSc
-    $:.any? { |path| path =~ %r{sunspot_solr(-[^/]+)?/lib$} }
+    $:.any? { |path| path.to_s =~ %r{sunspot_solr(-[^/]+)?/lib$} }
   end
 
   unless sunspot_solr_in_load_path?

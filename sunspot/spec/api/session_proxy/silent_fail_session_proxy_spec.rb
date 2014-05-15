@@ -6,7 +6,7 @@ describe Sunspot::SessionProxy::ShardingSessionProxy do
   SUPPORTED_METHODS = Sunspot::SessionProxy::SilentFailSessionProxy::SUPPORTED_METHODS
 
   before do
-    @search_session = mock(Sunspot::Session.new)
+    @search_session = double(Sunspot::Session.new)
     @proxy = Sunspot::SessionProxy::SilentFailSessionProxy.new(@search_session)
   end
   
