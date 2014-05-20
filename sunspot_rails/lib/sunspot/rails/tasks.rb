@@ -30,7 +30,7 @@ namespace :sunspot do
 
       # Load all the application's models. Models which invoke 'searchable' will register themselves
       # in Sunspot.searchable.
-      Rails.application.eager_load!
+      Rails.application.config.eager_load_namespaces.each(&:eager_load!)
 
       if args[:models].present?
         # Choose a specific subset of models, if requested
