@@ -781,6 +781,19 @@ results = Sunspot.more_like_this(post) do
 end
 ```
 
+To use more_like_this you need to have the [MoreLikeThis handler enabled in solrcofig.xml](http://wiki.apache.org/solr/MoreLikeThisHandler).
+
+Example handler will look like this:
+
+```
+<requestHandler class="solr.MoreLikeThisHandler" name="/mlt">
+  <lst name="defaults">
+    <str name="mlt.mintf">1</str>
+    <str name="mlt.mindf">2</str>
+  </lst>
+</requestHandler>
+```
+
 ## Indexes In Depth
 
 TODO
