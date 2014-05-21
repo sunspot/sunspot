@@ -2,7 +2,7 @@
 
 set +e # Don't exit immediately if a shell command returns a non-zero (fail) status
 
-gem update --system #1.8.25
+gem update --system
 
 solr_responding() {
   port=$1
@@ -22,7 +22,7 @@ case $GEM in
 
     cd sunspot
     /bin/echo -n "Starting Solr on port 8983 for Sunspot specs..."
-    bundle install #--quiet --path vendor/bundle
+    bundle install --quiet --path vendor/bundle
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
 
     bundle exec sunspot-solr start -p 8983 -d /tmp/solr
@@ -44,7 +44,7 @@ case $GEM in
 
     cd sunspot
     /bin/echo -n "Starting Solr on port 8983 for Sunspot specs..."
-    bundle install #--quiet --path vendor/bundle
+    bundle install --quiet --path vendor/bundle
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
 
     bundle exec sunspot-solr start -p 8983 -d /tmp/solr
