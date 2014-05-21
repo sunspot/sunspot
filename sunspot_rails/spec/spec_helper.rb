@@ -1,13 +1,5 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
-if rsolr_version = ENV['RSOLR_GEM_VERSION']
-  STDERR.puts("Forcing RSolr version #{rsolr_version}")
-  gem "rsolr", rsolr_version
-end
-
-# Require the Database-specific gems
-ENV['DB'] ||= 'sqlite'
-Bundler.require(ENV['DB'])
 
 require File.expand_path('config/environment', ENV['RAILS_ROOT'])
 require 'rspec/rails'
@@ -60,7 +52,7 @@ RSpec.configure do |config|
   config.before(:each) do
     empty_tables
     Sunspot.remove_all!
-  end  
+  end
 end
 
 def empty_tables
