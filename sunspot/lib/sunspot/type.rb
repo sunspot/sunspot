@@ -370,6 +370,11 @@ module Sunspot
         "#{name}_ll"
       end
 
+      def cast(string) #:nodoc:
+        lat, lng = string.split(',')
+        Sunspot::Util::Coordinates.new(lat, lng)
+      end
+      
       def to_indexed(value)
         "#{value.lat.to_f},#{value.lng.to_f}"
       end
