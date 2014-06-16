@@ -18,10 +18,16 @@ describe Sunspot::SessionProxy::ClassShardingSessionProxy do
 
   [:remove_by_id, :remove_by_id!].each do |method|
     it "should delegate #{method} to appropriate shard" do
-      @proxy.post_session.should_receive(method).with(Post, 1)
-      @proxy.photo_session.should_receive(method).with(Photo, 1)
+      @proxy.post_session.should_receive(method).with(Post, [1])
+      @proxy.photo_session.should_receive(method).with(Photo, [1])
       @proxy.send(method, Post, 1)
       @proxy.send(method, Photo, 1)
+    end
+    it "should delegate #{method} to appropriate shard given ids" do
+      @proxy.post_session.should_receive(method).with(Post, [1, 2])
+      @proxy.photo_session.should_receive(method).with(Photo, [1, 2])
+      @proxy.send(method, Post, 1, 2)
+      @proxy.send(method, Photo, [1, 2])
     end
   end
 
@@ -68,7 +74,7 @@ describe Sunspot::SessionProxy::ClassShardingSessionProxy do
 
   [:dirty, :delete_dirty].each do |method|
     it "should be dirty if any of the sessions are dirty" do
-      @proxy.post_session.stub!(:"#{method}?").and_return(true)
+      @proxy.post_session.stub(:"#{method}?").and_return(true)
       @proxy.should send("be_#{method}")
     end
 

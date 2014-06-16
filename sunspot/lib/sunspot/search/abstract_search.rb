@@ -1,30 +1,40 @@
 require 'sunspot/search/paginated_collection'
+require 'sunspot/search/hit_enumerable'
 
 module Sunspot
   module Search #:nodoc:
-    
-    # 
+
+    #
     # This class encapsulates the results of a Solr search. It provides access
     # to search results, total result count, facets, and pagination information.
     # Instances of Search are returned by the Sunspot.search and
     # Sunspot.new_search methods.
     #
     class AbstractSearch
-      # 
+      #
       # Retrieve all facet objects defined for this search, in order they were
       # defined. To retrieve an individual facet by name, use #facet()
       #
-      attr_reader :facets
+      attr_reader :facets, :groups, :stats
       attr_reader :query #:nodoc:
       attr_accessor :request_handler
-  
+
+      include HitEnumerable
+
       def initialize(connection, setup, query, configuration) #:nodoc:
         @connection, @setup, @query = connection, setup, query
         @query.paginate(1, configuration.pagination.default_per_page)
+
         @facets = []
         @facets_by_name = {}
+
+        @groups_by_name = {}
+        @groups = []
+
+        @stats_by_name = {}
+        @stats = []
       end
-  
+
       #
       # Execute the search on the Solr instance and store the results. If you
       # use Sunspot#search() to construct your searches, there is no need to call
@@ -42,8 +52,8 @@ module Sunspot
       def execute! #:nodoc: deprecated
         execute
       end
-  
-      # 
+
+      #
       # Get the collection of results as instantiated objects. If WillPaginate is
       # available, the results will be a WillPaginate::Collection instance; if
       # not, it will be a vanilla Array.
@@ -58,8 +68,8 @@ module Sunspot
       def results
         @results ||= paginate_collection(verified_hits.map { |hit| hit.instance })
       end
-  
-      # 
+
+      #
       # Access raw Solr result information. Returns a collection of Hit objects
       # that contain the class name, primary key, keyword relevance score (if
       # applicable), and any stored fields.
@@ -78,36 +88,14 @@ module Sunspot
       #
       def hits(options = {})
         if options[:verify]
-          verified_hits
+          super
         else
-          @hits ||=
-            begin
-              hits = if solr_response && solr_response['docs']
-                solr_response['docs'].map do |doc|
-                  Hit.new(doc, highlights_for(doc), self)
-                end
-              end
-              paginate_collection(hits || [])
-            end
+          @hits ||= paginate_collection(super)
         end
       end
       alias_method :raw_results, :hits
-  
+
       #
-      # Convenience method to iterate over hit and result objects. Block is
-      # yielded a Sunspot::Server::Hit instance and a Sunspot::Server::Result
-      # instance.
-      #
-      # Note that this method iterates over verified hits (see #hits method
-      # for more information).
-      #
-      def each_hit_with_result
-        verified_hits.each do |hit|
-          yield(hit, hit.result)
-        end
-      end
-  
-      # 
       # The total number of documents matching the query parameters
       #
       # ==== Returns
@@ -117,8 +105,19 @@ module Sunspot
       def total
         @total ||= solr_response['numFound'] || 0
       end
-  
-      # 
+
+      #
+      # The time elapsed to generate the Solr response
+      #
+      # ==== Returns
+      #
+      # Integer:: Query runtime in milliseconds
+      #
+      def query_time
+        @query_time ||= solr_response_header['QTime']
+      end
+
+      #
       # Get the facet object for the given name. `name` can either be the name
       # given to a query facet, or the field name of a field facet. Returns a
       # Sunspot::Facet object.
@@ -167,33 +166,39 @@ module Sunspot
           end
         end
       end
-  
-      # 
+
+      def stats(name)
+        if name
+          @stats_by_name[name.to_sym]
+        end
+      end
+
+      def group(name)
+        if name
+          @groups_by_name[name.to_sym]
+        end
+      end
+
+      #
       # Deprecated in favor of optional second argument to #facet
       #
       def dynamic_facet(base_name, dynamic_name) #:nodoc:
         facet(base_name, dynamic_name)
       end
-  
+
       def facet_response #:nodoc:
         @solr_result['facet_counts']
       end
-  
-      # 
-      # Get the data accessor that will be used to load a particular class out of
-      # persistent storage. Data accessors can implement any methods that may be
-      # useful for refining how data is loaded out of storage. When building a
-      # search manually (e.g., using the Sunspot#new_search method), this should
-      # be used before calling #execute(). Use the
-      # Sunspot::DSL::Search#data_accessor_for method when building searches using
-      # the block DSL.
-      #
-      def data_accessor_for(clazz) #:nodoc:
-        (@data_accessors ||= {})[clazz.name.to_sym] ||=
-          Adapters::DataAccessor.create(clazz)
+
+      def stats_response #:nodoc:
+        @solr_result['stats']['stats_fields']
       end
-  
-      # 
+
+      def group_response #:nodoc:
+        @solr_result['grouped']
+      end
+
+      #
       # Build this search using a DSL block. This method can be called more than
       # once on an unexecuted search (e.g., Sunspot.new_search) in order to build
       # a search incrementally.
@@ -210,80 +215,90 @@ module Sunspot
         Util.instance_eval_or_call(dsl, &block)
         self
       end
-  
-      # 
-      # Populate the Hit objects with their instances. This is invoked the first
-      # time any hit has its instance requested, and all hits are loaded as a
-      # batch.
-      #
-      def populate_hits #:nodoc:
-        id_hit_hash = Hash.new { |h, k| h[k] = {} }
-        hits.each do |hit|
-          id_hit_hash[hit.class_name][hit.primary_key] = hit
-        end
-        id_hit_hash.each_pair do |class_name, hits|
-          ids = hits.map { |id, hit| hit.primary_key }
-          data_accessor = data_accessor_for(Util.full_const_get(class_name))
-          hits_for_class = id_hit_hash[class_name]
-          data_accessor.load_all(ids).each do |result|
-            hit = hits_for_class.delete(Adapters::InstanceAdapter.adapt(result).id.to_s)
-            hit.result = result
-          end
-          hits_for_class.values.each { |hit| hit.result = nil }
-        end
-      end
-  
+
+
       def inspect #:nodoc:
         "<Sunspot::Search:#{query.to_params.inspect}>"
       end
-  
+
+      def add_field_group(field) #:nodoc:
+        add_group(field.name, FieldGroup.new(field, self))
+      end
+
       def add_field_facet(field, options = {}) #:nodoc:
         name = (options[:name] || field.name)
         add_facet(name, FieldFacet.new(field, self, options))
       end
-  
+
       def add_query_facet(name, options) #:nodoc:
         add_facet(name, QueryFacet.new(name, self, options))
       end
-  
+
       def add_date_facet(field, options) #:nodoc:
         name = (options[:name] || field.name)
         add_facet(name, DateFacet.new(field, self, options))
       end
-  
-      private
-  
-      def dsl
-        raise NotImplementedError 
+
+      def add_range_facet(field, options) #:nodoc:
+        name = (options[:name] || field.name)
+        add_facet(name, RangeFacet.new(field, self, options))
       end
-  
-      def execute_request(params)
-        raise NotImplementedError
+
+      def add_field_stats(field) #:nodoc:
+        add_stats(field.name, FieldStats.new(field, self))
       end
-  
-      def solr_response
-        @solr_response ||= @solr_result['response'] || {}
-      end
-  
-      def highlights_for(doc)
+
+      def highlights_for(doc) #:nodoc:
         if @solr_result['highlighting']
           @solr_result['highlighting'][doc['id']]
         end
       end
-  
-      def verified_hits
-        @verified_hits ||= paginate_collection(hits.select { |hit| hit.instance })
+
+      private
+
+      def dsl
+        raise NotImplementedError
       end
-  
+
+      def execute_request(params)
+        raise NotImplementedError
+      end
+
+      def solr_response
+        @solr_response ||= @solr_result['response'] || {}
+      end
+
+      def solr_response_header
+        @solr_response_header ||= @solr_result['responseHeader'] || {}
+      end
+
+      def solr_docs
+        solr_response['docs']
+      end
+
+      def verified_hits
+        @verified_hits ||= paginate_collection(super)
+      end
+
       def paginate_collection(collection)
         PaginatedCollection.new(collection, @query.page, @query.per_page, total)
       end
-  
+
       def add_facet(name, facet)
         @facets << facet
         @facets_by_name[name.to_sym] = facet
       end
-      
+
+      def add_stats(name, stats)
+        @stats << stats
+        @stats_by_name[name.to_sym] = stats
+      end
+
+      def add_group(name, group)
+        @groups << group
+        @groups_by_name[name.to_sym] = group
+      end
+
       # Clear out all the cached ivars so the search can be called again.
       def reset
         @results = @hits = @verified_hits = @total = @solr_response = @doc_ids = nil

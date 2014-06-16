@@ -119,46 +119,50 @@ describe 'ActiveRecord mixin' do
         with :title, 'Bogus Post'
       end.results.should be_empty
     end
-    
-    it 'should use the include option on the data accessor when specified' do
-      Post.should_receive(:all).with(hash_including(:include => [:blog])).and_return([@post])
-      Post.search do
-        with :title, 'Test Post'
-        data_accessor_for(Post).include = [:blog]
-      end.results.should == [@post]
-    end
-
-    it 'should pass :include option from search call to data accessor' do
-      Post.should_receive(:all).with(hash_including(:include => [:blog])).and_return([@post])
-      Post.search(:include => [:blog]) do
-        with :title, 'Test Post'
-      end.results.should == [@post]
-    end
-    
-    it 'should use the select option from search call to data accessor' do
-      Post.should_receive(:all).with(hash_including(:select => 'title, published_at')).and_return([@post])
-      Post.search(:select => 'title, published_at') do
-        with :title, 'Test Post'
-      end.results.should == [@post]
-    end
 
     it 'should not allow bogus options to search' do
       lambda { Post.search(:bogus => :option) }.should raise_error(ArgumentError)
     end
+
+    it 'should pass :include option from search call to data accessor' do
+      Post.search(:include => [:location]) do
+        with :title, 'Test Post'
+      end.data_accessor_for(Post).include.should == [:location]
+    end
+    
+    it 'should use the include option on the data accessor when specified' do
+      @post.update_attribute(:location, Location.create)
+      post = Post.search do
+        with :title, 'Test Post'
+        data_accessor_for(Post).include = [:location]
+      end.results.first
+
+      (Rails.version >= '3.1' ? post.association(:location).loaded? : post.loaded_location?).should be_true # Rails 3.1 removed "loaded_#{association}" method
+    end
+    
+    it 'should use the select option from search call to data accessor' do
+      Post.search(:select => 'id, title, body') do
+        with :title, 'Test Post'
+      end.data_accessor_for(Post).select.should == 'id, title, body'
+    end
     
     it 'should use the select option on the data accessor when specified' do
-      Post.should_receive(:all).with(hash_including(:select => 'title, published_at')).and_return([@post])
       Post.search do
         with :title, 'Test Post'
-        data_accessor_for(Post).select = [:title, :published_at]
-      end.results.should == [@post]
+        data_accessor_for(Post).select = 'id, title, body'
+      end.results.first.attribute_names.sort.should == ['body', 'id', 'title']
     end
     
     it 'should not use the select option on the data accessor when not specified' do
-      Post.should_receive(:all).with(hash_not_including(:select)).and_return([@post])
       Post.search do
         with :title, 'Test Post'
-      end.results.should == [@post]
+      end.results.first.attribute_names.should == Post.first.attribute_names
+    end
+
+    it 'should accept an array as a select option' do
+      Post.search(:select => ['id', 'title', 'body']) do
+        with :title, 'Test Post'
+      end.results.first.attribute_names.sort.should == ['body', 'id', 'title']
     end
 
     it 'should gracefully handle nonexistent records' do
@@ -286,15 +290,20 @@ describe 'ActiveRecord mixin' do
       @posts = Array.new(2) { Post.create }
     end
 
-    describe "when not using batches" do
-      
-      it "should select all if the batch_size is nil" do
-        Post.should_receive(:all).with(:include => []).and_return([])
-        Post.reindex(:batch_size => nil)
-      end
+    it "should use batches if the batch_size is specified" do
+      relation(Post).class.any_instance.should_receive(:find_in_batches)
+      Post.reindex(:batch_size => 50)
+    end
 
+    it "should select all if the batch_size isn't greater than 0" do
+      relation(Post).class.any_instance.should_not_receive(:find_in_batches)
+      Post.reindex(:batch_size => nil)
+      Post.reindex(:batch_size => 0)
+    end
+
+    describe "when not using batches" do
       it "should search for models with includes" do
-        Post.should_receive(:all).with(:include => :author).and_return([])
+        Post.should_receive(:includes).with(:author).and_return(relation(Post))
         Post.reindex(:batch_size => nil, :include => :author)
       end
 

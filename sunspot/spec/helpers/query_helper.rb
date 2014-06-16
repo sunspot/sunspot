@@ -11,7 +11,7 @@ module QueryHelper
   def subqueries(param)
     q = connection.searches.last[:q]
     subqueries = []
-    subqueries = q.scan(%r(_query_:"\{!dismax (.*?)\}(.*?)"))
+    subqueries = q.scan(%r(_query_:"\{!edismax (.*?)\}(.*?)"))
     subqueries.map do |subquery|
       params = {}
       subquery[0].scan(%r((\S+?)='(.+?)')) do |key, value|

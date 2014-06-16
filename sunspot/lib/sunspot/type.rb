@@ -1,7 +1,7 @@
 require 'singleton'
 begin
   require 'geohash'
-rescue LoadError => e
+rescue LoadError
   require 'pr_geohash'
 end
 
@@ -351,6 +351,27 @@ module Sunspot
 
       def to_indexed(value)
         GeoHash.encode(value.lat.to_f, value.lng.to_f, 12)
+      end
+    end
+
+    # 
+    # The Latlon type encodes geographical coordinates in the native
+    # Solr LatLonType.
+    #
+    # The data for this type must respond to the `lat` and `lng` methods; you
+    # can use Sunspot::Util::Coordinates as a wrapper if your source data does
+    # not follow this API.
+    #
+    # Location fields can be used with the geospatial DSL. See the
+    # Geospatial section of the README for examples.
+    #
+    class LatlonType < AbstractType
+      def indexed_name(name)
+        "#{name}_ll"
+      end
+
+      def to_indexed(value)
+        "#{value.lat.to_f},#{value.lng.to_f}"
       end
     end
 

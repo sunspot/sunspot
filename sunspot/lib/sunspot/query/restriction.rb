@@ -68,11 +68,14 @@ module Sunspot
         # on whether this restriction is negated.
         #
         def to_boolean_phrase
+          phrase = []
+          phrase << @field.local_params if @field.respond_to? :local_params
           unless negated?
-            to_positive_boolean_phrase
+            phrase << to_positive_boolean_phrase
           else
-            to_negated_boolean_phrase
+            phrase << to_negated_boolean_phrase
           end
+          phrase.join
         end
 
         # 
@@ -144,6 +147,18 @@ module Sunspot
         end
       end
 
+      class InRadius < Base
+        def initialize(negated, field, lat, lon, radius)
+          @lat, @lon, @radius = lat, lon, radius
+          super negated, field, [lat, lon, radius]
+        end
+
+        private
+          def to_positive_boolean_phrase
+            "_query_:\"{!geofilt sfield=#{@field.indexed_name} pt=#{@lat},#{@lon} d=#{@radius}}\""
+          end
+      end
+
       # 
       # Results must have field with value equal to given value. If the value
       # is nil, results must have no value for the given field.
@@ -185,6 +200,23 @@ module Sunspot
         end
 
         def to_solr_conditional
+          "{* TO #{solr_value}}"
+        end
+      end
+
+      # 
+      # Results must have field with value less or equal to than given value
+      #
+      class LessThanOrEqualTo < Base
+        private
+
+        def solr_value(value = @value)
+          solr_value = super
+          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
+          solr_value
+        end
+
+        def to_solr_conditional
           "[* TO #{solr_value}]"
         end
       end
@@ -193,6 +225,23 @@ module Sunspot
       # Results must have field with value greater than given value
       #
       class GreaterThan < Base
+        private
+
+        def solr_value(value = @value)
+          solr_value = super
+          solr_value = "\"#{solr_value}\"" if solr_value.index(' ')
+          solr_value
+        end
+
+        def to_solr_conditional
+          "{#{solr_value} TO *}"
+        end
+      end
+
+      # 
+      # Results must have field with value greater than or equal to given value
+      #
+      class GreaterThanOrEqualTo < Base
         private
 
         def solr_value(value = @value)
@@ -227,10 +276,23 @@ module Sunspot
       # Results must have field with value included in given collection
       #
       class AnyOf < Base
+
+        def negated?
+          if @value.empty?
+            false
+          else
+            super
+          end
+        end
+
         private
 
         def to_solr_conditional
-          "(#{@value.map { |v| solr_value v } * ' OR '})"
+          if @value.empty?
+            "[* TO *]"
+          else
+            "(#{@value.map { |v| solr_value v } * ' OR '})"
+          end
         end
       end
 
@@ -239,10 +301,22 @@ module Sunspot
       # collection (only makes sense for fields with multiple values)
       #
       class AllOf < Base
+        def negated?
+          if @value.empty?
+            false
+          else
+            super
+          end
+        end
+        
         private
 
         def to_solr_conditional
-          "(#{@value.map { |v| solr_value v } * ' AND '})"
+          if @value.empty?
+            "[* TO *]"
+          else
+            "(#{@value.map { |v| solr_value v } * ' AND '})"
+          end
         end
       end
 

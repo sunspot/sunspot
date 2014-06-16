@@ -5,6 +5,11 @@ module Sunspot
     #
     class FunctionQuery 
       include RSolr::Char
+
+      def ^(y)
+        @boost_amount = y
+        self
+      end
     end
 
     #
@@ -16,7 +21,7 @@ module Sunspot
       end
 
       def to_s
-        Type.to_literal(@constant)
+        Type.to_literal(@constant) << (@boost_amount ? "^#{@boost_amount}" : "")
       end
     end
 
@@ -29,7 +34,7 @@ module Sunspot
       end
 
       def to_s
-        "#{escape(@field.indexed_name)}"
+        "#{escape(@field.indexed_name)}" << (@boost_amount ? "^#{@boost_amount}" : "")
       end
     end
 
@@ -45,7 +50,7 @@ module Sunspot
 
       def to_s
         params = @function_args.map { |arg| arg.to_s }.join(",")
-        "#{@function_name}(#{params})"
+        "#{@function_name}(#{params})" << (@boost_amount ? "^#{@boost_amount}" : "")
       end
     end
   end

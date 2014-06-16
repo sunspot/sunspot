@@ -9,6 +9,15 @@ describe 'specs with Sunspot stubbed' do
     @post = Post.create!
   end
 
+  it 'should batch' do
+    foo = mock('Foo')
+    block = lambda { foo.bar }
+
+    foo.should_receive(:bar)
+
+    Sunspot.batch(&block)
+  end
+
   it 'should not send index to session' do
     @session.should_not_receive(:index)
     @post.index
@@ -54,6 +63,11 @@ describe 'specs with Sunspot stubbed' do
     Post.remove_all_from_index!
   end
 
+  it 'should not send optimize to session' do
+    @session.should_not_receive(:optimize)
+    Sunspot.optimize
+  end
+
   it 'should return false for dirty?' do
     @session.should_not_receive(:dirty?)
     Sunspot.dirty?.should == false
@@ -79,11 +93,6 @@ describe 'specs with Sunspot stubbed' do
     Post.search
   end
 
-  it 'should not execute a search when #search called' do
-    @session.should_not_receive(:search)
-    Post.search
-  end
-
   it 'should not execute a search when #search called with parameters' do
     @session.should_not_receive(:search)
     Post.search(:include => :blog, :select => 'id, title')
@@ -92,6 +101,11 @@ describe 'specs with Sunspot stubbed' do
   it 'should return a new search' do
     @session.should_not_receive(:new_search)
     Sunspot.new_search(Post).should respond_to(:execute)
+  end
+
+  it 'should not send more_like_this to session' do
+    @session.should_not_receive(:more_like_this)
+    Sunspot.more_like_this(@post)
   end
 
   describe 'stub search' do
@@ -107,16 +121,24 @@ describe 'specs with Sunspot stubbed' do
       @search.hits.should == []
     end
 
+    it 'should return the same for raw_results as hits' do
+      @search.raw_results.should == @search.hits
+    end
+
     it 'should return zero total' do
       @search.total.should == 0
     end
 
-    it 'should return nil for a given facet' do
-      @search.facet(:category_id).should be_nil
+    it 'should return empty results for a given facet' do
+      @search.facet(:category_id).rows.should == []
     end
 
-    it 'should return nil for a given dynamic facet' do
-      @search.dynamic_facet(:custom).should be_nil
+    it 'should return empty results for a given dynamic facet' do
+      @search.dynamic_facet(:custom).rows.should == []
+    end
+
+    it 'should return empty array if listing facets' do
+      @search.facets.should == []
     end
   end
 end

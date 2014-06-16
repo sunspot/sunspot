@@ -8,10 +8,11 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Mat Brown', 'Peer Allan', 'Dmitriy Dzema', 'Benjamin Krause', 'Marcel de Graaf', 'Brandon Keepers', 'Peter Berkenbosch',
                   'Brian Atkinson', 'Tom Coleman', 'Matt Mitchell', 'Nathan Beyer', 'Kieran Topping', 'Nicolas Braem', 'Jeremy Ashkenas',
-                  'Dylan Vaughn', 'Brian Durand', 'Sam Granieri', 'Nick Zadrozny', 'Jason Ronallo']
+                  'Dylan Vaughn', 'Brian Durand', 'Sam Granieri', 'Nick Zadrozny', 'Jason Ronallo', 'Ryan Wallace', 'Nicholas Jakobsen']
   s.email       = ["mat@patch.com"]
   s.homepage    = "http://outoftime.github.com/sunspot"
   s.summary = 'Library for expressive, powerful interaction with the Solr search engine'
+  s.license = 'MIT'
   s.description = <<-TEXT
     Sunspot is a library providing a powerful, all-ruby API for the Solr search engine. Sunspot manages the configuration of persistent
     Ruby classes for search and indexing and exposes Solr's most powerful features through a collection of DSLs. Complex search operations
@@ -25,12 +26,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'rsolr', '1.0.2'
-  s.add_dependency 'escape', '0.0.4'
-  s.add_dependency 'pr_geohash', '~> 1.0'
+  s.add_dependency 'rsolr', '~>1.0.7'
+  s.add_dependency 'pr_geohash', '~>1.0'
 
   s.add_development_dependency 'rspec', '~>2.6.0'
-  s.add_development_dependency 'hanna'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                   '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation' <<

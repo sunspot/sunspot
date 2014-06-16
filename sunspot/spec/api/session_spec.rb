@@ -77,13 +77,25 @@ describe 'Session' do
 
     it 'should open connection with defaults if nothing specified' do
       Sunspot.commit
-      connection.opts[:url].should == 'http://127.0.0.1:8983/solr'
+      connection.opts[:url].should == 'http://127.0.0.1:8983/solr/default'
     end
 
     it 'should open a connection with custom host' do
       Sunspot.config.solr.url = 'http://127.0.0.1:8981/solr'
       Sunspot.commit
       connection.opts[:url].should == 'http://127.0.0.1:8981/solr'
+    end
+
+    it 'should open a connection with custom read timeout' do
+      Sunspot.config.solr.read_timeout = 0.5
+      Sunspot.commit
+      connection.opts[:read_timeout].should == 0.5
+    end
+
+    it 'should open a connection with custom open timeout' do
+      Sunspot.config.solr.open_timeout = 0.5
+      Sunspot.commit
+      connection.opts[:open_timeout].should == 0.5
     end
   end
 
@@ -205,7 +217,7 @@ describe 'Session' do
 
   context 'session proxy' do
     it 'should send messages to manually assigned session proxy' do
-      stub_session = stub!('session')
+      stub_session = stub('session')
       Sunspot.session = stub_session
       post = Post.new
       stub_session.should_receive(:index).with(post)

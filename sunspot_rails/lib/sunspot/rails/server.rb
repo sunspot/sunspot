@@ -1,9 +1,6 @@
 module Sunspot
   module Rails
     class Server < Sunspot::Solr::Server
-      # ActiveSupport log levels are integers; this array maps them to the
-      # appropriate java.util.logging.Level constant
-      LOG_LEVELS = %w(FINE INFO WARNING SEVERE SEVERE INFO)
 
       # 
       # Directory in which to store PID files
@@ -45,18 +42,21 @@ module Sunspot
       end
 
       # 
+      # Address on which to run Solr
+      #
+      def bind_address
+        configuration.bind_address
+      end
+
+      # 
       # Port on which to run Solr
       #
       def port
         configuration.port
       end
 
-      #
-      # Severity level for logging. This is based on the severity level for the
-      # Rails logger.
-      #
       def log_level
-        LOG_LEVELS[::Rails.logger.level]
+        configuration.log_level
       end
 
       # 

@@ -10,21 +10,21 @@ shared_examples_for 'fulltext query' do
     search do
       keywords ''
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
+    connection.should_not have_last_search_with(:defType => 'edismax')
   end
 
   it 'ignores keywords if nil' do
     search do
       keywords nil
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
+    connection.should_not have_last_search_with(:defType => 'edismax')
   end
 
   it 'ignores keywords with only whitespace' do
     search do
       keywords "  \t"
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
+    connection.should_not have_last_search_with(:defType => 'edismax')
   end
 
   it 'gracefully ignores keywords block if keywords ignored' do
@@ -37,7 +37,7 @@ shared_examples_for 'fulltext query' do
     search do
       keywords 'keyword search'
     end
-    connection.should have_last_search_with(:defType => 'dismax')
+    connection.should have_last_search_with(:defType => 'edismax')
   end
 
   it 'searches types in filter query if keywords used' do
@@ -224,7 +224,7 @@ shared_examples_for 'fulltext query' do
         end
       end
     end
-    connection.should have_last_search_with(:bq => ['average_rating_ft:[2\.0 TO *]^2.0'])
+    connection.should have_last_search_with(:bq => ['average_rating_ft:{2\.0 TO *}^2.0'])
   end
 
   it 'creates multiple boost queries' do
@@ -240,7 +240,7 @@ shared_examples_for 'fulltext query' do
     end
     connection.should have_last_search_with(
       :bq => [
-        'average_rating_ft:[2\.0 TO *]^2.0',
+        'average_rating_ft:{2\.0 TO *}^2.0',
         'featured_bs:true^1.5'
       ]
     )

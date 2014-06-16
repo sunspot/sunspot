@@ -14,6 +14,7 @@ module Sunspot
       @stored_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @more_like_this_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @dsl = DSL::Fields.new(self)
+      @document_boost_extractor = nil
       add_field_factory(:class, Type::ClassType.instance)
     end
 
@@ -35,6 +36,12 @@ module Sunspot
       if more_like_this
         @more_like_this_field_factories_cache[field_factory.name] << field_factory
       end
+    end
+
+    def add_join_field_factory(name, type, options = {}, &block)
+      field_factory = FieldFactory::Join.new(name, type, options, &block)
+      @field_factories[field_factory.signature] = field_factory
+      @field_factories_cache[field_factory.name] = field_factory
     end
 
     # 

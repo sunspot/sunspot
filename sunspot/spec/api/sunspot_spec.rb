@@ -4,11 +4,11 @@ describe Sunspot do
 
   describe "setup" do
     it "should register the class in Sunspot.searchable" do
-      Sunspot.setup(Blog) do
+      Sunspot.setup(User) do
         text :name
       end
       Sunspot.searchable.should_not be_empty
-      Sunspot.searchable.should include(Blog)
+      Sunspot.searchable.should include(User)
     end
   end
 

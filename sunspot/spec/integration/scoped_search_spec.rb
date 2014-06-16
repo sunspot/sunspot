@@ -33,24 +33,48 @@ describe 'scoped_search' do
 
       it 'should filter by less than' do
         results = Sunspot.search(clazz) { with(field).less_than values[2] }.results
-        (0..2).each { |i| results.should include(@objects[i]) }
-        (3..4).each { |i| results.should_not include(@objects[i]) }
+        (0..1).each { |i| results.should include(@objects[i]) }
+        (2..4).each { |i| results.should_not include(@objects[i]) }
       end
 
       it 'should reject by less than' do
         results = Sunspot.search(clazz) { without(field).less_than values[2] }.results
+        (0..1).each { |i| results.should_not include(@objects[i]) }
+        (2..4).each { |i| results.should include(@objects[i]) }
+      end
+
+      it 'should filter by less than or equal to' do
+        results = Sunspot.search(clazz) { with(field).less_than_or_equal_to values[2] }.results
+        (0..2).each { |i| results.should include(@objects[i]) }
+        (3..4).each { |i| results.should_not include(@objects[i]) }
+      end
+
+      it 'should reject by less than or equal to' do
+        results = Sunspot.search(clazz) { without(field).less_than_or_equal_to values[2] }.results
         (0..2).each { |i| results.should_not include(@objects[i]) }
         (3..4).each { |i| results.should include(@objects[i]) }
       end
 
       it 'should filter by greater than' do
         results = Sunspot.search(clazz) { with(field).greater_than values[2] }.results
+        (3..4).each { |i| results.should include(@objects[i]) }
+        (0..2).each { |i| results.should_not include(@objects[i]) }
+      end
+
+      it 'should reject by greater than' do
+        results = Sunspot.search(clazz) { without(field).greater_than values[2] }.results
+        (3..4).each { |i| results.should_not include(@objects[i]) }
+        (0..2).each { |i| results.should include(@objects[i]) }
+      end
+
+      it 'should filter by greater than or equal to' do
+        results = Sunspot.search(clazz) { with(field).greater_than_or_equal_to values[2] }.results
         (2..4).each { |i| results.should include(@objects[i]) }
         (0..1).each { |i| results.should_not include(@objects[i]) }
       end
 
       it 'should reject by greater than' do
-        results = Sunspot.search(clazz) { without(field).greater_than values[2] }.results
+        results = Sunspot.search(clazz) { without(field).greater_than_or_equal_to values[2] }.results
         (2..4).each { |i| results.should_not include(@objects[i]) }
         (0..1).each { |i| results.should include(@objects[i]) }
       end
@@ -116,6 +140,14 @@ describe 'scoped_search' do
 
     it 'should filter for exact match for false' do
       Sunspot.search(Post) { with(:featured, false) }.results.should == [@posts[1]]
+    end
+  end
+
+  describe 'Legacy (static) fields' do
+    it "allows for using symbols in defining static field names" do
+      Sunspot.remove_all
+      Sunspot.index!(legacy = Post.new(:title => "foo"))
+      Sunspot.search(Post) { with(:legacy, "legacy foo") }.results.should == [legacy]
     end
   end
 
@@ -234,6 +266,44 @@ describe 'scoped_search' do
       end.results.should == posts[0..1]
     end
 
+    it 'should return results, ignoring any restriction in a disjunction that has been passed an empty array' do
+      posts = (1..3).map { |i| Post.new(:blog_id => i)}
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        with(:blog_id, [])
+      end.results.should == posts
+    end
+
+    it 'should return results, ignoring any restriction in a negative disjunction that has been passed an empty array' do
+      posts = (1..3).map { |i| Post.new(:blog_id => i)}
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        without(:blog_id, [])
+      end.results.should == posts
+    end 
+
+    it 'should return results, ignoring any restriction in a conjunction that has been passed an empty array' do
+      posts = (1..3).map { |i| Post.new(:blog_id => i)}
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        all_of do
+          with(:blog_id, 1)
+          with(:blog_id, [])
+        end
+      end.results.should == posts[0..0]
+    end
+
+    it 'should return results, ignoring any restriction in a negative conjunction that has been passed an empty array' do
+      posts = (1..3).map { |i| Post.new(:blog_id => i)}
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        all_of do
+          with(:blog_id, 1)
+          without(:blog_id, [])
+        end
+      end.results.should == posts[0..0]
+    end
+
     it 'should return results that match a nested conjunction in a disjunction' do
       posts = [
         Post.new(:title => 'No', :blog_id => 1),
@@ -340,15 +410,81 @@ describe 'scoped_search' do
   end
 
   describe 'ordering by random' do
-    it 'should order randomly (run this test again if it fails)' do
+    before do
       Sunspot.remove_all
       Sunspot.index!(Array.new(100) { Post.new })
+    end
+
+    it 'should order randomly (run this test again if it fails)' do
       result_sets = Array.new(2) do
-        Sunspot.search(Post) { order_by_random }.results.map do |result|
+        Sunspot.search(Post) { order_by(:random) }.results.map do |result|
           result.id
         end
       end
       result_sets[0].should_not == result_sets[1]
+    end
+
+    # This could fail if the random set returned just happens to be the same as the last random set (the nature of randomness)
+    it 'should order randomly using the order_by function and passing a direction' do
+      result_sets = Array.new(2) do
+        Sunspot.search(Post) { order_by(:random, :desc) }.results.map do |result|
+          result.id
+        end
+      end
+      result_sets[0].should_not == result_sets[1]
+    end
+
+    context 'when providing a custom seed value' do
+      before do
+        @first_results = Sunspot.search(Post) do
+          order_by(:random, :seed => 12345)
+        end.results.map { |result| result.id }
+      end
+
+      # This could fail if the random set returned just happens to be the same as the last random set (the nature of randomness)
+      it 'should return different results when passing a different seed value' do
+        next_results = Sunspot.search(Post) do
+          order_by(:random, :seed => 54321)
+        end.results.map { |result| result.id }
+        next_results.should_not == @first_results
+      end
+
+      it 'should return the same results when passing the same seed value' do
+        next_results = Sunspot.search(Post) do
+          order_by(:random, :seed => 12345)
+        end.results.map { |result| result.id }
+        next_results.should == @first_results
+      end
+    end
+  end
+
+  describe 'ordering by function' do
+    before :all do
+      Sunspot.remove_all
+      @p1 = Post.new(:blog_id => 1, :category_ids => [3])
+      @p2 = Post.new(:blog_id => 2, :category_ids => [1])
+      Sunspot.index([@p1,@p2])
+      Sunspot.commit
+    end
+    it 'should order by sum' do
+      # 1+3 > 2+1
+      search = Sunspot.search(Post) {order_by_function :sum, :blog_id, :primary_category_id, :desc}
+      search.results.first.should == @p1
+    end
+    it 'should order by product and sum' do
+      # 1 * (1+3) < 2 * (2+1)
+      search = Sunspot.search(Post) { order_by_function :product, :blog_id, [:sum,:blog_id,:primary_category_id], :desc}
+      search.results.first.should == @p2
+    end
+    it 'should accept string literals' do
+      # (1 * -2) > (2 * -2)
+      search = Sunspot.search(Post) {order_by_function :product, :blog_id, '-2', :desc}
+      search.results.first.should == @p1
+    end
+    it 'should accept non-string literals' do
+      # (1 * -2) > (2 * -2)
+      search = Sunspot.search(Post) {order_by_function :product, :blog_id, -2, :desc}
+      search.results.first.should == @p1
     end
   end
 end

@@ -10,6 +10,9 @@ module Sunspot
         else
           @scope.add_positive_restriction(TypeField.instance, Restriction::AnyOf, types)
         end
+
+        @pagination = nil
+        @parameter_adjustment = nil
       end
 
       def solr_parameter_adjustment=(block)
@@ -18,6 +21,11 @@ module Sunspot
 
       def add_sort(sort)
         @sort << sort
+      end
+
+      def add_group(group)
+        @components << group
+        group
       end
 
       def add_field_facet(facet)
@@ -35,12 +43,23 @@ module Sunspot
         function
       end
 
-      def paginate(page, per_page)
+      def add_geo(geo)
+        @components << geo
+        geo
+      end
+
+      def add_stats(stats)
+        @components << stats
+        stats
+      end
+
+      def paginate(page, per_page, offset = nil)
         if @pagination
+          @pagination.offset = offset
           @pagination.page = page
           @pagination.per_page = per_page
         else
-          @components << @pagination = Pagination.new(page, per_page)
+          @components << @pagination = Pagination.new(page, per_page, offset)
         end
       end
 

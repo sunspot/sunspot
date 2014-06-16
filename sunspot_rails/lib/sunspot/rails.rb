@@ -11,7 +11,7 @@ module Sunspot #:nodoc:
     begin
       require 'sunspot_solr'
       autoload :Server, File.join(File.dirname(__FILE__), 'rails', 'server')
-    rescue LoadError => e
+    rescue LoadError
       # We're fine
     end
 
@@ -27,7 +27,9 @@ module Sunspot #:nodoc:
       end
 
       def build_session(configuration = self.configuration)
-        if configuration.has_master?
+        if configuration.disabled?
+          StubSessionProxy.new(Sunspot.session)
+        elsif configuration.has_master?
           SessionProxy::MasterSlaveSessionProxy.new(
             SessionProxy::ThreadLocalSessionProxy.new(master_config(configuration)),
             SessionProxy::ThreadLocalSessionProxy.new(slave_config(configuration))
@@ -41,21 +43,29 @@ module Sunspot #:nodoc:
 
       def master_config(sunspot_rails_configuration)
         config = Sunspot::Configuration.build
-        config.solr.url = URI::HTTP.build(
+        builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
+        config.solr.url = builder.build(
           :host => sunspot_rails_configuration.master_hostname,
           :port => sunspot_rails_configuration.master_port,
-          :path => sunspot_rails_configuration.master_path
+          :path => sunspot_rails_configuration.master_path,
+          :userinfo => sunspot_rails_configuration.userinfo
         ).to_s
+        config.solr.read_timeout = sunspot_rails_configuration.read_timeout
+        config.solr.open_timeout = sunspot_rails_configuration.open_timeout
         config
       end
 
       def slave_config(sunspot_rails_configuration)
         config = Sunspot::Configuration.build
-        config.solr.url = URI::HTTP.build(
+        builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
+        config.solr.url = builder.build(
           :host => sunspot_rails_configuration.hostname,
           :port => sunspot_rails_configuration.port,
-          :path => sunspot_rails_configuration.path
+          :path => sunspot_rails_configuration.path,
+          :userinfo => sunspot_rails_configuration.userinfo
         ).to_s
+        config.solr.read_timeout = sunspot_rails_configuration.read_timeout
+        config.solr.open_timeout = sunspot_rails_configuration.open_timeout
         config
       end
     end

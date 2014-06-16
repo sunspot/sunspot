@@ -45,22 +45,30 @@ module Sunspot
       # 
       # See Sunspot.remove_by_id
       #
-      def remove_by_id(clazz, id)
-        session_for_index_id(
-          Adapters::InstanceAdapter.index_id_for(clazz, id)
-        ).remove_by_id(clazz, id)
+      def remove_by_id(clazz, *ids)
+        ids.flatten!
+        ids_by_session(clazz, ids).each do |session, ids|
+          session.remove_by_id(clazz, ids)
+        end
       end
 
       # 
       # See Sunspot.remove_by_id!
       #
-      def remove_by_id!(clazz, id)
-        session_for_index_id(
-          Adapters::InstanceAdapter.index_id_for(clazz, id)
-        ).remove_by_id!(clazz, id)
+      def remove_by_id!(clazz, *ids)
+        ids.flatten!
+        ids_by_session(clazz, ids).each do |session, ids|
+          session.remove_by_id!(clazz, ids)
+        end
       end
 
       private
+
+      def ids_by_session(clazz, ids)
+        ids.group_by do |id|
+          session_for_index_id(Adapters::InstanceAdapter.index_id_for(clazz, id))
+        end
+      end
 
       def session_for_index_id(index_id)
         @sessions[id_hash(index_id) % @sessions.length]

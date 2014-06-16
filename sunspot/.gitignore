@@ -1,5 +1,7 @@
 sunspot-solr.pid
 *.swp
+*.swo
+*~
 coverage
 pkg
 /doc

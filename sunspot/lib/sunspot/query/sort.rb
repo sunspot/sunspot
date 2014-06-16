@@ -76,8 +76,18 @@ module Sunspot
       # (usually) randomly.
       #
       class RandomSort < Abstract
+        def initialize(options_or_direction=nil)
+          if options_or_direction.is_a?(Hash)
+            @seed, @direction = options_or_direction[:seed], options_or_direction[:direction]
+					else
+            @direction = options_or_direction
+          end
+
+          @direction = (@direction || :asc).to_sym
+        end
+
         def to_param
-          "random_#{rand(1<<16)} #{direction_for_solr}"
+          "random_#{@seed || rand(1<<6)} #{direction_for_solr}"
         end
       end
 
@@ -88,6 +98,55 @@ module Sunspot
       class ScoreSort < Abstract
         def to_param
           "score #{direction_for_solr}"
+        end
+      end
+
+      #
+      # A GeodistSort sorts by distance from a given point.
+      #
+      class GeodistSort < FieldSort
+        def initialize(field, lat, lon, direction)
+          @lat, @lon = lat, lon
+          super(field, direction)
+        end
+
+        def to_param
+          "geodist(#{@field.indexed_name.to_sym},#{@lat},#{@lon}) #{direction_for_solr}"
+        end
+      end
+
+      #
+      # A FunctionSort sorts by solr function.
+      # FunctionComp recursively parses arguments for nesting
+      #
+      class FunctionSort < Abstract
+        attr_reader :comp
+        def initialize(setup,args)
+          @direction = args.pop
+          @comp = FunctionComp.new(setup,args)
+        end
+        def to_param
+          "#{comp.to_s} #{direction_for_solr}"
+        end
+      end
+      class FunctionComp
+        attr_accessor :function,:fields
+        def initialize(setup,args)
+          @function=args.shift
+          @fields = []
+          args.each do |argument|
+            case argument.class.name
+            when "Array"
+              @fields<< FunctionComp.new(setup,argument)
+            when "Symbol"
+              @fields<< setup.field(argument).indexed_name
+            else
+              @fields<< argument
+            end
+          end
+        end
+        def to_s
+          "#{function}(#{fields.map(&:to_s).join(",")})"
         end
       end
     end

@@ -1,3 +1,5 @@
+require 'sunspot/batcher'
+
 module Sunspot
   # 
   # This class presents a service for adding, updating, and removing data
@@ -22,10 +24,10 @@ module Sunspot
     #
     def add(model)
       documents = Util.Array(model).map { |m| prepare(m) }
-      if @batch.nil?
-        add_documents(documents)
+      if batcher.batching?
+        batcher.concat(documents)
       else
-        @batch.concat(documents)
+        add_documents(documents)
       end
     end
 
@@ -42,6 +44,7 @@ module Sunspot
     # Remove the model from the Solr index by specifying the class and ID
     #
     def remove_by_id(class_name, *ids)
+      ids.flatten!
       @connection.delete_by_id(
         ids.map { |id| Adapters::InstanceAdapter.index_id_for(class_name, id) }
       )
@@ -69,18 +72,21 @@ module Sunspot
     # Start batch processing
     #
     def start_batch
-      @batch = []
+      batcher.start_new
     end
 
     #
     # Write batch out to Solr and clear it
     #
     def flush_batch
-      add_documents(@batch)
-      @batch = nil
+      add_documents(batcher.end_current)
     end
 
     private
+
+    def batcher
+      @batcher ||= Batcher.new
+    end
 
     # 
     # Convert documents into hash of indexed properties
