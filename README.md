@@ -864,7 +864,7 @@ you can also get that result:
       spellcheck :count => 3
     end
 
-   search.spellcheck_collation # => 'coffee market'
+    search.spellcheck_collation # => 'coffee market'
 
 ## Indexes In Depth
 
