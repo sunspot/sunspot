@@ -17,7 +17,7 @@ module Sunspot
       #
       attr_reader :facets, :groups, :stats
       attr_reader :query #:nodoc:
-      attr_accessor :request_handler
+      attr_accessor :request_handler, :solr_result
 
       include HitEnumerable
 
@@ -252,6 +252,33 @@ module Sunspot
         if @solr_result['highlighting']
           @solr_result['highlighting'][doc['id']]
         end
+      end
+
+      def raw_suggestions
+        ["spellcheck", "suggestions"].inject(@solr_result){|h,k| h && h[k]}
+      end
+
+      def suggestions
+        suggestions = raw_suggestions
+        return nil unless suggestions.is_a?(Array)
+
+        suggestions_hash = {}
+        index = -1
+        suggestions.each do |sug|
+          index += 1
+          next unless sug.is_a?(String)
+          break unless suggestions.count > index + 1
+          suggestions_hash[sug] = suggestions[index+1]
+        end
+        suggestions_hash
+      end
+
+      def all_suggestions
+        suggestions.inject([]){|all, current| all += current}
+      end
+
+      def collation
+        suggestions["collation"] || "" if suggestions
       end
 
       private

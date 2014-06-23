@@ -105,6 +105,10 @@ module Sunspot
       end
       alias_method :keywords, :fulltext
 
+      def spellcheck options = {}
+        @query.spellcheck(options)
+      end
+
       def with(*args)
         case args.first
         when String, Symbol

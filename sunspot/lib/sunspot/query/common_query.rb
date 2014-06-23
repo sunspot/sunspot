@@ -85,6 +85,9 @@ module Sunspot
         @pagination.per_page if @pagination
       end
 
+      def spellcheck options = {}
+        @components << Spellcheck.new(options)
+      end
 
       private
 
