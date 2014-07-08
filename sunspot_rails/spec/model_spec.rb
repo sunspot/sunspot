@@ -113,6 +113,48 @@ describe 'ActiveRecord mixin' do
         with :title, 'Test Post'
       end.results.should == [@post]
     end
+    
+    it 'should return autocomplete results' do
+      @post = PostWithAutocomplete.create!(:title => 'Test Post')
+      @post.index!
+      PostWithAutocomplete.search do
+        keywords 'Test Pos'
+      end.results.should == [@post]
+    end
+    
+    it 'should return exact results' do
+      @post1 = PostWithExact.create!(:title => 'a!b')
+      @post1.index!
+      @post2 = PostWithExact.create!(:title => 'a?b')
+      @post2.index!
+      PostWithExact.search do
+        keywords 'a!b'
+      end.results.should == [@post1]
+    end
+    
+    it 'should return stemmed results' do
+      @post = PostWithEnglish.create!(:title => 'man running')
+      @post.index!
+      PostWithEnglish.search do
+        keywords 'man runs'
+      end.results.should == [@post]
+    end
+    
+    it 'should return French stemmed results' do
+      @post = PostWithFrench.create!(:title => 'continuel')
+      @post.index!
+      PostWithFrench.search do
+        keywords 'continuellement'
+      end.results.should == [@post]
+    end
+    
+    it 'should return phonetic results' do
+      @post = PostWithPhonetic.create!(:title => 'Zach Galifianakis')
+      @post.index!
+      PostWithPhonetic.search do
+        keywords 'zack galafanackes'
+      end.results.should == [@post]
+    end
 
     it 'should not return results excluded by search' do
       Post.search do

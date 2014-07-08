@@ -27,6 +27,20 @@ module Sunspot
       #
       # :boost<Float>::
       #   Index-time boost that should be applied to this field for keyword search
+      # :autocomplete<Boolean>::
+      #   Index "edge ngrams" to facilitate autocomplete queries.
+      # :phonetic<Boolean>::
+      #   Index the double-metaphone (http://en.wikipedia.org/wiki/Metaphone#Double_Metaphone)
+      #   representation of each token.  This will cause the lang and autocomplete options
+      #   to be ignored.
+      # :exact<Boolean>::
+      #   Index the exact representation of the text, split on regex word boundaries (\b).  This may
+      #   be useful to index source code or similar data.
+      # :lang<String>::
+      #   Adapt the indexing process to optimize for this language.  This turns on 
+      #   language-specific stemming (http://en.wikipedia.org/wiki/Stemming) and 
+      #   stopwords (http://en.wikipedia.org/wiki/Stopwords).  The language should be called
+      #   by its ISO code (e.g. English is en).
       # :default_boost<Float>::
       #   Default search-time boost to apply to this field during keyword
       #   search. Can be overriden with DSL::Fulltext#fields or

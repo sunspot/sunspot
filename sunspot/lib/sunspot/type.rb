@@ -91,8 +91,29 @@ module Sunspot
     # available to keyword search.
     #
     class TextType < AbstractType
-      def indexed_name(name) #:nodoc:
-        "#{name}_text"
+      VALID_LANGUAGES = %w[
+        ar bg ca cjk cz da de el en es eu exact fa fi fr ga gl hi hu hy 
+        id it ja phonetic lv nl no pt ro ru sv th tr
+        ]
+        
+      def indexed_name(name, options = {}) #:nodoc:
+        lang = options[:lang]
+        if options[:phonetic]
+          lang = "phonetic" 
+          options[:autocomplete] = false
+          if options[:exact]
+            raise "Cannot specify both exact and phonetic on #{name}"
+          end
+        end
+        lang = "exact" if options[:exact]
+        
+        if lang && !VALID_LANGUAGES.include?(lang)
+          raise "#{lang} is not a recognized language"
+        end
+        
+        lang_str = lang ? "_#{lang}" : ""
+        ac_str = options[:autocomplete] ? "_ac" : ""
+        "#{name}_text#{lang_str}#{ac_str}"
       end
 
       def to_indexed(value) #:nodoc:
@@ -116,7 +137,7 @@ module Sunspot
     # The String type represents string data.
     #
     class StringType < AbstractType
-      def indexed_name(name) #:nodoc:
+      def indexed_name(name, options = {}) #:nodoc:
         "#{name}_s"
       end
 
@@ -134,7 +155,7 @@ module Sunspot
     # The Integer type represents integers.
     #
     class IntegerType < AbstractType
-      def indexed_name(name) #:nodoc:
+      def indexed_name(name, options = {}) #:nodoc:
         "#{name}_i"
       end
 
@@ -156,7 +177,7 @@ module Sunspot
     # The Long type indexes Ruby Fixnum and Bignum numbers into Java Longs
     #
     class LongType < IntegerType
-      def indexed_name(name) #:nodoc:
+      def indexed_name(name, options = {}) #:nodoc:
         "#{name}_l"
       end
     end
@@ -165,7 +186,7 @@ module Sunspot
     # The Float type represents floating-point numbers.
     #
     class FloatType < AbstractType
-      def indexed_name(name) #:nodoc:
+      def indexed_name(name, options = {}) #:nodoc:
         "#{name}_f"
       end
 
@@ -188,7 +209,7 @@ module Sunspot
     # Double fields
     #
     class DoubleType < FloatType
-      def indexed_name(name)
+      def indexed_name(name, options = {})
         "#{name}_e"
       end
     end
@@ -200,7 +221,7 @@ module Sunspot
     class TimeType < AbstractType
       XMLSCHEMA = "%Y-%m-%dT%H:%M:%SZ"
 
-      def indexed_name(name) #:nodoc:
+      def indexed_name(name, options = {}) #:nodoc:
         "#{name}_d"
       end
 
@@ -271,7 +292,7 @@ module Sunspot
     # Store integers in a TrieField, which makes range queries much faster.
     #
     class TrieIntegerType < IntegerType
-      def indexed_name(name)
+      def indexed_name(name, options = {})
         "#{super}t"
       end
     end
@@ -280,7 +301,7 @@ module Sunspot
     # Store floats in a TrieField, which makes range queries much faster.
     #
     class TrieFloatType < FloatType
-      def indexed_name(name)
+      def indexed_name(name, options = {})
         "#{super}t"
       end
     end
@@ -292,7 +313,7 @@ module Sunspot
     # standpoint of the library's API.
     #
     class TrieTimeType < TimeType
-      def indexed_name(name)
+      def indexed_name(name, options = {})
         "#{super}t"
       end
     end
@@ -303,7 +324,7 @@ module Sunspot
     # indexed at all; only +false+ will be indexed with a false value.
     #
     class BooleanType < AbstractType
-      def indexed_name(name) #:nodoc:
+      def indexed_name(name, options = {}) #:nodoc:
         "#{name}_b"
       end
 
@@ -345,7 +366,7 @@ module Sunspot
     #   end
     #
     class LocationType < AbstractType
-      def indexed_name(name)
+      def indexed_name(name, options = {})
         "#{name}_s"
       end
 
@@ -366,7 +387,7 @@ module Sunspot
     # Geospatial section of the README for examples.
     #
     class LatlonType < AbstractType
-      def indexed_name(name)
+      def indexed_name(name, options = {})
         "#{name}_ll"
       end
 
@@ -376,7 +397,7 @@ module Sunspot
     end
 
     class ClassType < AbstractType
-      def indexed_name(name) #:nodoc:
+      def indexed_name(name, options = {}) #:nodoc:
         'class_name'
       end
 
