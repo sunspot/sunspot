@@ -2,25 +2,20 @@ module Sunspot
   module Query
 
     #
-    # Solr full-text queries use Solr's DisMaxRequestHandler, a search handler
-    # designed to process user-entered phrases, and search for individual
-    # words across a union of several fields.
+    # Solr full-text queries use Solr's JoinRequestHandler.
     #
-    class Dismax < AbstractFulltext
+    class Join < AbstractFulltext
       attr_writer :minimum_match, :phrase_slop, :query_phrase_slop, :tie
 
-      def initialize(keywords)
+      def initialize(keywords, target, from, to)
         @keywords = keywords
+        @target = target
+        @from = from
+        @to = to
+
         @fulltext_fields = {}
-        @boost_queries = []
-        @boost_functions = []
-        @highlights = []
 
         @minimum_match = nil
-        @phrase_fields = nil
-        @phrase_slop = nil
-        @query_phrase_slop = nil
-        @tie = nil
       end
 
       #
@@ -30,31 +25,8 @@ module Sunspot
         params = { :q => @keywords }
         params[:fl] = '* score'
         params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
-        params[:defType] = 'edismax'
+        params[:defType] = 'join'
         params[:mm] = @minimum_match if @minimum_match
-        params[:ps] = @phrase_slop if @phrase_slop
-        params[:qs] = @query_phrase_slop if @query_phrase_slop
-        params[:tie] = @tie if @tie
-
-        if @phrase_fields
-          params[:pf] = @phrase_fields.map { |field| field.to_boosted_field }.join(' ')
-        end
-
-        unless @boost_queries.empty?
-          params[:bq] = @boost_queries.map do |boost_query|
-            boost_query.to_boolean_phrase
-          end
-        end
-
-        unless @boost_functions.empty?
-          params[:bf] = @boost_functions.map do |boost_function|
-            boost_function.to_s
-          end
-        end
-
-        @highlights.each do |highlight|
-          Sunspot::Util.deep_merge!(params, highlight.to_params)
-        end
 
         params
       end
@@ -69,23 +41,26 @@ module Sunspot
 
         keywords = escape_quotes(params.delete(:q))
         options = params.map { |key, value| escape_param(key, value) }.join(' ')
+        q_name = "q#{@target.name}#{self.object_id}"
+        fq_name = "f#{q_name}"
 
-        { :q => "_query_:\"{!edismax #{options}}#{keywords}\"" }
+        {
+          :q => "_query_:\"{!join from=#{@from} to=#{@to} v=$#{q_name} fq=$#{fq_name}}\"",
+          q_name => "_query_:\"{!edismax #{options}}#{keywords}\"",
+          fq_name => "type:#{@target.name}"
+        }
       end
 
       #
       # Assign a new boost query and return it.
       #
       def create_boost_query(factor)
-        @boost_queries << boost_query = BoostQuery.new(factor)
-        boost_query
       end
 
       #
       # Add a boost function
       #
       def add_boost_function(function_query)
-        @boost_functions << function_query
       end
 
       #
@@ -99,8 +74,6 @@ module Sunspot
       # Add a phrase field for extra boost.
       #
       def add_phrase_field(field, boost = nil)
-        @phrase_fields ||= []
-        @phrase_fields << TextFieldBoost.new(field, boost)
       end
 
       #
@@ -109,7 +82,6 @@ module Sunspot
       # the dismax's :qf parameter will be used by Solr.
       #
       def add_highlight(fields=[], options={})
-        @highlights << Highlighting.new(fields, options)
       end
 
       #

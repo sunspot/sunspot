@@ -9,7 +9,11 @@ module Sunspot
       end
 
       def add_fulltext(keywords)
-        @fulltext.add(keywords)
+        @fulltext.add_fulltext(keywords)
+      end
+
+      def add_join(keywords, target, from, to)
+        @fulltext.add_join(keywords, target, from, to)
       end
 
       def disjunction

@@ -377,4 +377,28 @@ shared_examples_for 'fulltext query' do
       connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" OR _query_:\"{!edismax qf='body_textsv'}keyword2\")"
     end
   end
+
+  describe "joins" do
+    it "should search by join" do
+      srch = search PhotoContainer do
+        any do
+          fulltext 'keyword1', :fields => :caption
+          fulltext 'keyword2', :fields => :description
+        end
+      end
+
+      obj_id = srch.query.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Conjunction) }.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Disjunction) }.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Join) }.
+        object_id
+
+      q_name = "qPhoto#{obj_id}"
+      fq_name = "f#{q_name}"
+
+      connection.searches.last[:q].should eq "(_query_:\"{!join from=photo_container_id_i to=id_i v=$#{q_name} fq=$#{fq_name}}\" OR _query_:\"{!edismax qf='description_text^1.2'}keyword2\")"
+      connection.searches.last[q_name].should eq "_query_:\"{!edismax qf='caption_text'}keyword1\""
+      connection.searches.last[fq_name].should eq "type:Photo"
+    end
+  end
 end

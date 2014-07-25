@@ -82,8 +82,7 @@ module Sunspot
         unless name.to_s =~ /^\w+$/
           raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
         end
-        @field =
-          JoinField.new(name, type, options)
+        @field = JoinField.new(name, type, options)
       end
 
       # 

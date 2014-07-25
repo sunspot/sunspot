@@ -56,62 +56,55 @@ module Sunspot
       #   a pizza" will not. Default behavior is a query phrase slop of zero.
       #
       def fulltext(keywords, options = {}, &block)
-        if keywords && keywords.to_s !~ /^\s*$/
-          fulltext_query = @query.add_fulltext(keywords)
-          if field_names = options.delete(:fields)
-            Util.Array(field_names).each do |field_name|
-              @setup.text_fields(field_name).each do |field|
-                fulltext_query.add_fulltext_field(field, field.default_boost)
-              end
-            end
-          end
-          if minimum_match = options.delete(:minimum_match)
-            fulltext_query.minimum_match = minimum_match.to_i
-          end
-          if tie = options.delete(:tie)
-            fulltext_query.tie = tie.to_f
-          end
-          if query_phrase_slop = options.delete(:query_phrase_slop)
-            fulltext_query.query_phrase_slop = query_phrase_slop.to_i
-          end
+        return if not keywords or keywords.to_s =~ /^\s*$/
+
+        field_names = Util.Array(options.delete(:fields)).compact
+
+        add_fulltext(keywords, field_names) do |query, fields|
+          query.minimum_match = options.delete(:minimum_match).to_i if options.key?(:minimum_match)
+          query.tie = options.delete(:tie).to_f if options.key?(:tie)
+          query.query_phrase_slop = options.delete(:query_phrase_slop).to_i if options.key?(:query_phrase_slop)
+
           if highlight_field_names = options.delete(:highlight)
             if highlight_field_names == true
-              fulltext_query.add_highlight
+              query.add_highlight
             else
               highlight_fields = []
               Util.Array(highlight_field_names).each do |field_name|
                 highlight_fields.concat(@setup.text_fields(field_name))
               end
-              fulltext_query.add_highlight(highlight_fields)
+              query.add_highlight(highlight_fields)
             end
           end
-          if block && fulltext_query
-            fulltext_dsl = Fulltext.new(fulltext_query, @setup)
-            Util.instance_eval_or_call(
-              fulltext_dsl,
-              &block
-            )
+
+          if block && query
+            fulltext_dsl = Fulltext.new(query, @setup)
+            Util.instance_eval_or_call(fulltext_dsl, &block)
+          else
+            fulltext_dsl = nil
           end
-          if !field_names && (!fulltext_dsl || !fulltext_dsl.fields_added?)
+
+          if fields.empty? && (!fulltext_dsl || !fulltext_dsl.fields_added?)
             @setup.all_text_fields.each do |field|
-              unless fulltext_query.has_fulltext_field?(field)
+              unless query.has_fulltext_field?(field)
                 unless fulltext_dsl && fulltext_dsl.exclude_fields.include?(field.name)
-                  fulltext_query.add_fulltext_field(field, field.default_boost)
+                  query.add_fulltext_field(field, field.default_boost)
                 end
               end
             end
           end
         end
       end
+
       alias_method :keywords, :fulltext
 
       def with(*args)
         case args.first
-        when String, Symbol
-          if args.length == 1 # NONE
-            field = @setup.field(args[0].to_sym)
-            return DSL::RestrictionWithNear.new(field, @scope, @query, false)
-          end
+          when String, Symbol
+            if args.length == 1 # NONE
+              field = @setup.field(args[0].to_sym)
+              return DSL::RestrictionWithNear.new(field, @scope, @query, false)
+            end
         end
 
         # else
@@ -127,6 +120,29 @@ module Sunspot
       def all(&block)
         @query.conjunction do
           Util.instance_eval_or_call(self, &block)
+        end
+      end
+
+      private
+
+      def add_fulltext(keywords, field_names)
+        return yield(@query.add_fulltext(keywords), []) unless field_names.any?
+
+        all_fields = field_names.map { |name| @setup.text_fields(name) }.flatten
+        all_fields -= join_fields = all_fields.find_all(&:joined?)
+
+        if all_fields.any?
+          fulltext_query = @query.add_fulltext(keywords)
+          all_fields.each { |field| fulltext_query.add_fulltext_field(field, field.default_boost) }
+          yield(fulltext_query, all_fields)
+        end
+
+        if join_fields.any?
+          join_fields.group_by { |field| [field.target, field.from, field.to] }.each_pair do |(target, from, to), fields|
+            join_query = @query.add_join(keywords, target, from, to)
+            fields.each { |field| join_query.add_fulltext_field(field, field.default_boost) }
+            yield(join_query, fields)
+          end
         end
       end
     end

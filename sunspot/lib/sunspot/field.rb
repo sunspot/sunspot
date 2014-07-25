@@ -82,6 +82,17 @@ module Sunspot
       !!@more_like_this
     end
 
+    #
+    # Whether the field was joined from another model.
+    #
+    # ==== Returns
+    #
+    # Boolean:: True if this field was joined from another model
+    #
+    def joined?
+      !!@joined
+    end
+
     def hash
       indexed_name.hash
     end
@@ -156,22 +167,40 @@ module Sunspot
         end
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
-
   end
 
+  #
+  # JoinField encapsulates attributes from referenced models.
+  # Could be of any type
+  #
   class JoinField < Field #:nodoc:
+    attr_reader :default_boost, :target
 
     def initialize(name, type, options = {})
       @multiple = !!options.delete(:multiple)
+
       super(name, type, options)
-      @join_string = options.delete(:join_string)
+
+      @join = options.delete(:join)
+      @clazz = options.delete(:clazz)
+      @target = options.delete(:target)
+      @default_boost = options.delete(:default_boost)
+      @joined = true
+
       raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
     end
 
-    def local_params
-      "{!join #{@join_string}}"
+    def from
+      Sunspot::Setup.for(@target).field(@join[:from]).indexed_name
     end
 
+    def to
+      Sunspot::Setup.for(@clazz).field(@join[:to]).indexed_name
+    end
+
+    def local_params
+      "{!join from=#{from} to=#{to}}"
+    end
   end
 
   class TypeField #:nodoc:

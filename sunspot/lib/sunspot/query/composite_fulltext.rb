@@ -5,8 +5,13 @@ module Sunspot
         @components = []
       end
 
-      def add(keywords)
+      def add_fulltext(keywords)
         @components << dismax = Dismax.new(keywords)
+        dismax
+      end
+
+      def add_join(keywords, target, from, to)
+        @components << dismax = Join.new(keywords, target, from, to)
         dismax
       end
       
@@ -26,26 +31,23 @@ module Sunspot
       end
 
       def to_params
-        case @components.length
-        when 0
+        if @components.length == 0
           {}
-        when 1
-          @components.first.to_params.merge(:fl => '* score')
+        elsif @components.length > 1 or @components.find { |c| c.is_a?(Join) }
+          to_subquery.merge(:fl => '* score')
         else
-          to_subqueries.merge(:fl => '* score')
+          @components.first.to_params.merge(:fl => '* score')
         end
       end
 
       def to_subquery
-        "(#{@components.map(&:to_subquery).join(" #{connector} ")})"
-      end
+        params = @components.map(&:to_subquery).inject({:q => []}) do |res, subquery|
+          res[:q] << subquery.delete(:q)
+          res.merge(subquery)
+        end
 
-      private
-
-      attr_reader :components
-
-      def to_subqueries
-        { :q => to_subquery }
+        params[:q] = "(#{params[:q].join(" #{connector} ")})"
+        params
       end
     end
 
