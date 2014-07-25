@@ -41,12 +41,8 @@ shared_examples_for 'geohash query' do
       fulltext 'pizza', :fields => :title
       with(:coordinates).near(40.7, -73.5)
     end
-    expected =
-      "{!edismax fl='* score' qf='title_text'}pizza (#{build_geo_query})"
-    connection.should have_last_search_including(
-      :q,
-      %Q(_query_:"{!edismax qf='title_text'}pizza" (#{build_geo_query}))
-    )
+    expected = %Q((_query_:"{!edismax qf='title_text'}pizza" AND (#{build_geo_query})))
+    connection.should have_last_search_including(:q, expected)
   end
 
   private

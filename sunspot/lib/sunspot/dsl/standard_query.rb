@@ -56,7 +56,7 @@ module Sunspot
       #   a pizza" will not. Default behavior is a query phrase slop of zero.
       #
       def fulltext(keywords, options = {}, &block)
-        if keywords && !(keywords.to_s =~ /^\s*$/)
+        if keywords && keywords.to_s !~ /^\s*$/
           fulltext_query = @query.add_fulltext(keywords)
           if field_names = options.delete(:fields)
             Util.Array(field_names).each do |field_name|
@@ -116,6 +116,18 @@ module Sunspot
 
         # else
         super
+      end
+
+      def any(&block)
+        @query.disjunction do
+          Util.instance_eval_or_call(self, &block)
+        end
+      end
+
+      def all(&block)
+        @query.conjunction do
+          Util.instance_eval_or_call(self, &block)
+        end
       end
     end
   end

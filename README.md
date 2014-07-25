@@ -262,6 +262,16 @@ Post.search do
 end
 ```
 
+```ruby
+# Posts with blog_id 1 and author_id 2
+Post.search do
+  any do
+    fulltext "keyword1", :fields => :title
+    fulltext "keyword2", :fields => :body
+  end
+end
+```
+
 Disjunctions and conjunctions may be nested
 
 ```ruby
@@ -272,6 +282,18 @@ Post.search do
       with(:blog_id, 2)
       with(:category_ids, 3)
     end
+  end
+  
+  any do
+    all do
+      fulltext "keyword", :fields => :title
+      fulltext "keyword", :fields => :body
+    end
+    all do
+      fulltext "keyword", :fields => :first_name
+      fulltext "keyword", :fields => :last_name
+    end
+    fulltext "keyword", :fields => :description
   end
 end
 ```

@@ -15,6 +15,16 @@ module Sunspot
         location
       end
 
+      def add_disjunction
+        @components << disjunction = Disjunction.new
+        disjunction
+      end
+
+      def add_conjunction
+        @components << conjunction = Conjunction.new
+        conjunction
+      end
+
       def to_params
         case @components.length
         when 0
@@ -26,10 +36,46 @@ module Sunspot
         end
       end
 
+      def to_subquery
+        "(#{@components.map(&:to_subquery).join(" #{connector} ")})"
+      end
+
       private
 
+      attr_reader :components
+
       def to_subqueries
-        { :q => @components.map { |dismax| dismax.to_subquery }.join(' ') }
+        { :q => to_subquery }
+      end
+    end
+
+    class Disjunction < CompositeFulltext
+      #
+      # No-op - this is already a disjunction
+      #
+      def add_disjunction
+        self
+      end
+
+      private
+
+      def connector
+        'OR'
+      end
+    end
+
+    class Conjunction < CompositeFulltext
+      #
+      # No-op - this is already a conjunction
+      #
+      def add_conjunction
+        self
+      end
+
+      private
+
+      def connector
+        'AND'
       end
     end
   end

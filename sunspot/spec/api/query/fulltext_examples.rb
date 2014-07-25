@@ -310,4 +310,71 @@ shared_examples_for 'fulltext query' do
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
+
+  describe 'connective examples' do
+    it 'creates a disjunction between two subqueries' do
+      search Post do
+        any do
+          fulltext 'keywords1', :fields => :title
+          fulltext 'keyword2', :fields => :body
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" OR _query_:\"{!edismax qf='body_textsv'}keyword2\")"
+    end
+
+    it 'creates a conjunction inside of a disjunction' do
+      search do
+        any do
+          fulltext 'keywords1', :fields => :body
+
+          all do
+            fulltext 'keyword2', :fields => :body
+            fulltext 'keyword3', :fields => :body
+          end
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='body_textsv'}keywords1\" OR (_query_:\"{!edismax qf='body_textsv'}keyword2\" AND _query_:\"{!edismax qf='body_textsv'}keyword3\"))"
+    end
+
+    it 'does nothing special if #all/#any called from the top level or called multiple times' do
+      search Post do
+        all do
+          fulltext 'keywords1', :fields => :title
+          fulltext 'keyword2', :fields => :body
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" AND _query_:\"{!edismax qf='body_textsv'}keyword2\")"
+    end
+
+    it 'does nothing special if #all/#any are mixed and called multiple times' do
+      search Post do
+        all do
+          any do
+            all do
+              fulltext 'keywords1', :fields => :title
+              fulltext 'keyword2', :fields => :body
+            end
+          end
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" AND _query_:\"{!edismax qf='body_textsv'}keyword2\")"
+
+      search Post do
+        any do
+          all do
+            any do
+              fulltext 'keywords1', :fields => :title
+              fulltext 'keyword2', :fields => :body
+            end
+          end
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" OR _query_:\"{!edismax qf='body_textsv'}keyword2\")"
+    end
+  end
 end
