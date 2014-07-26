@@ -105,6 +105,13 @@ module Sunspot
     private
 
     #
+    # Raise if an unknown option passed
+    #
+    def check_options(options)
+      raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
+    end
+
+    #
     # Determine the indexed name. If the :as option is given use that, otherwise
     # create the value based on the indexed_name of the type with additional
     # suffixes for multiple, stored, and more_like_this.
@@ -141,7 +148,8 @@ module Sunspot
       @multiple = true
       @boost = options.delete(:boost)
       @default_boost = options.delete(:default_boost)
-      raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
+
+      check_options(options)
     end
 
     def indexed_name
@@ -166,7 +174,8 @@ module Sunspot
         elsif reference.respond_to?(:to_sym)
           reference.to_sym
         end
-      raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
+
+      check_options(options)
     end
   end
 
@@ -189,7 +198,7 @@ module Sunspot
       @default_boost = options.delete(:default_boost)
       @joined = true
 
-      raise ArgumentError, "Unknown field option #{options.keys.first.inspect} provided for field #{name.inspect}" unless options.empty?
+      check_options(options)
     end
 
     def from
