@@ -78,11 +78,11 @@ module Sunspot
 
     class Join < Abstract
       def initialize(name, type, options = {}, &block)
-        super(name, options, &block)
+        super(options[:prefix] ? "#{options[:prefix]}_#{name}" : name, options, &block)
         unless name.to_s =~ /^\w+$/
           raise ArgumentError, "Invalid field name #{name}: only letters, numbers, and underscores are allowed."
         end
-        @field = JoinField.new(name, type, options)
+        @field = JoinField.new(self.name, type, options)
       end
 
       # 
@@ -97,7 +97,6 @@ module Sunspot
       # into the Solr document for indexing. (noop here for joins)
       #
       def populate_document(document, model) #:nodoc:
-
       end
 
       # 

@@ -188,7 +188,7 @@ shared_examples_for 'fulltext query' do
     search Photo do
       keywords 'great pizza'
     end
-    connection.should have_last_search_with(:qf => 'caption_text^1.5')
+    connection.should have_last_search_with(:qf => 'caption_text^1.5 description_text')
   end
 
   it 'sets default boost with fields specified in options' do
@@ -387,18 +387,40 @@ shared_examples_for 'fulltext query' do
         end
       end
 
-      obj_id = srch.query.
-        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Conjunction) }.
-        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Disjunction) }.
-        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Join) }.
-        object_id
-
+      obj_id = find_ob_id(srch)
       q_name = "qPhoto#{obj_id}"
       fq_name = "f#{q_name}"
 
       connection.searches.last[:q].should eq "(_query_:\"{!join from=photo_container_id_i to=id_i v=$#{q_name} fq=$#{fq_name}}\" OR _query_:\"{!edismax qf='description_text^1.2'}keyword2\")"
       connection.searches.last[q_name].should eq "_query_:\"{!edismax qf='caption_text'}keyword1\""
       connection.searches.last[fq_name].should eq "type:Photo"
+    end
+
+    it "should be able to resolve name conflicts with the :prefix option" do
+      srch = search PhotoContainer do
+        any do
+          fulltext 'keyword1', :fields => :description
+          fulltext 'keyword2', :fields => :photo_description
+        end
+      end
+
+      obj_id = find_ob_id(srch)
+      q_name = "qPhoto#{obj_id}"
+      fq_name = "f#{q_name}"
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='description_text^1.2'}keyword1\" OR _query_:\"{!join from=photo_container_id_i to=id_i v=$#{q_name} fq=$#{fq_name}}\")"
+      connection.searches.last[q_name].should eq "_query_:\"{!edismax qf='description_text'}keyword2\""
+      connection.searches.last[fq_name].should eq "type:Photo"
+    end
+
+    private
+
+    def find_ob_id(search)
+      search.query.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Conjunction) }.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Disjunction) }.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Join) }.
+        object_id
     end
   end
 end

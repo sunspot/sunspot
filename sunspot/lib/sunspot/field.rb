@@ -118,7 +118,8 @@ module Sunspot
         if options[:as]
           options.delete(:as).to_s
         else
-          "#{@type.indexed_name(@name).to_s}#{'m' if multiple? }#{'s' if @stored}#{'v' if more_like_this?}"
+          name = options[:prefix] ? @name.to_s.sub(/^#{options[:prefix]}_/, '') : @name
+          "#{@type.indexed_name(name)}#{'m' if multiple? }#{'s' if @stored}#{'v' if more_like_this?}"
         end
     end
 
@@ -181,6 +182,7 @@ module Sunspot
 
       super(name, type, options)
 
+      @prefix = options.delete(:prefix)
       @join = options.delete(:join)
       @clazz = options.delete(:clazz)
       @target = options.delete(:target)
