@@ -98,7 +98,7 @@ module Sunspot
     end
 
     def eql?(field)
-      indexed_name == field.indexed_name
+      field.is_a?(self.class) && indexed_name == field.indexed_name
     end
     alias_method :==, :eql?
 
@@ -212,6 +212,12 @@ module Sunspot
     def local_params
       "{!join from=#{from} to=#{to}}"
     end
+
+    def eql?(field)
+      super && target == field.target && from == field.from && to == field.to
+    end
+
+    alias_method :==, :eql?
   end
 
   class TypeField #:nodoc:
