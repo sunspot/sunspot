@@ -67,7 +67,8 @@ module Sunspot
       # Add a fulltext field to be searched, with optional boost.
       #
       def add_fulltext_field(field, boost = nil)
-        @fulltext_fields[field.indexed_name] = TextFieldBoost.new(field, boost)
+        super if field.is_a?(Sunspot::JoinField) &&
+          field.target == @target && field.from == @from && field.to == @to
       end
 
       #
@@ -82,14 +83,6 @@ module Sunspot
       # the dismax's :qf parameter will be used by Solr.
       #
       def add_highlight(fields=[], options={})
-      end
-
-      #
-      # Determine if a given field is being searched. Used by DSL to avoid
-      # overwriting boost parameters when injecting defaults.
-      #
-      def has_fulltext_field?(field)
-        @fulltext_fields.has_key?(field.indexed_name)
       end
 
     end

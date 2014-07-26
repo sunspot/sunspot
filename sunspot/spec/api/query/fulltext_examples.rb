@@ -413,6 +413,24 @@ shared_examples_for 'fulltext query' do
       connection.searches.last[fq_name].should eq "type:Photo"
     end
 
+    it "should recognize fields when adding from DSL, e.g. when calling boost_fields" do
+      srch = search PhotoContainer do
+        any do
+          fulltext 'keyword1', :fields => [:photo_description, :description] do
+            boost_fields(:photo_description => 1.3, :description => 1.5)
+          end
+        end
+      end
+
+      obj_id = find_ob_id(srch)
+      q_name = "qPhoto#{obj_id}"
+      fq_name = "f#{q_name}"
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='description_text^1.5'}keyword1\" OR _query_:\"{!join from=photo_container_id_i to=id_i v=$#{q_name} fq=$#{fq_name}}\")"
+      connection.searches.last[q_name].should eq "_query_:\"{!edismax qf='description_text^1.3'}keyword1\""
+      connection.searches.last[fq_name].should eq "type:Photo"
+    end
+
     private
 
     def find_ob_id(search)
