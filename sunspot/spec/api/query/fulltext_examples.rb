@@ -188,7 +188,8 @@ shared_examples_for 'fulltext query' do
     search Photo do
       keywords 'great pizza'
     end
-    connection.should have_last_search_with(:qf => 'caption_text^1.5 description_text')
+    # Hashes in 1.8 aren't ordered
+    connection.searches.last[:qf].split(" ").sort.join(" ").should eq 'caption_text^1.5 description_text'
   end
 
   it 'sets default boost with fields specified in options' do
