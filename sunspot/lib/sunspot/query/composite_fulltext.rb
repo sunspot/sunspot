@@ -11,8 +11,8 @@ module Sunspot
       end
 
       def add_join(keywords, target, from, to)
-        @components << dismax = Join.new(keywords, target, from, to)
-        dismax
+        @components << join = Join.new(keywords, target, from, to)
+        join
       end
       
       def add_location(field, lat, lng, options)
