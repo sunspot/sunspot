@@ -352,6 +352,49 @@ search = Post.search do
 end
 ```
 
+#### Cursor-based pagination
+
+**Solr 4.7 and above**
+
+Cursor for the first page is "*".
+```ruby
+search = Post.search do
+  fulltext "pizza"
+  paginate :cursor => "*"
+end
+
+results = search.results
+
+# Results will contain cursor for the next page
+results.next_page_cursor # => "AoIIP4AAACxQcm9maWxlIDEwMTk="
+
+# Imagine there are 60 *total* results (at 30 results/page, that is two pages)
+results.current_cursor # => "*"
+results.total_pages    # => 2
+results.first_page?    # => true
+results.last_page?     # => false
+```
+
+To retrieve the next page of results, recreate the search and use the `paginate` method with cursor from previous results.
+```ruby
+search = Post.search do
+  fulltext "pizza"
+  paginate :cursor => "AoIIP4AAACxQcm9maWxlIDEwMTk="
+end
+
+results = search.results
+
+# Again, imagine there are 60 total results; this is the second page
+results.next_page_cursor # => "AoEsUHJvZmlsZSAxNzY5"
+results.current_cursor   # => "AoIIP4AAACxQcm9maWxlIDEwMTk="
+results.total_pages      # => 2
+results.first_page?      # => false
+# Last page will be detected only when current page contains less then per_page elements or contains nothing
+results.last_page?       # => false
+```
+
+`:per_page` option is also supported.
+
 ### Faceting
 
 Faceting is a feature of Solr that determines the number of documents

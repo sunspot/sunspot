@@ -115,6 +115,12 @@ module Sunspot
         end
       end
 
+      class SolrIdSort < Abstract
+        def to_param
+          "id #{direction_for_solr}"
+        end
+      end
+
       #
       # A FunctionSort sorts by solr function.
       # FunctionComp recursively parses arguments for nesting
