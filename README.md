@@ -959,7 +959,7 @@ environment (such as sidekiq), you should configure Sunspot to use the
 [ThreadLocalSessionProxy](http://sunspot.github.io/sunspot/docs/Sunspot/SessionProxy/ThreadLocalSessionProxy.html):
 
 ```ruby
-Sunspot.session = Sunspot::SessionProxy::ThreadLocalSessionProxy.new
+Sunspot.session = Sunspot::SessionProxy::ThreadLocalSessionProxy.new( Sunspot::Configuration.build )
 ```
 
 ## Manually Adjusting Solr Parameters
