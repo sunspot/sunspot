@@ -359,7 +359,7 @@ end
 With default Solr pagination it may turn that same records appear on different pages (e.g. if 
 many records have the same search score). Cursor-based pagination allows to avoid this.
 
-Useful for any kinds of exports, infinite scroll, etc.
+Useful for any kinds of export, infinite scroll, etc.
 
 Cursor for the first page is "*".
 ```ruby
