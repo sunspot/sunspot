@@ -262,6 +262,16 @@ Post.search do
 end
 ```
 
+```ruby
+# Posts with blog_id 1 and author_id 2
+Post.search do
+  any do
+    fulltext "keyword1", :fields => :title
+    fulltext "keyword2", :fields => :body
+  end
+end
+```
+
 Disjunctions and conjunctions may be nested
 
 ```ruby
@@ -272,6 +282,18 @@ Post.search do
       with(:blog_id, 2)
       with(:category_ids, 3)
     end
+  end
+  
+  any do
+    all do
+      fulltext "keyword", :fields => :title
+      fulltext "keyword", :fields => :body
+    end
+    all do
+      fulltext "keyword", :fields => :first_name
+      fulltext "keyword", :fields => :last_name
+    end
+    fulltext "keyword", :fields => :description
   end
 end
 ```
@@ -676,7 +698,8 @@ Solr joins allow you to filter objects by joining on additional documents.  More
 ```ruby
 class Photo < ActiveRecord::Base
   searchable do
-    text :caption, :default_boost => 1.5
+    text :description
+    string :caption, :default_boost => 1.5
     time :created_at
     integer :photo_container_id
   end
@@ -685,15 +708,73 @@ end
 class PhotoContainer < ActiveRecord::Base
   searchable do
     text :name
-    join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id')
-    join(:photos_created, :type => :time, :join_string => 'from=photo_container_id to=id', :as => 'created_at_d')
+    join(:description, :target => Photo, :type => :text, :join => { :from => :photo_container_id, :to => :id })
+    join(:caption, :target => Photo, :type => :string, :join => { :from => :photo_container_id, :to => :id })
+    join(:photos_created, :target => Photo, :type => :time, :join => { :from => :photo_container_id, :to => :id }, :as => 'created_at_d')
   end
 end
 
 PhotoContainer.search do
   with(:caption, 'blah')
   with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
+  
+  fulltext("keywords", :fields => [:name, :description])
 end
+
+# ...or
+
+PhotoContainer.search do
+  with(:caption, 'blah')
+  with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
+  
+  any do
+    fulltext("keyword1", :fields => :name)
+    fulltext("keyword2", :fields => :description) # will be joined from the Photo model
+  end
+end
+```
+
+#### If your models have fields with the same name
+
+```ruby
+class Tweet < ActiveRecord::Base
+  searchable do
+    text :keywords
+    integer :profile_id
+  end
+end
+
+class Rss < ActiveRecord::Base
+  searchable do
+    text :keywords
+    integer :profile_id
+  end
+end
+
+class Profile < ActiveRecord::Base
+  searchable do
+    text :name
+    join(:keywords, :prefix => "tweet", :target => Tweet, :type => :text, :join => { :from => :profile_id, :to => :id })
+    join(:keywords, :prefix => "rss", :target => Rss, :type => :text, :join => { :from => :profile_id, :to => :id })
+  end
+end
+
+Profile.search do
+  any do
+    fulltext("keyword1 keyword2", :fields => [:tweet_keywords]) do
+      minimum_match 1
+    end
+    
+    fulltext("keyword3", :fields => [:rss_keywords])
+  end
+end
+
+# ...produces:
+# sort: "score desc", fl: "* score", start: 0, rows: 20,
+# fq: ["type:Profile"],
+# q: "(_query_:"{!join from=profile_ids_i to=id_i v=$qTweet91755700 fq=$fqTweet91755700}" OR _query_:"{!join from=profile_ids_i to=id_i v=$qRss91753840 fq=$fqRss91753840}")",
+# qTweet91755700: "_query_:"{!edismax qf='keywords_text' mm='1'}keyword1 keyword2"", fqTweet91755700: "type:Tweet",
+# qRss91753840: "_query_:"{!edismax qf='keywords_text'}keyword3"", fqRss91753840: "type:Rss"
 ```
 
 ### Highlighting
