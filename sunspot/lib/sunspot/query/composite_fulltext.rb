@@ -41,12 +41,14 @@ module Sunspot
       end
 
       def to_subquery
+        return {} unless @components.any?
+
         params = @components.map(&:to_subquery).inject({:q => []}) do |res, subquery|
-          res[:q] << subquery.delete(:q)
+          res[:q] << subquery.delete(:q) if subquery[:q]
           res.merge(subquery)
         end
 
-        params[:q] = "(#{params[:q].join(" #{connector} ")})"
+        params[:q] = params[:q].size > 1 ? "(#{params[:q].join(" #{connector} ")})" : params[:q].join
         params
       end
     end

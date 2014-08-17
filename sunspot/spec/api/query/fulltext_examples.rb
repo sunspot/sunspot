@@ -377,6 +377,23 @@ shared_examples_for 'fulltext query' do
 
       connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" OR _query_:\"{!edismax qf='body_textsv'}keyword2\")"
     end
+
+    it "does not add empty parentheses" do
+      search Post do
+        any do
+          all do
+          end
+
+          any do
+            fulltext 'keywords1', :fields => :title
+            all do
+            end
+          end
+        end
+      end
+
+      connection.searches.last[:q].should eq "_query_:\"{!edismax qf='title_text'}keywords1\""
+    end
   end
 
   describe "joins" do
