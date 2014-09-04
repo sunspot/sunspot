@@ -35,6 +35,26 @@ shared_examples_for 'all sessions' do
     end
   end
 
+  context '#commit(bool)' do
+    it 'should soft-commit if bool=true' do
+      @session.commit(true)
+      connection.should have(1).commits
+      connection.should have(1).softCommits
+    end
+
+    it 'should hard-commit if bool=false' do
+      @session.commit(false)
+      connection.should have(1).commits
+      connection.should have(0).softCommits
+    end
+
+    it 'should hard-commit if bool is not specified' do
+      @session.commit
+      connection.should have(1).commits
+      connection.should have(0).softCommits
+    end
+  end
+
   context '#optimize()' do
     before :each do
       @session.optimize
@@ -202,16 +222,30 @@ describe 'Session' do
       connection.should have(0).commits
     end
 
-    it 'should commit when commit_if_dirty called on dirty session' do
+    it 'should hard commit when commit_if_dirty called on dirty session' do
       @session.index(Post.new)
       @session.commit_if_dirty
       connection.should have(1).commits
     end
     
-    it 'should commit when commit_if_delete_dirty called on delete_dirty session' do
+    it 'should soft commit when commit_if_dirty called on dirty session' do
+      @session.index(Post.new)
+      @session.commit_if_dirty(true)
+      connection.should have(1).commits
+      connection.should have(1).softCommits
+    end
+    
+    it 'should hard commit when commit_if_delete_dirty called on delete_dirty session' do
       @session.remove(Post.new)
       @session.commit_if_delete_dirty
       connection.should have(1).commits
+    end
+
+    it 'should soft commit when commit_if_delete_dirty called on delete_dirty session' do
+      @session.remove(Post.new)
+      @session.commit_if_delete_dirty(true)
+      connection.should have(1).commits
+      connection.should have(1).softCommits
     end
   end
 
