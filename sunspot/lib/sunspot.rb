@@ -196,23 +196,27 @@ module Sunspot
       session.index!(*objects)
     end
 
-    # Commits the singleton session
+    # Commits (soft or hard) the singleton session
     #
     # When documents are added to or removed from Solr, the changes are
     # initially stored in memory, and are not reflected in Solr's existing
-    # searcher instance. When a commit message is sent, the changes are written
+    # searcher instance. When a hard commit message is sent, the changes are written
     # to disk, and a new searcher is spawned. Commits are thus fairly
     # expensive, so if your application needs to index several documents as part
     # of a single operation, it is advisable to index them all and then call
     # commit at the end of the operation.
+    # Solr 4 introduced the concept of a soft commit which is much faster
+    # since it only makes index changes visible while not writing changes to disk.
+    # If Solr crashes or there is a loss of power, changes that occurred after
+    # the last hard commit will be lost.
     #
     # Note that Solr can also be configured to automatically perform a commit
     # after either a specified interval after the last change, or after a
     # specified number of documents are added. See
     # http://wiki.apache.org/solr/SolrConfigXml
     #
-    def commit
-      session.commit
+    def commit(softCommit = false)
+      session.commit softCommit
     end
 
     # Optimizes the index on the singletion session.
@@ -510,10 +514,10 @@ module Sunspot
     end
 
     # 
-    # Sends a commit if the session is dirty (see #dirty?).
+    # Sends a commit (soft or hard) if the session is dirty (see #dirty?).
     #
-    def commit_if_dirty
-      session.commit_if_dirty
+    def commit_if_dirty(softCommit = false)
+      session.commit_if_dirty softCommit
     end
     
     #
@@ -530,8 +534,8 @@ module Sunspot
     # 
     # Sends a commit if the session has deletes since the last commit (see #delete_dirty?).
     #
-    def commit_if_delete_dirty
-      session.commit_if_delete_dirty
+    def commit_if_delete_dirty(softCommit = false)
+      session.commit_if_delete_dirty softCommit
     end
     
     # Returns the configuration associated with the singleton session. See
