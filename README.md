@@ -1005,12 +1005,12 @@ There are a number of ways to index manually within Ruby:
 ```ruby
 # On a class itself
 Person.reindex
-Sunspot.commit
+Sunspot.commit # or commit(true) for a soft commit (Solr4)
 
 # On mixed objects
 Sunspot.index [post1, item2]
 Sunspot.index person3
-Sunspot.commit
+Sunspot.commit # or commit(true) for a soft commit (Solr4)
 
 # With autocommit
 Sunspot.index! [post1, item2, person3]
