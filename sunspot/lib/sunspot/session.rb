@@ -104,7 +104,7 @@ module Sunspot
     #
     def commit(softCommit = false)
       @adds = @deletes = 0
-      connection.commit :commit_attributes => {softCommit: softCommit}
+      connection.commit :commit_attributes => {:softCommit => softCommit}
     end
 
     #
