@@ -100,7 +100,9 @@ namespace :sunspot do
       task :stop => :moved_to_sunspot_solr
 
       # for backwards compatibility
-      task :reindex => :"sunspot:reindex"
+      task :reindex, [:batch_size, :models, :silence] => [:environment] do |t, args|
+        Rake::Task['sunspot:reindex'].execute(args)
+      end
     end
   end
 end

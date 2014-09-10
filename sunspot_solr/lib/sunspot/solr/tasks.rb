@@ -24,7 +24,9 @@ namespace :sunspot do
     end
 
     # for backwards compatibility
-    task reindex: :"sunspot:reindex"
+    task :reindex, [:batch_size, :models, :silence] => [:environment] do |t, args|
+      Rake::Task['sunspot:reindex'].execute(args)
+    end
 
     def server
       case RUBY_PLATFORM
