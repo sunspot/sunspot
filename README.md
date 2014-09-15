@@ -263,7 +263,7 @@ end
 ```
 
 ```ruby
-# Posts with blog_id 1 and author_id 2
+# Posts scoring with any of the two fields.
 Post.search do
   any do
     fulltext "keyword1", :fields => :title
