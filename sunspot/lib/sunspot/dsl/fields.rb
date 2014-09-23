@@ -33,13 +33,10 @@ module Sunspot
       #   DSL::Fulltext#boost_fields method.
       #
       def text(*names, &block)
-        options = names.pop if names.last.is_a?(Hash)
+        options = names.last.is_a?(Hash) ? names.pop : {}
+
         names.each do |name|
-          @setup.add_text_field_factory(
-            name,
-            options || {},
-            &block
-          )
+          @setup.add_text_field_factory(name, options, &block)
         end
       end
 
@@ -74,26 +71,33 @@ module Sunspot
       #
       def method_missing(method, *args, &block)
         options = Util.extract_options_from(args)
-        type_const_name = "#{Util.camel_case(method.to_s.sub(/^dynamic_/, ''))}Type"
+        join = method.to_s == 'join'
+        type_string = join ? options.delete(:type).to_s : method.to_s
+        type_const_name = "#{Util.camel_case(type_string.sub(/^dynamic_/, ''))}Type"
         trie = options.delete(:trie)
         type_const_name = "Trie#{type_const_name}" if trie
+
         begin
           type_class = Type.const_get(type_const_name)
-        rescue(NameError)
+        rescue NameError
           if trie
             raise ArgumentError, "Trie fields are only valid for numeric and time types"
           else
             super(method, *args, &block)
           end
         end
+
         type = type_class.instance
         name = args.shift
+
         if method.to_s =~ /^dynamic_/
           if type.accepts_dynamic?
             @setup.add_dynamic_field_factory(name, type, options, &block)
           else
             super(method, *args, &block)
           end
+        elsif join
+          @setup.add_join_field_factory(name, type, options.merge(:clazz => @setup.clazz), &block)
         else
           @setup.add_field_factory(name, type, options, &block)
         end

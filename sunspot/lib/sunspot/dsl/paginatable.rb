@@ -20,12 +20,15 @@ module Sunspot
       # :offset<Integer,String>::
       #   Applies a shift to paginated records. The default is 0.
       #
+      # :cursor<String>:: Cursor value for cursor-based pagination. The default is nil.
+      #
       def paginate(options = {})
         page = options.delete(:page)
         per_page = options.delete(:per_page)
         offset = options.delete(:offset)
+        cursor = options.delete(:cursor)
         raise ArgumentError, "unknown argument #{options.keys.first.inspect} passed to paginate" unless options.empty?
-        @query.paginate(page, per_page, offset)
+        @query.paginate(page, per_page, offset, cursor)
       end
     end
   end

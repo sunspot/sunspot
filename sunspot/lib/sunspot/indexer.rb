@@ -44,6 +44,7 @@ module Sunspot
     # Remove the model from the Solr index by specifying the class and ID
     #
     def remove_by_id(class_name, *ids)
+      ids.flatten!
       @connection.delete_by_id(
         ids.map { |id| Adapters::InstanceAdapter.index_id_for(class_name, id) }
       )

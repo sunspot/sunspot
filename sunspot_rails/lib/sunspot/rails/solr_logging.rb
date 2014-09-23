@@ -39,11 +39,8 @@ module Sunspot
       private
 
       def format_log_entry(message, dump = nil)
-        @colorize_logging ||= begin
-          ::Rails.application.config.colorize_logging # Rails 3
-        rescue NoMethodError
-          ActiveRecord::Base.colorize_logging # Rails 2
-        end
+        @colorize_logging ||= ::Rails.application.config.colorize_logging
+          
         if @colorize_logging
           message_color, dump_color = "4;32;1", "0;1"
           log_entry = "  \e[#{message_color}m#{message}\e[0m   "

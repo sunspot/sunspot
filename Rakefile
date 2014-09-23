@@ -1,4 +1,4 @@
-desc 'Release Sunspot, Sunspot::Rails and Sunspot::Solr to Gemcutter'
+desc 'Release Sunspot, Sunspot::Rails and Sunspot::Solr to Rubygems.org'
 task :release do
   FileUtils.cp('README.md', 'sunspot/')
 
@@ -27,11 +27,22 @@ task :release do
   end
 end
 
+desc 'Install bleeding edge gems locally'
+task :install do
+  %w[sunspot sunspot_rails sunspot_solr].each do |folder|
+    FileUtils.cd folder do
+      system "rm *.gem"
+      system "gem build *.gemspec"
+      system "gem install *.gem"
+    end
+  end
+end
 
 desc 'Run all the tests'
 task :default do
   exit system([ "GEM=sunspot ci/travis.sh",
-                "GEM=sunspot_rails RAILS=3.0.20 ci/travis.sh",
-                "GEM=sunspot_rails RAILS=3.1.10 ci/travis.sh",
-                "GEM=sunspot_rails RAILS=3.2.11 ci/travis.sh" ].join(" && ")) ? 0 : 1
+                "GEM=sunspot_rails RAILS=3.0.0 ci/travis.sh",
+                "GEM=sunspot_rails RAILS=3.1.0 ci/travis.sh",
+                "GEM=sunspot_rails RAILS=3.2.0 ci/travis.sh",
+                "GEM=sunspot_rails RAILS=4.0.0 ci/travis.sh" ].join(" && ")) ? 0 : 1
 end

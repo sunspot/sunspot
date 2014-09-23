@@ -7,6 +7,10 @@ module Sunspot
         @original_session = original_session
       end
 
+      def batch
+        yield
+      end
+
       def index(*objects)
       end
 
@@ -29,6 +33,9 @@ module Sunspot
       end
 
       def remove_all!(clazz = nil)
+      end
+
+      def optimize
       end
 
       def dirty?
@@ -77,15 +84,22 @@ module Sunspot
         def hits(options = {})
           PaginatedCollection.new
         end
+        alias_method :raw_results, :hits
 
         def total
           0
         end
 
+        def facets
+          []
+        end
+
         def facet(name)
+          FacetStub.new
         end
 
         def dynamic_facet(name)
+          FacetStub.new
         end
 
         def execute
@@ -139,6 +153,14 @@ module Sunspot
           0
         end
         
+      end
+
+      class FacetStub
+
+        def rows
+          []
+        end
+
       end
       
     end

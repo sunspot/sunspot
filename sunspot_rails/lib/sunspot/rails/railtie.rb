@@ -12,7 +12,7 @@ module Sunspot
           include(Sunspot::Rails::RequestLifecycle)
         end
         require 'sunspot/rails/log_subscriber'
-        RSolr::Connection.module_eval{ include Sunspot::Rails::SolrInstrumentation }
+        RSolr::Client.class_eval{ include Sunspot::Rails::SolrInstrumentation }
       end
 
       # Expose database runtime to controller for logging.

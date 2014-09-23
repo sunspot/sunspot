@@ -25,8 +25,8 @@ describe 'keyword highlighting' do
   
   it "should process multiple keyword request on different fields with highlights correctly" do
     search_results = nil
-    lambda do
-      search_results = Sunspot.search(Post) do 
+    expect do
+      search_results = Sunspot.search(Post) do
         keywords 'Lorem ipsum', :fields => [:body] do
           highlight :body
         end
@@ -34,7 +34,7 @@ describe 'keyword highlighting' do
           highlight :title
         end
       end
-    end.should_not raise_error(RSolr::Error::Http)
+    end.to_not raise_error
     search_results.results.length.should eq(1)
     search_results.results.first.should eq(@posts.last)
     # this one might be a Solr bug, therefore not related to Sunspot itself

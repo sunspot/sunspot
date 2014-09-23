@@ -10,21 +10,21 @@ shared_examples_for 'fulltext query' do
     search do
       keywords ''
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
+    connection.should_not have_last_search_with(:defType => 'edismax')
   end
 
   it 'ignores keywords if nil' do
     search do
       keywords nil
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
+    connection.should_not have_last_search_with(:defType => 'edismax')
   end
 
   it 'ignores keywords with only whitespace' do
     search do
       keywords "  \t"
     end
-    connection.should_not have_last_search_with(:defType => 'dismax')
+    connection.should_not have_last_search_with(:defType => 'edismax')
   end
 
   it 'gracefully ignores keywords block if keywords ignored' do
@@ -37,7 +37,7 @@ shared_examples_for 'fulltext query' do
     search do
       keywords 'keyword search'
     end
-    connection.should have_last_search_with(:defType => 'dismax')
+    connection.should have_last_search_with(:defType => 'edismax')
   end
 
   it 'searches types in filter query if keywords used' do
@@ -188,7 +188,8 @@ shared_examples_for 'fulltext query' do
     search Photo do
       keywords 'great pizza'
     end
-    connection.should have_last_search_with(:qf => 'caption_text^1.5')
+    # Hashes in 1.8 aren't ordered
+    connection.searches.last[:qf].split(" ").sort.join(" ").should eq 'caption_text^1.5 description_text'
   end
 
   it 'sets default boost with fields specified in options' do
@@ -309,5 +310,153 @@ shared_examples_for 'fulltext query' do
         keywords 'fulltext', :fields => :bogus
       end
     end.should raise_error(Sunspot::UnrecognizedFieldError)
+  end
+
+  describe 'connective examples' do
+    it 'creates a disjunction between two subqueries' do
+      search Post do
+        any do
+          fulltext 'keywords1', :fields => :title
+          fulltext 'keyword2', :fields => :body
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" OR _query_:\"{!edismax qf='body_textsv'}keyword2\")"
+    end
+
+    it 'creates a conjunction inside of a disjunction' do
+      search do
+        any do
+          fulltext 'keywords1', :fields => :body
+
+          all do
+            fulltext 'keyword2', :fields => :body
+            fulltext 'keyword3', :fields => :body
+          end
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='body_textsv'}keywords1\" OR (_query_:\"{!edismax qf='body_textsv'}keyword2\" AND _query_:\"{!edismax qf='body_textsv'}keyword3\"))"
+    end
+
+    it 'does nothing special if #all/#any called from the top level or called multiple times' do
+      search Post do
+        all do
+          fulltext 'keywords1', :fields => :title
+          fulltext 'keyword2', :fields => :body
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" AND _query_:\"{!edismax qf='body_textsv'}keyword2\")"
+    end
+
+    it 'does nothing special if #all/#any are mixed and called multiple times' do
+      search Post do
+        all do
+          any do
+            all do
+              fulltext 'keywords1', :fields => :title
+              fulltext 'keyword2', :fields => :body
+            end
+          end
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" AND _query_:\"{!edismax qf='body_textsv'}keyword2\")"
+
+      search Post do
+        any do
+          all do
+            any do
+              fulltext 'keywords1', :fields => :title
+              fulltext 'keyword2', :fields => :body
+            end
+          end
+        end
+      end
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='title_text'}keywords1\" OR _query_:\"{!edismax qf='body_textsv'}keyword2\")"
+    end
+
+    it "does not add empty parentheses" do
+      search Post do
+        any do
+          all do
+          end
+
+          any do
+            fulltext 'keywords1', :fields => :title
+            all do
+            end
+          end
+        end
+      end
+
+      connection.searches.last[:q].should eq "_query_:\"{!edismax qf='title_text'}keywords1\""
+    end
+  end
+
+  describe "joins" do
+    it "should search by join" do
+      srch = search PhotoContainer do
+        any do
+          fulltext 'keyword1', :fields => :caption
+          fulltext 'keyword2', :fields => :description
+        end
+      end
+
+      obj_id = find_ob_id(srch)
+      q_name = "qPhoto#{obj_id}"
+      fq_name = "f#{q_name}"
+
+      connection.searches.last[:q].should eq "(_query_:\"{!join from=photo_container_id_i to=id_i v=$#{q_name} fq=$#{fq_name}}\" OR _query_:\"{!edismax qf='description_text^1.2'}keyword2\")"
+      connection.searches.last[q_name].should eq "_query_:\"{!edismax qf='caption_text'}keyword1\""
+      connection.searches.last[fq_name].should eq "type:Photo"
+    end
+
+    it "should be able to resolve name conflicts with the :prefix option" do
+      srch = search PhotoContainer do
+        any do
+          fulltext 'keyword1', :fields => :description
+          fulltext 'keyword2', :fields => :photo_description
+        end
+      end
+
+      obj_id = find_ob_id(srch)
+      q_name = "qPhoto#{obj_id}"
+      fq_name = "f#{q_name}"
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='description_text^1.2'}keyword1\" OR _query_:\"{!join from=photo_container_id_i to=id_i v=$#{q_name} fq=$#{fq_name}}\")"
+      connection.searches.last[q_name].should eq "_query_:\"{!edismax qf='description_text'}keyword2\""
+      connection.searches.last[fq_name].should eq "type:Photo"
+    end
+
+    it "should recognize fields when adding from DSL, e.g. when calling boost_fields" do
+      srch = search PhotoContainer do
+        any do
+          fulltext 'keyword1', :fields => [:photo_description, :description] do
+            boost_fields(:photo_description => 1.3, :description => 1.5)
+          end
+        end
+      end
+
+      obj_id = find_ob_id(srch)
+      q_name = "qPhoto#{obj_id}"
+      fq_name = "f#{q_name}"
+
+      connection.searches.last[:q].should eq "(_query_:\"{!edismax qf='description_text^1.5'}keyword1\" OR _query_:\"{!join from=photo_container_id_i to=id_i v=$#{q_name} fq=$#{fq_name}}\")"
+      connection.searches.last[q_name].should eq "_query_:\"{!edismax qf='description_text^1.3'}keyword1\""
+      connection.searches.last[fq_name].should eq "type:Photo"
+    end
+
+    private
+
+    def find_ob_id(search)
+      search.query.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Conjunction) }.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Disjunction) }.
+        instance_variable_get("@components").find { |c| c.is_a?(Sunspot::Query::Join) }.
+        object_id
+    end
   end
 end

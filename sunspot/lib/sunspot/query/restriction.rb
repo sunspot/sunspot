@@ -68,11 +68,14 @@ module Sunspot
         # on whether this restriction is negated.
         #
         def to_boolean_phrase
+          phrase = []
+          phrase << @field.local_params if @field.respond_to? :local_params
           unless negated?
-            to_positive_boolean_phrase
+            phrase << to_positive_boolean_phrase
           else
-            to_negated_boolean_phrase
+            phrase << to_negated_boolean_phrase
           end
+          phrase.join
         end
 
         # 
@@ -273,10 +276,23 @@ module Sunspot
       # Results must have field with value included in given collection
       #
       class AnyOf < Base
+
+        def negated?
+          if @value.empty?
+            false
+          else
+            super
+          end
+        end
+
         private
 
         def to_solr_conditional
-          "(#{@value.map { |v| solr_value v } * ' OR '})"
+          if @value.empty?
+            "[* TO *]"
+          else
+            "(#{@value.map { |v| solr_value v } * ' OR '})"
+          end
         end
       end
 
@@ -285,10 +301,22 @@ module Sunspot
       # collection (only makes sense for fields with multiple values)
       #
       class AllOf < Base
+        def negated?
+          if @value.empty?
+            false
+          else
+            super
+          end
+        end
+        
         private
 
         def to_solr_conditional
-          "(#{@value.map { |v| solr_value v } * ' AND '})"
+          if @value.empty?
+            "[* TO *]"
+          else
+            "(#{@value.map { |v| solr_value v } * ' AND '})"
+          end
         end
       end
 

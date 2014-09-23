@@ -54,6 +54,28 @@ module SearchHelper
     }
   end
 
+  def stub_stats(name, values)
+    connection.response = {
+      'stats' => {
+        'stats_fields' => {
+          name.to_s => { :facets => {} }.merge(values)
+        }
+      }
+    }
+  end
+
+  def stub_stats_facets(name, facets)
+    connection.response = {
+      'stats' => {
+        'stats_fields' => {
+          name.to_s => {
+            'facets' => facets
+          }
+        }
+      }
+    }
+  end
+
   def stub_query_facet(values)
     connection.response = { 'facet_counts' => { 'facet_queries' => values } }
   end
@@ -64,5 +86,13 @@ module SearchHelper
 
   def facet_counts(result, field_name)
     result.facet(field_name).rows.map { |row| row.count }
+  end
+
+  def stats_facet_values(result, field_name, facet_name)
+    result.stats(field_name).facet(facet_name).rows.map(&:value)
+  end
+
+  def stats_facet_stats(result, field_name, facet_name, value)
+    result.stats(field_name).facet(facet_name).rows.find { |r| r.value == value }
   end
 end

@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module Sunspot
   #
   # Sunspot works by saving references to the primary key (or natural ID) of
@@ -46,7 +48,7 @@ module Sunspot
     #   end
     #
     #   # then in your initializer
-    #   Sunspot::Adapters::InstanceAdapter.register(MyAdapter, File)
+    #   Sunspot::Adapters::InstanceAdapter.register(FileAdapter, File)
     #
     class InstanceAdapter
       def initialize(instance) #:nodoc:
@@ -119,16 +121,28 @@ module Sunspot
         #
         # Sunspot::NoAdapterError:: If no adapter is registered for this class
         #
-        def for(clazz) #:nodoc:
-          original_class_name = clazz.to_s
-          clazz.ancestors.each do |ancestor_class|
-            next if ancestor_class.to_s.nil? || ancestor_class.to_s.empty?
-            class_name = ancestor_class.to_s.to_sym
-            return instance_adapters[class_name] if instance_adapters[class_name]
-          end
-
+        def for(clazz)
+          adapter = registered_adapter_for(clazz) || registered_adapter_for_ancestors_of(clazz)
+          return adapter if adapter
           raise(Sunspot::NoAdapterError,
-                "No adapter is configured for #{original_class_name} or its superclasses. See the documentation for Sunspot::Adapters")
+                "No adapter is configured for #{clazz.to_s} or its superclasses. See the documentation for Sunspot::Adapters")
+        end
+
+        # Returns the directly-registered adapter for the specified class,
+        # if one exists, without searching the class's ancestors.
+        #
+        # === Parameters
+        #
+        # clazz<Class>:: The model class to be checked for the registered
+        #   adapter
+        #
+        # === Returns
+        #
+        # Class:: Subclass of InstanceAdapter, or nil if none found
+        #
+        def registered_adapter_for(clazz)
+          return nil if clazz.to_s.nil? || clazz.to_s.empty?
+          instance_adapters[clazz.to_s.to_sym]
         end
 
         def index_id_for(class_name, id) #:nodoc:
@@ -145,6 +159,16 @@ module Sunspot
         #
         def instance_adapters #:nodoc:
           @instance_adapters ||= {}
+        end
+
+        def registered_adapter_for_ancestors_of(clazz) # :nodoc:
+          clazz.ancestors.each do |ancestor_class|
+            if adapter = registered_adapter_for(ancestor_class)
+              register(adapter, clazz)
+              return adapter
+            end
+          end
+          nil
         end
       end
     end
@@ -247,14 +271,27 @@ module Sunspot
         # Sunspot::NoAdapterError:: If no data accessor exists for the given class
         #
         def for(clazz) #:nodoc:
-          original_class_name = clazz.to_s
-          clazz.ancestors.each do |ancestor_class|
-            next if ancestor_class.to_s.nil? || ancestor_class.to_s.empty?
-            class_name = ancestor_class.to_s.to_sym
-            return data_accessors[class_name] if data_accessors[class_name]
-          end
+          accessor = registered_accessor_for(clazz) || registered_accessor_for_ancestors_of(clazz)
+          return accessor if accessor
           raise(Sunspot::NoAdapterError,
-                "No data accessor is configured for #{original_class_name} or its superclasses. See the documentation for Sunspot::Adapters")
+                "No data accessor is configured for #{clazz.to_s} or its superclasses. See the documentation for Sunspot::Adapters")
+        end
+
+        # Returns the directly-registered accessor for the specified class, if
+        # one exists, without searching the class's ancestors.
+        #
+        # === Parameters
+        #
+        # clazz<Class>:: The model class to be checked for the registered
+        #   data accessor
+        #
+        # === Returns
+        #
+        # Class:: Subclass of DataAccessor, or nil if none found
+        #
+        def registered_accessor_for(clazz)
+          return nil if clazz.to_s.nil? || clazz.to_s.empty?
+          data_accessors[clazz.to_s.to_sym]
         end
 
         protected
@@ -268,15 +305,25 @@ module Sunspot
         def data_accessors #:nodoc:
           @adapters ||= {}
         end
+
+        def registered_accessor_for_ancestors_of(clazz) # :nodoc:
+          clazz.ancestors.each do |ancestor_class|
+            if accessor = registered_accessor_for(ancestor_class)
+              register(accessor, clazz)
+              return accessor
+            end
+          end
+          nil
+        end
       end
     end
 
     # Allows to have a registry of the classes adapted by a DataAccessor. This
     # registry does the class registration using DataAccessor's #create and while
     # doing so also allows a registered class to notify which attributes
-    # should be inherited by its subclasses. 
-    # This is useful in cases such us ActiveRecord's #include option, where 
-    # you may need to run a search in all the subclasses of a searchable model 
+    # should be inherited by its subclasses.
+    # This is useful in cases such us ActiveRecord's #include option, where
+    # you may need to run a search in all the subclasses of a searchable model
     # and including some associations for all of them when it loads.
     #
     # ==== Example

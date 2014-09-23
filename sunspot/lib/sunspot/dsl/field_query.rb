@@ -1,6 +1,6 @@
 module Sunspot
   module DSL
-    # 
+    #
     # Provides an API for areas of the query DSL that operate on specific
     # fields. This functionality is provided by the query DSL and the dynamic
     # query DSL.
@@ -45,14 +45,14 @@ module Sunspot
       #   the reference longitude
       # direction<Symbol>::
       #   :asc or :desc (default :asc)
-      # 
+      #
       def order_by_geodist(field_name, lat, lon, direction = nil)
         @query.add_sort(
           Sunspot::Query::Sort::GeodistSort.new(@setup.field(field_name), lat, lon, direction)
         )
       end
 
-      # 
+      #
       # DEPRECATED Use <code>order_by(:random)</code>
       #
       def order_by_random
@@ -109,7 +109,7 @@ module Sunspot
       #     with(:blog_id, 1)
       #     facet(:category_id)
       #   end
-      #   
+      #
       # The facet specified above will have a row for each category_id that is
       # present in a document which also has a blog_id of 1.
       #
@@ -125,12 +125,12 @@ module Sunspot
       #     category_filter = with(:category_id, 2)
       #     facet(:category_id, :exclude => category_filter)
       #   end
-      # 
+      #
       # Although the results of the above search will be restricted to those
       # with a category_id of 2, the category_id facet will operate as if a
       # category had not been selected, allowing the user to select additional
       # categories (which will presumably be ORed together).
-      # 
+      #
       # It possible to exclude multiple filters by passing an array:
       #
       #   Sunspot.search(Post) do
@@ -141,7 +141,7 @@ module Sunspot
       #           :exclude => [category_filter, author_filter].compact)
       #   end
       #
-      # You should consider using +.compact+ to ensure that the array does not 
+      # You should consider using +.compact+ to ensure that the array does not
       # contain any nil values.
       #
       # <strong>As far as I can tell, Solr only supports multi-select with
@@ -331,11 +331,51 @@ module Sunspot
         end
       end
 
+      def stats(*field_names, &block)
+        options = Sunspot::Util.extract_options_from(field_names)
+
+        field_names.each do |field_name|
+          field = @setup.field(field_name)
+          query_stats = @query.add_stats(
+            Sunspot::Query::FieldStats.new(field, options)
+          )
+          search_stats = @search.add_field_stats(field)
+
+          Sunspot::Util.instance_eval_or_call(
+            FieldStats.new(query_stats, @setup, search_stats),
+            &block) if block
+        end
+      end
+
       def dynamic(base_name, &block)
         dynamic_field_factory = @setup.dynamic_field_factory(base_name)
         Sunspot::Util.instance_eval_or_call(
           FieldQuery.new(@search, @query, dynamic_field_factory),
           &block
+        )
+      end
+      #
+      # Specify that results should be ordered based on a
+      # FunctionQuery - http://wiki.apache.org/solr/FunctionQuery
+      # Solr 3.1 and up
+      #
+      #  For example, to order by field1 + (field2*field3):
+      #
+      #    order_by_function :sum, :field1, [:product, :field2, :field3], :desc
+      #
+      # ==== Parameters
+      # function_name<Symbol>::
+      #   the function to run
+      # arguments::
+      #   the arguments for this function.
+      #   - Symbol for a field or function name
+      #   - Array for a nested function
+      #   - String for a literal constant
+      # direction<Symbol>::
+      #   :asc or :desc
+      def order_by_function(*args)
+        @query.add_sort(
+          Sunspot::Query::Sort::FunctionSort.new(@setup,args)
         )
       end
     end
