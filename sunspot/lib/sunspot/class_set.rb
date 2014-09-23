@@ -7,7 +7,7 @@ module Sunspot
     end
 
     def <<(klass)
-      @name_to_klass[klass.name.to_sym] = klass
+      @name_to_klass[klass.to_s.to_sym] = klass
       self
     end
     alias_method :add, :<<

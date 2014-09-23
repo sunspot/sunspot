@@ -27,13 +27,13 @@ module Sunspot
     class <<self
       def register(sunspot_type, *classes)
         classes.each do |clazz|
-          ruby_type_map[clazz.name.to_sym] = sunspot_type.instance
+          ruby_type_map[clazz.to_s.to_sym] = sunspot_type.instance
         end
       end
 
       def for_class(clazz)
         if clazz
-          ruby_type_map[clazz.name.to_sym] || for_class(clazz.superclass)
+          ruby_type_map[clazz.to_s.to_sym] || for_class(clazz.superclass)
         end
       end
 
@@ -78,7 +78,7 @@ module Sunspot
       def to_literal(object)
         raise(
           ArgumentError,
-          "#{self.class.name} cannot be used as a Solr literal"
+          "#{self.class.to_s} cannot be used as a Solr literal"
         )
       end
     end

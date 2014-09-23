@@ -61,7 +61,7 @@ describe 'search with highlighting results', :type => :search do
     highlights.each_with_index do |highlight, i|
       if highlight
         instance = docs[i]
-        highlighting["#{instance.class.name} #{instance.id}"] = highlight
+        highlighting["#{instance.class.to_s} #{instance.id}"] = highlight
       end
     end
     response

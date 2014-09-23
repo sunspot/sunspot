@@ -32,7 +32,7 @@ module Sunspot
     # Array:: Collection of class names
     #
     def type_names
-      @type_names ||= @types.map { |clazz| clazz.name }
+      @type_names ||= @types.map { |clazz| clazz.to_s }
     end
 
     # 

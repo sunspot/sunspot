@@ -232,7 +232,7 @@ module Sunspot
     end
 
     def to_indexed(clazz)
-      clazz.name
+      clazz.to_s
     end
   end
 

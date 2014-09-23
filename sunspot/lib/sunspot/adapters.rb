@@ -63,7 +63,7 @@ module Sunspot
       # String:: ID for use in Solr
       #
       def index_id #:nodoc:
-        InstanceAdapter.index_id_for(@instance.class.name, id)
+        InstanceAdapter.index_id_for(@instance.class.to_s, id)
       end
 
       class <<self
@@ -83,8 +83,8 @@ module Sunspot
         def adapt(instance) #:nodoc:
           @known_adapters ||= {}
           clazz = instance.class
-          adapter = @known_adapters[clazz.name.to_sym] || self.for(clazz)
-          @known_adapters[clazz.name.to_sym] ||= adapter
+          adapter = @known_adapters[clazz.to_s.to_sym] || self.for(clazz)
+          @known_adapters[clazz.to_s.to_sym] ||= adapter
           adapter.new(instance)
         end
 
@@ -101,7 +101,7 @@ module Sunspot
         #
         def register(instance_adapter, *classes)
           classes.each do |clazz|
-            instance_adapters[clazz.name.to_sym] = instance_adapter
+            instance_adapters[clazz.to_s.to_sym] = instance_adapter
           end
         end
 
@@ -125,7 +125,7 @@ module Sunspot
           adapter = registered_adapter_for(clazz) || registered_adapter_for_ancestors_of(clazz)
           return adapter if adapter
           raise(Sunspot::NoAdapterError,
-                "No adapter is configured for #{clazz.name} or its superclasses. See the documentation for Sunspot::Adapters")
+                "No adapter is configured for #{clazz.to_s} or its superclasses. See the documentation for Sunspot::Adapters")
         end
 
         # Returns the directly-registered adapter for the specified class,
@@ -141,8 +141,8 @@ module Sunspot
         # Class:: Subclass of InstanceAdapter, or nil if none found
         #
         def registered_adapter_for(clazz)
-          return nil if clazz.name.nil? || clazz.name.empty?
-          instance_adapters[clazz.name.to_sym]
+          return nil if clazz.to_s.nil? || clazz.to_s.empty?
+          instance_adapters[clazz.to_s.to_sym]
         end
 
         def index_id_for(class_name, id) #:nodoc:
@@ -250,7 +250,7 @@ module Sunspot
         #
         def register(data_accessor, *classes)
           classes.each do |clazz|
-            data_accessors[clazz.name.to_sym] = data_accessor
+            data_accessors[clazz.to_s.to_sym] = data_accessor
           end
         end
 
@@ -274,7 +274,7 @@ module Sunspot
           accessor = registered_accessor_for(clazz) || registered_accessor_for_ancestors_of(clazz)
           return accessor if accessor
           raise(Sunspot::NoAdapterError,
-                "No data accessor is configured for #{clazz.name} or its superclasses. See the documentation for Sunspot::Adapters")
+                "No data accessor is configured for #{clazz.to_s} or its superclasses. See the documentation for Sunspot::Adapters")
         end
 
         # Returns the directly-registered accessor for the specified class, if
@@ -290,8 +290,8 @@ module Sunspot
         # Class:: Subclass of DataAccessor, or nil if none found
         #
         def registered_accessor_for(clazz)
-          return nil if clazz.name.nil? || clazz.name.empty?
-          data_accessors[clazz.name.to_sym]
+          return nil if clazz.to_s.nil? || clazz.to_s.empty?
+          data_accessors[clazz.to_s.to_sym]
         end
 
         protected
@@ -321,9 +321,9 @@ module Sunspot
     # Allows to have a registry of the classes adapted by a DataAccessor. This
     # registry does the class registration using DataAccessor's #create and while
     # doing so also allows a registered class to notify which attributes
-    # should be inherited by its subclasses. 
-    # This is useful in cases such us ActiveRecord's #include option, where 
-    # you may need to run a search in all the subclasses of a searchable model 
+    # should be inherited by its subclasses.
+    # This is useful in cases such us ActiveRecord's #include option, where
+    # you may need to run a search in all the subclasses of a searchable model
     # and including some associations for all of them when it loads.
     #
     # ==== Example
@@ -363,7 +363,7 @@ module Sunspot
       def_delegators :@reg, :include?
 
       def retrieve(clazz)
-        key = clazz.name.to_sym
+        key = clazz.to_s.to_sym
         if !@reg.include?(key)
           data_accessor = inject_inherited_attributes_for( Adapters::DataAccessor.create(clazz) )
           @reg[key] ||= data_accessor
@@ -381,8 +381,8 @@ module Sunspot
             inherited_value = nil
             # Now try to find a value for the attribute in the chain of ancestors
             data_accessor.clazz.ancestors.each do |ancestor|
-              next if ancestor.name.nil? || ancestor.name.empty?
-              key = ancestor.name.to_sym
+              next if ancestor.to_s.nil? || ancestor.to_s.empty?
+              key = ancestor.to_s.to_sym
               inherited_value = @reg[key].send(attribute) if @reg[key]
               break unless inherited_value.nil?
             end
