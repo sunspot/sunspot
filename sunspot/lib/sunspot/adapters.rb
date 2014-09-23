@@ -61,7 +61,7 @@ module Sunspot
       # String:: ID for use in Solr
       #
       def index_id #:nodoc:
-        InstanceAdapter.index_id_for(@instance.class.name, id)
+        InstanceAdapter.index_id_for(@instance.class.to_s, id)
       end
 
       class <<self
@@ -81,8 +81,8 @@ module Sunspot
         def adapt(instance) #:nodoc:
           @known_adapters ||= {}
           clazz = instance.class
-          adapter = @known_adapters[clazz.name.to_sym] || self.for(clazz)
-          @known_adapters[clazz.name.to_sym] ||= adapter
+          adapter = @known_adapters[clazz.to_s.to_sym] || self.for(clazz)
+          @known_adapters[clazz.to_s.to_sym] ||= adapter
           adapter.new(instance)
         end
 
@@ -99,7 +99,7 @@ module Sunspot
         #
         def register(instance_adapter, *classes)
           classes.each do |clazz|
-            instance_adapters[clazz.name.to_sym] = instance_adapter
+            instance_adapters[clazz.to_s.to_sym] = instance_adapter
           end
         end
 
@@ -120,10 +120,10 @@ module Sunspot
         # Sunspot::NoAdapterError:: If no adapter is registered for this class
         #
         def for(clazz) #:nodoc:
-          original_class_name = clazz.name
+          original_class_name = clazz.to_s
           clazz.ancestors.each do |ancestor_class|
-            next if ancestor_class.name.nil? || ancestor_class.name.empty?
-            class_name = ancestor_class.name.to_sym
+            next if ancestor_class.to_s.nil? || ancestor_class.to_s.empty?
+            class_name = ancestor_class.to_s.to_sym
             return instance_adapters[class_name] if instance_adapters[class_name]
           end
 
@@ -226,7 +226,7 @@ module Sunspot
         #
         def register(data_accessor, *classes)
           classes.each do |clazz|
-            data_accessors[clazz.name.to_sym] = data_accessor
+            data_accessors[clazz.to_s.to_sym] = data_accessor
           end
         end
 
@@ -247,10 +247,10 @@ module Sunspot
         # Sunspot::NoAdapterError:: If no data accessor exists for the given class
         #
         def for(clazz) #:nodoc:
-          original_class_name = clazz.name
+          original_class_name = clazz.to_s
           clazz.ancestors.each do |ancestor_class|
-            next if ancestor_class.name.nil? || ancestor_class.name.empty?
-            class_name = ancestor_class.name.to_sym
+            next if ancestor_class.to_s.nil? || ancestor_class.to_s.empty?
+            class_name = ancestor_class.to_s.to_sym
             return data_accessors[class_name] if data_accessors[class_name]
           end
           raise(Sunspot::NoAdapterError,
@@ -316,7 +316,7 @@ module Sunspot
       def_delegators :@reg, :include?
 
       def retrieve(clazz)
-        key = clazz.name.to_sym
+        key = clazz.to_s.to_sym
         if !@reg.include?(key)
           data_accessor = inject_inherited_attributes_for( Adapters::DataAccessor.create(clazz) )
           @reg[key] ||= data_accessor
@@ -334,8 +334,8 @@ module Sunspot
             inherited_value = nil
             # Now try to find a value for the attribute in the chain of ancestors
             data_accessor.clazz.ancestors.each do |ancestor|
-              next if ancestor.name.nil? || ancestor.name.empty?
-              key = ancestor.name.to_sym
+              next if ancestor.to_s.nil? || ancestor.to_s.empty?
+              key = ancestor.to_s.to_sym
               inherited_value = @reg[key].send(attribute) if @reg[key]
               break unless inherited_value.nil?
             end

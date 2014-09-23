@@ -153,7 +153,7 @@ module Sunspot
     def remove_by_id(clazz, id)
       class_name =
         if clazz.is_a?(Class)
-          clazz.name
+          clazz.to_s
         else
           clazz.to_s
         end

@@ -7,7 +7,7 @@ module Sunspot
     attr_reader :class_object_id
     def initialize(clazz)
       @class_object_id = clazz.object_id
-      @class_name = clazz.name
+      @class_name = clazz.to_s
       @field_factories, @text_field_factories, @dynamic_field_factories,
         @field_factories_cache, @text_field_factories_cache,
         @dynamic_field_factories_cache = *Array.new(6) { Hash.new }
@@ -310,7 +310,7 @@ module Sunspot
       #   Setup instance associated with the given class or its nearest ancestor
       #   
       def for(clazz) #:nodoc:
-        setups[clazz.name.to_sym] || self.for(clazz.superclass) if clazz
+        setups[clazz.to_s.to_sym] || self.for(clazz.superclass) if clazz
       end
 
       protected
@@ -327,11 +327,11 @@ module Sunspot
       # Sunspot::Setup:: New or existing setup for this class
       #
       def for!(clazz) #:nodoc:
-        setup = setups[clazz.name.to_sym]
+        setup = setups[clazz.to_s.to_sym]
         if setup && setup.class_object_id == clazz.object_id
           setup
         else
-          setups[clazz.name.to_sym] = new(clazz)
+          setups[clazz.to_s.to_sym] = new(clazz)
         end
       end
 

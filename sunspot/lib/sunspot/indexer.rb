@@ -54,7 +54,7 @@ module Sunspot
     #
     def remove_all(clazz = nil)
       if clazz
-        @connection.delete_by_query("type:#{escape(clazz.name)}")
+        @connection.delete_by_query("type:#{escape(clazz.to_s)}")
       else
         @connection.delete_by_query("*:*")
       end
@@ -114,7 +114,7 @@ module Sunspot
     def document_for(model)
       RSolr::Xml::Document.new(
         :id => Adapters::InstanceAdapter.adapt(model).index_id,
-        :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }
+        :type => Util.superclasses_for(model.class).map { |clazz| clazz.to_s }
       )
     end
 

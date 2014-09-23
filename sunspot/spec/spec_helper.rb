@@ -34,7 +34,7 @@ RSpec.configure do |config|
 end
 
 def without_class(clazz)
-  Object.class_eval { remove_const(clazz.name.to_sym) }
+  Object.class_eval { remove_const(clazz.to_s.to_sym) }
   yield
-  Object.class_eval { const_set(clazz.name.to_sym, clazz) }
+  Object.class_eval { const_set(clazz.to_s.to_sym, clazz) }
 end

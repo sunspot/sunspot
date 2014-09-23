@@ -10,7 +10,7 @@ module SearchHelper
       end
     docs = results.map do |result|
       instance = result.delete('instance')
-      result.merge('id' => "#{instance.class.name} #{instance.id}")
+      result.merge('id' => "#{instance.class.to_s} #{instance.id}")
     end
     response = {
       'response' => {
