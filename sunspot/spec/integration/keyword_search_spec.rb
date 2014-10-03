@@ -16,6 +16,34 @@ describe 'keyword search' do
       Sunspot.index!(@comment)
     end
 
+    context 'edismax' do
+      it 'matches with wildcards' do
+        results = Sunspot.search(Post) { keywords '*oas*' }.results
+        [0,2].each { |i| results.should include(@posts[i])}
+        [1].each { |i| results.should_not include(@posts[i])}
+      end
+
+      it 'matches multiple keywords on different fields with wildcards using subqueries' do
+        results = Sunspot.search(Post) do
+          keywords 'insuffic*',:fields=>[:title]
+          keywords 'win*',:fields=>[:body]
+        end.results
+        [0].each {|i| results.should include(@posts[i])}
+        [1,2].each {|i| results.should_not include(@posts[i])}
+      end
+
+      it 'matches with proximity' do
+        results = Sunspot.search(Post) { keywords '"wind buffer"~4' }.results
+        [0,1].each {|i| results.should_not include(@posts[i])}
+        [2].each {|i| results.should include(@posts[i])}
+      end
+
+      it 'does not match if not within proximity' do
+        results = Sunspot.search(Post) { keywords '"wind buffer"~1' }.results
+        results.should == []
+      end
+    end
+
     it 'matches a single keyword out of a single field' do
       results = Sunspot.search(Post) { keywords 'toast' }.results
       [0, 2].each { |i| results.should include(@posts[i]) }

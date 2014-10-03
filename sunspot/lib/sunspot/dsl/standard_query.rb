@@ -115,19 +115,32 @@ module Sunspot
           end
         end
       end
+
       alias_method :keywords, :fulltext
 
       def with(*args)
         case args.first
-        when String, Symbol
-          if args.length == 1 # NONE
-            field = @setup.field(args[0].to_sym)
-            return DSL::RestrictionWithNear.new(field, @scope, @query, false)
-          end
+          when String, Symbol
+            if args.length == 1 # NONE
+              field = @setup.field(args[0].to_sym)
+              return DSL::RestrictionWithNear.new(field, @scope, @query, false)
+            end
         end
 
         # else
         super
+      end
+
+      def any(&block)
+        @query.disjunction do
+          Util.instance_eval_or_call(self, &block)
+        end
+      end
+
+      def all(&block)
+        @query.conjunction do
+          Util.instance_eval_or_call(self, &block)
+        end
       end
 
       # Ask Solr to suggest alternative spellings for the query
@@ -137,6 +150,29 @@ module Sunspot
       # The list of options can be found here: http://wiki.apache.org/solr/SpellCheckComponent
       def spellcheck(options = {})
         @query.add_spellcheck(options)
+      end
+
+      private
+
+      def add_fulltext(keywords, field_names)
+        return yield(@query.add_fulltext(keywords), []) unless field_names.any?
+
+        all_fields = field_names.map { |name| @setup.text_fields(name) }.flatten
+        all_fields -= join_fields = all_fields.find_all(&:joined?)
+
+        if all_fields.any?
+          fulltext_query = @query.add_fulltext(keywords)
+          all_fields.each { |field| fulltext_query.add_fulltext_field(field, field.default_boost) }
+          yield(fulltext_query, all_fields)
+        end
+
+        if join_fields.any?
+          join_fields.group_by { |field| [field.target, field.from, field.to] }.each_pair do |(target, from, to), fields|
+            join_query = @query.add_join(keywords, target, from, to)
+            fields.each { |field| join_query.add_fulltext_field(field, field.default_boost) }
+            yield(join_query, fields)
+          end
+        end
       end
 
     end

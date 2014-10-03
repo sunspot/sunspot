@@ -19,10 +19,22 @@ describe Sunspot::SessionProxy::ShardingSessionProxy do
 
   [:remove_by_id, :remove_by_id!].each do |method|
     it "should delegate #{method} to appropriate session" do
-      @proxy.sessions[0].should_receive(method).with(Post, 2)
-      @proxy.sessions[1].should_receive(method).with(Post, 1)
+      @proxy.sessions[1].should_receive(method).with(Post, [3])
+      @proxy.sessions[0].should_receive(method).with(Post, [2])
+      @proxy.sessions[1].should_receive(method).with(Post, [1])
       @proxy.send(method, Post, 1)
       @proxy.send(method, Post, 2)
+      @proxy.send(method, Post, 3)
+    end
+    it "should delegate #{method} to appropriate session given splatted index ids" do
+      @proxy.sessions[0].should_receive(method).with(Post, [2])
+      @proxy.sessions[1].should_receive(method).with(Post, [1, 3])
+      @proxy.send(method, Post, 1, 2, 3)
+    end
+    it "should delegate #{method} to appropriate session given array of index ids" do
+      @proxy.sessions[0].should_receive(method).with(Post, [2])
+      @proxy.sessions[1].should_receive(method).with(Post, [1, 3])
+      @proxy.send(method, Post, [1, 2, 3])
     end
   end
 

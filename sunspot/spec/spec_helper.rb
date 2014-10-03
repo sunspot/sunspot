@@ -13,6 +13,10 @@ end
 require File.join(File.dirname(__FILE__), 'ext')
 
 RSpec.configure do |config|
+  # Run only examples with :focus => true
+  config.filter_run :focus => true
+  config.run_all_when_everything_filtered = true
+
   # Mock session available to all spec/api tests
   config.include MockSessionHelper,
                  :type => :api,

@@ -8,6 +8,9 @@ development:
     port: 8981
 config_test:
   solr:
+    scheme: http
+    user: user
+    pass: pass
     hostname: some.host
     port: 1234
     path: /solr/idx

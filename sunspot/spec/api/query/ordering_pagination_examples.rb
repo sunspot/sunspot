@@ -46,6 +46,20 @@ shared_examples_for 'sortable query' do
     connection.should have_last_search_with(:rows => 15, :start => 30)
   end
 
+  it 'paginates with initial cursor' do
+    search do
+      paginate :cursor => '*', :per_page => 15
+    end
+    connection.should have_last_search_with(:rows => 15, :cursorMark => '*')
+  end
+
+  it 'paginates with given cursor' do
+    search do
+      paginate :cursor => 'AoIIP4AAACxQcm9maWxlIDEwMTk='
+    end
+    connection.should have_last_search_with(:cursorMark => 'AoIIP4AAACxQcm9maWxlIDEwMTk=')
+  end
+
   it 'orders by a single field' do
     search do
       order_by :average_rating, :desc

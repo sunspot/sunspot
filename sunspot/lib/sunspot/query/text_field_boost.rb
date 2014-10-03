@@ -8,9 +8,7 @@ module Sunspot
       end
 
       def to_boosted_field
-        boosted_field = @field.indexed_name
-        boosted_field.concat("^#{@boost}") if @boost
-        boosted_field
+        @boost ? "#{@field.indexed_name}^#{@boost}" : @field.indexed_name
       end
     end
   end

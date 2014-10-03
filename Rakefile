@@ -1,4 +1,4 @@
-desc 'Release Sunspot, Sunspot::Rails and Sunspot::Solr to Gemcutter'
+desc 'Release Sunspot, Sunspot::Rails and Sunspot::Solr to Rubygems.org'
 task :release do
   FileUtils.cp('README.md', 'sunspot/')
 
