@@ -44,7 +44,7 @@ module Sunspot
       private
 
       def qualified_param(param)
-        :"f.#{key}.facet.#{param}"
+        :"f.#{@field.indexed_name}.facet.#{param}"
       end
       
       def key

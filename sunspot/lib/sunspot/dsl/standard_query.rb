@@ -54,41 +54,61 @@ module Sunspot
       #   instance, in a search for "\"great pizza\"" with a phrase slop of 1,
       #   "great pizza" and "great big pizza" will match, but "great monster of
       #   a pizza" will not. Default behavior is a query phrase slop of zero.
+      # :extended_syntax<Boolean>::
+      #   If true, use the new 'edismax' handler instead of the old 'dismax'. More
+      #   information about edismax handler can be found here:
+      #   
+      #   https://issues.apache.org/jira/browse/SOLR-1553
+      #   
+      #   Basically, it's an improved version of 'dismax' that supports Lucene query
+      #   syntax (e.g. allows operators like '+', '-' etc. in 'q' parameter).
       #
       def fulltext(keywords, options = {}, &block)
-        return if not keywords or keywords.to_s =~ /^\s*$/
+        extended_syntax = options.delete(:extended_syntax) || false
 
-        field_names = Util.Array(options.delete(:fields)).compact
+        if keywords && !(keywords.to_s =~ /^\s*$/) || extended_syntax
+          fulltext_query = @query.add_fulltext(keywords)
+          fulltext_query.extended_syntax = extended_syntax
 
-        add_fulltext(keywords, field_names) do |query, fields|
-          query.minimum_match = options.delete(:minimum_match).to_i if options.key?(:minimum_match)
-          query.tie = options.delete(:tie).to_f if options.key?(:tie)
-          query.query_phrase_slop = options.delete(:query_phrase_slop).to_i if options.key?(:query_phrase_slop)
-
+          if field_names = options.delete(:fields)
+            Util.Array(field_names).each do |field_name|
+              @setup.text_fields(field_name).each do |field|
+                fulltext_query.add_fulltext_field(field, field.default_boost)
+              end
+            end
+          end
+          if minimum_match = options.delete(:minimum_match)
+            fulltext_query.minimum_match = minimum_match.to_i
+          end
+          if tie = options.delete(:tie)
+            fulltext_query.tie = tie.to_f
+          end
+          if query_phrase_slop = options.delete(:query_phrase_slop)
+            fulltext_query.query_phrase_slop = query_phrase_slop.to_i
+          end
           if highlight_field_names = options.delete(:highlight)
             if highlight_field_names == true
-              query.add_highlight
+              fulltext_query.add_highlight
             else
               highlight_fields = []
               Util.Array(highlight_field_names).each do |field_name|
                 highlight_fields.concat(@setup.text_fields(field_name))
               end
-              query.add_highlight(highlight_fields)
+              fulltext_query.add_highlight(highlight_fields)
             end
           end
-
-          if block && query
-            fulltext_dsl = Fulltext.new(query, @setup)
-            Util.instance_eval_or_call(fulltext_dsl, &block)
-          else
-            fulltext_dsl = nil
+          if block && fulltext_query
+            fulltext_dsl = Fulltext.new(fulltext_query, @setup)
+            Util.instance_eval_or_call(
+              fulltext_dsl,
+              &block
+            )
           end
-
-          if fields.empty? && (!fulltext_dsl || !fulltext_dsl.fields_added?)
+          if !field_names && (!fulltext_dsl || !fulltext_dsl.fields_added?)
             @setup.all_text_fields.each do |field|
-              unless query.has_fulltext_field?(field)
+              unless fulltext_query.has_fulltext_field?(field)
                 unless fulltext_dsl && fulltext_dsl.exclude_fields.include?(field.name)
-                  query.add_fulltext_field(field, field.default_boost)
+                  fulltext_query.add_fulltext_field(field, field.default_boost)
                 end
               end
             end
@@ -123,6 +143,15 @@ module Sunspot
         end
       end
 
+      # Ask Solr to suggest alternative spellings for the query
+      #
+      # ==== Options
+      #
+      # The list of options can be found here: http://wiki.apache.org/solr/SpellCheckComponent
+      def spellcheck(options = {})
+        @query.add_spellcheck(options)
+      end
+
       private
 
       def add_fulltext(keywords, field_names)
@@ -145,6 +174,7 @@ module Sunspot
           end
         end
       end
+
     end
   end
 end

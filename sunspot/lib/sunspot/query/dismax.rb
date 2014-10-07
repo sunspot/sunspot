@@ -6,16 +6,16 @@ module Sunspot
     # designed to process user-entered phrases, and search for individual
     # words across a union of several fields.
     #
-    class Dismax < AbstractFulltext
-      attr_writer :minimum_match, :phrase_slop, :query_phrase_slop, :tie
+    class Dismax
+      attr_writer :minimum_match, :phrase_slop, :query_phrase_slop, :tie, :extended_syntax
 
       def initialize(keywords)
-        @keywords = keywords
+        @keywords = keywords && !(keywords.to_s =~ /^\s*$/) ? keywords : '*:*'
         @fulltext_fields = {}
         @boost_queries = []
         @boost_functions = []
         @highlights = []
-
+        @extended_syntax = false
         @minimum_match = nil
         @phrase_fields = nil
         @phrase_slop = nil
@@ -30,7 +30,7 @@ module Sunspot
         params = { :q => @keywords }
         params[:fl] = '* score'
         params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
-        params[:defType] = 'edismax'
+        params[:defType] = @extended_syntax ? 'edismax' : 'dismax'
         params[:mm] = @minimum_match if @minimum_match
         params[:ps] = @phrase_slop if @phrase_slop
         params[:qs] = @query_phrase_slop if @query_phrase_slop

@@ -33,6 +33,14 @@ module Sunspot
         @group.truncate = true
       end
 
+      #
+      # If true, includes the number of groups that have matched the query.
+      # Defaults to false.
+      #
+      def ngroups(val)
+        @group.ngroups = val 
+      end
+
       # Specify the order that results should be returned in. This method can
       # be called multiple times; precedence will be in the order given.
       #

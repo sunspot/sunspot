@@ -188,7 +188,7 @@ shared_examples_for "facetable query" do
       search do
         facet(:blog_id, :name => :blog, :sort => :count)
       end
-      connection.should have_last_search_with(:"f.blog.facet.sort" => 'true')
+      connection.should have_last_search_with(:"f.blog_id_i.facet.sort" => 'true')
     end
 
     it 'raises an ArgumentError if exclusion attempted on a restricted field facet' do
