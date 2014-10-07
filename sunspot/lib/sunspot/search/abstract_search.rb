@@ -23,7 +23,7 @@ module Sunspot
       include HitEnumerable
 
       def initialize(connection, setup, query, configuration) #:nodoc:
-        @connection, @setup, @query = connection, setup, query
+        @connection, @setup, @query, @configuration = connection, setup, query, configuration
         @query.paginate(1, configuration.pagination.default_per_page)
 
         @facets = []
@@ -46,7 +46,11 @@ module Sunspot
       def execute
         reset
         params = @query.to_params
-        @solr_result = @connection.post "#{request_handler}", :data => params
+        if @configuration.solr.http_method.to_s == 'post'
+          @solr_result = @connection.post "#{request_handler}", :data => params
+        else
+          @solr_result = @connection.get "#{request_handler}", :params => params
+        end
         self
       end
 
