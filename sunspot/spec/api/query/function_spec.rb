@@ -82,17 +82,6 @@ describe 'function query' do
     connection.should have_last_search_including(:bf, 'product(average_rating_ft,sum(average_rating_ft,20))')
   end
 
-  # TODO SOLR 1.5
-  it "should raise ArgumentError if string literal passed" do
-    lambda do
-      session.search Post do
-        keywords('pizza') do
-          boost(function { "hello world" })
-        end
-      end
-    end.should raise_error(ArgumentError)
-  end
-
   it "should raise UnrecognizedFieldError if bogus field name passed" do
     lambda do
       session.search Post do
