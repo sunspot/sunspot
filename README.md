@@ -265,7 +265,7 @@ end
 ```ruby
 # Posts with blog_id 1 and author_id 2
 Post.search do
-  any do
+  any_of do
     fulltext "keyword1", :fields => :title
     fulltext "keyword2", :fields => :body
   end
@@ -284,7 +284,7 @@ Post.search do
     end
   end
   
-  any do
+  any_of do
     all do
       fulltext "keyword", :fields => :title
       fulltext "keyword", :fields => :body
@@ -727,7 +727,7 @@ PhotoContainer.search do
   with(:caption, 'blah')
   with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
   
-  any do
+  any_of do
     fulltext("keyword1", :fields => :name)
     fulltext("keyword2", :fields => :description) # will be joined from the Photo model
   end
@@ -760,7 +760,7 @@ class Profile < ActiveRecord::Base
 end
 
 Profile.search do
-  any do
+  any_of do
     fulltext("keyword1 keyword2", :fields => [:tweet_keywords]) do
       minimum_match 1
     end
