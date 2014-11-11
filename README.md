@@ -692,6 +692,7 @@ end
 ### Joins
 
 **Solr 4 and above**
+**Sunspot version > 2.1.1 required**
 
 Solr joins allow you to filter objects by joining on additional documents.  More information can be found on the [Solr Wiki](http://wiki.apache.org/solr/Join).
 
@@ -707,6 +708,7 @@ end
 
 class PhotoContainer < ActiveRecord::Base
   searchable do
+    integer :id
     text :name
     join(:description, :target => Photo, :type => :text, :join => { :from => :photo_container_id, :to => :id })
     join(:caption, :target => Photo, :type => :string, :join => { :from => :photo_container_id, :to => :id })
