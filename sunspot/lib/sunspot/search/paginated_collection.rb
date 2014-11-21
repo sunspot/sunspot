@@ -32,6 +32,7 @@ module Sunspot
       def previous_page
         current_page > 1 ? (current_page - 1) : nil
       end
+      alias :prev_page :previous_page
 
       def next_page
         current_page < total_pages ? (current_page + 1) : nil
