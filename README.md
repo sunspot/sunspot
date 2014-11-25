@@ -263,7 +263,7 @@ end
 ```
 
 ```ruby
-# Posts with blog_id 1 and author_id 2
+# Posts that have 'keyword1' in the title or 'keyword2' in the body
 Post.search do
   any do
     fulltext "keyword1", :fields => :title
