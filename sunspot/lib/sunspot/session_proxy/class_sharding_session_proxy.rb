@@ -23,15 +23,17 @@ module Sunspot
       # 
       # See Sunspot.remove_by_id
       #
-      def remove_by_id(clazz, id)
-        session_for_class(clazz).remove_by_id(clazz, id)
+      def remove_by_id(clazz, *ids)
+        ids.flatten!
+        session_for_class(clazz).remove_by_id(clazz, ids)
       end
 
       # 
       # See Sunspot.remove_by_id!
       #
-      def remove_by_id!(clazz, id)
-        session_for_class(clazz).remove_by_id!(clazz, id)
+      def remove_by_id!(clazz, *ids)
+        ids.flatten!
+        session_for_class(clazz).remove_by_id!(clazz, ids)
       end
 
       # 

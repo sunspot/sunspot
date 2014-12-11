@@ -457,4 +457,34 @@ describe 'scoped_search' do
       end
     end
   end
+
+  describe 'ordering by function' do
+    before :all do
+      Sunspot.remove_all
+      @p1 = Post.new(:blog_id => 1, :category_ids => [3])
+      @p2 = Post.new(:blog_id => 2, :category_ids => [1])
+      Sunspot.index([@p1,@p2])
+      Sunspot.commit
+    end
+    it 'should order by sum' do
+      # 1+3 > 2+1
+      search = Sunspot.search(Post) {order_by_function :sum, :blog_id, :primary_category_id, :desc}
+      search.results.first.should == @p1
+    end
+    it 'should order by product and sum' do
+      # 1 * (1+3) < 2 * (2+1)
+      search = Sunspot.search(Post) { order_by_function :product, :blog_id, [:sum,:blog_id,:primary_category_id], :desc}
+      search.results.first.should == @p2
+    end
+    it 'should accept string literals' do
+      # (1 * -2) > (2 * -2)
+      search = Sunspot.search(Post) {order_by_function :product, :blog_id, '-2', :desc}
+      search.results.first.should == @p1
+    end
+    it 'should accept non-string literals' do
+      # (1 * -2) > (2 * -2)
+      search = Sunspot.search(Post) {order_by_function :product, :blog_id, -2, :desc}
+      search.results.first.should == @p1
+    end
+  end
 end

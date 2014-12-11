@@ -30,7 +30,7 @@ module Sunspot
 
       #
       # Bootstrap a new solr_home by creating all required
-      # directories. 
+      # directories.
       #
       # ==== Returns
       #
@@ -100,6 +100,7 @@ module Sunspot
         command << "-Dsolr.solr.home=#{solr_home}" if solr_home
         command << "-Djava.awt.headless=true"
         command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
+        command << "-Djava.awt.headless=true"
         command << '-jar' << File.basename(solr_jar)
         FileUtils.cd(File.dirname(solr_jar)) do
           exec(*command)
@@ -181,7 +182,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Create new solr_home, config, log and pid directories
       #
       # ==== Returns

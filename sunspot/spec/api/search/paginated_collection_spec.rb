@@ -7,7 +7,7 @@ describe "PaginatedCollection" do
 
   describe "#send" do
     it 'should allow send' do
-      expect { subject.send(:current_page) }.not_to raise_error(NoMethodError)
+      expect { subject.send(:current_page) }.to_not raise_error
     end
   end
 

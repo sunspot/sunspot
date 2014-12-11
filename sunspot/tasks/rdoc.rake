@@ -1,19 +1,27 @@
-begin
-  require 'hanna/rdoctask'
-rescue LoadError
-  if require 'rubygems'
-    retry
-  end
-  # It's OK if hanna isn't installed.
-end
+require 'sunspot/version'
 
-Rake::RDocTask.new(:doc) do |rdoc|
-  version = Sunspot::VERSION
-  rdoc.title = "Sunspot #{version} - Solr-powered search for Ruby objects - API Documentation"
-  rdoc.main = 'README.md'
-  rdoc.rdoc_files.include('README.md', 'lib/sunspot.rb', 'lib/sunspot/**/*.rb')
-  rdoc.rdoc_dir = 'doc'
-  rdoc.options << "--webcvs=http://github.com/outoftime/sunspot/tree/v#{version}/%s" << '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation'
+rdoc_task =
+  begin
+    require 'rdoc/task'
+    RDoc::Task
+  rescue LoadError
+    begin
+      require 'rake/rdoctask'
+      Rake::RDocTask
+    rescue
+      nil
+    end
+  end
+
+if rdoc_task
+  rdoc_task.new(:doc) do |rdoc|
+    version = Sunspot::VERSION
+    rdoc.title = "Sunspot #{version} - Solr-powered search for Ruby objects - API Documentation"
+    rdoc.main = '../README.md'
+    rdoc.rdoc_files.include('../README.md', 'lib/sunspot.rb', 'lib/sunspot/**/*.rb')
+    rdoc.rdoc_dir = 'doc'
+    rdoc.options << "--webcvs=http://github.com/outoftime/sunspot/tree/v#{version}/%s" << '--title' << 'Sunspot - Solr-powered search for Ruby objects - API Documentation'
+  end
 end
 
 namespace :doc do

@@ -38,6 +38,17 @@ module Sunspot
       end
     end
 
+    def add_join_field_factory(name, type, options = {}, &block)
+      field_factory = FieldFactory::Join.new(name, type, options, &block)
+      @field_factories[field_factory.signature] = field_factory
+
+      if type.is_a?(Type::TextType)
+        @text_field_factories_cache[field_factory.name] = field_factory
+      else
+        @field_factories_cache[field_factory.name] = field_factory
+      end
+    end
+
     # 
     # Add field_factories for fulltext search
     #
