@@ -1,6 +1,6 @@
 module Sunspot #:nodoc:
   module Rails #:nodoc:
-    # 
+    #
     # This module adds Sunspot functionality to ActiveRecord models. As well as
     # providing class and instance methods, it optionally adds lifecycle hooks
     # to automatically add and remove models from the Solr index as they are
@@ -16,7 +16,7 @@ module Sunspot #:nodoc:
       end
 
       module ActsAsMethods
-        # 
+        #
         # Makes a class searchable if it is not already, or adds search
         # configuration if it is. Note that the options passed in are only used
         # the first time this method is called for a particular class; so,
@@ -28,7 +28,7 @@ module Sunspot #:nodoc:
         # complete information on the functionality provided by that method.
         #
         # ==== Options (+options+)
-        # 
+        #
         # :auto_index<Boolean>::
         #   Automatically index models in Solr when they are saved.
         #   Default: true
@@ -53,9 +53,9 @@ module Sunspot #:nodoc:
         #   to ignore.
         # :include<Mixed>::
         #   Define default ActiveRecord includes, set this to allow ActiveRecord
-        #   to load required associations when indexing. See ActiveRecord's 
+        #   to load required associations when indexing. See ActiveRecord's
         #   documentation on eager-loading for examples on how to set this
-        #   Default: [] 
+        #   Default: []
         # :unless<Mixed>::
         #   Only index models in Solr if the method, proc or string evaluates
         #   to false (e.g. <code>:unless => :should_not_index?</code> or <code>
@@ -99,12 +99,12 @@ module Sunspot #:nodoc:
               end
             end
             options[:include] = Util::Array(options[:include])
-            
+
             self.sunspot_options = options
           end
         end
 
-        # 
+        #
         # This method is defined on all ActiveRecord::Base subclasses. It
         # is false for classes on which #searchable has not been called, and
         # true for classes on which #searchable has been called.
@@ -131,7 +131,7 @@ module Sunspot #:nodoc:
             alias_method :clean_index_orphans, :solr_clean_index_orphans unless method_defined? :clean_index_orphans
           end
         end
-        # 
+        #
         # Search for instances of this class in Solr. The block is delegated to
         # the Sunspot.search method - see the Sunspot documentation for the full
         # API.
@@ -160,7 +160,7 @@ module Sunspot #:nodoc:
           end
         end
 
-        # 
+        #
         # Get IDs of matching results without loading the result objects from
         # the database. This method may be useful if search is used as an
         # intermediate step in a larger find operation. The block is the same
@@ -176,14 +176,14 @@ module Sunspot #:nodoc:
           end
         end
 
-        # 
+        #
         # Remove instances of this class from the Solr index.
         #
         def solr_remove_all_from_index
           Sunspot.remove_all(self)
         end
 
-        # 
+        #
         # Remove all instances of this class from the Solr index and immediately
         # commit.
         #
@@ -192,7 +192,7 @@ module Sunspot #:nodoc:
           Sunspot.remove_all!(self)
         end
 
-        # 
+        #
         # Completely rebuild the index for this class. First removes all
         # instances from the index, then loads records and indexes them.
         #
@@ -210,7 +210,7 @@ module Sunspot #:nodoc:
         # records will not be indexed in batches. By default, a commit is issued
         # after each batch; passing +false+ for +batch_commit+ will disable
         # this, and only issue a commit at the end of the process. If associated
-        # objects need to indexed also, you can specify +include+ in format 
+        # objects need to indexed also, you can specify +include+ in format
         # accepted by ActiveRecord to improve your sql select performance
         #
         # ==== Options (passed as a hash)
@@ -228,18 +228,18 @@ module Sunspot #:nodoc:
         #            specify something reasonable here.
         #
         # ==== Examples
-        #   
+        #
         #   # index in batches of 50, commit after each
-        #   Post.index 
+        #   Post.index
         #
         #   # index all rows at once, then commit
-        #   Post.index(:batch_size => nil) 
+        #   Post.index(:batch_size => nil)
         #
         #   # index in batches of 50, commit when all batches complete
-        #   Post.index(:batch_commit => false) 
+        #   Post.index(:batch_commit => false)
         #
         #   # include the associated +author+ object when loading to index
-        #   Post.index(:include => :author) 
+        #   Post.index(:include => :author)
         #
         def solr_index(opts={})
           options = {
@@ -252,7 +252,7 @@ module Sunspot #:nodoc:
           if options[:batch_size].to_i > 0
             batch_counter = 0
             self.includes(options[:include]).find_in_batches(options.slice(:batch_size, :start)) do |records|
-              
+
               solr_benchmark(options[:batch_size], batch_counter += 1) do
                 Sunspot.index(records.select { |model| model.indexable? })
                 Sunspot.commit if options[:batch_commit]
@@ -268,23 +268,23 @@ module Sunspot #:nodoc:
           Sunspot.commit unless options[:batch_commit]
         end
 
-        # 
+        #
         # Return the IDs of records of this class that are indexed in Solr but
         # do not exist in the database. Under normal circumstances, this should
         # never happen, but this method is provided in case something goes
         # wrong. Usually you will want to rectify the situation by calling
         # #clean_index_orphans or #reindex
-        # 
+        #
         # ==== Options (passed as a hash)
         #
         # batch_size<Integer>:: Batch size with which to load records. Passing
         #                       Default is 1000 (from ActiveRecord).
-        # 
+        #
         # ==== Returns
         #
         # Array:: Collection of IDs that exist in Solr but not in the database
         def solr_index_orphans(opts={})
-          batch_size = opts[:batch_size] || Sunspot.config.indexing.default_batch_size          
+          batch_size = opts[:batch_size] || Sunspot.config.indexing.default_batch_size
 
           solr_page = 0
           solr_ids = []
@@ -297,7 +297,7 @@ module Sunspot #:nodoc:
           return solr_ids - self.connection.select_values("SELECT id FROM #{quoted_table_name}").collect(&:to_i)
         end
 
-        # 
+        #
         # Find IDs of records of this class that are indexed in Solr but do not
         # exist in the database, and remove them from Solr. Under normal
         # circumstances, this should not be necessary; this method is provided
@@ -307,7 +307,7 @@ module Sunspot #:nodoc:
         #
         # batch_size<Integer>:: Batch size with which to load records
         #                       Default is 50
-        # 
+        #
         def solr_clean_index_orphans(opts={})
           solr_index_orphans(opts).each do |id|
             new do |fake_instance|
@@ -316,7 +316,7 @@ module Sunspot #:nodoc:
           end
         end
 
-        # 
+        #
         # Classes that have been defined as searchable return +true+ for this
         # method.
         #
@@ -327,9 +327,9 @@ module Sunspot #:nodoc:
         def searchable?
           true
         end
-        
+
         def solr_execute_search(options = {})
-          options.assert_valid_keys(:include, :select)
+          options.assert_valid_keys(:include, :select, :where)
           search = yield
           unless options.empty?
             search.build do |query|
@@ -338,6 +338,9 @@ module Sunspot #:nodoc:
               end
               if options[:select]
                 query.data_accessor_for(self).select = options[:select]
+              end
+              if options[:where]
+                query.data_accessor_for(self).where = options[:where]
               end
             end
           end
@@ -348,10 +351,10 @@ module Sunspot #:nodoc:
           search = yield
           search.raw_results.map { |raw_result| raw_result.primary_key.to_i }
         end
-        
+
         protected
-        
-        # 
+
+        #
         # Does some logging for benchmarking indexing performance
         #
         def solr_benchmark(batch_size, counter,  &block)
@@ -375,7 +378,7 @@ module Sunspot #:nodoc:
             alias_method :more_like_this_ids, :solr_more_like_this_ids unless method_defined? :more_like_this_ids
           end
         end
-        # 
+        #
         # Index the model in Solr. If the model is already indexed, it will be
         # updated. Using the defaults, you will usually not need to call this
         # method, as models are indexed automatically when they are created or
@@ -387,14 +390,14 @@ module Sunspot #:nodoc:
           Sunspot.index(self)
         end
 
-        # 
+        #
         # Index the model in Solr and immediately commit. See #index
         #
         def solr_index!
           Sunspot.index!(self)
         end
-        
-        # 
+
+        #
         # Remove the model from the Solr index. Using the defaults, this should
         # not be necessary, as models will automatically be removed from the
         # index when they are destroyed. If you disable automatic removal
@@ -405,7 +408,7 @@ module Sunspot #:nodoc:
           Sunspot.remove(self)
         end
 
-        # 
+        #
         # Remove the model from the Solr index and commit immediately. See
         # #remove_from_index
         #
