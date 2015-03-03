@@ -24,7 +24,7 @@ namespace :sunspot do
     end
 
     # for backwards compatibility
-    task reindex: :"sunspot:reindex"
+    task :reindex, [:batch_size, :models, :silence] => :"sunspot:reindex"
 
     def server
       case RUBY_PLATFORM

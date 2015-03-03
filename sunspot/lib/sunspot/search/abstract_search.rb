@@ -1,4 +1,5 @@
 require 'sunspot/search/paginated_collection'
+require 'sunspot/search/cursor_paginated_collection'
 require 'sunspot/search/hit_enumerable'
 
 module Sunspot
@@ -276,12 +277,20 @@ module Sunspot
         solr_response['docs']
       end
 
+      def next_cursor
+        @solr_result['nextCursorMark'] if @query.cursor
+      end
+
       def verified_hits
         @verified_hits ||= paginate_collection(super)
       end
 
       def paginate_collection(collection)
-        PaginatedCollection.new(collection, @query.page, @query.per_page, total)
+        if @query.cursor
+          CursorPaginatedCollection.new(collection, @query.per_page, total, @query.cursor, next_cursor)
+        else
+          PaginatedCollection.new(collection, @query.page, @query.per_page, total)
+        end
       end
 
       def add_facet(name, facet)

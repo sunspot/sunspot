@@ -57,14 +57,18 @@ module Sunspot
         @components << Spellcheck.new(options)
       end
 
-      def paginate(page, per_page, offset = nil)
+      def paginate(page, per_page, offset = nil, cursor = nil)
         if @pagination
           @pagination.offset = offset
           @pagination.page = page
           @pagination.per_page = per_page
+          @pagination.cursor = cursor
         else
-          @components << @pagination = Pagination.new(page, per_page, offset)
+          @components << @pagination = Pagination.new(page, per_page, offset, cursor)
         end
+
+        # cursor pagination requires a sort containing a uniqueKey field
+        add_sort(Sunspot::Query::Sort.special(:solr_id).new('asc')) if cursor and !@sort.include?('id ')
       end
 
       def to_params
@@ -89,6 +93,9 @@ module Sunspot
         @pagination.per_page if @pagination
       end
 
+      def cursor
+        @pagination.cursor if @pagination
+      end
 
       private
 
