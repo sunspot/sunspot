@@ -102,7 +102,7 @@ module Sunspot
         command << "-Djava.awt.headless=true"
         command << '-jar' << File.basename(solr_jar)
         FileUtils.cd(File.dirname(solr_jar)) do
-          exec(*command)
+          system(*command)
         end
       end
 
