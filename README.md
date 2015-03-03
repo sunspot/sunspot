@@ -1020,13 +1020,13 @@ If you make a change to the object's "schema" (code in the `searchable` block),
 you must reindex all objects so the changes are reflected in Solr:
 
 ```bash
-bundle exec rake sunspot:solr:reindex
+bundle exec rake sunspot:reindex
 
 # or, to be specific to a certain model with a certain batch size:
-bundle exec rake sunspot:solr:reindex[500,Post] # some shells will require escaping [ with \[ and ] with \]
+bundle exec rake sunspot:reindex[500,Post] # some shells will require escaping [ with \[ and ] with \]
 
 # to skip the prompt asking you if you want to proceed with the reindexing:
-bundle exec rake sunspot:solr:reindex[,,true] # some shells will require escaping [ with \[ and ] with \]
+bundle exec rake sunspot:reindex[,,true] # some shells will require escaping [ with \[ and ] with \]
 ```
 
 ## Use Without Rails
