@@ -10,6 +10,26 @@ describe "field grouping" do
     connection.should have_last_search_including(:"group.field", "title_ss")
   end
 
+
+  it "sends default ngroups parameters to solr" do
+    session.search Post do
+      group :title do
+      end
+    end
+    connection.should have_last_search_including(:"group.ngroups", "false")
+  end
+
+  it "sends correct ngroups parameters to solr if it is provided" do
+    session.search Post do
+      group :title do
+        ngroups true
+      end
+    end
+
+    connection.should have_last_search_including(:"group.ngroups", "true")
+  end
+
+
   it "sends grouping limit parameters to solr" do
     session.search Post do
       group :title do

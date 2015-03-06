@@ -2,7 +2,7 @@
    field_facet highlighting pagination restriction common_query
    standard_query more_like_this more_like_this_query geo geofilt bbox query_facet
    scope sort sort_composite text_field_boost function_query field_stats
-   composite_fulltext field_group).each do |file|
+   composite_fulltext field_group spellcheck).each do |file|
   require(File.join(File.dirname(__FILE__), 'query', file))
 end
 module Sunspot

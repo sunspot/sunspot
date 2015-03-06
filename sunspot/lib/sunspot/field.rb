@@ -128,6 +128,7 @@ module Sunspot
           name = options[:prefix] ? @name.to_s.sub(/^#{options[:prefix]}_/, '') : @name
           "#{@type.indexed_name(name)}#{'m' if multiple? }#{'s' if @stored}#{'v' if more_like_this?}"
         end
+      @indexed_name
     end
 
   end

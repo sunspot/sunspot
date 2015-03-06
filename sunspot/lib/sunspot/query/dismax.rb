@@ -10,12 +10,12 @@ module Sunspot
       attr_writer :minimum_match, :phrase_slop, :query_phrase_slop, :tie
 
       def initialize(keywords)
-        @keywords = keywords
+        @keywords = keywords && !(keywords.to_s =~ /^\s*$/) ? keywords : '*:*'
         @fulltext_fields = {}
         @boost_queries = []
         @boost_functions = []
         @highlights = []
-
+        @extended_syntax = false
         @minimum_match = nil
         @phrase_fields = nil
         @phrase_slop = nil

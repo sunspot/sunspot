@@ -419,6 +419,11 @@
        queries across multiple shards
     -->
   <requestHandler name="/select" class="solr.SearchHandler">
+    <lst name="defaults">
+      <str name="spellcheck.dictionary">default</str>
+      <str name="spellcheck.extendedResults">true</str>
+      <str name="spellcheck.collate">true</str>
+    </lst>
     <arr name="last-components">
       <str>spellcheck</str>
     </arr>
@@ -514,10 +519,17 @@
          component
       -->
 
-    <!-- a spellchecker built from a field of the main index -->
     <lst name="spellchecker">
       <str name="name">default</str>
-      <str name="field">name</str>
+      <str name="field">title_text</str>
+      <str name="spellcheckIndexDir">./spellchecker</str>
+      <str name="buildOnCommit">true</str>
+    </lst>
+
+    <!-- a spellchecker built from a field of the main index -->
+    <lst name="spellchecker">
+      <str name="name">direct</str>
+      <str name="field">title_text</str>
       <str name="classname">solr.DirectSolrSpellChecker</str>
       <!-- the spellcheck distance measure used, the default is the internal levenshtein -->
       <str name="distanceMeasure">internal</str>

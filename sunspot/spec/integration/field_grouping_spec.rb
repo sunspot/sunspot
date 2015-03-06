@@ -23,12 +23,24 @@ describe "field grouping" do
     search.group(:title).groups.should include { |g| g.value == "Title2" }
   end
 
-  it "returns the number of matches unique groups" do
-    search = Sunspot.search(Post) do
-      group :title
+  context '#total' do
+    it "returns the number of matched unique groups if ngroups is true" do
+      search = Sunspot.search(Post) do
+        group :title do
+          ngroups true
+        end
+      end
+
+      search.group(:title).total.should == 2
     end
 
-    search.group(:title).total.should == 2
+    it "returns the number of matched documents if ngroups is false" do
+      search = Sunspot.search(Post) do
+        group :title
+      end
+
+      search.group(:title).total.should == 3
+    end
   end
 
   it "provides access to the number of matches before grouping" do
@@ -72,6 +84,44 @@ describe "field grouping" do
     title1_group.hits.first.primary_key.to_i.should == highest_ranked_post.id
   end
 
+#<<<<<<< HEAD
+  #it "provides access to the number of matched groups if ngroups parameter was set" do
+    #search = Sunspot.search(Post) do
+      #group :title do
+        #ngroups true
+      #end
+    #end
+
+    #search.group(:title).ngroups.should == 2
+  #end
+
+
+  #it "provides access to the total number of documents in each group" do
+    #search = Sunspot.search(Post) do
+      #group :title do
+        #ngroups true
+      #end
+    #end
+
+    #title1_group = search.group(:title).groups.detect { |g| g.value == "Title1" }
+    #title1_group.total.should == 2
+    #title2_group = search.group(:title).groups.detect { |g| g.value == "Title2" }
+    #title2_group.total.should == 1
+  #end
+
+  #it "calculates facets using the most relevant document from each group if trancate param is true" do
+    #search = Sunspot.search(Post) do
+      #group :title do
+        #ngroups true
+        #truncate true
+      #end
+      #facet :title
+    #end
+    #facet_values(search, :title).should == ['Title1', 'Title2']
+    #facet_counts(search, :title).should == [1, 1]
+  #end
+
+#=======
   it "allows pagination within groups" do
     search = Sunspot.search(Post) do
       group :title
@@ -85,7 +135,9 @@ describe "field grouping" do
   context "returns a paginated collection" do
     subject do
       search = Sunspot.search(Post) do
-        group :title
+        group :title do
+          ngroups true
+        end
         paginate :per_page => 1, :page => 2
       end
       search.group(:title).groups

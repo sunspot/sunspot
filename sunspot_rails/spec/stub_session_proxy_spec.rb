@@ -140,5 +140,11 @@ describe 'specs with Sunspot stubbed' do
     it 'should return empty array if listing facets' do
       @search.facets.should == []
     end
+
+    it 'should return empty group' do
+      group = @search.group('abc')
+      group.ngroups.should == 0
+      group.groups.should == []
+    end
   end
 end

@@ -4,7 +4,7 @@ module Sunspot
     # A FieldGroup groups by the unique values of a given field.
     #
     class FieldGroup
-      attr_accessor :limit, :truncate
+      attr_accessor :limit, :truncate, :ngroups
 
       def initialize(field)
         if field.multiple?
@@ -22,7 +22,7 @@ module Sunspot
       def to_params
         params = {
           :group            => "true",
-          :"group.ngroups"  => "true",
+          :"group.ngroups"  => @ngroups == true ? "true" : "false",
           :"group.field"    => @field.indexed_name
         }
 
