@@ -262,6 +262,16 @@ Post.search do
 end
 ```
 
+```ruby
+# Posts scoring with any of the two fields.
+Post.search do
+  any do
+    fulltext "keyword1", :fields => :title
+    fulltext "keyword2", :fields => :body
+  end
+end
+```
+
 Disjunctions and conjunctions may be nested
 
 ```ruby
@@ -272,6 +282,18 @@ Post.search do
       with(:blog_id, 2)
       with(:category_ids, 3)
     end
+  end
+  
+  any do
+    all do
+      fulltext "keyword", :fields => :title
+      fulltext "keyword", :fields => :body
+    end
+    all do
+      fulltext "keyword", :fields => :first_name
+      fulltext "keyword", :fields => :last_name
+    end
+    fulltext "keyword", :fields => :description
   end
 end
 ```
@@ -351,6 +373,49 @@ search = Post.search do
   paginate :page => 1, :per_page => 50
 end
 ```
+
+#### Cursor-based pagination
+
+**Solr 4.7 and above**
+
+Cursor for the first page is "*".
+```ruby
+search = Post.search do
+  fulltext "pizza"
+  paginate :cursor => "*"
+end
+
+results = search.results
+
+# Results will contain cursor for the next page
+results.next_page_cursor # => "AoIIP4AAACxQcm9maWxlIDEwMTk="
+
+# Imagine there are 60 *total* results (at 30 results/page, that is two pages)
+results.current_cursor # => "*"
+results.total_pages    # => 2
+results.first_page?    # => true
+results.last_page?     # => false
+```
+
+To retrieve the next page of results, recreate the search and use the `paginate` method with cursor from previous results.
+```ruby
+search = Post.search do
+  fulltext "pizza"
+  paginate :cursor => "AoIIP4AAACxQcm9maWxlIDEwMTk="
+end
+
+results = search.results
+
+# Again, imagine there are 60 total results; this is the second page
+results.next_page_cursor # => "AoEsUHJvZmlsZSAxNzY5"
+results.current_cursor   # => "AoIIP4AAACxQcm9maWxlIDEwMTk="
+results.total_pages      # => 2
+results.first_page?      # => false
+# Last page will be detected only when current page contains less then per_page elements or contains nothing
+results.last_page?       # => false
+```
+
+`:per_page` option is also supported.
 
 ### Faceting
 
@@ -633,7 +698,8 @@ Solr joins allow you to filter objects by joining on additional documents.  More
 ```ruby
 class Photo < ActiveRecord::Base
   searchable do
-    text :caption, :default_boost => 1.5
+    text :description
+    string :caption, :default_boost => 1.5
     time :created_at
     integer :photo_container_id
   end
@@ -642,15 +708,73 @@ end
 class PhotoContainer < ActiveRecord::Base
   searchable do
     text :name
-    join(:caption, :type => :string, :join_string => 'from=photo_container_id to=id')
-    join(:photos_created, :type => :time, :join_string => 'from=photo_container_id to=id', :as => 'created_at_d')
+    join(:description, :target => Photo, :type => :text, :join => { :from => :photo_container_id, :to => :id })
+    join(:caption, :target => Photo, :type => :string, :join => { :from => :photo_container_id, :to => :id })
+    join(:photos_created, :target => Photo, :type => :time, :join => { :from => :photo_container_id, :to => :id }, :as => 'created_at_d')
   end
 end
 
 PhotoContainer.search do
   with(:caption, 'blah')
   with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
+  
+  fulltext("keywords", :fields => [:name, :description])
 end
+
+# ...or
+
+PhotoContainer.search do
+  with(:caption, 'blah')
+  with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
+  
+  any do
+    fulltext("keyword1", :fields => :name)
+    fulltext("keyword2", :fields => :description) # will be joined from the Photo model
+  end
+end
+```
+
+#### If your models have fields with the same name
+
+```ruby
+class Tweet < ActiveRecord::Base
+  searchable do
+    text :keywords
+    integer :profile_id
+  end
+end
+
+class Rss < ActiveRecord::Base
+  searchable do
+    text :keywords
+    integer :profile_id
+  end
+end
+
+class Profile < ActiveRecord::Base
+  searchable do
+    text :name
+    join(:keywords, :prefix => "tweet", :target => Tweet, :type => :text, :join => { :from => :profile_id, :to => :id })
+    join(:keywords, :prefix => "rss", :target => Rss, :type => :text, :join => { :from => :profile_id, :to => :id })
+  end
+end
+
+Profile.search do
+  any do
+    fulltext("keyword1 keyword2", :fields => [:tweet_keywords]) do
+      minimum_match 1
+    end
+    
+    fulltext("keyword3", :fields => [:rss_keywords])
+  end
+end
+
+# ...produces:
+# sort: "score desc", fl: "* score", start: 0, rows: 20,
+# fq: ["type:Profile"],
+# q: "(_query_:"{!join from=profile_ids_i to=id_i v=$qTweet91755700 fq=$fqTweet91755700}" OR _query_:"{!join from=profile_ids_i to=id_i v=$qRss91753840 fq=$fqRss91753840}")",
+# qTweet91755700: "_query_:"{!edismax qf='keywords_text' mm='1'}keyword1 keyword2"", fqTweet91755700: "type:Tweet",
+# qRss91753840: "_query_:"{!edismax qf='keywords_text'}keyword3"", fqRss91753840: "type:Rss"
 ```
 
 ### Highlighting
@@ -896,13 +1020,13 @@ If you make a change to the object's "schema" (code in the `searchable` block),
 you must reindex all objects so the changes are reflected in Solr:
 
 ```bash
-bundle exec rake sunspot:solr:reindex
+bundle exec rake sunspot:reindex
 
 # or, to be specific to a certain model with a certain batch size:
-bundle exec rake sunspot:solr:reindex[500,Post] # some shells will require escaping [ with \[ and ] with \]
+bundle exec rake sunspot:reindex[500,Post] # some shells will require escaping [ with \[ and ] with \]
 
 # to skip the prompt asking you if you want to proceed with the reindexing:
-bundle exec rake sunspot:solr:reindex[,,true] # some shells will require escaping [ with \[ and ] with \]
+bundle exec rake sunspot:reindex[,,true] # some shells will require escaping [ with \[ and ] with \]
 ```
 
 ## Use Without Rails
