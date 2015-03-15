@@ -29,8 +29,9 @@ describe 'spellcheck' do
       keywords 'Closure'
       spellcheck :count => 3
     end
-    search.spellcheck_suggestions['closure']['suggestion']
-      .should == [{'word'=>'clojure', 'freq'=>2}, {'word'=>'conjure', 'freq'=>1}]
+    search.spellcheck_suggestions['closure']['suggestion'].should == [
+      {'word'=>'clojure', 'freq'=>2}, {'word'=>'conjure', 'freq'=>1}
+    ]
   end
 
   it 'returns suggestion with highest frequency' do
