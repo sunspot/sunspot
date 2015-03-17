@@ -246,7 +246,8 @@ module Sunspot #:nodoc:
             :batch_size => Sunspot.config.indexing.default_batch_size,
             :batch_commit => true,
             :include => self.sunspot_options[:include],
-            :start => opts.delete(:first_id)
+            :start => opts.delete(:first_id),
+            :safe_index => false
           }.merge(opts)
 
           if options[:batch_size].to_i > 0
@@ -254,7 +255,11 @@ module Sunspot #:nodoc:
             self.includes(options[:include]).find_in_batches(options.slice(:batch_size, :start)) do |records|
               
               solr_benchmark(options[:batch_size], batch_counter += 1) do
-                Sunspot.index(records.select { |model| model.indexable? })
+                if options[:safe_index]
+                  Sunspot.safe_index(records.select { |model| model.indexable? })
+                else
+                  Sunspot.index(records.select { |model| model.indexable? })
+                end
                 Sunspot.commit if options[:batch_commit]
               end
 

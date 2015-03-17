@@ -184,6 +184,39 @@ module Sunspot
       session.index(*objects)
     end
 
+    # Indexes objects on the singleton session, and won't raise exceptions if
+    # an object has weird characters that solr doesn't like. Instead it does a
+    # binary search through the batch of objects in order to find the offender.
+    # Everything else is indexed, the offending record is logged.
+    #
+    # ==== Parameters
+    #
+    # objects...<Object>:: objects to index (may pass an array or varargs)
+    #
+    # ==== Example
+    #
+    #   post1, post2 = new Array(2) { Post.create }
+    #   Sunspot.index(post1, post2)
+    #
+    # Note that indexed objects won't be reflected in search until a commit is
+    # sent - see Sunspot.index! and Sunspot.commit
+    #
+    def safe_index(*objects)
+      objects.flatten!
+      begin
+        self.index(*objects)
+      rescue RSolr::Error::Http => e
+        if objects.size == 1
+          # TODO: error reporting?
+          Rails.logger.error(e.message)
+        else
+          objects.each_slice(objects.size/2) do |fewer_objects|
+            self.safe_index(fewer_objects)
+          end
+        end
+      end
+    end
+
     # Indexes objects on the singleton session and commits immediately.
     #
     # See: Sunspot.index and Sunspot.commit
@@ -193,7 +226,8 @@ module Sunspot
     # objects...<Object>:: objects to index (may pass an array or varargs)
     #
     def index!(*objects)
-      session.index!(*objects)
+      self.index(*objects)
+      self.commit
     end
 
     # Commits the singleton session
