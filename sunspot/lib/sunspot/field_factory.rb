@@ -112,18 +112,19 @@ module Sunspot
     # configuration.
     #
     class Dynamic < Abstract
-      attr_accessor :name, :type
+      attr_accessor :name, :type, :separator
 
       def initialize(name, type, options = {}, &block)
         super(name, options, &block)
         @type, @options = type, options
+        @separator = @options.delete(:separator) || ':'
       end
 
       #
       # Build a field based on the dynamic name given.
       #
       def build(dynamic_name)
-        AttributeField.new("#{@name}:#{dynamic_name}", @type, @options.dup)
+        AttributeField.new([@name, dynamic_name].join(separator), @type, @options.dup)
       end
       # 
       # This alias allows a DynamicFieldFactory to be used in place of a Setup
