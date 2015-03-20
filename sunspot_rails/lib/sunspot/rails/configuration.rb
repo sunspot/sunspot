@@ -39,6 +39,8 @@ module Sunspot #:nodoc:
     #       hostname: localhost
     #       port: 8982
     #       path: /solr
+    #     auto_index_callback: after_commit
+    #     auto_remove_callback: after_commit
     #     auto_commit_after_request: true
     #
     # Sunspot::Rails uses the configuration to set up the Solr connection, as
@@ -313,6 +315,26 @@ module Sunspot #:nodoc:
       #
       def disabled?
         @disabled ||= (user_configuration_from_key('disabled') || false)
+      end
+
+      # The callback to use when automatically indexing records. The default is
+      # after_save for backwards compatibility, but after_commit is highly
+      # recommended on Rails 3 as the record will have been fully committed
+      # and won't rolled back by other callbacks.
+
+      def auto_index_callback
+        @auto_index_callback ||=
+          (user_configuration_from_key('auto_index_callback') || 'after_save')
+      end
+
+      # The callback to use when automatically removing records after deletion.
+      # The default is after_destroy for backwards compatibility, but
+      # after_commit is highly recommended on Rails 3 as the record will have
+      # been fully removed and won't rolled back by other callbacks.
+
+      def auto_remove_callback
+        @auto_remove_callback ||=
+          (user_configuration_from_key('auto_remove_callback') || 'after_destroy')
       end
 
       private

@@ -8,12 +8,13 @@ gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
 
 group :test do
   gem 'rspec-rails', '~> 2.14.0'
+  gem "database_cleaner", "~> 1.2.0"
 end
 
 group :postgres do
-	gem 'pg'
+  gem 'pg'
 end
 
 group :sqlite do
-	gem 'sqlite3', '~> 1.3.7'
+  gem 'sqlite3', '~> 1.3.7'
 end

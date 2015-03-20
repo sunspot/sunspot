@@ -129,7 +129,7 @@ describe 'ActiveRecord mixin' do
         with :title, 'Test Post'
       end.data_accessor_for(Post).include.should == [:location]
     end
-    
+
     it 'should use the include option on the data accessor when specified' do
       @post.update_attribute(:location, Location.create)
       post = Post.search do
@@ -139,20 +139,20 @@ describe 'ActiveRecord mixin' do
 
       (Rails.version >= '3.1' ? post.association(:location).loaded? : post.loaded_location?).should be_true # Rails 3.1 removed "loaded_#{association}" method
     end
-    
+
     it 'should use the select option from search call to data accessor' do
       Post.search(:select => 'id, title, body') do
         with :title, 'Test Post'
       end.data_accessor_for(Post).select.should == 'id, title, body'
     end
-    
+
     it 'should use the select option on the data accessor when specified' do
       Post.search do
         with :title, 'Test Post'
         data_accessor_for(Post).select = 'id, title, body'
       end.results.first.attribute_names.sort.should == ['body', 'id', 'title']
     end
-    
+
     it 'should not use the select option on the data accessor when not specified' do
       Post.search do
         with :title, 'Test Post'
@@ -194,7 +194,7 @@ describe 'ActiveRecord mixin' do
       Post.search_ids.to_set.should == @posts.map { |post| post.id }.to_set
     end
   end
-  
+
   describe 'searchable?()' do
     it 'should not be true for models that have not been configured for search' do
       Location.should_not be_searchable
@@ -250,7 +250,7 @@ describe 'ActiveRecord mixin' do
       Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
-    
+
   end
 
   describe 'reindex() with real data' do
@@ -272,7 +272,7 @@ describe 'ActiveRecord mixin' do
       Sunspot.commit
       Post.search.results.to_set.should == @posts.to_set
     end
-    
+
     describe "using batch sizes" do
       it 'should index with a specified batch size' do
         Post.reindex(:batch_size => 1)
@@ -283,9 +283,9 @@ describe 'ActiveRecord mixin' do
   end
 
 
-  
+
   describe "reindex()" do
-  
+
     before(:each) do
       @posts = Array.new(2) { Post.create }
     end
@@ -322,7 +322,7 @@ describe 'ActiveRecord mixin' do
           Post.search.results.should_not include(@posts.first)
         end
       end
-    
+
     end
 
     describe "when using batches" do
@@ -353,8 +353,8 @@ describe 'ActiveRecord mixin' do
       end
     end
   end
-  
-  describe "more_like_this()" do
+
+  describe "more_like_this()", :truncate => true do
     before(:each) do
       @posts = [
         Post.create!(:title => 'Post123', :body => "one two three"),
@@ -395,7 +395,7 @@ describe 'ActiveRecord mixin' do
     end
   end
 
-  describe ':if constraint' do
+  describe ':if constraint', :truncate => true do
     subject do
       PostWithAuto.new(:title => 'Post123')
     end
@@ -504,7 +504,7 @@ describe 'ActiveRecord mixin' do
     end
   end
 
-  describe ':unless constraint' do
+  describe ':unless constraint', :truncate => true do
     subject do
       PostWithAuto.new(:title => 'Post123')
     end

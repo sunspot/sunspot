@@ -92,6 +92,15 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   it "should handle the 'disabled' property when not set" do
     @config.disabled?.should be_false
   end
+
+  it "should handle the 'auto_index_callback' property when not set" do
+    @config.auto_index_callback.should == "after_save"
+  end
+
+  it "should handle the 'auto_remove_callback' property when not set" do
+    @config.auto_remove_callback.should == "after_destroy"
+  end
+
 end
 
 describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
@@ -158,6 +167,14 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
 
   it "should handle the 'open_timeout' property when set" do
     @config.open_timeout.should == 0.5
+  end
+
+  it "should handle the 'auto_index_callback' property when set" do
+    @config.auto_index_callback.should == "after_commit"
+  end
+
+  it "should handle the 'auto_remove_callback' property when set" do
+    @config.auto_remove_callback.should == "after_commit"
   end
 end
 
