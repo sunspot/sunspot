@@ -1,4 +1,5 @@
 require 'erb'
+require 'yaml'
 
 module Sunspot #:nodoc:
   module Rails #:nodoc:
