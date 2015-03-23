@@ -879,7 +879,23 @@ end
 
 ### Functions
 
-TODO
+Functions in Solr make it possible to dynamically compute values for each document. This gives you more flexability and you don't have to only deal with static values. For more details, please read [Fuction Query documentation](http://wiki.apache.org/solr/FunctionQuery).
+
+Sunspot supports functions in two ways:
+
+1. You can use functions to dynamically count boosting for field:
+
+```ruby
+#Posts with pizza, scored higer (square promotion field) if is_promoted
+Post.search do
+  fulltext 'pizza' do
+    boost(function {sqrt(:promotion)}) { with(:is_promoted, true) }
+  end
+end
+```
+
+2. You're able to use functions for ordering (see examples for [order_by_function](#ordering))
+
 
 ### More Like This
 
