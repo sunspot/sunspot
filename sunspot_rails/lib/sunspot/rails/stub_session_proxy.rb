@@ -46,13 +46,13 @@ module Sunspot
         false
       end
 
-      def commit_if_dirty(softCommit = false)
+      def commit_if_dirty(soft_commit = false)
       end
 
-      def commit_if_delete_dirty(softCommit = false)
+      def commit_if_delete_dirty(soft_commit = false)
       end
 
-      def commit(softCommit = false)
+      def commit(soft_commit = false)
       end
 
       def search(*types)
