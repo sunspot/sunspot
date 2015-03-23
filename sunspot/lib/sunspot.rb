@@ -215,8 +215,8 @@ module Sunspot
     # specified number of documents are added. See
     # http://wiki.apache.org/solr/SolrConfigXml
     #
-    def commit(softCommit = false)
-      session.commit softCommit
+    def commit(soft_commit = false)
+      session.commit soft_commit
     end
 
     # Optimizes the index on the singletion session.
@@ -516,8 +516,8 @@ module Sunspot
     # 
     # Sends a commit (soft or hard) if the session is dirty (see #dirty?).
     #
-    def commit_if_dirty(softCommit = false)
-      session.commit_if_dirty softCommit
+    def commit_if_dirty(soft_commit = false)
+      session.commit_if_dirty soft_commit
     end
     
     #
@@ -534,8 +534,8 @@ module Sunspot
     # 
     # Sends a commit if the session has deletes since the last commit (see #delete_dirty?).
     #
-    def commit_if_delete_dirty(softCommit = false)
-      session.commit_if_delete_dirty softCommit
+    def commit_if_delete_dirty(soft_commit = false)
+      session.commit_if_delete_dirty soft_commit
     end
     
     # Returns the configuration associated with the singleton session. See

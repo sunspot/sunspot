@@ -39,19 +39,19 @@ shared_examples_for 'all sessions' do
     it 'should soft-commit if bool=true' do
       @session.commit(true)
       connection.should have(1).commits
-      connection.should have(1).softCommits
+      connection.should have(1).soft_commits
     end
 
     it 'should hard-commit if bool=false' do
       @session.commit(false)
       connection.should have(1).commits
-      connection.should have(0).softCommits
+      connection.should have(0).soft_commits
     end
 
     it 'should hard-commit if bool is not specified' do
       @session.commit
       connection.should have(1).commits
-      connection.should have(0).softCommits
+      connection.should have(0).soft_commits
     end
   end
 
@@ -232,7 +232,7 @@ describe 'Session' do
       @session.index(Post.new)
       @session.commit_if_dirty(true)
       connection.should have(1).commits
-      connection.should have(1).softCommits
+      connection.should have(1).soft_commits
     end
     
     it 'should hard commit when commit_if_delete_dirty called on delete_dirty session' do
@@ -245,7 +245,7 @@ describe 'Session' do
       @session.remove(Post.new)
       @session.commit_if_delete_dirty(true)
       connection.should have(1).commits
-      connection.should have(1).softCommits
+      connection.should have(1).soft_commits
     end
   end
 
