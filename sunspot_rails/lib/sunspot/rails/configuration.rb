@@ -247,10 +247,6 @@ module Sunspot #:nodoc:
         @log_file ||= (user_configuration_from_key('solr', 'log_file') || default_log_file_location )
       end
 
-      def data_path
-        @data_path ||= user_configuration_from_key('solr', 'data_path') || File.join(::Rails.root, 'solr', 'data', ::Rails.env)
-      end
-
       def pid_dir
         @pid_dir ||= user_configuration_from_key('solr', 'pid_dir') || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
       end
@@ -277,8 +273,8 @@ module Sunspot #:nodoc:
       #
       # Solr start jar
       #
-      def solr_jar
-        @solr_jar ||= user_configuration_from_key('solr', 'solr_jar')
+      def solr_executable
+        @solr_executable ||= user_configuration_from_key('solr', 'solr_executable')
       end
 
       #

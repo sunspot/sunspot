@@ -34,12 +34,6 @@ describe Sunspot::Solr::Server do
     @server.run
   end
 
-  it 'runs Solr with specified data dir' do
-    @server.solr_data_dir = '/tmp/var/solr/data'
-    @server.should_receive(:exec).with(%r(-Dsolr\.data\.dir=/tmp/var/solr/data))
-    @server.run
-  end
-
   it 'runs Solr with specified Solr home' do
     @server.solr_home = '/tmp/var/solr'
     @server.should_receive(:exec).with(%r(-Dsolr\.solr\.home=/tmp/var/solr))
