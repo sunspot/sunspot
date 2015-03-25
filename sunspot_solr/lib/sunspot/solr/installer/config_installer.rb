@@ -65,8 +65,6 @@ module Sunspot
             fl.include "#{sunspot_config_path}/../solr.xml", "#{sunspot_config_path}/../**/core.properties"
           end
 
-          binding.pry
-
           list.map! { |path| path.first(2) == '..' ? File.join(sunspot_config_path, path) : path }
 
           list
