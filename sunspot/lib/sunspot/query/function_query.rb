@@ -4,7 +4,6 @@ module Sunspot
     # Abstract class for function queries.
     #
     class FunctionQuery 
-      include RSolr::Char
 
       def ^(y)
         @boost_amount = y
@@ -34,7 +33,7 @@ module Sunspot
       end
 
       def to_s
-        "#{escape(@field.indexed_name)}" << (@boost_amount ? "^#{@boost_amount}" : "")
+        "#{Util.escape(@field.indexed_name)}" << (@boost_amount ? "^#{@boost_amount}" : "")
       end
     end
 

@@ -16,10 +16,6 @@ describe Sunspot::Rails::Server do
     @server.pid_path.should == File.join(@server.pid_dir, 'sunspot-solr-test.pid')
   end
 
-  it "sets the correct Solr data dir" do
-    @server.solr_data_dir.should == File.join(@solr_home, 'data', 'test')
-  end
-
   it "sets the correct port" do
     @server.port.should == 8983
   end

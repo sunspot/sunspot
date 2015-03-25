@@ -38,7 +38,6 @@ module Sunspot
       #
       class Base #:nodoc:
         include Filter
-        include RSolr::Char
 
         RESERVED_WORDS = Set['AND', 'OR', 'NOT']
 
@@ -92,7 +91,7 @@ module Sunspot
         # String:: Boolean phrase for restriction in the positive
         #
         def to_positive_boolean_phrase
-          "#{escape(@field.indexed_name)}:#{to_solr_conditional}"
+          "#{Util.escape(@field.indexed_name)}:#{to_solr_conditional}"
         end
 
         # 
@@ -138,7 +137,7 @@ module Sunspot
         # String:: Solr API representation of given value
         #
         def solr_value(value = @value)
-          solr_value = escape(@field.to_indexed(value))
+          solr_value = Util.escape(@field.to_indexed(value))
           if RESERVED_WORDS.include?(solr_value)
             %Q("#{solr_value}")
           else
@@ -168,7 +167,7 @@ module Sunspot
           unless @value.nil?
             super
           else
-            "#{escape(@field.indexed_name)}:[* TO *]"
+            "#{Util.escape(@field.indexed_name)}:[* TO *]"
           end
         end
 

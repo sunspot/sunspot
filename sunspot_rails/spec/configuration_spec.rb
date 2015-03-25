@@ -67,11 +67,6 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
     @config.solr_home.should == '/some/path/solr'
   end
 
-  it "should handle the 'data_path' property when not set" do
-    Rails.should_receive(:root).at_least(1).and_return('/some/path')
-    @config.data_path.should == '/some/path/solr/data/test'
-  end
-
   it "should handle the 'pid_dir' property when not set" do
     Rails.should_receive(:root).at_least(1).and_return('/some/path')
     @config.pid_dir.should == '/some/path/solr/pids/test'
@@ -134,10 +129,6 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
 
   it "should handle the 'solr_home' propery when set" do
     @config.solr_home.should == '/my_superior_path'
-  end
-
-  it "should handle the 'data_path' property when set" do
-    @config.data_path.should == '/my_superior_path/data'
   end
 
   it "should handle the 'pid_dir' property when set" do
