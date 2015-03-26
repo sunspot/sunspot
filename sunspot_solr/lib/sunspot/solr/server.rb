@@ -97,7 +97,6 @@ module Sunspot
         command << "-p" << "#{port}" if port
         command << "-h" << "#{bind_address}" if bind_address
         command << "-s" << "#{solr_home}" if solr_home
-        command << '-a' << "java.util.logging.config.file=#{logging_config_path}" if logging_config_path
 
         exec_in_solr_executable_directory(command)
       end
