@@ -79,6 +79,8 @@
     <fieldType name="tdate" class="solr.TrieDateField"
                omitNorms="true"/>
 
+    <fieldType name="daterange" class="solr.DateRangeField" omitNorms="true" />
+
     <!-- Special field type for spell correction. Be careful about
          adding filters here, as they apply *before* your values go in
          the spellcheck. For example, the lowercase filter here means
@@ -233,6 +235,14 @@
     <dynamicField name="*_ets" stored="true" termVectors="true" type="tdouble" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_etms" stored="true" termVectors="true" type="tdouble" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_dr" stored="false" type="daterange" multiValued="false" indexed="true" />
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_drm" stored="false" type="daterange" multiValued="true" indexed="true" />
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_drs" stored="true" type="daterange" multiValued="false" indexed="true" />
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_drms" stored="true" type="daterange" multiValued="true" indexed="true" />
 
     <!-- Type used to index the lat and lon components for the "location" FieldType -->
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false" multiValued="false"/>
