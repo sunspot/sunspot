@@ -353,6 +353,10 @@ module Sunspot
           @field.to_indexed(value)
         end
 
+        def to_negative_boolean_phrase
+          %Q(-"#{to_positive_boolean_phrase}")
+        end
+
         def to_positive_boolean_phrase
           "{!field f=#{@field.indexed_name} op=#{operation}}#{solr_value}"
         end
