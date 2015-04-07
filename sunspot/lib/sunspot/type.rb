@@ -375,6 +375,26 @@ module Sunspot
       end
     end
 
+    class DateRangeType < DateType
+      def indexed_name(name)
+        "#{name}_dr"
+      end
+
+      def to_indexed(value)
+        if value.respond_to?(:first) && value.respond_to?(:last)
+          "[#{super value.first} TO #{super value.last}]"
+        else
+          super value
+        end
+      end
+
+      def cast(value)
+        return super unless m = value.match(/^\[(?<start>.+) TO (?<end>.+)\]$/)
+        Range.new super(m[:start]), super(m[:end])
+      end
+    end
+    register DateRangeType, Range
+
     class ClassType < AbstractType
       def indexed_name(name) #:nodoc:
         'class_name'
