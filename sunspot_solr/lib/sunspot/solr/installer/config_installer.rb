@@ -42,7 +42,7 @@ module Sunspot
 
           # Also copy the solr.xml file for multi core support
           file = File.expand_path('../solr.xml', sunspot_config_path)
-          dest = File.expand_path(File.join(@config_path, ".."), File.basename(file))
+          dest = File.expand_path(File.join(@config_path, "..", File.basename(file)))
           say("Copying #{file} => #{dest}")
           FileUtils.cp(file, dest)
 
