@@ -387,6 +387,11 @@ module Sunspot
           super value
         end
       end
+
+      def cast(value)
+        return super unless m = value.match(/^\[(?<start>.+) TO (?<end>.+)\]$/)
+        Range.new super(m[:start]), super(m[:end])
+      end
     end
     register DateRangeType, Range
 

@@ -354,7 +354,7 @@ module Sunspot
         end
 
         def to_positive_boolean_phrase
-          "{!field f=#{@field.indexed_name} op=#{operation}}#{solr_value}"
+          "_query_:\"{!field f=#{@field.indexed_name} op=#{operation}}#{solr_value}\""
         end
       end
 

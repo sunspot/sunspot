@@ -389,7 +389,7 @@ function run_tool() {
     (mkdir -p $DEFAULT_SERVER_DIR/solr-webapp/webapp && cd $DEFAULT_SERVER_DIR/solr-webapp/webapp && $UNPACK_WAR_CMD $DEFAULT_SERVER_DIR/webapps/solr.war)    
   fi
   
-  "$JAVA" $SOLR_SSL_OPTS -Dsolr.install.dir=$SOLR_TIP -Dlog4j.configuration=file:$DEFAULT_SERVER_DIR/scripts/cloud-scripts/log4j.properties \
+  "$JAVA" $SOLR_SSL_OPTS -Dsolr.install.dir=$SOLR_TIP -Dlog4j.configuration=file:$DEFAULT_SERVER_DIR/resources/log4j.properties \
     -classpath "$DEFAULT_SERVER_DIR/solr-webapp/webapp/WEB-INF/lib/*:$DEFAULT_SERVER_DIR/lib/ext/*" \
     org.apache.solr.util.SolrCLI $*
 

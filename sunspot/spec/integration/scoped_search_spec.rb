@@ -136,8 +136,6 @@ describe 'scoped_search' do
         'January only' => Date.new(2015,1,5)..Date.new(2015,1,20),
         'January and February' => Date.new(2015,1,25)..Date.new(2015,2,10),
         'February only' => Date.new(2015,2,5)..Date.new(2015,2,20),
-        'February and March' => Date.new(2015,2,25)..Date.new(2015,3,10),
-        'March only' => Date.new(2015,3,5)..Date.new(2015,3,20),
         'December to February' => Date.new(2014,12,25)..Date.new(2015,2,10),
         'January to March' => Date.new(2015,1,25)..Date.new(2015,3,10),
         'December to March' => Date.new(2014,12,25)..Date.new(2015,3,20)
@@ -154,26 +152,16 @@ describe 'scoped_search' do
       featured_for_posts(:containing, Date.new(2015,1,15) ).should == [@posts[0]]
       featured_for_posts(:containing, 'December and January').should be_empty
       featured_for_posts(:containing, 'January only').should == [@posts[0]]
-      featured_for_posts(:containing, 'January and February').should be_empty
-      featured_for_posts(:containing, 'February only').should == [@posts[1]]
-      featured_for_posts(:containing, 'February and March').should be_empty
-      featured_for_posts(:containing, 'March only').should be_empty
-      featured_for_posts(:containing, 'December to February').should be_empty
-      featured_for_posts(:containing, 'January to March').should be_empty
-      featured_for_posts(:containing, 'December to March').should be_empty
+      featured_for_posts(:containing, 'January only', negated = true).should == @posts[1..-1]
     end
 
     it 'should filter by Intersects' do
       featured_for_posts(:intersecting, Date.new(2015,1,15) ).should == [@posts[0]]
-      featured_for_posts(:intersecting, 'December and January').should == [@posts[0]]
       featured_for_posts(:intersecting, 'January only').should == [@posts[0]]
       featured_for_posts(:intersecting, 'January and February').should == @posts[0..1]
+      featured_for_posts(:intersecting, 'January and February', negated = true).should == [@posts[2]]
       featured_for_posts(:intersecting, 'February only').should == [@posts[1]]
-      featured_for_posts(:intersecting, 'February and March').should == [@posts[1]]
-      featured_for_posts(:intersecting, 'March only').should be_empty
-      featured_for_posts(:intersecting, 'December to February').should == @posts[0..1]
-      featured_for_posts(:intersecting, 'January to March').should == @posts[0..1]
-      featured_for_posts(:intersecting, 'December to March').should == @posts[0..1]
+      featured_for_posts(:intersecting, 'February only', negated = true).should == [@posts[0], @posts[2]]
     end
 
     it 'should filter by Within' do
@@ -182,8 +170,11 @@ describe 'scoped_search' do
         featured_for_posts(:within, key).should be_empty
       end
       featured_for_posts(:within, 'December to February').should == [@posts[0]]
+      featured_for_posts(:within, 'December to February', negated = true).should == @posts[1..-1]
       featured_for_posts(:within, 'January to March').should == [@posts[1]]
+      featured_for_posts(:within, 'January to March', negated = true).should == [@posts[0], @posts[2]]
       featured_for_posts(:within, 'December to March').should == @posts[0..1]
+      featured_for_posts(:within, 'December to March', negated = true).should == [@posts[2]]
     end
   end
 
