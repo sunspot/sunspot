@@ -115,8 +115,8 @@ module Sunspot
       # 
       # Commit all shards. See Sunspot.commit
       #
-      def commit
-        all_sessions.each { |session| session.commit }
+      def commit(*args)
+        all_sessions.each { |session| session.commit(*args) }
       end
 
       # 
