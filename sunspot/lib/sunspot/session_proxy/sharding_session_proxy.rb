@@ -131,8 +131,8 @@ module Sunspot
       #
       # See Sunspot.commit_if_dirty
       #
-      def commit_if_dirty
-        all_sessions.each { |session| session.commit_if_dirty }
+      def commit_if_dirty(*args)
+        all_sessions.each { |session| session.commit_if_dirty(*args) }
       end
 
       # 
