@@ -155,6 +155,23 @@ module Sunspot
         deep_merge_into(left, left, right)
       end
 
+      #
+      # Escapes characters for the Solr query parser
+      #
+      # ==== Parameters
+      #
+      # string<String>:: String to escape
+      #
+      # ==== Returns
+      #
+      # String:: escaped string
+      #
+      def escape(value)
+        # RSolr.solr_escape doesn't handle spaces or period chars,
+        # which do need to be escaped
+        RSolr.solr_escape(value).gsub(/([\s\.])/, '\\\\\1')
+      end
+
       private
 
       # 
