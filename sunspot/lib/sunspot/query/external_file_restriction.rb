@@ -17,7 +17,7 @@ module Sunspot
         # String:: Boolean phrase for restriction in the positive
         #
         def to_positive_boolean_phrase
-          "#{to_solr_conditional}#{escape(@field.indexed_name)}"
+          "#{to_solr_conditional}#{Util.escape(@field.indexed_name)}"
         end
 
         #

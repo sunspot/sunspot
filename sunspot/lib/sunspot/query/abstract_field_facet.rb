@@ -1,7 +1,6 @@
 module Sunspot
   module Query
     class AbstractFieldFacet
-      include RSolr::Char
 
       def initialize(field, options)
         @field, @options = field, options
