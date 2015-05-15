@@ -102,9 +102,9 @@ module Sunspot
     #
     # See Sunspot.commit
     #
-    def commit
+    def commit(soft_commit = false)
       @adds = @deletes = 0
-      connection.commit
+      connection.commit :commit_attributes => {:softCommit => soft_commit}
     end
 
     #
@@ -200,8 +200,8 @@ module Sunspot
     # 
     # See Sunspot.commit_if_dirty
     #
-    def commit_if_dirty
-      commit if dirty?
+    def commit_if_dirty(soft_commit = false)
+      commit soft_commit if dirty?
     end
     
     # 
@@ -214,8 +214,8 @@ module Sunspot
     # 
     # See Sunspot.commit_if_delete_dirty
     #
-    def commit_if_delete_dirty
-      commit if delete_dirty?
+    def commit_if_delete_dirty(soft_commit = false)
+      commit soft_commit if delete_dirty?
     end
     
     # 

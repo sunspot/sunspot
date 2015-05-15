@@ -188,6 +188,29 @@ remove those documents from the index, use +clean_index_orphans+. Note that
 neither of these operations should be needed if Sunspot and Sunspot::Rails are
 used as intended.
 
+=== Configuration
+
+==== ActiveRecord index hooks
+
+By default, `sunspot_rails` uses `after_save` and `after_destroy` hooks to
+automatically index or remove ActiveRecord models. When you're using any sort
+of asynchronous indexing like
+[sunspot_index_queue](https://github.com/bdurand/sunspot_index_queue) or
+[sunspot-queue](https://github.com/gaffneyc/sunspot-queue) you may want
+these to be after_commit hooks or you may have timing issues.
+
+To do this, add the following to your `sunspot.yml` for each environment:
+
+    production:
+      # ...
+      auto_index_callback: after_commit
+      auto_remove_callback: after_commit
+
+Note that if you set these to `after_commit` in the `test` environment you may
+need https://github.com/grosser/test_after_commit if you use
+`transactionnal_fixtures = true`.
+
+
 == Testing Solr integration using RSpec
 
 To disable the sunspot-solr integration for your active record models, require

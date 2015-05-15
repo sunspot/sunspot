@@ -9,7 +9,7 @@ module Sunspot
     # See Sunspot.search for usage examples
     #
     class StandardQuery < FieldQuery
-      include Paginatable, Adjustable
+      include Paginatable, Adjustable, Spellcheckable
 
       # Specify a phrase that should be searched as fulltext. Only +text+
       # fields are searched - see DSL::Fields.text
