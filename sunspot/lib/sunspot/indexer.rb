@@ -81,12 +81,6 @@ module Sunspot
       add_documents(batcher.end_current)
     end
 
-    private
-
-    def batcher
-      @batcher ||= Batcher.new
-    end
-
     # 
     # Convert documents into hash of indexed properties
     #
@@ -100,6 +94,12 @@ module Sunspot
         field_factory.populate_document(document, model)
       end
       document
+    end
+
+    private
+
+    def batcher
+      @batcher ||= Batcher.new
     end
 
     def add_documents(documents)
