@@ -104,8 +104,7 @@ module Sunspot
       def document
         @document ||= {}.tap do |doc|
           @stored_values.each do |key, value|
-            field = (setup.field_from_indexed_name(key) rescue nil)
-            if field
+            if field = setup.field_from_indexed_name(key)
               if field.dynamic_field?
                 doc[field.dynamic_root.to_s] ||= {}
                 doc[field.dynamic_root.to_s][field.dynamic_name.to_s] =\
