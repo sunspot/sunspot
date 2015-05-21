@@ -157,15 +157,11 @@ module Sunspot
       def build_from_indexed_name(indexed_name)
         if dynamic_root = "#{indexed_name}".gsub!(/^#{name}:/, '')
           if (field = build(dynamic_root)) && field.indexed_name == indexed_name
-            return field
+            field
           elsif (field = build(dynamic_root.match(/(.*)(_.*)$/)[1])) && field.indexed_name == indexed_name
-            return field
+            field
           end
         end
-        raise(
-          UnrecognizedFieldError,
-          "#{indexed_name} is not a dynamic field"
-        )
       end
 
       # 

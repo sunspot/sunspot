@@ -181,17 +181,21 @@ module Sunspot
     def field_from_indexed_name(indexed_name)
       indexed_name = indexed_name.to_s
       @indexed_fields_by_name ||= {}
-      @indexed_fields_by_name[indexed_name] ||= all_field_factories.find { |factory|
-        if factory.is_a?(FieldFactory::Dynamic)
-          if dynamic_field = (factory.build_from_indexed_name(indexed_name) rescue nil)
+      if @indexed_fields_by_name.has_key?(indexed_name)
+        @indexed_fields_by_name[indexed_name]
+      else
+        @indexed_fields_by_name[indexed_name] = all_field_factories.find { |factory|
+          if factory.is_a?(FieldFactory::Dynamic)
+            if dynamic_field = factory.build_from_indexed_name(indexed_name)
+              # Returns built field here and stops iteration
+              break dynamic_field
+            end
+          elsif factory.build.indexed_name == indexed_name
             # Returns built field here and stops iteration
-            break dynamic_field
+            break factory.build
           end
-        elsif factory.build.indexed_name == indexed_name
-          # Returns built field here and stops iteration
-          break factory.build
-        end
-      }
+        }
+      end
     end
 
     # 
