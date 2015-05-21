@@ -147,7 +147,8 @@ describe 'hits', :type => :search do
 
   it 'should return a full solr document with fields casted' do
     time = Time.utc(2008, 7, 8, 2, 45)
-    stub_full_results('instance' => Post.new,
+    post = Post.new
+    stub_full_results('instance' => post,
       'title_ss' => 'Post 1',
       'featured_bs' => 'true',
       'last_indexed_at_ds' => time.xmlschema,
@@ -165,7 +166,7 @@ describe 'hits', :type => :search do
       "custom_string"=>{"tag1"=>"popular"},
       "score"=>4,
       "distance"=>3.42,
-      "id"=>"Post 27"
+      "id"=>"Post #{post.id}"
     )
   end
 end
