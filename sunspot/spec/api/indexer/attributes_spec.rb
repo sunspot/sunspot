@@ -71,6 +71,11 @@ describe 'indexing attribute fields', :type => :indexer do
     connection.should have_add_with(:expire_date_d => '2009-07-13T00:00:00Z')
   end
 
+  it 'should correctly index a date range field' do
+    session.index(post(:featured_for => Date.new(2009, 07, 13)..Date.new(2009, 12, 25)))
+    connection.should have_add_with(:featured_for_dr => '[2009-07-13T00:00:00Z TO 2009-12-25T00:00:00Z]')
+  end
+
   it 'should correctly index a boolean field' do
     session.index(post(:featured => true))
     connection.should have_add_with(:featured_bs => 'true')

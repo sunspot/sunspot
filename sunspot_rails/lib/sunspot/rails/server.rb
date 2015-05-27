@@ -17,17 +17,6 @@ module Sunspot
       end
 
       # 
-      # Directory to store lucene index data files
-      #
-      # ==== Returns
-      #
-      # String:: data_path
-      #
-      def solr_data_dir
-        configuration.data_path
-      end
-
-      # 
       # Directory to use for Solr home.
       #
       def solr_home
@@ -37,8 +26,8 @@ module Sunspot
       #
       # Solr start jar
       #
-      def solr_jar
-        configuration.solr_jar || super
+      def solr_executable
+        configuration.solr_executable || super
       end
 
       # 

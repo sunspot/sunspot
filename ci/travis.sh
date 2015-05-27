@@ -25,7 +25,7 @@ case $GEM in
     bundle install --quiet --path vendor/bundle
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
 
-    bundle exec sunspot-solr start -p 8983 -d /tmp/solr
+    bundle exec sunspot-solr start -p 8983
     wait_until_solr_responds 8983
     /bin/echo "done."
     
@@ -47,7 +47,7 @@ case $GEM in
     bundle install --quiet --path vendor/bundle
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
 
-    bundle exec sunspot-solr start -p 8983 -d /tmp/solr
+    bundle exec sunspot-solr start -p 8983
     wait_until_solr_responds 8983
     /bin/echo "done."
     
