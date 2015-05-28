@@ -78,6 +78,31 @@ module Sunspot
           end
         @group.add_sort(sort)
       end
+
+      #
+      # Specify that results should be ordered based on a
+      # FunctionQuery - http://wiki.apache.org/solr/FunctionQuery
+      # Solr 3.1 and up
+      #
+      #  For example, to order by field1 + (field2*field3):
+      #
+      #    order_by_function :sum, :field1, [:product, :field2, :field3], :desc
+      #
+      # ==== Parameters
+      # function_name<Symbol>::
+      #   the function to run
+      # arguments::
+      #   the arguments for this function.
+      #   - Symbol for a field or function name
+      #   - Array for a nested function
+      #   - String for a literal constant
+      # direction<Symbol>::
+      #   :asc or :desc
+      def order_by_function(*args)
+        @group.add_sort(
+          Sunspot::Query::Sort::FunctionSort.new(@setup,args)
+        )
+      end
     end
   end
 end
