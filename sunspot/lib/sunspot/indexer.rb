@@ -8,7 +8,6 @@ module Sunspot
   # subclasses).
   #
   class Indexer #:nodoc:
-    include RSolr::Char
 
     def initialize(connection)
       @connection = connection
@@ -55,7 +54,7 @@ module Sunspot
     #
     def remove_all(clazz = nil)
       if clazz
-        @connection.delete_by_query("type:#{escape(clazz.name)}")
+        @connection.delete_by_query("type:#{Util.escape(clazz.name)}")
       else
         @connection.delete_by_query("*:*")
       end

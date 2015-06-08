@@ -378,6 +378,11 @@ end
 
 **Solr 4.7 and above**
 
+With default Solr pagination it may turn that same records appear on different pages (e.g. if 
+many records have the same search score). Cursor-based pagination allows to avoid this.
+
+Useful for any kinds of export, infinite scroll, etc.
+
 Cursor for the first page is "*".
 ```ruby
 search = Post.search do
@@ -874,7 +879,23 @@ end
 
 ### Functions
 
-TODO
+Functions in Solr make it possible to dynamically compute values for each document. This gives you more flexability and you don't have to only deal with static values. For more details, please read [Fuction Query documentation](http://wiki.apache.org/solr/FunctionQuery).
+
+Sunspot supports functions in two ways:
+
+1. You can use functions to dynamically count boosting for field:
+
+```ruby
+#Posts with pizza, scored higer (square promotion field) if is_promoted
+Post.search do
+  fulltext 'pizza' do
+    boost(function {sqrt(:promotion)}) { with(:is_promoted, true) }
+  end
+end
+```
+
+2. You're able to use functions for ordering (see examples for [order_by_function](#ordering))
+
 
 ### More Like This
 
@@ -917,6 +938,78 @@ Example handler will look like this:
   </lst>
 </requestHandler>
 ```
+
+### Spellcheck
+
+Solr supports spellchecking of search results against a
+dictionary. Sunspot supports turning on the spellchecker via the query
+DSL and parsing the response. Read the
+[solr docs](http://wiki.apache.org/solr/SpellCheckComponent) for more
+information on how this all works inside Solr.
+
+Solr's default spellchecking engine expects to use a dictionary
+comprised of values from an indexed field. This tends to work better
+than a static dictionary file, since it includes proper nouns in your
+index. The default in sunspot's `solrconfig.xml` is `textSpell` (note
+that `buildOnCommit` isn't recommended in production):
+
+    <lst name="spellchecker">
+       <str name="name">default</str>
+       <!-- change field to textSpell and use copyField in schema.xml
+       to spellcheck multiple fields -->
+       <str name="field">textSpell</str>
+       <str name="buildOnCommit">true</str>
+     </lst>
+
+Define the `textSpell` field in your `schema.xml`.
+
+    <field name="textSpell" stored="false" type="textSpell" multiValued="true" indexed="true"/>
+
+To get some data into your spellchecking field, you can use `copyField` in `schema.xml`:
+
+    <copyField source="*_text"  dest="textSpell" />
+    <copyField source="*_s"  dest="textSpell" />
+
+`copyField` works *before* any analyzers you have set up on the source
+fields. You can add your own analyzer by customizing the `textSpell` field type in `schema.xml`:
+
+    <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+It's dangerous to add too much to this analyzer chain. It runs before
+words are inserted into the spellcheck dictionary, which means the
+suggestions that come back from solr are post-analyzer. With the
+default above, that means all spelling suggestions will be lower-case.
+
+Once you have solr configured, you can turn it on for a given query
+using the query DSL (see spellcheck_spec.rb for more examples):
+
+    search = Sunspot.search(Post) do
+      keywords 'Cofee'
+      spellcheck :count => 3
+    end
+
+Access the suggestions via the `spellcheck_suggestions` or
+`spellcheck_suggestion_for` (for just the top one) methods:
+
+    search.spellcheck_suggestion_for('cofee') # => 'coffee'
+
+    search.spellcheck_suggestions # => [{word: 'coffee', freq: 10}, {word: 'toffee', freq: 1}]
+
+If you've turned on [collation](http://wiki.apache.org/solr/SpellCheckComponent#spellcheck.collate),
+you can also get that result:
+
+    search = Sunspot.search(Post) do
+      keywords 'Cofee market'
+      spellcheck :count => 3
+    end
+
+    search.spellcheck_collation # => 'coffee market'
 
 ## Indexes In Depth
 
@@ -1005,12 +1098,12 @@ There are a number of ways to index manually within Ruby:
 ```ruby
 # On a class itself
 Person.reindex
-Sunspot.commit
+Sunspot.commit # or commit(true) for a soft commit (Solr4)
 
 # On mixed objects
 Sunspot.index [post1, item2]
 Sunspot.index person3
-Sunspot.commit
+Sunspot.commit # or commit(true) for a soft commit (Solr4)
 
 # With autocommit
 Sunspot.index! [post1, item2, person3]

@@ -140,5 +140,19 @@ describe 'specs with Sunspot stubbed' do
     it 'should return empty array if listing facets' do
       @search.facets.should == []
     end
+
+    describe '#data_accessor_for' do
+      before do
+        @accessor = @search.data_accessor_for(Post)
+      end
+
+      it 'should provide accessor for select' do
+        @accessor.should respond_to(:select, :select=)
+      end
+
+      it 'should provide accessor for include' do
+        @accessor.should respond_to(:include, :include=)
+      end
+    end
   end
 end

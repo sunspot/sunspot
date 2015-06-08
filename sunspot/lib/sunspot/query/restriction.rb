@@ -11,7 +11,7 @@ module Sunspot
         # Array:: Collection of restriction class names
         #
         def names
-          constants - %w(Base) #XXX this seems ugly
+          constants - abstract_constants
         end
 
         # 
@@ -21,6 +21,17 @@ module Sunspot
         def [](restriction_name)
           @types ||= {}
           @types[restriction_name.to_sym] ||= const_get(Sunspot::Util.camel_case(restriction_name.to_s))
+        end
+
+        private
+
+        #
+        # Return the names of all abstract restriction classes that should not
+        # be made available to the DSL. Considers abstract classes are any class
+        # ending with '::Base' or containing a namespace prefixed with 'Abstract'
+        #
+        def abstract_constants
+          constants.grep(/(^|::)(Base$|Abstract)/)
         end
       end
 
@@ -38,7 +49,6 @@ module Sunspot
       #
       class Base #:nodoc:
         include Filter
-        include RSolr::Char
 
         RESERVED_WORDS = Set['AND', 'OR', 'NOT']
 
@@ -92,7 +102,7 @@ module Sunspot
         # String:: Boolean phrase for restriction in the positive
         #
         def to_positive_boolean_phrase
-          "#{escape(@field.indexed_name)}:#{to_solr_conditional}"
+          "#{Util.escape(@field.indexed_name)}:#{to_solr_conditional}"
         end
 
         # 
@@ -138,7 +148,7 @@ module Sunspot
         # String:: Solr API representation of given value
         #
         def solr_value(value = @value)
-          solr_value = escape(@field.to_indexed(value))
+          solr_value = Util.escape(@field.to_indexed(value))
           if RESERVED_WORDS.include?(solr_value)
             %Q("#{solr_value}")
           else
@@ -168,7 +178,7 @@ module Sunspot
           unless @value.nil?
             super
           else
-            "#{escape(@field.indexed_name)}:[* TO *]"
+            "#{Util.escape(@field.indexed_name)}:[* TO *]"
           end
         end
 
@@ -330,6 +340,39 @@ module Sunspot
         def to_solr_conditional
           "#{solr_value(@value)}*"
         end
+      end
+
+      class AbstractRange < Between
+        private
+
+        def operation
+          @operation || self.class.name.split('::').last
+        end
+
+        def solr_value(value = @value)
+          @field.to_indexed(value)
+        end
+
+        def to_positive_boolean_phrase
+          "_query_:\"{!field f=#{@field.indexed_name} op=#{operation}}#{solr_value}\""
+        end
+      end
+
+      class Containing < AbstractRange
+        def initialize(negated, field, value)
+          @operation = 'Contains'
+          super
+        end
+      end
+
+      class Intersecting < AbstractRange
+        def initialize(negated, field, value)
+          @operation = 'Intersects'
+          super
+        end
+      end
+
+      class Within < AbstractRange
       end
     end
   end

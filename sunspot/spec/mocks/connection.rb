@@ -22,7 +22,7 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :optims, :searches, :message, :opts, :deletes_by_query
+    attr_reader :adds, :commits, :soft_commits, :optims, :searches, :message, :opts, :deletes_by_query
     attr_accessor :response
     attr_writer :expected_handler
     undef_method :select # annoyingly defined on Object
@@ -30,7 +30,7 @@ module Mock
     def initialize(opts = {})
       @opts = opts
       @message = OpenStruct.new
-      @adds, @deletes, @deletes_by_query, @commits, @optims, @searches = Array.new(6) { [] }
+      @adds, @deletes, @deletes_by_query, @commits, @soft_commits, @optims, @searches = Array.new(7) { [] }
       @expected_handler = :select
     end
 
@@ -46,8 +46,10 @@ module Mock
       @deletes_by_query << query
     end
 
-    def commit
+    def commit(opts = {})
+      commit_attrs = opts.delete(:commit_attributes) || {}
       @commits << Time.now
+      @soft_commits << Time.now if commit_attrs[:softCommit]
     end
 
     def optimize

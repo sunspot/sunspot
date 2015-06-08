@@ -127,6 +127,57 @@ describe 'scoped_search' do
   test_field_type 'Trie Time', :created_at, :created_at, Photo, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
                                                                    '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
 
+  describe 'Date range field type' do
+    let(:january) { Date.new(2015,1,1)..Date.new(2015,1,31) }
+    let(:february) { Date.new(2015,2,1)..Date.new(2015,2,28) }
+    let(:date_ranges) do
+      {
+        'December and January' => Date.new(2014,12,25)..Date.new(2015,1,10),
+        'January only' => Date.new(2015,1,5)..Date.new(2015,1,20),
+        'January and February' => Date.new(2015,1,25)..Date.new(2015,2,10),
+        'February only' => Date.new(2015,2,5)..Date.new(2015,2,20),
+        'December to February' => Date.new(2014,12,25)..Date.new(2015,2,10),
+        'January to March' => Date.new(2015,1,25)..Date.new(2015,3,10),
+        'December to March' => Date.new(2014,12,25)..Date.new(2015,3,20)
+      }
+    end
+
+    before :all do
+      Sunspot.remove_all
+      @posts = [Post.new(featured_for: january), Post.new(featured_for: february), Post.new]
+      Sunspot.index!(@posts)
+    end
+
+    it 'should filter by Contains' do
+      featured_for_posts(:containing, Date.new(2015,1,15) ).should == [@posts[0]]
+      featured_for_posts(:containing, 'December and January').should be_empty
+      featured_for_posts(:containing, 'January only').should == [@posts[0]]
+      featured_for_posts(:containing, 'January only', negated = true).should == @posts[1..-1]
+    end
+
+    it 'should filter by Intersects' do
+      featured_for_posts(:intersecting, Date.new(2015,1,15) ).should == [@posts[0]]
+      featured_for_posts(:intersecting, 'January only').should == [@posts[0]]
+      featured_for_posts(:intersecting, 'January and February').should == @posts[0..1]
+      featured_for_posts(:intersecting, 'January and February', negated = true).should == [@posts[2]]
+      featured_for_posts(:intersecting, 'February only').should == [@posts[1]]
+      featured_for_posts(:intersecting, 'February only', negated = true).should == [@posts[0], @posts[2]]
+    end
+
+    it 'should filter by Within' do
+      featured_for_posts(:within, Date.new(2015,1,15) ).should be_empty
+      (date_ranges.keys - date_ranges.keys.grep(/ to /)).each do |key|
+        featured_for_posts(:within, key).should be_empty
+      end
+      featured_for_posts(:within, 'December to February').should == [@posts[0]]
+      featured_for_posts(:within, 'December to February', negated = true).should == @posts[1..-1]
+      featured_for_posts(:within, 'January to March').should == [@posts[1]]
+      featured_for_posts(:within, 'January to March', negated = true).should == [@posts[0], @posts[2]]
+      featured_for_posts(:within, 'December to March').should == @posts[0..1]
+      featured_for_posts(:within, 'December to March', negated = true).should == [@posts[2]]
+    end
+  end
+
   describe 'Boolean field type' do
     before :all do
       Sunspot.remove_all

@@ -26,10 +26,6 @@ opts = OptionParser.new do |opts|
     server.bind_address = b
   end
 
-  opts.on '-d', '--data-directory=DIRECTORY', 'Solr data directory' do |d|
-    server.solr_data_dir = File.expand_path(d)
-  end
-
   opts.on '-s', '--solr-home=HOME', 'Solr home directory (should contain conf/ directory)' do |s|
     server.solr_home = File.expand_path(s)
   end
