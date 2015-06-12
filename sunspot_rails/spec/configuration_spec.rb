@@ -59,7 +59,7 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   end
 
   it "should handle the 'log_file' property" do
-    @config.log_file.should =~ /log\/solr_test.log/
+    @config.log_file.should =~ /log\/sunspot-solr-test.log/
   end
 
   it "should handle the 'solr_home' property when not set" do

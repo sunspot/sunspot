@@ -343,7 +343,7 @@ module Sunspot #:nodoc:
       # String:: default_log_file_location
       #
       def default_log_file_location
-        File.join(::Rails.root, 'log', "solr_" + ::Rails.env + ".log")
+        File.join(::Rails.root, 'log', "sunspot-solr-" + ::Rails.env + ".log")
       end
 
       #

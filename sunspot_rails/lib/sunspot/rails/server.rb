@@ -52,7 +52,7 @@ module Sunspot
       # Log file for Solr. File is in the rails log/ directory.
       #
       def log_file
-        File.join(::Rails.root, 'log', "sunspot-solr-#{::Rails.env}.log")
+        configuration.log_file
       end
 
       # 
