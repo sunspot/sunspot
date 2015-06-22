@@ -103,9 +103,6 @@ describe 'function query' do
     end.should raise_error(Sunspot::UnrecognizedFieldError)
   end
 
-
-
-
   it "should send query to solr with multiplicative boost function" do
     session.search Post do
       keywords('pizza') do
