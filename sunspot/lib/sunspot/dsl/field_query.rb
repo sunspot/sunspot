@@ -68,20 +68,22 @@ module Sunspot
       #
       # ==== Parameters
       #
-      # field_name<Symbol>:: the field to use for grouping
+      # field_names...<Symbol>:: the fields to use for grouping
       def group(*field_names, &block)
+        group = Sunspot::Query::Group.new()
+
         field_names.each do |field_name|
           field = @setup.field(field_name)
-          group = @query.add_group(Sunspot::Query::FieldGroup.new(field))
-          @search.add_field_group(field)
-
-          if block
-            Sunspot::Util.instance_eval_or_call(
-              FieldGroup.new(@setup, group),
-              &block
-            )
-          end
+          group.add_field(field)
         end
+
+        if block
+          dsl = Group.new(@setup, group)
+          Sunspot::Util.instance_eval_or_call(dsl, &block)
+        end
+
+        @query.add_group(group)
+        @search.add_group(group)
       end
 
       #

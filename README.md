@@ -638,6 +638,59 @@ Post.search do
 end
 ```
 
+#### Grouping by Queries
+It is also possible to group by arbitrary queries instead of on a
+specific field, much like using query facets instead of field facets.
+For example, we can group by average rating.
+
+```ruby
+# Returns the top post for each range of average ratings
+search = Post.search do
+  group do
+    query("1.0 to 2.0") do
+      with(:average_rating, 1.0..2.0)
+    end
+    query("2.0 to 3.0") do
+      with(:average_rating, 2.0..3.0)
+    end
+    query("3.0 to 4.0") do
+      with(:average_rating, 3.0..4.0)
+    end
+    query("4.0 to 5.0") do
+      with(:average_rating, 4.0..5.0)
+    end
+  end
+end
+
+search.group(:queries).matches # Total number of matches to the queries
+
+search.group(:queries).groups.each do |group|
+  puts group.value # The argument to query - "1.0 to 2.0", for example
+
+  group.results.each do |result|
+    # ...
+  end
+end
+```
+
+This can also be used to query multivalued fields, allowing a single
+item to be in multiple groups.
+
+```ruby
+# This finds the top 10 posts for each category in category_ids.
+search = Post.search do
+  group do
+    limit 10
+
+    category_ids.each do |category_id|
+      query category_id do
+        with(:category_id, category_id)
+      end
+    end
+  end
+end
+```
+
 ### Geospatial
 
 **Sunspot 2.0 only**
