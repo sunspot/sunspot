@@ -18,8 +18,15 @@ module Sunspot
       #
       # Add a boost function
       #
-      def add_boost_function(function_query)
-        @boost_functions << function_query
+      def add_additive_boost_function(function_query)
+        @additive_boost_functions << function_query
+      end
+
+      #
+      # Add a multiplicative boost function
+      #
+      def add_multiplicative_boost_function(function_query)
+        @multiplicative_boost_functions << function_query
       end
 
       #

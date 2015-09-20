@@ -168,14 +168,22 @@ module Sunspot
       # will be boosted by (average_rating + popularity * 10).
       #
       def boost(factor_or_function, &block)
+        additive_boost(factor_or_function, &block)
+      end
+
+      def additive_boost(factor_or_function, &block)
         if factor_or_function.is_a?(Sunspot::Query::FunctionQuery)
-          @query.add_boost_function(factor_or_function)
+          @query.add_additive_boost_function(factor_or_function)
         else
           Sunspot::Util.instance_eval_or_call(
             Scope.new(@query.create_boost_query(factor_or_function), @setup),
             &block
           )
         end
+      end
+
+      def multiplicative_boost(factor_or_function)
+        @query.add_multiplicative_boost_function(factor_or_function)
       end
 
       #
