@@ -1,16 +1,16 @@
 module Sunspot #:nodoc:
   module Rails #:nodoc:
-    # 
+    #
     # This module provides Sunspot Adapter implementations for ActiveRecord
     # models.
     #
     module Adapters
       class ActiveRecordInstanceAdapter < Sunspot::Adapters::InstanceAdapter
-        # 
+        #
         # Return the primary key for the adapted instance
         #
         # ==== Returns
-        # 
+        #
         # Integer:: Database ID of model
         #
         def id
@@ -21,11 +21,12 @@ module Sunspot #:nodoc:
       class ActiveRecordDataAccessor < Sunspot::Adapters::DataAccessor
         # options for the find
         attr_accessor :include
+        attr_accessor :where
         attr_reader :select
 
         def initialize(clazz)
           super(clazz)
-          @inherited_attributes = [:include, :select]
+          @inherited_attributes = [:include, :select, :where]
         end
 
         #
@@ -40,8 +41,8 @@ module Sunspot #:nodoc:
           value = value.join(', ') if value.respond_to?(:join)
           @select = value
         end
-        
-        # 
+
+        #
         # Get one ActiveRecord instance out of the database by ID
         #
         # ==== Parameters
@@ -51,12 +52,12 @@ module Sunspot #:nodoc:
         # ==== Returns
         #
         # ActiveRecord::Base:: ActiveRecord model
-        # 
+        #
         def load(id)
           @clazz.where(@clazz.primary_key => id).merge(scope_for_load).first
         end
 
-        # 
+        #
         # Get a collection of ActiveRecord instances out of the database by ID
         #
         # ==== Parameters
@@ -70,14 +71,15 @@ module Sunspot #:nodoc:
         def load_all(ids)
           @clazz.where(@clazz.primary_key => ids).merge(scope_for_load)
         end
-        
+
         private
-        
+
         def scope_for_load
           scope = relation
           scope = scope.includes(@include) if @include.present?
           scope = scope.select(@select)    if @select.present?
-          scope 
+          scope = scope.where(@where)      if @where.present?
+          scope
         end
 
         # COMPATIBILITY: Rails 4 has deprecated the 'scoped' method in favour of 'all'
