@@ -152,6 +152,7 @@ module Sunspot
         def previous_page
           nil
         end
+        alias :prev_page :previous_page
 
         def next_page
           nil
