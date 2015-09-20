@@ -283,23 +283,28 @@ module Sunspot #:nodoc:
         # ==== Options (passed as a hash)
         #
         # batch_size<Integer>:: Batch size with which to load records. Passing
-        #                       Default is 1000 (from ActiveRecord).
+        #                       Default is 50
+        #
+        # use_deleted_at<Boolean>:: Uses the ActiveRecord's deleted_at column to
+        #                           treat soft/paranoid deleted records in the 
+        #                           database as deleted.
         # 
         # ==== Returns
         #
         # Array:: Collection of IDs that exist in Solr but not in the database
         def solr_index_orphans(opts={})
           batch_size = opts[:batch_size] || Sunspot.config.indexing.default_batch_size          
+          deleted_filter = opts[:use_deleted_at] ? "WHERE deleted_at IS NULL" : ""
 
           solr_page = 0
           solr_ids = []
           while (solr_page = solr_page.next)
-            ids = solr_search_ids { paginate(:page => solr_page, :per_page => 1000) }.to_a
+            ids = solr_search_ids { paginate(:page => solr_page, :per_page => batch_size) }.to_a
             break if ids.empty?
             solr_ids.concat ids
           end
 
-          return solr_ids - self.connection.select_values("SELECT id FROM #{quoted_table_name}").collect(&:to_i)
+          return solr_ids - self.connection.select_values("SELECT id FROM #{quoted_table_name} #{deleted_filter}").collect(&:to_i)
         end
 
         # 
@@ -312,6 +317,10 @@ module Sunspot #:nodoc:
         #
         # batch_size<Integer>:: Batch size with which to load records
         #                       Default is 50
+        #
+        # use_deleted_at<Boolean>:: Uses the ActiveRecord's deleted_at column to
+        #                           treat soft/paranoid deleted records in the 
+        #                           database as deleted.
         # 
         def solr_clean_index_orphans(opts={})
           solr_index_orphans(opts).each do |id|
