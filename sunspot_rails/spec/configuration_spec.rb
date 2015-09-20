@@ -162,7 +162,7 @@ end
 
 describe Sunspot::Rails::Configuration, "with auto_index_callback and auto_remove_callback set" do
   before do
-    ::Rails.stub!(:env => 'config_commit_test')
+    ::Rails.stub(:env => 'config_commit_test')
     @config = Sunspot::Rails::Configuration.new
   end
 

@@ -110,6 +110,10 @@ module Sunspot
           DataAccessorStub.new
         end
 
+        def stats(name)
+          StatsStub.new
+        end
+
         def execute
           self
         end
@@ -167,6 +171,49 @@ module Sunspot
 
         def rows
           []
+        end
+
+      end
+
+      class StatsStub
+        def min
+          0
+        end
+
+        def max
+          100
+        end
+
+        def count
+          30
+        end
+
+        def sum
+          500
+        end
+
+        def missing
+          3
+        end
+
+        def sum_of_squares
+          5000
+        end
+
+        def mean
+          50
+        end
+
+        def standard_deviation
+          20
+        end
+
+        def facets
+          []
+        end
+
+        def facet(name)
+          FacetStub.new
         end
 
       end
