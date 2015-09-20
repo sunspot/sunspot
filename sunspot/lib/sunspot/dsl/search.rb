@@ -19,7 +19,7 @@ module Sunspot
       # ==== Example
       #
       #   Sunspot.search Post do
-      #     data_acccessor_for(Post).includes = [:blog, :comments]
+      #     data_accessor_for(Post).include = [:blog, :comments]
       #   end
       #
       def data_accessor_for(clazz)
