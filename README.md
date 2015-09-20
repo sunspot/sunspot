@@ -979,7 +979,7 @@ results = Sunspot.more_like_this(post) do
 end
 ```
 
-To use more_like_this you need to have the [MoreLikeThis handler enabled in solrcofig.xml](http://wiki.apache.org/solr/MoreLikeThisHandler).
+To use more_like_this you need to have the [MoreLikeThis handler enabled in solrconfig.xml](http://wiki.apache.org/solr/MoreLikeThisHandler).
 
 Example handler will look like this:
 
