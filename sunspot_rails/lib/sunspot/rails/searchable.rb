@@ -282,8 +282,7 @@ module Sunspot #:nodoc:
         # 
         # ==== Options (passed as a hash)
         #
-        # batch_size<Integer>:: Batch size with which to load records. Passing
-        #                       Default is 1000 (from ActiveRecord).
+        # batch_size<Integer>:: Override default batch size with which to load records.
         # 
         # ==== Returns
         #
@@ -294,7 +293,7 @@ module Sunspot #:nodoc:
           solr_page = 0
           solr_ids = []
           while (solr_page = solr_page.next)
-            ids = solr_search_ids { paginate(:page => solr_page, :per_page => 1000) }.to_a
+            ids = solr_search_ids { paginate(:page => solr_page, :per_page => batch_size) }.to_a
             break if ids.empty?
             solr_ids.concat ids
           end
@@ -310,8 +309,7 @@ module Sunspot #:nodoc:
         #
         # ==== Options (passed as a hash)
         #
-        # batch_size<Integer>:: Batch size with which to load records
-        #                       Default is 50
+        # batch_size<Integer>:: Override default batch size with which to load records
         # 
         def solr_clean_index_orphans(opts={})
           solr_index_orphans(opts).each do |id|
