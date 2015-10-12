@@ -5,6 +5,7 @@ gem 'rails', '~> 4.0.0'
 gem 'sunspot', :path => File.expand_path('../../../sunspot', __FILE__)
 gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)
 gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
+gem 'progress_bar', '~> 1.0.5'
 
 group :test do
 	gem 'protected_attributes' # Rails 4 support for attr_accessor so specs still work

@@ -30,6 +30,12 @@ describe 'sunspot namespace rake task' do
 
       run_rake_task("sunspot:reindex", '', "Post+Author", true)
     end
+
+    it "should raise exception when all tables of sunspot models are empty" do
+      STDOUT.should_receive(:puts).with("You have no data in the database. Reindexing does nothing here.")
+      empty_tables
+      run_rake_task("sunspot:reindex")
+    end
   end
 end
 
