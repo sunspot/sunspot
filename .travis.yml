@@ -1,3 +1,7 @@
+language: ruby
+cache: bundler
+sudo: false
+
 rvm:
   - 1.9.3
   - 2.0.0
