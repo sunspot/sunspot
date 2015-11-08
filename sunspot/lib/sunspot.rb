@@ -490,9 +490,9 @@ module Sunspot
     #
     #   Sunspot.batch do
     #     post = Post.new
-    #     Sunspot.add(post)
+    #     Sunspot.index(post)
     #     comment = Comment.new
-    #     Sunspot.add(comment)
+    #     Sunspot.index(comment)
     #   end
     #
     # Sunspot will send both the post and the comment in a single request.
