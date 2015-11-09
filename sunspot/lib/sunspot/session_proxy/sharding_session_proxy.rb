@@ -70,6 +70,20 @@ module Sunspot
         using_sharded_session(objects) { |session, group| session.index!(group) }
       end
 
+      #
+      # See Sunspot.atomic_update
+      #
+      def atomic_update(*objects)
+        using_sharded_session(objects) { |session, group| session.atomic_update(group) }
+      end
+
+      #
+      # See Sunspot.atomic_update!
+      #
+      def atomic_update!(*objects)
+        using_sharded_session(objects) { |session, group| session.atomic_update!(group) }
+      end
+
       # 
       # See Sunspot.remove
       #

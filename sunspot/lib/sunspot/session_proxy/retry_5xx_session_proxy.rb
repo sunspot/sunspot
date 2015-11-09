@@ -59,7 +59,7 @@ module Sunspot
 
       delegate :batch, :commit, :commit_if_dirty, :commit_if_delete_dirty,
         :dirty?, :index!, :index, :optimize, :remove!, :remove, :remove_all!,
-        :remove_all, :remove_by_id!, :remove_by_id,
+        :remove_all, :remove_by_id!, :remove_by_id, :atomic_update, :atomic_update!,
         :to => :retry_handler
 
     end

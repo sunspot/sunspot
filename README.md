@@ -953,6 +953,31 @@ end
 2. You're able to use functions for ordering (see examples for [order_by_function](#ordering))
 
 
+### Atomic updates
+
+Atomic Updates is a feature in Solr 4.0 that allows you to update on a field level rather than on a document level. This means that you can update individual fields without having to send the entire document to Solr with the un-updated fields values. For more details, please read [Atomic Update documentation](https://wiki.apache.org/solr/Atomic_Updates).
+
+All fields of the model must be **stored**, otherwise non-stored values will be lost after an update.
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    # all fields stored
+    text :body, :stored => true
+    string :title, :stored => true
+  end
+end
+
+post1 = Post.create #...
+post2 = Post.create #...
+
+# atomic update on class level
+Post.atomic_update post1.id => {title: 'A New Title'}, post2.id => {body: 'A New Body'}
+
+# atomic update on instance level
+post1.atomic_update body: 'A New Body', title: 'Another New Title'
+```
+
 ### More Like This
 
 Sunspot can extract related items using more_like_this. When searching

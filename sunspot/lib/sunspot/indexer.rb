@@ -22,12 +22,23 @@ module Sunspot
     # model<Object>:: the model to index
     #
     def add(model)
-      documents = Util.Array(model).map { |m| prepare(m) }
-      if batcher.batching?
-        batcher.concat(documents)
-      else
-        add_documents(documents)
-      end
+      documents = Util.Array(model).map { |m| prepare_full_update(m) }
+      add_batch_documents(documents)
+    end
+
+    #
+    # Construct a representation of the given class instances for atomic properties update
+    # and send it to the connection for indexing
+    #
+    # ==== Parameters
+    #
+    # clazz<Class>:: the class of the models to be updated
+    # updates<Hash>:: hash of updates where keys are model ids
+    #                 and values are hash with property name/values to be updated
+    #
+    def add_atomic_update(clazz, updates={})
+      documents = updates.map { |id, m| prepare_atomic_update(clazz, id, m) }
+      add_batch_documents(documents)
     end
 
     # 
@@ -49,7 +60,7 @@ module Sunspot
       )
     end
 
-    # 
+    #
     # Delete all documents of the class indexed by this indexer from Solr.
     #
     def remove_all(clazz = nil)
@@ -90,9 +101,9 @@ module Sunspot
     # 
     # Convert documents into hash of indexed properties
     #
-    def prepare(model)
-      document = document_for(model)
-      setup = setup_for(model)
+    def prepare_full_update(model)
+      document = document_for(model.class, model.id)
+      setup = setup_for_object(model)
       if boost = setup.document_boost_for(model)
         document.attrs[:boost] = boost
       end
@@ -102,8 +113,26 @@ module Sunspot
       document
     end
 
+    def prepare_atomic_update(clazz, id, updates = {})
+      document = document_for(clazz, id)
+      setup_for_class(clazz).all_field_factories.each do |field_factory|
+        if updates.has_key?(field_factory.name)
+          field_factory.populate_document(document, nil, value: updates[field_factory.name], update: :set)
+        end
+      end
+      document
+    end
+
     def add_documents(documents)
       @connection.add(documents)
+    end
+
+    def add_batch_documents(documents)
+      if batcher.batching?
+        batcher.concat(documents)
+      else
+        add_documents(documents)
+      end
     end
 
     # 
@@ -111,11 +140,13 @@ module Sunspot
     # This method constructs the document hash containing those key-value
     # pairs.
     #
-    def document_for(model)
-      RSolr::Xml::Document.new(
-        :id => Adapters::InstanceAdapter.adapt(model).index_id,
-        :type => Util.superclasses_for(model.class).map { |clazz| clazz.name }
-      )
+    def document_for(clazz, id)
+      if Adapters::InstanceAdapter.for(clazz)
+        RSolr::Xml::Document.new(
+            id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
+            type: Util.superclasses_for(clazz).map(&:name)
+        )
+      end
     end
 
     # 
@@ -129,8 +160,23 @@ module Sunspot
     #
     # Sunspot::Setup:: The setup for the object's class
     #
-    def setup_for(object)
-      Setup.for(object.class) || raise(NoSetupError, "Sunspot is not configured for #{object.class.inspect}")
+    def setup_for_object(object)
+      setup_for_class(object.class)
+    end
+
+    #
+    # Get the Setup object for the given class.
+    #
+    # ==== Parameters
+    #
+    # clazz<Class>:: The class whose setup is to be retrieved
+    #
+    # ==== Returns
+    #
+    # Sunspot::Setup:: The setup for the class
+    #
+    def setup_for_class(clazz)
+      Setup.for(clazz) || raise(NoSetupError, "Sunspot is not configured for #{clazz.inspect}")
     end
   end
 end
