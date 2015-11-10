@@ -27,9 +27,11 @@ module Sunspot
     # * remove_by_id!
     # * remove_all with an argument
     # * remove_all! with an argument
+    # * atomic_update with arguments
+    # * atomic_update! with arguments
     #
     class ShardingSessionProxy < AbstractSessionProxy
-      not_supported :batch, :config, :remove_by_id, :remove_by_id!
+      not_supported :batch, :config, :remove_by_id, :remove_by_id!, :atomic_update, :atomic_update!
 
       # 
       # +search_session+ is the session that should be used for searching.
@@ -71,20 +73,6 @@ module Sunspot
       end
 
       #
-      # See Sunspot.atomic_update
-      #
-      def atomic_update(*objects)
-        using_sharded_session(objects) { |session, group| session.atomic_update(group) }
-      end
-
-      #
-      # See Sunspot.atomic_update!
-      #
-      def atomic_update!(*objects)
-        using_sharded_session(objects) { |session, group| session.atomic_update!(group) }
-      end
-
-      # 
       # See Sunspot.remove
       #
       def remove(*objects)
