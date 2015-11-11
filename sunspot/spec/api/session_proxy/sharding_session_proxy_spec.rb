@@ -15,7 +15,7 @@ describe Sunspot::SessionProxy::ShardingSessionProxy do
     end
   end
 
-  [:remove_by_id, :remove_by_id!].each do |method|
+  [:remove_by_id, :remove_by_id!, :atomic_update, :atomic_update!].each do |method|
     it "should raise NotSupportedError when #{method} called" do
       lambda { @proxy.send(method, Post, 1) }.should raise_error(Sunspot::SessionProxy::NotSupportedError)
     end
