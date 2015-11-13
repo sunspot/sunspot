@@ -17,6 +17,12 @@ module Sunspot
       def index!(*objects)
       end
 
+      def atomic_update(clazz, updates = {})
+      end
+
+      def atomic_update!(clazz, updates = {})
+      end
+
       def remove(*objects)
       end
 

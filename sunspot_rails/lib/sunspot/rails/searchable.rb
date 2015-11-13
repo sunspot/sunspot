@@ -134,6 +134,8 @@ module Sunspot #:nodoc:
             alias_method :index, :solr_index unless method_defined? :index
             alias_method :index_orphans, :solr_index_orphans unless method_defined? :index_orphans
             alias_method :clean_index_orphans, :solr_clean_index_orphans unless method_defined? :clean_index_orphans
+            alias_method :atomic_update, :solr_atomic_update unless method_defined? :atomic_update
+            alias_method :atomic_update!, :solr_atomic_update! unless method_defined? :atomic_update!
           end
         end
         # 
@@ -257,9 +259,9 @@ module Sunspot #:nodoc:
           if options[:batch_size].to_i > 0
             batch_counter = 0
             self.includes(options[:include]).find_in_batches(options.slice(:batch_size, :start)) do |records|
-              
+
               solr_benchmark(options[:batch_size], batch_counter += 1) do
-                Sunspot.index(records.select { |model| model.indexable? })
+                Sunspot.index(records.select(&:indexable?))
                 Sunspot.commit if options[:batch_commit]
               end
 
@@ -271,6 +273,46 @@ module Sunspot #:nodoc:
 
           # perform a final commit if not committing in batches
           Sunspot.commit unless options[:batch_commit]
+        end
+
+        #
+        # Update properties of existing records in the Solr index.
+        # Atomic updates available only for the stored properties.
+        #
+        # ==== Updates (passed as a hash)
+        #
+        # updates should be specified as a hash, where key - is the object ID
+        # and values is hash with property name/values to be updated.
+        #
+        # ==== Examples
+        #
+        #   class Post < ActiveRecord::Base
+        #     searchable do
+        #       string :title, stored: true
+        #       string :description, stored: true
+        #     end
+        #   end
+        #
+        #   post1 = Post.create(title: 'A Title', description: nil)
+        #
+        #   # update single property
+        #   Post.atomic_update(post1.id => {description: 'New post description'})
+        #
+        # ==== Notice
+        # all non-stored properties in Solr index will be lost after update.
+        # Read Solr wiki page: https://wiki.apache.org/solr/Atomic_Updates
+        def solr_atomic_update(updates = {})
+          Sunspot.atomic_update(self, updates)
+        end
+
+        #
+        # Update properties of existing records in the Solr index atomically, and
+        # immediately commits.
+        #
+        # See #solr_atomic_update for information on options, etc.
+        #
+        def solr_atomic_update!(updates = {})
+          Sunspot.atomic_update!(self, updates)
         end
 
         # 
@@ -376,6 +418,8 @@ module Sunspot #:nodoc:
             alias_method :remove_from_index!, :solr_remove_from_index! unless method_defined? :remove_from_index!
             alias_method :more_like_this, :solr_more_like_this unless method_defined? :more_like_this
             alias_method :more_like_this_ids, :solr_more_like_this_ids unless method_defined? :more_like_this_ids
+            alias_method :atomic_update, :solr_atomic_update unless method_defined? :atomic_update
+            alias_method :atomic_update!, :solr_atomic_update! unless method_defined? :atomic_update!
           end
         end
         # 
@@ -395,6 +439,23 @@ module Sunspot #:nodoc:
         #
         def solr_index!
           Sunspot.index!(self)
+        end
+
+        #
+        # Updates specified model properties in Solr.
+        # Unlike ClassMethods#solr_atomic_update you dont need to pass object id,
+        # you only need to pass hash with property changes
+        #
+        def solr_atomic_update(updates = {})
+          Sunspot.atomic_update(self.class, self.id => updates)
+        end
+
+        #
+        # Updates specified model properties in Solr and immediately commit.
+        # See #solr_atomic_update
+        #
+        def solr_atomic_update!(updates = {})
+          Sunspot.atomic_update!(self.class, self.id => updates)
         end
         
         # 

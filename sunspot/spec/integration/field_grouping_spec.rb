@@ -72,6 +72,19 @@ describe "field grouping" do
     title1_group.hits.first.primary_key.to_i.should == highest_ranked_post.id
   end
 
+  it "allows specification of an ordering function within groups" do
+    search = Sunspot.search(Post) do
+      group :title do
+        order_by_function(:product, :average_rating, -2, :asc)
+      end
+    end
+
+    highest_ranked_post = @posts.sort_by { |p| -p.ratings_average }.first
+
+    title1_group = search.group(:title).groups.detect { |g| g.value == "Title1" }
+    title1_group.hits.first.primary_key.to_i.should == highest_ranked_post.id
+  end
+
   it "allows pagination within groups" do
     search = Sunspot.search(Post) do
       group :title

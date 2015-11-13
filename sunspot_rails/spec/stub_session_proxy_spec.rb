@@ -28,6 +28,16 @@ describe 'specs with Sunspot stubbed' do
     @post.index!
   end
 
+  it 'should not send atomic_update to session' do
+    @session.should_not_receive(:atomic_update)
+    @post.index
+  end
+
+  it 'should not send atomic_update! to session' do
+    @session.should_not_receive(:atomic_update!)
+    @post.index!
+  end
+
   it 'should not send commit to session' do
     @session.should_not_receive(:commit)
     Sunspot.commit

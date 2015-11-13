@@ -100,6 +100,22 @@ module Sunspot
     end
 
     #
+    # See Sunspot.atomic_update
+    #
+    def atomic_update(clazz, updates = {})
+      @adds += updates.keys.length
+      indexer.add_atomic_update(clazz, updates)
+    end
+
+    #
+    # See Sunspot.atomic_update!
+    #
+    def atomic_update!(clazz, updates = {})
+      atomic_update(clazz, updates)
+      commit
+    end
+
+    #
     # See Sunspot.commit
     #
     def commit(soft_commit = false)
