@@ -18,8 +18,12 @@
 # affecting other Java applications on your server/workstation.
 #SOLR_JAVA_HOME=""
 
-# Increase Java Min/Max Heap as needed to support your indexing / query needs
-SOLR_JAVA_MEM="-Xms512m -Xmx512m"
+# Increase Java Heap as needed to support your indexing / query needs
+SOLR_HEAP="512m"
+
+# Expert: If you want finer control over memory options, specify them directly
+# Comment out SOLR_HEAP if you are using this though, that takes precedence
+#SOLR_JAVA_MEM="-Xms512m -Xmx512m"
 
 # Enable verbose GC logging
 GC_LOG_OPTS="-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails \
@@ -75,8 +79,8 @@ ENABLE_REMOTE_JMX_OPTS="false"
 # If not set, the script will create PID files in $SOLR_TIP/bin
 #SOLR_PID_DIR=
 
-# Path to a directory where Solr creates index files, the specified directory
-# must contain a solr.xml; by default, Solr will use server/solr
+# Path to a directory for Solr to store cores and their data. By default, Solr will use server/solr
+# If solr.xml is not stored in ZooKeeper, this directory needs to contain solr.xml
 #SOLR_HOME=
 
 # Solr provides a default Log4J configuration properties file in server/resources
@@ -93,11 +97,21 @@ ENABLE_REMOTE_JMX_OPTS="false"
 
 # Uncomment to set SSL-related system properties
 # Be sure to update the paths to the correct keystore for your environment
-#SOLR_SSL_OPTS="-Djavax.net.ssl.keyStore=etc/solr-ssl.keystore.jks \
-#-Djavax.net.ssl.keyStorePassword=secret \
-#-Djavax.net.ssl.trustStore=etc/solr-ssl.keystore.jks \
-#-Djavax.net.ssl.trustStorePassword=secret"
+#SOLR_SSL_KEY_STORE=etc/solr-ssl.keystore.jks
+#SOLR_SSL_KEY_STORE_PASSWORD=secret
+#SOLR_SSL_TRUST_STORE=etc/solr-ssl.keystore.jks
+#SOLR_SSL_TRUST_STORE_PASSWORD=secret
+#SOLR_SSL_NEED_CLIENT_AUTH=false
+#SOLR_SSL_WANT_CLIENT_AUTH=false
 
-# Uncomment to set a specific SSL port (-Djetty.ssl.port=N); if not set
-# and you are using SSL, then the start script will use SOLR_PORT for the SSL port
-#SOLR_SSL_PORT=
+# Uncomment if you want to override previously defined SSL values for HTTP client
+# otherwise keep them commented and the above values will automatically be set for HTTP clients
+#SOLR_SSL_CLIENT_KEY_STORE=
+#SOLR_SSL_CLIENT_KEY_STORE_PASSWORD=
+#SOLR_SSL_CLIENT_TRUST_STORE=
+#SOLR_SSL_CLIENT_TRUST_STORE_PASSWORD=
+
+# Settings for authentication
+#SOLR_AUTHENTICATION_CLIENT_CONFIGURER=
+#SOLR_AUTHENTICATION_OPTS=
+

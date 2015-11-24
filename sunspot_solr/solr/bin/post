@@ -34,7 +34,7 @@ SOLR_TIP=`dirname "$THIS_SCRIPT"`/..
 SOLR_TIP=`cd "$SOLR_TIP"; pwd`
 
 if [ -n "$SOLR_JAVA_HOME" ]; then
-  JAVA=$SOLR_JAVA_HOME/bin/java
+  JAVA="$SOLR_JAVA_HOME/bin/java"
 elif [ -n "$JAVA_HOME" ]; then
   for java in "$JAVA_HOME"/bin/amd64/java "$JAVA_HOME"/bin/java; do
     if [ -x "$java" ]; then
@@ -47,12 +47,12 @@ else
 fi
 
 # test that Java exists and is executable on this server
-$JAVA -version >/dev/null 2>&1 || { echo >&2 "Java is required to run this tool! Please install Java 8 or greater before running this script."; exit 1; }
+"$JAVA" -version >/dev/null 2>&1 || { echo >&2 "Java is required to run this tool! Please install Java 8 or greater before running this script."; exit 1; }
 
 
 # ===== post specific code
 
-TOOL_JAR=$SOLR_TIP/dist/solr-core-*.jar
+TOOL_JAR=("$SOLR_TIP/dist"/solr-core-*.jar)
 
 function print_usage() {
   echo ""
@@ -66,7 +66,7 @@ function print_usage() {
   echo "  Solr options:"
   echo "    -url <base Solr update URL> (overrides collection, host, and port)"
   echo "    -host <host> (default: localhost)"
-  echo "    -port <port> (default: 8983)"
+  echo "    -p or -port <port> (default: 8983)"
   echo "    -commit yes|no (default: yes)"
   # optimize intentionally omitted, but can be used as '-optimize yes' (default: no)
   echo ""
@@ -92,7 +92,7 @@ function print_usage() {
   echo "* XML files: $THIS_SCRIPT -c records article*.xml"
   echo "* CSV file: $THIS_SCRIPT -c signals LATEST-signals.csv"
   echo "* Directory of files: $THIS_SCRIPT -c myfiles ~/Documents"
-  echo "* Web crawl: $THIS_SCRIPT -c gettingstarted http://lucidworks.com -recursive 1 -delay 1"
+  echo "* Web crawl: $THIS_SCRIPT -c gettingstarted http://lucene.apache.org/solr -recursive 1 -delay 1"
   echo "* Standard input (stdin): echo '{"commit": {}}' | $THIS_SCRIPT -c my_collection -type application/json -out yes -d"
   echo "* Data as string: $THIS_SCRIPT -c signals -type text/csv -out yes -d $'id,value\n1,0.47'"
   echo ""
@@ -104,8 +104,8 @@ if [[ $# -eq 1 && ("$1" == "-help" || "$1" == "-h" || "$1" == "-usage") ]]; then
 fi
 
 
-COLLECTION=$DEFAULT_SOLR_COLLECTION
-PROPS="-Dauto=yes"
+COLLECTION="$DEFAULT_SOLR_COLLECTION"
+PROPS=('-Dauto=yes')
 RECURSIVE=""
 FILES=()
 URLS=()
@@ -118,7 +118,7 @@ while [ $# -gt 0 ]; do
   if [[ -d "$1" ]]; then
     # Directory
 #    echo "$1: DIRECTORY"
-    RECURSIVE="-Drecursive=yes"
+    RECURSIVE=yes
     FILES+=("$1")
   elif [[ -f "$1" ]]; then
     # File
@@ -129,12 +129,16 @@ while [ $# -gt 0 ]; do
 #    echo "$1: URL"
     URLS+=("$1")
   else
-    if [[ $1 == -* ]]; then
-      if [[ $1 == "-c" ]]; then
+    if [[ "$1" == -* ]]; then
+      if [[ "$1" == "-c" ]]; then
         # Special case, pull out collection name
         shift
-        COLLECTION=$1
-      elif [[ ($1 == "-d" || $1 == "--data" || $1 == "-") ]]; then
+        COLLECTION="$1"
+      elif [[ "$1" == "-p" ]]; then
+        # -p alias for -port for convenience and compatibility with `bin/solr start`
+        shift
+        PROPS+=("-Dport=$1")
+      elif [[ ("$1" == "-d" || "$1" == "--data" || "$1" == "-") ]]; then
         if [[ -s /dev/stdin ]]; then
           MODE="stdin"
         else
@@ -148,10 +152,13 @@ while [ $# -gt 0 ]; do
           fi
         fi
       else
-        key=${1:1}
+        key="${1:1}"
         shift
 #       echo "$1: PROP"
-        PROPS="$PROPS -D$key=$1"
+        PROPS+=("-D$key=$1")
+        if [[ "$key" == "url" ]]; then
+          SOLR_URL=$1
+        fi
       fi
     else
       echo -e "\nUnrecognized argument: $1\n"
@@ -163,8 +170,8 @@ while [ $# -gt 0 ]; do
 done
 
 # Check for errors
-if [[ $COLLECTION == "" ]]; then
-  echo -e "\nCollection must be specified.  Use -c <collection name> or set DEFAULT_SOLR_COLLECTION in your environment.\n"
+if [[ $COLLECTION == "" && $SOLR_URL == "" ]]; then
+  echo -e "\nCollection or URL must be specified.  Use -c <collection name> or set DEFAULT_SOLR_COLLECTION in your environment, or use -url instead.\n"
   echo -e "See '$THIS_SCRIPT -h' for usage instructions.\n"
   exit 1
 fi
@@ -208,10 +215,13 @@ else
   PARAMS=("${ARGS[@]}")
 fi
 
-PROPS="$PROPS -Dc=$COLLECTION -Ddata=$MODE $RECURSIVE"
+PROPS+=("-Dc=$COLLECTION" "-Ddata=$MODE")
+if [[ -n "$RECURSIVE" ]]; then
+  PROPS+=('-Drecursive=yes')
+fi
 
-echo "$JAVA" -classpath $TOOL_JAR $PROPS org.apache.solr.util.SimplePostTool "${PARAMS[@]}"
-"$JAVA" -classpath $TOOL_JAR $PROPS org.apache.solr.util.SimplePostTool "${PARAMS[@]}"
+echo "$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool "${PARAMS[@]}"
+"$JAVA" -classpath "${TOOL_JAR[0]}" "${PROPS[@]}" org.apache.solr.util.SimplePostTool "${PARAMS[@]}"
 
 # post smoker:
 # bin/post -c signals -out yes -type application/json -d '[{"id": 2, "val": 0.47}]'

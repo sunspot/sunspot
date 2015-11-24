@@ -75,11 +75,7 @@ server/solr/configsets
 
 server/solr-webapp
 
-  Jetty will extract the solr.war into this directory at runtime.
-
-server/webapps
-
-  Contains the solr.war file.
+  Contains files used by the Solr server; do not edit files in this directory (Solr is not a Java Web application).
 
 
 Notes About Solr Examples
@@ -105,9 +101,10 @@ solrconfig.xml.
 
 * Logging *
 
-By default, Jetty & Solr will log to the console a logs/solr.log. This can be convenient when 
-first getting started, but eventually you will want to log just to a file. To 
-configure logging, edit the log4j.properties file in "resources".
+By default, Jetty & Solr will log to the console and logs/solr.log. This can
+be convenient when first getting started, but eventually you will want to
+log just to a file. To configure logging, edit the log4j.properties file in
+"resources".
  
 It is also possible to setup log4j or other popular logging frameworks.
 
