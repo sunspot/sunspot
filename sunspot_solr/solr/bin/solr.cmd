@@ -18,6 +18,8 @@
 
 IF "%OS%"=="Windows_NT" setlocal enabledelayedexpansion enableextensions
 
+set "PASS_TO_RUN_EXAMPLE="
+
 REM Determine top-level Solr directory
 set SDIR=%~dp0
 IF "%SDIR:~-1%"=="\" set SDIR=%SDIR:~0,-1%
@@ -36,10 +38,30 @@ REM command line args
 IF "%SOLR_INCLUDE%"=="" set "SOLR_INCLUDE=%SOLR_TIP%\bin\solr.in.cmd"
 IF EXIST "%SOLR_INCLUDE%" CALL "%SOLR_INCLUDE%"
 
-REM URL scheme for contacting Solr
+REM Select HTTP OR HTTPS related configurations
 set SOLR_URL_SCHEME=http
-IF DEFINED SOLR_SSL_OPTS set SOLR_URL_SCHEME=https
-IF NOT DEFINED SOLR_SSL_OPTS set SOLR_SSL_OPTS=
+set "SOLR_JETTY_CONFIG=--module=http"
+set "SOLR_SSL_OPTS= "
+IF DEFINED SOLR_SSL_KEY_STORE (
+  set "SOLR_JETTY_CONFIG=--module=https"
+  set SOLR_URL_SCHEME=https
+  set "SCRIPT_ERROR=Solr server directory %SOLR_SERVER_DIR% not found!"
+  set "SOLR_SSL_OPTS=-Dsolr.jetty.keystore=%SOLR_SSL_KEY_STORE% -Dsolr.jetty.keystore.password=%SOLR_SSL_KEY_STORE_PASSWORD% -Dsolr.jetty.truststore=%SOLR_SSL_TRUST_STORE% -Dsolr.jetty.truststore.password=%SOLR_SSL_TRUST_STORE_PASSWORD% -Dsolr.jetty.ssl.needClientAuth=%SOLR_SSL_NEED_CLIENT_AUTH% -Dsolr.jetty.ssl.wantClientAuth=%SOLR_SSL_WANT_CLIENT_AUTH%"
+  IF DEFINED SOLR_SSL_CLIENT_KEY_STORE  (
+    set "SOLR_SSL_OPTS=%SOLR_SSL_OPTS% -Djavax.net.ssl.keyStore=%SOLR_SSL_CLIENT_KEY_STORE% -Djavax.net.ssl.keyStorePassword=%SOLR_SSL_CLIENT_KEY_STORE_PASSWORD% -Djavax.net.ssl.trustStore=%SOLR_SSL_CLIENT_TRUST_STORE% -Djavax.net.ssl.trustStorePassword=%SOLR_SSL_CLIENT_TRUST_STORE_PASSWORD%"
+  ) ELSE (
+    set "SOLR_SSL_OPTS=%SOLR_SSL_OPTS% -Djavax.net.ssl.keyStore=%SOLR_SSL_KEY_STORE% -Djavax.net.ssl.keyStorePassword=%SOLR_SSL_KEY_STORE_PASSWORD% -Djavax.net.ssl.trustStore=%SOLR_SSL_TRUST_STORE% -Djavax.net.ssl.trustStorePassword=%SOLR_SSL_TRUST_STORE_PASSWORD%"
+  )
+) ELSE (
+  set SOLR_SSL_OPTS=
+)
+
+REM Set the SOLR_TOOL_HOST variable for use when connecting to a running Solr instance
+IF NOT "%SOLR_HOST%"=="" (
+  set "SOLR_TOOL_HOST=%SOLR_HOST%"
+) ELSE (
+  set "SOLR_TOOL_HOST=localhost"
+)
 
 REM Verify Java is available
 IF DEFINED SOLR_JAVA_HOME set "JAVA_HOME=%SOLR_JAVA_HOME%"
@@ -58,7 +80,7 @@ IF NOT EXIST "%JAVA_HOME%\bin\java.exe" (
   goto err
 )
 set "JAVA=%JAVA_HOME%\bin\java"
-CALL :resolve_java_version
+CALL :resolve_java_info
 IF !JAVA_MAJOR_VERSION! LSS 7 (
   set "SCRIPT_ERROR=Java 1.7 or later is required to run Solr. Current Java version is: !JAVA_VERSION_INFO!"
   goto err
@@ -168,9 +190,9 @@ goto done
 @echo   -s dir        Sets the solr.solr.home system property; Solr will create core directories under
 @echo                   this directory. This allows you to run multiple Solr instances on the same host
 @echo                   while reusing the same server directory set using the -d parameter. If set, the
-@echo                   specified directory should contain a solr.xml file. The default value is example/solr.
+@echo                   specified directory should contain a solr.xml file, unless solr.xml exists in ZooKeeper.
 @echo                   This parameter is ignored when running examples (-e), as the solr.solr.home depends
-@echo                   on which example is run.
+@echo                   on which example is run. The default value is server/solr.
 @echo.
 @echo   -e example    Name of the example to run; available examples:
 @echo       cloud:          SolrCloud example
@@ -358,6 +380,7 @@ goto parse_args
 
 :set_verbose
 set verbose=1
+set "PASS_TO_RUN_EXAMPLE=--verbose !PASS_TO_RUN_EXAMPLE!"
 SHIFT
 goto parse_args
 
@@ -441,6 +464,7 @@ IF "%firstChar%"=="-" (
 )
 
 set SOLR_HEAP=%~2
+set "PASS_TO_RUN_EXAMPLE=-m %~2 !PASS_TO_RUN_EXAMPLE!"
 SHIFT
 SHIFT
 goto parse_args
@@ -459,6 +483,7 @@ IF "%firstChar%"=="-" (
 )
 
 set SOLR_HOST=%~2
+set "PASS_TO_RUN_EXAMPLE=-h %~2 !PASS_TO_RUN_EXAMPLE!"
 SHIFT
 SHIFT
 goto parse_args
@@ -477,6 +502,7 @@ IF "%firstChar%"=="-" (
 )
 
 set SOLR_PORT=%~2
+set "PASS_TO_RUN_EXAMPLE=-p %~2 !PASS_TO_RUN_EXAMPLE!"
 SHIFT
 SHIFT
 goto parse_args
@@ -518,6 +544,7 @@ IF "%firstChar%"=="-" (
 )
 
 set "ZK_HOST=%~2"
+set "PASS_TO_RUN_EXAMPLE=-z %~2 !PASS_TO_RUN_EXAMPLE!"
 SHIFT
 SHIFT
 goto parse_args
@@ -536,12 +563,15 @@ IF NOT "%SOLR_OPTS%"=="" (
 ) ELSE (
   set "SOLR_OPTS=%PASSTHRU%"
 )
+set "PASS_TO_RUN_EXAMPLE=%PASSTHRU% !PASS_TO_RUN_EXAMPLE!"
 SHIFT
 SHIFT
 goto parse_args
 
 :set_noprompt
 set NO_USER_PROMPT=1
+set "PASS_TO_RUN_EXAMPLE=-noprompt !PASS_TO_RUN_EXAMPLE!"
+
 SHIFT
 goto parse_args
 
@@ -568,37 +598,7 @@ IF NOT EXIST "%SOLR_SERVER_DIR%" (
   goto err
 )
 
-IF "%EXAMPLE%"=="" (
-  REM SOLR_HOME just becomes serverDir/solr
-) ELSE IF "%EXAMPLE%"=="techproducts" (
-  mkdir "%SOLR_TIP%\example\techproducts\solr"
-  set "SOLR_HOME=%SOLR_TIP%\example\techproducts\solr"
-  IF NOT EXIST "!SOLR_HOME!\solr.xml" (
-    copy "%DEFAULT_SERVER_DIR%\solr\solr.xml" "!SOLR_HOME!\solr.xml"
-  )
-  IF NOT EXIST "!SOLR_HOME!\zoo.cfg" (
-    copy "%DEFAULT_SERVER_DIR%\solr\zoo.cfg" "!SOLR_HOME!\zoo.cfg"
-  )
-) ELSE IF "%EXAMPLE%"=="cloud" (
-  set SOLR_MODE=solrcloud
-  goto cloud_example_start
-) ELSE IF "%EXAMPLE%"=="dih" (
-  set "SOLR_HOME=%SOLR_TIP%\example\example-DIH\solr"
-) ELSE IF "%EXAMPLE%"=="schemaless" (
-  mkdir "%SOLR_TIP%\example\schemaless\solr"
-  set "SOLR_HOME=%SOLR_TIP%\example\schemaless\solr"
-  IF NOT EXIST "!SOLR_HOME!\solr.xml" (
-    copy "%DEFAULT_SERVER_DIR%\solr\solr.xml" "!SOLR_HOME!\solr.xml"
-  )
-  IF NOT EXIST "!SOLR_HOME!\zoo.cfg" (
-    copy "%DEFAULT_SERVER_DIR%\solr\zoo.cfg" "!SOLR_HOME!\zoo.cfg"
-  )
-) ELSE (
-  @echo.
-  @echo 'Unrecognized example %EXAMPLE%!'
-  @echo.
-  goto start_usage
-)
+IF NOT "%EXAMPLE%"=="" goto run_example
 
 :start_solr
 IF "%SOLR_HOME%"=="" set "SOLR_HOME=%SOLR_SERVER_DIR%\solr"
@@ -611,11 +611,6 @@ IF NOT EXIST "%SOLR_HOME%\" (
     set "SCRIPT_ERROR=Solr home directory %SOLR_HOME% not found!"
     goto err
   )
-)
-
-IF NOT EXIST "%SOLR_HOME%\solr.xml" (
-  set "SCRIPT_ERROR=Solr home directory %SOLR_HOME% must contain solr.xml!"
-  goto err
 )
 
 IF "%STOP_KEY%"=="" set STOP_KEY=solrrocks
@@ -694,7 +689,7 @@ IF "%SCRIPT_CMD%"=="stop" (
             set found_it=1
             @echo Stopping Solr process %%N running on port %SOLR_PORT%
             set /A STOP_PORT=%SOLR_PORT% - 1000
-            "%JAVA%" %SOLR_SSL_OPTS% -Djetty.home="%SOLR_SERVER_DIR%" -jar "%SOLR_SERVER_DIR%\start.jar" STOP.PORT=!STOP_PORT! STOP.KEY=%STOP_KEY% --stop
+            "%JAVA%" %SOLR_SSL_OPTS% -Djetty.home="%SOLR_SERVER_DIR%" -jar "%SOLR_SERVER_DIR%\start.jar" "%SOLR_JETTY_CONFIG%" STOP.PORT=!STOP_PORT! STOP.KEY=%STOP_KEY% --stop
             del "%SOLR_TIP%"\bin\solr-%SOLR_PORT%.port
             timeout /T 5
             REM Kill it if it is still running after the graceful shutdown
@@ -771,6 +766,8 @@ IF EXIST "!SOLR_LOGS_DIR!\solr_gc.log" (
   move /Y "!SOLR_LOGS_DIR!\solr_gc.log" "!SOLR_LOGS_DIR!\solr_gc_log_!now_ts!"
 )
 
+IF NOT "%ZK_HOST%"=="" set SOLR_MODE=solrcloud
+
 IF "%SOLR_MODE%"=="solrcloud" (
   IF "%ZK_CLIENT_TIMEOUT%"=="" set "ZK_CLIENT_TIMEOUT=15000"
 
@@ -785,6 +782,10 @@ IF "%SOLR_MODE%"=="solrcloud" (
   IF EXIST "%SOLR_HOME%\collection1\core.properties" set "CLOUD_MODE_OPTS=!CLOUD_MODE_OPTS! -Dbootstrap_confdir=./solr/collection1/conf -Dcollection.configName=myconf -DnumShards=1"
 ) ELSE (
   set CLOUD_MODE_OPTS=
+  IF NOT EXIST "%SOLR_HOME%\solr.xml" (
+    set "SCRIPT_ERROR=Solr home directory %SOLR_HOME% must contain solr.xml!"
+    goto err
+  )
 )
 
 REM These are useful for attaching remove profilers like VisualVM/JConsole
@@ -849,7 +850,7 @@ IF "%verbose%"=="1" (
   @echo.
 )
 
-set START_OPTS=-Duser.timezone=%SOLR_TIMEZONE% -Djava.net.preferIPv4Stack=true
+set START_OPTS=-Duser.timezone=%SOLR_TIMEZONE%
 set START_OPTS=%START_OPTS% !GC_TUNE! %GC_LOG_OPTS%
 IF NOT "!CLOUD_MODE_OPTS!"=="" set "START_OPTS=%START_OPTS% !CLOUD_MODE_OPTS!"
 IF NOT "%REMOTE_JMX_OPTS%"=="" set "START_OPTS=%START_OPTS% %REMOTE_JMX_OPTS%"
@@ -857,8 +858,7 @@ IF NOT "%SOLR_ADDL_ARGS%"=="" set "START_OPTS=%START_OPTS% %SOLR_ADDL_ARGS%"
 IF NOT "%SOLR_HOST_ARG%"=="" set "START_OPTS=%START_OPTS% %SOLR_HOST_ARG%"
 IF NOT "%SOLR_OPTS%"=="" set "START_OPTS=%START_OPTS% %SOLR_OPTS%"
 IF NOT "%SOLR_SSL_OPTS%"=="" (
-  set "SSL_PORT_PROP=-Djetty.ssl.port=%SOLR_PORT%"
-  IF DEFINED SOLR_SSL_PORT set "SSL_PORT_PROP=-Djetty.ssl.port=%SOLR_SSL_PORT%"
+  set "SSL_PORT_PROP=-Dsolr.jetty.https.port=%SOLR_PORT%"
   set "START_OPTS=%START_OPTS% %SOLR_SSL_OPTS% !SSL_PORT_PROP!"
 )
 
@@ -874,217 +874,40 @@ IF NOT EXIST "%SOLR_SERVER_DIR%\tmp" (
   mkdir "%SOLR_SERVER_DIR%\tmp"
 )
 
-@echo.
-CALL :safe_echo "Starting Solr on port %SOLR_PORT% from %SOLR_SERVER_DIR%"
-@echo.
+IF "%JAVA_VENDOR%" == "IBM J9" (
+  set "GCLOG_OPT=-Xverbosegclog"
+) else (
+  set "GCLOG_OPT=-Xloggc"
+)
+
 IF "%FG%"=="1" (
   REM run solr in the foreground
   title "Solr-%SOLR_PORT%"
   echo %SOLR_PORT%>"%SOLR_TIP%"\bin\solr-%SOLR_PORT%.port
-  "%JAVA%" %SERVEROPT% -Xss256k %SOLR_JAVA_MEM% %START_OPTS% -Xloggc:"!SOLR_LOGS_DIR!"/solr_gc.log -Dlog4j.configuration="%LOG4J_CONFIG%" -DSTOP.PORT=!STOP_PORT! -DSTOP.KEY=%STOP_KEY% ^
-    -Djetty.port=%SOLR_PORT% -Dsolr.solr.home="%SOLR_HOME%" -Dsolr.install.dir="%SOLR_TIP%" -Djetty.home="%SOLR_SERVER_DIR%" -Djava.io.tmpdir="%SOLR_SERVER_DIR%\tmp" -jar start.jar
+  "%JAVA%" %SERVEROPT% -Xss256k %SOLR_JAVA_MEM% %START_OPTS% %GCLOG_OPT%:"!SOLR_LOGS_DIR!"/solr_gc.log -Dlog4j.configuration="%LOG4J_CONFIG%" -DSTOP.PORT=!STOP_PORT! -DSTOP.KEY=%STOP_KEY% ^
+    -Djetty.port=%SOLR_PORT% -Dsolr.solr.home="%SOLR_HOME%" -Dsolr.install.dir="%SOLR_TIP%" -Djetty.home="%SOLR_SERVER_DIR%" -Djava.io.tmpdir="%SOLR_SERVER_DIR%\tmp" -jar start.jar "%SOLR_JETTY_CONFIG%"
 ) ELSE (
-  START /B "Solr-%SOLR_PORT%" /D "%SOLR_SERVER_DIR%" "%JAVA%" %SERVEROPT% -Xss256k %SOLR_JAVA_MEM% %START_OPTS% -Xloggc:"!SOLR_LOGS_DIR!"/solr_gc.log -Dlog4j.configuration="%LOG4J_CONFIG%" -DSTOP.PORT=!STOP_PORT! -DSTOP.KEY=%STOP_KEY% ^
-    -Djetty.port=%SOLR_PORT% -Dsolr.solr.home="%SOLR_HOME%" -Dsolr.install.dir="%SOLR_TIP%" -Djetty.home="%SOLR_SERVER_DIR%" -Djava.io.tmpdir="%SOLR_SERVER_DIR%\tmp" -jar start.jar > "!SOLR_LOGS_DIR!\solr-%SOLR_PORT%-console.log"
+  START /B "Solr-%SOLR_PORT%" /D "%SOLR_SERVER_DIR%" "%JAVA%" %SERVEROPT% -Xss256k %SOLR_JAVA_MEM% %START_OPTS% %GCLOG_OPT%:"!SOLR_LOGS_DIR!"/solr_gc.log -Dlog4j.configuration="%LOG4J_CONFIG%" -DSTOP.PORT=!STOP_PORT! -DSTOP.KEY=%STOP_KEY% ^
+    -Djetty.port=%SOLR_PORT% -Dsolr.solr.home="%SOLR_HOME%" -Dsolr.install.dir="%SOLR_TIP%" -Djetty.home="%SOLR_SERVER_DIR%" -Djava.io.tmpdir="%SOLR_SERVER_DIR%\tmp" -jar start.jar "%SOLR_JETTY_CONFIG%" > "!SOLR_LOGS_DIR!\solr-%SOLR_PORT%-console.log"
   echo %SOLR_PORT%>"%SOLR_TIP%"\bin\solr-%SOLR_PORT%.port
-)
 
-set EXAMPLE_NAME=%EXAMPLE%
-set CREATE_EXAMPLE_CONFIG=
-IF "%EXAMPLE%"=="schemaless" (
-  set EXAMPLE_NAME=gettingstarted
-  set CREATE_EXAMPLE_CONFIG=data_driven_schema_configs
+  REM now wait to see Solr come online ...
+  "%JAVA%" %SOLR_SSL_OPTS% -Dsolr.install.dir="%SOLR_TIP%" -Dlog4j.configuration="file:%DEFAULT_SERVER_DIR%\scripts\cloud-scripts\log4j.properties" ^
+    -classpath "%DEFAULT_SERVER_DIR%\solr-webapp\webapp\WEB-INF\lib\*;%DEFAULT_SERVER_DIR%\lib\ext\*" ^
+    org.apache.solr.util.SolrCLI status -maxWaitSecs 30 -solr !SOLR_URL_SCHEME!://%SOLR_TOOL_HOST%:%SOLR_PORT%/solr
 )
-IF "%EXAMPLE%"=="techproducts" (
-  set CREATE_EXAMPLE_CONFIG=sample_techproducts_configs
-)
-
-IF NOT "!CREATE_EXAMPLE_CONFIG!"=="" (
-  timeout /T 10
-  IF "%SOLR_MODE%"=="solrcloud" (
-    "%JAVA%" %SOLR_SSL_OPTS% -Dsolr.install.dir="%SOLR_TIP%" -Dlog4j.configuration="file:%DEFAULT_SERVER_DIR%\scripts\cloud-scripts\log4j.properties" ^
-      -classpath "%DEFAULT_SERVER_DIR%\solr-webapp\webapp\WEB-INF\lib\*;%DEFAULT_SERVER_DIR%\lib\ext\*" ^
-      org.apache.solr.util.SolrCLI create_collection -name !EXAMPLE_NAME! -shards 1 -replicationFactor 1 ^
-      -confdir !CREATE_EXAMPLE_CONFIG! -configsetsDir "%SOLR_SERVER_DIR%\solr\configsets" -solrUrl !SOLR_URL_SCHEME!://localhost:%SOLR_PORT%/solr
-  ) ELSE (
-    "%JAVA%" %SOLR_SSL_OPTS% -Dsolr.install.dir="%SOLR_TIP%" -Dlog4j.configuration="file:%DEFAULT_SERVER_DIR%\scripts\cloud-scripts\log4j.properties" ^
-      -classpath "%DEFAULT_SERVER_DIR%\solr-webapp\webapp\WEB-INF\lib\*;%DEFAULT_SERVER_DIR%\lib\ext\*" ^
-      org.apache.solr.util.SolrCLI create_core -name !EXAMPLE_NAME! -solrUrl !SOLR_URL_SCHEME!://localhost:%SOLR_PORT%/solr ^
-      -confdir !CREATE_EXAMPLE_CONFIG! -configsetsDir "%SOLR_SERVER_DIR%\solr\configsets"
-  )
-)
-
-IF "%EXAMPLE%"=="techproducts" (
-  @echo.
-  @echo Indexing tech product example docs from "%SOLR_TIP%\example\exampledocs"
-  "%JAVA%" %SOLR_SSL_OPTS% -Durl=!SOLR_URL_SCHEME!://localhost:%SOLR_PORT%/solr/%EXAMPLE%/update -jar "%SOLR_TIP%/example/exampledocs/post.jar" "%SOLR_TIP%/example/exampledocs/*.xml"
-)
-
-@echo.
-IF NOT "%EXAMPLE%"=="" (
-  @echo Solr %EXAMPLE% example launched successfully.
-)
-@echo Direct your Web browser to !SOLR_URL_SCHEME!://localhost:%SOLR_PORT%/solr to visit the Solr Admin UI
-@echo.
 
 goto done
 
-:cloud_example_start
-REM Launch interactive session to guide the user through the SolrCloud example
+:run_example
+REM Run the requested example
 
-CLS
-@echo.
-@echo Welcome to the SolrCloud example
-@echo.
-@echo.
-
-IF "%NO_USER_PROMPT%"=="1" (
-  set CLOUD_NUM_NODES=2
-  @echo Starting up %CLOUD_NUM_NODES% Solr nodes for your example SolrCloud cluster.
-  goto start_cloud_nodes
-) ELSE (
-  @echo This interactive session will help you launch a SolrCloud cluster on your local workstation.
-  @echo.
-  SET /P "USER_INPUT=To begin, how many Solr nodes would you like to run in your local cluster (specify 1-4 nodes) [2]: "
-  goto while_num_nodes_not_valid
-)
-
-:while_num_nodes_not_valid
-IF "%USER_INPUT%"=="" set USER_INPUT=2
-SET /A INPUT_AS_NUM=!USER_INPUT!*1
-IF %INPUT_AS_NUM% GEQ 1 IF %INPUT_AS_NUM% LEQ 4 set CLOUD_NUM_NODES=%INPUT_AS_NUM%
-IF NOT DEFINED CLOUD_NUM_NODES (
-  SET USER_INPUT=
-  SET /P "USER_INPUT=Please enter a number between 1 and 4 [2]: "
-  goto while_num_nodes_not_valid
-)
-@echo Ok, let's start up %CLOUD_NUM_NODES% Solr nodes for your example SolrCloud cluster.
-
-:start_cloud_nodes
-
-set "CLOUD_EXAMPLE_DIR=%SOLR_TIP%\example\cloud"
-
-@echo Creating Solr home "%CLOUD_EXAMPLE_DIR%\node1\solr"
-mkdir "%CLOUD_EXAMPLE_DIR%\node1\solr"
-copy "%DEFAULT_SERVER_DIR%\solr\solr.xml" "%CLOUD_EXAMPLE_DIR%\node1\solr\solr.xml"
-copy "%DEFAULT_SERVER_DIR%\solr\zoo.cfg" "%CLOUD_EXAMPLE_DIR%\node1\solr\zoo.cfg"
-
-for /l %%x in (2, 1, !CLOUD_NUM_NODES!) do (
-  IF NOT EXIST "%SOLR_TIP%\node%%x" (
-    @echo Cloning "%CLOUD_EXAMPLE_DIR%\node1" into "%CLOUD_EXAMPLE_DIR%\node%%x"
-    xcopy /Q /E /I "%CLOUD_EXAMPLE_DIR%\node1" "%CLOUD_EXAMPLE_DIR%\node%%x"
-  )
-)
-
-for /l %%x in (1, 1, !CLOUD_NUM_NODES!) do (
-  set USER_INPUT=
-  set /A idx=%%x-1
-  set DEF_PORT=8983
-  IF %%x EQU 2 (
-    set DEF_PORT=7574
-  ) ELSE (
-    IF %%x EQU 3 (
-    set DEF_PORT=8984
-    ) ELSE (
-      IF %%x EQU 4 (
-        set DEF_PORT=7575
-      )
-    )
-  )
-
-  IF "%NO_USER_PROMPT%"=="1" (
-    set NODE_PORT=!DEF_PORT!
-  ) ELSE (
-    set /P "USER_INPUT=Please enter the port for node%%x [!DEF_PORT!]: "
-    IF "!USER_INPUT!"=="" set USER_INPUT=!DEF_PORT!
-    set NODE_PORT=!USER_INPUT!
-    echo node%%x port: !NODE_PORT!
-    @echo.
-  )
-
-  IF NOT "!SOLR_HEAP!"=="" (
-    set "DASHM=-m !SOLR_HEAP!"
-  ) ELSE (
-    set "DASHM="
-  )
-
-  IF %%x EQU 1 (
-    set EXAMPLE=
-    IF NOT "!ZK_HOST!"=="" (
-      set "DASHZ=-z !ZK_HOST!"
-    ) ELSE (
-      set "DASHZ="
-    )
-    @echo Starting node1 on port !NODE_PORT! using command:
-    @echo solr -cloud -p !NODE_PORT! -s example\node1\solr !DASHZ! !DASHM!
-    START "Solr-!NODE_PORT!" /D "%SDIR%" solr -f -cloud -p !NODE_PORT! !DASHZ! !DASHM! -s "%CLOUD_EXAMPLE_DIR%\node1\solr"
-    set NODE1_PORT=!NODE_PORT!
-    echo !NODE_PORT!>"%SOLR_TIP%"\bin\solr-!NODE_PORT!.port
-  ) ELSE (
-    IF "!ZK_HOST!"=="" (
-      set /A ZK_PORT=!NODE1_PORT!+1000
-      set "ZK_HOST=localhost:!ZK_PORT!"
-    )
-    @echo Starting node%%x on port !NODE_PORT! using command:
-    @echo solr -cloud -p !NODE_PORT! -s example\node%%x\solr -z !ZK_HOST! !DASHM!
-    START "Solr-!NODE_PORT!" /D "%SDIR%" solr -f -cloud -p !NODE_PORT! -z !ZK_HOST! !DASHM! -s "%CLOUD_EXAMPLE_DIR%\node%%x\solr"
-    echo !NODE_PORT!>"%SOLR_TIP%"\bin\solr-!NODE_PORT!.port
-  )
-
-  timeout /T 10
-)
-
-set USER_INPUT=
-echo.
-echo Now let's create a new collection for indexing documents in your %CLOUD_NUM_NODES%-node cluster.
-IF "%NO_USER_PROMPT%"=="1" (
-  set CLOUD_COLLECTION=gettingstarted
-  set CLOUD_NUM_SHARDS=2
-  set CLOUD_REPFACT=2
-  set CLOUD_CONFIG=data_driven_schema_configs
-  goto create_collection
-) ELSE (
-  goto get_create_collection_params
-)
-
-:get_create_collection_params
-set /P "USER_INPUT=Please provide a name for your new collection: [gettingstarted] "
-IF "!USER_INPUT!"=="" set USER_INPUT=gettingstarted
-set CLOUD_COLLECTION=!USER_INPUT!
-echo !CLOUD_COLLECTION!
-set USER_INPUT=
-echo.
-set /P "USER_INPUT=How many shards would you like to split !CLOUD_COLLECTION! into? [2] "
-IF "!USER_INPUT!"=="" set USER_INPUT=2
-set CLOUD_NUM_SHARDS=!USER_INPUT!
-echo !CLOUD_NUM_SHARDS!
-set USER_INPUT=
-echo.
-set /P "USER_INPUT=How many replicas per shard would you like to create? [2] "
-IF "!USER_INPUT!"=="" set USER_INPUT=2
-set CLOUD_REPFACT=!USER_INPUT!
-echo !CLOUD_REPFACT!
-set USER_INPUT=
-echo.
-set /P "USER_INPUT=Please choose a configuration for the !CLOUD_COLLECTION! collection, available options are: basic_configs, data_driven_schema_configs, or sample_techproducts_configs [data_driven_schema_configs]"
-IF "!USER_INPUT!"=="" set USER_INPUT=data_driven_schema_configs
-set CLOUD_CONFIG=!USER_INPUT!
-echo !CLOUD_CONFIG!
-goto create_collection
-
-:create_collection
 "%JAVA%" %SOLR_SSL_OPTS% -Dsolr.install.dir="%SOLR_TIP%" -Dlog4j.configuration="file:%DEFAULT_SERVER_DIR%\scripts\cloud-scripts\log4j.properties" ^
   -classpath "%DEFAULT_SERVER_DIR%\solr-webapp\webapp\WEB-INF\lib\*;%DEFAULT_SERVER_DIR%\lib\ext\*" ^
-  org.apache.solr.util.SolrCLI create_collection -name !CLOUD_COLLECTION! -shards !CLOUD_NUM_SHARDS! -replicationFactor !CLOUD_REPFACT! ^
-  -confdir !CLOUD_CONFIG! -configsetsDir "%SOLR_SERVER_DIR%\solr\configsets" -zkHost %zk_host%
+  org.apache.solr.util.SolrCLI run_example -script "%SDIR%\solr.cmd" -e %EXAMPLE% -d "%SOLR_SERVER_DIR%" -urlScheme !SOLR_URL_SCHEME! !PASS_TO_RUN_EXAMPLE!
 
-echo.
-echo SolrCloud example is running, please visit !SOLR_URL_SCHEME!://localhost:%NODE1_PORT%/solr"
-echo.
-
-REM End of interactive cloud example
+REM End of run_example
 goto done
-
 
 :get_info
 REM Find all Java processes, correlate with those listening on a port
@@ -1102,7 +925,7 @@ for /f "usebackq" %%i in (`dir /b "%SOLR_TIP%\bin" ^| findstr /i "^solr-.*\.port
             echo Found Solr process %%k running on port !SOME_SOLR_PORT!
             "%JAVA%" %SOLR_SSL_OPTS% -Dsolr.install.dir="%SOLR_TIP%" -Dlog4j.configuration="file:%DEFAULT_SERVER_DIR%\scripts\cloud-scripts\log4j.properties" ^
               -classpath "%DEFAULT_SERVER_DIR%\solr-webapp\webapp\WEB-INF\lib\*;%DEFAULT_SERVER_DIR%\lib\ext\*" ^
-              org.apache.solr.util.SolrCLI status -solr !SOLR_URL_SCHEME!://localhost:!SOME_SOLR_PORT!/solr
+              org.apache.solr.util.SolrCLI status -solr !SOLR_URL_SCHEME!://%SOLR_TOOL_HOST%:!SOME_SOLR_PORT!/solr
             @echo.
           )
         )
@@ -1231,13 +1054,13 @@ if "!CREATE_PORT!"=="" (
 if "%SCRIPT_CMD%"=="create_core" (
   "%JAVA%" %SOLR_SSL_OPTS% -Dsolr.install.dir="%SOLR_TIP%" -Dlog4j.configuration="file:%DEFAULT_SERVER_DIR%\scripts\cloud-scripts\log4j.properties" ^
     -classpath "%DEFAULT_SERVER_DIR%\solr-webapp\webapp\WEB-INF\lib\*;%DEFAULT_SERVER_DIR%\lib\ext\*" ^
-    org.apache.solr.util.SolrCLI create_core -name !CREATE_NAME! -solrUrl !SOLR_URL_SCHEME!://localhost:!CREATE_PORT!/solr ^
+    org.apache.solr.util.SolrCLI create_core -name !CREATE_NAME! -solrUrl !SOLR_URL_SCHEME!://%SOLR_TOOL_HOST%:!CREATE_PORT!/solr ^
     -confdir !CREATE_CONFDIR! -configsetsDir "%SOLR_TIP%\server\solr\configsets"
 ) else (
   "%JAVA%" %SOLR_SSL_OPTS% -Dsolr.install.dir="%SOLR_TIP%" -Dlog4j.configuration="file:%DEFAULT_SERVER_DIR%\scripts\cloud-scripts\log4j.properties" ^
   -classpath "%DEFAULT_SERVER_DIR%\solr-webapp\webapp\WEB-INF\lib\*;%DEFAULT_SERVER_DIR%\lib\ext\*" ^
   org.apache.solr.util.SolrCLI create -name !CREATE_NAME! -shards !CREATE_NUM_SHARDS! -replicationFactor !CREATE_REPFACT! ^
-  -confname !CREATE_CONFNAME! -confdir !CREATE_CONFDIR! -configsetsDir "%SOLR_TIP%\server\solr\configsets" -solrUrl !SOLR_URL_SCHEME!://localhost:!CREATE_PORT!/solr
+  -confname !CREATE_CONFNAME! -confdir !CREATE_CONFDIR! -configsetsDir "%SOLR_TIP%\server\solr\configsets" -solrUrl !SOLR_URL_SCHEME!://%SOLR_TOOL_HOST%:!CREATE_PORT!/solr
 )
 
 goto done
@@ -1303,7 +1126,7 @@ if "!DELETE_CONFIG!"=="" (
 "%JAVA%" %SOLR_SSL_OPTS% -Dsolr.install.dir="%SOLR_TIP%" -Dlog4j.configuration="file:%DEFAULT_SERVER_DIR%\scripts\cloud-scripts\log4j.properties" ^
 -classpath "%DEFAULT_SERVER_DIR%\solr-webapp\webapp\WEB-INF\lib\*;%DEFAULT_SERVER_DIR%\lib\ext\*" ^
 org.apache.solr.util.SolrCLI delete -name !DELETE_NAME! -deleteConfig !DELETE_CONFIG! ^
--solrUrl !SOLR_URL_SCHEME!://localhost:!DELETE_PORT!/solr
+-solrUrl !SOLR_URL_SCHEME!://%SOLR_TOOL_HOST%:!DELETE_PORT!/solr
 
 goto done
 
@@ -1351,29 +1174,52 @@ goto done
 exit /b 1
 
 :done
-
 ENDLOCAL
-
-GOTO :eof
+exit /b 0
 
 REM Tests what Java we have and sets some global variables
-:resolve_java_version
+:resolve_java_info
+
+CALL :resolve_java_vendor
 
 set JAVA_MAJOR_VERSION=0
 set JAVA_VERSION_INFO=
 set JAVA_BUILD=0
+
 "%JAVA%" -version 2>&1 | findstr /i "version" > javavers
 set /p JAVAVEROUT=<javavers
 del javavers
-for /f "tokens=3" %%g in ("!JAVAVEROUT!") do (
-  set JAVA_VERSION_INFO=%%g
+
+for /f "tokens=3" %%a in ("!JAVAVEROUT!") do (
+  set JAVA_VERSION_INFO=%%a
+  REM Remove surrounding quotes
   set JAVA_VERSION_INFO=!JAVA_VERSION_INFO:"=!
-  for /f "delims=_ tokens=1-3" %%v in ("!JAVA_VERSION_INFO!") do (
-    set JAVA_MAJOR=!JAVA_VERSION_INFO:~0,3!
-    set /a JAVA_BUILD=%%w
-    set /a JAVA_MAJOR_VERSION=!JAVA_MAJOR:~2,1!*1
+  
+  REM Extract the major Java version, e.g. 7, 8, 9, 10 ...
+  for /f "tokens=2 delims=." %%a in ("!JAVA_VERSION_INFO!") do (
+    set JAVA_MAJOR_VERSION=%%a
+  )
+    
+  REM Don't look for "_{build}" if we're on IBM J9.
+  if NOT "%JAVA_VENDOR%" == "IBM J9" (
+    for /f "delims=_ tokens=2" %%a in ("!JAVA_VERSION_INFO!") do (
+      set /a JAVA_BUILD=%%a
+    )
   )
 )
+GOTO :eof
+
+REM Set which JVM vendor we have
+:resolve_java_vendor
+set "JAVA_VENDOR=Oracle"
+"%JAVA%" -version 2>&1 | findstr /i "IBM J9" > javares
+set /p JAVA_VENDOR_OUT=<javares
+del javares
+if NOT "%JAVA_VENDOR_OUT%" == "" (
+  set "JAVA_VENDOR=IBM J9"
+)
+
+set JAVA_VENDOR_OUT=
 GOTO :eof
 
 REM Safe echo which does not mess with () in strings
