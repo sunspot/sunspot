@@ -32,6 +32,7 @@ require
     'lib/order!lib/ZeroClipboard',
     'lib/order!lib/d3',
     'lib/order!lib/chosen',
+    'lib/order!lib/naturalSort',
     'lib/order!scripts/app',
 
     'lib/order!scripts/analysis',
@@ -49,7 +50,8 @@ require
     'lib/order!scripts/query',
     'lib/order!scripts/replication',
     'lib/order!scripts/schema-browser',
-    'lib/order!scripts/threads'
+    'lib/order!scripts/threads',
+    'lib/order!scripts/segments'
   ],
   function( $ )
   {
