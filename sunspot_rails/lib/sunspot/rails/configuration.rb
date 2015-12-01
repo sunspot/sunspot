@@ -12,8 +12,7 @@ module Sunspot #:nodoc:
     #     solr:
     #       hostname: localhost
     #       port: 8982
-    #       min_memory: 512M
-    #       max_memory: 1G
+    #       memory: 1G
     #       solr_jar: /some/path/solr15/start.jar
     #       bind_address: 0.0.0.0
     #     disabled: false
@@ -278,17 +277,10 @@ module Sunspot #:nodoc:
       end
 
       #
-      # Minimum java heap size for Solr instance
+      # java heap size for Solr instance
       #
-      def min_memory
-        @min_memory ||= user_configuration_from_key('solr', 'min_memory')
-      end
-
-      #
-      # Maximum java heap size for Solr instance
-      #
-      def max_memory
-        @max_memory ||= user_configuration_from_key('solr', 'max_memory')
+      def memory
+        @memory ||= user_configuration_from_key('solr', 'memory')
       end
 
       #
