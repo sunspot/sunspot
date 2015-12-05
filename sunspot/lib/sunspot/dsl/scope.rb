@@ -191,7 +191,10 @@ module Sunspot
         case args.first
         when String, Symbol
           raise ArgumentError if args.length > 2
-          field = @setup.field(args[0].to_sym)
+          field_name = args[0].to_sym
+          field = (field_name == :id) \
+            ? IdField.instance
+            : @setup.field(field_name)
           if args.length > 1
             value = args[1]
             @scope.add_shorthand_restriction(negated, field, value)
