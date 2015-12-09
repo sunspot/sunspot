@@ -16,15 +16,10 @@ describe Sunspot::Solr::Server do
     @server.run
   end
 
-  it 'runs Java with min memory' do
-    @server.min_memory = 1024
-    @server.should_receive(:exec).with(/-Xms1024/)
-    @server.run
-  end
-
-  it 'runs Java with max memory' do
-    @server.max_memory = 2048
+  it 'runs Java with memory set' do
+    @server.memory = 2048
     @server.should_receive(:exec).with(/-Xmx2048/)
+    @server.should_receive(:exec).with(/-Xms2048/)
     @server.run
   end
 

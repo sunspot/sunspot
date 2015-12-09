@@ -46,12 +46,8 @@ opts = OptionParser.new do |opts|
     server.log_file = File.expand_path(lf)
   end
 
-  opts.on '--max-memory=MEMORY', 'Specify the maximum size of the memory allocation pool' do |mm|
-    server.max_memory = mm
-  end
-
-  opts.on '--min-memory=MEMORY', 'Specify the initial size of the memory allocation pool' do |mm|
-    server.min_memory = mm
+  opts.on '--memory=MEMORY', 'Specify the size of the memory allocation pool' do |m|
+    server.memory = m
   end
 end
 
