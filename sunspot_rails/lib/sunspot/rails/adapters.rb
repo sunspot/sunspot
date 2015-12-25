@@ -21,11 +21,12 @@ module Sunspot #:nodoc:
       class ActiveRecordDataAccessor < Sunspot::Adapters::DataAccessor
         # options for the find
         attr_accessor :include
+        attr_accessor :scopes
         attr_reader :select
 
         def initialize(clazz)
           super(clazz)
-          @inherited_attributes = [:include, :select]
+          @inherited_attributes = [:include, :select, :scopes]
         end
 
         #
@@ -77,6 +78,9 @@ module Sunspot #:nodoc:
           scope = relation
           scope = scope.includes(@include) if @include.present?
           scope = scope.select(@select)    if @select.present?
+          Array.wrap(@scopes).each do |s|
+            scope = scope.send(s)
+          end
           scope 
         end
 

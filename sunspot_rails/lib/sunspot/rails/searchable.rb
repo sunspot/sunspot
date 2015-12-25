@@ -374,15 +374,15 @@ module Sunspot #:nodoc:
         end
         
         def solr_execute_search(options = {})
-          options.assert_valid_keys(:include, :select)
+          inherited_attributes = [:include, :select, :scopes]
+          options.assert_valid_keys(*inherited_attributes)
           search = yield
           unless options.empty?
             search.build do |query|
-              if options[:include]
-                query.data_accessor_for(self).include = options[:include]
-              end
-              if options[:select]
-                query.data_accessor_for(self).select = options[:select]
+              inherited_attributes.each do |attr|
+                if options[attr]
+                  query.data_accessor_for(self).send("#{attr}=", options[attr])
+                end
               end
             end
           end
