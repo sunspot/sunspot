@@ -10,4 +10,8 @@ class Post < ActiveRecord::Base
     text :body, :more_like_this => true
     location :location
   end
+
+  scope :includes_location, -> {
+    includes(:location)
+  }
 end
