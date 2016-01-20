@@ -160,11 +160,13 @@ module Sunspot
       #
       def facet(name, dynamic_name = nil)
         if name
-          if dynamic_name
-            @facets_by_name[:"#{name}:#{dynamic_name}"]
-          else
-            @facets_by_name[name.to_sym]
-          end
+          facet_name = if dynamic_name
+                         separator = @setup.dynamic_field_factory(name).separator
+                         [name, dynamic_name].join(separator)
+                       else
+                         name
+                       end.to_sym
+          @facets_by_name[facet_name]
         end
       end
 
