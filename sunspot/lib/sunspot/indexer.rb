@@ -102,7 +102,7 @@ module Sunspot
     # Convert documents into hash of indexed properties
     #
     def prepare_full_update(model)
-      document = document_for(model.class, model.id)
+      document = document_for_full_update(model)
       setup = setup_for_object(model)
       if boost = setup.document_boost_for(model)
         document.attrs[:boost] = boost
@@ -114,7 +114,7 @@ module Sunspot
     end
 
     def prepare_atomic_update(clazz, id, updates = {})
-      document = document_for(clazz, id)
+      document = document_for_atomic_update(clazz, id)
       setup_for_class(clazz).all_field_factories.each do |field_factory|
         if updates.has_key?(field_factory.name)
           field_factory.populate_document(document, nil, value: updates[field_factory.name], update: :set)
@@ -137,10 +137,17 @@ module Sunspot
 
     # 
     # All indexed documents index and store the +id+ and +type+ fields.
-    # This method constructs the document hash containing those key-value
+    # These methods construct the document hash containing those key-value
     # pairs.
     #
-    def document_for(clazz, id)
+    def document_for_full_update(model)
+      RSolr::Xml::Document.new(
+        id: Adapters::InstanceAdapter.adapt(model).index_id,
+        type: Util.superclasses_for(model.class).map(&:name)
+      )
+    end
+
+    def document_for_atomic_update(clazz, id)
       if Adapters::InstanceAdapter.for(clazz)
         RSolr::Xml::Document.new(
             id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
@@ -148,7 +155,6 @@ module Sunspot
         )
       end
     end
-
     # 
     # Get the Setup object for the given object's class.
     #
