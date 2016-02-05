@@ -36,7 +36,7 @@ describe 'more_like_this' do
       fields :body, :tags => 8
     end
     connection.searches.last[:"mlt.fl"].split(',').sort.should == %w(body_textsv tags_textv)
-    connection.should have_last_search_with(:qf => "tags_textv^8")
+    connection.should have_last_search_with(:"mlt.qf" => "tags_textv^8")
   end
 
   it 'doesn\'t assign boosts to fields when not specified' do
