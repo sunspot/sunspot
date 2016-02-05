@@ -942,7 +942,7 @@ Sunspot supports functions in two ways:
 1. You can use functions to dynamically count boosting for field:
 
 ```ruby
-#Posts with pizza, scored higer (square promotion field) if is_promoted
+#Posts with pizza, scored higher (square promotion field) if is_promoted
 Post.search do
   fulltext 'pizza' do
     boost(function {sqrt(:promotion)}) { with(:is_promoted, true) }
