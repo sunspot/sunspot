@@ -1,5 +1,5 @@
 module Sunspot
-  # 
+  #
   # A Sunspot session encapsulates a connection to Solr and a set of
   # configuration choices. Though users of Sunspot may manually instantiate
   # Session objects, in the general case it's easier to use the singleton
@@ -10,8 +10,8 @@ module Sunspot
   class Session
     class <<self
       attr_writer :connection_class #:nodoc:
-      
-      # 
+
+      #
       # For testing purposes
       #
       def connection_class #:nodoc:
@@ -19,12 +19,12 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # Sunspot::Configuration object for this session
     #
     attr_reader :config
 
-    # 
+    #
     # Sessions are initialized with a Sunspot configuration and a Solr
     # connection. Usually you will want to stick with the default arguments
     # when instantiating your own sessions.
@@ -36,7 +36,7 @@ module Sunspot
       @deletes = @adds = 0
     end
 
-    # 
+    #
     # See Sunspot.new_search
     #
     def new_search(*types, &block)
@@ -59,7 +59,7 @@ module Sunspot
       search.execute
     end
 
-    # 
+    #
     # See Sunspot.new_more_like_this
     #
     def new_more_like_this(object, *types, &block)
@@ -91,7 +91,7 @@ module Sunspot
       indexer.add(objects)
     end
 
-    # 
+    #
     # See Sunspot.index!
     #
     def index!(*objects)
@@ -131,7 +131,7 @@ module Sunspot
       connection.optimize
     end
 
-    # 
+    #
     # See Sunspot.remove
     #
     def remove(*objects, &block)
@@ -155,7 +155,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # See Sunspot.remove!
     #
     def remove!(*objects, &block)
@@ -163,7 +163,7 @@ module Sunspot
       commit
     end
 
-    # 
+    #
     # See Sunspot.remove_by_id
     #
     def remove_by_id(clazz, *ids)
@@ -176,7 +176,7 @@ module Sunspot
       indexer.remove_by_id(class_name, ids)
     end
 
-    # 
+    #
     # See Sunspot.remove_by_id!
     #
     def remove_by_id!(clazz, *ids)
@@ -198,7 +198,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # See Sunspot.remove_all!
     #
     def remove_all!(*classes)
@@ -206,35 +206,35 @@ module Sunspot
       commit
     end
 
-    # 
+    #
     # See Sunspot.dirty?
     #
     def dirty?
       (@deletes + @adds) > 0
     end
 
-    # 
+    #
     # See Sunspot.commit_if_dirty
     #
     def commit_if_dirty(soft_commit = false)
       commit soft_commit if dirty?
     end
-    
-    # 
+
+    #
     # See Sunspot.delete_dirty?
     #
     def delete_dirty?
       @deletes > 0
     end
 
-    # 
+    #
     # See Sunspot.commit_if_delete_dirty
     #
     def commit_if_delete_dirty(soft_commit = false)
       commit soft_commit if delete_dirty?
     end
-    
-    # 
+
+    #
     # See Sunspot.batch
     #
     def batch
@@ -245,7 +245,7 @@ module Sunspot
 
     private
 
-    # 
+    #
     # Retrieve the Solr connection for this session, creating one if it does not
     # already exist.
     #
@@ -257,7 +257,8 @@ module Sunspot
       @connection ||=
         self.class.connection_class.connect(:url          => config.solr.url,
                                             :read_timeout => config.solr.read_timeout,
-                                            :open_timeout => config.solr.open_timeout)
+                                            :open_timeout => config.solr.open_timeout,
+                                            :proxy        => config.solr.proxy)
     end
 
     def indexer
