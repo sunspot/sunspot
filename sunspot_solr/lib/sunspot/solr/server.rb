@@ -19,7 +19,7 @@ module Sunspot
 
       LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
-      attr_accessor :min_memory, :max_memory, :bind_address, :port, :log_file
+      attr_accessor :memory, :bind_address, :port, :log_file
 
       attr_writer :pid_dir, :pid_file, :solr_home, :solr_executable
 
@@ -92,8 +92,7 @@ module Sunspot
         bootstrap
 
         command = %w[./solr start -f]
-        command << "-Xms#{min_memory}" if min_memory
-        command << "-Xmx#{max_memory}" if max_memory
+        command << "-m" << "#{memory}" if memory
         command << "-p" << "#{port}" if port
         command << "-h" << "#{bind_address}" if bind_address
         command << "-s" << "#{solr_home}" if solr_home
@@ -113,7 +112,7 @@ module Sunspot
           pid = IO.read(pid_path).to_i
           begin
             Process.kill('TERM', pid)
-            exec_in_solr_executable_directory(['solr', 'stop', '-p', "#{port}"]) if port
+            exec_in_solr_executable_directory(['./solr', 'stop', '-p', "#{port}"]) if port
           rescue Errno::ESRCH
             raise NotRunningError, "Process with PID #{pid} is no longer running"
           ensure

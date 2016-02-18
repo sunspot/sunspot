@@ -8,6 +8,7 @@ gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
 
 group :test do
   gem 'rspec-rails', '~> 2.14.0'
+  gem 'progress_bar', '~> 1.0.5', require: false
 end
 
 group :postgres do

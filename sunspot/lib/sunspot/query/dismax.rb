@@ -13,7 +13,8 @@ module Sunspot
         @keywords = keywords
         @fulltext_fields = {}
         @boost_queries = []
-        @boost_functions = []
+        @additive_boost_functions = []
+        @multiplicative_boost_functions = []
         @highlights = []
 
         @minimum_match = nil
@@ -46,9 +47,15 @@ module Sunspot
           end
         end
 
-        unless @boost_functions.empty?
-          params[:bf] = @boost_functions.map do |boost_function|
-            boost_function.to_s
+        unless @additive_boost_functions.empty?
+          params[:bf] = @additive_boost_functions.map do |additive_boost_function|
+            additive_boost_function.to_s
+          end
+        end
+
+        unless @multiplicative_boost_functions.empty?
+          params[:boost] = @multiplicative_boost_functions.map do |multiplicative_boost_function|
+            multiplicative_boost_function.to_s
           end
         end
 

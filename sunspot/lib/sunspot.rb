@@ -196,6 +196,40 @@ module Sunspot
       session.index!(*objects)
     end
 
+    # Atomic update object properties on the singleton session.
+    #
+    # ==== Parameters
+    #
+    # clazz<Class>:: the class of the objects to be updated
+    # updates<Hash>:: hash of updates where keys are model ids
+    #                 and values are hash with property name/values to be updated
+    #
+    # ==== Example
+    #
+    #   post1, post2 = new Array(2) { Post.create }
+    #   Sunspot.atomic_update(Post, post1.id => {title: 'New Title'}, post2.id => {description: 'new description'})
+    #
+    # Note that indexed objects won't be reflected in search until a commit is
+    # sent - see Sunspot.index! and Sunspot.commit
+    #
+    def atomic_update(clazz, updates = {})
+      session.atomic_update(clazz, updates)
+    end
+
+    # Atomic update object properties on the singleton session.
+    #
+    # See: Sunspot.atomic_update and Sunspot.commit
+    #
+    # ==== Parameters
+    #
+    # clazz<Class>:: the class of the objects to be updated
+    # updates<Hash>:: hash of updates where keys are model ids
+    #                 and values are hash with property name/values to be updated
+    #
+    def atomic_update!(clazz, updates = {})
+      session.atomic_update!(clazz, updates)
+    end
+
     # Commits (soft or hard) the singleton session
     #
     # When documents are added to or removed from Solr, the changes are
@@ -490,9 +524,9 @@ module Sunspot
     #
     #   Sunspot.batch do
     #     post = Post.new
-    #     Sunspot.add(post)
+    #     Sunspot.index(post)
     #     comment = Comment.new
-    #     Sunspot.add(comment)
+    #     Sunspot.index(comment)
     #   end
     #
     # Sunspot will send both the post and the comment in a single request.

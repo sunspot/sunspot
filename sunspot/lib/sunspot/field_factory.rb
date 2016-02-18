@@ -22,6 +22,23 @@ module Sunspot
             DataExtractor::AttributeExtractor.new(options.delete(:using) || name)
           end
       end
+
+      #
+      # Extract the encapsulated field's data from the given model and add it
+      # into the Solr document for indexing. (noop here for joins)
+      #
+      def populate_document(document, model, options = {}) #:nodoc:
+      end
+
+      protected
+
+      def extract_value(model, options = {})
+        if options.has_key?(:value)
+          options.delete(:value)
+        else
+          @data_extractor.value_for(model)
+        end
+      end
     end
 
     # 
@@ -54,15 +71,16 @@ module Sunspot
       # Extract the encapsulated field's data from the given model and add it
       # into the Solr document for indexing.
       #
-      def populate_document(document, model) #:nodoc:
-        unless (value = @data_extractor.value_for(model)).nil?
+      def populate_document(document, model, options = {}) #:nodoc:
+        value = extract_value(model, options)
+        unless value.nil?
           Util.Array(@field.to_indexed(value)).each do |scalar_value|
-            options = {}
-            options[:boost] = @field.boost if @field.boost
+            field_options = {}
+            field_options[:boost] = @field.boost if @field.boost
             document.add_field(
               @field.indexed_name.to_sym,
               scalar_value,
-              options
+              field_options.merge(options)
             )
           end
         end
@@ -92,14 +110,7 @@ module Sunspot
         @field
       end
 
-      # 
-      # Extract the encapsulated field's data from the given model and add it
-      # into the Solr document for indexing. (noop here for joins)
       #
-      def populate_document(document, model) #:nodoc:
-      end
-
-      # 
       # A unique signature identifying this field by name and type.
       #
       def signature
@@ -112,18 +123,19 @@ module Sunspot
     # configuration.
     #
     class Dynamic < Abstract
-      attr_accessor :name, :type
+      attr_accessor :name, :type, :separator
 
       def initialize(name, type, options = {}, &block)
         super(name, options, &block)
         @type, @options = type, options
+        @separator = @options.delete(:separator) || ':'
       end
 
       #
       # Build a field based on the dynamic name given.
       #
       def build(dynamic_name)
-        AttributeField.new("#{@name}:#{dynamic_name}", @type, @options.dup)
+        AttributeField.new([@name, dynamic_name].join(separator), @type, @options.dup)
       end
       # 
       # This alias allows a DynamicFieldFactory to be used in place of a Setup
@@ -135,14 +147,16 @@ module Sunspot
       # Generate dynamic fields based on hash returned by data accessor and
       # add the field data to the document.
       #
-      def populate_document(document, model)
-        if values = @data_extractor.value_for(model)
+      def populate_document(document, model, options = {})
+        values = extract_value(model, options)
+        if values
           values.each_pair do |dynamic_name, value|
             field_instance = build(dynamic_name)
             Util.Array(field_instance.to_indexed(value)).each do |scalar_value|
               document.add_field(
                 field_instance.indexed_name.to_sym,
-                scalar_value
+                scalar_value,
+                options
               )
             end
           end

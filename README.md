@@ -20,6 +20,9 @@ For questions about how to use Sunspot in your app, please use the
 [Sunspot Mailing List](http://groups.google.com/group/ruby-sunspot) or search
 [Stack Overflow](http://www.stackoverflow.com).
 
+## Looking for maintainers
+This project is looking for maintainers. An ideal candidate would be someone on a team whose app makes heavy use of the Sunspot gem. If you think you're a good fit, send a message to contact@culturecode.ca.
+
 ## Quickstart with Rails 3 / 4
 
 Add to Gemfile:
@@ -638,6 +641,59 @@ Post.search do
 end
 ```
 
+#### Grouping by Queries
+It is also possible to group by arbitrary queries instead of on a
+specific field, much like using query facets instead of field facets.
+For example, we can group by average rating.
+
+```ruby
+# Returns the top post for each range of average ratings
+search = Post.search do
+  group do
+    query("1.0 to 2.0") do
+      with(:average_rating, 1.0..2.0)
+    end
+    query("2.0 to 3.0") do
+      with(:average_rating, 2.0..3.0)
+    end
+    query("3.0 to 4.0") do
+      with(:average_rating, 3.0..4.0)
+    end
+    query("4.0 to 5.0") do
+      with(:average_rating, 4.0..5.0)
+    end
+  end
+end
+
+search.group(:queries).matches # Total number of matches to the queries
+
+search.group(:queries).groups.each do |group|
+  puts group.value # The argument to query - "1.0 to 2.0", for example
+
+  group.results.each do |result|
+    # ...
+  end
+end
+```
+
+This can also be used to query multivalued fields, allowing a single
+item to be in multiple groups.
+
+```ruby
+# This finds the top 10 posts for each category in category_ids.
+search = Post.search do
+  group do
+    limit 10
+
+    category_ids.each do |category_id|
+      query category_id do
+        with(:category_id, category_id)
+      end
+    end
+  end
+end
+```
+
 ### Geospatial
 
 **Sunspot 2.0 only**
@@ -886,7 +942,7 @@ Sunspot supports functions in two ways:
 1. You can use functions to dynamically count boosting for field:
 
 ```ruby
-#Posts with pizza, scored higer (square promotion field) if is_promoted
+#Posts with pizza, scored higher (square promotion field) if is_promoted
 Post.search do
   fulltext 'pizza' do
     boost(function {sqrt(:promotion)}) { with(:is_promoted, true) }
@@ -896,6 +952,31 @@ end
 
 2. You're able to use functions for ordering (see examples for [order_by_function](#ordering))
 
+
+### Atomic updates
+
+Atomic Updates is a feature in Solr 4.0 that allows you to update on a field level rather than on a document level. This means that you can update individual fields without having to send the entire document to Solr with the un-updated fields values. For more details, please read [Atomic Update documentation](https://wiki.apache.org/solr/Atomic_Updates).
+
+All fields of the model must be **stored**, otherwise non-stored values will be lost after an update.
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    # all fields stored
+    text :body, :stored => true
+    string :title, :stored => true
+  end
+end
+
+post1 = Post.create #...
+post2 = Post.create #...
+
+# atomic update on class level
+Post.atomic_update post1.id => {title: 'A New Title'}, post2.id => {body: 'A New Body'}
+
+# atomic update on instance level
+post1.atomic_update body: 'A New Body', title: 'Another New Title'
+```
 
 ### More Like This
 
@@ -926,7 +1007,7 @@ results = Sunspot.more_like_this(post) do
 end
 ```
 
-To use more_like_this you need to have the [MoreLikeThis handler enabled in solrcofig.xml](http://wiki.apache.org/solr/MoreLikeThisHandler).
+To use more_like_this you need to have the [MoreLikeThis handler enabled in solrconfig.xml](http://wiki.apache.org/solr/MoreLikeThisHandler).
 
 Example handler will look like this:
 
@@ -1272,7 +1353,6 @@ $ yardoc -o docs */lib/**/*.rb - README.md
 * [Using Sunspot, Websolr, and Solr on Heroku](http://mrdanadams.com/2012/sunspot-websolr-solr-heroku/) (mrdanadams)
 * [Full Text Searching with Solr and Sunspot](http://collectiveidea.com/blog/archives/2011/03/08/full-text-searching-with-solr-and-sunspot/) (Collective Idea)
 * [Full-text search in Rails with Sunspot](http://tech.favoritemedium.com/2010/01/full-text-search-in-rails-with-sunspot.html) (Tropical Software Observations)
-* [Sunspot Full-text Search for Rails/Ruby](http://therailworld.com/posts/23-Sunspot-Full-text-Search-for-Rails-Ruby) (The Rail World)
 * [A Few Sunspot Tips](http://blog.trydionel.com/2009/11/19/a-few-sunspot-tips/) (spiral_code)
 * [Sunspot: A Solr-Powered Search Engine for Ruby](http://www.linux-mag.com/id/7341) (Linux Magazine)
 * [Sunspot Showed Me the Light](http://bennyfreshness.com/2010/05/sunspot-helped-me-see-the-light/) (ben koonse)
@@ -1284,15 +1364,10 @@ $ yardoc -o docs */lib/**/*.rb - README.md
 * [How to get full text search working with Sunspot](http://cookbook.hobocentral.net/recipes/57-how-to-get-full-text-search) (Hobo Cookbook)
 * [Full text search with Sunspot in Rails](http://web.archive.org/web/20120311015358/http://hemju.com/2011/01/04/full-text-search-with-sunspot-in-rails/) (hemju)
 * [Using Sunspot for Free-Text Search with Redis](http://masonoise.wordpress.com/2010/02/06/using-sunspot-for-free-text-search-with-redis/) (While I Pondered...)
-* [Fuzzy searching in SOLR with Sunspot](http://www.pipetodevnull.com/past/2010/8/5/fuzzy_searching_in_solr_with_sunspot/) (pipe :to => /dev/null)
 * [Default scope with Sunspot](http://www.cloudspace.com/blog/2010/01/15/default-scope-with-sunspot/) (Cloudspace)
 * [Index External Models with Sunspot/Solr](http://www.medihack.org/2011/03/19/index-external-models-with-sunspotsolr/) (Medihack)
 * [Testing with Sunspot and Cucumber](http://collectiveidea.com/blog/archives/2011/05/25/testing-with-sunspot-and-cucumber/) (Collective Idea)
-* [Cucumber and Sunspot](http://opensoul.org/2010/4/7/cucumber-and-sunspot) (opensoul.org)
 * [Testing Sunspot with Cucumber](http://blog.trydionel.com/2010/02/06/testing-sunspot-with-cucumber/) (spiral_code)
-* [Running cucumber features with sunspot_rails](http://blog.kabisa.nl/2010/02/03/running-cucumber-features-with-sunspot_rails) (Kabisa Blog)
-* [Testing Sunspot with Test::Unit](http://timcowlishaw.co.uk/post/3179661158/testing-sunspot-with-test-unit) (Type Slowly)
-* [Sunspot Quickstart](http://wiki.websolr.com/guides/Sunspot-Quick-Start) (WebSolr)
 * [Solr, and Sunspot](http://www.kuahyeow.com/2009/08/solr-and-sunspot.html) (YT!)
 * [The Saga of the Switch](http://web.archive.org/web/20100427135335/http://mrb.github.com/2010/04/08/the-saga-of-the-switch.html) (mrb -- includes comparison of Sunspot and Ultrasphinx)
 * [Conditional Indexing with Sunspot](http://mikepackdev.com/blog_posts/19-conditional-indexing-with-sunspot) (mikepack)

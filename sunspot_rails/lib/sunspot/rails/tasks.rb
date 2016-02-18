@@ -49,6 +49,8 @@ namespace :sunspot do
         reindex_options[:progress_bar] = ProgressBar.new(total_documents)
       rescue LoadError => e
         $stdout.puts "Skipping progress bar: for progress reporting, add gem 'progress_bar' to your Gemfile"
+      rescue ProgressBar::ArgumentError => e
+        $stdout.puts "You have no data in the database. Reindexing does nothing here."
       rescue Exception => e
         $stderr.puts "Error using progress bar: #{e.message}"
       end unless args[:silence]

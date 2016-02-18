@@ -165,6 +165,22 @@ describe 'ActiveRecord mixin' do
       end.results.first.attribute_names.sort.should == ['body', 'id', 'title']
     end
 
+    it 'should use the scoped option from search call to data accessor' do
+      Post.search(:scopes => [:includes_location]) do
+        with :title, 'Test Post'
+      end.data_accessor_for(Post).scopes.should == [:includes_location]
+    end
+
+    it 'should use the scopes option on the data accessor when specified' do
+      @post.update_attribute(:location, Location.create)
+      post = Post.search do
+        with :title, 'Test Post'
+        data_accessor_for(Post).scopes = [:includes_location]
+      end.results.first
+
+      (Rails.version >= '3.1' ? post.association(:location).loaded? : post.loaded_location?).should be_true # Rails 3.1 removed "loaded_#{association}" method
+    end
+
     it 'should gracefully handle nonexistent records' do
       post2 = Post.create!(:title => 'Test Post')
       post2.index!

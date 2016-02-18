@@ -15,6 +15,10 @@ class Post < SuperClass
     @custom_string ||= {}
   end
 
+  def custom_underscored_string
+    @custom_underscored_string ||= {}
+  end
+
   def custom_fl
     @custom_fl ||= {}
   end
@@ -28,7 +32,7 @@ class Post < SuperClass
   end
 
   private
-  attr_writer :category_ids, :custom_string, :custom_fl, :custom_time, :custom_boolean
+  attr_writer :category_ids, :custom_string, :custom_underscored_string, :custom_fl, :custom_time, :custom_boolean
 end
 
 Sunspot.setup(Post) do
@@ -59,6 +63,7 @@ Sunspot.setup(Post) do
   latlon(:coordinates_new) { coordinates }
 
   dynamic_string :custom_string, :stored => true
+  dynamic_string :custom_underscored_string, separator: '__'
   dynamic_float :custom_float, :multiple => true, :using => :custom_fl
   dynamic_integer :custom_integer do
     category_ids.inject({}) do |hash, category_id|

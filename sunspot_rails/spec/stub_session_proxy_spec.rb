@@ -10,7 +10,7 @@ describe 'specs with Sunspot stubbed' do
   end
 
   it 'should batch' do
-    foo = mock('Foo')
+    foo = double('Foo')
     block = lambda { foo.bar }
 
     foo.should_receive(:bar)
@@ -25,6 +25,16 @@ describe 'specs with Sunspot stubbed' do
 
   it 'should not send index! to session' do
     @session.should_not_receive(:index!)
+    @post.index!
+  end
+
+  it 'should not send atomic_update to session' do
+    @session.should_not_receive(:atomic_update)
+    @post.index
+  end
+
+  it 'should not send atomic_update! to session' do
+    @session.should_not_receive(:atomic_update!)
     @post.index!
   end
 
@@ -153,6 +163,33 @@ describe 'specs with Sunspot stubbed' do
       it 'should provide accessor for include' do
         @accessor.should respond_to(:include, :include=)
       end
+    end
+
+    describe '#stats' do
+      before do
+        @stats = @search.stats(:price)
+      end
+
+      it 'should response to all the available data methods' do
+        @stats.should respond_to(
+          :min,
+          :max,
+          :count,
+          :sum,
+          :missing,
+          :sum_of_squares,
+          :mean,
+          :standard_deviation)
+      end
+
+      it 'should return empty results for a given facet' do
+        @stats.facet(:category_id).rows.should == []
+      end
+
+      it 'should return empty array if listing facets' do
+        @stats.facets.should == []
+      end
+
     end
   end
 end
