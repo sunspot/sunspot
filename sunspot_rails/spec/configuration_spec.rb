@@ -22,6 +22,10 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
     @config.userinfo.should be_nil
   end
 
+  it "should not set a proxy" do
+    @config.proxy.should be_nil
+  end
+
   describe "port" do
     it "should default to port 8981 in test" do
       ::Rails.stub(:env => 'test')
@@ -157,6 +161,10 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
 
   it "should handle the 'open_timeout' property when set" do
     @config.open_timeout.should == 0.5
+  end
+
+  it "should handle the 'proxy' property when set" do
+    @config.proxy.should == 'http://proxy.com:12345'
   end
 end
 

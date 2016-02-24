@@ -15,6 +15,7 @@ module Sunspot #:nodoc:
     #       memory: 1G
     #       solr_jar: /some/path/solr15/start.jar
     #       bind_address: 0.0.0.0
+    #       proxy: false
     #     disabled: false
     #   test:
     #     solr:
@@ -23,6 +24,7 @@ module Sunspot #:nodoc:
     #       log_level: OFF
     #       open_timeout: 0.5
     #       read_timeout: 2
+    #       proxy: false
     #   production:
     #     solr:
     #       scheme: http
@@ -35,6 +37,7 @@ module Sunspot #:nodoc:
     #       solr_home: /some/path
     #       open_timeout: 0.5
     #       read_timeout: 2
+    #       proxy: http://proxy.com:12345
     #     master_solr:
     #       hostname: localhost
     #       port: 8982
@@ -296,6 +299,10 @@ module Sunspot #:nodoc:
 
       def open_timeout
         @open_timeout ||= user_configuration_from_key('solr', 'open_timeout')
+      end
+
+      def proxy
+        @proxy ||= user_configuration_from_key('solr', 'proxy')
       end
 
       #
