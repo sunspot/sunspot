@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'abstract_session_proxy')
 
 module Sunspot
   module SessionProxy
-    # 
+    #
     # This class implements a session proxy that creates a different Session
     # object for each thread. Any multithreaded application should use this
     # proxy.
@@ -21,12 +21,12 @@ module Sunspot
                :new_search, :optimize, :remove, :remove!, :remove_all, :remove_all!, :remove_by_id, :remove_by_id!,
                :search, :more_like_this, :new_more_like_this, :atomic_update, :atomic_update!, :to => :session
 
-      # 
+      #
       # Optionally pass an existing Sunspot::Configuration object. If none is
       # passed, a default configuration is used; it can then be modified using
       # the #config attribute.
       #
-      def initialize(config = Sunspot::Configuration.new)
+      def initialize(config = Sunspot::Configuration.build)
         @config = config
         ObjectSpace.define_finalizer(self, FINALIZER)
       end
