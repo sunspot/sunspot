@@ -1217,6 +1217,12 @@ environment (such as sidekiq), you should configure Sunspot to use the
 Sunspot.session = Sunspot::SessionProxy::ThreadLocalSessionProxy.new
 ```
 
+Within a Rails app, to ensure your `config/sunspot.yml` settings are properly setup in this session you can use  [Sunspot::Rails.build_session](http://sunspot.github.io/sunspot/docs/Sunspot/Rails.html#build_session-class_method) to mirror the normal Sunspot setup process:
+```ruby
+  session = Sunspot::Rails.build_session  Sunspot::Rails::Configuration.new
+  Sunspot.session = session
+```
+
 ## Manually Adjusting Solr Parameters
 
 To add or modify parameters sent to Solr, use `adjust_solr_params`:
