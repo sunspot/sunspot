@@ -777,7 +777,7 @@ end
 
 PhotoContainer.search do
   with(:caption, 'blah')
-  with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
+  with(:photos_created).between(Date.new(2011,3,1)..Date.new(2011,4,1))
   
   fulltext("keywords", :fields => [:name, :description])
 end
@@ -786,7 +786,7 @@ end
 
 PhotoContainer.search do
   with(:caption, 'blah')
-  with(:photos_created).between(Date.new(2011,3,1), Date.new(2011,4,1))
+  with(:photos_created).between(Date.new(2011,3,1)..Date.new(2011,4,1))
   
   any do
     fulltext("keyword1", :fields => :name)
