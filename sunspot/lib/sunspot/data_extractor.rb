@@ -57,8 +57,13 @@ module Sunspot
       end
 
       def strip_control_characters(value)
-        return value unless value.is_a? String
-        value.gsub(/[[:cntrl:]]/, ' ')
+        if value.is_a? String
+          value.gsub(/[[:cntrl:]]/, ' ')
+        elsif value.is_a? Array
+          value.map { |v| strip_control_characters(v) }
+        else
+          value
+        end
       end
     end
   end
