@@ -22,7 +22,7 @@ describe 'document removal', :type => :indexer do
   end
 
   it 'removes an object by type and ids and immediately commits' do
-    connection.should_receive(:delete_by_id).with(['Post 1', 'Post 2', 'Post 3']).ordered
+    connection.should_receive(:delete_by_id).with(['Post 1', 'Post 2', 'Post 3'], {}).ordered
     connection.should_receive(:commit).ordered
     session.remove_by_id!(Post, 1, 2, 3)
   end
@@ -50,7 +50,7 @@ describe 'document removal', :type => :indexer do
   end
 
   it 'correctly escapes namespaced classes when removing everything from the index' do
-    connection.should_receive(:delete_by_query).with('type:Namespaced\:\:Comment')
+    connection.should_receive(:delete_by_query).with('type:Namespaced\:\:Comment', {})
     session.remove_all(Namespaced::Comment)
   end
 

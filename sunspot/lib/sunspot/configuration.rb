@@ -36,6 +36,7 @@ module Sunspot
           indexing do
             default_batch_size 50
           end
+          commit_within nil
         end
       end
 

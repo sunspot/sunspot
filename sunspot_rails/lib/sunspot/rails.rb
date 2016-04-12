@@ -42,32 +42,26 @@ module Sunspot #:nodoc:
       private
 
       def master_config(sunspot_rails_configuration)
-        config = Sunspot::Configuration.build
-        builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
-        config.solr.url = builder.build(
-          :host => sunspot_rails_configuration.master_hostname,
-          :port => sunspot_rails_configuration.master_port,
-          :path => sunspot_rails_configuration.master_path,
-          :userinfo => sunspot_rails_configuration.userinfo
-        ).to_s
-        config.solr.read_timeout = sunspot_rails_configuration.read_timeout
-        config.solr.open_timeout = sunspot_rails_configuration.open_timeout
-        config.solr.proxy = sunspot_rails_configuration.proxy
-        config
+        build_config(sunspot_rails_configuration, :master_hostname, :master_port, :master_path)
       end
 
       def slave_config(sunspot_rails_configuration)
+        build_config(sunspot_rails_configuration, :hostname, :port, :path)
+      end
+
+      def build_config(sunspot_rails_configuration, host_property, port_property, path_property)
         config = Sunspot::Configuration.build
         builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
         config.solr.url = builder.build(
-          :host => sunspot_rails_configuration.hostname,
-          :port => sunspot_rails_configuration.port,
-          :path => sunspot_rails_configuration.path,
+          :host => sunspot_rails_configuration.send(host_property),
+          :port => sunspot_rails_configuration.send(port_property),
+          :path => sunspot_rails_configuration.send(path_property),
           :userinfo => sunspot_rails_configuration.userinfo
         ).to_s
         config.solr.read_timeout = sunspot_rails_configuration.read_timeout
         config.solr.open_timeout = sunspot_rails_configuration.open_timeout
         config.solr.proxy = sunspot_rails_configuration.proxy
+        config.commit_within = sunspot_rails_configuration.commit_within
         config
       end
     end

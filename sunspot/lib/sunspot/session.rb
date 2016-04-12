@@ -262,7 +262,7 @@ module Sunspot
     end
 
     def indexer
-      @indexer ||= Indexer.new(connection)
+      @indexer ||= Indexer.new(connection, commitWithin: config.commit_within)
     end
 
     def setup_for_types(types)

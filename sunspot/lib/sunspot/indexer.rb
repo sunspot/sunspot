@@ -9,8 +9,9 @@ module Sunspot
   #
   class Indexer #:nodoc:
 
-    def initialize(connection)
+    def initialize(connection, options = {})
       @connection = connection
+      @update_options = options.delete_if { |key, value| value.nil? }
     end
 
     # 
@@ -46,7 +47,8 @@ module Sunspot
     #
     def remove(*models)
       @connection.delete_by_id(
-        models.map { |model| Adapters::InstanceAdapter.adapt(model).index_id }
+        models.map { |model| Adapters::InstanceAdapter.adapt(model).index_id },
+        @update_options
       )
     end
 
@@ -56,7 +58,8 @@ module Sunspot
     def remove_by_id(class_name, *ids)
       ids.flatten!
       @connection.delete_by_id(
-        ids.map { |id| Adapters::InstanceAdapter.index_id_for(class_name, id) }
+        ids.map { |id| Adapters::InstanceAdapter.index_id_for(class_name, id) },
+        @update_options
       )
     end
 
@@ -65,9 +68,9 @@ module Sunspot
     #
     def remove_all(clazz = nil)
       if clazz
-        @connection.delete_by_query("type:#{Util.escape(clazz.name)}")
+        @connection.delete_by_query("type:#{Util.escape(clazz.name)}", @update_options)
       else
-        @connection.delete_by_query("*:*")
+        @connection.delete_by_query('*:*', @update_options)
       end
     end
 
@@ -75,7 +78,7 @@ module Sunspot
     # Remove all documents that match the scope given in the Query
     #
     def remove_by_scope(scope)
-      @connection.delete_by_query(scope.to_boolean_phrase)
+      @connection.delete_by_query(scope.to_boolean_phrase, @update_options)
     end
 
     # 
@@ -124,7 +127,7 @@ module Sunspot
     end
 
     def add_documents(documents)
-      @connection.add(documents)
+      @connection.add(documents, @update_options)
     end
 
     def add_batch_documents(documents)
@@ -150,8 +153,8 @@ module Sunspot
     def document_for_atomic_update(clazz, id)
       if Adapters::InstanceAdapter.for(clazz)
         RSolr::Xml::Document.new(
-            id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
-            type: Util.superclasses_for(clazz).map(&:name)
+          id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
+          type: Util.superclasses_for(clazz).map(&:name)
         )
       end
     end
