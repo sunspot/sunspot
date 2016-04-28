@@ -36,17 +36,17 @@ module Mock
     end
 
     def add(documents, opts = {})
-      @committed_within = commitWithinValue(opts)
+      @committed_within = commit_within_value(opts)
       @adds << Array(documents)
     end
 
     def delete_by_id(ids, opts = {})
-      @committed_within = commitWithinValue(opts)
+      @committed_within = commit_within_value(opts)
       @deletes << Array(ids)
     end
 
     def delete_by_query(query, opts = {})
-      @committed_within = commitWithinValue(opts)
+      @committed_within = commit_within_value(opts)
       @deletes_by_query << query
     end
 
@@ -129,7 +129,7 @@ module Mock
       end
     end
 
-    def commitWithinValue(opts = {})
+    def commit_within_value(opts = {})
       opts[:params][:commitWithin] if opts[:params] && opts[:params][:commitWithin]
     end
   end

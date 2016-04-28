@@ -11,7 +11,7 @@ module Sunspot
 
     def initialize(connection, options = {})
       @connection = connection
-      @update_options = {params: options.delete_if { |key, value| value.nil? }}
+      @update_options = {params: options.delete_if { |_, value| value.nil? }}
     end
 
     # 
