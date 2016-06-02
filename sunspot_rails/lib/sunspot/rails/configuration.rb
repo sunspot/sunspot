@@ -156,7 +156,12 @@ module Sunspot #:nodoc:
       # String:: host name
       #
       def master_hostname
-        @master_hostname ||= (user_configuration_from_key('master_solr', 'hostname') || hostname)
+        unless defined?(@master_hostname)
+          @master_hostname   = master_solr_url.host if master_solr_url
+          @master_hostname ||= user_configuration_from_key('master_solr', 'hostname')
+          @master_hostname ||= hostname
+        end
+        @master_hostname
       end
 
       #
@@ -168,7 +173,13 @@ module Sunspot #:nodoc:
       # Integer:: port
       #
       def master_port
-        @master_port ||= (user_configuration_from_key('master_solr', 'port') || port).to_i
+        unless defined?(@master_port)
+          @master_port   = master_solr_url.port if master_solr_url
+          @master_port ||= user_configuration_from_key('master_solr', 'port')
+          @master_port ||= port
+          @master_port   = @master_port.to_i
+        end
+        @master_port
       end
 
       #
@@ -180,7 +191,12 @@ module Sunspot #:nodoc:
       # String:: path
       #
       def master_path
-        @master_path ||= (user_configuration_from_key('master_solr', 'path') || path)
+        unless defined?(@master_path)
+          @master_path   = master_solr_url.path if master_solr_url
+          @master_path ||= user_configuration_from_key('master_solr', 'path')
+          @master_path ||= path
+        end
+        @master_path
       end
 
       #
@@ -191,7 +207,7 @@ module Sunspot #:nodoc:
       # Boolean:: bool
       #
       def has_master?
-        @has_master = !!user_configuration_from_key('master_solr')
+        @has_master = !!(master_solr_url || user_configuration_from_key('master_solr'))
       end
 
       #
@@ -392,6 +408,12 @@ module Sunspot #:nodoc:
       def solr_url
         if ENV['SOLR_URL'] || ENV['WEBSOLR_URL']
           URI.parse(ENV['SOLR_URL'] || ENV['WEBSOLR_URL'])
+        end
+      end
+
+      def master_solr_url
+        if ENV['MASTER_SOLR_URL']
+          URI.parse(ENV['MASTER_SOLR_URL'])
         end
       end
 

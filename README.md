@@ -1245,7 +1245,7 @@ TODO
 
 ## Configuration
 
-Configure Sunspot by creating a *config/sunspot.yml* file or by setting a `SOLR_URL` or a `WEBSOLR_URL` environment variable.
+Configure Sunspot by creating a *config/sunspot.yml* file or by setting a `SOLR_URL` or a `WEBSOLR_URL` or a `MASTER_SOLR_URL` environment variable.
 The defaults are as follows.
 
 ```yaml

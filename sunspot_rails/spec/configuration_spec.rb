@@ -313,3 +313,32 @@ describe Sunspot::Rails::Configuration, "with ENV['WEBSOLR_URL'] including useri
     @config.path.should == '/solr/a1b2c3d4e5f'
   end
 end
+
+describe Sunspot::Rails::Configuration, "with ENV['MASTER_SOLR_URL'] overriding sunspot.yml" do
+  before(:all) do
+    ENV['MASTER_SOLR_URL'] = 'http://master.host:5433/solr/master'
+  end
+
+  before(:each) do
+    ::Rails.stub(:env => 'config_test')
+    @config = Sunspot::Rails::Configuration.new
+  end
+
+  after(:all) do
+    ENV.delete('MASTER_SOLR_URL')
+  end
+
+  it "should handle the 'hostname' property when set" do
+    @config.master_hostname.should == 'master.host'
+  end
+
+  it "should handle the 'port' property when set" do
+    @config.master_port.should == 5433
+  end
+
+  it "should handle the 'path' property when set" do
+    @config.master_path.should == '/solr/master'
+  end
+
+  it { @config.should have_master }
+end
