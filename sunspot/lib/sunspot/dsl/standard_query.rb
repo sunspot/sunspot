@@ -56,8 +56,7 @@ module Sunspot
       #   a pizza" will not. Default behavior is a query phrase slop of zero.
       #
       def fulltext(keywords, options = {}, &block)
-        return if not keywords or keywords.to_s =~ /^\s*$/
-
+        #return if not keywords or keywords.to_s =~ /^\s*$/
         field_names = Util.Array(options.delete(:fields)).compact
 
         add_fulltext(keywords, field_names) do |query, fields|
@@ -109,6 +108,15 @@ module Sunspot
 
         # else
         super
+      end
+
+      # Ask Solr to suggest alternative spellings for the query
+      #
+      # ==== Options
+      #
+      # The list of options can be found here: http://wiki.apache.org/solr/SpellCheckComponent
+      def spellcheck(options = {})
+        @query.add_spellcheck(options)
       end
 
       def any(&block)

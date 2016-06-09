@@ -45,5 +45,6 @@ describe "PaginatedCollection" do
     it { subject.limit_value.should eql(10) }
     it { subject.first_page?.should be_true }
     it { subject.last_page?.should_not be_true }
+    it { subject.offset_value.should eql(0) }
   end
 end

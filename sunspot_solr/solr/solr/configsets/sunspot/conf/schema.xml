@@ -64,7 +64,6 @@
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.PorterStemFilterFactory"/>
       </analyzer>
     </fieldType>
     <!-- *** This fieldType is used by Sunspot! *** -->
@@ -243,6 +242,9 @@
     <dynamicField name="*_drs" stored="true" type="daterange" multiValued="false" indexed="true" />
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_drms" stored="true" type="daterange" multiValued="true" indexed="true" />
+
+    <dynamicField name="*_textfvh" stored="true" termVectors="true" termPositions="true" termOffsets="true" type="text" multiValued="true" indexed="true"/>
+    <dynamicField name="*_texton" stored="true" type="text" multiValued="true" indexed="true" omitNorms="true"/>
 
     <!-- Type used to index the lat and lon components for the "location" FieldType -->
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false" multiValued="false"/>
