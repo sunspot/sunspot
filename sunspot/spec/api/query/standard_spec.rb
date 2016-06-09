@@ -12,6 +12,7 @@ describe 'standard query', :type => :query do
   it_should_behave_like "query with text field scoping"
   it_should_behave_like "geohash query"
   it_should_behave_like "spatial query"
+  it_should_behave_like "spellcheck query"
   it_should_behave_like "stats query"
   it_should_behave_like "spellcheck query"
 

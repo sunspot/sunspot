@@ -64,6 +64,14 @@ module Mock
       @response || {}
     end
 
+    def get(path, params)
+      unless path == "#{@expected_handler}"
+        raise ArgumentError, "Expected request to #{@expected_handler} request handler"
+      end
+      @searches << @last_search = params[:params]
+      @response || {}
+    end
+
     def method_missing(method, *args, &block)
       get("#{method}", *args)
     end

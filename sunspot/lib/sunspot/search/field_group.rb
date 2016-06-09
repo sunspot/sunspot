@@ -24,9 +24,15 @@ module Sunspot
         end
       end
 
-      def total
+      def ngroups
         if solr_response
           solr_response['ngroups'].to_i
+        end
+      end
+
+      def total
+        if solr_response
+          ngroups > 0 ? ngroups : matches
         end
       end
 

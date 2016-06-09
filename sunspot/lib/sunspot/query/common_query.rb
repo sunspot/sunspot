@@ -48,6 +48,10 @@ module Sunspot
         geo
       end
 
+      def add_spellcheck(options = {})
+        @components << Spellcheck.new(options)
+      end
+
       def add_stats(stats)
         @components << stats
         stats
