@@ -17,6 +17,7 @@ env:
   - GEM=sunspot_rails RAILS=4.0.0
   - GEM=sunspot_rails RAILS=4.1.0
   - GEM=sunspot_rails RAILS=4.2.0
+  - GEM=sunspot_solr
 
 # Limit the size of the matrix by only performing the most common builds
 matrix:
