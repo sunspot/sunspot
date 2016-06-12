@@ -1,87 +1,55 @@
-require File.expand_path('spec_helper', File.dirname(__FILE__))
-require 'tempfile'
+require "spec_helper"
 
 describe Sunspot::Solr::Server do
-  SUNSPOT_START_JAR = File.expand_path(
-    File.join(File.dirname(__FILE__), '..', '..', 'solr', 'start.jar')
-  )
 
-  before :each do
-    @server = Sunspot::Solr::Server.new
+  describe ".new" do
+    it "ensures Java is installed upon initialization" do
+      expect(Sunspot::Solr::Java).to receive(:ensure_install!)
+      described_class.new
+    end
   end
 
-  it 'runs server in current process' do
-    @server.should_not_receive(:fork)
-    @server.should_receive(:exec).with(/java .*-jar start.jar/)
-    @server.run
+  describe "#bootstrap" do
+    it "installs the solr home directory if it doesn't yet exist" do
+      specified_dir = Dir.mktmpdir + "/test_directory"
+      subject.solr_home = specified_dir
+      expect(Sunspot::Solr::Installer).to receive(:execute).
+        with(specified_dir, force: true, verbose: true)
+      subject.bootstrap
+    end
   end
 
-  it 'runs Java with memory set' do
-    @server.memory = 2048
-    @server.should_receive(:exec).with(/-Xmx2048/)
-    @server.should_receive(:exec).with(/-Xms2048/)
-    @server.run
-  end
+  describe "#run" do
+    before { expect(subject).to receive(:bootstrap) }
 
-  it 'runs Jetty with specified port' do
-    @server.port = 8981
-    @server.should_receive(:exec).with(/-Djetty\.port=8981/)
-    @server.run
-  end
-
-  it 'runs Solr with specified Solr home' do
-    @server.solr_home = '/tmp/var/solr'
-    @server.should_receive(:exec).with(%r(-Dsolr\.solr\.home=/tmp/var/solr))
-    @server.run
-  end
-
-  it 'runs Solr with specified Solr jar' do
-    @server.solr_jar = SUNSPOT_START_JAR
-    FileUtils.should_receive(:cd).with(File.dirname(SUNSPOT_START_JAR))
-    @server.run
-  end
-
-  it 'raises an error if java is missing' do
-    Sunspot::Solr::Java.stub(:installed? => false)
-    expect {
-     Sunspot::Solr::Server.new
-    }.to raise_error(Sunspot::Solr::Server::JavaMissing)
-  end
-
-  describe 'with logging' do
-    before :each do
-      @server.log_level = 'info'
-      @server.log_file = 'log/sunspot-development.log'
-      Tempfile.should_receive(:new).with('logging.properties').and_return(@tempfile = StringIO.new)
-      @tempfile.should_receive(:flush)
-      @tempfile.should_receive(:close)
-      @tempfile.stub(:path).and_return('/tmp/logging.properties.12345')
-      @server.stub(:exec)
+    it 'runs the Solr server in the foreground' do
+      expect(subject).to receive(:exec).with("./solr", "start", "-f", any_args)
+      subject.run
     end
 
-    it 'runs Solr with logging properties file' do
-      @server.should_receive(:exec).with(%r(-Djava\.util\.logging\.config\.file=/tmp/logging\.properties\.12345))
-      @server.run
+    it 'runs the Solr server with the memory specified' do
+      subject.memory = 2048
+      expect(subject).to receive(:exec).with("./solr", "start", "-f", "-m", "2048", any_args)
+      subject.run
     end
 
-    it 'sets logging level' do
-      @server.run
-      @tempfile.string.should =~ /^java\.util\.logging\.FileHandler\.level *= *INFO$/
+    it 'runs the Solr server with the port specified' do
+      subject.port = 8981
+      expect(subject).to receive(:exec).with("./solr", "start", "-f", "-p", "8981", any_args)
+      subject.run
     end
 
-    it 'sets handler' do
-      @server.run
-      @tempfile.string.should =~ /^handlers *= *java.util.logging.FileHandler$/
+    it 'runs the Solr server with the hostname specified' do
+      subject.bind_address = "0.0.0.0"
+      expect(subject).to receive(:exec).with("./solr", "start", "-f", "-h", "0.0.0.0", any_args)
+      subject.run
     end
 
-    it 'sets formatter' do
-      @server.run
-      @tempfile.string.should =~ /^java\.util\.logging\.FileHandler\.formatter *= *java\.util\.logging\.SimpleFormatter$/
-    end
-
-    it 'sets log file' do
-      @server.run
-      @tempfile.string.should =~ /^java\.util\.logging\.FileHandler\.pattern *= *log\/sunspot-development\.log$/
+    it 'runs the Solr server with the solr home directory specified' do
+      specified_dir = Dir.mktmpdir + "/test_directory"
+      subject.solr_home = specified_dir
+      expect(subject).to receive(:exec).with(any_args, "-s", specified_dir)
+      subject.run
     end
   end
 end
