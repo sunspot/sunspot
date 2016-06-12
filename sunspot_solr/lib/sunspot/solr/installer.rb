@@ -54,7 +54,7 @@ module Sunspot
       end
 
       def sunspot_config_path
-        @sunspot_config_path ||= Pathname(__FILE__)/"../../../../solr/solr"
+        @sunspot_config_path ||= Pathname(__FILE__).join("../../../../solr/solr")
       end
 
       def config_source_files
@@ -69,9 +69,9 @@ module Sunspot
 
       def glob_source_files
         source_files = []
-        source_files += Pathname.glob(sunspot_config_path/"solr.xml")
-        source_files += Pathname.glob(sunspot_config_path/"configsets/**/*")
-        source_files += Pathname.glob(sunspot_config_path/"**/core.properties")
+        source_files += Pathname.glob(sunspot_config_path.join("solr.xml"))
+        source_files += Pathname.glob(sunspot_config_path.join("configsets/**/*"))
+        source_files += Pathname.glob(sunspot_config_path.join("**/core.properties"))
         source_files.select(&:file?).map(&:expand_path)
       end
 

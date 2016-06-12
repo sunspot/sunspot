@@ -21,7 +21,7 @@ describe Sunspot::Solr::Installer do
       "test/core.properties" ]
   end
 
-  let(:destination_files) { install_manifest.map { |file| install_dir/file } }
+  let(:destination_files) { install_manifest.map { |file| install_dir.join(file) } }
 
   it "creates the install directory" do
     expect { described_class.execute(install_dir.to_s) }.
@@ -30,12 +30,12 @@ describe Sunspot::Solr::Installer do
 
   it "installs the Solr config files into the specified directory" do
     described_class.execute(install_dir.to_s)
-    installed_files = Pathname.glob(install_dir/"**/*").select(&:file?)
+    installed_files = Pathname.glob(install_dir.join("**/*")).select(&:file?)
     expect(installed_files).to contain_exactly(*destination_files).and all( be_exist )
   end
 
   describe "force" do
-    let(:existing_file) { install_dir/"solr.xml" }
+    let(:existing_file) { install_dir.join("solr.xml") }
 
     before do
       install_dir.mkpath
@@ -61,7 +61,7 @@ describe Sunspot::Solr::Installer do
     before do
       stub_const("STDOUT", fake_stdout)
       install_dir.mkpath
-      File.write(install_dir/"solr.xml", "Hello, World!")
+      File.write(install_dir.join("solr.xml"), "Hello, World!")
     end
 
     it "does not output to STDOUT when 'verbose' is false (default)" do

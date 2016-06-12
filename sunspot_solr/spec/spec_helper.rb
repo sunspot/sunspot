@@ -1,4 +1,3 @@
-require "pry-byebug"
 require "sunspot_solr"
 
 RSpec.configure do |config|
