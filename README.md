@@ -89,7 +89,7 @@ Post.search do
 
   with :blog_id, 1
   with(:published_at).less_than Time.now
-  field_list [:blog_id, :title]
+  field_list :blog_id, :title
   order_by :published_at, :desc
   paginate :page => 2, :per_page => 15
   facet :category_ids, :author_id
