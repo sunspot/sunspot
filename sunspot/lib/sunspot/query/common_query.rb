@@ -23,6 +23,11 @@ module Sunspot
         @sort << sort
       end
 
+      def add_field_list(field_list)
+        @components << field_list
+        field_list
+      end
+
       def add_group(group)
         @components << group
         group

@@ -89,6 +89,7 @@ Post.search do
 
   with :blog_id, 1
   with(:published_at).less_than Time.now
+  field_list [:blog_id, :title]
   order_by :published_at, :desc
   paginate :page => 2, :per_page => 15
   facet :category_ids, :author_id
@@ -242,6 +243,19 @@ Post.search do
 end
 ```
 
+#### Restrictions and Field List
+
+```ruby
+# Posts with a blog_id of 1
+Post.search do
+  with(:blog_id, 1)
+  field_list [:title]
+end
+
+Post.search do
+  without(:category_ids, [1, 3])
+  field_list [:title, :author_id]
+end
 
 #### Disjunctions and Conjunctions
 
@@ -286,7 +300,7 @@ Post.search do
       with(:category_ids, 3)
     end
   end
-  
+
   any do
     all do
       fulltext "keyword", :fields => :title
@@ -381,7 +395,7 @@ end
 
 **Solr 4.7 and above**
 
-With default Solr pagination it may turn that same records appear on different pages (e.g. if 
+With default Solr pagination it may turn that same records appear on different pages (e.g. if
 many records have the same search score). Cursor-based pagination allows to avoid this.
 
 Useful for any kinds of export, infinite scroll, etc.
@@ -778,7 +792,7 @@ end
 PhotoContainer.search do
   with(:caption, 'blah')
   with(:photos_created).between(Date.new(2011,3,1)..Date.new(2011,4,1))
-  
+
   fulltext("keywords", :fields => [:name, :description])
 end
 
@@ -787,7 +801,7 @@ end
 PhotoContainer.search do
   with(:caption, 'blah')
   with(:photos_created).between(Date.new(2011,3,1)..Date.new(2011,4,1))
-  
+
   any do
     fulltext("keyword1", :fields => :name)
     fulltext("keyword2", :fields => :description) # will be joined from the Photo model
@@ -825,7 +839,7 @@ Profile.search do
     fulltext("keyword1 keyword2", :fields => [:tweet_keywords]) do
       minimum_match 1
     end
-    
+
     fulltext("keyword3", :fields => [:rss_keywords])
   end
 end
