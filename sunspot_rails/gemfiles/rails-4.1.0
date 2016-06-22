@@ -1,6 +1,9 @@
 source 'http://rubygems.org'
 
 gem 'rails', '~> 4.1.0'
+if SystemRubyVersion.new.to_s =~ /1.9/
+  gem 'mime-types', '~> 2.99.0'
+end
 
 gem 'sunspot', :path => File.expand_path('../../../sunspot', __FILE__)
 gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)

@@ -257,7 +257,15 @@ module Sunspot
       end
 
       def id
-        @__calling_context__.__send__(:id)
+        begin
+          @__calling_context__.__send__(:id)
+        rescue ::NoMethodError => e
+          begin
+            @__receiver__.__send__(:id)
+          rescue ::NoMethodError
+            raise(e)
+          end
+        end
       end
 
       # Special case due to `Kernel#sub`'s existence
