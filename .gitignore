@@ -1,10 +1,9 @@
 *.gem
 Gemfile.lock
-vendor/bundle
-sunspot/vendor/bundle
+.bundle
+**/*/vendor/bundle
 sunspot_rails/spec/rails2/vendor
 sunspot_rails/spec/rails3/vendor
-**/*/vendor/bundle
 sunspot-solr.pid
 sunspot_solr/solr/solr-webapp
 .yardoc

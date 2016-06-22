@@ -29,10 +29,6 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency 'rspec', '~> 1.1'
-  s.add_development_dependency 'hanna'
-
-  s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
-                  '--title' << 'Sunspot-Solr - Bundled Solr distribution for Sunspot - API Documentation' <<
-                  '--main' << 'README.rdoc'
+  s.add_development_dependency 'rake', '~> 11.1.2'
+  s.add_development_dependency 'rspec', '~> 3.4.0'
 end

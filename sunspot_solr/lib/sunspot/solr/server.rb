@@ -23,9 +23,8 @@ module Sunspot
 
       attr_writer :pid_dir, :pid_file, :solr_home, :solr_executable
 
-      def initialize(*args)
-        ensure_java_installed
-        super(*args)
+      def initialize
+        Sunspot::Solr::Java.ensure_install!
       end
 
       #
@@ -194,16 +193,6 @@ module Sunspot
       end
 
       private
-
-      def ensure_java_installed
-        unless defined?(@java_installed)
-          @java_installed = Sunspot::Solr::Java.installed?
-          unless @java_installed
-            raise JavaMissing.new("You need a Java Runtime Environment to run the Solr server")
-          end
-        end
-        @java_installed
-      end
 
       def logging_config_path
         return @logging_config_path if defined?(@logging_config_path)
