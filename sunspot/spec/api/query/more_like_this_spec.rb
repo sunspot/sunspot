@@ -132,6 +132,19 @@ describe 'more_like_this' do
     connection.should have_last_search_with(:some => 'param')
   end
 
+  it "should send query to solr with adjusted parameters in multiple blocks" do
+    session.more_like_this(Post.new) do
+      adjust_solr_params do |params|
+        params[:q]    = 'new search'
+      end
+      adjust_solr_params do |params|
+        params[:some] = 'param'
+      end
+    end
+    connection.should have_last_search_with(:q    => 'new search')
+    connection.should have_last_search_with(:some => 'param')
+  end
+
   private
 
   def search(*args, &block)

@@ -12,11 +12,11 @@ module Sunspot
         end
 
         @pagination = nil
-        @parameter_adjustment = nil
+        @parameter_adjustments = []
       end
 
-      def solr_parameter_adjustment=(block)
-        @parameter_adjustment = block
+      def add_parameter_adjustment(block)
+        @parameter_adjustments << block
       end
 
       def add_sort(sort)
@@ -81,7 +81,11 @@ module Sunspot
         @components.each do |component|
           Sunspot::Util.deep_merge!(params, component.to_params)
         end
-        @parameter_adjustment.call(params) if @parameter_adjustment
+
+        @parameter_adjustments.each do |_block|
+          _block.call(params)
+        end
+
         params[:q] ||= '*:*'
         params
       end
