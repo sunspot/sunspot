@@ -256,6 +256,7 @@ Post.search do
   without(:category_ids, [1, 3])
   field_list [:title, :author_id]
 end
+```
 
 #### Disjunctions and Conjunctions
 
