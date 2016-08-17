@@ -331,6 +331,14 @@ module Sunspot #:nodoc:
           (user_configuration_from_key('auto_remove_callback') || 'after_destroy')
       end
 
+      #
+      # The query parser that should be used (useful for legacy systems).
+      # Default 'edismax'.
+      #
+      def query_parser
+        @query_parser ||= (user_configuration_from_key('query_parser') || 'edismax')
+      end
+
       private
 
       #
