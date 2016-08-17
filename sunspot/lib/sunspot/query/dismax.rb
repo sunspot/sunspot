@@ -31,7 +31,7 @@ module Sunspot
         params = { :q => @keywords }
         params[:fl] = '* score'
         params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
-        params[:defType] = 'edismax'
+        params[:defType] = query_parser
         params[:mm] = @minimum_match if @minimum_match
         params[:ps] = @phrase_slop if @phrase_slop
         params[:qs] = @query_phrase_slop if @query_phrase_slop
@@ -77,7 +77,11 @@ module Sunspot
         keywords = escape_quotes(params.delete(:q))
         options = params.map { |key, value| escape_param(key, value) }.join(' ')
 
-        { :q => "_query_:\"{!edismax #{options}}#{keywords}\"" }
+        if query_parser == 'dismax'
+          { :q => "_query_:\"{!dismax #{options}}#{keywords}\"" }
+        else
+          { :q => "_query_:\"{!edismax #{options}}#{keywords}\"" }
+        end
       end
 
       #
@@ -87,6 +91,23 @@ module Sunspot
         super unless field.is_a?(Sunspot::JoinField)
       end
 
+      private
+
+      def query_parser
+        configuration.query_parser
+      end
+
+      # access to the Sunspot::Rails::Configuration, defined in
+      # sunspot.yml. Use Sunspot::Rails.configuration if you want
+      # to access the configuration directly.
+      #
+      # ==== returns
+      #
+      # Sunspot::Rails::Configuration:: configuration
+      #
+      def configuration
+        Sunspot::Rails.configuration
+      end
     end
   end
 end
