@@ -100,7 +100,7 @@ module Sunspot #:nodoc:
             unless options[:auto_remove] == false
               # after_commit { |searchable| searchable.remove_from_index }, :on => :destroy
               __send__ Sunspot::Rails.configuration.auto_remove_callback,
-                       :sunspot_auto_remove_callback
+                       :sunspot_auto_remove_callback,
                        :on => :destroy
             end
             options[:include] = Util::Array(options[:include])
