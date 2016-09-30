@@ -7,3 +7,5 @@ gemspec
 group :development do
   gem 'rake'
 end
+
+gem 'rsolr', ENV['RSOLR'] if ENV['RSOLR']
