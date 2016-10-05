@@ -16,7 +16,7 @@ group :test do
 end
 
 group :postgres do
-  gem 'pg'
+  gem 'pg', '~> 0.18.4'
 end
 
 group :sqlite do
