@@ -1,16 +1,12 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 4.2.0'
-if RUBY_VERSION < '2.0'
-  gem 'mime-types', '~> 2.99.0'
-end
-
+gem 'rails', '~> 5.0'
 gem 'sunspot', :path => File.expand_path('../../../sunspot', __FILE__)
 gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)
 gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
 
 group :test do
-  gem 'protected_attributes' # Rails 4 support for attr_accessor so specs still work
+  gem 'protected_attributes_continued'
   gem 'rspec-rails', '~> 2.14.0'
   gem 'progress_bar', '~> 1.0.5', require: false
 end
