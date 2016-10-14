@@ -17,7 +17,6 @@ module Sunspot
           action = "Commit"
           body = ""
         end
-        body = body[0, 800] + '...' if body.length > 800
 
         # Make request and log.
         response = nil
