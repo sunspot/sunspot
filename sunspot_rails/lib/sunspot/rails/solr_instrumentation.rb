@@ -4,17 +4,18 @@ module Sunspot
       extend ActiveSupport::Concern
 
       included do
-        alias_method_chain :send_and_receive, :as_instrumentation
+        prepend Sunspot::SolrRailsInstrumentation
       end
+    end
+  end
 
-
-      def send_and_receive_with_as_instrumentation(path, opts)
-        parameters = (opts[:params] || {})
-        parameters.merge!(opts[:data]) if opts[:data].is_a? Hash
-        payload = {:path => path, :parameters => parameters}
-        ActiveSupport::Notifications.instrument("request.rsolr", payload) do
-          send_and_receive_without_as_instrumentation(path, opts)
-        end
+  module SolrRailsInstrumentation
+    def send_and_receive(path, opts)
+      parameters = (opts[:params] || {})
+      parameters.merge!(opts[:data]) if opts[:data].is_a? Hash
+      payload = {path: path, parameters: parameters}
+      ActiveSupport::Notifications.instrument("request.rsolr", payload) do
+        super(path,opts)
       end
     end
   end
