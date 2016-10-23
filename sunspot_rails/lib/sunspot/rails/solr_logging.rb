@@ -2,15 +2,9 @@ module Sunspot
   module Rails
     module SolrLogging
 
-      class <<self
-        def included(base)
-          base.alias_method_chain :execute, :rails_logging
-        end
-      end
-
       COMMIT = %r{<commit/>}
 
-      def execute_with_rails_logging(client, request_context)
+      def execute(client, request_context)
         body = (request_context[:data]||"").dup
         action = request_context[:path].capitalize
         if body =~ COMMIT
@@ -22,7 +16,7 @@ module Sunspot
         response = nil
         begin
           ms = Benchmark.ms do
-            response = execute_without_rails_logging(client, request_context)
+            response = super(client, request_context)
           end
           log_name = 'Solr %s (%.1fms)' % [action, ms]
           ::Rails.logger.debug(format_log_entry(log_name, body))
@@ -39,7 +33,7 @@ module Sunspot
 
       def format_log_entry(message, dump = nil)
         @colorize_logging ||= ::Rails.application.config.colorize_logging
-          
+
         if @colorize_logging
           message_color, dump_color = "4;32;1", "0;1"
           log_entry = "  \e[#{message_color}m#{message}\e[0m   "
@@ -54,5 +48,5 @@ module Sunspot
 end
 
 RSolr::Connection.module_eval do
-  include Sunspot::Rails::SolrLogging
+  prepend Sunspot::Rails::SolrLogging
 end
