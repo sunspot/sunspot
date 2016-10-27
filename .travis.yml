@@ -11,7 +11,6 @@ rvm:
   # - jruby
 
 env:
-  - GEM=sunspot RSOLR=2.0.0.pre1
   - GEM=sunspot
   - GEM=sunspot_rails RAILS=3.0.0
   - GEM=sunspot_rails RAILS=3.1.0
