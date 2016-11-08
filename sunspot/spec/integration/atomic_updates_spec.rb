@@ -5,9 +5,11 @@ describe 'atomic updates' do
     Sunspot.remove_all
   end
 
-  def validate_hit(hit, title, featured)
-    expect(hit.stored(:title)).to eq(title)
-    expect(hit.stored(:featured)).to eq(featured)
+  def validate_hit(hit, values = {})
+    values.each do |field, value|
+      stored_value = hit.stored(field)
+      stored_value.should eq(value), "expected #{value.inspect}, but got #{stored_value.inspect} for field '#{field}'"
+    end
   end
 
   def find_indexed_post(id)
@@ -20,13 +22,13 @@ describe 'atomic updates' do
     post = Post.new(title: 'A Title', featured: true)
     Sunspot.index!(post)
     
-    validate_hit(find_indexed_post(post.id), post.title, post.featured)
+    validate_hit(find_indexed_post(post.id), title: post.title, featured: post.featured)
 
     Sunspot.atomic_update!(Post, post.id => {title: 'A New Title'})
-    validate_hit(find_indexed_post(post.id), 'A New Title', true)
+    validate_hit(find_indexed_post(post.id), title: 'A New Title', featured: true)
 
     Sunspot.atomic_update!(Post, post.id => {featured: false})
-    validate_hit(find_indexed_post(post.id), 'A New Title', false)
+    validate_hit(find_indexed_post(post.id), title: 'A New Title', featured: false)
   end
 
   it 'should update fields for multiple records' do
@@ -34,11 +36,23 @@ describe 'atomic updates' do
     post2 = Post.new(title: 'A Second Title', featured: false)
     Sunspot.index!(post1, post2)
 
-    validate_hit(find_indexed_post(post1.id), post1.title, post1.featured)
-    validate_hit(find_indexed_post(post2.id), post2.title, post2.featured)
+    validate_hit(find_indexed_post(post1.id), title: post1.title, featured: post1.featured)
+    validate_hit(find_indexed_post(post2.id), title: post2.title, featured: post2.featured)
 
     Sunspot.atomic_update!(Post, post1.id => {title: 'A New Title'}, post2.id => {featured: true})
-    validate_hit(find_indexed_post(post1.id), 'A New Title', true)
-    validate_hit(find_indexed_post(post2.id), 'A Second Title', true)
+    validate_hit(find_indexed_post(post1.id), title: 'A New Title', featured: true)
+    validate_hit(find_indexed_post(post2.id), title: 'A Second Title', featured: true)
+  end
+
+  it 'should clear field value properly' do
+    post = Post.new(title: 'A Title', tags: %w(tag1 tag2), featured: true)
+    Sunspot.index!(post)
+    validate_hit(find_indexed_post(post.id), title: post.title, tag_list: post.tags, featured: true)
+
+    Sunspot.atomic_update!(Post, post.id => {tag_list: []})
+    validate_hit(find_indexed_post(post.id), title: post.title, tag_list: nil, featured: true)
+
+    Sunspot.atomic_update!(Post, post.id => {featured: nil})
+    validate_hit(find_indexed_post(post.id), title: post.title, tag_list: nil, featured: nil)
   end
 end

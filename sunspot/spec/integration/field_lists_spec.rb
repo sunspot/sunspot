@@ -3,7 +3,7 @@ require File.expand_path('../spec_helper', File.dirname(__FILE__))
 describe 'fields lists' do
   before :all do
     Sunspot.remove_all
-    @post = Post.new(title: 'A Title', body: 'A Body', featured: true)
+    @post = Post.new(title: 'A Title', body: 'A Body', featured: true, tags: ['tag'])
     Sunspot.index!(@post)
   end
 

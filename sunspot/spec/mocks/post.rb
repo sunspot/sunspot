@@ -85,7 +85,11 @@ Sunspot.setup(Post) do
 
   string :legacy_array, :as => :legacy_array_field_sm, :multiple => true do
     ['first string', 'second string']
- 	end
+  end
+
+  string :tag_list, :multiple => true, :stored => true do
+    tags
+  end
 end
 
 class PhotoPost < Post
