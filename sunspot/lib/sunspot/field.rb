@@ -93,6 +93,17 @@ module Sunspot
       !!@joined
     end
 
+    #
+    # Whether the field is stored or not.
+    #
+    # ==== Returns
+    #
+    # Boolean:: True if this field is a stored field
+    #
+    def stored?
+      !!@stored
+    end
+
     def hash
       indexed_name.hash
     end
