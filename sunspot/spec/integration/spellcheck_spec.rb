@@ -69,6 +69,51 @@ describe 'spellcheck' do
       end
       search.spellcheck_collation.should == 'clojure developer'
     end
+
+    it 'returns Solr collation if terms are not provided even for single word' do
+
+      search = Sunspot.search(Post) do
+        keywords 'lojure'
+        spellcheck :count => 3, :only_more_popular => true
+      end
+      search.spellcheck_collation.should == 'clojure'
+    end
+
+    it 'returns Solr collation if terms are provided even for single word' do
+
+      search = Sunspot.search(Post) do
+        keywords 'lojure'
+        spellcheck :count => 3
+      end
+      search.spellcheck_collation.should == 'clojure'
+    end
+
+    it 'returns Solr collation if terms are provided even for single word' do
+
+      search = Sunspot.search(Post) do
+        keywords 'lojure'
+        spellcheck :count => 3
+      end
+      search.spellcheck_collation('lojure').should == 'clojure'
+    end
+
+    it 'returns Solr collation if terms are provided even if single keyword is word' do
+
+      search = Sunspot.search(Post) do
+        keywords 'C++, lojure Developer'
+        spellcheck :count => 3
+      end
+      search.spellcheck_collation.should == 'C++, clojure Developer'
+    end
+
+    it 'returns nil if terms are provided which varies from actual keywords' do
+
+      search = Sunspot.search(Post) do
+        keywords 'clojure'
+        spellcheck :count => 3
+      end
+      search.spellcheck_collation('lojure').should == nil
+    end
   end
 
 end
