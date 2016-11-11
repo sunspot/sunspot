@@ -49,12 +49,11 @@ module Sunspot
       # the index. Otherwise return Solr's suggested collation.
       #
       # Solr's suggested collation is more liberal, replacing even terms that
-      # are present in the index. This may not be useful if only one term is
-      # misspelled and preventing useful results.
+      # are present in the index.
       #
       # Mix and match in your views for a blend of strict and liberal collations.
       def spellcheck_collation(*terms)
-        if solr_spellcheck['suggestions'] && solr_spellcheck['suggestions'].length > 2
+        if solr_spellcheck['suggestions'] && solr_spellcheck['suggestions'].length > 0
           collation = terms.join(" ").dup if terms
 
           # If we are given a query string, tokenize it and strictly replace
