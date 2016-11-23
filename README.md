@@ -1255,8 +1255,18 @@ end
 TODO
 
 ## Type Reference
-
-TODO
+The following FieldTypes are used in sunspot. sunspot_solr will create schema.xml file inside Project for FieldType reference.
+* [Boolean](http://lucene.apache.org/solr/4_4_0/solr-core/org/apache/solr/schema/BoolField.html)
+* [SortableFloat](http://lucene.apache.org/solr/4_4_0/solr-core/org/apache/solr/schema/SortableFloatField.html)
+* [Date](http://lucene.apache.org/solr/4_4_0/solr-core/org/apache/solr/schema/DateField.html)
+* [SortableInt](http://lucene.apache.org/solr/4_4_0/solr-core/org/apache/solr/schema/SortableIntField.html)
+* [String](http://lucene.apache.org/core/4_4_0/core/org/apache/lucene/document/StringField.html)
+* [SortableDouble](http://lucene.apache.org/solr/4_5_1/solr-core/org/apache/solr/schema/SortableDoubleField.html)
+* [SortableLong](http://lucene.apache.org/solr/4_5_1/solr-core/org/apache/solr/schema/SortableLongField.html)
+* [TrieInteger](http://lucene.apache.org/solr/4_4_0/solr-core/org/apache/solr/schema/TrieIntField.html)
+* [TrieFloat](https://lucene.apache.org/solr/4_4_0/solr-core/org/apache/solr/schema/TrieFloatField.html)
+* [TrieInt](https://lucene.apache.org/solr/4_4_0/solr-core/org/apache/solr/schema/TrieIntField.html)
+* [LatlonField](http://lucene.apache.org/solr/4_4_0/solr-core/org/apache/solr/schema/LatLonType.html)
 
 ## Configuration
 
