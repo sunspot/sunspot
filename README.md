@@ -1391,6 +1391,7 @@ $ yardoc -o docs */lib/**/*.rb - README.md
 * [The Saga of the Switch](http://web.archive.org/web/20100427135335/http://mrb.github.com/2010/04/08/the-saga-of-the-switch.html) (mrb -- includes comparison of Sunspot and Ultrasphinx)
 * [Conditional Indexing with Sunspot](http://mikepackdev.com/blog_posts/19-conditional-indexing-with-sunspot) (mikepack)
 * [Introduction to Full Text Search for Rails Developers](http://valve.github.io/blog/2014/02/22/rails-developer-guide-to-full-text-search-with-solr/) (Valve's)
+* [Video Course: Compare Ruby Search Engines](https://code.tutsplus.com/courses/compare-ruby-search-engines)
 
 ## License
 
