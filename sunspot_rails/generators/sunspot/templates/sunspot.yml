@@ -1,3 +1,19 @@
+development:
+  solr:
+    hostname: localhost
+    port: 8982
+    log_level: INFO
+  auto_index_callback: after_commit
+  auto_remove_callback: after_commit
+
+test:
+  solr:
+    hostname: localhost
+    port: 8981
+    log_level: WARNING
+  auto_index_callback: after_commit
+  auto_remove_callback: after_commit
+
 production:
   solr:
     hostname: localhost
@@ -5,16 +21,5 @@ production:
     log_level: WARNING
     # read_timeout: 2
     # open_timeout: 0.5
-
-development:
-  solr:
-    hostname: localhost
-    port: 8982
-    log_level: INFO
-
-test:
-  solr:
-    hostname: localhost
-    port: 8981
-    log_level: WARNING
-    
+  auto_index_callback: after_commit
+  auto_remove_callback: after_commit
