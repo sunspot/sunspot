@@ -40,4 +40,17 @@ describe 'more_like_this' do
       @mlt.total.should == 0
     end
   end
+
+  context 'when the query is across multiple types' do
+    before(:all) do
+      @comment = Namespaced::Comment.new(:body => 'there are no numbers here')
+      Sunspot.index!(@comment)
+    end
+
+    it 'should return results for the specified text field' do
+      Sunspot.more_like_this(@posts.first, Post, Namespaced::Comment) do
+        fields :body
+      end.results.to_set.should == @posts[2..3].to_set
+    end
+  end
 end

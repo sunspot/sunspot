@@ -26,9 +26,101 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "sunspot"
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files         = %w[
+    LICENSE
+    MIT-LICENSE
+    README.rdoc
+    Rakefile
+    TODO
+    dev_tasks/rdoc.rake
+    dev_tasks/release.rake
+    dev_tasks/spec.rake
+    dev_tasks/todo.rake
+    gemfiles/rails-2.3.14
+    gemfiles/rails-3.0.12
+    gemfiles/rails-3.1.4
+    gemfiles/rails-3.2.3
+    generators/sunspot/sunspot_generator.rb
+    generators/sunspot/templates/sunspot.yml
+    install.rb
+    lib/generators/sunspot_rails.rb
+    lib/generators/sunspot_rails/install/install_generator.rb
+    lib/generators/sunspot_rails/install/templates/config/sunspot.yml
+    lib/sunspot/rails.rb
+    lib/sunspot/rails/adapters.rb
+    lib/sunspot/rails/configuration.rb
+    lib/sunspot/rails/init.rb
+    lib/sunspot/rails/log_subscriber.rb
+    lib/sunspot/rails/railtie.rb
+    lib/sunspot/rails/railties/controller_runtime.rb
+    lib/sunspot/rails/request_lifecycle.rb
+    lib/sunspot/rails/searchable.rb
+    lib/sunspot/rails/server.rb
+    lib/sunspot/rails/solr_instrumentation.rb
+    lib/sunspot/rails/solr_logging.rb
+    lib/sunspot/rails/spec_helper.rb
+    lib/sunspot/rails/stub_session_proxy.rb
+    lib/sunspot/rails/tasks.rb
+    lib/sunspot_rails.rb
+    spec/configuration_spec.rb
+    spec/model_lifecycle_spec.rb
+    spec/model_spec.rb
+    spec/rails_template/app/controllers/application_controller.rb
+    spec/rails_template/app/controllers/posts_controller.rb
+    spec/rails_template/app/models/author.rb
+    spec/rails_template/app/models/blog.rb
+    spec/rails_template/app/models/location.rb
+    spec/rails_template/app/models/photo_post.rb
+    spec/rails_template/app/models/post.rb
+    spec/rails_template/app/models/post_with_auto.rb
+    spec/rails_template/app/models/post_with_default_scope.rb
+    spec/rails_template/config/boot.rb
+    spec/rails_template/config/preinitializer.rb
+    spec/rails_template/config/routes.rb
+    spec/rails_template/config/sunspot.yml
+    spec/rails_template/db/schema.rb
+    spec/request_lifecycle_spec.rb
+    spec/schema.rb
+    spec/searchable_spec.rb
+    spec/server_spec.rb
+    spec/session_spec.rb
+    spec/shared_examples/indexed_after_save.rb
+    spec/shared_examples/not_indexed_after_save.rb
+    spec/spec_helper.rb
+    spec/stub_session_proxy_spec.rb
+    sunspot_rails.gemspec
+  ]
+
+  s.test_files    = %w[
+    spec/configuration_spec.rb
+    spec/model_lifecycle_spec.rb
+    spec/model_spec.rb
+    spec/rails_template/app/controllers/application_controller.rb
+    spec/rails_template/app/controllers/posts_controller.rb
+    spec/rails_template/app/models/author.rb
+    spec/rails_template/app/models/blog.rb
+    spec/rails_template/app/models/location.rb
+    spec/rails_template/app/models/photo_post.rb
+    spec/rails_template/app/models/post.rb
+    spec/rails_template/app/models/post_with_auto.rb
+    spec/rails_template/app/models/post_with_default_scope.rb
+    spec/rails_template/config/boot.rb
+    spec/rails_template/config/preinitializer.rb
+    spec/rails_template/config/routes.rb
+    spec/rails_template/config/sunspot.yml
+    spec/rails_template/db/schema.rb
+    spec/request_lifecycle_spec.rb
+    spec/schema.rb
+    spec/searchable_spec.rb
+    spec/server_spec.rb
+    spec/session_spec.rb
+    spec/shared_examples/indexed_after_save.rb
+    spec/shared_examples/not_indexed_after_save.rb
+    spec/spec_helper.rb
+    spec/stub_session_proxy_spec.rb
+  ]
+
+  s.executables   = []
   s.require_paths = ["lib"]
 
   s.add_dependency 'sunspot', Sunspot::VERSION

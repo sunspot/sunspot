@@ -470,12 +470,21 @@ module Sunspot #:nodoc:
           true
         end
 
+        def dispatch_index_task(option, default)
+          to_do = sunspot_options[option] || default
+          if to_do.is_a? Proc
+            to_do.call(self)
+          elsif to_do
+            send(to_do)
+          end
+        end
+
         def perform_index_tasks
           if @marked_for_auto_indexing
-            solr_index
+            dispatch_index_task(:auto_index_method, :solr_index)
             remove_instance_variable(:@marked_for_auto_indexing)
           elsif @marked_for_auto_removal
-            solr_remove_from_index
+            dispatch_index_task(:auto_remove_method, :solr_remove_from_index)
             remove_instance_variable(:@marked_for_auto_removal)
           end
         end
