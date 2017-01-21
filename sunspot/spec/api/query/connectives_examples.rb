@@ -198,4 +198,16 @@ shared_examples_for "query with connective scope" do
       :fq, '(_query_:"{!geofilt sfield=coordinates_new_ll pt=23,-46 d=100}" OR _query_:"{!geofilt sfield=coordinates_new_ll pt=42,56 d=50}")'
     )
   end
+  
+  it 'creates a conjunction of in_bounding_box queries' do
+    search do
+      any_of do
+        with(:coordinates_new).in_bounding_box([23, -46], [25, -44])
+        with(:coordinates_new).in_bounding_box([42, 56], [43, 58])
+      end
+    end
+    connection.should have_last_search_including(
+      :fq, '(coordinates_new_ll:[23,-46 TO 25,-44] OR coordinates_new_ll:[42,56 TO 43,58])'
+    )
+  end
 end

@@ -169,6 +169,17 @@ module Sunspot
           end
       end
 
+      class InBoundingBox < Base
+        def initialize(negated, field, first_corner, second_corner)
+          @bbox = Sunspot::Query::Bbox.new(field, first_corner, second_corner)
+          super negated, field, [first_corner, second_corner]
+        end
+
+        def to_solr_conditional
+          @bbox.to_solr_conditional
+        end
+      end
+
       # 
       # Results must have field with value equal to given value. If the value
       # is nil, results must have no value for the given field.
