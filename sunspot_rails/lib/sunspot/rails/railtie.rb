@@ -7,6 +7,7 @@ module Sunspot
           Sunspot::Adapters::InstanceAdapter.register(Sunspot::Rails::Adapters::ActiveRecordInstanceAdapter, ActiveRecord::Base)
           Sunspot::Adapters::DataAccessor.register(Sunspot::Rails::Adapters::ActiveRecordDataAccessor, ActiveRecord::Base)
           include(Sunspot::Rails::Searchable)
+          include(Sunspot::Rails::IndexRelated)
         end
         ActiveSupport.on_load(:action_controller) do
           include(Sunspot::Rails::RequestLifecycle)

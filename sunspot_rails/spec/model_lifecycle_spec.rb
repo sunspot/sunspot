@@ -77,5 +77,55 @@ describe 'searchable with lifecycle' do
     end
 
   end
+
+  describe 'indexing associated model' do
+    before(:each) do
+      @post = PostThatIndexesAssociations.create(blog: Blog.create)
+    end
+
+    it 'should index the associated model when saved' do
+      Sunspot.should_receive(:index!).with(@post.blog)
+      @post.update_attribute :title, "brand new title"
+    end
+
+    it 'should index the associated model when destroyed' do
+      Sunspot.should_receive(:index!).with(@post.blog)
+      @post.destroy
+    end
+  end
+
+  describe 'conditionally index associated model' do
+    context "when the condition is true" do
+      before(:each) do
+        @post = PostThatConditionallyIndexesAssociations.create(blog: Blog.create, published: true)
+      end
+
+      it 'should index the associated model when saved' do
+        Sunspot.should_receive(:index!).with(@post.blog)
+        @post.update_attribute :title, "brand new title"
+      end
+
+      it 'should index the associated model when destroyed' do
+        Sunspot.should_receive(:index!).with(@post.blog)
+        @post.destroy
+      end
+    end
+
+    context "when the condition is false" do
+      before(:each) do
+        @post = PostThatConditionallyIndexesAssociations.create(blog: Blog.create, published: false)
+      end
+
+      it "should not index associations upon save" do
+        Sunspot.should_not_receive(:index!).with(@post.blog)
+        @post.update_attribute :title, "brand new title"
+      end
+
+      it 'should not index the associated model when destroyed' do
+        Sunspot.should_not_receive(:index!).with(@post.blog)
+        @post.destroy
+      end
+    end
+  end
 end
 
