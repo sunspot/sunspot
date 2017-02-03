@@ -1,6 +1,11 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
-shared_examples_for 'all sessions' do
+shared_examples_for 'all sessions' do |options|
+
+  let(:commitWithinRequirement) do
+    (options || {})[:commit_within]
+  end
+
   context '#index()' do
     before :each do
       @session.index(Post.new)
@@ -8,6 +13,7 @@ shared_examples_for 'all sessions' do
 
     it 'should add document to connection' do
       connection.should have(1).adds
+      connection.committed_within.should eq(commitWithinRequirement)
     end
   end
 
@@ -18,6 +24,7 @@ shared_examples_for 'all sessions' do
 
     it 'should add document to connection' do
       connection.should have(1).adds
+      connection.committed_within.should eq(commitWithinRequirement)
     end
 
     it 'should commit' do
@@ -62,6 +69,84 @@ shared_examples_for 'all sessions' do
 
     it 'should optimize' do
       connection.should have(1).optims
+    end
+  end
+
+  context '#remove()' do
+    before :each do
+      @session.remove(Post.new(:id => 1))
+    end
+
+    it 'should add document removals to connection' do
+      connection.should have(1).deletes
+      connection.committed_within.should eq(commitWithinRequirement)
+    end
+  end
+
+  context '#remove!()' do
+    before :each do
+      @session.remove!(Post.new(:id => 1))
+    end
+
+    it 'should add document removals to connection' do
+      connection.should have(1).deletes
+      connection.committed_within.should eq(commitWithinRequirement)
+    end
+
+    it 'should commit' do
+      connection.should have(1).commits
+    end
+  end
+
+  context '#remove_by_id()' do
+    before :each do
+      @session.remove_by_id(Post, 1)
+    end
+
+    it 'should add document removals to connection' do
+      connection.should have(1).deletes
+      connection.committed_within.should eq(commitWithinRequirement)
+    end
+  end
+
+  context '#remove_by_id!()' do
+    before :each do
+      @session.remove_by_id!(Post, 1)
+    end
+
+    it 'should add document removals to connection' do
+      connection.should have(1).deletes
+      connection.committed_within.should eq(commitWithinRequirement)
+    end
+
+    it 'should commit' do
+      connection.should have(1).commits
+    end
+  end
+
+  context '#remove_all()' do
+    before :each do
+      @session.remove_all(Post)
+    end
+
+    it 'should add document removals to connection' do
+      connection.should have(1).deletes_by_query
+      connection.committed_within.should eq(commitWithinRequirement)
+    end
+  end
+
+  context '#remove_all!()' do
+    before :each do
+      @session.remove_all!(Post)
+    end
+
+    it 'should add document removals to connection' do
+      connection.should have(1).deletes_by_query
+      connection.committed_within.should eq(commitWithinRequirement)
+    end
+
+    it 'should commit' do
+      connection.should have(1).commits
     end
   end
 
@@ -139,6 +224,18 @@ describe 'Session' do
       session.commit
       connection.opts[:url].should == 'http://127.0.0.1:8982/solr'
     end
+  end
+
+  context 'custom session with commit_within option' do
+    COMMIT_WITHIN_TEST_VALUE = 3000
+
+    before :each do
+      @session = Sunspot::Session.new do |config|
+        config.commit_within = COMMIT_WITHIN_TEST_VALUE
+      end
+    end
+
+    it_should_behave_like 'all sessions', commit_within: COMMIT_WITHIN_TEST_VALUE
   end
 
   context 'dirty sessions' do

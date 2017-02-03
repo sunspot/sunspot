@@ -22,7 +22,8 @@ module Mock
   end
 
   class Connection
-    attr_reader :adds, :commits, :soft_commits, :optims, :searches, :message, :opts, :deletes_by_query
+    attr_reader :adds, :commits, :soft_commits, :optims, :searches, :message, :opts, :deletes, :deletes_by_query,
+                :committed_within
     attr_accessor :response
     attr_writer :expected_handler
     undef_method :select # annoyingly defined on Object
@@ -34,15 +35,18 @@ module Mock
       @expected_handler = :select
     end
 
-    def add(documents)
+    def add(documents, opts = {})
+      @committed_within = commit_within_value(opts)
       @adds << Array(documents)
     end
 
-    def delete_by_id(ids)
+    def delete_by_id(ids, opts = {})
+      @committed_within = commit_within_value(opts)
       @deletes << Array(ids)
     end
 
-    def delete_by_query(query)
+    def delete_by_query(query, opts = {})
+      @committed_within = commit_within_value(opts)
       @deletes_by_query << query
     end
 
@@ -123,6 +127,10 @@ module Mock
       else
         request.has_key?(params)
       end
+    end
+
+    def commit_within_value(opts = {})
+      opts[:params][:commitWithin] if opts[:params] && opts[:params][:commitWithin]
     end
   end
 end

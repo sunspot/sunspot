@@ -50,11 +50,11 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   end
 
   it "should set the read timeout to nil when not set" do
-    @config.read_timeout == nil
+    @config.read_timeout.should == nil
   end
 
   it "should set the open timeout to nil when not set" do
-    @config.open_timeout == nil
+    @config.open_timeout.should == nil
   end
 
   it "should set 'log_level' property using Rails log level when not set" do
@@ -98,6 +98,10 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
 
   it "should handle the 'auto_remove_callback' property when not set" do
     @config.auto_remove_callback.should == "after_destroy"
+  end
+
+  it "should set the commit_within to nil when not set" do
+    @config.commit_within.should be_nil
   end
 end
 
@@ -165,6 +169,10 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
 
   it "should handle the 'proxy' property when set" do
     @config.proxy.should == 'http://proxy.com:12345'
+  end
+
+  it "should handle the 'commit_within' property when set" do
+    @config.commit_within.should == 3000
   end
 end
 

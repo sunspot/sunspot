@@ -205,10 +205,7 @@ module Sunspot #:nodoc:
       # String:: log_level
       #
       def log_level
-        @log_level ||= (
-          user_configuration_from_key('solr', 'log_level') ||
-          LOG_LEVELS[::Rails.logger.level]
-        )
+        @log_level ||= (user_configuration_from_key('solr', 'log_level') || LOG_LEVELS[::Rails.logger.level])
       end
 
       #
@@ -220,8 +217,7 @@ module Sunspot #:nodoc:
       # Boolean: auto_commit_after_request?
       #
       def auto_commit_after_request?
-        @auto_commit_after_request ||=
-          user_configuration_from_key('auto_commit_after_request') != false
+        @auto_commit_after_request ||= user_configuration_from_key('auto_commit_after_request') != false
       end
 
       #
@@ -233,8 +229,19 @@ module Sunspot #:nodoc:
       # Boolean: auto_commit_after_delete_request?
       #
       def auto_commit_after_delete_request?
-        @auto_commit_after_delete_request ||=
-          (user_configuration_from_key('auto_commit_after_delete_request') || false)
+        @auto_commit_after_delete_request ||= (user_configuration_from_key('auto_commit_after_delete_request') || false)
+      end
+
+      #
+      # Time interval for the solr to queue soft commit (https://wiki.apache.org/solr/CommitWithin)
+      # Default nil
+      #
+      # ==== Returns
+      #
+      # Fixnum: time interval in milliseconds
+      #
+      def commit_within
+        @commit_within ||= (user_configuration_from_key('commit_within') || nil)
       end
 
 
@@ -264,12 +271,7 @@ module Sunspot #:nodoc:
       # String:: solr_home
       #
       def solr_home
-        @solr_home ||=
-          if user_configuration_from_key('solr', 'solr_home')
-            user_configuration_from_key('solr', 'solr_home')
-          else
-            File.join(::Rails.root, 'solr')
-          end
+        @solr_home ||= user_configuration_from_key('solr', 'solr_home') || File.join(::Rails.root, 'solr')
       end
 
       #

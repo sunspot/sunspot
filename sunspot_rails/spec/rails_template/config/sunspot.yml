@@ -25,6 +25,7 @@ config_test:
     proxy: http://proxy.com:12345
   auto_commit_after_request: false
   auto_commit_after_delete_request: true
+  commit_within: 3000
 config_disabled_test:
   disabled: true
 config_commit_test:
