@@ -143,6 +143,8 @@ module Sunspot
       #
       alias_method :field, :build
 
+      alias_method :facetable_field, :build
+
       # 
       # Generate dynamic fields based on hash returned by data accessor and
       # add the field data to the document.

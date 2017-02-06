@@ -82,6 +82,15 @@ module Sunspot
       )
     end
 
+    def facetable_field(field_name)
+      field = fields_hash[field_name.to_sym]
+      field ||= text_fields_hash[field_name.to_sym]
+      field || raise(
+        UnrecognizedFieldError,
+        "No field configured for #{@types * ', '} with name '#{field_name}'"
+      )
+    end
+
     # 
     # Get a dynamic field factory for the given base name.
     #

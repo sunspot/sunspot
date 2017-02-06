@@ -274,7 +274,7 @@ module Sunspot
         else
           field_names.each do |field_name|
             search_facet = nil
-            field = @setup.field(field_name)
+            field = @setup.facetable_field(field_name)
             facet =
               if options[:time_range]
                 unless field.type.is_a?(Sunspot::Type::TimeType)
