@@ -123,6 +123,24 @@ module Sunspot
         def execute
           self
         end
+
+        def group(name)
+          QueryGroupStub.new
+        end
+
+        class QueryGroupStub
+          def groups
+            []
+          end
+
+          def matches
+            0
+          end
+
+          def total
+            0
+          end
+        end
       end
 
 
