@@ -158,7 +158,7 @@ module Sunspot
       end
 
       def exec_in_solr_executable_directory(command)
-        FileUtils.cd(solr_executable_directory) { exec(*command) }
+        FileUtils.cd(solr_executable_directory) { system(*command) }
       end
 
       #
