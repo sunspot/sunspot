@@ -502,6 +502,10 @@ module Sunspot #:nodoc:
           if_passes and unless_passes
         end
 
+        def skip_index!
+          @skip_index = true
+        end
+
         private
 
         def constraint_passes?(constraint)
@@ -527,7 +531,9 @@ module Sunspot #:nodoc:
             # :if/:unless constraints pass or were not present
 
             @marked_for_auto_indexing =
-              if !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
+              if @skip_index
+                false
+              elsif !new_record? && ignore_attributes = self.class.sunspot_options[:ignore_attribute_changes_of]
                 !(changed.map { |attr| attr.to_sym } - ignore_attributes).blank?
               elsif !new_record? && only_attributes = self.class.sunspot_options[:only_reindex_attribute_changes_of]
                 !(changed.map { |attr| attr.to_sym } & only_attributes).blank?
