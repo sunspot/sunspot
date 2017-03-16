@@ -69,6 +69,12 @@ module Sunspot
       def results
         @results ||= paginate_collection(verified_hits.map { |hit| hit.instance })
       end
+      
+      def as_relation
+        matching_item_ids = self.hits.map(self.hits.each do { |pk| pk.primary_key})
+        class_name = self.hits.first.class_name
+        class_name.where(id: matching_item_ids)
+      end
 
       #
       # Access raw Solr result information. Returns a collection of Hit objects
