@@ -1218,6 +1218,11 @@ bundle exec rake sunspot:reindex[500,Post] # some shells will require escaping [
 bundle exec rake sunspot:reindex[,,true] # some shells will require escaping [ with \[ and ] with \]
 ```
 
+If you need to reindex a model in ruby code:
+```ruby
+Post.solr_reindex
+```
+
 ## Use Without Rails
 
 TODO
