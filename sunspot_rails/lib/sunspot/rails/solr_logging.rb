@@ -4,7 +4,8 @@ module Sunspot
 
       COMMIT = %r{<commit/>}
 
-      def execute_with_rails_logging(client, request_context)
+      # def execute_with_rails_logging(client, request_context)
+      def execute_with_rails_logging(request_context)
         body = (request_context[:data]||"").dup
         action = request_context[:path].capitalize
         if body =~ COMMIT
@@ -16,7 +17,8 @@ module Sunspot
         response = nil
         begin
           ms = Benchmark.ms do
-            response = execute_without_rails_logging(client, request_context)
+            # response = execute_without_rails_logging(client, request_context)
+            response = execute_without_rails_logging(request_context)
           end
           log_name = 'Solr %s (%.1fms)' % [action, ms]
           ::Rails.logger.debug(format_log_entry(log_name, body))
@@ -47,7 +49,8 @@ module Sunspot
   end
 end
 
-RSolr::Connection.module_eval do
+# RSolr::Connection.module_eval do
+RSolr::Client.module_eval do
   include Sunspot::Rails::SolrLogging
   alias_method :execute_without_rails_logging, :execute
   alias_method :execute, :execute_with_rails_logging

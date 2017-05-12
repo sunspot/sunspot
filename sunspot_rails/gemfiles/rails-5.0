@@ -4,6 +4,7 @@ gem 'rails', '~> 5.0'
 gem 'sunspot', :path => File.expand_path('../../../sunspot', __FILE__)
 gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)
 gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
+gem 'pry'
 
 group :test do
   gem 'protected_attributes_continued'
