@@ -33,7 +33,7 @@ and Rails 4.2/5.0.  The steps are as follows.
 1. Start `solr`
 
     ```
-    cd sunspot_rails
+    cd sunspot
     bundle install --quiet --path vendor/bundle
     if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
     bundle exec sunspot-solr start -p 8983
@@ -45,19 +45,24 @@ and Rails 4.2/5.0.  The steps are as follows.
     - Rails 4.2
 
         ```
-        cp tmp_rails_4_2_0_app tmp/rails_4_2_0_app
+        cd ../sunspot_rails
+        cp -r tmp_rails_4_2_0_app tmp/.
+        mv tmp/tmp_rails_4_2_0_app tmp/rails_4_2_0_app
         rake spec RAILS=4.2.0
         ```
     - Rails 5.0
 
         ```
-        cp tmp_rails_5_0_app tmp/rails_5_0_app
+        cd ../sunspot_rails
+        cp -r tmp_rails_5_0_app tmp/.
+        mv tmp/tmp_rails_5_0_app tmp/rails_5_0_app
         rake spec RAILS=5.0
         ```
 
 3. Stop `solr` after all tests passed
 
     ```
+    cd ../sunspot
     bundle exec sunspot-solr stop
     ```
 
