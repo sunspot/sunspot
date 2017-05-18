@@ -4,10 +4,12 @@ gem 'sunspot_solr', :path => File.expand_path('../../sunspot_solr', __FILE__)
 
 gemspec
 
-gem 'pry'
-
 group :development do
   gem 'rake'
+end
+
+group :development, :test do
+  gem 'pry'
 end
 
 gem 'rsolr', ENV['RSOLR'] if ENV['RSOLR']
