@@ -16,7 +16,7 @@ module Sunspot
       # Retrieve all facet objects defined for this search, in order they were
       # defined. To retrieve an individual facet by name, use #facet()
       #
-      attr_reader :facets, :groups, :stats
+      attr_reader :facets, :groups
       attr_reader :query #:nodoc:
       attr_accessor :request_handler
 

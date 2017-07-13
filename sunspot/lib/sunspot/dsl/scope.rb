@@ -199,25 +199,25 @@ module Sunspot
 
       def add_restriction(negated, *args)
         case args.first
-          when String, Symbol
-            raise ArgumentError if args.length > 2
-            field = @setup.field(args[0].to_sym)
-            if args.length > 1
-              value = args[1]
-              @scope.add_shorthand_restriction(negated, field, value)
-            else # NONE
-              DSL::Restriction.new(field, @scope, negated)
-            end
-          else # args are instances
-            @scope.add_restriction(
-              negated,
-              IdField.instance,
-              Sunspot::Query::Restriction::AnyOf,
-              args.flatten.map { |instance|
-                Sunspot::Adapters::InstanceAdapter.adapt(instance).index_id }
-            )
+        when String, Symbol
+          raise ArgumentError if args.length > 2
+          field = @setup.field(args[0].to_sym)
+          if args.length > 1
+            value = args[1]
+            @scope.add_shorthand_restriction(negated, field, value)
+          else # NONE
+            DSL::Restriction.new(field, @scope, negated)
           end
+        else # args are instances
+          @scope.add_restriction(
+            negated,
+            IdField.instance,
+            Sunspot::Query::Restriction::AnyOf,
+            args.flatten.map { |instance|
+              Sunspot::Adapters::InstanceAdapter.adapt(instance).index_id }
+          )
         end
+      end
     end
   end
 end
