@@ -12,7 +12,10 @@ Bundler.require(ENV['DB'])
 require File.expand_path('config/environment', ENV['RAILS_ROOT'])
 require 'rspec/rails'
 require 'rspec/autorun'
-require File.join('sunspot', 'rails', 'solr_logging')
+
+if RSolr::VERSION >= '2'
+  require File.join('sunspot', 'rails', 'solr_logging')
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
