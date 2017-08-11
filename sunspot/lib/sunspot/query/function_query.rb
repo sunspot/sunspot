@@ -25,6 +25,19 @@ module Sunspot
     end
 
     #
+    # Function query which represents a literal to be passed directly through to Solr.
+    #
+    class LiteralFunctionQuery < FunctionQuery
+      def initialize(literal)
+        @literal = literal
+      end
+
+      def to_s
+        @literal << (@boost_amount ? "^#{@boost_amount}" : "")
+      end
+    end
+
+    #
     # Function query which represents a field.
     #
     class FieldFunctionQuery < FunctionQuery

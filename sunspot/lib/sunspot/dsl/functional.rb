@@ -13,6 +13,7 @@ module Sunspot
       #   function { 10 }
       #   function { :average_rating }
       #   function { sum(:average_rating, 10) }
+      #   function { recip(ms("NOW/HOUR", :published_at), 3.16e-11, 1, 1) }
       #
       # See http://wiki.apache.org/solr/FunctionQuery for a list of all
       # applicable functions
@@ -34,6 +35,8 @@ module Sunspot
           expression
         elsif expression.is_a?(Symbol)
           Sunspot::Query::FieldFunctionQuery.new(@setup.field(expression))
+        elsif expression.is_a?(String)
+          Sunspot::Query::LiteralFunctionQuery.new(expression)
         else
           Sunspot::Query::ConstantFunctionQuery.new(expression)
         end
