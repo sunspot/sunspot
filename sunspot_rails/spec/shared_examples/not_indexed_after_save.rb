@@ -3,6 +3,6 @@ shared_examples_for 'not indexed after save' do
     subject.save!
     Sunspot.commit
 
-    subject.class.search.results.should_not include(subject)
+    expect(subject.class.search.results).not_to include(subject)
   end
 end

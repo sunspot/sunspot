@@ -19,7 +19,7 @@ describe 'Sunspot::Rails session' do
 
     # There should be no items in the queue with the same object_id
     object_ids = sessions.map(&:object_id)
-    object_ids.uniq.should == object_ids
+    expect(object_ids.uniq).to eq(object_ids)
   end
 
   it 'should create a separate master/slave session if configured' do
@@ -31,7 +31,7 @@ describe 'Sunspot::Rails session' do
   context 'disabled' do
     before do
       Sunspot::Rails.reset
-      ::Rails.stub(:env).and_return("config_disabled_test")
+      allow(::Rails).to receive(:env).and_return("config_disabled_test")
     end
 
     after do
@@ -39,7 +39,7 @@ describe 'Sunspot::Rails session' do
     end
 
     it 'sets the session proxy as a stub' do
-      Sunspot::Rails.build_session.should be_a_kind_of(Sunspot::Rails::StubSessionProxy)
+      expect(Sunspot::Rails.build_session).to be_a_kind_of(Sunspot::Rails::StubSessionProxy)
     end
   end
 

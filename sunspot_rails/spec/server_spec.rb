@@ -4,28 +4,28 @@ describe Sunspot::Rails::Server do
   before :each do
     @server = Sunspot::Rails::Server.new
     @config = Sunspot::Rails::Configuration.new
-    @server.stub(:configuration){ @config }
+    allow(@server).to receive(:configuration){ @config }
     @solr_home = File.join(@config.solr_home)
   end
 
   it "sets the correct Solr home" do
-    @server.solr_home.should == @solr_home
+    expect(@server.solr_home).to eq(@solr_home)
   end
 
   it "sets the correct Solr PID path" do
-    @server.pid_path.should == File.join(@server.pid_dir, 'sunspot-solr-test.pid')
+    expect(@server.pid_path).to eq(File.join(@server.pid_dir, 'sunspot-solr-test.pid'))
   end
 
   it "sets the correct port" do
-    @server.port.should == 8983
+    expect(@server.port).to eq(8983)
   end
 
   it "sets the log level using configuration" do
-    @config.stub(:log_level){ 'WARNING' }
-    @server.log_level.should == "WARNING"
+    allow(@config).to receive(:log_level){ 'WARNING' }
+    expect(@server.log_level).to eq("WARNING")
   end
 
   it "sets the correct log file" do
-    @server.log_file.should == File.join(Rails.root, 'log', 'sunspot-solr-test.log')
+    expect(@server.log_file).to eq(File.join(Rails.root, 'log', 'sunspot-solr-test.log'))
   end
 end
