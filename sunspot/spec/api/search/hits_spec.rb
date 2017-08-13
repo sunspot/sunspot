@@ -121,7 +121,7 @@ describe 'hits', :type => :search do
 
   it 'should return stored boolean fields' do
     stub_full_results('instance' => Post.new, 'featured_bs' => true)
-    session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should be_true
+    session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should be(true)
   end
 
   it 'should return stored boolean fields that evaluate to false' do

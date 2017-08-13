@@ -107,7 +107,7 @@ describe "field grouping" do
     it { subject.per_page.should      eql(1)   }
     it { subject.total_pages.should   eql(2)   }
     it { subject.current_page.should  eql(2)   }
-    it { subject.first_page?.should   be_false }
-    it { subject.last_page?.should    be_true  }
+    it { subject.first_page?.should   be(false) }
+    it { subject.last_page?.should    be(true)  }
   end
 end

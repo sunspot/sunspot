@@ -13,7 +13,7 @@ describe "CursorPaginatedCollection" do
 
   describe "#respond_to?" do
     it 'should return true for current_cursor' do
-      subject.respond_to?(:current_cursor).should be_true
+      subject.respond_to?(:current_cursor).should be(true)
     end
   end
 
@@ -29,7 +29,7 @@ describe "CursorPaginatedCollection" do
     it { subject.total_count.should eql(20) }
     it { subject.num_pages.should eql(2) }
     it { subject.limit_value.should eql(10) }
-    it { subject.first_page?.should be_true }
-    it { subject.last_page?.should be_true }
+    it { subject.first_page?.should be(true) }
+    it { subject.last_page?.should be(true) }
   end
 end

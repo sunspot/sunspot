@@ -147,75 +147,75 @@ describe 'Session' do
     end
 
     it 'should start out not dirty' do
-      @session.dirty?.should be_false
+      @session.dirty?.should be(false)
     end
 
     it 'should start out not delete_dirty' do
-      @session.delete_dirty?.should be_false
+      @session.delete_dirty?.should be(false)
     end
 
     it 'should be dirty after adding an item' do
       @session.index(Post.new)
-      @session.dirty?.should be_true
+      @session.dirty?.should be(true)
     end
 
     it 'should be not be delete_dirty after adding an item' do
       @session.index(Post.new)
-      @session.delete_dirty?.should be_false
+      @session.delete_dirty?.should be(false)
     end
 
     it 'should be dirty after deleting an item' do
       @session.remove(Post.new)
-      @session.dirty?.should be_true
+      @session.dirty?.should be(true)
     end
 
     it 'should be delete_dirty after deleting an item' do
       @session.remove(Post.new)
-      @session.delete_dirty?.should be_true
+      @session.delete_dirty?.should be(true)
     end
 
     it 'should be dirty after a remove_all for a class' do
       @session.remove_all(Post)
-      @session.dirty?.should be_true
+      @session.dirty?.should be(true)
     end
 
     it 'should be delete_dirty after a remove_all for a class' do
       @session.remove_all(Post)
-      @session.delete_dirty?.should be_true
+      @session.delete_dirty?.should be(true)
     end
 
     it 'should be dirty after a global remove_all' do
       @session.remove_all
-      @session.dirty?.should be_true
+      @session.dirty?.should be(true)
     end
 
     it 'should be delete_dirty after a global remove_all' do
       @session.remove_all
-      @session.delete_dirty?.should be_true
+      @session.delete_dirty?.should be(true)
     end
 
     it 'should not be dirty after a commit' do
       @session.index(Post.new)
       @session.commit
-      @session.dirty?.should be_false
+      @session.dirty?.should be(false)
     end
 
     it 'should not be dirty after an optimize' do
       @session.index(Post.new)
       @session.optimize
-      @session.dirty?.should be_false
+      @session.dirty?.should be(false)
     end
 
     it 'should not be delete_dirty after a commit' do
       @session.remove(Post.new)
       @session.commit
-      @session.delete_dirty?.should be_false
+      @session.delete_dirty?.should be(false)
     end
 
     it 'should not be delete_dirty after an optimize' do
       @session.remove(Post.new)
       @session.optimize
-      @session.delete_dirty?.should be_false
+      @session.delete_dirty?.should be(false)
     end
 
     it 'should not commit when commit_if_dirty called on clean session' do
@@ -257,7 +257,7 @@ describe 'Session' do
 
   context 'session proxy' do
     it 'should send messages to manually assigned session proxy' do
-      stub_session = stub('session')
+      stub_session = double('session')
       Sunspot.session = stub_session
       post = Post.new
       stub_session.should_receive(:index).with(post)

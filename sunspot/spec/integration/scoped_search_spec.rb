@@ -126,10 +126,7 @@ describe 'scoped_search' do
   test_field_type 'Trie Float', :average_rating, :average_rating, Photo, -2.5, 0.0, 3.2, 3.5, 16.0
   test_field_type 'Trie Time', :created_at, :created_at, Photo, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
                                                                    '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
-
   describe 'Date range field type' do
-    let(:january) { Date.new(2015,1,1)..Date.new(2015,1,31) }
-    let(:february) { Date.new(2015,2,1)..Date.new(2015,2,28) }
     let(:date_ranges) do
       {
         'December and January' => Date.new(2014,12,25)..Date.new(2015,1,10),
@@ -143,6 +140,8 @@ describe 'scoped_search' do
     end
 
     before :all do
+      january = Date.new(2015,1,1)..Date.new(2015,1,31)
+      february = Date.new(2015,2,1)..Date.new(2015,2,28)
       Sunspot.remove_all
       @posts = [Post.new(featured_for: january), Post.new(featured_for: february), Post.new]
       Sunspot.index!(@posts)
