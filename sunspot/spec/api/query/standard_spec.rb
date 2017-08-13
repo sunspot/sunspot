@@ -19,7 +19,7 @@ describe 'standard query', :type => :query do
     session.search Post do
       with :title, 'My Pet Post'
     end
-    connection.should have_last_search_with(:q => '*:*')
+    expect(connection).to have_last_search_with(:q => '*:*')
   end
 
   private

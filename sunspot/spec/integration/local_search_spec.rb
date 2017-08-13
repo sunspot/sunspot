@@ -25,13 +25,13 @@ describe 'local search' do
     end
 
     it 'should return results in geo order' do
-      @search.results.should == @posts
+      expect(@search.results).to eq(@posts)
     end
 
     it 'should asssign higher score to closer locations' do
       hits = @search.hits
       hits[1..-1].each_with_index do |hit, i|
-        hit.score.should < hits[i].score
+        expect(hit.score).to be < hits[i].score
       end
     end
   end
@@ -51,13 +51,13 @@ describe 'local search' do
     end
 
     it 'should take both fulltext and distance into account in ordering' do
-      @search.results.should == @posts
+      expect(@search.results).to eq(@posts)
     end
 
     it 'should take both fulltext and distance into account in scoring' do
       hits = @search.hits
       hits[1..-1].each_with_index do |hit, i|
-        hit.score.should < hits[i].score
+        expect(hit.score).to be < hits[i].score
       end
     end
   end

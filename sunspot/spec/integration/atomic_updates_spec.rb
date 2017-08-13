@@ -6,13 +6,13 @@ describe 'atomic updates' do
   end
 
   def validate_hit(hit, title, featured)
-    hit.stored(:title).should == title
-    hit.stored(:featured).should == featured
+    expect(hit.stored(:title)).to eq(title)
+    expect(hit.stored(:featured)).to eq(featured)
   end
 
   def find_indexed_post(id)
     hit = Sunspot.search(Post).hits.find{ |h| h.primary_key.to_i == id }
-    hit.should_not be_nil
+    expect(hit).not_to be_nil
     hit
   end
 

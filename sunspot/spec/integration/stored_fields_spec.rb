@@ -7,6 +7,6 @@ describe 'stored fields' do
   end
 
   it 'should return stored fields' do
-    Sunspot.search(Post).hits.first.stored(:title).should == 'A Title'
+    expect(Sunspot.search(Post).hits.first.stored(:title)).to eq('A Title')
   end
 end

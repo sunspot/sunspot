@@ -11,16 +11,16 @@ describe 'keyword highlighting' do
   end
   
   it 'should include highlights in the results' do
-    @search_result.hits.first.highlights.length.should == 1
+    expect(@search_result.hits.first.highlights.length).to eq(1)
   end
   
   it 'should return formatted highlight fragments' do
-    @search_result.hits.first.highlights(:body).first.format.should == 'And the <em>fox</em> laughed'
+    expect(@search_result.hits.first.highlights(:body).first.format).to eq('And the <em>fox</em> laughed')
   end
   
   it 'should be empty for non-keyword searches' do
     search_result = Sunspot.search(Post){ with :blog_id, 1 }
-    search_result.hits.first.highlights.should be_empty
+    expect(search_result.hits.first.highlights).to be_empty
   end
   
   it "should process multiple keyword request on different fields with highlights correctly" do
@@ -35,8 +35,8 @@ describe 'keyword highlighting' do
         end
       end
     end.to_not raise_error
-    search_results.results.length.should eq(1)
-    search_results.results.first.should eq(@posts.last)
+    expect(search_results.results.length).to eq(1)
+    expect(search_results.results.first).to eq(@posts.last)
     # this one might be a Solr bug, therefore not related to Sunspot itself
     # search_results.hits.first.highlights.should_not be_empty
   end

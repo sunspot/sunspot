@@ -2,45 +2,45 @@ require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::Adapters::InstanceAdapter do
   it "finds adapter by superclass" do
-    Sunspot::Adapters::InstanceAdapter::for(Model).should be(AbstractModelInstanceAdapter)
+    expect(Sunspot::Adapters::InstanceAdapter::for(Model)).to be(AbstractModelInstanceAdapter)
   end
 
   it "finds adapter by mixin" do
-    Sunspot::Adapters::InstanceAdapter::for(MixModel).should be(MixInModelInstanceAdapter)
+    expect(Sunspot::Adapters::InstanceAdapter::for(MixModel)).to be(MixInModelInstanceAdapter)
   end
 
   it 'throws NoAdapterError if anonymous module passed in' do
-    lambda do
+    expect do
       Sunspot::Adapters::InstanceAdapter::for(Module.new)
-    end.should raise_error(Sunspot::NoAdapterError)
+    end.to raise_error(Sunspot::NoAdapterError)
   end
 
   it "registers adapters found by ancestor lookup with the descendant class" do
-    Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel).should be(nil)
+    expect(Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel)).to be(nil)
     Sunspot::Adapters::InstanceAdapter::for(UnseenModel)
-    Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel).should be(AbstractModelInstanceAdapter)
+    expect(Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel)).to be(AbstractModelInstanceAdapter)
   end
 end
 
 describe Sunspot::Adapters::DataAccessor do
   it "finds adapter by superclass" do
-    Sunspot::Adapters::DataAccessor::for(Model).should be(AbstractModelDataAccessor)
+    expect(Sunspot::Adapters::DataAccessor::for(Model)).to be(AbstractModelDataAccessor)
   end
 
   it "finds adapter by mixin" do
-    Sunspot::Adapters::DataAccessor::for(MixModel).should be(MixInModelDataAccessor)
+    expect(Sunspot::Adapters::DataAccessor::for(MixModel)).to be(MixInModelDataAccessor)
   end
 
   it 'throws NoAdapterError if anonymous module passed in' do
-    lambda do
+    expect do
       Sunspot::Adapters::DataAccessor::for(Module.new)
-    end.should raise_error(Sunspot::NoAdapterError)
+    end.to raise_error(Sunspot::NoAdapterError)
   end
 
   it "registers adapters found by ancestor lookup with the descendant class" do
-    Sunspot::Adapters::DataAccessor::registered_accessor_for(UnseenModel).should be(nil)
+    expect(Sunspot::Adapters::DataAccessor::registered_accessor_for(UnseenModel)).to be(nil)
     Sunspot::Adapters::DataAccessor::for(UnseenModel)
-    Sunspot::Adapters::DataAccessor::registered_accessor_for(UnseenModel).should be(AbstractModelDataAccessor)
+    expect(Sunspot::Adapters::DataAccessor::registered_accessor_for(UnseenModel)).to be(AbstractModelDataAccessor)
   end
 end
 
@@ -51,30 +51,30 @@ describe Sunspot::Adapters::Registry do
   let(:mixin_accessor){ Sunspot::Adapters::DataAccessor::for(MixModel) }
 
   it "registers and retrieves a data accessor for abstractclass" do
-      registry.retrieve(AbstractModel).should be_a(abstractclass_accessor)
+      expect(registry.retrieve(AbstractModel)).to be_a(abstractclass_accessor)
   end
 
   it "registers and retrieves a data accessor for superclass" do
-      registry.retrieve(Model).should be_a(superclass_accessor)
+      expect(registry.retrieve(Model)).to be_a(superclass_accessor)
   end
 
   it "registers and retrieves a data accessor for mixin" do
-      registry.retrieve(MixModel).should be_a(mixin_accessor)
+      expect(registry.retrieve(MixModel)).to be_a(mixin_accessor)
   end
 
   it "injects inherited attributes" do
-    AbstractModelDataAccessor.any_instance.stub(:inherited_attributes).and_return([:to_be_injected])
+    allow_any_instance_of(AbstractModelDataAccessor).to receive(:inherited_attributes).and_return([:to_be_injected])
     in_registry_data_accessor = registry.retrieve(AbstractModel)
     in_registry_data_accessor.to_be_injected = "value"
-    registry.retrieve(Model).to_be_injected.should == "value"
+    expect(registry.retrieve(Model).to_be_injected).to eq("value")
   end
 
   it "not overrides inherited attributes" do
-    AbstractModelDataAccessor.any_instance.stub(:inherited_attributes).and_return([:to_be_injected])
+    allow_any_instance_of(AbstractModelDataAccessor).to receive(:inherited_attributes).and_return([:to_be_injected])
     parent_data_accessor = registry.retrieve(AbstractModel)
     current_data_accessor = registry.retrieve(Model)
     parent_data_accessor.to_be_injected = "value"
     current_data_accessor.to_be_injected = "safe-value"
-    registry.retrieve(Model).to_be_injected.should == "safe-value"
+    expect(registry.retrieve(Model).to_be_injected).to eq("safe-value")
   end
 end

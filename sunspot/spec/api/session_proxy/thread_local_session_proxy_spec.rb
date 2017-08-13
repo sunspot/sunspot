@@ -17,7 +17,7 @@ describe Sunspot::SessionProxy::ThreadLocalSessionProxy do
     end
 
     it 'should have the same session for the same thread' do
-      @proxy.session.should eql(@proxy.session)
+      expect(@proxy.session).to eql(@proxy.session)
     end
 
     it 'should not have the same session for different threads' do
@@ -26,12 +26,12 @@ describe Sunspot::SessionProxy::ThreadLocalSessionProxy do
       Thread.new do
         session2 = @proxy.session
       end.join
-      session1.should_not eql(session2)
+      expect(session1).not_to eql(session2)
     end
 
     it 'should not have the same session for the same thread in different proxy instances' do
       proxy2 = Sunspot::SessionProxy::ThreadLocalSessionProxy.new(@config)
-      @proxy.session.should_not eql(proxy2.session)
+      expect(@proxy.session).not_to eql(proxy2.session)
     end
 
     (Sunspot::Session.public_instance_methods(false) - ['config', :config]).each do |method|
@@ -39,7 +39,7 @@ describe Sunspot::SessionProxy::ThreadLocalSessionProxy do
         args = Array.new(Sunspot::Session.instance_method(method).arity.abs) do
           double('arg')
         end
-        @proxy.session.should_receive(method).with(*args)
+        expect(@proxy.session).to receive(method).with(*args)
         @proxy.send(method, *args)
       end
     end

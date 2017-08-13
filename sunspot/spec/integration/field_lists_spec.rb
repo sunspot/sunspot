@@ -17,7 +17,7 @@ describe 'fields lists' do
     hit = Sunspot.search(Post).hits.first
 
     stored_field_names.each do |field|
-      hit.stored(field).should_not be_nil
+      expect(hit.stored(field)).not_to be_nil
     end
   end
 
@@ -27,10 +27,10 @@ describe 'fields lists' do
         field_list :title
       end.hits.first
 
-    hit.stored(:title).should == @post.title
+    expect(hit.stored(:title)).to eq(@post.title)
 
     (stored_field_names - [:title]).each do |field|
-      hit.stored(field).should be_nil
+      expect(hit.stored(field)).to be_nil
     end
   end
 end

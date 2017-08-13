@@ -6,7 +6,7 @@ describe "DSL bindings" do
     session.search(Post) do
       value = test_method
     end
-    value.should == 'value'
+    expect(value).to eq('value')
   end
 
   it 'should give access to calling context\'s id method in search DSL' do
@@ -14,7 +14,7 @@ describe "DSL bindings" do
     session.search(Post) do
       value = id
     end
-    value.should == 16
+    expect(value).to eq(16)
   end
 
   it 'should give access to calling context\'s methods in nested DSL block' do
@@ -24,7 +24,7 @@ describe "DSL bindings" do
         value = test_method
       end
     end
-    value.should == 'value'
+    expect(value).to eq('value')
   end
 
   it 'should give access to calling context\'s methods in double-nested DSL block' do

@@ -3,21 +3,21 @@ shared_examples_for "query with highlighting support" do
     search do
       keywords 'test'
     end
-    connection.should_not have_last_search_with(:hl)
+    expect(connection).not_to have_last_search_with(:hl)
   end
 
   it 'should enable highlighting when highlighting requested as keywords argument' do
     search do
       keywords 'test', :highlight => true
     end
-    connection.should have_last_search_with(:hl => 'on')
+    expect(connection).to have_last_search_with(:hl => 'on')
   end
 
   it 'should not set highlight fields parameter if highlight fields are not passed' do
     search do
       keywords 'test', :highlight => true, :fields => [:title]
     end
-    connection.should_not have_last_search_with(:'hl.fl')
+    expect(connection).not_to have_last_search_with(:'hl.fl')
   end
 
   it 'should enable highlighting on multiple fields when highlighting requested as array of fields via keywords argument' do
@@ -25,15 +25,15 @@ shared_examples_for "query with highlighting support" do
       keywords 'test', :highlight => [:title, :body]
     end
 
-    connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_textsv))
+    expect(connection).to have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_textsv))
   end
 
   it 'should raise UnrecognizedFieldError if try to highlight unexisting field via keywords argument' do
-    lambda {
+    expect {
       search do
         keywords 'test', :highlight => [:unknown_field]
       end
-    }.should raise_error(Sunspot::UnrecognizedFieldError)
+    }.to raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'should enable highlighting on multiple fields when highlighting requested as list of fields via block call' do
@@ -43,7 +43,7 @@ shared_examples_for "query with highlighting support" do
       end
     end
 
-    connection.should have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_textsv))
+    expect(connection).to have_last_search_with(:hl => 'on', :'hl.fl' => %w(title_text body_textsv))
   end
 
   it 'should enable highlighting on multiple fields for multiple search types' do
@@ -52,24 +52,24 @@ shared_examples_for "query with highlighting support" do
         highlight :body
       end
     end
-    connection.searches.last[:'hl.fl'].to_set.should == Set['body_text', 'body_textsv']
+    expect(connection.searches.last[:'hl.fl'].to_set).to eq(Set['body_text', 'body_textsv'])
   end
 
   it 'should raise UnrecognizedFieldError if try to highlight unexisting field via block call' do
-    lambda {
+    expect {
       search do
         keywords 'test' do
           highlight :unknown_field
         end
       end
-    }.should raise_error(Sunspot::UnrecognizedFieldError)
+    }.to raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'should set internal formatting' do
     search do
       keywords 'test', :highlight => true
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.simple.pre" => '@@@hl@@@',
       :"hl.simple.post" => '@@@endhl@@@'
     )
@@ -81,7 +81,7 @@ shared_examples_for "query with highlighting support" do
         highlight :title
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.fl" => %w(title_text)
     )
   end
@@ -90,7 +90,7 @@ shared_examples_for "query with highlighting support" do
     search do
       keywords 'test', :highlight => :body
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.simple.pre" => '@@@hl@@@',
       :"hl.simple.post" => '@@@endhl@@@'
     )
@@ -102,7 +102,7 @@ shared_examples_for "query with highlighting support" do
         highlight :max_snippets => 3
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.snippets" => 3
     )
   end
@@ -113,7 +113,7 @@ shared_examples_for "query with highlighting support" do
         highlight :title, :max_snippets => 3
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.fl"       => %w(title_text),
       :"f.title_text.hl.snippets" => 3
     )
@@ -125,7 +125,7 @@ shared_examples_for "query with highlighting support" do
         highlight :fragment_size => 200
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.fragsize" => 200
     )
   end
@@ -136,7 +136,7 @@ shared_examples_for "query with highlighting support" do
         highlight :title, :fragment_size => 200
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"f.title_text.hl.fragsize" => 200
     )
   end
@@ -147,7 +147,7 @@ shared_examples_for "query with highlighting support" do
         highlight :merge_contiguous_fragments => true
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.mergeContiguous" => 'true'
     )
   end
@@ -158,7 +158,7 @@ shared_examples_for "query with highlighting support" do
         highlight :title, :merge_contiguous_fragments => true
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"f.title_text.hl.mergeContiguous" => 'true'
     )
   end
@@ -169,7 +169,7 @@ shared_examples_for "query with highlighting support" do
         highlight :phrase_highlighter => true
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.usePhraseHighlighter" => 'true'
     )
   end
@@ -180,7 +180,7 @@ shared_examples_for "query with highlighting support" do
         highlight :title, :phrase_highlighter => true
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"f.title_text.hl.usePhraseHighlighter" => 'true'
     )
   end
@@ -191,7 +191,7 @@ shared_examples_for "query with highlighting support" do
         highlight :phrase_highlighter => true, :require_field_match => true
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.requireFieldMatch" => 'true'
     )
   end
@@ -202,7 +202,7 @@ shared_examples_for "query with highlighting support" do
         highlight :title, :phrase_highlighter => true, :require_field_match => true
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"f.title_text.hl.requireFieldMatch" => 'true'
     )
   end
@@ -214,7 +214,7 @@ shared_examples_for "query with highlighting support" do
         highlight :body, :max_snippets => 1
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"hl.fl" => %w(title_text body_textsv),
       :"f.title_text.hl.snippets" => 2,
       :"f.body_textsv.hl.snippets" => 1
@@ -227,7 +227,7 @@ shared_examples_for "query with highlighting support" do
         highlight :title, :formatter => 'formatter'
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"f.title_text.hl.formatter" => 'formatter'
     )
   end
@@ -238,7 +238,7 @@ shared_examples_for "query with highlighting support" do
         highlight :title, :fragmenter => 'example_fragmenter'
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"f.title_text.hl.fragmenter" => 'example_fragmenter'
     )
   end

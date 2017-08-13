@@ -7,8 +7,8 @@ describe Sunspot do
       Sunspot.setup(User) do
         text :name
       end
-      Sunspot.searchable.should_not be_empty
-      Sunspot.searchable.should include(User)
+      expect(Sunspot.searchable).not_to be_empty
+      expect(Sunspot.searchable).to include(User)
     end
   end
 
@@ -16,14 +16,14 @@ describe Sunspot do
     it "should reset current session" do
       old_session = Sunspot.send(:session)
       Sunspot.reset!(true)
-      Sunspot.send(:session).should_not == old_session
+      expect(Sunspot.send(:session)).not_to eq(old_session)
     end
 
     it "should keep keep configuration if specified" do
       Sunspot.config.solr.url = "http://localhost:9999/path/solr"
       config_before_reset = Sunspot.config
       Sunspot.reset!(true)
-      Sunspot.config.should == config_before_reset
+      expect(Sunspot.config).to eq(config_before_reset)
     end
   end
 end

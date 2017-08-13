@@ -15,7 +15,7 @@ describe "geospatial search" do
         with(:coordinates_new).in_radius(32, -68, 1)
       }.results
 
-      results.should include(@post)
+      expect(results).to include(@post)
     end
 
     it "filters out posts not in the radius" do
@@ -23,7 +23,7 @@ describe "geospatial search" do
         with(:coordinates_new).in_radius(33, -68, 1)
       }.results
 
-      results.should_not include(@post)
+      expect(results).not_to include(@post)
     end
 
     it "allows conjunction queries with radius" do
@@ -34,7 +34,7 @@ describe "geospatial search" do
         end
       }.results
 
-      results.should include(@post)
+      expect(results).to include(@post)
     end
 
     it "allows conjunction queries with bounding box" do
@@ -45,7 +45,7 @@ describe "geospatial search" do
         end
       }.results
 
-      results.should include(@post)
+      expect(results).to include(@post)
     end
   end
 
@@ -63,7 +63,7 @@ describe "geospatial search" do
         with(:coordinates_new).in_bounding_box [31, -69], [33, -67]
       }.results
 
-      results.should include(@post)
+      expect(results).to include(@post)
     end
 
     it "filters out posts not in the bounding box" do
@@ -71,7 +71,7 @@ describe "geospatial search" do
         with(:coordinates_new).in_bounding_box [20, -70], [21, -69]
       }.results
 
-      results.should_not include(@post)
+      expect(results).not_to include(@post)
     end
   end
 
@@ -93,7 +93,7 @@ describe "geospatial search" do
         order_by_geodist(:coordinates_new, 32, -68)
       }.results
 
-      results.should == @posts.reverse
+      expect(results).to eq(@posts.reverse)
     end
 
     it "orders posts by distance descending" do
@@ -101,7 +101,7 @@ describe "geospatial search" do
         order_by_geodist(:coordinates_new, 32, -68, :desc)
       }.results
 
-      results.should == @posts
+      expect(results).to eq(@posts)
     end
   end
 end

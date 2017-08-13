@@ -9,7 +9,7 @@ describe 'batch indexing', :type => :indexer do
         session.index(post)
       end
     end
-    connection.adds.length.should == 1
+    expect(connection.adds.length).to eq(1)
   end
 
   it 'should add all batched adds' do
@@ -19,8 +19,9 @@ describe 'batch indexing', :type => :indexer do
       end
     end
     add = connection.adds.last
-    connection.adds.first.map { |add| add.field_by_name(:id).value }.should ==
+    expect(connection.adds.first.map { |add| add.field_by_name(:id).value }).to eq(
       posts.map { |post| "Post #{post.id}" }
+    )
   end
 
   it 'should not index changes to models that happen after index call' do
@@ -29,13 +30,13 @@ describe 'batch indexing', :type => :indexer do
       session.index(post)
       post.title = 'Title'
     end
-    connection.adds.first.first.field_by_name(:title_ss).should be_nil
+    expect(connection.adds.first.first.field_by_name(:title_ss)).to be_nil
   end
 
   it 'should batch an add and a delete' do
-    pending 'batching all operations'
-    connection.should_not_receive(:add)
-    connection.should_not_receive(:remove)
+    skip 'batching all operations'
+    expect(connection).not_to receive(:add)
+    expect(connection).not_to receive(:remove)
     session.batch do
       session.index(posts[0])
       session.remove(posts[1])
@@ -64,7 +65,7 @@ describe 'batch indexing', :type => :indexer do
       a_nested_batch
       nested_batches_adds = connection.adds
 
-      nested_batches_adds.first.first.field_by_name(:title_ss).value.should eq(
+      expect(nested_batches_adds.first.first.field_by_name(:title_ss).value).to eq(
         two_sets_of_batches_adds.first.first.field_by_name(:title_ss).value
       )
     end

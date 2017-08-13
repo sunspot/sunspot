@@ -15,26 +15,26 @@ describe Sunspot::SessionProxy::MasterSlaveSessionProxy do
         args = Array.new(Sunspot::Session.instance_method(method).arity.abs) do
           double('arg')
         end
-        instance_variable_get(:"@#{delegate}").should_receive(method).with(*args)
+        expect(instance_variable_get(:"@#{delegate}")).to receive(method).with(*args)
         @proxy.send(method, *args)
       end
     end
   end
 
   it 'should return master session config by default' do
-    @proxy.config.should eql(@master_session.config)
+    expect(@proxy.config).to eql(@master_session.config)
   end
 
   it 'should return master session config when specified' do
-    @proxy.config(:master).should eql(@master_session.config)
+    expect(@proxy.config(:master)).to eql(@master_session.config)
   end
 
   it 'should return slave session config when specified' do
-    @proxy.config(:slave).should eql(@slave_session.config)
+    expect(@proxy.config(:slave)).to eql(@slave_session.config)
   end
 
   it 'should raise ArgumentError when bogus config specified' do
-    lambda { @proxy.config(:bogus) }.should raise_error
+    expect { @proxy.config(:bogus) }.to raise_error
   end
 
   it_should_behave_like 'session proxy'

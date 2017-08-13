@@ -6,7 +6,7 @@ describe Sunspot::Search do
     search = session.search Post do
       data_accessor_for(Post).custom_title = 'custom title'
     end
-    search.results.first.title.should == 'custom title'
+    expect(search.results.first.title).to eq('custom title')
   end
   
   it 'should re-execute search' do
@@ -14,10 +14,10 @@ describe Sunspot::Search do
     
     stub_results(post_1)
     search = session.search Post
-    search.results.should == [post_1]
+    expect(search.results).to eq([post_1])
     
     stub_results(post_2)
     search.execute!
-    search.results.should == [post_2]
+    expect(search.results).to eq([post_2])
   end
 end

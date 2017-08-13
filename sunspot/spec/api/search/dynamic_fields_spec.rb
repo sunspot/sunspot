@@ -4,13 +4,13 @@ describe 'search with dynamic fields' do
   it 'returns dynamic string facet' do
     stub_facet(:"custom_string:test_ss", 'two' => 2, 'one' => 1)
     result = session.search(Post) { dynamic(:custom_string) { facet(:test) }}
-    result.facet(:custom_string, :test).rows.map { |row| row.value }.should == ['two', 'one']
+    expect(result.facet(:custom_string, :test).rows.map { |row| row.value }).to eq(['two', 'one'])
   end
 
   it 'returns dynamic field facet with custom label' do
     stub_facet(:"bogus", 'two' => 2, 'one' => 1)
     result = session.search(Post) { dynamic(:custom_string) { facet(:test, :name => :bogus) }}
-    result.facet(:bogus).rows.map { |row| row.value }.should == ['two', 'one']
+    expect(result.facet(:bogus).rows.map { |row| row.value }).to eq(['two', 'one'])
   end
 
   it 'returns query facet specified in dynamic call' do
@@ -27,7 +27,7 @@ describe 'search with dynamic fields' do
       end
     end
     facet = search.facet(:test)
-    facet.rows.first.value.should == :foo_bar
-    facet.rows.first.count.should == 3
+    expect(facet.rows.first.value).to eq(:foo_bar)
+    expect(facet.rows.first.count).to eq(3)
   end
 end

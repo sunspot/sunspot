@@ -10,6 +10,6 @@ describe "unicode characters" do
   end
 
   it "correctly retrieves the string as UTF-8" do
-    Sunspot.search(Post).hits.first.stored(:title).should == "Híghgrøøvé"
+    expect(Sunspot.search(Post).hits.first.stored(:title)).to eq("Híghgrøøvé")
   end
 end

@@ -7,8 +7,8 @@ describe 'indexer', :type => :indexer do
     Object.class_eval { remove_const(:ReloadableClass) }
     Object::ReloadableClass = Class.new(MockRecord)
     Sunspot.setup(ReloadableClass) {}
-    lambda do
+    expect do
       Sunspot.search(ReloadableClass) { with(:title, 'title') }
-    end.should raise_error(Sunspot::UnrecognizedFieldError)
+    end.to raise_error(Sunspot::UnrecognizedFieldError)
   end
 end

@@ -6,8 +6,8 @@ describe "grouping" do
       group :title
     end
 
-    connection.should have_last_search_including(:group, "true")
-    connection.should have_last_search_including(:"group.field", "title_ss")
+    expect(connection).to have_last_search_including(:group, "true")
+    expect(connection).to have_last_search_including(:"group.field", "title_ss")
   end
 
   it "sends grouping limit parameters to solr" do
@@ -17,7 +17,7 @@ describe "grouping" do
       end
     end
 
-    connection.should have_last_search_including(:"group.limit", 2)
+    expect(connection).to have_last_search_including(:"group.limit", 2)
   end
 
   it "sends grouping sort parameters to solr" do
@@ -27,7 +27,7 @@ describe "grouping" do
       end
     end
 
-    connection.should have_last_search_including(:"group.sort", "average_rating_ft asc")
+    expect(connection).to have_last_search_including(:"group.sort", "average_rating_ft asc")
   end
 
   it "sends grouping field parameters to solr" do
@@ -37,7 +37,7 @@ describe "grouping" do
       end
     end
 
-    connection.should have_last_search_including(:"group.field", "title_ss")
+    expect(connection).to have_last_search_including(:"group.field", "title_ss")
   end
 
   it "sends grouping query parameters to solr" do
@@ -49,6 +49,6 @@ describe "grouping" do
       end
     end
 
-    connection.should have_last_search_including(:"group.query", "category_ids_im:1")
+    expect(connection).to have_last_search_including(:"group.query", "category_ids_im:1")
   end
 end
