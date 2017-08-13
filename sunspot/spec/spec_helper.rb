@@ -13,27 +13,32 @@ end
 require File.join(File.dirname(__FILE__), 'ext')
 
 RSpec.configure do |config|
-  # Run only examples with :focus => true
-  config.filter_run :focus => true
+  config.filter_run :focus
   config.run_all_when_everything_filtered = true
+
+  # Run specs in random order to surface order dependencies. If you find an
+  # order dependency and want to debug it, you can fix the order by providing
+  # the seed, which is printed after each run.
+  #     --seed 1234
+  config.order = 'random'
 
   # Mock session available to all spec/api tests
   config.include MockSessionHelper,
                  :type => :api,
-                 :example_group => {:file_path => /spec[\\\/]api/}
+                 :file_path => /spec[\\\/]api/
 
   # Real Solr instance is available to integration tests
   config.include IntegrationHelper,
                  :type => :integration,
-                 :example_group => {:file_path => /spec[\\\/]integration/}
+                 :file_path => /spec[\\\/]integration/
 
   # Nested under spec/api
   [:indexer, :query, :search].each do |spec_type|
     helper_name = "#{spec_type}_helper"
 
     config.include Sunspot::Util.full_const_get(Sunspot::Util.camel_case(helper_name)),
-                   :type          => spec_type,
-                   :example_group => {:file_path => /spec[\\\/]api[\\\/]#{spec_type}/}
+                   :type => spec_type,
+                   :file_path => /spec[\\\/]api[\\\/]#{spec_type}/
   end
 end
 

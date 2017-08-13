@@ -15,7 +15,11 @@ describe Sunspot::SessionProxy::MasterSlaveSessionProxy do
         args = Array.new(Sunspot::Session.instance_method(method).arity.abs) do
           double('arg')
         end
-        expect(instance_variable_get(:"@#{delegate}")).to receive(method).with(*args)
+        if args.empty?
+          expect(instance_variable_get(:"@#{delegate}")).to receive(method).with(no_args)
+        else
+          expect(instance_variable_get(:"@#{delegate}")).to receive(method).with(*args)
+        end
         @proxy.send(method, *args)
       end
     end

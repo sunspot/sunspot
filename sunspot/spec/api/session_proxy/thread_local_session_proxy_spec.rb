@@ -39,7 +39,11 @@ describe Sunspot::SessionProxy::ThreadLocalSessionProxy do
         args = Array.new(Sunspot::Session.instance_method(method).arity.abs) do
           double('arg')
         end
-        expect(@proxy.session).to receive(method).with(*args)
+        if args.empty?
+          expect(@proxy.session).to receive(method).with(no_args)
+        else
+          expect(@proxy.session).to receive(method).with(*args)
+        end
         @proxy.send(method, *args)
       end
     end

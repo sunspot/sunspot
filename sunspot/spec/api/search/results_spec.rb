@@ -65,7 +65,7 @@ describe 'search results', :type => :search do
     posts.each { |post| post.destroy }
     stub_results(*posts)
     search = session.search(Post) do
-      data_accessor_for(Post).should_receive(:load_all).once.and_return([])
+      expect(data_accessor_for(Post)).to receive(:load_all).once.and_return([])
     end
     expect(search.results).to eq([])
   end
