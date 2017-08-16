@@ -6,7 +6,7 @@ shared_examples_for 'spellcheck query' do
     search do
       spellcheck
     end
-    connection.should have_last_search_including(:spellcheck, true)
+    expect(connection).to have_last_search_including(:spellcheck, true)
   end
 
 
@@ -14,7 +14,7 @@ shared_examples_for 'spellcheck query' do
     search do
       spellcheck :only_more_popular => true, :count => 5
     end
-    connection.should have_last_search_including('spellcheck.onlyMorePopular', true)
-    connection.should have_last_search_including('spellcheck.count', 5)
+    expect(connection).to have_last_search_including('spellcheck.onlyMorePopular', true)
+    expect(connection).to have_last_search_including('spellcheck.count', 5)
   end
 end

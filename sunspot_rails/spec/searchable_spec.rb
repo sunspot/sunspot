@@ -6,10 +6,10 @@ describe Sunspot::Rails::Searchable do
     	# Rspec runs tests in random order, causing this test to fail on occasion unless we ensure the models have loaded.
     	Author; Blog; Post;
 
-      Sunspot.searchable.should_not be_empty
-      Sunspot.searchable.should include(Author)
-      Sunspot.searchable.should include(Blog)
-      Sunspot.searchable.should include(Post)
+      expect(Sunspot.searchable).not_to be_empty
+      expect(Sunspot.searchable).to include(Author)
+      expect(Sunspot.searchable).to include(Blog)
+      expect(Sunspot.searchable).to include(Post)
     end
   end
 end

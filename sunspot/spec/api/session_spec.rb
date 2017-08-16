@@ -7,7 +7,7 @@ shared_examples_for 'all sessions' do
     end
 
     it 'should add document to connection' do
-      connection.should have(1).adds
+      expect(connection.adds.size).to eq(1)
     end
   end
 
@@ -17,11 +17,11 @@ shared_examples_for 'all sessions' do
     end
 
     it 'should add document to connection' do
-      connection.should have(1).adds
+      expect(connection.adds.size).to eq(1)
     end
 
     it 'should commit' do
-      connection.should have(1).commits
+      expect(connection.commits.size).to eq(1)
     end
   end
 
@@ -31,27 +31,27 @@ shared_examples_for 'all sessions' do
     end
 
     it 'should commit' do
-      connection.should have(1).commits
+      expect(connection.commits.size).to eq(1)
     end
   end
 
   context '#commit(bool)' do
     it 'should soft-commit if bool=true' do
       @session.commit(true)
-      connection.should have(1).commits
-      connection.should have(1).soft_commits
+      expect(connection.commits.size).to eq(1)
+      expect(connection.soft_commits.size).to eq(1)
     end
 
     it 'should hard-commit if bool=false' do
       @session.commit(false)
-      connection.should have(1).commits
-      connection.should have(0).soft_commits
+      expect(connection.commits.size).to eq(1)
+      expect(connection.soft_commits.size).to eq(0)
     end
 
     it 'should hard-commit if bool is not specified' do
       @session.commit
-      connection.should have(1).commits
-      connection.should have(0).soft_commits
+      expect(connection.commits.size).to eq(1)
+      expect(connection.soft_commits.size).to eq(0)
     end
   end
 
@@ -61,7 +61,7 @@ shared_examples_for 'all sessions' do
     end
 
     it 'should optimize' do
-      connection.should have(1).optims
+      expect(connection.optims.size).to eq(1)
     end
   end
 
@@ -71,7 +71,7 @@ shared_examples_for 'all sessions' do
     end
 
     it 'should search' do
-      connection.should have(1).searches
+      expect(connection.searches.size).to eq(1)
     end
   end
 end
@@ -97,31 +97,31 @@ describe 'Session' do
 
     it 'should open connection with defaults if nothing specified' do
       Sunspot.commit
-      connection.opts[:url].should == 'http://127.0.0.1:8983/solr/default'
+      expect(connection.opts[:url]).to eq('http://127.0.0.1:8983/solr/default')
     end
 
     it 'should open a connection with custom host' do
       Sunspot.config.solr.url = 'http://127.0.0.1:8981/solr'
       Sunspot.commit
-      connection.opts[:url].should == 'http://127.0.0.1:8981/solr'
+      expect(connection.opts[:url]).to eq('http://127.0.0.1:8981/solr')
     end
 
     it 'should open a connection with custom read timeout' do
       Sunspot.config.solr.read_timeout = 0.5
       Sunspot.commit
-      connection.opts[:read_timeout].should == 0.5
+      expect(connection.opts[:read_timeout]).to eq(0.5)
     end
 
     it 'should open a connection with custom open timeout' do
       Sunspot.config.solr.open_timeout = 0.5
       Sunspot.commit
-      connection.opts[:open_timeout].should == 0.5
+      expect(connection.opts[:open_timeout]).to eq(0.5)
     end
 
     it 'should open a connection through a provided proxy' do
       Sunspot.config.solr.proxy = 'http://proxy.com:1234'
       Sunspot.commit
-      connection.opts[:proxy].should == 'http://proxy.com:1234'
+      expect(connection.opts[:proxy]).to eq('http://proxy.com:1234')
     end
   end
 
@@ -137,7 +137,7 @@ describe 'Session' do
         config.solr.url = 'http://127.0.0.1:8982/solr'
       end
       session.commit
-      connection.opts[:url].should == 'http://127.0.0.1:8982/solr'
+      expect(connection.opts[:url]).to eq('http://127.0.0.1:8982/solr')
     end
   end
 
@@ -147,120 +147,120 @@ describe 'Session' do
     end
 
     it 'should start out not dirty' do
-      @session.dirty?.should be_false
+      expect(@session.dirty?).to be(false)
     end
 
     it 'should start out not delete_dirty' do
-      @session.delete_dirty?.should be_false
+      expect(@session.delete_dirty?).to be(false)
     end
 
     it 'should be dirty after adding an item' do
       @session.index(Post.new)
-      @session.dirty?.should be_true
+      expect(@session.dirty?).to be(true)
     end
 
     it 'should be not be delete_dirty after adding an item' do
       @session.index(Post.new)
-      @session.delete_dirty?.should be_false
+      expect(@session.delete_dirty?).to be(false)
     end
 
     it 'should be dirty after deleting an item' do
       @session.remove(Post.new)
-      @session.dirty?.should be_true
+      expect(@session.dirty?).to be(true)
     end
 
     it 'should be delete_dirty after deleting an item' do
       @session.remove(Post.new)
-      @session.delete_dirty?.should be_true
+      expect(@session.delete_dirty?).to be(true)
     end
 
     it 'should be dirty after a remove_all for a class' do
       @session.remove_all(Post)
-      @session.dirty?.should be_true
+      expect(@session.dirty?).to be(true)
     end
 
     it 'should be delete_dirty after a remove_all for a class' do
       @session.remove_all(Post)
-      @session.delete_dirty?.should be_true
+      expect(@session.delete_dirty?).to be(true)
     end
 
     it 'should be dirty after a global remove_all' do
       @session.remove_all
-      @session.dirty?.should be_true
+      expect(@session.dirty?).to be(true)
     end
 
     it 'should be delete_dirty after a global remove_all' do
       @session.remove_all
-      @session.delete_dirty?.should be_true
+      expect(@session.delete_dirty?).to be(true)
     end
 
     it 'should not be dirty after a commit' do
       @session.index(Post.new)
       @session.commit
-      @session.dirty?.should be_false
+      expect(@session.dirty?).to be(false)
     end
 
     it 'should not be dirty after an optimize' do
       @session.index(Post.new)
       @session.optimize
-      @session.dirty?.should be_false
+      expect(@session.dirty?).to be(false)
     end
 
     it 'should not be delete_dirty after a commit' do
       @session.remove(Post.new)
       @session.commit
-      @session.delete_dirty?.should be_false
+      expect(@session.delete_dirty?).to be(false)
     end
 
     it 'should not be delete_dirty after an optimize' do
       @session.remove(Post.new)
       @session.optimize
-      @session.delete_dirty?.should be_false
+      expect(@session.delete_dirty?).to be(false)
     end
 
     it 'should not commit when commit_if_dirty called on clean session' do
       @session.commit_if_dirty
-      connection.should have(0).commits
+      expect(connection.commits.size).to eq(0)
     end
 
     it 'should not commit when commit_if_delete_dirty called on clean session' do
       @session.commit_if_delete_dirty
-      connection.should have(0).commits
+      expect(connection.commits.size).to eq(0)
     end
 
     it 'should hard commit when commit_if_dirty called on dirty session' do
       @session.index(Post.new)
       @session.commit_if_dirty
-      connection.should have(1).commits
+      expect(connection.commits.size).to eq(1)
     end
 
     it 'should soft commit when commit_if_dirty called on dirty session' do
       @session.index(Post.new)
       @session.commit_if_dirty(true)
-      connection.should have(1).commits
-      connection.should have(1).soft_commits
+      expect(connection.commits.size).to eq(1)
+      expect(connection.soft_commits.size).to eq(1)
     end
 
     it 'should hard commit when commit_if_delete_dirty called on delete_dirty session' do
       @session.remove(Post.new)
       @session.commit_if_delete_dirty
-      connection.should have(1).commits
+      expect(connection.commits.size).to eq(1)
     end
 
     it 'should soft commit when commit_if_delete_dirty called on delete_dirty session' do
       @session.remove(Post.new)
       @session.commit_if_delete_dirty(true)
-      connection.should have(1).commits
-      connection.should have(1).soft_commits
+      expect(connection.commits.size).to eq(1)
+      expect(connection.soft_commits.size).to eq(1)
     end
   end
 
   context 'session proxy' do
     it 'should send messages to manually assigned session proxy' do
-      stub_session = stub('session')
+      stub_session = double('session')
       Sunspot.session = stub_session
       post = Post.new
-      stub_session.should_receive(:index).with(post)
+      expect(stub_session).to receive(:index).with(post)
       Sunspot.index(post)
       Sunspot.reset!
     end

@@ -10,38 +10,38 @@ describe 'search stats' do
   end
 
   it 'returns minimum stats' do
-    Sunspot.search(Post) do
+    expect(Sunspot.search(Post) do
       stats :average_rating
-    end.stats(:average_rating).min.should == 3.0
+    end.stats(:average_rating).min).to eq(3.0)
   end
 
   it 'returns maximum stats' do
-    Sunspot.search(Post) do
+    expect(Sunspot.search(Post) do
       stats :average_rating
-    end.stats(:average_rating).max.should == 4.0
+    end.stats(:average_rating).max).to eq(4.0)
   end
 
   it 'returns count stats' do
-    Sunspot.search(Post) do
+    expect(Sunspot.search(Post) do
       stats :average_rating
-    end.stats(:average_rating).count.should == 3
+    end.stats(:average_rating).count).to eq(3)
   end
 
   describe 'facets' do
     it 'returns minimum on facet row with two blog ids' do
-      Sunspot.search(Post) do
+      expect(Sunspot.search(Post) do
         stats :average_rating do
           facet :blog_id
         end
-      end.stats(:average_rating).facet(:blog_id).rows[1].min.should == 3.0
+      end.stats(:average_rating).facet(:blog_id).rows[1].min).to eq(3.0)
     end
 
     it 'returns maximum on facet row with two blog ids' do
-      Sunspot.search(Post) do
+      expect(Sunspot.search(Post) do
         stats :average_rating do
           facet :blog_id
         end
-      end.stats(:average_rating).facet(:blog_id).rows[1].max.should == 4.0
+      end.stats(:average_rating).facet(:blog_id).rows[1].max).to eq(4.0)
     end
   end
 end

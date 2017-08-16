@@ -27,14 +27,14 @@ describe 'search faceting' do
 
       it "should return value #{value1.inspect} with count 2" do
         row = @search.facet(field).rows[0]
-        row.value.should == value1
-        row.count.should == 2
+        expect(row.value).to eq(value1)
+        expect(row.count).to eq(2)
       end
 
       it "should return value #{value2.inspect} with count 1" do
         row = @search.facet(field).rows[1]
-        row.value.should == value2
-        row.count.should == 1
+        expect(row.value).to eq(value2)
+        expect(row.count).to eq(1)
       end
     end
   end
@@ -66,7 +66,7 @@ describe 'search faceting' do
       search = Sunspot.search(Post) do
         facet :title, :limit => 3
       end
-      search.facet(:title).should have(3).rows
+      expect(search.facet(:title).rows.size).to eq(3)
     end
 
     it 'should not return zeros by default' do
@@ -74,7 +74,7 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title
       end
-      search.facet(:title).rows.map { |row| row.value }.should_not include('zero')
+      expect(search.facet(:title).rows.map { |row| row.value }).not_to include('zero')
     end
 
     it 'should return zeros when specified' do
@@ -82,14 +82,14 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :zeros => true
       end
-      search.facet(:title).rows.map { |row| row.value }.should include('zero')
+      expect(search.facet(:title).rows.map { |row| row.value }).to include('zero')
     end
     
     it 'should return facet rows from an offset' do
       search = Sunspot.search(Post) do
         facet :title, :offset => 3
       end
-      search.facet(:title).rows.map { |row| row.value }.should == %w(one zero)
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(one zero))
     end
 
     it 'should return a specified minimum count' do
@@ -97,7 +97,7 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :minimum_count => 2
       end
-      search.facet(:title).rows.map { |row| row.value }.should == %w(four three two)
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four three two))
     end
 
     it 'should order facets lexically' do
@@ -105,7 +105,7 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :sort => :index
       end
-      search.facet(:title).rows.map { |row| row.value }.should == %w(four one three two)
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four one three two))
     end
 
     it 'should order facets by count' do
@@ -113,7 +113,7 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :sort => :count
       end
-      search.facet(:title).rows.map { |row| row.value }.should == %w(four three two one)
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four three two one))
     end
 
     it 'should limit facet values by prefix' do
@@ -121,7 +121,7 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :prefix => 't'
       end
-      search.facet(:title).rows.map { |row| row.value }.sort.should == %w(three two)
+      expect(search.facet(:title).rows.map { |row| row.value }.sort).to eq(%w(three two))
     end
 
     it 'should return :all facet' do
@@ -129,8 +129,8 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :extra => :any
       end
-      search.facet(:title).rows.first.value.should == :any
-      search.facet(:title).rows.first.count.should == 10
+      expect(search.facet(:title).rows.first.value).to eq(:any)
+      expect(search.facet(:title).rows.first.count).to eq(10)
     end
 
     it 'should return :none facet' do
@@ -138,8 +138,8 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :extra => :none
       end
-      search.facet(:title).rows.first.value.should == :none
-      search.facet(:title).rows.first.count.should == 1
+      expect(search.facet(:title).rows.first.value).to eq(:none)
+      expect(search.facet(:title).rows.first.count).to eq(1)
     end
 
     it 'gives correct facet count when group == true and truncate == true' do
@@ -152,7 +152,7 @@ describe 'search faceting' do
       end
 
       # Should be 5 instead of 11
-      search.facet(:title).rows.first.count.should == 5
+      expect(search.facet(:title).rows.first.count).to eq(5)
     end
   end
 
@@ -170,7 +170,7 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :prefix => 'title '
       end
-      search.facet(:title).rows.map { |row| row.value }.sort.should == ["title with spaces 1", "title with spaces 2"]
+      expect(search.facet(:title).rows.map { |row| row.value }.sort).to eq(["title with spaces 1", "title with spaces 2"])
     end
 
     it 'should limit facet values by a prefix with slashes' do
@@ -178,7 +178,7 @@ describe 'search faceting' do
         with :blog_id, 1
         facet :title, :prefix => 'title/'
       end
-      search.facet(:title).rows.map { |row| row.value }.sort.should == ["title/with/slashes/1", "title/with/slashes/2"]
+      expect(search.facet(:title).rows.map { |row| row.value }.sort).to eq(["title/with/slashes/1", "title/with/slashes/2"])
     end
   end
 
@@ -199,7 +199,7 @@ describe 'search faceting' do
           category_filter = with(:category_ids, 1)
           facet(:category_ids, :exclude => category_filter)
         end
-        search.facet(:category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
+        expect(search.facet(:category_ids).rows.map { |row| row.value }.to_set).to eq(Set[1, 2])
       end
 
       it 'should use facet keys to facet more than once with different exclusions' do
@@ -209,8 +209,8 @@ describe 'search faceting' do
           facet(:category_ids)
           facet(:category_ids, :exclude => category_filter, :name => :all_category_ids)
         end
-        search.facet(:category_ids).rows.map { |row| row.value }.should == [1]
-        search.facet(:all_category_ids).rows.map { |row| row.value }.to_set.should == Set[1, 2]
+        expect(search.facet(:category_ids).rows.map { |row| row.value }).to eq([1])
+        expect(search.facet(:all_category_ids).rows.map { |row| row.value }.to_set).to eq(Set[1, 2])
       end
     end
 
@@ -228,7 +228,7 @@ describe 'search faceting' do
             end
           end
         end
-        search.facet(:category_ids).rows.map { |row| [row.value, row.count] }.to_set.should == Set[[:category_1, 1], [:category_2, 1]]
+        expect(search.facet(:category_ids).rows.map { |row| [row.value, row.count] }.to_set).to eq(Set[[:category_1, 1], [:category_2, 1]])
       end
 
       it 'should use facet keys to facet more than once with different exclusions' do
@@ -253,8 +253,8 @@ describe 'search faceting' do
             end
           end
         end
-        search.facet(:category_ids).rows.map { |row| [row.value, row.count] }.to_set.should == Set[[:category_1, 1]]
-        search.facet(:all_category_ids).rows.map { |row| [row.value, row.count] }.to_set.should == Set[[:category_1, 1], [:category_2, 1]]
+        expect(search.facet(:category_ids).rows.map { |row| [row.value, row.count] }.to_set).to eq(Set[[:category_1, 1]])
+        expect(search.facet(:all_category_ids).rows.map { |row| [row.value, row.count] }.to_set).to eq(Set[[:category_1, 1], [:category_2, 1]])
       end
     end
   end
@@ -273,10 +273,10 @@ describe 'search faceting' do
       search = Sunspot.search(Post) do
         facet :published_at, :time_range => time..(time + 60*60*24*2), :sort => :count
       end
-      search.facet(:published_at).rows.first.value.should == (time..(time + 60*60*24))
-      search.facet(:published_at).rows.first.count.should == 2
-      search.facet(:published_at).rows.last.value.should == ((time + 60*60*24)..(time + 60*60*24*2))
-      search.facet(:published_at).rows.last.count.should == 1
+      expect(search.facet(:published_at).rows.first.value).to eq(time..(time + 60*60*24))
+      expect(search.facet(:published_at).rows.first.count).to eq(2)
+      expect(search.facet(:published_at).rows.last.value).to eq((time + 60*60*24)..(time + 60*60*24*2))
+      expect(search.facet(:published_at).rows.last.count).to eq(1)
     end
   end
 
@@ -290,10 +290,10 @@ describe 'search faceting' do
       search = Sunspot.search(Post, Namespaced::Comment) do
         facet(:class, :sort => :count)
       end
-      search.facet(:class).rows.first.value.should == Post
-      search.facet(:class).rows.first.count.should == 2
-      search.facet(:class).rows.last.value.should == Namespaced::Comment
-      search.facet(:class).rows.last.count.should == 1
+      expect(search.facet(:class).rows.first.value).to eq(Post)
+      expect(search.facet(:class).rows.first.count).to eq(2)
+      expect(search.facet(:class).rows.last.value).to eq(Namespaced::Comment)
+      expect(search.facet(:class).rows.last.count).to eq(1)
     end
   end
 
@@ -319,12 +319,12 @@ describe 'search faceting' do
         end
       end
       facet = search.facet(:rating_range)
-      facet.rows[0].value.should == (3.0..4.0)
-      facet.rows[0].count.should == 3
-      facet.rows[1].value.should == (1.0..2.0)
-      facet.rows[1].count.should == 2
-      facet.rows[2].value.should == (4.0..5.0)
-      facet.rows[2].count.should == 1
+      expect(facet.rows[0].value).to eq(3.0..4.0)
+      expect(facet.rows[0].count).to eq(3)
+      expect(facet.rows[1].value).to eq(1.0..2.0)
+      expect(facet.rows[1].count).to eq(2)
+      expect(facet.rows[2].value).to eq(4.0..5.0)
+      expect(facet.rows[2].count).to eq(1)
     end
   end
 end

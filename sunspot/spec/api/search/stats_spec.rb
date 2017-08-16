@@ -6,7 +6,7 @@ describe 'stats', :type => :search do
     result = session.search Post do
       stats :average_rating
     end
-    result.stats(:average_rating).field_name.should == :average_rating
+    expect(result.stats(:average_rating).field_name).to eq(:average_rating)
   end
 
   it 'returns min for stats field' do
@@ -14,7 +14,7 @@ describe 'stats', :type => :search do
     result = session.search Post do
       stats :average_rating
     end
-    result.stats(:average_rating).min.should == 1.0
+    expect(result.stats(:average_rating).min).to eq(1.0)
   end
 
   it 'returns max for stats field' do
@@ -22,7 +22,7 @@ describe 'stats', :type => :search do
     result = session.search Post do
       stats :average_rating
     end
-    result.stats(:average_rating).max.should == 5.0
+    expect(result.stats(:average_rating).max).to eq(5.0)
   end
 
   it 'returns count for stats field' do
@@ -30,7 +30,7 @@ describe 'stats', :type => :search do
     result = session.search Post do
       stats :average_rating
     end
-    result.stats(:average_rating).count.should == 120
+    expect(result.stats(:average_rating).count).to eq(120)
   end
 
   it 'returns sum for stats field' do
@@ -38,7 +38,7 @@ describe 'stats', :type => :search do
     result = session.search Post do
       stats :average_rating
     end
-    result.stats(:average_rating).sum.should == 2200.0
+    expect(result.stats(:average_rating).sum).to eq(2200.0)
   end
 
   it 'returns facet rows for stats field' do
@@ -51,7 +51,7 @@ describe 'stats', :type => :search do
         facet :featured
       end
     end
-    stats_facet_values(result, :average_rating, :featured).should == [false, true]
+    expect(stats_facet_values(result, :average_rating, :featured)).to eq([false, true])
   end
 
   it 'returns facet stats for stats field' do
@@ -63,8 +63,8 @@ describe 'stats', :type => :search do
         facet :featured
       end
     end
-    stats_facet_stats(result, :average_rating, :featured, true).min.should == 2.0
-    stats_facet_stats(result, :average_rating, :featured, true).max.should == 4.0
+    expect(stats_facet_stats(result, :average_rating, :featured, true).min).to eq(2.0)
+    expect(stats_facet_stats(result, :average_rating, :featured, true).max).to eq(4.0)
   end
 
   it 'returns instantiated stats facet values' do
@@ -76,7 +76,7 @@ describe 'stats', :type => :search do
         facet :blog_id
       end
     end
-    search.stats(:average_rating).facet(:blog_id).rows.map { |row| row.instance }.should == blogs
+    expect(search.stats(:average_rating).facet(:blog_id).rows.map { |row| row.instance }).to eq(blogs)
   end
 
   it 'only returns verified instances when requested' do
@@ -89,6 +89,6 @@ describe 'stats', :type => :search do
         facet :blog_id
       end
     end
-    search.stats(:average_rating).facet(:blog_id).rows(:verified => true).map { |row| row.instance }.should == [blog]
+    expect(search.stats(:average_rating).facet(:blog_id).rows(:verified => true).map { |row| row.instance }).to eq([blog])
   end
 end

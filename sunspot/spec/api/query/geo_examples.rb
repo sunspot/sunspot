@@ -5,35 +5,35 @@ shared_examples_for 'geohash query' do
     search do
       with(:coordinates).near(40.7, -73.5)
     end
-    connection.should have_last_search_including(:q, build_geo_query)
+    expect(connection).to have_last_search_including(:q, build_geo_query)
   end
 
   it 'searches for nearby points with non-Float arguments' do
     search do
       with(:coordinates).near(BigDecimal.new('40.7'), BigDecimal.new('-73.5'))
     end
-    connection.should have_last_search_including(:q, build_geo_query)
+    expect(connection).to have_last_search_including(:q, build_geo_query)
   end
 
   it 'searches for nearby points with given precision' do
     search do
       with(:coordinates).near(40.7, -73.5, :precision => 10)
     end
-    connection.should have_last_search_including(:q, build_geo_query(:precision => 10))
+    expect(connection).to have_last_search_including(:q, build_geo_query(:precision => 10))
   end
 
   it 'searches for nearby points with given precision factor' do
     search do
       with(:coordinates).near(40.7, -73.5, :precision_factor => 1.5)
     end
-    connection.should have_last_search_including(:q, build_geo_query(:precision_factor => 1.5))
+    expect(connection).to have_last_search_including(:q, build_geo_query(:precision_factor => 1.5))
   end
 
   it 'searches for nearby points with given boost' do
     search do
       with(:coordinates).near(40.7, -73.5, :boost => 2.0)
     end
-    connection.should have_last_search_including(:q, build_geo_query(:boost => 2.0))
+    expect(connection).to have_last_search_including(:q, build_geo_query(:boost => 2.0))
   end
 
   it 'performs both dismax search and location search' do
@@ -42,7 +42,7 @@ shared_examples_for 'geohash query' do
       with(:coordinates).near(40.7, -73.5)
     end
     expected = %Q((_query_:"{!edismax qf='title_text'}pizza" AND (#{build_geo_query})))
-    connection.should have_last_search_including(:q, expected)
+    expect(connection).to have_last_search_including(:q, expected)
   end
 
   private

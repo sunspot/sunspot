@@ -5,7 +5,7 @@ shared_examples_for "query with dynamic field support" do
         with :test, 'string'
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_string\:test_ss:string')
+    expect(connection).to have_last_search_including(:fq, 'custom_string\:test_ss:string')
   end
 
   it 'restricts by dynamic integer field with less than restriction' do
@@ -14,7 +14,7 @@ shared_examples_for "query with dynamic field support" do
         with(:test).less_than(1)
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_integer\:test_i:{* TO 1}')
+    expect(connection).to have_last_search_including(:fq, 'custom_integer\:test_i:{* TO 1}')
   end
 
   it 'restricts by dynamic float field with between restriction' do
@@ -23,7 +23,7 @@ shared_examples_for "query with dynamic field support" do
         with(:test).between(2.2..3.3)
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_float\:test_fm:[2\.2 TO 3\.3]')
+    expect(connection).to have_last_search_including(:fq, 'custom_float\:test_fm:[2\.2 TO 3\.3]')
   end
 
   it 'restricts by dynamic time field with any of restriction' do
@@ -33,7 +33,7 @@ shared_examples_for "query with dynamic field support" do
                             Time.parse('2009-02-13 18:00:00 UTC')])
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_time\:test_d:(2009\-02\-10T14\:00\:00Z OR 2009\-02\-13T18\:00\:00Z)')
+    expect(connection).to have_last_search_including(:fq, 'custom_time\:test_d:(2009\-02\-10T14\:00\:00Z OR 2009\-02\-13T18\:00\:00Z)')
   end
 
   it 'restricts by dynamic boolean field with equality restriction' do
@@ -42,7 +42,7 @@ shared_examples_for "query with dynamic field support" do
         with :test, false
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_boolean\:test_b:false')
+    expect(connection).to have_last_search_including(:fq, 'custom_boolean\:test_b:false')
   end
 
   it 'negates a dynamic field restriction' do
@@ -51,7 +51,7 @@ shared_examples_for "query with dynamic field support" do
         without :test, 'foo'
       end
     end
-    connection.should have_last_search_including(:fq, '-custom_string\:test_ss:foo')
+    expect(connection).to have_last_search_including(:fq, '-custom_string\:test_ss:foo')
   end
 
   it 'scopes by a dynamic field inside a disjunction' do
@@ -63,7 +63,7 @@ shared_examples_for "query with dynamic field support" do
         with :title, 'bar'
       end
     end
-    connection.should have_last_search_including(
+    expect(connection).to have_last_search_including(
       :fq, '(custom_string\:test_ss:foo OR title_ss:bar)'
     )
   end
@@ -74,7 +74,7 @@ shared_examples_for "query with dynamic field support" do
         order_by :test, :desc
       end
     end
-    connection.should have_last_search_with(:sort => 'custom_integer:test_i desc')
+    expect(connection).to have_last_search_with(:sort => 'custom_integer:test_i desc')
   end
 
   it 'orders by a dynamic field and static field, with given precedence' do
@@ -84,25 +84,25 @@ shared_examples_for "query with dynamic field support" do
       end
       order_by :sort_title, :asc
     end
-    connection.should have_last_search_with(:sort => 'custom_integer:test_i desc, sort_title_s asc')
+    expect(connection).to have_last_search_with(:sort => 'custom_integer:test_i desc, sort_title_s asc')
   end
 
   it 'raises an UnrecognizedFieldError if an unknown dynamic field is searched by' do
-    lambda do
+    expect do
       search do
         dynamic(:bogus) { with :some, 'value' }
       end
-    end.should raise_error(Sunspot::UnrecognizedFieldError)
+    end.to raise_error(Sunspot::UnrecognizedFieldError)
   end
 
   it 'raises a NoMethodError if pagination is attempted in a dynamic query' do
-    lambda do
+    expect do
       search do
         dynamic :custom_string do
           paginate :page => 3, :per_page => 10
         end
       end
-    end.should raise_error(NoMethodError)
+    end.to raise_error(NoMethodError)
   end
 
   it 'requests field facet on dynamic field' do
@@ -111,7 +111,7 @@ shared_examples_for "query with dynamic field support" do
         facet(:test)
       end
     end
-    connection.should have_last_search_including(:"facet.field", 'custom_string:test_ss')
+    expect(connection).to have_last_search_including(:"facet.field", 'custom_string:test_ss')
   end
 
   it 'requests named field facet on dynamic field' do
@@ -120,7 +120,7 @@ shared_examples_for "query with dynamic field support" do
         facet(:test, :name => :bogus)
       end
     end
-    connection.should have_last_search_including(:"facet.field", '{!key=bogus}custom_string:test_ss')
+    expect(connection).to have_last_search_including(:"facet.field", '{!key=bogus}custom_string:test_ss')
   end
 
   it 'requests query facet with internal dynamic field' do
@@ -133,7 +133,7 @@ shared_examples_for "query with dynamic field support" do
         end
       end
     end
-    connection.should have_last_search_with(
+    expect(connection).to have_last_search_with(
       :"facet.query" => 'custom_string\:test_ss:foo'
     )
   end
@@ -148,7 +148,7 @@ shared_examples_for "query with dynamic field support" do
         end
       end
     end
-    connection.should have_last_search_including(
+    expect(connection).to have_last_search_including(
       :"facet.query",
       'custom_string\:test_ss:foo'
     )
@@ -160,6 +160,6 @@ shared_examples_for "query with dynamic field support" do
         with(:test, 1.23)
       end
     end
-    connection.should have_last_search_including(:fq, 'custom_float\\:test_fm:1\\.23')
+    expect(connection).to have_last_search_including(:fq, 'custom_float\\:test_fm:1\\.23')
   end
 end

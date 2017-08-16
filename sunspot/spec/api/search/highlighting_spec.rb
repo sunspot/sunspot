@@ -14,38 +14,38 @@ describe 'search with highlighting results', :type => :search do
   end
 
   it 'returns all highlights' do
-    @search.hits.last.should have(3).highlights
+    expect(@search.hits.last.highlights.size).to eq(3)
   end
 
   it 'returns all highlights for a specified field' do
-    @search.hits.last.should have(2).highlights(:body)
+    expect(@search.hits.last.highlights(:body).size).to eq(2)
   end
 
   it 'returns first highlight for a specified field' do
-    @search.hits.first.highlight(:title).format.should == 'one <em>two</em> three'
+    expect(@search.hits.first.highlight(:title).format).to eq('one <em>two</em> three')
   end
 
   it 'returns an empty array if a given field does not have a highlight' do
-    @search.hits.first.highlights(:body).should == []
+    expect(@search.hits.first.highlights(:body)).to eq([])
   end
 
   it 'formats hits with <em> by default' do
     highlight = @search.hits.first.highlights(:title).first.formatted
-    highlight.should == 'one <em>two</em> three'
+    expect(highlight).to eq('one <em>two</em> three')
   end
 
   it 'formats hits with provided block' do
     highlight = @search.hits.first.highlights(:title).first.format do |word|
       "<i>#{word}</i>"
     end
-    highlight.should == 'one <i>two</i> three'
+    expect(highlight).to eq('one <i>two</i> three')
   end
 
   it 'handles multiple highlighted words' do
     highlight = @search.hits.last.highlights(:body).last.format do |word|
       "<b>#{word}</b>"
     end
-    highlight.should == '<b>eight</b> nine <b>ten</b>'
+    expect(highlight).to eq('<b>eight</b> nine <b>ten</b>')
   end
 
   private

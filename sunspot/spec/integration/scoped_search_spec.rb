@@ -22,95 +22,95 @@ describe 'scoped_search' do
       end
 
       it 'should filter by exact match' do
-        Sunspot.search(clazz) { with(field, values[2]) }.results.should == [@objects[2]]
+        expect(Sunspot.search(clazz) { with(field, values[2]) }.results).to eq([@objects[2]])
       end
 
       it 'should reject by inexact match' do
         results = Sunspot.search(clazz) { without(field, values[2]) }.results
-        [0, 1, 3, 4].each { |i| results.should include(@objects[i]) }
-        results.should_not include(@objects[2])
+        [0, 1, 3, 4].each { |i| expect(results).to include(@objects[i]) }
+        expect(results).not_to include(@objects[2])
       end
 
       it 'should filter by less than' do
         results = Sunspot.search(clazz) { with(field).less_than values[2] }.results
-        (0..1).each { |i| results.should include(@objects[i]) }
-        (2..4).each { |i| results.should_not include(@objects[i]) }
+        (0..1).each { |i| expect(results).to include(@objects[i]) }
+        (2..4).each { |i| expect(results).not_to include(@objects[i]) }
       end
 
       it 'should reject by less than' do
         results = Sunspot.search(clazz) { without(field).less_than values[2] }.results
-        (0..1).each { |i| results.should_not include(@objects[i]) }
-        (2..4).each { |i| results.should include(@objects[i]) }
+        (0..1).each { |i| expect(results).not_to include(@objects[i]) }
+        (2..4).each { |i| expect(results).to include(@objects[i]) }
       end
 
       it 'should filter by less than or equal to' do
         results = Sunspot.search(clazz) { with(field).less_than_or_equal_to values[2] }.results
-        (0..2).each { |i| results.should include(@objects[i]) }
-        (3..4).each { |i| results.should_not include(@objects[i]) }
+        (0..2).each { |i| expect(results).to include(@objects[i]) }
+        (3..4).each { |i| expect(results).not_to include(@objects[i]) }
       end
 
       it 'should reject by less than or equal to' do
         results = Sunspot.search(clazz) { without(field).less_than_or_equal_to values[2] }.results
-        (0..2).each { |i| results.should_not include(@objects[i]) }
-        (3..4).each { |i| results.should include(@objects[i]) }
+        (0..2).each { |i| expect(results).not_to include(@objects[i]) }
+        (3..4).each { |i| expect(results).to include(@objects[i]) }
       end
 
       it 'should filter by greater than' do
         results = Sunspot.search(clazz) { with(field).greater_than values[2] }.results
-        (3..4).each { |i| results.should include(@objects[i]) }
-        (0..2).each { |i| results.should_not include(@objects[i]) }
+        (3..4).each { |i| expect(results).to include(@objects[i]) }
+        (0..2).each { |i| expect(results).not_to include(@objects[i]) }
       end
 
       it 'should reject by greater than' do
         results = Sunspot.search(clazz) { without(field).greater_than values[2] }.results
-        (3..4).each { |i| results.should_not include(@objects[i]) }
-        (0..2).each { |i| results.should include(@objects[i]) }
+        (3..4).each { |i| expect(results).not_to include(@objects[i]) }
+        (0..2).each { |i| expect(results).to include(@objects[i]) }
       end
 
       it 'should filter by greater than or equal to' do
         results = Sunspot.search(clazz) { with(field).greater_than_or_equal_to values[2] }.results
-        (2..4).each { |i| results.should include(@objects[i]) }
-        (0..1).each { |i| results.should_not include(@objects[i]) }
+        (2..4).each { |i| expect(results).to include(@objects[i]) }
+        (0..1).each { |i| expect(results).not_to include(@objects[i]) }
       end
 
       it 'should reject by greater than' do
         results = Sunspot.search(clazz) { without(field).greater_than_or_equal_to values[2] }.results
-        (2..4).each { |i| results.should_not include(@objects[i]) }
-        (0..1).each { |i| results.should include(@objects[i]) }
+        (2..4).each { |i| expect(results).not_to include(@objects[i]) }
+        (0..1).each { |i| expect(results).to include(@objects[i]) }
       end
 
       it 'should filter by between' do
         results = Sunspot.search(clazz) { with(field).between(values[1]..values[3]) }.results
-        (1..3).each { |i| results.should include(@objects[i]) }
-        [0, 4].each { |i| results.should_not include(@objects[i]) }
+        (1..3).each { |i| expect(results).to include(@objects[i]) }
+        [0, 4].each { |i| expect(results).not_to include(@objects[i]) }
       end
 
       it 'should reject by between' do
         results = Sunspot.search(clazz) { without(field).between(values[1]..values[3]) }.results
-        (1..3).each { |i| results.should_not include(@objects[i]) }
-        [0, 4].each { |i| results.should include(@objects[i]) }
+        (1..3).each { |i| expect(results).not_to include(@objects[i]) }
+        [0, 4].each { |i| expect(results).to include(@objects[i]) }
       end
 
       it 'should filter by any of' do
         results = Sunspot.search(clazz) { with(field).any_of(values.values_at(1, 3)) }.results
-        [1, 3].each { |i| results.should include(@objects[i]) }
-        [0, 2, 4].each { |i| results.should_not include(@objects[i]) }
+        [1, 3].each { |i| expect(results).to include(@objects[i]) }
+        [0, 2, 4].each { |i| expect(results).not_to include(@objects[i]) }
       end
 
       it 'should reject by any of' do
         results = Sunspot.search(clazz) { without(field).any_of(values.values_at(1, 3)) }.results
-        [1, 3].each { |i| results.should_not include(@objects[i]) }
-        [0, 2, 4].each { |i| results.should include(@objects[i]) }
+        [1, 3].each { |i| expect(results).not_to include(@objects[i]) }
+        [0, 2, 4].each { |i| expect(results).to include(@objects[i]) }
       end
 
       it 'should order by field ascending' do
         results = Sunspot.search(clazz) { order_by field, :asc }.results
-        results.should == @objects
+        expect(results).to eq(@objects)
       end
 
       it 'should order by field descending' do
         results = Sunspot.search(clazz) { order_by field, :desc }.results
-        results.should == @objects.reverse
+        expect(results).to eq(@objects.reverse)
       end
     end
   end
@@ -126,10 +126,7 @@ describe 'scoped_search' do
   test_field_type 'Trie Float', :average_rating, :average_rating, Photo, -2.5, 0.0, 3.2, 3.5, 16.0
   test_field_type 'Trie Time', :created_at, :created_at, Photo, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
                                                                    '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
-
   describe 'Date range field type' do
-    let(:january) { Date.new(2015,1,1)..Date.new(2015,1,31) }
-    let(:february) { Date.new(2015,2,1)..Date.new(2015,2,28) }
     let(:date_ranges) do
       {
         'December and January' => Date.new(2014,12,25)..Date.new(2015,1,10),
@@ -143,38 +140,40 @@ describe 'scoped_search' do
     end
 
     before :all do
+      january = Date.new(2015,1,1)..Date.new(2015,1,31)
+      february = Date.new(2015,2,1)..Date.new(2015,2,28)
       Sunspot.remove_all
       @posts = [Post.new(featured_for: january), Post.new(featured_for: february), Post.new]
       Sunspot.index!(@posts)
     end
 
     it 'should filter by Contains' do
-      featured_for_posts(:containing, Date.new(2015,1,15) ).should == [@posts[0]]
-      featured_for_posts(:containing, 'December and January').should be_empty
-      featured_for_posts(:containing, 'January only').should == [@posts[0]]
-      featured_for_posts(:containing, 'January only', negated = true).should == @posts[1..-1]
+      expect(featured_for_posts(:containing, Date.new(2015,1,15) )).to eq([@posts[0]])
+      expect(featured_for_posts(:containing, 'December and January')).to be_empty
+      expect(featured_for_posts(:containing, 'January only')).to eq([@posts[0]])
+      expect(featured_for_posts(:containing, 'January only', negated = true)).to eq(@posts[1..-1])
     end
 
     it 'should filter by Intersects' do
-      featured_for_posts(:intersecting, Date.new(2015,1,15) ).should == [@posts[0]]
-      featured_for_posts(:intersecting, 'January only').should == [@posts[0]]
-      featured_for_posts(:intersecting, 'January and February').should == @posts[0..1]
-      featured_for_posts(:intersecting, 'January and February', negated = true).should == [@posts[2]]
-      featured_for_posts(:intersecting, 'February only').should == [@posts[1]]
-      featured_for_posts(:intersecting, 'February only', negated = true).should == [@posts[0], @posts[2]]
+      expect(featured_for_posts(:intersecting, Date.new(2015,1,15) )).to eq([@posts[0]])
+      expect(featured_for_posts(:intersecting, 'January only')).to eq([@posts[0]])
+      expect(featured_for_posts(:intersecting, 'January and February')).to eq(@posts[0..1])
+      expect(featured_for_posts(:intersecting, 'January and February', negated = true)).to eq([@posts[2]])
+      expect(featured_for_posts(:intersecting, 'February only')).to eq([@posts[1]])
+      expect(featured_for_posts(:intersecting, 'February only', negated = true)).to eq([@posts[0], @posts[2]])
     end
 
     it 'should filter by Within' do
-      featured_for_posts(:within, Date.new(2015,1,15) ).should be_empty
+      expect(featured_for_posts(:within, Date.new(2015,1,15) )).to be_empty
       (date_ranges.keys - date_ranges.keys.grep(/ to /)).each do |key|
-        featured_for_posts(:within, key).should be_empty
+        expect(featured_for_posts(:within, key)).to be_empty
       end
-      featured_for_posts(:within, 'December to February').should == [@posts[0]]
-      featured_for_posts(:within, 'December to February', negated = true).should == @posts[1..-1]
-      featured_for_posts(:within, 'January to March').should == [@posts[1]]
-      featured_for_posts(:within, 'January to March', negated = true).should == [@posts[0], @posts[2]]
-      featured_for_posts(:within, 'December to March').should == @posts[0..1]
-      featured_for_posts(:within, 'December to March', negated = true).should == [@posts[2]]
+      expect(featured_for_posts(:within, 'December to February')).to eq([@posts[0]])
+      expect(featured_for_posts(:within, 'December to February', negated = true)).to eq(@posts[1..-1])
+      expect(featured_for_posts(:within, 'January to March')).to eq([@posts[1]])
+      expect(featured_for_posts(:within, 'January to March', negated = true)).to eq([@posts[0], @posts[2]])
+      expect(featured_for_posts(:within, 'December to March')).to eq(@posts[0..1])
+      expect(featured_for_posts(:within, 'December to March', negated = true)).to eq([@posts[2]])
     end
   end
 
@@ -186,11 +185,11 @@ describe 'scoped_search' do
     end
 
     it 'should filter by exact match for true' do
-      Sunspot.search(Post) { with(:featured, true) }.results.should == [@posts[0]]
+      expect(Sunspot.search(Post) { with(:featured, true) }.results).to eq([@posts[0]])
     end
 
     it 'should filter for exact match for false' do
-      Sunspot.search(Post) { with(:featured, false) }.results.should == [@posts[1]]
+      expect(Sunspot.search(Post) { with(:featured, false) }.results).to eq([@posts[1]])
     end
   end
 
@@ -198,7 +197,7 @@ describe 'scoped_search' do
     it "allows for using symbols in defining static field names" do
       Sunspot.remove_all
       Sunspot.index!(legacy = Post.new(:title => "foo"))
-      Sunspot.search(Post) { with(:legacy, "legacy foo") }.results.should == [legacy]
+      expect(Sunspot.search(Post) { with(:legacy, "legacy foo") }.results).to eq([legacy])
     end
   end
 
@@ -206,7 +205,7 @@ describe 'scoped_search' do
     %w(AND OR NOT TO).each do |word|
       it "should successfully search for #{word.inspect}" do
         Sunspot.index!(post = Post.new(:title => word))
-        Sunspot.search(Post) { with(:title, word) }.results.should == [post]
+        expect(Sunspot.search(Post) { with(:title, word) }.results).to eq([post])
       end
     end
   end
@@ -219,11 +218,11 @@ describe 'scoped_search' do
     end
 
     it 'should filter results without value for field' do
-      Sunspot.search(Post) { with(:title, nil) }.results.should == [@posts[1]]
+      expect(Sunspot.search(Post) { with(:title, nil) }.results).to eq([@posts[1]])
     end
 
     it 'should exclude results without value for field' do
-      Sunspot.search(Post) { without(:title, nil) }.results.should == [@posts[0]]
+      expect(Sunspot.search(Post) { without(:title, nil) }.results).to eq([@posts[0]])
     end
   end
 
@@ -237,7 +236,7 @@ describe 'scoped_search' do
     end
 
     it 'should return results whose prefix matches' do
-      Sunspot.search(Post) { with(:title).starting_with('test') }.results.should == @posts[0..1]
+      expect(Sunspot.search(Post) { with(:title).starting_with('test') }.results).to eq(@posts[0..1])
     end
   end
 
@@ -253,20 +252,20 @@ describe 'scoped_search' do
 
     it 'should only return included object' do
       included_post = @posts.shift
-      Sunspot.search(Post) { with(included_post) }.results.should include(included_post)
+      expect(Sunspot.search(Post) { with(included_post) }.results).to include(included_post)
     end
 
     it 'should not return objects not included' do
       included_post = @posts.shift
       for excluded_post in @posts
-        Sunspot.search(Post) { with(included_post) }.results.should_not include(excluded_post)
+        expect(Sunspot.search(Post) { with(included_post) }.results).not_to include(excluded_post)
       end
     end
 
     it 'should return included objects' do
       included_posts = [@posts.shift, @posts.shift]
       for included_post in included_posts
-        Sunspot.search(Post) { with(included_posts) }.results.should include(included_post)
+        expect(Sunspot.search(Post) { with(included_posts) }.results).to include(included_post)
       end
     end
   end
@@ -283,20 +282,20 @@ describe 'scoped_search' do
 
     it 'should not return excluded object' do
       excluded_post = @posts.shift
-      Sunspot.search(Post) { without(excluded_post) }.results.should_not include(excluded_post)
+      expect(Sunspot.search(Post) { without(excluded_post) }.results).not_to include(excluded_post)
     end
 
     it 'should return objects not excluded' do
       excluded_post = @posts.shift
       for included_post in @posts
-        Sunspot.search(Post) { without(excluded_post) }.results.should include(included_post)
+        expect(Sunspot.search(Post) { without(excluded_post) }.results).to include(included_post)
       end
     end
 
     it 'should not return excluded objects' do
       excluded_posts = [@posts.shift, @posts.shift]
       for excluded_post in excluded_posts
-        Sunspot.search(Post) { without(excluded_posts) }.results.should_not include(excluded_post)
+        expect(Sunspot.search(Post) { without(excluded_posts) }.results).not_to include(excluded_post)
       end
     end
   end
@@ -309,50 +308,50 @@ describe 'scoped_search' do
     it 'should return results that match any restriction in a disjunction' do
       posts = (1..3).map { |i| Post.new(:blog_id => i)}
       Sunspot.index!(posts)
-      Sunspot.search(Post) do
+      expect(Sunspot.search(Post) do
         any_of do
           with(:blog_id, 1)
           with(:blog_id, 2)
         end
-      end.results.should == posts[0..1]
+      end.results).to eq(posts[0..1])
     end
 
     it 'should return results, ignoring any restriction in a disjunction that has been passed an empty array' do
       posts = (1..3).map { |i| Post.new(:blog_id => i)}
       Sunspot.index!(posts)
-      Sunspot.search(Post) do
+      expect(Sunspot.search(Post) do
         with(:blog_id, [])
-      end.results.should == posts
+      end.results).to eq(posts)
     end
 
     it 'should return results, ignoring any restriction in a negative disjunction that has been passed an empty array' do
       posts = (1..3).map { |i| Post.new(:blog_id => i)}
       Sunspot.index!(posts)
-      Sunspot.search(Post) do
+      expect(Sunspot.search(Post) do
         without(:blog_id, [])
-      end.results.should == posts
+      end.results).to eq(posts)
     end 
 
     it 'should return results, ignoring any restriction in a conjunction that has been passed an empty array' do
       posts = (1..3).map { |i| Post.new(:blog_id => i)}
       Sunspot.index!(posts)
-      Sunspot.search(Post) do
+      expect(Sunspot.search(Post) do
         all_of do
           with(:blog_id, 1)
           with(:blog_id, [])
         end
-      end.results.should == posts[0..0]
+      end.results).to eq(posts[0..0])
     end
 
     it 'should return results, ignoring any restriction in a negative conjunction that has been passed an empty array' do
       posts = (1..3).map { |i| Post.new(:blog_id => i)}
       Sunspot.index!(posts)
-      Sunspot.search(Post) do
+      expect(Sunspot.search(Post) do
         all_of do
           with(:blog_id, 1)
           without(:blog_id, [])
         end
-      end.results.should == posts[0..0]
+      end.results).to eq(posts[0..0])
     end
 
     it 'should return results that match a nested conjunction in a disjunction' do
@@ -363,7 +362,7 @@ describe 'scoped_search' do
         Post.new(:title => 'No', :blog_id => 2)
       ]
       Sunspot.index!(posts)
-      Sunspot.search(Post) do
+      expect(Sunspot.search(Post) do
         any_of do
           with(:blog_id, 1)
           all_of do
@@ -371,7 +370,7 @@ describe 'scoped_search' do
             with(:title, 'Yes')
           end
         end
-      end.results.should == posts[0..1]
+      end.results).to eq(posts[0..1])
     end
 
     it 'should return results that match a conjunction with a negated restriction' do
@@ -387,7 +386,7 @@ describe 'scoped_search' do
           without(:title, 'No')
         end
       end
-      search.results.should == posts[0..1]
+      expect(search.results).to eq(posts[0..1])
     end
 
     it 'should return results that match a conjunction with a disjunction with a conjunction with a negated restriction' do
@@ -411,7 +410,7 @@ describe 'scoped_search' do
           end
         end
       end
-      search.results.should == posts[0..2]
+      expect(search.results).to eq(posts[0..2])
     end
 
     it 'should return results that match a disjunction with a negated restriction and a nested disjunction in a conjunction with a negated restriction' do
@@ -436,7 +435,7 @@ describe 'scoped_search' do
           end
         end
       end
-      search.results.should == posts[0..2]
+      expect(search.results).to eq(posts[0..2])
     end
   end
 
@@ -456,7 +455,7 @@ describe 'scoped_search' do
         order_by :average_rating, :desc
         order_by :sort_title, :asc
       end
-      search.results.should == @posts
+      expect(search.results).to eq(@posts)
     end
   end
 
@@ -472,7 +471,7 @@ describe 'scoped_search' do
           result.id
         end
       end
-      result_sets[0].should_not == result_sets[1]
+      expect(result_sets[0]).not_to eq(result_sets[1])
     end
 
     # This could fail if the random set returned just happens to be the same as the last random set (the nature of randomness)
@@ -482,7 +481,7 @@ describe 'scoped_search' do
           result.id
         end
       end
-      result_sets[0].should_not == result_sets[1]
+      expect(result_sets[0]).not_to eq(result_sets[1])
     end
 
     context 'when providing a custom seed value' do
@@ -497,14 +496,14 @@ describe 'scoped_search' do
         next_results = Sunspot.search(Post) do
           order_by(:random, :seed => 54321)
         end.results.map { |result| result.id }
-        next_results.should_not == @first_results
+        expect(next_results).not_to eq(@first_results)
       end
 
       it 'should return the same results when passing the same seed value' do
         next_results = Sunspot.search(Post) do
           order_by(:random, :seed => 12345)
         end.results.map { |result| result.id }
-        next_results.should == @first_results
+        expect(next_results).to eq(@first_results)
       end
     end
   end
@@ -520,22 +519,22 @@ describe 'scoped_search' do
     it 'should order by sum' do
       # 1+3 > 2+1
       search = Sunspot.search(Post) {order_by_function :sum, :blog_id, :primary_category_id, :desc}
-      search.results.first.should == @p1
+      expect(search.results.first).to eq(@p1)
     end
     it 'should order by product and sum' do
       # 1 * (1+3) < 2 * (2+1)
       search = Sunspot.search(Post) { order_by_function :product, :blog_id, [:sum,:blog_id,:primary_category_id], :desc}
-      search.results.first.should == @p2
+      expect(search.results.first).to eq(@p2)
     end
     it 'should accept string literals' do
       # (1 * -2) > (2 * -2)
       search = Sunspot.search(Post) {order_by_function :product, :blog_id, '-2', :desc}
-      search.results.first.should == @p1
+      expect(search.results.first).to eq(@p1)
     end
     it 'should accept non-string literals' do
       # (1 * -2) > (2 * -2)
       search = Sunspot.search(Post) {order_by_function :product, :blog_id, -2, :desc}
-      search.results.first.should == @p1
+      expect(search.results.first).to eq(@p1)
     end
   end
 end

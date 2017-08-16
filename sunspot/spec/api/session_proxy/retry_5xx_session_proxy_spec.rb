@@ -33,14 +33,14 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   end
 
   it "should behave normally without a stubbed exception" do
-    @sunspot_session.should_receive(:index).and_return(double)
+    expect(@sunspot_session).to receive(:index).and_return(double)
     Sunspot.index(post)
   end
 
   it "should be successful with a single exception followed by a sucess" do
     e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_rsolr_response(503))
-    @sunspot_session.should_receive(:index).and_return do
-      @sunspot_session.should_receive(:index).and_return(double)
+    expect(@sunspot_session).to receive(:index) do
+      expect(@sunspot_session).to receive(:index).and_return(double)
       raise e
     end
     Sunspot.index(post)
@@ -51,23 +51,23 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
     e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_response)
     fake_success = double('success')
 
-    @sunspot_session.should_receive(:index).and_return do
-      @sunspot_session.should_receive(:index).and_return do
-        @sunspot_session.stub(:index).and_return(fake_success)
+    expect(@sunspot_session).to receive(:index) do
+      expect(@sunspot_session).to receive(:index) do
+        allow(@sunspot_session).to receive(:index).and_return(fake_success)
         raise e
       end
       raise e
     end
 
     response = Sunspot.index(post)
-    response.should_not == fake_success
-    response.should == fake_response
+    expect(response).not_to eq(fake_success)
+    expect(response).to eq(fake_response)
   end
 
   it "should not retry a 4xx" do
     e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_rsolr_response(400))
-    @sunspot_session.should_receive(:index).and_raise(e)
-    lambda { Sunspot.index(post) }.should raise_error
+    expect(@sunspot_session).to receive(:index).and_raise(e)
+    expect { Sunspot.index(post) }.to raise_error
   end
 
   # TODO: try against more than just Sunspot.index? but that's just testing the

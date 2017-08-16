@@ -5,37 +5,37 @@ describe 'hits', :type => :search do
     post_1, post_2 = Array.new(2) { Post.new }
     stub_results(post_1, post_2)
     %w(load load_all).each do |message|
-      MockAdapter::DataAccessor.should_not_receive(message)
+      expect(MockAdapter::DataAccessor).not_to receive(message)
     end
-    session.search(Post).hits.map do |hit|
+    expect(session.search(Post).hits.map do |hit|
       [hit.class_name, hit.primary_key]
-    end.should == [['Post', post_1.id.to_s], ['Post', post_2.id.to_s]]
+    end).to eq([['Post', post_1.id.to_s], ['Post', post_2.id.to_s]])
   end
 
   it 'returns search total as attribute of hits' do
     stub_results(Post.new, 4)
-    session.search(Post) do
+    expect(session.search(Post) do
       paginate(:page => 1)
-    end.hits.total_entries.should == 4
+    end.hits.total_entries).to eq(4)
   end
 
   it 'returns search total as attribute of verified hits' do
     stub_results(Post.new, 4)
-    session.search(Post) do
+    expect(session.search(Post) do
       paginate(:page => 1)
-    end.hits(:verify => true).total_entries.should == 4
+    end.hits(:verify => true).total_entries).to eq(4)
   end
 
   it 'should return instance from hit' do
     posts = Array.new(2) { Post.new }
     stub_results(*posts)
-    session.search(Post).hits.first.instance.should == posts.first
+    expect(session.search(Post).hits.first.instance).to eq(posts.first)
   end
 
   it 'should return the instance primary key when you use it as a param' do
     posts = Array.new(2) { Post.new }
     stub_results(*posts)
-    session.search(Post).hits.first.to_param.should == posts.first.id.to_s
+    expect(session.search(Post).hits.first.to_param).to eq(posts.first.id.to_s)
   end
 
   it 'should provide iterator over hits with instances' do
@@ -49,8 +49,8 @@ describe 'hits', :type => :search do
       results << result
     end
 
-    hits.should have(2).hits
-    results.should have(2).results
+    expect(hits.size).to eq(2)
+    expect(results.size).to eq(2)
   end
 
   it 'should provide an Enumerator over hits with instances' do
@@ -59,9 +59,9 @@ describe 'hits', :type => :search do
     search = session.search(Post)
     hits, results = [], []
     search.each_hit_with_result.with_index do |(hit, result), index|
-      hit.should be_kind_of(Sunspot::Search::Hit)
-      result.should be_kind_of(Post)
-      index.should be_kind_of(Integer)
+      expect(hit).to be_kind_of(Sunspot::Search::Hit)
+      expect(result).to be_kind_of(Post)
+      expect(index).to be_kind_of(Integer)
     end
   end
 
@@ -71,9 +71,9 @@ describe 'hits', :type => :search do
     search = session.search(Post)
     search.hits.first.instance
     %w(load load_all).each do |message|
-      MockAdapter::DataAccessor.should_not_receive(message)
+      expect(MockAdapter::DataAccessor).not_to receive(message)
     end
-    search.hits.last.instance.should == posts.last
+    expect(search.hits.last.instance).to eq(posts.last)
   end
 
   it 'should return only hits whose referenced object exists in the data store if :verify option passed' do
@@ -81,7 +81,7 @@ describe 'hits', :type => :search do
     posts.last.destroy
     stub_results(*posts)
     search = session.search(Post)
-    search.hits(:verify => true).map { |hit| hit.instance }.should == posts[0..0]
+    expect(search.hits(:verify => true).map { |hit| hit.instance }).to eq(posts[0..0])
   end
 
   it 'should return verified and unverified hits from the same search' do
@@ -89,59 +89,59 @@ describe 'hits', :type => :search do
     posts.last.destroy
     stub_results(*posts)
     search = session.search(Post)
-    search.hits(:verify => true).map { |hit| hit.instance }.should == posts[0..0]
-    search.hits.map { |hit| hit.instance }.should == [posts.first, nil]
+    expect(search.hits(:verify => true).map { |hit| hit.instance }).to eq(posts[0..0])
+    expect(search.hits.map { |hit| hit.instance }).to eq([posts.first, nil])
   end
 
   it 'should attach score to hits' do
     stub_full_results('instance' => Post.new, 'score' => 1.23)
-    session.search(Post).hits.first.score.should == 1.23
+    expect(session.search(Post).hits.first.score).to eq(1.23)
   end
 
   it 'should return stored field values in hits' do
     stub_full_results('instance' => Post.new, 'title_ss' => 'Title')
-    session.search(Post).hits.first.stored(:title).should == 'Title'
+    expect(session.search(Post).hits.first.stored(:title)).to eq('Title')
   end
 
   it 'should return stored field values for searches against multiple types' do
     stub_full_results('instance' => Post.new, 'title_ss' => 'Title')
-    session.search(Post, Namespaced::Comment).hits.first.stored(:title).should == 'Title'
+    expect(session.search(Post, Namespaced::Comment).hits.first.stored(:title)).to eq('Title')
   end
 
   it 'should return stored field values for searches against base type when subtype matches' do
     class SubclassedPost < Post; end;
     stub_full_results('instance' => SubclassedPost.new, 'title_ss' => 'Title')
-    session.search(Post).hits.first.stored(:title).should == 'Title'
+    expect(session.search(Post).hits.first.stored(:title)).to eq('Title')
   end
 
   it 'should return stored text fields' do
     stub_full_results('instance' => Post.new, 'body_textsv' => 'Body')
-    session.search(Post, Namespaced::Comment).hits.first.stored(:body).should == 'Body'
+    expect(session.search(Post, Namespaced::Comment).hits.first.stored(:body)).to eq('Body')
   end
 
   it 'should return stored boolean fields' do
     stub_full_results('instance' => Post.new, 'featured_bs' => true)
-    session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should be_true
+    expect(session.search(Post, Namespaced::Comment).hits.first.stored(:featured)).to be(true)
   end
 
   it 'should return stored boolean fields that evaluate to false' do
     stub_full_results('instance' => Post.new, 'featured_bs' => false)
-    session.search(Post, Namespaced::Comment).hits.first.stored(:featured).should == false
+    expect(session.search(Post, Namespaced::Comment).hits.first.stored(:featured)).to eq(false)
   end
 
   it 'should return stored dynamic fields' do
     stub_full_results('instance' => Post.new, 'custom_string:test_ss' => 'Custom')
-    session.search(Post, Namespaced::Comment).hits.first.stored(:custom_string, :test).should == 'Custom'
+    expect(session.search(Post, Namespaced::Comment).hits.first.stored(:custom_string, :test)).to eq('Custom')
   end
 
   it 'should typecast stored field values in hits' do
     time = Time.utc(2008, 7, 8, 2, 45)
     stub_full_results('instance' => Post.new, 'last_indexed_at_ds' => time.xmlschema)
-    session.search(Post).hits.first.stored(:last_indexed_at).should == time
+    expect(session.search(Post).hits.first.stored(:last_indexed_at)).to eq(time)
   end
 
   it 'should return stored values for multi-valued fields' do
     stub_full_results('instance' => User.new, 'role_ids_ims' => %w(1 4 5))
-    session.search(User).hits.first.stored(:role_ids).should == [1, 4, 5]
+    expect(session.search(User).hits.first.stored(:role_ids)).to eq([1, 4, 5])
   end
 end

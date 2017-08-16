@@ -13,108 +13,108 @@ describe 'specs with Sunspot stubbed' do
     foo = double('Foo')
     block = lambda { foo.bar }
 
-    foo.should_receive(:bar)
+    expect(foo).to receive(:bar)
 
     Sunspot.batch(&block)
   end
 
   it 'should not send index to session' do
-    @session.should_not_receive(:index)
+    expect(@session).not_to receive(:index)
     @post.index
   end
 
   it 'should not send index! to session' do
-    @session.should_not_receive(:index!)
+    expect(@session).not_to receive(:index!)
     @post.index!
   end
 
   it 'should not send atomic_update to session' do
-    @session.should_not_receive(:atomic_update)
+    expect(@session).not_to receive(:atomic_update)
     @post.index
   end
 
   it 'should not send atomic_update! to session' do
-    @session.should_not_receive(:atomic_update!)
+    expect(@session).not_to receive(:atomic_update!)
     @post.index!
   end
 
   it 'should not send commit to session' do
-    @session.should_not_receive(:commit)
+    expect(@session).not_to receive(:commit)
     Sunspot.commit
   end
 
   it 'should not send remove to session' do
-    @session.should_not_receive(:remove)
+    expect(@session).not_to receive(:remove)
     @post.remove_from_index
   end
 
   it 'should not send remove! to session' do
-    @session.should_not_receive(:remove)
+    expect(@session).not_to receive(:remove)
     @post.remove_from_index!
   end
 
   it 'should not send remove_by_id to session' do
-    @session.should_not_receive(:remove_by_id)
+    expect(@session).not_to receive(:remove_by_id)
     Sunspot.remove_by_id(Post, 1)
   end
 
   it 'should not send remove_by_id! to session' do
-    @session.should_not_receive(:remove_by_id!)
+    expect(@session).not_to receive(:remove_by_id!)
     Sunspot.remove_by_id!(Post, 1)
   end
 
   it 'should not send remove_all to session' do
-    @session.should_not_receive(:remove_all)
+    expect(@session).not_to receive(:remove_all)
     Post.remove_all_from_index
   end
 
   it 'should not send remove_all! to session' do
-    @session.should_not_receive(:remove_all!)
+    expect(@session).not_to receive(:remove_all!)
     Post.remove_all_from_index!
   end
 
   it 'should not send optimize to session' do
-    @session.should_not_receive(:optimize)
+    expect(@session).not_to receive(:optimize)
     Sunspot.optimize
   end
 
   it 'should return false for dirty?' do
-    @session.should_not_receive(:dirty?)
-    Sunspot.dirty?.should == false
+    expect(@session).not_to receive(:dirty?)
+    expect(Sunspot.dirty?).to eq(false)
   end
 
   it 'should not send commit_if_dirty to session' do
-    @session.should_not_receive(:commit_if_dirty)
+    expect(@session).not_to receive(:commit_if_dirty)
     Sunspot.commit_if_dirty
   end
 
   it 'should return false for delete_dirty?' do
-    @session.should_not_receive(:delete_dirty?)
-    Sunspot.delete_dirty?.should == false
+    expect(@session).not_to receive(:delete_dirty?)
+    expect(Sunspot.delete_dirty?).to eq(false)
   end
 
   it 'should not send commit_if_delete_dirty to session' do
-    @session.should_not_receive(:commit_if_delete_dirty)
+    expect(@session).not_to receive(:commit_if_delete_dirty)
     Sunspot.commit_if_delete_dirty
   end
 
   it 'should not execute a search when #search called' do
-    @session.should_not_receive(:search)
+    expect(@session).not_to receive(:search)
     Post.search
   end
 
   it 'should not execute a search when #search called with parameters' do
-    @session.should_not_receive(:search)
+    expect(@session).not_to receive(:search)
     Post.search(:include => :blog, :select => 'id, title')
   end
 
   it 'should return a new search' do
-    @session.should_not_receive(:new_search)
-    Sunspot.new_search(Post).should respond_to(:execute)
+    expect(@session).not_to receive(:new_search)
+    expect(Sunspot.new_search(Post)).to respond_to(:execute)
   end
 
   it 'should not send more_like_this to session' do
-    @session.should_not_receive(:more_like_this)
+    expect(@session).not_to receive(:more_like_this)
     Sunspot.more_like_this(@post)
   end
 
@@ -124,31 +124,31 @@ describe 'specs with Sunspot stubbed' do
     end
 
     it 'should return empty results' do
-      @search.results.should == []
+      expect(@search.results).to eq([])
     end
 
     it 'should return empty hits' do
-      @search.hits.should == []
+      expect(@search.hits).to eq([])
     end
 
     it 'should return the same for raw_results as hits' do
-      @search.raw_results.should == @search.hits
+      expect(@search.raw_results).to eq(@search.hits)
     end
 
     it 'should return zero total' do
-      @search.total.should == 0
+      expect(@search.total).to eq(0)
     end
 
     it 'should return empty results for a given facet' do
-      @search.facet(:category_id).rows.should == []
+      expect(@search.facet(:category_id).rows).to eq([])
     end
 
     it 'should return empty results for a given dynamic facet' do
-      @search.dynamic_facet(:custom).rows.should == []
+      expect(@search.dynamic_facet(:custom).rows).to eq([])
     end
 
     it 'should return empty array if listing facets' do
-      @search.facets.should == []
+      expect(@search.facets).to eq([])
     end
 
     describe '#data_accessor_for' do
@@ -157,11 +157,11 @@ describe 'specs with Sunspot stubbed' do
       end
 
       it 'should provide accessor for select' do
-        @accessor.should respond_to(:select, :select=)
+        expect(@accessor).to respond_to(:select, :select=)
       end
 
       it 'should provide accessor for include' do
-        @accessor.should respond_to(:include, :include=)
+        expect(@accessor).to respond_to(:include, :include=)
       end
     end
 
@@ -171,7 +171,7 @@ describe 'specs with Sunspot stubbed' do
       end
 
       it 'should response to all the available data methods' do
-        @stats.should respond_to(
+        expect(@stats).to respond_to(
           :min,
           :max,
           :count,
@@ -183,11 +183,11 @@ describe 'specs with Sunspot stubbed' do
       end
 
       it 'should return empty results for a given facet' do
-        @stats.facet(:category_id).rows.should == []
+        expect(@stats.facet(:category_id).rows).to eq([])
       end
 
       it 'should return empty array if listing facets' do
-        @stats.facets.should == []
+        expect(@stats.facets).to eq([])
       end
 
     end

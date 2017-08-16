@@ -12,27 +12,27 @@ describe 'sunspot namespace rake task' do
       run_rake_task("sunspot:reindex", '', '', true)
 
       # This model should not be used by any other test and therefore should only be loaded by this test
-      Sunspot.searchable.collect(&:name).should include('RakeTaskAutoLoadTestModel')
+      expect(Sunspot.searchable.collect(&:name)).to include('RakeTaskAutoLoadTestModel')
     end
 
     it "should accept a space delimited list of models to reindex" do
-      Post.should_receive(:solr_reindex)
-      Author.should_receive(:solr_reindex)
-      Blog.should_not_receive(:solr_reindex)
+      expect(Post).to receive(:solr_reindex)
+      expect(Author).to receive(:solr_reindex)
+      expect(Blog).not_to receive(:solr_reindex)
 
       run_rake_task("sunspot:reindex", '', "Post Author", true)
     end
 
     it "should accept a plus delimited list of models to reindex" do
-      Post.should_receive(:solr_reindex)
-      Author.should_receive(:solr_reindex)
-      Blog.should_not_receive(:solr_reindex)
+      expect(Post).to receive(:solr_reindex)
+      expect(Author).to receive(:solr_reindex)
+      expect(Blog).not_to receive(:solr_reindex)
 
       run_rake_task("sunspot:reindex", '', "Post+Author", true)
     end
 
     it "should raise exception when all tables of sunspot models are empty" do
-      STDOUT.should_receive(:puts).with("You have no data in the database. Reindexing does nothing here.")
+      expect(STDOUT).to receive(:puts).with("You have no data in the database. Reindexing does nothing here.")
       empty_tables
       run_rake_task("sunspot:reindex")
     end

@@ -12,11 +12,11 @@ shared_examples_for "query with advanced manipulation" do
     end
 
     it "modifies existing param" do
-      connection.should have_last_search_with(:rows  => 40)
+      expect(connection).to have_last_search_with(:rows  => 40)
     end
 
     it "adds new param" do
-      connection.should have_last_search_with(:qt => 'complicated')
+      expect(connection).to have_last_search_with(:qt => 'complicated')
     end
   end
 
@@ -29,7 +29,7 @@ shared_examples_for "query with advanced manipulation" do
     end
 
     it 'should use specified request handler' do
-      connection.should have_last_search_with({})
+      expect(connection).to have_last_search_with({})
     end
   end
 end

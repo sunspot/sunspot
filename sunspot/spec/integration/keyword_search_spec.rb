@@ -19,8 +19,8 @@ describe 'keyword search' do
     context 'edismax' do
       it 'matches with wildcards' do
         results = Sunspot.search(Post) { keywords '*oas*' }.results
-        [0,2].each { |i| results.should include(@posts[i])}
-        [1].each { |i| results.should_not include(@posts[i])}
+        [0,2].each { |i| expect(results).to include(@posts[i])}
+        [1].each { |i| expect(results).not_to include(@posts[i])}
       end
 
       it 'matches multiple keywords on different fields with wildcards using subqueries' do
@@ -28,52 +28,52 @@ describe 'keyword search' do
           keywords 'insuffic*',:fields=>[:title]
           keywords 'win*',:fields=>[:body]
         end.results
-        [0].each {|i| results.should include(@posts[i])}
-        [1,2].each {|i| results.should_not include(@posts[i])}
+        [0].each {|i| expect(results).to include(@posts[i])}
+        [1,2].each {|i| expect(results).not_to include(@posts[i])}
       end
 
       it 'matches with proximity' do
         results = Sunspot.search(Post) { keywords '"wind buffer"~4' }.results
-        [0,1].each {|i| results.should_not include(@posts[i])}
-        [2].each {|i| results.should include(@posts[i])}
+        [0,1].each {|i| expect(results).not_to include(@posts[i])}
+        [2].each {|i| expect(results).to include(@posts[i])}
       end
 
       it 'does not match if not within proximity' do
         results = Sunspot.search(Post) { keywords '"wind buffer"~1' }.results
-        results.should == []
+        expect(results).to eq([])
       end
     end
 
     it 'matches a single keyword out of a single field' do
       results = Sunspot.search(Post) { keywords 'toast' }.results
-      [0, 2].each { |i| results.should include(@posts[i]) }
-      [1].each { |i| results.should_not include(@posts[i]) }
+      [0, 2].each { |i| expect(results).to include(@posts[i]) }
+      [1].each { |i| expect(results).not_to include(@posts[i]) }
     end
 
     it 'matches multiple words out of a single field' do
       results = Sunspot.search(Post) { keywords 'elects toast' }.results
-      results.should == [@posts[0]]
+      expect(results).to eq([@posts[0]])
     end
 
     it 'matches multiple words in multiple fields' do
       results = Sunspot.search(Post) { keywords 'toast wind' }.results
-      [0, 2].each { |i| results.should include(@posts[i]) }
-      [1].each { |i| results.should_not include(@posts[i]) }
+      [0, 2].each { |i| expect(results).to include(@posts[i]) }
+      [1].each { |i| expect(results).not_to include(@posts[i]) }
     end
 
     it 'matches multiple types' do
       results = Sunspot.search(Post, Namespaced::Comment) do
         keywords 'toast'
       end.results
-      [@posts[0], @posts[2], @comment].each  { |obj| results.should include(obj) }
-      results.should_not include(@posts[1])
+      [@posts[0], @posts[2], @comment].each  { |obj| expect(results).to include(obj) }
+      expect(results).not_to include(@posts[1])
     end
 
     it 'matches keywords from only the fields specified' do
       results = Sunspot.search(Post) do
         keywords 'moron', :fields => [:title]
       end.results
-      results.should == [@posts[1]]
+      expect(results).to eq([@posts[1]])
     end
 
     it 'matches multiple keywords on different fields using subqueries' do
@@ -81,13 +81,13 @@ describe 'keyword search' do
         keywords 'moron', :fields => [:title]
         keywords 'wind',  :fields => [:body]
       end
-      search.results.should == []
+      expect(search.results).to eq([])
 
       search = Sunspot.search(Post) do
         keywords 'moron',   :fields => [:title]
         keywords 'buffer',  :fields => [:body]
       end
-      search.results.should == [@posts[1]]
+      expect(search.results).to eq([@posts[1]])
     end
 
     it 'matches multiple keywords with escaped characters' do
@@ -95,7 +95,7 @@ describe 'keyword search' do
         keywords 'spirit',   :fields => [:title]
         keywords 'host\'s',  :fields => [:body]
       end
-      search.results.should == [@posts[2]]
+      expect(search.results).to eq([@posts[2]])
     end
 
     it 'matches multiple keywords with phrase-based search' do
@@ -104,7 +104,7 @@ describe 'keyword search' do
         keywords '"interpret the buffer"', :fields => [:body]
         keywords '"does the"', :fields => [:body]
       end
-      search.results.should == [@posts[2]]
+      expect(search.results).to eq([@posts[2]])
     end
 
     it 'matches multiple keywords different options' do
@@ -112,7 +112,7 @@ describe 'keyword search' do
         keywords 'insufficient nonexistent', :fields => [:title], :minimum_match => 1
         keywords 'wind does', :fields => [:body], :minimum_match => 2
       end
-      search.results.should == [@posts[0]]
+      expect(search.results).to eq([@posts[0]])
     end
   end
 
@@ -125,9 +125,10 @@ describe 'keyword search' do
 
     it 'should assign a higher score to the result matching the higher-boosted field' do
       search = Sunspot.search(Post) { keywords 'rhinoceros' }
-      search.hits.map { |hit| hit.primary_key }.should ==
+      expect(search.hits.map { |hit| hit.primary_key }).to eq(
         @posts.map { |post| post.id.to_s }
-      search.hits.first.score.should > search.hits.last.score
+      )
+      expect(search.hits.first.score).to be > search.hits.last.score
     end
   end
 
@@ -142,9 +143,10 @@ describe 'keyword search' do
 
     it 'should assign a higher score to the higher-boosted document' do
       search = Sunspot.search(Post) { keywords 'test' }
-      search.hits.map { |hit| hit.primary_key }.should ==
+      expect(search.hits.map { |hit| hit.primary_key }).to eq(
         @posts.map { |post| post.id.to_s }
-      search.hits.first.score.should > search.hits.last.score
+      )
+      expect(search.hits.first.score).to be > search.hits.last.score
     end
   end
 
@@ -164,8 +166,8 @@ describe 'keyword search' do
           phrase_fields :body => 2.0
         end
       end.hits
-      hits.first.instance.should == @comments.first
-      hits.first.score.should > hits.last.score
+      expect(hits.first.instance).to eq(@comments.first)
+      expect(hits.first.score).to be > hits.last.score
     end
 
     it 'assigns a higher score to documents in which the search terms appear in a boosted field' do
@@ -174,8 +176,8 @@ describe 'keyword search' do
           fields :body => 2.0, :author_name => 0.75
         end
       end.hits
-      hits.first.instance.should == @comments.first
-      hits.first.score.should > hits.last.score
+      expect(hits.first.instance).to eq(@comments.first)
+      expect(hits.first.score).to be > hits.last.score
     end
 
     it 'assigns a higher score to documents in which the search terms appear in a higher boosted phrase field' do
@@ -184,8 +186,8 @@ describe 'keyword search' do
           phrase_fields :body => 2.0, :author_name => 0.75
         end
       end.hits
-      hits.first.instance.should == @comments.first
-      hits.first.score.should > hits.last.score
+      expect(hits.first.instance).to eq(@comments.first)
+      expect(hits.first.score).to be > hits.last.score
     end
   end
 
@@ -210,8 +212,8 @@ describe 'keyword search' do
         end
         query.without(@posts[1])
       end
-      search.results.should == [@posts[0], @posts[2]]
-      search.hits[0].score.should > search.hits[1].score
+      expect(search.results).to eq([@posts[0], @posts[2]])
+      expect(search.hits[0].score).to be > search.hits[1].score
     end
 
     it 'should assign scores in order of multiple boost query match' do
@@ -221,9 +223,9 @@ describe 'keyword search' do
           boost(1.5) { with(:average_rating).greater_than(3.0) }
         end
       end
-      search.results.should == @posts
-      search.hits[0].score.should > search.hits[1].score
-      search.hits[1].score.should > search.hits[2].score
+      expect(search.results).to eq(@posts)
+      expect(search.hits[0].score).to be > search.hits[1].score
+      expect(search.hits[1].score).to be > search.hits[2].score
     end
   end
 
@@ -241,11 +243,11 @@ describe 'keyword search' do
     end
 
     it 'should match documents that contain the minimum_match number of search terms' do
-      @search.results.should include(@posts[0])
+      expect(@search.results).to include(@posts[0])
     end
 
     it 'should not match documents that do not contain the minimum_match number of search terms' do
-      @search.results.should_not include(@posts[1])
+      expect(@search.results).not_to include(@posts[1])
     end
   end
 
@@ -264,15 +266,15 @@ describe 'keyword search' do
     end
 
     it 'should match exact phrase' do
-      @search.results.should include(@posts[0])
+      expect(@search.results).to include(@posts[0])
     end
 
     it 'should match phrase divided by query phrase slop terms' do
-      @search.results.should include(@posts[1])
+      expect(@search.results).to include(@posts[1])
     end
 
     it 'should not match phrase divided by more than query phrase slop terms' do
-      @search.results.should_not include(@posts[2])
+      expect(@search.results).not_to include(@posts[2])
     end
   end
 
@@ -298,15 +300,15 @@ describe 'keyword search' do
     end
 
     it 'should give phrase field boost to exact match' do
-      @sorted_hits[0].score.should > @sorted_hits[1].score
+      expect(@sorted_hits[0].score).to be > @sorted_hits[1].score
     end
 
     it 'should give phrase field boost to match within slop' do
-      @sorted_hits[2].score.should > @sorted_hits[3].score
+      expect(@sorted_hits[2].score).to be > @sorted_hits[3].score
     end
 
     it 'should not give phrase field boost to match beyond slop' do
-      @sorted_hits[4].score.should == @sorted_hits[5].score
+      expect(@sorted_hits[4].score).to eq(@sorted_hits[5].score)
     end
   end
 
@@ -316,8 +318,8 @@ describe 'keyword search' do
     end
 
     after :each do
-      @search.results.should == @posts
-      @search.hits.first.score.should > @search.hits.last.score
+      expect(@search.results).to eq(@posts)
+      expect(@search.hits.first.score).to be > @search.hits.last.score
     end
 
     it 'boosts via function query with float' do

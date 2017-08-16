@@ -2,12 +2,12 @@ require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::Batcher do
   it "includes Enumerable" do
-    described_class.should include Enumerable
+    expect(described_class).to include Enumerable
   end
 
   describe "#each" do
     let(:current) { [:foo, :bar] }
-    before { subject.stub(:current).and_return current }
+    before { allow(subject).to receive(:current).and_return current }
 
     it "iterates over current" do
       yielded_values = []
@@ -16,25 +16,25 @@ describe Sunspot::Batcher do
         yielded_values << value
       end
 
-      yielded_values.should eq current
+      expect(yielded_values).to eq current
     end
   end
 
   describe "adding to current batch" do
     it "#push pushes to current" do
       subject.push :foo
-      subject.current.should include :foo
+      expect(subject.current).to include :foo
     end
 
     it "#<< pushes to current" do
       subject.push :foo
-      subject.current.should include :foo
+      expect(subject.current).to include :foo
     end
 
     it "#concat concatinates on current batch" do
       subject << :foo
       subject.concat [:bar, :mix]
-      should include :foo, :bar, :mix
+      is_expected.to include :foo, :bar, :mix
     end
   end
 
@@ -46,7 +46,7 @@ describe Sunspot::Batcher do
       end
 
       it "is empty by default" do
-        subject.current.should be_empty
+        expect(subject.current).to be_empty
       end
     end
 
@@ -58,7 +58,7 @@ describe Sunspot::Batcher do
       end
 
       it "returns the same as last time" do
-        subject.current.should eq subject.current
+        expect(subject.current).to eq subject.current
       end
     end
   end
@@ -71,7 +71,7 @@ describe Sunspot::Batcher do
     it "changes current" do
       subject << :foo
       subject.start_new
-      should_not include :foo
+      is_expected.not_to include :foo
     end
   end
 
@@ -88,25 +88,25 @@ describe Sunspot::Batcher do
       it "changes current" do
         subject << :foo
         subject.end_current
-        should_not include :foo
+        is_expected.not_to include :foo
       end
 
       it "returns current" do
         subject << :foo
-        subject.end_current.should include :foo
+        expect(subject.end_current).to include :foo
       end
     end
   end
 
   describe "#batching?" do
     it "is false when depth is 0" do
-      subject.should_receive(:depth).and_return 0
-      should_not be_batching
+      expect(subject).to receive(:depth).and_return 0
+      is_expected.not_to be_batching
     end
 
     it "is true when depth is more than 0" do
-      subject.should_receive(:depth).and_return 1
-      should be_batching
+      expect(subject).to receive(:depth).and_return 1
+      is_expected.to be_batching
     end
   end
 end

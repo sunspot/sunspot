@@ -19,8 +19,8 @@ describe "field grouping" do
       group :title
     end
 
-    search.group(:title).groups.should include { |g| g.value == "Title1" }
-    search.group(:title).groups.should include { |g| g.value == "Title2" }
+    expect(search.group(:title).groups).to include { |g| g.value == "Title1" }
+    expect(search.group(:title).groups).to include { |g| g.value == "Title2" }
   end
 
   it "returns the number of matches unique groups" do
@@ -28,7 +28,7 @@ describe "field grouping" do
       group :title
     end
 
-    search.group(:title).total.should == 2
+    expect(search.group(:title).total).to eq(2)
   end
 
   it "provides access to the number of matches before grouping" do
@@ -36,7 +36,7 @@ describe "field grouping" do
       group :title
     end
 
-    search.group(:title).matches.should == @posts.length
+    expect(search.group(:title).matches).to eq(@posts.length)
   end
 
   it "allows grouping by multiple fields" do
@@ -44,8 +44,8 @@ describe "field grouping" do
       group :title, :sort_title
     end
 
-    search.group(:title).groups.should_not be_empty
-    search.group(:sort_title).groups.should_not be_empty
+    expect(search.group(:title).groups).not_to be_empty
+    expect(search.group(:sort_title).groups).not_to be_empty
   end
 
   it "allows specification of the number of documents per group" do
@@ -56,7 +56,7 @@ describe "field grouping" do
     end
 
     title1_group = search.group(:title).groups.detect { |g| g.value == "Title1" }
-    title1_group.hits.length.should == 2
+    expect(title1_group.hits.length).to eq(2)
   end
 
   it "allows specification of the sort within groups" do
@@ -69,7 +69,7 @@ describe "field grouping" do
     highest_ranked_post = @posts.sort_by { |p| -p.ratings_average }.first
 
     title1_group = search.group(:title).groups.detect { |g| g.value == "Title1" }
-    title1_group.hits.first.primary_key.to_i.should == highest_ranked_post.id
+    expect(title1_group.hits.first.primary_key.to_i).to eq(highest_ranked_post.id)
   end
 
   it "allows specification of an ordering function within groups" do
@@ -82,7 +82,7 @@ describe "field grouping" do
     highest_ranked_post = @posts.sort_by { |p| -p.ratings_average }.first
 
     title1_group = search.group(:title).groups.detect { |g| g.value == "Title1" }
-    title1_group.hits.first.primary_key.to_i.should == highest_ranked_post.id
+    expect(title1_group.hits.first.primary_key.to_i).to eq(highest_ranked_post.id)
   end
 
   it "allows pagination within groups" do
@@ -91,8 +91,8 @@ describe "field grouping" do
       paginate :per_page => 1, :page => 2
     end
 
-    search.group(:title).groups.length.should eql(1)
-    search.group(:title).groups.first.results.should == [ @posts.last ]
+    expect(search.group(:title).groups.length).to eql(1)
+    expect(search.group(:title).groups.first.results).to eq([ @posts.last ])
   end
 
   context "returns a paginated collection" do
@@ -104,10 +104,10 @@ describe "field grouping" do
       search.group(:title).groups
     end
 
-    it { subject.per_page.should      eql(1)   }
-    it { subject.total_pages.should   eql(2)   }
-    it { subject.current_page.should  eql(2)   }
-    it { subject.first_page?.should   be_false }
-    it { subject.last_page?.should    be_true  }
+    it { expect(subject.per_page).to      eql(1)   }
+    it { expect(subject.total_pages).to   eql(2)   }
+    it { expect(subject.current_page).to  eql(2)   }
+    it { expect(subject.first_page?).to   be(false) }
+    it { expect(subject.last_page?).to    be(true)  }
   end
 end

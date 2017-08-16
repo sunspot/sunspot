@@ -7,7 +7,7 @@ describe Sunspot::ClassSet do
     set = described_class.new
     set << class1 << class2
 
-    set.to_a.should =~ [class1, class2]
+    expect(set.to_a).to match_array([class1, class2])
   end
 
   it "replaces classes with the same name" do
@@ -15,10 +15,10 @@ describe Sunspot::ClassSet do
 
     class1 = double(:name => "Class1")
     set << class1
-    set.to_a.should == [class1]
+    expect(set.to_a).to eq([class1])
 
     class1_dup = double(:name => "Class1")
     set << class1_dup
-    set.to_a.should == [class1_dup]
+    expect(set.to_a).to eq([class1_dup])
   end
 end

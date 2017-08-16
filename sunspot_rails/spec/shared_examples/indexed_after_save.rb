@@ -3,6 +3,6 @@ shared_examples_for 'indexed after save' do
     subject.save!
     Sunspot.commit
 
-    subject.class.search.results.should include(subject)
+    expect(subject.class.search.results).to include(subject)
   end
 end
