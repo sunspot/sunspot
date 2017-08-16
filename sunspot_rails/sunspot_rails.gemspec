@@ -36,9 +36,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'sunspot', Sunspot::VERSION
   s.add_dependency 'nokogiri'
 
-  s.add_development_dependency 'rspec', '~> 1.2'
-  s.add_development_dependency 'rspec-rails', '~> 1.2'
-
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                   '--title' << 'Sunspot-Rails - Rails integration for the Sunspot Solr search library - API Documentation' <<
                   '--main' << 'README.rdoc'

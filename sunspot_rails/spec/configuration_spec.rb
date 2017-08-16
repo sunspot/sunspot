@@ -28,22 +28,22 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
 
   describe "port" do
     it "should default to port 8981 in test" do
-      allow(::Rails).to receive_messages(:env => 'test')
+      allow(::Rails).to receive(:env).and_return('test')
       @config = Sunspot::Rails::Configuration.new
       expect(@config.port).to eq(8981)
     end
     it "should default to port 8982 in development" do
-      allow(::Rails).to receive_messages(:env => 'development')
+      allow(::Rails).to receive(:env).and_return('development')
       @config = Sunspot::Rails::Configuration.new
       expect(@config.port).to eq(8982)
     end
     it "should default to 8983 in production" do
-      allow(::Rails).to receive_messages(:env => 'production')
+      allow(::Rails).to receive(:env).and_return('production')
       @config = Sunspot::Rails::Configuration.new
       expect(@config.port).to eq(8983)
     end
     it "should generally default to 8983" do
-      allow(::Rails).to receive_messages(:env => 'staging')
+      allow(::Rails).to receive(:env).and_return('staging')
       @config = Sunspot::Rails::Configuration.new
       expect(@config.port).to eq(8983)
     end
@@ -103,7 +103,7 @@ end
 
 describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
   before(:each) do
-    allow(::Rails).to receive_messages(:env => 'config_test')
+    allow(::Rails).to receive(:env).and_return('config_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
@@ -170,7 +170,7 @@ end
 
 describe Sunspot::Rails::Configuration, "with auto_index_callback and auto_remove_callback set" do
   before do
-    allow(::Rails).to receive_messages(:env => 'config_commit_test')
+    allow(::Rails).to receive(:env).and_return('config_commit_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
@@ -185,7 +185,7 @@ end
 
 describe Sunspot::Rails::Configuration, "with disabled: true in sunspot.yml" do
   before(:each) do
-    allow(::Rails).to receive_messages(:env => 'config_disabled_test')
+    allow(::Rails).to receive(:env).and_return('config_disabled_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
@@ -200,7 +200,7 @@ describe Sunspot::Rails::Configuration, "with ENV['SOLR_URL'] overriding sunspot
   end
 
   before(:each) do
-    allow(::Rails).to receive_messages(:env => 'config_test')
+    allow(::Rails).to receive(:env).and_return('config_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
@@ -227,7 +227,7 @@ describe Sunspot::Rails::Configuration, "with ENV['WEBSOLR_URL'] overriding suns
   end
 
   before(:each) do
-    allow(::Rails).to receive_messages(:env => 'config_test')
+    allow(::Rails).to receive(:env).and_return('config_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
@@ -254,7 +254,7 @@ describe Sunspot::Rails::Configuration, "with ENV['WEBSOLR_URL'] using https" do
   end
 
   before(:each) do
-    allow(::Rails).to receive_messages(:env => 'config_test')
+    allow(::Rails).to receive(:env).and_return('config_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
@@ -285,7 +285,7 @@ describe Sunspot::Rails::Configuration, "with ENV['WEBSOLR_URL'] including useri
   end
 
   before(:each) do
-    allow(::Rails).to receive_messages(:env => 'config_test')
+    allow(::Rails).to receive(:env).and_return('config_test')
     @config = Sunspot::Rails::Configuration.new
   end
 
