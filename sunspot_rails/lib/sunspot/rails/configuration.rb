@@ -237,7 +237,6 @@ module Sunspot #:nodoc:
           (user_configuration_from_key('auto_commit_after_delete_request') || false)
       end
 
-
       #
       # The log directory for solr logfiles
       #

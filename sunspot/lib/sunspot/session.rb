@@ -258,7 +258,9 @@ module Sunspot
         self.class.connection_class.connect(:url          => config.solr.url,
                                             :read_timeout => config.solr.read_timeout,
                                             :open_timeout => config.solr.open_timeout,
-                                            :proxy        => config.solr.proxy)
+                                            :proxy        => config.solr.proxy,
+                                            :faraday_client_config => config.faraday.client_config,
+                                            )
     end
 
     def indexer

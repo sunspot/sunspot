@@ -26,22 +26,22 @@ module Sunspot #:nodoc:
         @configuration = nil
       end
 
-      def build_session(configuration = self.configuration)
+      def build_session(configuration = self.configuration, &block)
         if configuration.disabled?
           StubSessionProxy.new(Sunspot.session)
         elsif configuration.has_master?
           SessionProxy::MasterSlaveSessionProxy.new(
-            SessionProxy::ThreadLocalSessionProxy.new(master_config(configuration)),
-            SessionProxy::ThreadLocalSessionProxy.new(slave_config(configuration))
+            SessionProxy::ThreadLocalSessionProxy.new(master_config(configuration, &block)),
+            SessionProxy::ThreadLocalSessionProxy.new(slave_config(configuration, &block))
           )
         else
-          SessionProxy::ThreadLocalSessionProxy.new(slave_config(configuration))
+          SessionProxy::ThreadLocalSessionProxy.new(slave_config(configuration, &block))
         end
       end
 
       private
 
-      def master_config(sunspot_rails_configuration)
+      def master_config(sunspot_rails_configuration, &block)
         config = Sunspot::Configuration.build
         builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
         config.solr.url = builder.build(
@@ -53,10 +53,12 @@ module Sunspot #:nodoc:
         config.solr.read_timeout = sunspot_rails_configuration.read_timeout
         config.solr.open_timeout = sunspot_rails_configuration.open_timeout
         config.solr.proxy = sunspot_rails_configuration.proxy
+        block.call(config) if block
+
         config
       end
 
-      def slave_config(sunspot_rails_configuration)
+      def slave_config(sunspot_rails_configuration, &block)
         config = Sunspot::Configuration.build
         builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
         config.solr.url = builder.build(
@@ -68,6 +70,8 @@ module Sunspot #:nodoc:
         config.solr.read_timeout = sunspot_rails_configuration.read_timeout
         config.solr.open_timeout = sunspot_rails_configuration.open_timeout
         config.solr.proxy = sunspot_rails_configuration.proxy
+        block.call(config) if block
+
         config
       end
     end

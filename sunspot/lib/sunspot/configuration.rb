@@ -27,6 +27,9 @@ module Sunspot
             open_timeout nil
             proxy nil
           end
+          faraday do
+            client_config nil
+          end
           master_solr do
             url nil
           end
