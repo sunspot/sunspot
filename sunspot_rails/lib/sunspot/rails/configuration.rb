@@ -369,7 +369,7 @@ module Sunspot #:nodoc:
       def user_configuration
         @user_configuration ||=
           begin
-            path = File.join(::Rails.root, 'config', 'sunspot.yml')
+            path = File.join(::Rails.root, 'config', ENV['SUNSPOT_CONFIG'] || 'sunspot.yml')
             if File.exist?(path)
               File.open(path) do |file|
                 processed = ERB.new(file.read).result
