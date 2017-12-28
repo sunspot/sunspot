@@ -278,6 +278,37 @@ describe 'search faceting' do
       expect(search.facet(:published_at).rows.last.value).to eq((time + 60*60*24)..(time + 60*60*24*2))
       expect(search.facet(:published_at).rows.last.count).to eq(1)
     end
+
+    it 'json facet should return time ranges' do
+      days_diff = 15
+      time_from = Time.utc(2009, 7, 8)
+      time_to = Time.utc(2009, 7, 8 + days_diff)
+      search = Sunspot.search(Post) do
+        json_facet(
+            :published_at,
+            :time_range => time_from..time_to
+        )
+      end
+      expect(search.json_facet(:published_at).rows.size).to eq(days_diff)
+      expect(search.json_facet(:published_at).rows[0].count).to eq(2)
+      expect(search.json_facet(:published_at).rows[1].count).to eq(1)
+    end
+
+    it 'json facet should return time ranges with custom gap' do
+      days_diff = 10
+      time_from = Time.utc(2009, 7, 8)
+      time_to = Time.utc(2009, 7, 8 + days_diff)
+      search = Sunspot.search(Post) do
+        json_facet(
+            :published_at,
+            :time_range => time_from..time_to,
+            gap: 60*60*24*2
+        )
+      end
+      expect(search.json_facet(:published_at).rows.size).to eq(days_diff / 2)
+      expect(search.json_facet(:published_at).rows[0].count).to eq(3)
+    end
+
   end
 
   context 'class facets' do

@@ -2,6 +2,7 @@
 
 require 'ostruct'
 require 'sunspot'
+require 'byebug'
 
 require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each do |file|

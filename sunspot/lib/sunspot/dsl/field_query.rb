@@ -333,6 +333,71 @@ module Sunspot
         end
       end
 
+      def json_facet(*field_names)
+        options = Sunspot::Util.extract_options_from(field_names)
+
+        # OLD
+        # field = @setup.field(field_name)
+        # @search.add_json_facet(field, options)
+        # facet = Sunspot::Query::JsonFacet.new(field, options)
+        # @query.add_query_facet(facet)
+
+        field_names.each do |field_name|
+          search_facet = nil
+          field = @setup.field(field_name)
+          facet =
+              if options[:time_range]
+                unless field.type.is_a?(Sunspot::Type::TimeType)
+                  raise(
+                      ArgumentError,
+                      ':time_range can only be specified for Date or Time fields'
+                  )
+                end
+                search_facet = @search.add_json_facet(field, options)
+                Sunspot::Query::DateFieldJsonFacet.new(field, options)
+              else
+                search_facet = @search.add_json_facet(field, options)
+                Sunspot::Query::FieldJsonFacet.new(field, options)
+              end
+
+          @query.add_query_facet(facet)
+
+          # TODO
+          # @query.add_field_facet(facet)
+          #
+          # Util.Array(options[:extra]).each do |extra|
+          #   if options.has_key?(:exclude)
+          #     raise(
+          #         ArgumentError,
+          #         "can't use :exclude with :extra (see documentation)"
+          #     )
+          #   end
+          #   extra_facet = Sunspot::Query::QueryFacet.new
+          #   case extra
+          #     when :any
+          #       extra_facet.add_negated_restriction(
+          #           field,
+          #           Sunspot::Query::Restriction::EqualTo,
+          #           nil
+          #       )
+          #     when :none
+          #       extra_facet.add_positive_restriction(
+          #           field,
+          #           Sunspot::Query::Restriction::EqualTo,
+          #           nil
+          #       )
+          #     else
+          #       raise(
+          #           ArgumentError,
+          #           "Allowed values for :extra are :any and :none"
+          #       )
+          #   end
+          #   search_facet.add_row(extra, extra_facet.to_boolean_phrase)
+          #   @query.add_query_facet(extra_facet)
+          # end
+        end
+      end
+
       def stats(*field_names, &block)
         options = Sunspot::Util.extract_options_from(field_names)
 

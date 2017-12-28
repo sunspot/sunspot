@@ -10,9 +10,19 @@ module Sunspot
         @facets << field
       end
 
+      def add_json_facet(json_facet)
+        @json_facet = json_facet
+      end
+
       def to_params
-        params = { :stats => true, :"stats.field" => [@field.indexed_name]}
-        params[facet_key] = @facets.map(&:indexed_name) unless @facets.empty?
+        params = {}
+        if !@json_facet.nil?
+          params.merge!(:"json.facet" => @json_facet.field_name_with_local_params(@field))
+        else
+          params.merge!({:stats => true, :"stats.field" => [@field.indexed_name]})
+          params[facet_key] = @facets.map(&:indexed_name) unless @facets.empty?
+          # params.merge!(:"stats.calcdistinct" => 'true') if @calc_distinct
+        end
         params
       end
 

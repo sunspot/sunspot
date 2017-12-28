@@ -182,6 +182,22 @@ module Sunspot
         end
       end
 
+      def json_facet(name, dynamic_name = nil)
+        if name
+          facet_name = if dynamic_name
+                         separator = @setup.dynamic_field_factory(name).separator
+                         [name, dynamic_name].join(separator)
+                       else
+                         name
+                       end.to_sym
+          @facets_by_name[facet_name]
+        end
+      end
+
+      def json_stat_facet(name, options = {})
+        JsonRangeStatFacet.new(name, self, options)
+      end
+
       #
       # Deprecated in favor of optional second argument to #facet
       #
@@ -191,6 +207,10 @@ module Sunspot
 
       def facet_response #:nodoc:
         @solr_result['facet_counts']
+      end
+
+      def json_facet_response #:nodoc:
+        @solr_result['facets']
       end
 
       def stats_response #:nodoc:
@@ -253,6 +273,11 @@ module Sunspot
 
       def add_field_stats(field) #:nodoc:
         add_stats(field.name, FieldStats.new(field, self))
+      end
+
+      def add_json_facet(field, options = {})
+        name = (options[:name] || field.name)
+        add_facet(name, JsonRangeFacet.new(field, self, options))
       end
 
       def highlights_for(doc) #:nodoc:
