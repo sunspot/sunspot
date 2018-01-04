@@ -4,7 +4,7 @@ sudo: false
 
 rvm:
   - 2.0.0
-  - 2.1.0
+  - 2.1.1
   - 2.3.1
   - 2.4.2
   - 2.5.0
@@ -14,37 +14,54 @@ rvm:
 env:
   - GEM=sunspot RSOLR=1.1.2
   - GEM=sunspot
-  - GEM=sunspot_rails RAILS=3.0.0
-  - GEM=sunspot_rails RAILS=3.1.0
-  - GEM=sunspot_rails RAILS=3.2.0
   - GEM=sunspot_rails RAILS=4.0.0
   - GEM=sunspot_rails RAILS=4.1.0
   - GEM=sunspot_rails RAILS=4.2.0
   - GEM=sunspot_rails RAILS=5.0
+  - GEM=sunspot_rails RAILS=5.1
   - GEM=sunspot_solr
 
 # Limit the size of the matrix by only performing the most common builds
 matrix:
   exclude:
-    # Not supporting Ruby 2.0 and Rails < 3
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=3.0.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=3.1.0
-  allow_failures:
-    # SQLITE fails to load correctly on Travis in Ruby 2.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=3.2.0
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=4.0.0
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=4.1.0
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=4.2.0
+    - rvm: 2.0.0
+      env: GEM=sunspot_rails RAILS=5.0
+    - rvm: 2.0.0
+      env: GEM=sunspot_rails RAILS=5.1
+
+    - rvm: 2.1.1
+      env: GEM=sunspot_rails RAILS=4.0.0
+    - rvm: 2.1.1
+      env: GEM=sunspot_rails RAILS=4.1.0
+    - rvm: 2.1.1
+      env: GEM=sunspot_rails RAILS=4.2.0
+    - rvm: 2.1.1
+      env: GEM=sunspot_rails RAILS=5.0
+    - rvm: 2.1.1
+      env: GEM=sunspot_rails RAILS=5.1
+
+    - rvm: 2.3.1
+      env: GEM=sunspot_rails RAILS=4.0.0
+    - rvm: 2.3.1
+      env: GEM=sunspot_rails RAILS=4.1.0
+    - rvm: 2.3.1
+      env: GEM=sunspot_rails RAILS=4.2.0
+    - rvm: 2.3.1
+      env: GEM=sunspot_rails RAILS=5.0
+    - rvm: 2.3.1
+      env: GEM=sunspot_rails RAILS=5.1
+
+  allow_failures:
     # rails 5.0 doesn't work with rspec-rails-2.14.2 undefined method 'alias_method_chain'
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=5.0
-    - rvm: 2.1.0
+    - rvm: 2.1.1
       env: GEM=sunspot_rails RAILS=5.0
     - rvm: 2.3.1
       env: GEM=sunspot_rails RAILS=5.0
