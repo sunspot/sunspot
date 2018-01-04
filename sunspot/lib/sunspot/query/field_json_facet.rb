@@ -3,7 +3,7 @@ module Sunspot
     class FieldJsonFacet < AbstractFieldFacet
 
       def initialize(field, options)
-        # TODO
+        @field, @options = field, options
         super
       end
 
@@ -12,9 +12,7 @@ module Sunspot
       end
 
       def field_name_with_local_params
-        # TODO
-        {
-        }
+        { count: @field.indexed_name }
       end
     end
   end

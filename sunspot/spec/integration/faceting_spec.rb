@@ -259,6 +259,57 @@ describe 'search faceting' do
     end
   end
 
+  context 'distinct field facets' do
+    before :all do
+      Sunspot.remove_all
+
+      Sunspot.index!(
+          (0..5).map { |i| Post.new(:blog_id => i, :title => 'title') }
+      )
+      Sunspot.index!(Post.new(:blog_id => 0, :title => 'title'))
+      Sunspot.index!(Post.new(:blog_id => 1, :title => 'title'))
+      Sunspot.index!(Post.new(:blog_id => 2, :title => 'title'))
+      Sunspot.index!(Post.new(:blog_id => 3, :title => 'title'))
+      Sunspot.index!(Post.new(:blog_id => 4, :title => 'other title'))
+      Sunspot.index!(Post.new(:blog_id => 5, :title => 'other title'))
+
+      Sunspot.index!(Post.new(:blog_id => 40, :title => 'title'))
+      Sunspot.index!(Post.new(:blog_id => 40, :title => 'title'))
+      Sunspot.index!(Post.new(:blog_id => 40, :title => 'other title'))
+      Sunspot.index!(Post.new(:blog_id => 40, :title => 'other title'))
+    end
+
+    it 'should return unique indexed elements for a field' do
+      search = Sunspot.search(Post) do
+        distinct(:blog_id)
+      end
+
+      expect(search.facet(:blog_id).rows.size).to eq(7)
+      expect(search.facet(:blog_id).rows.map(&:count).uniq.size).to eq(1)
+    end
+
+    it 'should return unique indexed elements for a field and facet on a field' do
+      search = Sunspot.search(Post) do
+        distinct(:blog_id, { group: :title })
+      end
+
+      expect(search.facet(:blog_id).rows.size).to eq(2)
+      expect(search.facet(:blog_id).rows[0].count).to eq(3)
+      expect(search.facet(:blog_id).rows[1].count).to eq(7)
+    end
+
+    it 'should return unique indexed elements for a field and facet on a field with hll' do
+      search = Sunspot.search(Post) do
+        distinct(:blog_id, { group: :title, stategy: :hll })
+      end
+
+      expect(search.facet(:blog_id).rows.size).to eq(2)
+      expect(search.facet(:blog_id).rows[0].count).to eq(3)
+      expect(search.facet(:blog_id).rows[1].count).to eq(7)
+    end
+
+  end
+
   context 'date facets' do
     before :all do
       Sunspot.remove_all
@@ -289,9 +340,10 @@ describe 'search faceting' do
             :time_range => time_from..time_to
         )
       end
-      expect(search.json_facet(:published_at).rows.size).to eq(days_diff)
-      expect(search.json_facet(:published_at).rows[0].count).to eq(2)
-      expect(search.json_facet(:published_at).rows[1].count).to eq(1)
+
+      expect(search.facet(:published_at).rows.size).to eq(days_diff)
+      expect(search.facet(:published_at).rows[0].count).to eq(2)
+      expect(search.facet(:published_at).rows[1].count).to eq(1)
     end
 
     it 'json facet should return time ranges with custom gap' do
@@ -305,8 +357,8 @@ describe 'search faceting' do
             gap: 60*60*24*2
         )
       end
-      expect(search.json_facet(:published_at).rows.size).to eq(days_diff / 2)
-      expect(search.json_facet(:published_at).rows[0].count).to eq(3)
+      expect(search.facet(:published_at).rows.size).to eq(days_diff / 2)
+      expect(search.facet(:published_at).rows[0].count).to eq(3)
     end
 
   end

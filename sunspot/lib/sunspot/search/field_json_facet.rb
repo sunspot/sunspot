@@ -1,6 +1,6 @@
 module Sunspot
   module Search
-    class JsonRangeFacet
+    class RangeJsonFacet
       def initialize(field, search, options)
         @field, @search, @options = field, search, options
       end
