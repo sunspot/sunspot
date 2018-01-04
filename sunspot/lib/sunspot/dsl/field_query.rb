@@ -349,6 +349,15 @@ module Sunspot
                 end
                 search_facet = @search.add_date_json_facet(field, options)
                 Sunspot::Query::DateFieldJsonFacet.new(field, options)
+              elsif options[:range]
+                unless [Sunspot::Type::TimeType, Sunspot::Type::FloatType, Sunspot::Type::IntegerType ].inject(false){|res,type| res || field.type.is_a?(type)}
+                  raise(
+                      ArgumentError,
+                      ':range can only be specified for date or numeric fields'
+                  )
+                end
+                search_facet = @search.add_range_json_facet(field, options)
+                Sunspot::Query::RangeJsonFacet.new(field, options)
               else
                 search_facet = @search.add_field_facet(field, options)
                 Sunspot::Query::FieldJsonFacet.new(field, options)
