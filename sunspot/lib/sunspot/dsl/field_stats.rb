@@ -14,12 +14,6 @@ module Sunspot
         end
       end
 
-      def json_facet(field_name, options = {})
-        field = @setup.field(field_name)
-        facet = Sunspot::Query::JsonFacet.new(field, options)
-        @query_stats.add_json_facet(facet)
-      end
-
     end
   end
 end

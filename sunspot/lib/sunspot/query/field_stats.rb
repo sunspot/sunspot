@@ -21,7 +21,6 @@ module Sunspot
         else
           params.merge!({:stats => true, :"stats.field" => [@field.indexed_name]})
           params[facet_key] = @facets.map(&:indexed_name) unless @facets.empty?
-          # params.merge!(:"stats.calcdistinct" => 'true') if @calc_distinct
         end
         params
       end
