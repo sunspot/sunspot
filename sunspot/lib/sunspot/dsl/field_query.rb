@@ -371,10 +371,10 @@ module Sunspot
         strategy = options[:strategy] || :unique
 
         field = @setup.field(field_name)
-        group = !options[:group].nil? ? @setup.field(options[:group]) : nil
+        group_by = !options[:group_by].nil? ? @setup.field(options[:group_by]) : nil
 
-        facet = Sunspot::Query::DistinctJsonFacet.new(field, { strategy: strategy, group: group } )
-        search_facet = @search.add_distinct_json_facet(field, { strategy: strategy, group: group } )
+        facet = Sunspot::Query::DistinctJsonFacet.new(field, { strategy: strategy, group_by: group_by } )
+        search_facet = @search.add_distinct_json_facet(field, { strategy: strategy, group_by: group_by } )
 
         @query.add_query_facet(facet)
       end

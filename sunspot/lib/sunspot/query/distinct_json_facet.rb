@@ -7,7 +7,7 @@ module Sunspot
       def initialize(field, options)
         raise Exception.new("Need to specify a strategy") if options[:strategy].nil?
         @stategy = STRATEGIES.include?(options[:strategy]) ? options[:strategy] : :unique
-        @group = options[:group] || field
+        @group_by = options[:group_by] || field
         super
       end
 
@@ -19,7 +19,7 @@ module Sunspot
         {
           categories: {
             type: 'terms',
-            field: @group.indexed_name,
+            field: @group_by.indexed_name,
             facet: {
               distinct: "#{@stategy}(#{@field.indexed_name})"
             }

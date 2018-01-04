@@ -290,7 +290,7 @@ describe 'search faceting' do
 
     it 'should return unique indexed elements for a field and facet on a field' do
       search = Sunspot.search(Post) do
-        distinct(:blog_id, { group: :title })
+        distinct(:blog_id, { group_by: :title })
       end
 
       expect(search.facet(:blog_id).rows.size).to eq(2)
@@ -300,7 +300,7 @@ describe 'search faceting' do
 
     it 'should return unique indexed elements for a field and facet on a field with hll' do
       search = Sunspot.search(Post) do
-        distinct(:blog_id, { group: :title, stategy: :hll })
+        distinct(:blog_id, { group_by: :title, stategy: :hll })
       end
 
       expect(search.facet(:blog_id).rows.size).to eq(2)
