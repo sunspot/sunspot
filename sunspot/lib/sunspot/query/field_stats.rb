@@ -17,7 +17,7 @@ module Sunspot
       def to_params
         params = {}
         if !@json_facet.nil?
-          params.merge!(:"json.facet" => @json_facet.field_name_with_local_params(@field))
+          params.merge!(:"json.facet" => @json_facet.field_name_with_local_params(@field).to_json)
         else
           params.merge!({:stats => true, :"stats.field" => [@field.indexed_name]})
           params[facet_key] = @facets.map(&:indexed_name) unless @facets.empty?

@@ -27,7 +27,8 @@ module Sunspot
                 min: "min(#{stats_field.indexed_name})",
                 max: "max(#{stats_field.indexed_name})",
                 sum: "sum(#{stats_field.indexed_name})",
-                avg: "avg(#{stats_field.indexed_name})"
+                avg: "avg(#{stats_field.indexed_name})",
+                sumsq: "sumsq(#{stats_field.indexed_name})",
               }
             }
           }
