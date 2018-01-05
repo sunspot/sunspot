@@ -25,49 +25,29 @@ env:
 matrix:
   exclude:
     - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=4.0.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=4.1.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=4.2.0
-    - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=5.0
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=5.1
 
-    - rvm: 2.1.1
-      env: GEM=sunspot_rails RAILS=4.0.0
-    - rvm: 2.1.1
-      env: GEM=sunspot_rails RAILS=4.1.0
-    - rvm: 2.1.1
-      env: GEM=sunspot_rails RAILS=4.2.0
     - rvm: 2.1.1
       env: GEM=sunspot_rails RAILS=5.0
     - rvm: 2.1.1
       env: GEM=sunspot_rails RAILS=5.1
 
     - rvm: 2.3.1
-      env: GEM=sunspot_rails RAILS=4.0.0
-    - rvm: 2.3.1
-      env: GEM=sunspot_rails RAILS=4.1.0
-    - rvm: 2.3.1
-      env: GEM=sunspot_rails RAILS=4.2.0
-    - rvm: 2.3.1
       env: GEM=sunspot_rails RAILS=5.0
     - rvm: 2.3.1
       env: GEM=sunspot_rails RAILS=5.1
 
-  allow_failures:
-    # rails 5.0 doesn't work with rspec-rails-2.14.2 undefined method 'alias_method_chain'
     - rvm: 2.4.2
-      env: GEM=sunspot_rails RAILS=5.0
+      env: GEM=sunspot_rails RAILS=4.0.0
     - rvm: 2.4.2
-      env: GEM=sunspot_rails RAILS=5.1
+      env: GEM=sunspot_rails RAILS=4.1.0
 
     - rvm: 2.5.0
-      env: GEM=sunspot_rails RAILS=5.0
+      env: GEM=sunspot_rails RAILS=4.0.0
     - rvm: 2.5.0
-      env: GEM=sunspot_rails RAILS=5.1
+      env: GEM=sunspot_rails RAILS=4.1.0
 
 script:
   - ci/travis.sh

@@ -10,8 +10,9 @@ gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)
 gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
 
 group :test do
+  gem 'byebug'
   gem 'protected_attributes_continued'
-  gem 'rspec-rails', '~> 2.99.0'
+  gem 'rspec-rails', '~> 3.7.2'
   gem 'progress_bar', '~> 1.0.5', require: false
 end
 
