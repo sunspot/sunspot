@@ -25,7 +25,7 @@ module Sunspot
           params[qualified_param('limit')] = @options[:limit].to_i
         end
         if @options[:offset]
-          params[qualified_param('offset')] = @options[:offset].to_i
+          params[qualified_param('offset')] = @op1tions[:offset].to_i
         end
         if @options[:prefix]
           params[qualified_param('prefix')] = @options[:prefix].to_s

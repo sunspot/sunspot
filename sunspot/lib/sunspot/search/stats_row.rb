@@ -30,11 +30,11 @@ module Sunspot
       end
 
       def sum_of_squares
-        !data['sumOfSquares'].nil? ? data['sumOfSquares'] : 0
+        !data['sumOfSquares'].nil? ? data['sumOfSquares'] : (!data['sumsq'].nil? ? data['sumsq']: 0)
       end
 
       def mean
-        !data['mean'].nil? ? data['mean'] : 0
+        !data['mean'].nil? ? data['mean'] : (!data['avg'].nil? ? data['avg'] : 0)
       end
 
       def standard_deviation
