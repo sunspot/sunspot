@@ -183,7 +183,7 @@ module Sunspot
       end
 
       def stat_json_facet(name, options = {})
-        RangeStatJsonFacet.new(name, self, options)
+        StatJsonFacet.new(name, self, options)
       end
 
       #
