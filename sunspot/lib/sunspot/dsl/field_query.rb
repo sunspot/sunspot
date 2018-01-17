@@ -359,11 +359,40 @@ module Sunspot
                 search_facet = @search.add_range_json_facet(field, options)
                 Sunspot::Query::RangeJsonFacet.new(field, options)
               else
-                search_facet = @search.add_field_facet(field, options)
+                search_facet = @search.add_field_json_facet(field, options)
                 Sunspot::Query::FieldJsonFacet.new(field, options)
               end
-
           @query.add_query_facet(facet)
+          Util.Array(options[:extra]).each do |extra|
+            if options.has_key?(:exclude)
+              raise(
+                ArgumentError,
+                "can't use :exclude with :extra (see documentation)"
+              )
+            end
+            extra_facet = Sunspot::Query::QueryFacet.new
+            case extra
+              when :any
+                extra_facet.add_negated_restriction(
+                  field,
+                  Sunspot::Query::Restriction::EqualTo,
+                  nil
+                )
+              when :none
+                extra_facet.add_positive_restriction(
+                  field,
+                  Sunspot::Query::Restriction::EqualTo,
+                  nil
+                )
+              else
+                raise(
+                  ArgumentError,
+                  "Allowed values for :extra are :any and :none"
+                )
+            end
+            search_facet.add_row(extra, extra_facet.to_boolean_phrase)
+            @query.add_query_facet(extra_facet)
+          end
         end
       end
 

@@ -156,7 +156,75 @@ describe 'search faceting' do
     end
   end
 
-  context 'prefix escaping' do
+  context 'json facet options' do
+    before :all do
+      Sunspot.remove_all
+      facet_values = %w(zero one two three four)
+      facet_values.each_with_index do |value, i|
+        i.times { Sunspot.index(Post.new(:title => value, :blog_id => 1)) }
+      end
+      Sunspot.index(Post.new(:blog_id => 1))
+      Sunspot.index(Post.new(:title => 'zero', :blog_id => 2))
+      Sunspot.commit
+    end
+
+    it 'should work' do
+      search = Sunspot.search(Post) do
+         json_facet(:title)
+      end
+      expect(search.facet(:title).rows.size).to eq(5)
+    end
+
+    it 'should limit the number of facet rows' do
+      search = Sunspot.search(Post) do
+        json_facet :title, :limit => 3
+      end
+      expect(search.facet(:title).rows.size).to eq(3)
+    end
+
+    it 'should not return zeros by default' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }).not_to include('zero')
+    end
+
+    it 'should return a specified minimum count' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, :minimum_count => 2
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four three two))
+    end
+
+    it 'should order facets lexically' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, :sort => :index
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four one three two))
+    end
+
+    it 'should order facets by count' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, :sort => :count
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four three two one))
+    end
+
+    it 'should limit facet values by prefix' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, :prefix => 't'
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }.sort).to eq(%w(three two))
+    end
+
+  end
+
+    context 'prefix escaping' do
     before do
       Sunspot.remove_all
       ["title1", "title2", "title with spaces 1", "title with spaces 2", "title/with/slashes/1", "title/with/slashes/2"].each do |value|

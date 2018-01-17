@@ -1,8 +1,9 @@
 module Sunspot
   module Search
-    class RangeJsonFacet
+    class FieldJsonFacet < QueryFacet
       def initialize(field, search, options)
-        @field, @search, @options = field, search, options
+        super((options[:name] || field.name).to_sym, search, options)
+        @field = field
       end
 
       def rows
