@@ -49,7 +49,7 @@ describe 'search stats' do
     it 'returns minimum on facet row with two blog ids' do
       expect(Sunspot.search(Post) do
         stats :average_rating do
-          json_facet :blog_id
+          json_facet :blog_id, sort: :min
         end
       end.stat_json_facet(:blog_id).rows[1].min).to eq(3.0)
     end
@@ -57,17 +57,10 @@ describe 'search stats' do
     it 'returns maximum on facet row with two blog ids' do
       expect(Sunspot.search(Post) do
         stats :average_rating do
-          json_facet :blog_id
+          json_facet :blog_id, sort: :max
         end
       end.stat_json_facet(:blog_id).rows[1].max).to eq(4.0)
     end
 
-    it 'returns maximum on facet row with two blog ids' do
-      expect(Sunspot.search(Post) do
-        stats :average_rating do
-          json_facet :blog_id
-        end
-      end.stat_json_facet(:blog_id).rows[1].max).to eq(4.0)
-    end
   end
 end

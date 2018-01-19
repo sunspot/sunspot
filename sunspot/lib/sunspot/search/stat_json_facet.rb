@@ -14,11 +14,6 @@ module Sunspot
             data.each do |d|
               rows << StatsRow.new(d, nil, d['val'])
             end
-            if @options[:sort] == :index
-              rows.sort! { |lrow, rrow| lrow.value <=> rrow.value }
-            else
-              rows.sort! { |lrow, rrow| lrow.count <=> rrow.count }
-            end
             rows
           end
 
