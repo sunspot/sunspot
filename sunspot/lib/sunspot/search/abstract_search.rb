@@ -263,24 +263,9 @@ module Sunspot
         add_stats(field.name, FieldStats.new(field, self))
       end
 
-      def add_range_json_facet(field, options = {})
-        name = (options[:name] || field.name)
-        add_facet(name, RangeJsonFacet.new(field, self, options))
-      end
-
-      def add_date_json_facet(field, options = {})
-        name = (options[:name] || field.name)
-        add_facet(name, DateJsonFacet.new(field, self, options))
-      end
-
-      def add_field_json_facet(field, options = {})
+      def add_json_facet(field, options = {})
         name = (options[:name] || field.name)
         add_facet(name, FieldJsonFacet.new(field, self, options))
-      end
-
-      def add_distinct_json_facet(field, options = {})
-        name = (options[:name] || field.name)
-        add_facet(name, DistinctJsonFacet.new(field, self, options))
       end
 
       def highlights_for(doc) #:nodoc:

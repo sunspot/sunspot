@@ -12,7 +12,7 @@ module Sunspot
             data = json_facet_response.nil? ? [] : json_facet_response['buckets']
             rows = []
             data.each do |d|
-              rows << StatsRow.new(d, nil, d['val'])
+              rows << StatsJsonRow.new(d, nil, d['val'])
             end
             rows
           end

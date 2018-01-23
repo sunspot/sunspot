@@ -16,28 +16,7 @@ module Sunspot
 
       def json_facet(field_name, options = {})
         field = @setup.field(field_name)
-
-        facet =
-            if options[:time_range]
-              unless field.type.is_a?(Sunspot::Type::TimeType)
-                raise(
-                    ArgumentError,
-                    ':time_range can only be specified for Date or Time fields'
-                )
-              end
-              Sunspot::Query::DateFieldJsonFacet.new(field, options)
-            elsif options[:range]
-              unless [Sunspot::Type::TimeType, Sunspot::Type::FloatType, Sunspot::Type::IntegerType ].inject(false){|res,type| res || field.type.is_a?(type)}
-                raise(
-                    ArgumentError,
-                    ':range can only be specified for date or numeric fields'
-                )
-              end
-              Sunspot::Query::RangeJsonFacet.new(field, options)
-            else
-              Sunspot::Query::FieldJsonFacet.new(field, options)
-            end
-
+        facet = Sunspot::Util.parse_json_facet(field_name, options, @setup)
         @query_stats.add_json_facet(facet)
       end
 

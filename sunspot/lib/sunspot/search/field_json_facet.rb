@@ -1,8 +1,11 @@
 module Sunspot
   module Search
-    class FieldJsonFacet < QueryFacet
+    class FieldJsonFacet
+
+      attr_reader :name
+
       def initialize(field, search, options)
-        super((options[:name] || field.name).to_sym, search, options)
+        @name, @search, @options = name, search, options
         @field = field
       end
 
@@ -13,7 +16,7 @@ module Sunspot
             data = json_facet_response.nil? ? [] : json_facet_response['buckets']
             rows = []
             data.each do |d|
-              rows << FacetRow.new(d['val'], d['count'], self)
+              rows << JsonFacetRow.new(d, self)
             end
 
             if @options[:sort] == :count
