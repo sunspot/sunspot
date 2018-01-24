@@ -241,7 +241,8 @@ describe 'scoped_search' do
   end
 
   describe 'inclusion by identity' do
-    before do
+    before :each do
+      Sunspot.remove_all
       @posts = (1..5).map do |i|
         post = Post.new
         Sunspot.index(post)
@@ -271,7 +272,8 @@ describe 'scoped_search' do
   end
 
   describe 'exclusion by identity' do
-    before do
+    before :each do
+      Sunspot.remove_all
       @posts = (1..5).map do |i|
         post = Post.new
         Sunspot.index(post)
