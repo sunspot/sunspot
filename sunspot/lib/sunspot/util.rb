@@ -206,8 +206,6 @@ module Sunspot
             )
           end
           Sunspot::Query::RangeJsonFacet.new(field, options, setup)
-        elsif options[:query]
-          Sunspot::Query::QueryJsonFacet.new(field, options, setup)
         else
           Sunspot::Query::FieldJsonFacet.new(field, options, setup)
         end
