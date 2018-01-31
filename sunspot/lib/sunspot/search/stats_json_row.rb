@@ -69,7 +69,7 @@ module Sunspot
       end
 
       def inspect
-        "<Sunspot::Search::StatsRow:#{value.inspect} min=#{min} max=#{max} count=#{count} sum=#{sum} missing=#{missing} sum_of_squares=#{sum_of_squares} mean=#{mean} standard_deviation=#{standard_deviation} #{nested.nil? ? '' : " nested_count=#{nested.size}"}>"
+        "<Sunspot::Search::StatsJsonRow:#{value.inspect} min=#{min} max=#{max} count=#{count} sum=#{sum} missing=#{missing} sum_of_squares=#{sum_of_squares} mean=#{mean} standard_deviation=#{standard_deviation} #{nested.nil? ? '' : " nested_count=#{nested.size}"}>"
       end
 
       private
