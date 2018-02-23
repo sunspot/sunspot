@@ -11,6 +11,9 @@ module Sunspot
         end
       end
 
+      #
+      # Returns all of the hits that have a result
+      #
       def verified_hits
         hits.select { |h| h.result }
       end
