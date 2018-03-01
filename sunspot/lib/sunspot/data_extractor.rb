@@ -25,7 +25,7 @@ module Sunspot
           when Array
             object.map { |o| extract_value_from(o) }
           when Hash
-            object.map { |(k, v)| [extract_value_from(k), extract_value_from(v)] }.to_h
+            object.inject({}) { |h, (k, v)| h.merge(extract_value_from(k) => extract_value_from(v)) }
           else
             object
         end
