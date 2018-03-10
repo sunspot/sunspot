@@ -88,8 +88,16 @@ module Sunspot
     # Return an XML representation of this schema using the ERB template
     #
     def to_xml
-      template = File.join(File.dirname(__FILE__), '..', '..', 'templates', 'schema.xml.erb')
-      ERB.new(File.read(template), nil, '-').result(binding)
+      template_path = File.join(File.dirname(__FILE__), '..', '..', 'templates', 'schema.xml.erb')
+      template_text = File.read(template_path)
+
+      erb = if RUBY_VERSION >= '2.6'
+        ERB.new(template_text, trim_mode: '-')
+      else
+        ERB.new(template_text, nil, '-')
+      end
+
+      erb.result(binding)
     end
 
     private
