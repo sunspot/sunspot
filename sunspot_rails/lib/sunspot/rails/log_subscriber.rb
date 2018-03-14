@@ -41,7 +41,7 @@ module Sunspot
         }.join(', ')
         request = "path=#{path} parameters={#{parameters}}"
 
-        debug "  #{color(name, GREEN, true)}  [ #{request} ]"
+        # debug "  #{color(name, GREEN, true)}  [ #{request} ]"
       end
     end
   end
