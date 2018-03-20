@@ -6,6 +6,8 @@ if RUBY_VERSION < '2.1'
   gem 'nokogiri', '~> 1.6.8'
 end
 
+gem 'rake', '< 12.3'
+
 gem 'sunspot', :path => File.expand_path('../../../sunspot', __FILE__)
 gem 'sunspot_solr', :path => File.expand_path('../../../sunspot_solr', __FILE__)
 gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)

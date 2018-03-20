@@ -242,6 +242,7 @@ describe 'scoped_search' do
 
   describe 'inclusion by identity' do
     before do
+      Sunspot.remove_all
       @posts = (1..5).map do |i|
         post = Post.new
         Sunspot.index(post)
@@ -272,6 +273,7 @@ describe 'scoped_search' do
 
   describe 'exclusion by identity' do
     before do
+      Sunspot.remove_all
       @posts = (1..5).map do |i|
         post = Post.new
         Sunspot.index(post)
@@ -477,9 +479,10 @@ describe 'scoped_search' do
     # This could fail if the random set returned just happens to be the same as the last random set (the nature of randomness)
     it 'should order randomly using the order_by function and passing a direction' do
       result_sets = Array.new(2) do
-        Sunspot.search(Post) { order_by(:random, :desc) }.results.map do |result|
-          result.id
-        end
+        Sunspot.search(Post) do
+          order_by(:random, :desc)
+          paginate(:page => 1, :per_page => 100)
+        end.results.map { |result| result.id }
       end
       expect(result_sets[0]).not_to eq(result_sets[1])
     end
