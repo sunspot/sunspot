@@ -7,8 +7,8 @@ describe 'atomic updates' do
 
   def validate_hit(hit, values = {})
     values.each do |field, value|
-      stored_value = hit.stored(field)
-      stored_value.should eq(value), "expected #{value.inspect}, but got #{stored_value.inspect} for field '#{field}'"
+      stored = hit.stored(field)
+      expect(stored).to eq(value), "expected #{value.inspect}, but got #{stored.inspect} for field '#{field}'"
     end
   end
 
