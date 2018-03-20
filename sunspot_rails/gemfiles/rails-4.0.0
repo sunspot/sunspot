@@ -17,7 +17,7 @@ gem 'sunspot_rails', :path => File.expand_path('../..', __FILE__)
 
 group :test do
   gem 'protected_attributes' # Rails 4 support for attr_accessor so specs still work
-  gem 'rspec-rails', '~> 2.99.0'
+  gem 'rspec-rails', '~> 3.6.0'
   gem 'progress_bar', '~> 1.0.5', require: false
   gem 'test-unit', '~> 3.2.0' if RUBY_VERSION >= '2.2.0'
 end

@@ -11,7 +11,6 @@ Bundler.require(ENV['DB'])
 
 require File.expand_path('config/environment', ENV['RAILS_ROOT'])
 require 'rspec/rails'
-require 'rspec/autorun'
 
 if RSolr::VERSION >= '2'
   require File.join('sunspot', 'rails', 'solr_logging')

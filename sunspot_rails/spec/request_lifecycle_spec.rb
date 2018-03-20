@@ -15,26 +15,22 @@ describe PostsController, :type => :controller do
     Sunspot::Rails.configuration = nil
   end
 
-  unless respond_to?(:describes)
-    controller_name :posts  # RSpec 1
-  end
-
   it 'should automatically commit after each action if specified' do
     @configuration.user_configuration = { 'auto_commit_after_request' => true }
     expect(Sunspot).to receive(:commit_if_dirty)
-    post :create, :post => { :title => 'Test 1' }
+    post :create, :params => { :post => { :title => 'Test 1' } }
   end
   
   it 'should not commit, if configuration is set to false' do
     @configuration.user_configuration = { 'auto_commit_after_request' => false }
     expect(Sunspot).not_to receive(:commit_if_dirty)
-    post :create, :post => { :title => 'Test 1' }
+    post :create, :params => { :post => { :title => 'Test 1' } }
   end
 
   it 'should commit if configuration is not specified' do
     @configuration.user_configuration = {}
     expect(Sunspot).to receive(:commit_if_dirty)
-    post :create, :post => { :title => 'Test 1' }
+    post :create, :params => { :post => { :title => 'Test 1' } }
   end
   
   ### auto_commit_if_delete_dirty
@@ -43,19 +39,19 @@ describe PostsController, :type => :controller do
     @configuration.user_configuration = { 'auto_commit_after_request' => false,
                                           'auto_commit_after_delete_request' => true }
     expect(Sunspot).to receive(:commit_if_delete_dirty)
-    post :create, :post => { :title => 'Test 1' }
+    post :create, :params => { :post => { :title => 'Test 1' } }
   end
   
   it 'should not automatically commit on delete if configuration is set to false' do
     @configuration.user_configuration = { 'auto_commit_after_request' => false,
                                           'auto_commit_after_delete_request' => false }
     expect(Sunspot).not_to receive(:commit_if_delete_dirty)
-    post :create, :post => { :title => 'Test 1' }
+    post :create, :params => { :post => { :title => 'Test 1' } }
   end
 
   it 'should not automatically commit on delete if configuration is not specified' do
     @configuration.user_configuration = { 'auto_commit_after_request' => false }
     expect(Sunspot).not_to receive(:commit_if_delete_dirty)
-    post :create, :post => { :title => 'Test 1' }
+    post :create, :params => { :post => { :title => 'Test 1' } }
   end
 end

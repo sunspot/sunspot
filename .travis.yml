@@ -1,6 +1,17 @@
 language: ruby
-cache: bundler
 sudo: false
+cache:
+  bundler: true
+  directories:
+    - sunspot/vendor/bundle
+    - sunspot_solr/vendor/bundle
+    - sunspot_rails/tmp/rails_3_0_0_app/vendor/bundle
+    - sunspot_rails/tmp/rails_3_1_0_app/vendor/bundle
+    - sunspot_rails/tmp/rails_3_2_0_app/vendor/bundle
+    - sunspot_rails/tmp/rails_4_0_0_app/vendor/bundle
+    - sunspot_rails/tmp/rails_4_1_0_app/vendor/bundle
+    - sunspot_rails/tmp/rails_4_2_0_app/vendor/bundle
+    - sunspot_rails/tmp/rails_5_0_app/vendor/bundle
 
 rvm:
   - 1.9.3
@@ -25,10 +36,10 @@ env:
 # Limit the size of the matrix by only performing the most common builds
 matrix:
   exclude:
-    # Not supporting Ruby 2.0 and Rails < 3
-    - rvm: 2.0.0
+    # Ruby 2.2+ is not supported on Rails 3.0 / 3.1
+    - rvm: 2.3.1
       env: GEM=sunspot_rails RAILS=3.0.0
-    - rvm: 2.0.0
+    - rvm: 2.3.1
       env: GEM=sunspot_rails RAILS=3.1.0
     # Rails 5 only supports ruby > 2.2.2
     - rvm: 1.9.3
@@ -36,19 +47,6 @@ matrix:
     - rvm: 2.0.0
       env: GEM=sunspot_rails RAILS=5.0
     - rvm: 2.1.0
-      env: GEM=sunspot_rails RAILS=5.0
-  allow_failures:
-    # SQLITE fails to load correctly on Travis in Ruby 2.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=3.2.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=4.0.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=4.1.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=4.2.0
-    # rails 5.0 doesn't work with rspec-rails-2.14.2 undefined method 'alias_method_chain'
-    - rvm: 2.3.1
       env: GEM=sunspot_rails RAILS=5.0
 
 script:
