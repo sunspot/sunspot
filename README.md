@@ -1150,6 +1150,16 @@ Post.search.hits.each do |hit|
 end
 ```
 
+Please note that when you have stored fields declared, they all going to be retrieved from Solr every time,
+even if you dont really need them. You can reduce returned stored dataset by using field lists,
+or you can skip all of them entirely:
+
+```ruby
+Post.search do
+  without_stored_fields
+end
+```
+
 ## Hits vs. Results
 
 Sunspot simply stores the type and primary key of objects in Solr.

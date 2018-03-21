@@ -22,14 +22,19 @@ describe 'fields lists' do
   end
 
   it 'loads only filtered fields' do
-    hit =
-      Sunspot.search(Post) do
-        field_list :title
-      end.hits.first
+    hit = Sunspot.search(Post) { field_list(:title) }.hits.first
 
     expect(hit.stored(:title)).to eq(@post.title)
 
     (stored_field_names - [:title]).each do |field|
+      expect(hit.stored(field)).to be_nil
+    end
+  end
+
+  it 'does not load any stored fields' do
+    hit = Sunspot.search(Post) { without_stored_fields }.hits.first
+
+    stored_field_names.each do |field|
       expect(hit.stored(field)).to be_nil
     end
   end

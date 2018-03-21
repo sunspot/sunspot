@@ -18,6 +18,10 @@ module Sunspot
         @query.add_field_list(Sunspot::Query::FieldList.new([:id] + list)) unless list.empty?
       end
 
+      def without_stored_fields
+        @query.add_field_list(Sunspot::Query::FieldList.new([:id]))
+      end
+
       #
       # Build a positive restriction. This method can take three forms: equality
       # restriction, restriction by another restriction, or identity
