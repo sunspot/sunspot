@@ -4,38 +4,42 @@ set +e
 
 gem update --system 1.8.25
 
+SOLR_PORT=8983
+
 solr_responding() {
-  port=$1
-  curl -o /dev/null "http://localhost:$port/solr/admin/ping" > /dev/null 2>&1
+  curl -o /dev/null "http://localhost:$SOLR_PORT/solr/admin/ping" > /dev/null 2>&1
 }
 
-wait_until_solr_responds() {
-  port=$1
-  while ! solr_responding $1; do
+start_solr_server() {
+  /bin/echo -n "Starting Solr on port $SOLR_PORT for Sunspot specs..."
+  bundle exec sunspot-solr start -p $SOLR_PORT
+  while ! solr_responding; do
     /bin/echo -n "."
     sleep 1
   done
+  /bin/echo "done."
+}
+
+stop_solr_server() {
+  /bin/echo -n "Stopping Solr... "
+  bundle exec sunspot-solr stop -p $SOLR_PORT
+  /bin/echo "done."
 }
 
 case $GEM in
   "sunspot")
 
     cd sunspot
-    /bin/echo -n "Starting Solr on port 8983 for Sunspot specs..."
     bundle install --quiet --path vendor/bundle
-    if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
+    if [ -f sunspot-solr.pid ]; then stop_solr_server || true; fi
 
-    bundle exec sunspot-solr start -p 8983
-    wait_until_solr_responds 8983
-    /bin/echo "done."
+    start_solr_server
 
     # Invoke the sunspot specs
     bundle exec rake spec
     rv=$?
 
-    /bin/echo -n "Stopping Solr... "
-    bundle exec sunspot-solr stop
-    /bin/echo "done."
+    stop_solr_server
 
     exit $rv
     ;;
@@ -43,13 +47,10 @@ case $GEM in
   "sunspot_rails")
 
     cd sunspot
-    /bin/echo -n "Starting Solr on port 8983 for Sunspot specs..."
     bundle install --quiet --path vendor/bundle
-    if [ -f sunspot-solr.pid ]; then bundle exec sunspot-solr stop || true; fi
+    if [ -f sunspot-solr.pid ]; then stop_solr_server || true; fi
 
-    bundle exec sunspot-solr start -p 8983
-    wait_until_solr_responds 8983
-    /bin/echo "done."
+    start_solr_server
 
     # Install gems for test Rails application
     # Allow user to pass in SPEC_OPTS that are passed to spec in order to specify
@@ -59,11 +60,8 @@ case $GEM in
     rake spec RAILS=$RAILS SPEC_OPTS="$SPEC_OPTS"
     rv=$?
 
-    # Cleanup Solr
-    /bin/echo -n "Stopping Solr... "
     cd ../sunspot
-    bundle exec sunspot-solr stop
-    /bin/echo "done."
+    stop_solr_server
 
     exit $rv
     ;;
