@@ -34,7 +34,7 @@ module Sunspot
           hits_for_class = id_hit_hash[class_name]
           data_accessor.load_all(ids).each do |result|
             hit = hits_for_class.delete(Adapters::InstanceAdapter.adapt(result).id.to_s)
-            hit.result = result
+            hit.result = result if hit
           end
           hits_for_class.values.each { |hit| hit.result = nil }
         end
