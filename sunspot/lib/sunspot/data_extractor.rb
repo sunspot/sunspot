@@ -9,8 +9,7 @@ module Sunspot
     # Abstract extractor to perform common actions on extracted values
     #
     class AbstractExtractor
-      CHAR_BLACKLIST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 14, 15, 16,
-        17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127]
+      BLACKLIST_REGEXP = /[\x0-\x8\xB\xC\xE-\x1F\x7f]/
 
       def value_for(object)
         extract_value_from(object)
@@ -32,8 +31,7 @@ module Sunspot
       end
 
       def remove_blacklisted_chars(object)
-        object.chars.
-          reject { |c| CHAR_BLACKLIST.include?(c.ord) }.join
+        object.gsub(BLACKLIST_REGEXP, '')
       end
     end
 
