@@ -29,7 +29,7 @@ Add to Gemfile:
 
 ```ruby
 gem 'sunspot_rails'
-gem 'sunspot_solr' # optional pre-packaged Solr distribution for use in development
+gem 'sunspot_solr' # optional pre-packaged Solr distribution for use in development. Please find a section below explaining other options for running Solr in production
 ```
 
 Bundle it!
@@ -1300,6 +1300,13 @@ test:
 You may want to use SSL for production environments with a username and password. For example, set `SOLR_URL` to `https://username:password@production.solr.example.com/solr`.
 
 You can examine the value of `Sunspot::Rails.configuration` at runtime.
+
+## Running Solr in production environment
+
+`sunspot_solr` gem is an easy and convenient way to start your development with Solr. 
+However once you are ready to deploy your code to a production, consider using another options like 
+[standalone](https://lucene.apache.org/solr/guide/installing-solr.html) or 
+[docker](https://hub.docker.com/_/solr/) Solr setup
 
 ## Development
 
