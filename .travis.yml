@@ -5,49 +5,22 @@ cache:
   directories:
     - sunspot/vendor/bundle
     - sunspot_solr/vendor/bundle
-    - sunspot_rails/tmp/rails_3_0_0_app/vendor/bundle
-    - sunspot_rails/tmp/rails_3_1_0_app/vendor/bundle
-    - sunspot_rails/tmp/rails_3_2_0_app/vendor/bundle
-    - sunspot_rails/tmp/rails_4_0_0_app/vendor/bundle
-    - sunspot_rails/tmp/rails_4_1_0_app/vendor/bundle
-    - sunspot_rails/tmp/rails_4_2_0_app/vendor/bundle
-    - sunspot_rails/tmp/rails_5_0_app/vendor/bundle
+    - sunspot_rails/vendor/bundle
 
 rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.0
   - 2.3.1
+  - 2.4.3
+  - 2.5.0
   # - rbx-2.0
   # - jruby
 
 env:
-  - GEM=sunspot RSOLR=1.1.2
   - GEM=sunspot
-  - GEM=sunspot_rails RAILS=3.0.0
-  - GEM=sunspot_rails RAILS=3.1.0
-  - GEM=sunspot_rails RAILS=3.2.0
-  - GEM=sunspot_rails RAILS=4.0.0
-  - GEM=sunspot_rails RAILS=4.1.0
-  - GEM=sunspot_rails RAILS=4.2.0
-  - GEM=sunspot_rails RAILS=5.0
+  - GEM=sunspot_rails
   - GEM=sunspot_solr
-
-# Limit the size of the matrix by only performing the most common builds
-matrix:
-  exclude:
-    # Ruby 2.2+ is not supported on Rails 3.0 / 3.1
-    - rvm: 2.3.1
-      env: GEM=sunspot_rails RAILS=3.0.0
-    - rvm: 2.3.1
-      env: GEM=sunspot_rails RAILS=3.1.0
-    # Rails 5 only supports ruby > 2.2.2
-    - rvm: 1.9.3
-      env: GEM=sunspot_rails RAILS=5.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=5.0
-    - rvm: 2.1.0
-      env: GEM=sunspot_rails RAILS=5.0
 
 script:
   - ci/travis.sh

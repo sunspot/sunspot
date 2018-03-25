@@ -23,7 +23,7 @@ For questions about how to use Sunspot in your app, please use the
 ## Looking for maintainers
 This project is looking for maintainers. An ideal candidate would be someone on a team whose app makes heavy use of the Sunspot gem. If you think you're a good fit, send a message to contact@culturecode.ca.
 
-## Quickstart with Rails 3 / 4
+## Quickstart with Rails
 
 Add to Gemfile:
 
@@ -1312,68 +1312,13 @@ However once you are ready to deploy your code to a production, consider using a
 
 ### Running Tests
 
-#### sunspot
-
-Install the required gem dependencies:
-
-```bash
-cd /path/to/sunspot/sunspot
-bundle install
-```
-
-Start a Solr instance on port 8983:
+To run all the specs just call `rake` from the library root folder.
+To run specs related to individual gems, consider using one of the following commands:
 
 ```bash
-bundle exec sunspot-solr start -p 8983
-# or `bundle exec sunspot-solr run -p 8983` to run in foreground
-```
-
-Run the tests:
-
-```bash
-bundle exec rake spec
-```
-
-If desired, stop the Solr instance:
-
-```bash
-bundle exec sunspot-solr stop
-```
-
-#### sunspot\_rails
-
-Install the gem dependencies for `sunspot`:
-
-```bash
-cd /path/to/sunspot/sunspot
-bundle install
-```
-
-Start a Solr instance on port 8983:
-
-```bash
-bundle exec sunspot-solr start -p 8983
-# or `bundle exec sunspot-solr run -p 8983` to run in foreground
-```
-
-Navigate to the `sunspot_rails` directory:
-
-```bash
-cd ../sunspot_rails
-```
-
-Run the tests:
-
-```bash
-rake spec # all Rails versions
-rake spec RAILS=3.1.1 # specific Rails version only
-```
-
-If desired, stop the Solr instance:
-
-```bash
-cd ../sunspot
-bundle exec sunspot-solr stop
+GEM=sunspot ci/travis.sh
+GEM=sunspot_rails ci/travis.sh
+GEM=sunspot_solr ci/travis.sh
 ```
 
 ### Generating Documentation
