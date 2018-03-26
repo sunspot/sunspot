@@ -1,0 +1,11 @@
+<% if ENV['DB'] == 'postgres' %>
+test:
+  adapter: postgresql
+  database: sunspot_test
+<% elsif ENV['DB'] == 'sqlite' %>
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000
+<% end %>

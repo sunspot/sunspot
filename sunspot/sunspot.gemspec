@@ -30,7 +30,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'rsolr', '>= 1.1.1', '< 3'
   s.add_dependency 'pr_geohash', '~>1.0'
 
-  s.add_development_dependency 'rspec', '~> 3.6.0'
+  s.add_development_dependency 'rake', '< 12.3'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'appraisal', '2.2.0'
   s.add_development_dependency 'byebug'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<

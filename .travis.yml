@@ -1,53 +1,27 @@
 language: ruby
-cache: bundler
 sudo: false
+cache:
+  bundler: true
+  directories:
+    - sunspot/vendor/bundle
+    - sunspot_solr/vendor/bundle
+    - sunspot_rails/vendor/bundle
 
 rvm:
   - 2.0.0
   - 2.1.1
   - 2.3.1
   - 2.4.2
+  - 2.4.3
   - 2.5.0
   # - rbx-2.0
   # - jruby
 
 env:
-  - GEM=sunspot RSOLR=1.1.2
   - GEM=sunspot
-  - GEM=sunspot_rails RAILS=4.0.0
-  - GEM=sunspot_rails RAILS=4.1.0
-  - GEM=sunspot_rails RAILS=4.2.0
-  - GEM=sunspot_rails RAILS=5.0
-  - GEM=sunspot_rails RAILS=5.1
+  - GEM=sunspot_rails
   - GEM=sunspot_solr
-
-# Limit the size of the matrix by only performing the most common builds
-matrix:
-  exclude:
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=5.0
-    - rvm: 2.0.0
-      env: GEM=sunspot_rails RAILS=5.1
-
-    - rvm: 2.1.1
-      env: GEM=sunspot_rails RAILS=5.0
-    - rvm: 2.1.1
-      env: GEM=sunspot_rails RAILS=5.1
-
-    - rvm: 2.3.1
-      env: GEM=sunspot_rails RAILS=5.0
-    - rvm: 2.3.1
-      env: GEM=sunspot_rails RAILS=5.1
-
-    - rvm: 2.4.2
-      env: GEM=sunspot_rails RAILS=4.0.0
-    - rvm: 2.4.2
-      env: GEM=sunspot_rails RAILS=4.1.0
-
-    - rvm: 2.5.0
-      env: GEM=sunspot_rails RAILS=4.0.0
-    - rvm: 2.5.0
-      env: GEM=sunspot_rails RAILS=4.1.0
 
 script:
   - ci/travis.sh
+

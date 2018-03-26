@@ -3,5 +3,4 @@ doc
 pkg/*
 log
 .bundle
-tmp/*
-gemfiles/*.lock
+gemfiles/*.gemfile*

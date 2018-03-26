@@ -11,3 +11,4 @@ pkg
 README.rdoc
 .bundle
 Gemfile.lock
+gemfiles/*.gemfile*
