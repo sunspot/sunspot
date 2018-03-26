@@ -526,6 +526,11 @@ Sunspot.search(Post) do
 end
 ```
 
+#### Json Facets
+
+The [json facet](http://yonik.com/json-facet-api/) functionality is also implemented. In the specs you can find
+some examples.
+
 ### Ordering
 
 By default, Sunspot orders results by "score": the Solr-determined
@@ -935,6 +940,20 @@ end
 Take care when requesting facets on a stats field, since all facet results are
 returned by Solr!
 
+#### Json facets stats
+```ruby
+search = Post.search do
+  stats :average_rating do
+    json_facet :featured
+  end
+end
+
+search.stat_json_facet(:featured).rows.each do |row|
+  puts "Minimum average rating for featured=#{row.value}: #{row.min}"
+end
+```
+
+
 #### Multiple stats and selective faceting
 
 ```ruby
@@ -1303,9 +1322,9 @@ You can examine the value of `Sunspot::Rails.configuration` at runtime.
 
 ## Running Solr in production environment
 
-`sunspot_solr` gem is an easy and convenient way to start your development with Solr. 
-However once you are ready to deploy your code to a production, consider using another options like 
-[standalone](https://lucene.apache.org/solr/guide/installing-solr.html) or 
+`sunspot_solr` gem is an easy and convenient way to start your development with Solr.
+However once you are ready to deploy your code to a production, consider using another options like
+[standalone](https://lucene.apache.org/solr/guide/installing-solr.html) or
 [docker](https://hub.docker.com/_/solr/) Solr setup
 
 ## Development

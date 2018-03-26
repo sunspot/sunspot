@@ -333,6 +333,17 @@ module Sunspot
         end
       end
 
+      def json_facet(*field_names)
+        options = Sunspot::Util.extract_options_from(field_names)
+
+        field_names.each do |field_name|
+          field = @setup.field(field_name)
+          facet = Sunspot::Util.parse_json_facet(field_name, options, @setup)
+          @search.add_json_facet(field, options)
+          @query.add_query_facet(facet)
+        end
+      end
+
       def stats(*field_names, &block)
         options = Sunspot::Util.extract_options_from(field_names)
 
