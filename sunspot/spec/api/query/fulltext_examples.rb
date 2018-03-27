@@ -66,7 +66,9 @@ shared_examples_for 'fulltext query' do
     end
 
     it 'puts default dismax parameters in subquery' do
-      expect(subqueries(:q).last[:qf].split(' ').sort).to eq(%w(backwards_title_text body_textsv tags_textv title_text))
+      expect(subqueries(:q).last[:qf].split(' ').sort).to(
+        eq(%w(backwards_title_text body_textsv tags_textv text_array_text title_text))
+      )
     end
 
     it 'puts field list in main query' do
@@ -78,14 +80,18 @@ shared_examples_for 'fulltext query' do
     search = search do
       keywords 'keyword search'
     end
-    expect(connection.searches.last[:qf].split(' ').sort).to eq(%w(backwards_title_text body_textsv tags_textv title_text))
+    expect(connection.searches.last[:qf].split(' ').sort).to(
+      eq(%w(backwards_title_text body_textsv tags_textv text_array_text title_text))
+    )
   end
 
   it 'searches both stored and unstored text fields' do
     search Post, Namespaced::Comment do
       keywords 'keyword search'
     end
-    expect(connection.searches.last[:qf].split(' ').sort).to eq(%w(author_name_text backwards_title_text body_text body_textsv tags_textv title_text))
+    expect(connection.searches.last[:qf].split(' ').sort).to(
+      eq(%w(author_name_text backwards_title_text body_text body_textsv tags_textv text_array_text title_text))
+    )
   end
 
   it 'searches only specified text fields when specified' do
@@ -101,7 +107,7 @@ shared_examples_for 'fulltext query' do
         exclude_fields :backwards_title, :body_mlt
       end
     end
-    expect(connection.searches.last[:qf].split(' ').sort).to eq(%w(body_textsv tags_textv title_text))
+    expect(connection.searches.last[:qf].split(' ').sort).to eq(%w(body_textsv tags_textv text_array_text title_text))
   end
 
   it 'assigns boost to fields when specified' do
@@ -173,7 +179,9 @@ shared_examples_for 'fulltext query' do
         boost_fields :title => 1.5
       end
     end
-    expect(connection.searches.last[:qf].split(' ').sort).to eq(%w(backwards_title_text body_textsv tags_textv title_text^1.5))
+    expect(connection.searches.last[:qf].split(' ').sort).to(
+      eq(%w(backwards_title_text body_textsv tags_textv text_array_text title_text^1.5))
+    )
   end
 
   it 'ignores boost fields that do not apply' do
@@ -182,7 +190,9 @@ shared_examples_for 'fulltext query' do
         boost_fields :bogus => 1.2, :title => 1.5
       end
     end
-    expect(connection.searches.last[:qf].split(' ').sort).to eq(%w(backwards_title_text body_textsv tags_textv title_text^1.5))
+    expect(connection.searches.last[:qf].split(' ').sort).to(
+      eq(%w(backwards_title_text body_textsv tags_textv text_array_text title_text^1.5))
+    )
   end
 
   it 'sets default boost with default fields' do

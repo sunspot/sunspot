@@ -26,6 +26,7 @@ module Sunspot
             read_timeout nil
             open_timeout nil
             proxy nil
+            update_format :xml
           end
           master_solr do
             url nil

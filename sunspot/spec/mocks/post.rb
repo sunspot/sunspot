@@ -37,6 +37,9 @@ end
 
 Sunspot.setup(Post) do
   text :title, :boost => 2
+  text :text_array, :boost => 3 do
+    [title, title]
+  end
   text :body, :stored => true, :more_like_this => true
   text :backwards_title do
     title.reverse if title
