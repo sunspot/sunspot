@@ -30,5 +30,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_development_dependency 'rake', '< 12.3'
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rspec', '~> 3.7'
 end
