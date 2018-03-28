@@ -241,7 +241,7 @@ describe 'scoped_search' do
   end
 
   describe 'inclusion by identity' do
-    before :each do
+    before do
       Sunspot.remove_all
       @posts = (1..5).map do |i|
         post = Post.new
@@ -272,7 +272,7 @@ describe 'scoped_search' do
   end
 
   describe 'exclusion by identity' do
-    before :each do
+    before do
       Sunspot.remove_all
       @posts = (1..5).map do |i|
         post = Post.new
@@ -332,7 +332,7 @@ describe 'scoped_search' do
       expect(Sunspot.search(Post) do
         without(:blog_id, [])
       end.results).to eq(posts)
-    end 
+    end
 
     it 'should return results, ignoring any restriction in a conjunction that has been passed an empty array' do
       posts = (1..3).map { |i| Post.new(:blog_id => i)}
@@ -467,44 +467,39 @@ describe 'scoped_search' do
       Sunspot.index!(Array.new(100) { Post.new })
     end
 
-    it 'should order randomly (run this test again if it fails)' do
-      result_sets = Array.new(2) do
-        Sunspot.search(Post) { order_by(:random) }.results.map do |result|
-          result.id
-        end
+    def search_ordered_by_random(direction = nil)
+      Sunspot.search(Post) do
+        order_by(:random, direction)
+        paginate(:page => 1, :per_page => 100)
       end
-      expect(result_sets[0]).not_to eq(result_sets[1])
     end
 
-    # This could fail if the random set returned just happens to be the same as the last random set (the nature of randomness)
-    it 'should order randomly using the order_by function and passing a direction' do
-      result_sets = Array.new(2) do
-        Sunspot.search(Post) { order_by(:random, :desc) }.results.map do |result|
-          result.id
-        end
+    it 'should order randomly' do
+      result_sets = Array.new(5) do
+        search_ordered_by_random.results.map { |result| result.id }
       end
-      expect(result_sets[0]).not_to eq(result_sets[1])
+      expect(result_sets.uniq.size).to be > 1
+    end
+
+    it 'should order randomly using the order_by function and passing a direction' do
+      result_sets = Array.new(5) do
+        search_ordered_by_random(:desc).results.map { |result| result.id }
+      end
+      expect(result_sets.uniq.size).to be > 1
     end
 
     context 'when providing a custom seed value' do
       before do
-        @first_results = Sunspot.search(Post) do
-          order_by(:random, :seed => 12345)
-        end.results.map { |result| result.id }
+        @first_results = search_ordered_by_random(:seed => 12345).results.map { |result| result.id }
       end
 
-      # This could fail if the random set returned just happens to be the same as the last random set (the nature of randomness)
       it 'should return different results when passing a different seed value' do
-        next_results = Sunspot.search(Post) do
-          order_by(:random, :seed => 54321)
-        end.results.map { |result| result.id }
+        next_results = search_ordered_by_random(:seed => 54321).results.map { |result| result.id }
         expect(next_results).not_to eq(@first_results)
       end
 
       it 'should return the same results when passing the same seed value' do
-        next_results = Sunspot.search(Post) do
-          order_by(:random, :seed => 12345)
-        end.results.map { |result| result.id }
+        next_results = search_ordered_by_random(:seed => 12345).results.map { |result| result.id }
         expect(next_results).to eq(@first_results)
       end
     end
@@ -518,21 +513,25 @@ describe 'scoped_search' do
       Sunspot.index([@p1,@p2])
       Sunspot.commit
     end
+
     it 'should order by sum' do
       # 1+3 > 2+1
       search = Sunspot.search(Post) {order_by_function :sum, :blog_id, :primary_category_id, :desc}
       expect(search.results.first).to eq(@p1)
     end
+
     it 'should order by product and sum' do
       # 1 * (1+3) < 2 * (2+1)
       search = Sunspot.search(Post) { order_by_function :product, :blog_id, [:sum,:blog_id,:primary_category_id], :desc}
       expect(search.results.first).to eq(@p2)
     end
+
     it 'should accept string literals' do
       # (1 * -2) > (2 * -2)
       search = Sunspot.search(Post) {order_by_function :product, :blog_id, '-2', :desc}
       expect(search.results.first).to eq(@p1)
     end
+
     it 'should accept non-string literals' do
       # (1 * -2) > (2 * -2)
       search = Sunspot.search(Post) {order_by_function :product, :blog_id, -2, :desc}

@@ -24,8 +24,11 @@ REM set SOLR_JAVA_HOME=
 REM Increase Java Min/Max Heap as needed to support your indexing / query needs
 set SOLR_JAVA_MEM=-Xms512m -Xmx512m
 
-REM Enable verbose GC logging
-set GC_LOG_OPTS=-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime
+REM Enable verbose GC logging (Java 9+)
+REM set GC_LOG_OPTS=-Xlog:gc*
+
+REM Enable verbose GC logging (Java <9)
+REM set GC_LOG_OPTS=-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime
 
 REM These GC settings have shown to work well for a number of common Solr workloads
 set GC_TUNE=-XX:NewRatio=3 ^

@@ -1,0 +1,7 @@
+appraise 'rsolr-1.1.x' do
+  gem 'rsolr', '~> 1.1.0'
+end
+
+appraise 'rsolr-2.1.x' do
+  gem 'rsolr', '~> 2.1.0'
+end

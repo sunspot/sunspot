@@ -1,7 +1,7 @@
 # Sunspot
 
 [![Gem Version](https://badge.fury.io/rb/sunspot.svg)](http://badge.fury.io/rb/sunspot)
-[![Build Status](https://secure.travis-ci.org/extendi/sunspot.png?branch=master)](http://travis-ci.org/extendi/sunspot)
+[![Build Status](https://secure.travis-ci.org/sunspot/sunspot.svg?branch=master)](http://travis-ci.org/sunspot/sunspot)
 
 Sunspot is a Ruby library for expressive, powerful interaction with the Solr
 search engine. Sunspot is built on top of the RSolr library, which
@@ -23,13 +23,13 @@ For questions about how to use Sunspot in your app, please use the
 ## Looking for maintainers
 This project is looking for maintainers. An ideal candidate would be someone on a team whose app makes heavy use of the Sunspot gem. If you think you're a good fit, send a message to contact@culturecode.ca.
 
-## Quickstart with Rails 3 / 4
+## Quickstart with Rails
 
 Add to Gemfile:
 
 ```ruby
 gem 'sunspot_rails'
-gem 'sunspot_solr' # optional pre-packaged Solr distribution for use in development
+gem 'sunspot_solr' # optional pre-packaged Solr distribution for use in development. Please find a section below explaining other options for running Solr in production
 ```
 
 Bundle it!
@@ -1169,6 +1169,16 @@ Post.search.hits.each do |hit|
 end
 ```
 
+Please note that when you have stored fields declared, they all going to be retrieved from Solr every time,
+even if you dont really need them. You can reduce returned stored dataset by using field lists,
+or you can skip all of them entirely:
+
+```ruby
+Post.search do
+  without_stored_fields
+end
+```
+
 ## Hits vs. Results
 
 Sunspot simply stores the type and primary key of objects in Solr.
@@ -1310,72 +1320,24 @@ You may want to use SSL for production environments with a username and password
 
 You can examine the value of `Sunspot::Rails.configuration` at runtime.
 
+## Running Solr in production environment
+
+`sunspot_solr` gem is an easy and convenient way to start your development with Solr.
+However once you are ready to deploy your code to a production, consider using another options like
+[standalone](https://lucene.apache.org/solr/guide/installing-solr.html) or
+[docker](https://hub.docker.com/_/solr/) Solr setup
+
 ## Development
 
 ### Running Tests
 
-#### sunspot
-
-Install the required gem dependencies:
-
-```bash
-cd /path/to/sunspot/sunspot
-bundle install
-```
-
-Start a Solr instance on port 8983:
+To run all the specs just call `rake` from the library root folder.
+To run specs related to individual gems, consider using one of the following commands:
 
 ```bash
-bundle exec sunspot-solr start -p 8983
-# or `bundle exec sunspot-solr run -p 8983` to run in foreground
-```
-
-Run the tests:
-
-```bash
-bundle exec rake spec
-```
-
-If desired, stop the Solr instance:
-
-```bash
-bundle exec sunspot-solr stop
-```
-
-#### sunspot\_rails
-
-Install the gem dependencies for `sunspot`:
-
-```bash
-cd /path/to/sunspot/sunspot
-bundle install
-```
-
-Start a Solr instance on port 8983:
-
-```bash
-bundle exec sunspot-solr start -p 8983
-# or `bundle exec sunspot-solr run -p 8983` to run in foreground
-```
-
-Navigate to the `sunspot_rails` directory:
-
-```bash
-cd ../sunspot_rails
-```
-
-Run the tests:
-
-```bash
-rake spec # all Rails versions
-rake spec RAILS=3.1.1 # specific Rails version only
-```
-
-If desired, stop the Solr instance:
-
-```bash
-cd ../sunspot
-bundle exec sunspot-solr stop
+GEM=sunspot ci/travis.sh
+GEM=sunspot_rails ci/travis.sh
+GEM=sunspot_solr ci/travis.sh
 ```
 
 ### Generating Documentation

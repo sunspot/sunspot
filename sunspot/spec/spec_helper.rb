@@ -2,7 +2,6 @@
 
 require 'ostruct'
 require 'sunspot'
-require 'byebug'
 
 require File.join(File.dirname(__FILE__), 'mocks', 'mock_record.rb')
 Dir.glob(File.join(File.dirname(__FILE__), 'mocks', '**', '*.rb')).each do |file|
@@ -24,14 +23,10 @@ RSpec.configure do |config|
   config.order = 'random'
 
   # Mock session available to all spec/api tests
-  config.include MockSessionHelper,
-                 :type => :api,
-                 :file_path => /spec[\\\/]api/
+  config.include MockSessionHelper, type: :api, file_path: /spec[\\\/]api/
 
   # Real Solr instance is available to integration tests
-  config.include IntegrationHelper,
-                 :type => :integration,
-                 :file_path => /spec[\\\/]integration/
+  config.include IntegrationHelper, type: :integration, file_path: /spec[\\\/]integration/
 
   # Nested under spec/api
   [:indexer, :query, :search].each do |spec_type|

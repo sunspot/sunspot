@@ -2,6 +2,7 @@ module IntegrationHelper
   def self.included(base)
     base.before(:all) do
       Sunspot.config.solr.url = ENV['SOLR_URL'] || 'http://localhost:8983/solr/default'
+      Sunspot.config.solr.update_format = ENV['UPDATE_FORMAT'].to_sym if ENV['UPDATE_FORMAT']
       Sunspot.reset!(true)
     end
   end

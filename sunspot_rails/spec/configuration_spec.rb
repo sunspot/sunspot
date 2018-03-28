@@ -50,11 +50,15 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   end
 
   it "should set the read timeout to nil when not set" do
-    @config.read_timeout == nil
+    expect(@config.read_timeout).to be_nil
   end
 
   it "should set the open timeout to nil when not set" do
-    @config.open_timeout == nil
+    expect(@config.open_timeout).to be_nil
+  end
+
+  it "should set the update_format to nil when not set" do
+    expect(@config.update_format).to be_nil
   end
 
   it "should set 'log_level' property using Rails log level when not set" do
@@ -161,6 +165,10 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
 
   it "should handle the 'open_timeout' property when set" do
     expect(@config.open_timeout).to eq(0.5)
+  end
+
+  it "should handle the 'update_format' property when set" do
+    expect(@config.update_format).to eq('json')
   end
 
   it "should handle the 'proxy' property when set" do

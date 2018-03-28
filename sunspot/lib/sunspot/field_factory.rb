@@ -72,11 +72,15 @@ module Sunspot
       # into the Solr document for indexing.
       #
       def populate_document(document, model, options = {}) #:nodoc:
+        atomic_operation = options[:update] == :set
         value = extract_value(model, options)
-        unless value.nil?
-          Util.Array(@field.to_indexed(value)).each do |scalar_value|
+        if value != nil || atomic_operation
+          indexed_values = Util.Array(@field.to_indexed(value))
+          indexed_values = [nil] if indexed_values.empty? && atomic_operation
+          indexed_values.each do |scalar_value|
             field_options = {}
             field_options[:boost] = @field.boost if @field.boost
+            field_options[:null] = true if scalar_value.nil? && atomic_operation
             document.add_field(
               @field.indexed_name.to_sym,
               scalar_value,
