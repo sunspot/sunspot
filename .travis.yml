@@ -18,9 +18,14 @@ rvm:
   # - jruby
 
 env:
-  - GEM=sunspot
+  - GEM=sunspot UPDATE_FORMAT=xml
+  - GEM=sunspot UPDATE_FORMAT=json
   - GEM=sunspot_rails
   - GEM=sunspot_solr
+
+matrix:
+  allow_failures:
+    - env: GEM=sunspot UPDATE_FORMAT=json
 
 script:
   - ci/travis.sh

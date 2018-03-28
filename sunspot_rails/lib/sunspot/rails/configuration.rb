@@ -301,6 +301,10 @@ module Sunspot #:nodoc:
         @open_timeout ||= user_configuration_from_key('solr', 'open_timeout')
       end
 
+      def update_format
+        @update_format ||= user_configuration_from_key('solr', 'update_format')
+      end
+
       def proxy
         @proxy ||= user_configuration_from_key('solr', 'proxy')
       end
