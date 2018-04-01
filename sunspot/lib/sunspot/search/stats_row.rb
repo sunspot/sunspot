@@ -10,23 +10,23 @@ module Sunspot
       end
 
       def min
-        !data['min'].nil? ? data['min'] : 0
+        data['min'].to_i
       end
 
       def max
-        !data['max'].nil? ? data['max'] : 0
+        data['max'].to_i
       end
 
       def count
-        !data['count'].nil? ? data['count'] : 0
+        data['count'].to_i
       end
 
       def sum
-        !data['sum'].nil? ? data['sum'] : 0
+        data['sum'].to_i
       end
 
       def missing
-        !data['missing'].nil? ? data['missing'] : 0
+        data['missing'].to_i
       end
 
       def sumsq
@@ -34,7 +34,7 @@ module Sunspot
       end
 
       def sum_of_squares
-        !data['sumOfSquares'].nil? ? data['sumOfSquares'] : (!data['sumsq'].nil? ? data['sumsq']: 0)
+        !data['sumOfSquares'].nil? ? data['sumOfSquares'] : data['sumsq'].to_i
       end
 
       def avg
@@ -42,7 +42,7 @@ module Sunspot
       end
 
       def mean
-        !data['mean'].nil? ? data['mean'] : (!data['avg'].nil? ? data['avg'] : 0)
+        !data['mean'].nil? ? data['mean'] : data['avg'].to_i
       end
 
       def standard_deviation
@@ -67,7 +67,9 @@ module Sunspot
       end
 
       def inspect
-        "<Sunspot::Search::StatsRow:#{value.inspect} min=#{min} max=#{max} count=#{self.count} sum=#{sum} missing=#{missing} sum_of_squares=#{sum_of_squares} mean=#{mean} standard_deviation=#{standard_deviation}>"
+        "<Sunspot::Search::StatsRow:#{value.inspect} min=#{min} max=#{max} "\
+        "count=#{self.count} sum=#{sum} missing=#{missing} sum_of_squares=#{sum_of_squares}"\
+        " mean=#{mean} standard_deviation=#{standard_deviation}>"
       end
     end
   end

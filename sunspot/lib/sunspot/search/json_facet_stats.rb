@@ -1,6 +1,6 @@
 module Sunspot
   module Search
-    class StatJsonFacet
+    class JsonFacetStats
       def initialize(field, search, options)
         @field, @search, @options = field, search, options
       end

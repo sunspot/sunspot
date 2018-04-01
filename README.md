@@ -528,8 +528,49 @@ end
 
 #### Json Facets
 
-The [json facet](http://yonik.com/json-facet-api/) functionality is also implemented. In the specs you can find
-some examples.
+The [json facet](http://yonik.com/json-facet-api/) can be used with the following syntaxt:
+
+```ruby
+Sunspot.search(Post) do
+  json_facet(:title)
+end
+```
+
+There are some options you can pass to the json facet:
+:limit
+:minimum_count
+:sort
+:prefix
+
+#### Json Facet Distinct
+
+The [json facet count distinct](http://yonik.com/solr-count-distinct/) can be used with the following syntaxt:
+
+```ruby
+# Get posts with distinct title
+# available stategies: :unique, :hll
+Sunspot.search(Post) do
+  json_facet(:blog_id, distinct: { group_by: :title, strategy: :unique })
+end
+```
+
+#### Json Facet nested
+
+The [json facet nested queries] can be used with the following syntaxt:
+```ruby
+Sunspot.search(Post) do
+  json_facet(:title, nested: { field: :author_name } )
+end
+```
+
+You can nest the nested facet also recursively:
+```ruby
+Sunspot.search(Post) do
+  json_facet(:title, nested: { field: :author_name, nested: { field: :title } )
+end
+```
+
+Nested facets have the same options of json facets
 
 ### Ordering
 
@@ -948,7 +989,7 @@ search = Post.search do
   end
 end
 
-search.stat_json_facet(:featured).rows.each do |row|
+search.json_facet_stats(:featured).rows.each do |row|
   puts "Minimum average rating for featured=#{row.value}: #{row.min}"
 end
 ```

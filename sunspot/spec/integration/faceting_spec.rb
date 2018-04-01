@@ -168,7 +168,7 @@ describe 'search faceting' do
       Sunspot.commit
     end
 
-    it 'should work' do
+    it 'should return indexed elements' do
       search = Sunspot.search(Post) do
          json_facet(:title)
       end
@@ -236,23 +236,12 @@ describe 'search faceting' do
         end
       end
 
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'alfa', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another2', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another3', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another4', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another5', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another6', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another7', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another8', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another9', :blog_id => 1))
-      Sunspot.index(Post.new(:title => 'zero', :author_name => 'another10', :blog_id => 1))
-
-
+      0.upto(9) { |i| Sunspot.index(Post.new(:title => 'zero', :author_name => "another#{i}", :blog_id => 1)) }
+      
       Sunspot.commit
     end
 
-    it 'should work' do
+    it 'should get nested' do
       search = Sunspot.search(Post) do
         json_facet(:title, nested: { field: :author_name } )
       end
@@ -407,15 +396,15 @@ describe 'search faceting' do
       Sunspot.index!(
           (0..5).map { |i| Post.new(:blog_id => i, :title => 'title') }
       )
-      Sunspot.index!(Post.new(:blog_id => 0, :title => 'title'))
-      Sunspot.index!(Post.new(:blog_id => 1, :title => 'title'))
-      Sunspot.index!(Post.new(:blog_id => 2, :title => 'title'))
-      Sunspot.index!(Post.new(:blog_id => 3, :title => 'title'))
+
+      0.upto(3) { |i| Sunspot.index(Post.new(:blog_id => i, :title => 'title')) }
+
       Sunspot.index!(Post.new(:blog_id => 4, :title => 'other title'))
       Sunspot.index!(Post.new(:blog_id => 5, :title => 'other title'))
 
       Sunspot.index!(Post.new(:blog_id => 40, :title => 'title'))
       Sunspot.index!(Post.new(:blog_id => 40, :title => 'title'))
+
       Sunspot.index!(Post.new(:blog_id => 40, :title => 'other title'))
       Sunspot.index!(Post.new(:blog_id => 40, :title => 'other title'))
     end

@@ -51,7 +51,7 @@ describe 'search stats' do
         stats :average_rating, sort: :min do
           json_facet :blog_id
         end
-      end.stat_json_facet(:blog_id).rows[1].min).to eq(3.0)
+      end.json_facet_stats(:blog_id).rows[1].min).to eq(3.0)
     end
 
     it 'returns maximum on facet row with two blog ids' do
@@ -59,7 +59,7 @@ describe 'search stats' do
         stats :average_rating, sort: :max do
           json_facet :blog_id
         end
-      end.stat_json_facet(:blog_id).rows[1].max).to eq(4.0)
+      end.json_facet_stats(:blog_id).rows[1].max).to eq(4.0)
     end
 
     it 'returns only sum' do
@@ -68,11 +68,11 @@ describe 'search stats' do
           json_facet :blog_id
         end
       end
-      expect(search.stat_json_facet(:blog_id).rows[1].max).to eq(0)
-      expect(search.stat_json_facet(:blog_id).rows[1].min).to eq(0)
-      expect(search.stat_json_facet(:blog_id).rows[1].avg).to eq(0)
-      expect(search.stat_json_facet(:blog_id).rows[1].sumsq).to eq(0)
-      expect(search.stat_json_facet(:blog_id).rows[1].sum).to eq(4.0)
+      expect(search.json_facet_stats(:blog_id).rows[1].max).to eq(0)
+      expect(search.json_facet_stats(:blog_id).rows[1].min).to eq(0)
+      expect(search.json_facet_stats(:blog_id).rows[1].avg).to eq(0)
+      expect(search.json_facet_stats(:blog_id).rows[1].sumsq).to eq(0)
+      expect(search.json_facet_stats(:blog_id).rows[1].sum).to eq(4.0)
     end
 
     it 'works with nested facets' do
@@ -81,7 +81,7 @@ describe 'search stats' do
           json_facet(:blog_id, nested: { field: :author_name, limit: 3, nested: { field: :average_rating } } )
         end
       end
-      expect(search.stat_json_facet(:blog_id).rows[1].nested.first.nested.first.min).to eq(4.0)
+      expect(search.json_facet_stats(:blog_id).rows[1].nested.first.nested.first.min).to eq(4.0)
     end
 
   end

@@ -199,7 +199,7 @@ module Sunspot
           end
           Sunspot::Query::DateFieldJsonFacet.new(field, options, setup)
         elsif options[:range]
-          unless [Sunspot::Type::TimeType, Sunspot::Type::FloatType, Sunspot::Type::IntegerType ].inject(false){|res,type| res || field.type.is_a?(type)}
+          unless [Sunspot::Type::TimeType, Sunspot::Type::FloatType, Sunspot::Type::IntegerType ].find{|type| field.type.is_a?(type)}
             raise(
               ArgumentError,
               ':range can only be specified for date or numeric fields'

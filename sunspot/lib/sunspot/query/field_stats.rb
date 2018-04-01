@@ -19,7 +19,7 @@ module Sunspot
         if !@json_facet.nil?
           params['json.facet'] = recursive_add_stats(@json_facet.get_params).to_json
         else
-          params.merge!({:stats => true, :"stats.field" => [@field.indexed_name]})
+          params.merge!(:stats => true, :"stats.field" => [@field.indexed_name])
           params[facet_key] = @facets.map(&:indexed_name) unless @facets.empty?
         end
         params
@@ -42,7 +42,7 @@ module Sunspot
       def json_stats_params
         params = {}
         STATS_FUNCTIONS.each { |s| params[s] = "#{s.to_s}(#{@field.indexed_name})" }
-        if !@options[:stats].nil?
+        unless @options[:stats].nil?
           to_remove = STATS_FUNCTIONS - @options[:stats]
           to_remove.map { |s| params.delete(s)}
         end
