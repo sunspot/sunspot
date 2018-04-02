@@ -537,10 +537,12 @@ end
 ```
 
 There are some options you can pass to the json facet:
+```
 :limit
 :minimum_count
 :sort
 :prefix
+```
 
 #### Json Facet Distinct
 
@@ -556,7 +558,7 @@ end
 
 #### Json Facet nested
 
-The [json facet nested queries] can be used with the following syntaxt:
+The [nested facets](http://yonik.com/solr-subfacets/) can be used with the following syntaxt:
 ```ruby
 Sunspot.search(Post) do
   json_facet(:title, nested: { field: :author_name } )
