@@ -9,4 +9,4 @@ sunspot_solr/solr/solr-webapp
 .yardoc
 docs
 *.swp
-sunspot/spec/solr/
+.idea
