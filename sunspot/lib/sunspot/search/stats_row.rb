@@ -10,23 +10,23 @@ module Sunspot
       end
 
       def min
-        data['min'].to_i
+        !data['min'].nil? ? data['min'] : 0
       end
 
       def max
-        data['max'].to_i
+        !data['max'].nil? ? data['max'] : 0
       end
 
       def count
-        data['count'].to_i
+        !data['count'].nil? ? data['count'] : 0
       end
 
       def sum
-        data['sum'].to_i
+        !data['sum'].nil? ? data['sum'] : 0
       end
 
       def missing
-        data['missing'].to_i
+        !data['missing'].nil? ? data['missing'] : 0
       end
 
       def sumsq
@@ -34,7 +34,7 @@ module Sunspot
       end
 
       def sum_of_squares
-        !data['sumOfSquares'].nil? ? data['sumOfSquares'] : data['sumsq'].to_i
+        !data['sumOfSquares'].nil? ? data['sumOfSquares'] : 0
       end
 
       def avg
@@ -42,7 +42,7 @@ module Sunspot
       end
 
       def mean
-        !data['mean'].nil? ? data['mean'] : data['avg'].to_i
+        !data['mean'].nil? ? data['mean'] : 0
       end
 
       def standard_deviation
