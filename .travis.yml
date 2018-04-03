@@ -14,6 +14,7 @@ rvm:
   - 2.3.1
   - 2.4.3
   - 2.5.0
+  - ruby-head
   # - rbx-2.0
   # - jruby
 
@@ -26,6 +27,9 @@ env:
 matrix:
   allow_failures:
     - env: GEM=sunspot UPDATE_FORMAT=json
+    - rvm: ruby-head
+
+before_install: gem install bundler
 
 script:
   - ci/travis.sh
