@@ -29,6 +29,8 @@ matrix:
     - env: GEM=sunspot UPDATE_FORMAT=json
     - rvm: ruby-head
 
+before_install: gem install bundler
+
 script:
   - ci/travis.sh
 
