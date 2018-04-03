@@ -10,43 +10,35 @@ module Sunspot
       end
 
       def min
-        !data['min'].nil? ? data['min'] : 0
+        data['min']
       end
 
       def max
-        !data['max'].nil? ? data['max'] : 0
+        data['max']
       end
 
       def count
-        !data['count'].nil? ? data['count'] : 0
+        data['count']
       end
 
       def sum
-        !data['sum'].nil? ? data['sum'] : 0
+        data['sum']
       end
 
       def missing
-        !data['missing'].nil? ? data['missing'] : 0
-      end
-
-      def sumsq
-        sum_of_squares
+        data['missing']
       end
 
       def sum_of_squares
-        !data['sumOfSquares'].nil? ? data['sumOfSquares'] : 0
-      end
-
-      def avg
-        mean
+        data['sumOfSquares']
       end
 
       def mean
-        !data['mean'].nil? ? data['mean'] : 0
+        data['mean']
       end
 
       def standard_deviation
-        !data['stddev'].nil? ? data['stddev'] : 0
+        data['stddev']
       end
 
       def facet name
@@ -55,7 +47,7 @@ module Sunspot
 
       def facets
         @facets ||= @facet_fields.map do |field|
-          StatsFacet.new(field, !data.nil? ? data['facets'][field.indexed_name] : [])
+          StatsFacet.new(field, data['facets'][field.indexed_name])
         end
       end
 
@@ -67,8 +59,8 @@ module Sunspot
       end
 
       def inspect
-        "<Sunspot::Search::StatsRow:#{value.inspect} min=#{min} max=#{max} "\
-        "count=#{self.count} sum=#{sum} missing=#{missing} sum_of_squares=#{sum_of_squares}"\
+        "<Sunspot::Search::StatsRow:#{value.inspect} min=#{min} max=#{max}"\
+        " count=#{self.count} sum=#{sum} missing=#{missing} sum_of_squares=#{sum_of_squares}"\
         " mean=#{mean} standard_deviation=#{standard_deviation}>"
       end
     end

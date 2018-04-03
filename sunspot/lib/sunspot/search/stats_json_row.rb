@@ -12,43 +12,37 @@ module Sunspot
       end
 
       def min
-        data['min'].to_i
+        data['min']
       end
 
       def max
-        data['max'].to_i
+        data['max']
       end
 
       def count
-        data['count'].to_i
+        data['count']
       end
 
       def sum
-        data['sum'].to_i
+        data['sum']
       end
 
       def missing
-        data['missing'].to_i
-      end
-
-      def sumsq
-        sum_of_squares
+        data['missing']
       end
 
       def sum_of_squares
-        data['sumsq'].to_i
+        data['sumsq']
       end
-
-      def avg
-        mean
-      end
+      alias :sumsq :sum_of_squares
 
       def mean
-        data['avg'].to_i
+        data['avg']
       end
+      alias :avg :mean
 
       def standard_deviation
-        data['stddev'].to_i
+        data['stddev']
       end
 
       def facet name
@@ -57,7 +51,7 @@ module Sunspot
 
       def facets
         @facets ||= @facet_fields.map do |field|
-          StatsFacet.new(field, !data.nil? ? data['facets'][field.indexed_name] : [])
+          StatsFacet.new(field, data['facets'][field.indexed_name])
         end
       end
 
