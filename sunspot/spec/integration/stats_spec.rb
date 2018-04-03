@@ -68,10 +68,10 @@ describe 'search stats' do
           json_facet :blog_id
         end
       end
-      expect(search.json_facet_stats(:blog_id).rows[1].max).to eq(0)
-      expect(search.json_facet_stats(:blog_id).rows[1].min).to eq(0)
-      expect(search.json_facet_stats(:blog_id).rows[1].avg).to eq(0)
-      expect(search.json_facet_stats(:blog_id).rows[1].sumsq).to eq(0)
+      expect(search.json_facet_stats(:blog_id).rows[1].max).to eq(nil)
+      expect(search.json_facet_stats(:blog_id).rows[1].min).to eq(nil)
+      expect(search.json_facet_stats(:blog_id).rows[1].avg).to eq(nil)
+      expect(search.json_facet_stats(:blog_id).rows[1].sumsq).to eq(nil)
       expect(search.json_facet_stats(:blog_id).rows[1].sum).to eq(4.0)
     end
 
