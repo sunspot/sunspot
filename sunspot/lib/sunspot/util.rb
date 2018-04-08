@@ -188,6 +188,29 @@ module Sunspot
         RSolr.solr_escape(value).gsub(/([\s\.])/, '\\\\\1')
       end
 
+      def parse_json_facet(field_name, options, setup)
+        field = setup.field(field_name)
+        if options[:time_range]
+          unless field.type.is_a?(Sunspot::Type::TimeType)
+            raise(
+              ArgumentError,
+              ':time_range can only be specified for Date or Time fields'
+            )
+          end
+          Sunspot::Query::DateFieldJsonFacet.new(field, options, setup)
+        elsif options[:range]
+          unless [Sunspot::Type::TimeType, Sunspot::Type::FloatType, Sunspot::Type::IntegerType ].find{|type| field.type.is_a?(type)}
+            raise(
+              ArgumentError,
+              ':range can only be specified for date or numeric fields'
+            )
+          end
+          Sunspot::Query::RangeJsonFacet.new(field, options, setup)
+        else
+          Sunspot::Query::FieldJsonFacet.new(field, options, setup)
+        end
+      end
+
       private
 
       #

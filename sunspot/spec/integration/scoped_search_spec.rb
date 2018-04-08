@@ -332,7 +332,7 @@ describe 'scoped_search' do
       expect(Sunspot.search(Post) do
         without(:blog_id, [])
       end.results).to eq(posts)
-    end 
+    end
 
     it 'should return results, ignoring any restriction in a conjunction that has been passed an empty array' do
       posts = (1..3).map { |i| Post.new(:blog_id => i)}

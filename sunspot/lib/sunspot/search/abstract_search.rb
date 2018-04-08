@@ -182,6 +182,10 @@ module Sunspot
         end
       end
 
+      def json_facet_stats(name, options = {})
+        JsonFacetStats.new(name, self, options)
+      end
+
       #
       # Deprecated in favor of optional second argument to #facet
       #
@@ -191,6 +195,10 @@ module Sunspot
 
       def facet_response #:nodoc:
         @solr_result['facet_counts']
+      end
+
+      def json_facet_response #:nodoc:
+        @solr_result['facets']
       end
 
       def stats_response #:nodoc:
@@ -253,6 +261,11 @@ module Sunspot
 
       def add_field_stats(field) #:nodoc:
         add_stats(field.name, FieldStats.new(field, self))
+      end
+
+      def add_json_facet(field, options = {})
+        name = (options[:name] || field.name)
+        add_facet(name, FieldJsonFacet.new(field, self, options))
       end
 
       def highlights_for(doc) #:nodoc:

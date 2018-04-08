@@ -156,6 +156,136 @@ describe 'search faceting' do
     end
   end
 
+  context 'json facet options' do
+    before :all do
+      Sunspot.remove_all
+      facet_values = %w(zero one two three four)
+      facet_values.each_with_index do |value, i|
+        i.times { Sunspot.index(Post.new(:title => value, :blog_id => 1)) }
+      end
+      Sunspot.index(Post.new(:blog_id => 1))
+      Sunspot.index(Post.new(:title => 'zero', :blog_id => 2))
+      Sunspot.commit
+    end
+
+    it 'should return indexed elements' do
+      search = Sunspot.search(Post) do
+         json_facet(:title)
+      end
+      expect(search.facet(:title).rows.size).to eq(5)
+    end
+
+    it 'should limit the number of facet rows' do
+      search = Sunspot.search(Post) do
+        json_facet :title, :limit => 3
+      end
+      expect(search.facet(:title).rows.size).to eq(3)
+    end
+
+    it 'should not return zeros by default' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }).not_to include('zero')
+    end
+
+    it 'should return a specified minimum count' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, :minimum_count => 2
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four three two))
+    end
+
+    it 'should order facets lexically' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, :sort => :index
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four one three two))
+    end
+
+    it 'should order facets by count' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, :sort => :count
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four three two one))
+    end
+
+    it 'should limit facet values by prefix' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, :prefix => 't'
+      end
+      expect(search.facet(:title).rows.map { |row| row.value }.sort).to eq(%w(three two))
+    end
+
+  end
+
+  context 'nested json facet' do
+    before :all do
+      Sunspot.remove_all
+      facet_values = %w(zero one two three four)
+      nested_facet_values = %w(alfa bravo charlie delta)
+
+      facet_values.each do |value|
+        nested_facet_values.each do |v2|
+          Sunspot.index(Post.new(:title => value, :author_name => v2, :blog_id => 1))
+        end
+      end
+
+      0.upto(9) { |i| Sunspot.index(Post.new(:title => 'zero', :author_name => "another#{i}", :blog_id => 1)) }
+      
+      Sunspot.commit
+    end
+
+    it 'should get nested' do
+      search = Sunspot.search(Post) do
+        json_facet(:title, nested: { field: :author_name } )
+      end
+      expect(search.facet(:title).rows.first.nested.size).to eq(4)
+    end
+
+    it 'without limit take the first 10' do
+      search = Sunspot.search(Post) do
+        json_facet(:title, nested: { field: :author_name } )
+      end
+      expect(search.facet(:title).rows.last.nested.size).to eq(10)
+    end
+
+    it 'without limit' do
+      search = Sunspot.search(Post) do
+        json_facet(:title, nested: { field: :author_name, limit: -1 } )
+      end
+      expect(search.facet(:title).rows.last.nested.size).to eq(14)
+    end
+
+    it 'works with distinct' do
+      search = Sunspot.search(Post) do
+        json_facet(:title, nested: { field: :author_name, distinct: { strategy: :unique } } )
+      end
+      expect(search.facet(:title).rows.first.nested.map(&:count).uniq.size).to eq(1)
+    end
+
+    it 'should limit the nested facet' do
+      search = Sunspot.search(Post) do
+        json_facet(:title, nested: { field: :author_name, limit: 2 } )
+      end
+      expect(search.facet(:title).rows.first.nested.size).to eq(2)
+    end
+
+    it 'should work nested of nested' do
+      search = Sunspot.search(Post) do
+        json_facet(:title, nested: { field: :author_name, nested: { field: :title } } )
+      end
+      expect(search.facet(:title).rows.first.nested.first.nested.size).to eq(1)
+      expect(search.facet(:title).rows.first.nested.first.nested.first.nested).to eq(nil)
+    end
+
+  end
+
   context 'prefix escaping' do
     before do
       Sunspot.remove_all
@@ -259,6 +389,57 @@ describe 'search faceting' do
     end
   end
 
+  context 'distinct field facets' do
+    before :all do
+      Sunspot.remove_all
+
+      Sunspot.index!(
+          (0..5).map { |i| Post.new(:blog_id => i, :title => 'title') }
+      )
+
+      0.upto(3) { |i| Sunspot.index(Post.new(:blog_id => i, :title => 'title')) }
+
+      Sunspot.index!(Post.new(:blog_id => 4, :title => 'other title'))
+      Sunspot.index!(Post.new(:blog_id => 5, :title => 'other title'))
+
+      Sunspot.index!(Post.new(:blog_id => 40, :title => 'title'))
+      Sunspot.index!(Post.new(:blog_id => 40, :title => 'title'))
+
+      Sunspot.index!(Post.new(:blog_id => 40, :title => 'other title'))
+      Sunspot.index!(Post.new(:blog_id => 40, :title => 'other title'))
+    end
+
+    it 'should return unique indexed elements for a field' do
+      search = Sunspot.search(Post) do
+        json_facet(:blog_id, distinct: { strategy: :unique })
+      end
+
+      expect(search.facet(:blog_id).rows.size).to eq(7)
+      expect(search.facet(:blog_id).rows.map(&:count).uniq.size).to eq(1)
+    end
+
+    it 'should return unique indexed elements for a field and facet on a field' do
+      search = Sunspot.search(Post) do
+        json_facet(:blog_id, distinct: { group_by: :title, strategy: :unique })
+      end
+
+      expect(search.facet(:blog_id).rows.size).to eq(2)
+      expect(search.facet(:blog_id).rows[0].count).to eq(3)
+      expect(search.facet(:blog_id).rows[1].count).to eq(7)
+    end
+
+    it 'should return unique indexed elements for a field and facet on a field with hll' do
+      search = Sunspot.search(Post) do
+        json_facet(:blog_id, distinct: { group_by: :title, strategy: :hll })
+      end
+
+      expect(search.facet(:blog_id).rows.size).to eq(2)
+      expect(search.facet(:blog_id).rows[0].count).to eq(3)
+      expect(search.facet(:blog_id).rows[1].count).to eq(7)
+    end
+
+  end
+
   context 'date facets' do
     before :all do
       Sunspot.remove_all
@@ -278,6 +459,38 @@ describe 'search faceting' do
       expect(search.facet(:published_at).rows.last.value).to eq((time + 60*60*24)..(time + 60*60*24*2))
       expect(search.facet(:published_at).rows.last.count).to eq(1)
     end
+
+    it 'json facet should return time ranges' do
+      days_diff = 15
+      time_from = Time.utc(2009, 7, 8)
+      time_to = Time.utc(2009, 7, 8 + days_diff)
+      search = Sunspot.search(Post) do
+        json_facet(
+            :published_at,
+            :time_range => time_from..time_to
+        )
+      end
+
+      expect(search.facet(:published_at).rows.size).to eq(days_diff)
+      expect(search.facet(:published_at).rows[0].count).to eq(2)
+      expect(search.facet(:published_at).rows[1].count).to eq(1)
+    end
+
+    it 'json facet should return time ranges with custom gap' do
+      days_diff = 10
+      time_from = Time.utc(2009, 7, 8)
+      time_to = Time.utc(2009, 7, 8 + days_diff)
+      search = Sunspot.search(Post) do
+        json_facet(
+            :published_at,
+            :time_range => time_from..time_to,
+            gap: 60*60*24*2
+        )
+      end
+      expect(search.facet(:published_at).rows.size).to eq(days_diff / 2)
+      expect(search.facet(:published_at).rows[0].count).to eq(3)
+    end
+
   end
 
   context 'class facets' do

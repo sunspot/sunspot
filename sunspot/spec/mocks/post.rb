@@ -46,6 +46,7 @@ Sunspot.setup(Post) do
   end
   text :tags, :more_like_this => true
   string :title, :stored => true
+  string :author_name
   integer :blog_id, :references => Blog
   integer :category_ids, :multiple => true
   float :average_rating, :using => :ratings_average, :trie => true

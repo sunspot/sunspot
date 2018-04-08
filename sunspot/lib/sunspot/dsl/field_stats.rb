@@ -13,6 +13,13 @@ module Sunspot
           @search_stats.add_facet(field)
         end
       end
+
+      def json_facet(field_name, options = {})
+        field = @setup.field(field_name)
+        facet = Sunspot::Util.parse_json_facet(field_name, options, @setup)
+        @query_stats.add_json_facet(facet)
+      end
+
     end
   end
 end
