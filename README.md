@@ -544,6 +544,29 @@ There are some options you can pass to the json facet:
 :prefix
 ```
 
+Some examples
+```ruby
+# limit the results to 10
+Sunspot.search(Post) do
+  json_facet(:title, limit: 10)
+end
+
+# returns only the results with a minimum count of 10
+Sunspot.search(Post) do
+  json_facet(:title, minimum_count: 10)
+end
+
+# sort by count
+Sunspot.search(Post) do
+  json_facet(:title, sort: :count)
+end
+
+# filter titles by prefix 't'
+Sunspot.search(Post) do
+  json_facet(:title, prefix: 't')
+end
+```
+
 #### Json Facet Distinct
 
 The [json facet count distinct](http://yonik.com/solr-count-distinct/) can be used with the following syntaxt:
