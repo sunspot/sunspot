@@ -33,6 +33,9 @@ RailsApp::Application.configure do
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
 
+  # mute Rails 5.2 deprecation warning
+  config.active_record.sqlite3.represent_boolean_as_integer = true if config.active_record.sqlite3
+
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 end

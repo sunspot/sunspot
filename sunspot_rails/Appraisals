@@ -41,19 +41,17 @@ appraise 'rails-4.2.0' do
   gem 'sunspot', path: File.expand_path('sunspot', ENV['SUNSPOT_LIB_HOME'])
   gem 'sunspot_solr', path: File.expand_path('sunspot_solr', ENV['SUNSPOT_LIB_HOME'])
   gem 'rails', '~> 4.2.0'
-  gem 'protected_attributes'
   gem 'progress_bar', '~> 1.0.5', require: false
   gem 'rspec', '~> 3.4.0'
   gem 'rspec-rails', '~> 3.4.0'
 end
 
 if ruby_version >= Gem::Version.new('2.2.0')
-  ['5.0.0', '5.1.0'].each do |rails_version|
+  ['5.0.0', '5.1.0', '5.2.0'].each do |rails_version|
     appraise "rails-#{rails_version}" do
       gem 'sunspot', path: File.expand_path('sunspot', ENV['SUNSPOT_LIB_HOME'])
       gem 'sunspot_solr', path: File.expand_path('sunspot_solr', ENV['SUNSPOT_LIB_HOME'])
       gem 'rails', "~> #{rails_version}"
-      gem 'protected_attributes_continued'
       gem 'progress_bar', '~> 1.0.5', require: false
     end
   end
