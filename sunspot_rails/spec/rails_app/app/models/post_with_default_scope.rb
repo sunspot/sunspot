@@ -3,8 +3,6 @@ class PostWithDefaultScope < ActiveRecord::Base
     'posts'
   end
 
-  # attr_accessible :title, :type, :location_id, :body, :blog
-
 	def self.default_scope
 		order(:title)
   end
