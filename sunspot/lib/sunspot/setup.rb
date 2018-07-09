@@ -4,7 +4,9 @@ module Sunspot
   # contents are built using the Sunspot.setup method.
   #
   class Setup #:nodoc:
-    attr_reader :class_object_id
+    attr_reader :class_object_id,
+                :child_field_factory
+
     def initialize(clazz)
       @class_object_id = clazz.object_id
       @class_name = clazz.name
@@ -87,6 +89,11 @@ module Sunspot
       if more_like_this
         @more_like_this_field_factories_cache[field_factory.name] << field_factory
       end
+    end
+
+    # TODO(ar3s3ru): add documentation
+    def add_child_field_factory(field)
+      @child_field_factory = FieldFactory::Child.new(field)
     end
 
     # 

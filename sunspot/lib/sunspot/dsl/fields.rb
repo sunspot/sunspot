@@ -34,10 +34,14 @@ module Sunspot
       #
       def text(*names, &block)
         options = names.last.is_a?(Hash) ? names.pop : {}
-
         names.each do |name|
           @setup.add_text_field_factory(name, options, &block)
         end
+      end
+
+      # TODO(ar3s3ru): add documentation
+      def child_documents(field)
+        @setup.add_child_field_factory(field)
       end
 
       # 
