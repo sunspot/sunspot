@@ -187,16 +187,16 @@ module Sunspot
       end
 
       def extract_value(model, options = {})
-        values  = @extractor.value_for(model) # TODO: how to handle incorrect field values?
+        # TODO(ar3s3ru): how to handle incorrect field values?
+        values  = @extractor.value_for(model)
         adapter = options[:adapter]
         unless values.is_a? Array
-          # TODO: Throw an error, it should be an Array of class documents!
           raise 'Child documents field must be an Array of indexable documents'
         end
         if adapter.nil? || !adapter.respond_to?(:call)
           raise 'No adapter function specified: needed to translate childs into indexable documents'
         end
-        # TODO: .map could be inefficient space-wise, maybe use .map! instead?
+        # TODO(ar3s3ru): .map could be inefficient space-wise, maybe use .map! instead?
         values.map { |value| options[:adapter].call(value) }
       end
 
