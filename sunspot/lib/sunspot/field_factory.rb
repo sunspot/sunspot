@@ -1,5 +1,3 @@
-require 'rsolr'
-
 module Sunspot
   # 
   # The FieldFactory module contains classes for generating fields. FieldFactory
