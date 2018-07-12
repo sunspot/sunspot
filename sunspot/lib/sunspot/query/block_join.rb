@@ -35,10 +35,6 @@ module Sunspot
         def add_secondary_filter(filter)
           @secondary_filter = filter
         end
-
-        def to_params
-          { q: to_boolean_phrase }
-        end
       end
     end
   end
