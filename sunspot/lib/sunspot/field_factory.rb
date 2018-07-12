@@ -1,4 +1,4 @@
-require 'rsolr/document'
+require 'rsolr'
 
 module Sunspot
   # 
