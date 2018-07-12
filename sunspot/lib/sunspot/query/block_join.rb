@@ -5,16 +5,16 @@ module Sunspot
       class ChildOf < Abstract
         alias add_some_parents_filter add_secondary_filter
 
-        def to_params
-          { q: "{!child of=\"#{all_parents_filters}\"}#{secondary_filter}" }
+        def to_boolean_phrase
+          "{!child of=\"#{all_parents_filters}\"}#{secondary_filter}"
         end
       end
 
       class ParentWhich < Abstract
         alias add_some_children_filter add_secondary_filter
 
-        def to_params
-          { q: "{!parent which=\"#{all_parents_filters}\"}#{secondary_filter}" }
+        def to_boolean_phrase
+          "{!parent which=\"#{all_parents_filters}\"}#{secondary_filter}"
         end
       end
 
@@ -22,6 +22,8 @@ module Sunspot
 
       class Abstract
         DEFAULT_PARENTS_FILTER = '*.*'.freeze
+
+        include ::Sunspot::Query::Filter
 
         attr_reader :all_parents_filters
         attr_reader :secondary_filter
@@ -32,6 +34,10 @@ module Sunspot
 
         def add_secondary_filter(filter)
           @secondary_filter = filter
+        end
+
+        def to_params
+          { q: to_boolean_phrase }
         end
       end
     end
