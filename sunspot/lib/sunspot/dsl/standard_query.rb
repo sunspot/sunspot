@@ -123,6 +123,16 @@ module Sunspot
         end
       end
 
+      # TODO(ar3s3ru): document block join functions
+
+      def child_of(parents_filter, &block)
+        puts parents_filter
+      end
+
+      def parent_which(parents_filter, &block)
+        puts parents_filter
+      end
+
       private
 
       def add_fulltext(keywords, field_names)
