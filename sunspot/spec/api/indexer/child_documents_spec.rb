@@ -1,5 +1,4 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
-require 'rsolr'
 
 describe 'indexing child documents fields', :type => :indexer do
   it 'should index both parent and children' do

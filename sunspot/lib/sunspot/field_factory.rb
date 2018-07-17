@@ -183,7 +183,7 @@ module Sunspot
 
       def populate_document(document, model, options = {})
         values = extract_value(model, options)
-        document.add_field(RSolr::Document::CHILD_DOCUMENT_KEY, values, options)
+        document.add_field(::RSolr::Document::CHILD_DOCUMENT_KEY, values, options)
       end
 
       def extract_value(model, options = {})
@@ -201,7 +201,7 @@ module Sunspot
       end
 
       def signature
-        [field, RSolr::Document::CHILD_DOCUMENT_KEY]
+        [field, ::RSolr::Document::CHILD_DOCUMENT_KEY]
       end
     end
   end
