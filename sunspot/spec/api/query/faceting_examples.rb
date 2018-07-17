@@ -448,7 +448,7 @@ shared_examples_for "facetable query" do
     it 'tags and excludes a scope filter in a query facet' do
       search do
         blog_filter = with(:blog_id, 1)
-        facet:foo, :exclude => blog_filter do
+        facet :foo, :exclude => blog_filter do
           row(:bar) do
             with(:category_ids, 1)
           end
@@ -466,7 +466,7 @@ shared_examples_for "facetable query" do
           with(:blog_id, 1)
           with(:blog_id, 2)
         end
-        facet:foo, :exclude => blog_filter do
+        facet :foo, :exclude => blog_filter do
           row(:bar) do
             with(:category_ids, 1)
           end
@@ -482,7 +482,7 @@ shared_examples_for "facetable query" do
       search do
         blog_filter = with(:blog_id, 1)
         category_filter = with(:category_ids, 2)
-        facet:foo, :exclude => [blog_filter, category_filter] do
+        facet :foo, :exclude => [blog_filter, category_filter] do
           row(:bar) do
             with(:category_ids, 1)
           end

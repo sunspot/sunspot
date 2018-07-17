@@ -10,6 +10,7 @@ module Sunspot
     #
     class StandardQuery < FieldQuery
       include Paginatable, Adjustable, Spellcheckable
+      include BlockJoin
 
       # Specify a phrase that should be searched as fulltext. Only +text+
       # fields are searched - see DSL::Fields.text
@@ -121,16 +122,6 @@ module Sunspot
         @query.conjunction do
           Util.instance_eval_or_call(self, &block)
         end
-      end
-
-      # TODO(ar3s3ru): document block join functions
-
-      def child_of(parents_filter, &block)
-        puts parents_filter
-      end
-
-      def parent_which(parents_filter, &block)
-        puts parents_filter
       end
 
       private

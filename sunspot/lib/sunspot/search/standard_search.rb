@@ -7,6 +7,8 @@ module Sunspot
     # Sunspot.new_search methods.
     #
     class StandardSearch < AbstractSearch
+      include Cloneable
+
       def request_handler
         super || :select
       end
