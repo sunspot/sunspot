@@ -9,5 +9,14 @@ describe 'indexing child documents fields', :type => :indexer do
     children.each do |child|
       expect(Sunspot.search(Child) { with :name, child.name }.results).to be_one
     end
+    search = Sunspot.search(Child) do
+      child_of(Parent) do
+        any_of do
+          with(:name, 'Test Parent')
+          with(:name, 'Parent')
+        end
+      end
+    end
+    expect(search.results).to_not be_empty
   end
 end
