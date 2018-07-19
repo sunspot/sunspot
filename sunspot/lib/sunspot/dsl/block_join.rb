@@ -20,7 +20,7 @@ module Sunspot
           Configuration.build
         )
         new_search.build(&block) if block
-        @query.add_function(block_join_clazz.new(new_search.query))
+        @query.add_function(block_join_clazz.new(@scope, new_search.query))
       end
     end
   end

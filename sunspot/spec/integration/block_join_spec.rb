@@ -42,7 +42,7 @@ describe 'Block Join queries' do
     it 'should return correct parent selecting just one child' do
       expect(Sunspot.search(Parent) do
         parent_which(Child) { with(:name, children[0].name) }
-      end.results).to eq(parent)
+      end.results).to eq([parent])
     end
 
     it 'should return no parent when selecting un-existent child' do
