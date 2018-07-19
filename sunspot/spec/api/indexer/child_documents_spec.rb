@@ -1,22 +1,16 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
-describe 'indexing child documents fields', :type => :indexer do
+describe 'indexing child documents fields', type: :indexer do
+  let(:children) { Array.new(3) { |i| Child.new(name: "Child #{i}") } }
+  let(:parent)   { Parent.new(name: 'Parent', children: children) }
+
   it 'should index both parent and children' do
-    children = Array.new(3) { |i| Child.new(name: "Child #{i}") }
-    parent   = Parent.new(name: 'Test Parent', children: children)
-    Sunspot.index!(parent)
-    expect(Sunspot.search(Parent) { with :name, parent.name }.results).to be_one
-    children.each do |child|
-      expect(Sunspot.search(Child) { with :name, child.name }.results).to be_one
+    session.index(parent)
+    expect(connection).to have_add_with(name_s: parent.name)
+    add_children = values_in_last_document_for(RSolr::Document::CHILD_DOCUMENT_KEY)
+    expect(add_children.length).to eq(children.length)
+    add_children.each_with_index do |child, i|
+      expect(child.field_by_name(:name_s).value).to eq(children[i].name)
     end
-    search = Sunspot.search(Child) do
-      child_of(Parent) do
-        any_of do
-          with(:name, 'Test Parent')
-          with(:name, 'Parent')
-        end
-      end
-    end
-    expect(search.results).to_not be_empty
   end
 end
