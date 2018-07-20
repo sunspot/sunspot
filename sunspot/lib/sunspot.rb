@@ -48,7 +48,7 @@ module Sunspot
   @searchable = ClassSet.new
 
   class <<self
-    # 
+    #
     # Clients can inject a session proxy, allowing them to implement custom
     # session-management logic while retaining the Sunspot singleton API as
     # an available interface. The object assigned to this attribute must
@@ -105,7 +105,7 @@ module Sunspot
     # ===== Field Types
     #
     # The available types are:
-    # 
+    #
     # * +text+
     # * +string+
     # * +integer+
@@ -125,9 +125,9 @@ module Sunspot
     # It is fine to specify a field both as a text field and a string field;
     # internally, the fields will have different names so there is no danger
     # of conflict.
-    # 
+    #
     # ===== Dynamic Fields
-    # 
+    #
     # For use cases which have highly dynamic data models (for instance, an
     # open set of key-value pairs attached to a model), it may be useful to
     # defer definition of fields until indexing time. Sunspot exposes dynamic
@@ -139,7 +139,7 @@ module Sunspot
     #
     # Dynamic fields are speficied in the setup block using the type name
     # prefixed by +dynamic_+. For example:
-    # 
+    #
     #   Sunspot.setup(Post) do
     #     dynamic_string :custom_values do
     #       key_value_pairs.inject({}) do |hash, key_value_pair|
@@ -147,20 +147,20 @@ module Sunspot
     #       end
     #     end
     #   end
-    # 
+    #
     # If you later wanted to facet all of the values for the key "cuisine",
     # you could issue:
-    # 
+    #
     #   Sunspot.search(Post) do
     #     dynamic :custom_values do
     #       facet :cuisine
     #     end
     #   end
-    # 
+    #
     # In the documentation, +:custom_values+ is referred to as the "base name" -
     # that is, the one specified statically - and +:cuisine+ is referred to as
     # the dynamic name, which is the part that is specified at indexing time.
-    # 
+    #
     def setup(clazz, &block)
       Sunspot.searchable << clazz
       Setup.setup(clazz, &block)
@@ -256,16 +256,16 @@ module Sunspot
     # Optimizes the index on the singletion session.
     #
     # Frequently adding and deleting documents to Solr, leaves the index in a
-    # fragmented state. The optimize command merges all index segments into 
-    # a single segment and removes any deleted documents, making it faster to 
-    # search. Since optimize rebuilds the index from scratch, it takes some 
+    # fragmented state. The optimize command merges all index segments into
+    # a single segment and removes any deleted documents, making it faster to
+    # search. Since optimize rebuilds the index from scratch, it takes some
     # time and requires double the space on the hard disk while it's rebuilding.
     # Note that optimize also commits.
     def optimize
       session.optimize
     end
 
-    # 
+    #
     # Create a new Search instance, but do not execute it immediately. Generally
     # you will want to use the #search method to build and execute searches in
     # one step, but if you are building searches piecemeal you may call
@@ -291,7 +291,7 @@ module Sunspot
     #     keywords('some keywords')
     #     order_by(:published_at, :desc)
     #   end
-    # 
+    #
     # ==== Parameters
     #
     # types<Class>...::
@@ -303,7 +303,7 @@ module Sunspot
     # Sunspot::Search::
     #   Search object, not yet executed. Query parameters can be added manually;
     #   then #execute should be called.
-    # 
+    #
     def new_search(*types, &block)
       session.new_search(*types, &block)
     end
@@ -365,7 +365,7 @@ module Sunspot
     #     order_by :published_at, :desc
     #     paginate 2, 15
     #   end
-    #  
+    #
     # If the block passed to #search takes an argument, that argument will
     # present the DSL, and the block will be evaluated in the calling context.
     # This will come in handy for building searches using instance data or
@@ -387,7 +387,7 @@ module Sunspot
       session.new_more_like_this(object, *types, &block)
     end
 
-    # 
+    #
     # Initiate a MoreLikeThis search. MoreLikeThis is a special type of search
     # that finds similar documents using fulltext comparison. The fields to be
     # compared are `text` fields set up with the `:more_like_this` option set to
@@ -448,7 +448,7 @@ module Sunspot
       session.remove(*objects, &block)
     end
 
-    # 
+    #
     # Remove objects from the index and immediately commit. See Sunspot.remove
     #
     # ==== Parameters
@@ -459,7 +459,7 @@ module Sunspot
       session.remove!(*objects, &block)
     end
 
-    # 
+    #
     # Remove an object from the index using its class name and primary key.
     # Useful if you know this information and want to remove an object without
     # instantiating it from persistent storage
@@ -472,15 +472,15 @@ module Sunspot
     #   returned by the class's instance adapter.
     #
     def remove_by_id(clazz, *ids)
-      session.remove_by_id(clazz, ids)
+      raise 'This method can not be used with SolrCloud'
     end
 
-    # 
+    #
     # Remove an object by class name and primary key, and immediately commit.
     # See #remove_by_id and #commit
     #
     def remove_by_id!(clazz, *ids)
-      session.remove_by_id!(clazz, ids)
+      raise 'This method can not be used with SolrCloud'
     end
 
     # Remove all objects of the given classes from the index. There isn't much
@@ -502,7 +502,7 @@ module Sunspot
       session.remove_all(*classes)
     end
 
-    # 
+    #
     # Remove all objects of the given classes from the index and immediately
     # commit. See Sunspot.remove_all
     #
@@ -514,7 +514,7 @@ module Sunspot
       session.remove_all!(*classes)
     end
 
-    # 
+    #
     # Process all adds in a batch. Any Sunspot adds initiated inside the block
     # will be sent in bulk when the block finishes. Useful if your application
     # initiates index adds from various places in code as part of a single
@@ -547,13 +547,13 @@ module Sunspot
       session.dirty?
     end
 
-    # 
+    #
     # Sends a commit (soft or hard) if the session is dirty (see #dirty?).
     #
     def commit_if_dirty(soft_commit = false)
       session.commit_if_dirty soft_commit
     end
-    
+
     #
     # True if documents have been removed since the last commit.
     #
@@ -565,13 +565,13 @@ module Sunspot
       session.delete_dirty?
     end
 
-    # 
+    #
     # Sends a commit if the session has deletes since the last commit (see #delete_dirty?).
     #
     def commit_if_delete_dirty(soft_commit = false)
       session.commit_if_delete_dirty soft_commit
     end
-    
+
     # Returns the configuration associated with the singleton session. See
     # Sunspot::Configuration for details.
     #
@@ -583,7 +583,7 @@ module Sunspot
       session.config
     end
 
-    # 
+    #
     # Resets the singleton session. This is useful for clearing out all
     # static data between tests, but probably nowhere else.
     #
@@ -603,7 +603,7 @@ module Sunspot
       @session = Session.new(config)
     end
 
-    # 
+    #
     # Get the singleton session, creating it if none yet exists.
     #
     # ==== Returns

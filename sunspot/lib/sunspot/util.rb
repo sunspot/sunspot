@@ -82,6 +82,11 @@ module Sunspot
       #
       def full_const_get(string)
         string.split('::').inject(Object) do |context, const_name|
+          # we added sharding key in front of the original const_name organization_id!Application
+          # we need to extract the original const name from it
+          index = const_name.rindex('!')
+          const_name = const_name[(index+1)..-1] if index
+
           context.const_defined?(const_name) ? context.const_get(const_name) : context.const_missing(const_name)
         end
       end
