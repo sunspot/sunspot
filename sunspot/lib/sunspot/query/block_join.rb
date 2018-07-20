@@ -51,7 +51,7 @@ module Sunspot
           query_string = "{!#{query_type} #{all_parents_key}=\"#{all_parents}\""
           query_string << " score=#{score}" unless score.nil?
           query_string << '}'
-          query_string << filter.join(' ') unless filter.nil?
+          query_string << filter.join(' AND ') unless filter.nil?
           query_string
         end
       end
@@ -91,7 +91,16 @@ module Sunspot
 
         def all_parents_filter
           # Use top-level scope (on parent type) as allParents filter.
-          scope.to_params[:fq].flatten.join(' ')
+          scope.to_params[:fq].flatten.join(' AND ')
+        end
+
+        def secondary_filter
+          q = super
+          # Everything in the subquery is related to children: use those
+          # filters as 'someChildren' field.
+          q << filter_query.to_params[:fq]
+          q.flatten!
+          q
         end
       end
 
