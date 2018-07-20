@@ -50,5 +50,16 @@ describe 'Block Join queries' do
         parent_which(Child) { with(:name, 'un-existent child') }
       end.results).to be_empty
     end
+
+    it 'should return correct parent in case of complex children filter' do
+      expect(Sunspot.search(Parent) do
+        parent_which(Child) do
+          any_of do
+            with(:name, children[0].name)
+            with(:name, 'un-existent child')
+          end
+        end
+      end.results).to eq([parent])
+    end
   end
 end
