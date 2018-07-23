@@ -9,9 +9,9 @@ describe 'Block Join queries' do
     Sunspot.index! parent
   end
 
-  after :each do
-    Sunspot.remove_all!
-  end
+  # after :each do
+  #   Sunspot.remove_all!
+  # end
 
   context 'with ChildOf operator' do
     it 'should return correct children using parent name' do

@@ -3,11 +3,15 @@ module Sunspot
     # TODO(ar3s3ru): document this!
     module BlockJoin
       def child_of(parent_type, &block)
-        block_join_query(parent_type, Query::BlockJoin::ChildOf, &block)
+        @query.add_function(
+          block_join_query(parent_type, Query::BlockJoin::ChildOf, &block)
+        )
       end
 
       def parent_which(children_type, &block)
-        block_join_query(children_type, Query::BlockJoin::ParentWhich, &block)
+        @query.add_function(
+          block_join_query(children_type, Query::BlockJoin::ParentWhich, &block)
+        )
       end
 
       private
@@ -20,7 +24,7 @@ module Sunspot
           Configuration.build
         )
         new_search.build(&block) if block
-        @query.add_function(block_join_clazz.new(@scope, new_search.query))
+        block_join_clazz.new(@scope, new_search.query)
       end
     end
   end

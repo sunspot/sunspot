@@ -25,6 +25,15 @@ module Sunspot
           @score || Score::NONE
         end
 
+        def all_parents_filter
+          raise 'Implement in subclasses!'
+        end
+
+        def secondary_filter
+          return [] if filter_query.to_params[:q] == '*:*'
+          filter_query.to_params[:q]
+        end
+
         private
 
         def correct?(filter)
@@ -33,15 +42,6 @@ module Sunspot
 
         def scope?(scope)
           scope.instance_of? Scope
-        end
-
-        def all_parents_filter
-          raise 'Implement in subclasses!'
-        end
-
-        def secondary_filter
-          return [] if filter_query.to_params[:q] == '*:*'
-          filter_query.to_params[:q]
         end
 
         def render_query_string(query_type, all_parents_key)
@@ -57,12 +57,6 @@ module Sunspot
       end
 
       class ChildOf < Abstract
-        def to_params
-          { q: render_query_string('child', 'of') }
-        end
-
-        private
-
         def all_parents_filter
           # The scope of the initial query should give the 'allParents' filter,
           # to select which parents are used in the query.
@@ -80,15 +74,13 @@ module Sunspot
           q.flatten!
           q
         end
+
+        def to_params
+          { q: render_query_string('child', 'of') }
+        end
       end
 
       class ParentWhich < Abstract
-        def to_params
-          { q: render_query_string('parent', 'which') }
-        end
-
-        private
-
         def all_parents_filter
           # Use top-level scope (on parent type) as allParents filter.
           scope.to_params[:fq].flatten.join(' AND ')
@@ -101,6 +93,10 @@ module Sunspot
           q << filter_query.to_params[:fq]
           q.flatten!
           q
+        end
+
+        def to_params
+          { q: render_query_string('parent', 'which') }
         end
       end
 
