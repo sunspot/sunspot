@@ -9,7 +9,7 @@ describe 'Block Join queries' do
     Sunspot.index! parent
   end
 
-  after :each do
+  after :all do
     Sunspot.remove_all!
   end
 

@@ -10,13 +10,13 @@ describe 'Block Join faceting with JSON API' do
         pub_year: 2010,
         reviews: [
           Review.new(
-            review_date: Time.new('2015-001-03T14:30:00Z'),
+            review_date: DateTime.parse('2015-01-03T14:30:00Z'),
             stars: 5,
             author: 'yonik',
             comment: 'A great start to what looks like an epic series!'
           ),
           Review.new(
-            review_date: Time.new('2014-03-15T12:00:00Z'),
+            review_date: DateTime.parse('2014-03-15T12:00:00Z'),
             stars: 3,
             author: 'dan',
             comment: 'This book was way too long.'
@@ -30,19 +30,19 @@ describe 'Block Join faceting with JSON API' do
         pub_year: 1992,
         reviews: [
           Review.new(
-            review_date: Time.new('2015-01-03T14:30:00Z'),
+            review_date: DateTime.parse('2015-01-03T14:30:00Z'),
             stars: 5,
             author: 'yonik',
             comment: 'Ahead of its time... I wonder if it helped inspire The Matrix?'
           ),
           Review.new(
-            review_date: Time.new('2015-04-10T9:00:00Z'),
+            review_date: DateTime.parse('2015-04-10T9:00:00Z'),
             stars: 2,
             author: 'dan',
             comment: 'A pizza boy for the Mafia franchise? Really?'
           ),
           Review.new(
-            review_date: Time.new('2015-06-02T00:00:00Z'),
+            review_date: DateTime.parse('2015-06-02T00:00:00Z'),
             stars: 4,
             author: 'mary',
             comment: 'Neal is so creative and detailed! Loved the metaverse!'
@@ -57,7 +57,30 @@ describe 'Block Join faceting with JSON API' do
     Sunspot.index! books
   end
 
-  after :each do
+  after :all do
     Sunspot.remove_all!
+  end
+
+  it 'search children by filter and facet on parent field' do
+    search = Sunspot.search(Review) do
+      with :author, 'yonik'
+      json_facet :category, block_join: on_parent(Book) {}
+    end
+
+    expect(search.facet(:category).rows.size).to eq(2)
+    expect(search.facet(:category).rows.map(&:value).uniq).to eq(%w[fantasy sci-fi])
+  end
+
+  it 'search parents by filter and facet on child field' do
+    search = Sunspot.search(Book) do
+      fulltext(books[0].title, fields: [:title])
+      json_facet :review_date, block_join: (on_child(Review) do
+        with(:review_date).greater_than(DateTime.parse('2015-01-01T00:00:00Z'))
+      end)
+    end
+
+    expect(search.facet(:review_date).rows.size).to eq(1)
+    found_value = DateTime.parse(search.facet(:review_date).rows[0].value)
+    expect(found_value).to eq(books[0].reviews[0].review_date)
   end
 end
