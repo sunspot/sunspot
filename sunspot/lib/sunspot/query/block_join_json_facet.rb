@@ -35,10 +35,17 @@ module Sunspot
               field: @field.indexed_name,
               domain: {
                 @operator => @query.all_parents_filter,
-                FILTER_OP => @query.secondary_filter.join(' AND ')
+                FILTER_OP => generate_filter
               }
             }.merge!(init_params)
           }
+        end
+
+        private
+
+        def generate_filter
+          target_value = @query.secondary_filter.join(' AND ')
+          target_value == '' ? '*:*' : target_value
         end
       end
     end
