@@ -189,8 +189,8 @@ module Sunspot
       end
 
       def parse_json_facet(field_name, options, setup)
-        field = setup.field(field_name)
         return parse_block_join_json_facet(field_name, options, setup) unless options[:block_join].nil?
+        field = setup.field(field_name)
         if options[:time_range]
           unless field.type.is_a?(Sunspot::Type::TimeType)
             raise(
