@@ -175,7 +175,10 @@ module Sunspot
       end
     end
 
-    # TODO(ar3s3ru): add documentation
+    #
+    # ChildFieldFactories create child field instances based on setup,
+    # looking at the +child_documents+ directive inside +Sunspot.setup+ block.
+    #
     class Child
       def initialize(field)
         @extractor = DataExtractor::AttributeExtractor.new(field)

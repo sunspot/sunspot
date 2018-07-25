@@ -39,7 +39,17 @@ module Sunspot
         end
       end
 
-      # TODO(ar3s3ru): add documentation
+      #
+      # child_documents is used to specify the field that will be serialized
+      # and indexed in Solr as child documents.
+      #
+      # It is mandatory for a child_documents field to be an +Array+ of
+      # searchable documents (must use +Sunspot.setup+).
+      #
+      # ==== Parameters
+      #
+      # field<Symbol>:: Field name at object level that contains child documents
+      #
       def child_documents(field)
         @setup.add_child_field_factory(field)
       end
