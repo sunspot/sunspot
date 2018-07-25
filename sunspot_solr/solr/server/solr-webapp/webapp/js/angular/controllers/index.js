@@ -15,18 +15,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-solrAdminApp.controller('IndexController', ['$scope', 'System', 'Cores', function($scope, System, Cores) {
-  $scope.resetMenu("index", true);
+solrAdminApp.controller('IndexController', function($scope, System, Cores, Constants) {
+  $scope.resetMenu("index", Constants.IS_ROOT_PAGE);
   $scope.reload = function() {
     System.get(function(data) {
       $scope.system = data;
 
       // load average
-      load_average = ( data.system.uptime || '' ).match( /load averages?: (\d+[.,]\d\d),? (\d+[.,]\d\d),? (\d+[.,]\d\d)/ );
-      for (var i=0;i<2;i++) {
-        load_average[i]=load_average[i].replace(",","."); // for European users
+      var load_average = ( data.system.uptime || '' ).match( /load averages?: (\d+[.,]\d\d),? (\d+[.,]\d\d),? (\d+[.,]\d\d)/ );
+      if (load_average) {
+        for (var i=0;i<2;i++) {
+          load_average[i]=load_average[i].replace(",","."); // for European users
+        }
+        $scope.load_average = load_average.slice(1);
       }
-      $scope.load_average = load_average.slice(1);
 
       // physical memory
       var memoryMax = parse_memory_value(data.system.totalPhysicalMemorySize);
@@ -67,7 +69,7 @@ solrAdminApp.controller('IndexController', ['$scope', 'System', 'Cores', functio
     });
   };
   $scope.reload();
-}]);
+});
 
 var parse_memory_value = function( value ) {
   if( value !== Number( value ) )

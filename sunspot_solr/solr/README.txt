@@ -67,7 +67,7 @@ Solr includes a few examples to help you get started. To run a specific example,
   bin/solr -e <EXAMPLE> where <EXAMPLE> is one of:
 
     cloud        : SolrCloud example
-    dih          : Data Import Handler (rdbms, mail, rss, tika)
+    dih          : Data Import Handler (rdbms, mail, atom, tika)
     schemaless   : Schema-less example (schema is inferred from data during indexing)
     techproducts : Kitchen sink example providing comprehensive examples of Solr features
 
@@ -85,7 +85,7 @@ To add documents to the index, use bin/post.  For example:
 
 For more information about Solr examples please read...
 
- * example/solr/README.txt
+ * example/README.txt
    For more information about the "Solr Home" and Solr specific configuration
  * http://lucene.apache.org/solr/quickstart.html
    For a Quick Start guide
@@ -106,9 +106,10 @@ server/
   configuration and documents to index. Please see: bin/solr start -help
   for more information about starting a Solr server.
 
-dist/solr-XX.war
-  The Apache Solr Application.  Deploy this WAR file to any servlet
-  container to run Apache Solr.
+example/
+  Contains example documents and an alternative Solr home
+  directory containing examples of how to use the Data Import Handler,
+  see example/example-DIH/README.txt for more information.
 
 dist/solr-<component>-XX.jar
   The Apache Solr libraries.  To compile Apache Solr Plugins,
@@ -117,16 +118,16 @@ dist/solr-<component>-XX.jar
   for more information).
 
 docs/index.html
-  The Apache Solr Javadoc API documentation and Tutorial
+  A link to the online version of Apache Solr Javadoc API documentation and Tutorial
 
 
 Instructions for Building Apache Solr from Source
 -------------------------------------------------
 
-1. Download the Java SE 7 JDK (Java Development Kit) or later from http://java.sun.com/
+1. Download the Java SE 8 JDK (Java Development Kit) or later from http://www.oracle.com/java/
    You will need the JDK installed, and the $JAVA_HOME/bin (Windows: %JAVA_HOME%\bin) 
    folder included on your command path. To test this, issue a "java -version" command 
-   from your shell (command prompt) and verify that the Java version is 1.7 or later.
+   from your shell (command prompt) and verify that the Java version is 1.8 or later.
 
 2. Download the Apache Ant binary distribution (1.8.2+) from 
    http://ant.apache.org/  You will need Ant installed and the $ANT_HOME/bin (Windows: 
@@ -141,7 +142,7 @@ Instructions for Building Apache Solr from Source
 3. Download the Apache Solr distribution, linked from the above web site. 
    Unzip the distribution to a folder of your choice, e.g. C:\solr or ~/solr
    Alternately, you can obtain a copy of the latest Apache Solr source code
-   directly from the Subversion repository:
+   directly from the GIT repository:
 
      http://lucene.apache.org/solr/versioncontrol.html
 
@@ -150,7 +151,7 @@ Instructions for Building Apache Solr from Source
   
    NOTE: 
    To see Solr in action, you may want to use the "ant server" command to build
-   and package Solr into the server/webapps directory. See also server/README.txt.
+   and package Solr into the server directory. See also server/README.txt.
 
 
 Export control

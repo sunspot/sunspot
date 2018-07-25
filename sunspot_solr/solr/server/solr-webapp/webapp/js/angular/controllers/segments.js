@@ -17,8 +17,8 @@
 
 var MB_FACTOR = 1024*1024;
 
-solrAdminApp.controller('SegmentsController', function($scope, $routeParams, $interval, Segments) {
-    $scope.resetMenu("segments");
+solrAdminApp.controller('SegmentsController', function($scope, $routeParams, $interval, Segments, Constants) {
+    $scope.resetMenu("segments", Constants.IS_CORE_PAGE);
 
     $scope.refresh = function() {
 
@@ -59,6 +59,11 @@ solrAdminApp.controller('SegmentsController', function($scope, $routeParams, $in
         $scope.autorefresh = !$scope.autorefresh;
         if ($scope.autorefresh) {
             $scope.interval = $interval($scope.refresh, 1000);
+            var onRouteChangeOff = $scope.$on('$routeChangeStart', function() {
+              $interval.cancel($scope.interval);
+              onRouteChangeOff();
+            });
+
         } else if ($scope.interval) {
             $interval.cancel($scope.interval);
         }

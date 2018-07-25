@@ -16,8 +16,8 @@
 */
 
 solrAdminApp.controller('PluginsController',
-    function($scope, $rootScope, $routeParams, $location, Mbeans) {
-        $scope.resetMenu("plugins");
+    function($scope, $rootScope, $routeParams, $location, Mbeans, Constants) {
+        $scope.resetMenu("plugins", Constants.IS_CORE_PAGE);
 
         if ($routeParams.legacytype) {
             // support legacy URLs. Angular cannot change #path without reloading controller
@@ -88,6 +88,7 @@ var getPluginTypes = function(data, selected) {
         var key = mbeans[i];
         var lower = key.toLowerCase();
         var plugins = getPlugins(mbeans[i+1]);
+        if (plugins.length == 0) continue;
         keys.push({name: key,
                    selected: lower == selected,
                    changes: 0,
