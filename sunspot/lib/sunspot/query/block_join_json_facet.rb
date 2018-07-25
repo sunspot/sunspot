@@ -1,12 +1,17 @@
 module Sunspot
   module Query
-    module BlockJoin
-      # TODO(ar3s3ru): add documentation
+    module BlockJoin #:nodoc:
+      #
+      # Implements BlockJoin Faceting feature on top of the JSON API.
+      #
       class JsonFacet < AbstractJsonFieldFacet
         ON_CHILDREN_OP = 'blockChildren'.freeze
         ON_PARENTS_OP  = 'blockParent'.freeze
         FILTER_OP      = 'filter'.freeze
 
+        #
+        # Ensure that the requested operation is legal.
+        # 
         def self.ensure_correct_operator(options)
           op = options[:op]
           unless [ON_CHILDREN_OP, ON_PARENTS_OP].include? op
@@ -15,6 +20,9 @@ module Sunspot
           op
         end
 
+        #
+        # Ensures that the input query is a BlockJoin query instance.
+        #
         def self.ensure_correct_query(query)
           if !query.instance_of?(ChildOf) && !query.instance_of?(ParentWhich)
             raise 'Query must be Sunspot::Query::BlockJoin::ChildOf or ParentWhich'
@@ -22,6 +30,26 @@ module Sunspot
           query
         end
 
+        #
+        # Initializes a new BlockJoin Facet operation.
+        #
+        # ==== Parameters
+        #
+        # field<Sunspot::Field>::
+        #   Document field on which we need faceting.
+        #
+        # setup<Sunspot::Setup>::
+        #   Setup of the nested class (on which faceting is needed).
+        #
+        # query<Sunspot::Query::BlockJoin::>::
+        #   BlockJoin query to execute in this faceting operation.
+        #
+        # ==== Options
+        #
+        # :op<String>::
+        #   Specifies the operator to perform in the +domain+ clause
+        #   of the +json.facet+ parameter.
+        #
         def initialize(field, options, setup, query)
           super(field, options, setup)
           @query = BlockJoin::JsonFacet.ensure_correct_query(query)
