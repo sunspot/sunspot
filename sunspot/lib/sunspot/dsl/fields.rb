@@ -46,6 +46,29 @@ module Sunspot
       # It is mandatory for a child_documents field to be an +Array+ of
       # searchable documents (must use +Sunspot.setup+).
       #
+      # ==== Example
+      #
+      #   class Person
+      #     attr_accessor :name, :surname, :age
+      #   end
+      #
+      #   class Parent < Person
+      #     attr_accessor :children
+      #   end
+      #
+      #   Sunspot.setup(Person) do
+      #     string :name
+      #     string :surname
+      #     integer :age
+      #   end
+      #
+      #   Sunspot.setup(Parent) do
+      #     string :name
+      #     string :surname
+      #     integer :age
+      #     child_documents :children
+      #   end
+      #
       # ==== Parameters
       #
       # field<Symbol>:: Field name at object level that contains child documents
