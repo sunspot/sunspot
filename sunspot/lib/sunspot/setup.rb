@@ -91,7 +91,13 @@ module Sunspot
       end
     end
 
-    # TODO(ar3s3ru): add documentation
+    #
+    # Add a child documents field factory to the setup.
+    #
+    # ==== Parameters
+    #
+    # field<Symbol>:: The document field that contains the child documents.
+    #
     def add_child_field_factory(field)
       @child_field_factory = FieldFactory::Child.new(field)
     end
