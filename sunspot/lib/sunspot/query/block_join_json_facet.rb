@@ -11,7 +11,7 @@ module Sunspot
 
         #
         # Ensure that the requested operation is legal.
-        # 
+        #
         def self.ensure_correct_operator(options)
           op = options[:op]
           unless [ON_CHILDREN_OP, ON_PARENTS_OP].include? op
