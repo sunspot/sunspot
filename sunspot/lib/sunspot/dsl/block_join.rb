@@ -71,11 +71,10 @@ module Sunspot
       #
       def block_join_query(inner_type, block_join_clazz, &block)
         # Use a cloned search with parent type setup to keep using the DSL
-        new_search = @search.clone(
-          Query::StandardQuery.new([inner_type]),
-          Sunspot::Setup.for(inner_type),
-          Configuration.build
-        )
+        new_search = Sunspot::Search::StandardSearch.new(nil,
+                                                         Sunspot::Setup.for(inner_type),
+                                                         Query::StandardQuery.new([inner_type]),
+                                                         Configuration.build)
         new_search.build(&block) if block
         block_join_clazz.new(@scope, new_search.query)
       end
