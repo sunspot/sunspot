@@ -16,6 +16,7 @@ Sunspot.setup(Book) do
 end
 
 class Review < MockRecord
+  attr_accessor :book_id
   attr_accessor :review_date
   attr_accessor :stars
   attr_accessor :author
@@ -23,6 +24,7 @@ class Review < MockRecord
 end
 
 Sunspot.setup(Review) do
+  integer :book_id
   time    :review_date
   integer :stars
   string  :author

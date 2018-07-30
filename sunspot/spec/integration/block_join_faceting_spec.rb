@@ -10,12 +10,14 @@ describe 'Block Join faceting with JSON API' do
         pub_year: 2010,
         reviews: [
           Review.new(
+            book_id: 1,
             review_date: DateTime.parse('2015-01-03T14:30:00Z'),
             stars: 5,
             author: 'yonik',
             comment: 'A great start to what looks like an epic series!'
           ),
           Review.new(
+            book_id: 1,
             review_date: DateTime.parse('2014-03-15T12:00:00Z'),
             stars: 3,
             author: 'dan',
@@ -30,18 +32,21 @@ describe 'Block Join faceting with JSON API' do
         pub_year: 1992,
         reviews: [
           Review.new(
+            book_id: 2,
             review_date: DateTime.parse('2015-01-03T14:30:00Z'),
             stars: 5,
             author: 'yonik',
             comment: 'Ahead of its time... I wonder if it helped inspire The Matrix?'
           ),
           Review.new(
+            book_id: 2,
             review_date: DateTime.parse('2015-04-10T9:00:00Z'),
             stars: 2,
             author: 'dan',
             comment: 'A pizza boy for the Mafia franchise? Really?'
           ),
           Review.new(
+            book_id: 2,
             review_date: DateTime.parse('2015-06-02T00:00:00Z'),
             stars: 4,
             author: 'mary',
@@ -82,5 +87,21 @@ describe 'Block Join faceting with JSON API' do
     expect(search.facet(:review_date).rows.size).to eq(1)
     found_value = DateTime.parse(search.facet(:review_date).rows[0].value)
     expect(found_value).to eq(books[0].reviews[0].review_date)
+  end
+
+  context 'stats' do
+    it 'executes correct stats on children using block join JSON faceting' do
+      search = Sunspot.search(Book) do
+        fulltext(books[0].title, fields: [:title])
+        stats :stars, sort: :avg, on: Review do
+          json_facet :book_id, block_join: (on_child(Review) {})
+        end
+      end
+
+      expect(search.json_facet_stats(:book_id).rows.length).to eq(1)
+      expect(search.json_facet_stats(:book_id).rows[0].min).to eq(3.0)
+      expect(search.json_facet_stats(:book_id).rows[0].max).to eq(5.0)
+      expect(search.json_facet_stats(:book_id).rows[0].avg).to eq(4.0)
+    end
   end
 end
