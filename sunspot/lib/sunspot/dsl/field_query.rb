@@ -345,16 +345,18 @@ module Sunspot
 
       def stats(*field_names, &block)
         options = Sunspot::Util.extract_options_from(field_names)
+        setup = @setup
+        setup = Sunspot::Setup.for(options[:on]) unless options[:on].nil?
 
         field_names.each do |field_name|
-          field = @setup.field(field_name)
+          field = setup.field(field_name)
           query_stats = @query.add_stats(
             Sunspot::Query::FieldStats.new(field, options)
           )
           search_stats = @search.add_field_stats(field)
 
           Sunspot::Util.instance_eval_or_call(
-            FieldStats.new(query_stats, @setup, search_stats),
+            FieldStats.new(query_stats, setup, search_stats, scope = @scope),
             &block) if block
         end
       end
