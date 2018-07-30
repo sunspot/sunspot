@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>5.0.0</luceneMatchVersion>
+  <luceneMatchVersion>6.6.0</luceneMatchVersion>
 
   <!-- Data Directory
 
@@ -461,6 +461,7 @@
   <initParams path="/update/**,/query,/select,/tvrh,/elevate,/spell">
     <lst name="defaults">
       <str name="df">text</str>
+      <str name="q.op">AND</str>
     </lst>
   </initParams>
 
