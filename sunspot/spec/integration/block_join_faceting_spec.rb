@@ -53,6 +53,35 @@ describe 'Block Join faceting with JSON API' do
             comment: 'Neal is so creative and detailed! Loved the metaverse!'
           )
         ]
+      ),
+      Book.new(
+        title: 'Dark Tower: The Gunslinger',
+        author: 'Stephen King',
+        category: 'fantasy',
+        pub_year: 1982,
+        reviews: [
+          Review.new(
+            book_id: 3,
+            review_date: DateTime.parse('2017-09-03T15:13:25Z'),
+            stars: 3,
+            author: 'richard',
+            comment: 'I know, I\'m the only person who doesn\'t like it, but I just couldn\'t get into it.'
+          ),
+          Review.new(
+            book_id: 3,
+            review_date: DateTime.parse('2017-06-02T07:00:00Z'),
+            stars: 5,
+            author: 'moore',
+            comment: 'It\'s my third time reading this series, I believe this one is my favorite.'
+          ),
+          Review.new(
+            book_id: 3,
+            review_date: DateTime.parse('2017-12-24T16:27:19Z'),
+            stars: 1,
+            author: 'roxanne',
+            comment: 'This book was a very slow read and it felt like it never got to a point.'
+          )
+        ]
       )
     ]
   end
@@ -90,7 +119,7 @@ describe 'Block Join faceting with JSON API' do
   end
 
   context 'stats' do
-    it 'executes correct stats on children using block join JSON faceting' do
+    it 'executes correct stats on children using block join faceting' do
       search = Sunspot.search(Book) do
         fulltext(books[0].title, fields: [:title])
         stats :stars, sort: :avg, on: Review do
@@ -102,6 +131,22 @@ describe 'Block Join faceting with JSON API' do
       expect(search.json_facet_stats(:book_id).rows[0].min).to eq(3.0)
       expect(search.json_facet_stats(:book_id).rows[0].max).to eq(5.0)
       expect(search.json_facet_stats(:book_id).rows[0].avg).to eq(4.0)
+    end
+
+    it 'executes correct stats on parents using block join faceting' do
+      search = Sunspot.search(Review) do
+        with(:stars).greater_than(2.0)
+        stats :pub_year, sort: :min, on: Book do
+          json_facet :category, block_join: (on_parent(Book) {})
+        end
+      end
+
+      rows = search.json_facet_stats(:category).rows
+      expect(rows.length).to eq(2)
+      expect(rows[0].min).to eq(books[1].pub_year)
+      expect(rows[0].max).to eq(books[1].pub_year)
+      expect(rows[1].min).to eq(books[2].pub_year)
+      expect(rows[1].max).to eq(books[0].pub_year)
     end
   end
 end
