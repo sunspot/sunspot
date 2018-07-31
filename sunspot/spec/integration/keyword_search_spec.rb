@@ -223,7 +223,7 @@ describe 'keyword search' do
           boost(1.5) { with(:average_rating).greater_than(3.0) }
         end
       end
-      expect(search.results).to eq(@posts)
+      expect(search.results.sort! { |a, b| a.id <=> b.id }).to eq(@posts)
       expect(search.hits[0].score).to be > search.hits[1].score
       expect(search.hits[1].score).to be > search.hits[2].score
     end
