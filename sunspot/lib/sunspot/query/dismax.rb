@@ -36,6 +36,11 @@ module Sunspot
         params[:ps] = @phrase_slop if @phrase_slop
         params[:qs] = @query_phrase_slop if @query_phrase_slop
         params[:tie] = @tie if @tie
+
+        # NOTE(ar3s3ru): the default operator in Sunspot is 'AND'.
+        # When using 'AND' in default q.op, the 'mm' parameter in Extended DisMax
+        # queries is disregarded by Solr (please, take a look at the JIRA board).
+        # This fixes the 'mm' parameter parsing for all Solr versions (hopefully).
         params[:'q.op'] = 'OR' if @minimum_match
 
         if @phrase_fields
