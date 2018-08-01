@@ -107,9 +107,22 @@ describe 'Block Join faceting with JSON API' do
 
   it 'search parents by filter and facet on child field' do
     search = Sunspot.search(Book) do
-      fulltext(books[0].title, fields: [:title])
+      fulltext books[0].title, fields: [:title]
       json_facet :review_date, block_join: (on_child(Review) do
         with(:review_date).greater_than(DateTime.parse('2015-01-01T00:00:00Z'))
+      end)
+    end
+
+    expect(search.facet(:review_date).rows.size).to eq(1)
+    found_value = DateTime.parse(search.facet(:review_date).rows[0].value)
+    expect(found_value).to eq(books[0].reviews[0].review_date)
+  end
+
+  it 'search parents by filter and facet on child field (using minimum match)' do
+    search = Sunspot.search(Book) do
+      fulltext books[0].title, fields: [:title], minimum_match: 1
+      json_facet :review_date, block_join: (on_child(Review) do
+        with(:review_date, (DateTime.parse('2015-01-01T00:00:00Z')..DateTime.parse('2017-01-01T00:00:00Z')))
       end)
     end
 
