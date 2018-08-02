@@ -88,13 +88,15 @@ as such:
 
 ```ruby
 class Comment < ActiveRecord::Base
-  # NOTE: this is not necessary, Solr uses '_root_' field to refer to the parent document
-  integer :post_id
-  # -------------------------------------------------------------------------------------
-  integer :author_id
-  
-  text :body
-  time :published_at
+  searchable do
+    # NOTE: this is not necessary, Solr uses '_root_' field to refer to the parent document
+    integer :post_id
+    # -------------------------------------------------------------------------------------
+    integer :author_id
+    
+    text :body
+    time :published_at
+  end
 end
 
 class Post < ActiveRecord::Base
