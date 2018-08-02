@@ -242,6 +242,10 @@ describe 'keyword search' do
       end
     end
 
+    it 'should add the q.op OR parameter to ensure minimum match is parsed' do
+      expect(@search.query.to_params[:'q.op']).to eq('OR')
+    end
+
     it 'should match documents that contain the minimum_match number of search terms' do
       expect(@search.results).to include(@posts[0])
     end
