@@ -15,7 +15,7 @@ describe 'keyword highlighting' do
   end
   
   it 'should return formatted highlight fragments' do
-    expect(@search_result.hits.first.highlights(:body).first.format).to eq('And the <em>fox</em> laughed')
+    expect(@search_result.hits.first.highlights(:body).first.format).to eq('And the fox laughed')
   end
   
   it 'should be empty for non-keyword searches' do
