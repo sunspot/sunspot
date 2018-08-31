@@ -27,7 +27,7 @@ module Sunspot
       #   search.highlights(:body).first.format { |word| "<strong>#{word}</strong>" }
       #
       def format(&block)
-        block ||= proc { |word| "<em>#{word}</em>" }
+        block ||= proc { |word| "<em>#{word}</em>" }.html_safe
         @highlight.gsub(HIGHLIGHT_MATCHER) do
           block.call(Regexp.last_match[1])
         end
