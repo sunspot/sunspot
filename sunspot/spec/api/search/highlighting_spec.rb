@@ -22,16 +22,11 @@ describe 'search with highlighting results', :type => :search do
   end
 
   it 'returns first highlight for a specified field' do
-    expect(@search.hits.first.highlight(:title).format).to eq('one <em>two</em> three')
+    expect(@search.hits.first.highlight(:title).format).to eq('one two three')
   end
 
   it 'returns an empty array if a given field does not have a highlight' do
     expect(@search.hits.first.highlights(:body)).to eq([])
-  end
-
-  it 'formats hits with <em> by default' do
-    highlight = @search.hits.first.highlights(:title).first.formatted
-    expect(highlight).to eq('one <em>two</em> three')
   end
 
   it 'formats hits with provided block' do
