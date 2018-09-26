@@ -5,6 +5,15 @@ module Sunspot
   #
   module Util #:nodoc:
     class <<self
+      def ensure_child_documents_support
+        raise 'Child Documents features needs RSolr v2!' unless child_documents_supported?
+      end
+
+      def child_documents_supported?
+        rsolr_version = Semantic::Version.new(RSolr::VERSION)
+        rsolr_version.major >= 2
+      end
+
       #
       # Get all of the superclasses for a given class, including the class
       # itself.
