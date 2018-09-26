@@ -31,6 +31,7 @@ module Sunspot
       #   end
       #
       def child_of(parent_type, &block)
+        Sunspot::Util.ensure_child_documents_support
         @query.add_function(
           block_join_query(parent_type, Query::BlockJoin::ChildOf, &block)
         )
@@ -51,6 +52,7 @@ module Sunspot
       #   end
       #
       def parent_which(children_type, &block)
+        Sunspot::Util.ensure_child_documents_support
         @query.add_function(
           block_join_query(children_type, Query::BlockJoin::ParentWhich, &block)
         )

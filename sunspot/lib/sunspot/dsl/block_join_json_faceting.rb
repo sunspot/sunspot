@@ -28,6 +28,7 @@ module Sunspot
         #   Children type, needed for the inner filter block.
         #
         def on_child(type, &block)
+          Sunspot::Util.ensure_child_documents_support
           {
             op: Sunspot::Query::BlockJoin::JsonFacet::ON_CHILDREN_OP,
             type: type,
@@ -55,6 +56,7 @@ module Sunspot
         #   Parent type, needed for the inner filter block.
         #
         def on_parent(type, &block)
+          Sunspot::Util.ensure_child_documents_support
           {
             op: Sunspot::Query::BlockJoin::JsonFacet::ON_PARENTS_OP,
             type: type,
