@@ -27,7 +27,8 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'rsolr', '>= 2', '< 3'
+  s.add_dependency 'semantic', '1.6.1'
+  s.add_dependency 'rsolr', '>= 1.1.1', '< 3'
   s.add_dependency 'pr_geohash', '~>1.0'
 
   s.add_development_dependency 'rake', '< 12.3'
