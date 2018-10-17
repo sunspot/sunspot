@@ -76,8 +76,8 @@ module Sunspot #:nodoc:
         
         def scope_for_load
           scope = relation
-          scope = scope.includes(@include) if @include.present?
-          scope = scope.select(@select)    if @select.present?
+          scope = scope.eager_load(@include) if @include.present?
+          scope = scope.select(@select)      if @select.present?
           Array.wrap(@scopes).each do |s|
             scope = scope.send(s)
           end
