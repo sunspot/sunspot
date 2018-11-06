@@ -30,7 +30,7 @@ matrix:
 
 before_install: 
   - gem install bundler
-  - gem psych
+  - gem install psych
 
 script:
   - ci/travis.sh
