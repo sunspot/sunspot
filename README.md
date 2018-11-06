@@ -705,7 +705,7 @@ Additional options are supported by the DSL:
 Post.search do
   group :blog_id_str do
     limit 3
-    total false # If you don't need to have the total group counter
+    ngroups false # If you don't need the total groups counter
   end
 end
 
