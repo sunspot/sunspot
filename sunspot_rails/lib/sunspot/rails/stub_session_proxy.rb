@@ -44,6 +44,10 @@ module Sunspot
       def optimize
       end
 
+      def config
+        Sunspot::Configuration.build
+      end
+
       def dirty?
         false
       end

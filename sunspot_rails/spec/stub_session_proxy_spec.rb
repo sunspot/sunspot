@@ -118,6 +118,10 @@ describe 'specs with Sunspot stubbed' do
     Sunspot.more_like_this(@post)
   end
 
+  it 'should not raise error when reindexing scope' do
+    expect{ Post.solr_index }.to_not raise_error
+  end
+
   describe 'stub search' do
     before :each do
       @search = Post.search
