@@ -99,7 +99,7 @@ describe "field grouping" do
     subject do
       search = Sunspot.search(Post) do
         group :title do
-          total false
+          ngroups false
         end
         paginate :per_page => 1, :page => 2
 

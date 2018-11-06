@@ -62,11 +62,11 @@ module Sunspot
       #
       # The group.ngroups option true return the total number of groups
       # this is expensive and sometimes you don't need it!
-      # If total is false paginated_collection last_page? and total_pages wont't work.
+      # If ngroups is false paginated_collection last_page? and total_pages wont't work.
       # Defaults to true.
       #
-      def total(enabled)
-        @group.total = enabled
+      def ngroups(enabled)
+        @group.ngroups = enabled
       end
 
       # Specify the order that results should be returned in. This method can
