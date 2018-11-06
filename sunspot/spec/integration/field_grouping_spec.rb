@@ -94,6 +94,25 @@ describe "field grouping" do
     expect(search.group(:title).groups.length).to eql(1)
     expect(search.group(:title).groups.first.results).to eq([ @posts.last ])
   end
+  
+  context "returns a not paginated collection" do
+    subject do
+      search = Sunspot.search(Post) do
+        group :title do
+          ngroups false
+        end
+        paginate :per_page => 1, :page => 2
+
+      end
+      search.group(:title).groups
+    end
+
+    it { expect(subject.per_page).to      eql(1)   }
+    it { expect(subject.total_pages).to   eql(0)   }
+    it { expect(subject.current_page).to  eql(2)   }
+    it { expect(subject.first_page?).to   be(false) }
+    it { expect(subject.last_page?).to    be(true)  }
+  end
 
   context "returns a paginated collection" do
     subject do

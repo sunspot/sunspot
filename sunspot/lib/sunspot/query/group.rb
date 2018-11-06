@@ -4,7 +4,7 @@ module Sunspot
     # A Group groups by the unique values of a given field, or by given queries.
     #
     class Group
-      attr_accessor :limit, :truncate
+      attr_accessor :limit, :truncate, :ngroups
       attr_reader :fields, :queries
 
       def initialize
@@ -30,16 +30,15 @@ module Sunspot
 
       def to_params
         params = {
-          :group            => "true",
-          :"group.ngroups"  => "true",
+          :group            => 'true',
+          :"group.ngroups"  => @ngroups.nil? ? 'true' : @ngroups.to_s
         }
 
-        params.merge!(@sort.to_params("group."))
+        params.merge!(@sort.to_params('group.'))
         params[:"group.field"] = @fields.map(&:indexed_name) if @fields.any?
         params[:"group.query"] = @queries.map(&:to_boolean_phrase) if @queries.any?
         params[:"group.limit"] = @limit if @limit
         params[:"group.truncate"] = @truncate if @truncate
-
         params
       end
     end
