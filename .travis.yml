@@ -28,7 +28,8 @@ matrix:
   allow_failures:
     - rvm: ruby-head
 
-before_install: gem install bundler
+before_install: 
+  - gem install bundler
 
 script:
   - ci/travis.sh

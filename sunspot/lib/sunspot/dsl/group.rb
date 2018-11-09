@@ -59,6 +59,16 @@ module Sunspot
         @group.truncate = true
       end
 
+      #
+      # The group.ngroups option true return the total number of groups
+      # this is expensive and sometimes you don't need it!
+      # If ngroups is false paginated_collection last_page? and total_pages wont't work.
+      # Defaults to true.
+      #
+      def ngroups(enabled)
+        @group.ngroups = enabled
+      end
+
       # Specify the order that results should be returned in. This method can
       # be called multiple times; precedence will be in the order given.
       #
