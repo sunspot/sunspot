@@ -35,6 +35,7 @@ end
 #
 module Sunspot
   UnrecognizedFieldError = Class.new(StandardError)
+  UnrecognizedOptionError = Class.new(StandardError)
   UnrecognizedRestrictionError = Class.new(StandardError)
   NoAdapterError = Class.new(StandardError)
   NoSetupError = Class.new(StandardError)
