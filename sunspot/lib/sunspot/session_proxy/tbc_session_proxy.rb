@@ -3,26 +3,25 @@
 module Sunspot
   module SessionProxy
     #
-    # This is a generic abstract implementation of a session proxy that allows
-    # Sunspot to be used with a distributed (sharded) Solr deployment. Concrete
-    # subclasses should implement the #session_for method, which takes a
-    # searchable object and returns a Session that points to the appropriate
-    # Solr shard for that object. Subclasses should also implement the
-    # #all_sessions object, which returns the collection of all sharded Session
-    # objects.
+    # Time Routed Aliases solr 7 drawbacks:
+    # only time based use cases are supported, time filters in queries are not considered 
+    # to filter the collections during search and old collections are not optimized. 
+    # Most of these improvements are already in progress.
+    # Anyways TbcSessionProxy is meant to address previous issues and to cover Time Routed Aliases on
+    # previous solr versions
     #
-    # The class is initialized with a session that points to the Solr instance
-    # used to perform searches. Searches will have the +:shards+ param injected,
-    # containing references to the Solr instances returned by #all_sessions.
+    # TbcSessionProxy automatically creates new collections as it routes documents to the
+    # correct collection based on its timestamp.
+    # This approach allows for indefinite indexing of data without degradation of
+    # performance otherwise experienced due to the continuous growth of a single index.
     #
-    # For more on distributed search, see:
-    # http://wiki.apache.org/solr/DistributedSearch
+    # For more info, see:
+    # https://lucene.apache.org/solr/guide/7_4\5/time-routed-aliases.html
     #
     # The following methods are not supported (although subclasses may in some
     # cases be able to support them):
     #
     # * batch
-    # * config
     # * remove_by_id
     # * remove_by_id!
     # * remove_all with an argument
@@ -31,51 +30,66 @@ module Sunspot
     # * atomic_update! with arguments
     #
     class TbcSessionProxy < AbstractSessionProxy
-      not_supported :batch, :config, :remove_by_id, :remove_by_id!, :atomic_update, :atomic_update!, :remove_all, :remove_all!
-      attr_reader :admin_session, :config
+      not_supported :batch, :remove_by_id, :remove_by_id!, :atomic_update, :atomic_update!, :remove_all, :remove_all!
 
-      #
-      # +search_session+ is the session that should be used for searching.
-      #
-      def initialize(date_from: (Time.now.utc - 1.month).to_i, date_to: Time.now.utc.to_i, collections: [])
+      attr_reader :solr, :config, :search_collections
+
+      def initialize(date_from: (Time.now.utc - 1.month).to_i, date_to: Time.now.utc.to_i, collections: nil)
         @config = Sunspot::Rails.configuration
-        @admin_session = AdminSessionProxy.new
-        @date_from = Time.at(date_from)
-        @date_to = Time.at(date_to)
-        @collections = collections
+        @solr = AdminSessionProxy.new
+        @search_collections = collections || calculate_search_collections(date_from: date_from, date_to: date_to)
       end
 
-      # def with_exception_handling
-      #   retry_count = 0
-      #   max_retry_count = 5
-      #   retry_interval = 0.5
-      #   begin
-      #     yield
-      #   rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
-      #     ::Rails.logger.info "Error connecting to Solr #{@config.inspect}"
+      #
+      # Wrap the solr call and retries in case of ConnectionRefused or Http errors
+      #
+      def with_exception_handling
+        retries = 0
+        max_retries = 3
+        begin
+          yield
+        rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
+          logger.error "Error connecting to Solr #{e.message}"
+          if retries < max_retries
+            retries += 1
+            sleep_for = 2**retries
+            logger.error "Retrying Solr connection in #{sleep_for} seconds... (#{retries} of #{max_retries})"
+            sleep(sleep_for)
+            retry
+          else
+            logger.error 'Reached max Solr connection retry count.'
+            raise e
+          end
+        end
+      rescue StandardError => e
+        logger.error "Exception: #{e.inspect}"
+        raise e
+      end
 
-      #     if retry_count < max_retry_count
-      #       retry_count += 1
-      #       ::Rails.logger.info "Retrying Solr connection... (#{retry_count} of #{max_retry_count})"
-      #       sleep retry_interval
-      #       @my_session = FailoverSession.new.new_session(retry_count)
-      #       retry
-      #     else
-      #       ::Rails.logger.error 'Reached max Solr connection retry count.'
-      #       raise e
-      #     end
-      #   end
-      # rescue StandardError => e
-      #   ::Rails.logger.error "Exception: #{e.inspect}"
-      #   raise e
-      # end
+      #
+      # Return a session.
+      #
+      def session
+        now = Time.now.utc
+        c = Sunspot::Configuration.build
+        c.solr.url = URI::HTTP.build(
+          host: @config.hostnames[rand(@config.hostnames.size)],
+          port: @config.port,
+          path: "/solr/#{collection_name(year: 2018, month: 5)}"
+        ).to_s
+        c.solr.read_timeout = @config.read_timeout
+        c.solr.open_timeout = @config.open_timeout
+        c.solr.proxy = @config.proxy
+        Session.new(c)
+      end
 
       #
       # Return the appropriate collection session for the object.
+      #
       def session_for(object)
-        obj_col_name = collection(object)
-        # Check if the collection is present, if not we create it
-        admin_session.create_collection(collection_name: obj_col_name) if !admin_session.collections.include?(obj_col_name)
+        obj_col_name = collection_for(object)
+        # If collection is not present, create it!
+        solr.create_collection(collection_name: obj_col_name) unless solr.collections.include?(obj_col_name)
 
         c = Sunspot::Configuration.build
         c.solr.url = URI::HTTP.build(
@@ -94,7 +108,7 @@ module Sunspot
       #
       def all_sessions
         @sessions = []
-        admin_session.collections.each do |col|
+        solr.collections.each do |col|
           c = Sunspot::Configuration.build
           c.solr.url = URI::HTTP.build(
             host: @config.hostnames[rand(@config.hostnames.size)],
@@ -104,7 +118,7 @@ module Sunspot
           c.solr.read_timeout = conf.read_timeout
           c.solr.open_timeout = conf.open_timeout
           c.solr.proxy = conf.proxy
-          @sessions << ession.new(c)
+          @sessions << Session.new(c)
         end
       end
 
@@ -112,28 +126,28 @@ module Sunspot
       # See Sunspot.index
       #
       def index(*objects)
-        using_collection_session(objects) { |session, group| session.index(group) }
+        using_collection_session(objects) { |session, group| with_exception_handling { session.index(group) } }
       end
 
       #
       # See Sunspot.index!
       #
       def index!(*objects)
-        using_collection_session(objects) { |session, group| session.index!(group) }
+        using_collection_session(objects) { |session, group| with_exception_handling { session.index!(group) } }
       end
 
       #
       # See Sunspot.remove
       #
       def remove(*objects)
-        using_collection_session(objects) { |session, group| session.remove(group) }
+        using_collection_session(objects) { |session, group| with_exception_handling {session.remove(group) } }
       end
 
       #
       # See Sunspot.remove!
       #
       def remove!(*objects)
-        using_collection_session(objects) { |session, group| session.remove!(group) }
+        using_collection_session(objects) { |session, group| with_exception_handling { session.remove!(group) } } 
       end
 
       #
@@ -171,16 +185,16 @@ module Sunspot
 
       #
       # Instantiate a new Search object, but don't execute it. The search will
-      # have an extra :shards param injected into the query, which will tell the
+      # have an extra :collections param injected into the query, which will tell the
       # Solr instance referenced by the search session to search across all
       # shards.
       #
       # See Sunspot.new_search
       #
       def new_search(*types)
-        search = @search_session.new_search(*types)
+        search = session.new_search(*types)
         search.build do
-          adjust_solr_params { |params| params[:collections] = collections.join(',') }
+          adjust_solr_params { |params| params[:collection] = search_collections.join(',') }
         end
         search
       end
@@ -202,7 +216,7 @@ module Sunspot
       end
 
       def new_more_like_this(object, &block)
-        @search_session.new_more_like_this(object, &block)
+        session.new_more_like_this(object, &block)
       end
 
       #
@@ -228,14 +242,31 @@ module Sunspot
 
       private
 
-      def collection(object)
-        if !object.respond_to?(:time_routed_on)
-          raise NoMethodError, "Method :time_routed_on on class #{object.class} is not defined"
-        else
-          time_routed_on = object.published_at.utc
-          collection_name = "#{@config.collection['base_name']}_#{time_routed_on.year}_#{time_routed_on.month}"
-          collection_name
-        end
+      def calculate_search_collections(date_from:, date_to:)
+        date_from = Time.at(date_from).utc.to_date
+        date_to = Time.at(date_to).utc.to_date
+        qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.uniq
+        qc &= solr.collections
+        raise IllegalSearchError, 'With TbcSessionProxy you must provide a valid list of collections' if qc.empty?
+        qc
+      end
+
+      #
+      # The collection returns the collection name for the object based on time_routed_on
+      # String:: collection name
+      #
+      def collection_for(object)
+        raise NoMethodError, "Method :time_routed_on on class #{object.class} is not defined" unless object.respond_to?(:time_routed_on)
+        time_routed_on = object.published_at.utc
+        collection_name(year: time_routed_on.year, month: time_routed_on.month)
+      end
+      
+      #
+      # The collection name is based on base_name, year, month
+      # String:: collection_name
+      #
+      def collection_name(year:, month:)
+        "#{@config.collection['base_name']}_#{year}_#{month}"
       end
 
       #
