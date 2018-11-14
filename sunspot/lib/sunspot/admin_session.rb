@@ -32,11 +32,18 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def collections(force: false)
-      if force || (Time.now - @initialized_at) > @refresh_every
-        @initialized_at = Time.now
-        @collections = nil 
+      if defined?(::Rails.cache)
+        ::Rails.cache.delete('CACHE_SOLR_COLLECTIONS') if force
+        ::Rails.cache.fetch('CACHE_SOLR_COLLECTIONS', expires_in: @refresh_every) do
+          @connection.get(:collections, params: { action: 'LIST' })['collections']
+        end
+      else
+        if force || (Time.now - @initialized_at) > @refresh_every
+          @initialized_at = Time.now
+          @collections = nil
+        end
+        @collections ||= @connection.get(:collections, params: { action: 'LIST' })['collections']
       end
-      @collections ||= @connection.get(:collections, params: { action: 'LIST' })['collections']
     end
 
     #

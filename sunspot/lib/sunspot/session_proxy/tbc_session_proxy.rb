@@ -4,8 +4,8 @@ module Sunspot
   module SessionProxy
     #
     # Time Routed Aliases solr 7 drawbacks:
-    # only time based use cases are supported, time filters in queries are not considered 
-    # to filter the collections during search and old collections are not optimized. 
+    # only time based use cases are supported, time filters in queries are not considered
+    # to filter the collections during search and old collections are not optimized.
     # Most of these improvements are already in progress.
     # Anyways TbcSessionProxy is meant to address previous issues and to cover Time Routed Aliases on
     # previous solr versions
@@ -71,11 +71,13 @@ module Sunspot
       #
       def session
         now = Time.now.utc
+        col_name = collection_name(year: now.year, month: now.month)
+        solr.create_collection(collection_name: col_name) unless solr.collections.include?(col_name)
         c = Sunspot::Configuration.build
         c.solr.url = URI::HTTP.build(
           host: @config.hostnames[rand(@config.hostnames.size)],
           port: @config.port,
-          path: "/solr/#{collection_name(year: 2018, month: 5)}"
+          path: "/solr/#{col_name}"
         ).to_s
         c.solr.read_timeout = @config.read_timeout
         c.solr.open_timeout = @config.open_timeout
@@ -140,14 +142,14 @@ module Sunspot
       # See Sunspot.remove
       #
       def remove(*objects)
-        using_collection_session(objects) { |session, group| with_exception_handling {session.remove(group) } }
+        using_collection_session(objects) { |session, group| with_exception_handling { session.remove(group) } }
       end
 
       #
       # See Sunspot.remove!
       #
       def remove!(*objects)
-        using_collection_session(objects) { |session, group| with_exception_handling { session.remove!(group) } } 
+        using_collection_session(objects) { |session, group| with_exception_handling { session.remove!(group) } }
       end
 
       #
@@ -191,10 +193,13 @@ module Sunspot
       #
       # See Sunspot.new_search
       #
+      # If search_collections is empty we search on the latest collection
       def new_search(*types)
         search = session.new_search(*types)
-        search.build do
-          adjust_solr_params { |params| params[:collection] = search_collections.join(',') }
+        if search_collections.present?
+          search.build do
+            adjust_solr_params { |params| params[:collection] = search_collections.join(',') }
+          end
         end
         search
       end
@@ -247,8 +252,8 @@ module Sunspot
         date_to = Time.at(date_to).utc.to_date
         qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.uniq
         qc &= solr.collections
-        raise IllegalSearchError, 'With TbcSessionProxy you must provide a valid list of collections' if qc.empty?
-        qc
+        # raise IllegalSearchError, 'With TbcSessionProxy you must provide a valid list of collections' if qc.empty?
+        # qc
       end
 
       #
@@ -260,7 +265,7 @@ module Sunspot
         time_routed_on = object.published_at.utc
         collection_name(year: time_routed_on.year, month: time_routed_on.month)
       end
-      
+
       #
       # The collection name is based on base_name, year, month
       # String:: collection_name
