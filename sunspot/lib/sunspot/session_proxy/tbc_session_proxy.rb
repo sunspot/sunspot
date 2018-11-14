@@ -194,8 +194,8 @@ module Sunspot
       # See Sunspot.new_search
       #
       # If search_collections is empty we search on the latest collection
-      def new_search(*types)
-        search = session.new_search(*types)
+      def new_search(*types, &block)
+        search = session.new_search(*types, &block)
         if search_collections.present?
           search.build do
             adjust_solr_params { |params| params[:collection] = search_collections.join(',') }
@@ -211,8 +211,8 @@ module Sunspot
       #
       # See Sunspot.search
       #
-      def search(*types)
-        new_search(*types).execute
+      def search(*types, &block)
+        new_search(*types, &block).execute
       end
 
       def more_like_this(object, &block)
