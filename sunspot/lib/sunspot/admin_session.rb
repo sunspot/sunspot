@@ -10,6 +10,7 @@ module Sunspot
       @initialized_at = Time.now
       @refresh_every = refresh_every
       @config = config
+      @connection = session.send(:connection)
     end
 
     #
@@ -34,14 +35,14 @@ module Sunspot
       if defined?(::Rails.cache)
         ::Rails.cache.delete('CACHE_SOLR_COLLECTIONS') if force
         ::Rails.cache.fetch('CACHE_SOLR_COLLECTIONS', expires_in: @refresh_every) do
-          session.connection.get(:collections, params: { action: 'LIST' })['collections']
+          @connection.get(:collections, params: { action: 'LIST' })['collections']
         end
       else
         if force || (Time.now - @initialized_at) > @refresh_every
           @initialized_at = Time.now
           @collections = nil
         end
-        @collections ||= session.connection.get(:collections, params: { action: 'LIST' })['collections']
+        @collections ||= @connection.get(:collections, params: { action: 'LIST' })['collections']
       end
     end
 
@@ -58,7 +59,7 @@ module Sunspot
         params[v] = collection_conf[k.to_s] if collection_conf[k.to_s].present?
       end
       begin
-        response = session.connection.get :collections, params: params
+        response = @connection.get :collections, params: params
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
@@ -75,7 +76,7 @@ module Sunspot
       params[:action] = 'DELETE'
       params[:name] = collection_name
       begin
-        response = session.connection.get :collections, params: params
+        response = @connection.get :collections, params: params
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
