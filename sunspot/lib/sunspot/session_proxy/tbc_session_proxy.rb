@@ -36,7 +36,7 @@ module Sunspot
 
       def initialize(date_from: (Time.now.utc - 1.month).to_i, date_to: Time.now.utc.to_i, collections: nil)
         @config = Sunspot::Rails.configuration
-        @solr = AdminSessionProxy.new
+        @solr = AdminSession.new(@config)
         @search_collections = collections || calculate_search_collections(date_from: date_from, date_to: date_to)
       end
 

@@ -36,14 +36,6 @@ module Sunspot
       )
     )
     autoload(
-      :AdminSessionProxy,
-      File.join(
-        File.dirname(__FILE__),
-        'session_proxy',
-        'admin_session_proxy'
-      )
-    )
-    autoload(
       :ThreadLocalSessionProxy,
       File.join(
         File.dirname(__FILE__),
