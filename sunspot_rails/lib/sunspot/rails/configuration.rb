@@ -10,17 +10,18 @@ module Sunspot #:nodoc:
     #
     #   development:
     #     solr:
+    #       hostnames: [host1, host2,...] or "host1,host2"
     #       hostname: localhost
     #       port: 8982
     #       memory: 1G
     #       solr_jar: /some/path/solr15/start.jar
     #       bind_address: 0.0.0.0
     #       proxy: false
-    #     collection:
-    #       base_name: 'trac'
-    #       num_shards: 8
-    #       replication_factor: 1
-    #       config_name: 'static_schema_1_6'
+    #       collection:
+    #         base_name: 'trac'
+    #         num_shards: 8
+    #         replication_factor: 1
+    #         config_name: 'static_schema_1_6'
     #     disabled: false
     #   test:
     #     solr:
