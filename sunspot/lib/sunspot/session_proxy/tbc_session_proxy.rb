@@ -37,33 +37,11 @@ module Sunspot
       def initialize(date_from: (Time.now.utc - 1.month).to_i, date_to: Time.now.utc.to_i, collections: nil)
         @config = Sunspot::Rails.configuration
         @solr = AdminSession.new(@config)
-        @search_collections = collections || calculate_search_collections(date_from: date_from, date_to: date_to)
-      end
-
-      #
-      # Wrap the solr call and retries in case of ConnectionRefused or Http errors
-      #
-      def with_exception_handling
-        retries = 0
-        max_retries = 3
-        begin
-          yield
-        rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
-          logger.error "Error connecting to Solr #{e.message}"
-          if retries < max_retries
-            retries += 1
-            sleep_for = 2**retries
-            logger.error "Retrying Solr connection in #{sleep_for} seconds... (#{retries} of #{max_retries})"
-            sleep(sleep_for)
-            retry
-          else
-            logger.error 'Reached max Solr connection retry count.'
-            raise e
-          end
-        end
-      rescue StandardError => e
-        logger.error "Exception: #{e.inspect}"
-        raise e
+        @search_collections =
+          collections || calculate_search_collections(
+            date_from: date_from,
+            date_to: date_to
+          )
       end
 
       #
@@ -128,28 +106,36 @@ module Sunspot
       # See Sunspot.index
       #
       def index(*objects)
-        using_collection_session(objects) { |session, group| with_exception_handling { session.index(group) } }
+        using_collection_session(objects) do |session, group|
+          with_exception_handling { session.index(group) }
+        end
       end
 
       #
       # See Sunspot.index!
       #
       def index!(*objects)
-        using_collection_session(objects) { |session, group| with_exception_handling { session.index!(group) } }
+        using_collection_session(objects) do |session, group|
+          with_exception_handling { session.index!(group) }
+        end
       end
 
       #
       # See Sunspot.remove
       #
       def remove(*objects)
-        using_collection_session(objects) { |session, group| with_exception_handling { session.remove(group) } }
+        using_collection_session(objects) do |session, group|
+          with_exception_handling { session.remove(group) }
+        end
       end
 
       #
       # See Sunspot.remove!
       #
       def remove!(*objects)
-        using_collection_session(objects) { |session, group| with_exception_handling { session.remove!(group) } }
+        using_collection_session(objects) do |session, group|
+          with_exception_handling { session.remove!(group) }
+        end
       end
 
       #
@@ -246,6 +232,32 @@ module Sunspot
       end
 
       private
+
+      #
+      # Wrap the solr call and retries in case of ConnectionRefused or Http errors
+      #
+      def with_exception_handling
+        retries = 0
+        max_retries = 3
+        begin
+          yield
+        rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
+          logger.error "Error connecting to Solr #{e.message}"
+          if retries < max_retries
+            retries += 1
+            sleep_for = 2**retries
+            logger.error "Retrying Solr connection in #{sleep_for} seconds... (#{retries} of #{max_retries})"
+            sleep(sleep_for)
+            retry
+          else
+            logger.error 'Reached max Solr connection retry count.'
+            raise e
+          end
+        end
+      rescue StandardError => e
+        logger.error "Exception: #{e.inspect}"
+        raise e
+      end
 
       def calculate_search_collections(date_from:, date_to:)
         date_from = Time.at(date_from).utc.to_date

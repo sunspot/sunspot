@@ -48,7 +48,7 @@ module Sunspot
       # String:: Directory with default solr config files
       #
       def solr_default_configuration_location
-        File.join( File.dirname(__FILE__), '../../solr/solr/conf' )
+        File.join(File.dirname(__FILE__), '../../solr/solr/conf')
       end
     end
   end
