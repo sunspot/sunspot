@@ -47,6 +47,24 @@ module Sunspot
     end
 
     #
+    # Return all collections. Refreshing every @refresh_every (default: 30.min)
+    # Array:: collections
+    def live_nodes(force: false)
+      if defined?(::Rails.cache)
+        ::Rails.cache.delete('CACHE_SOLR_LIVE_NODES') if force
+        ::Rails.cache.fetch('CACHE_SOLR_LIVE_NODES', expires_in: @refresh_every) do
+          @connection.get(:collections, params: { action: 'CLUSTERSTATUS' })["cluster"]["live_nodes"]
+        end
+      else
+        if force || (Time.now - @initialized_at) > @refresh_every
+          @initialized_at = Time.now
+          @collections = nil
+        end
+        @collections ||= @connection.get(:collections, params: { action: 'CLUSTERSTATUS' })["cluster"]["live_nodes"]
+      end
+    end
+
+    #
     # Return { status:, time: sec}.
     # https://lucene.apache.org/solr/guide/6_6/collections-api.html
     #
