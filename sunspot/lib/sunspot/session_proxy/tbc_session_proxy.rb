@@ -34,8 +34,9 @@ module Sunspot
 
       attr_reader :solr, :config, :search_collections
 
-      def initialize(date_from: (Time.now.utc - 1.month).to_i, date_to: Time.now.utc.to_i, collections: nil)
-        @config = Sunspot::Rails.configuration
+      #config = Configuration.build
+      def initialize(config: Configuration.build, date_from: default_init_date, date_to: default_end_date, collections: nil)
+        @config = config
         @solr = AdminSession.new(@config)
         @search_collections =
           collections || calculate_search_collections(
@@ -73,7 +74,7 @@ module Sunspot
 
         c = Sunspot::Configuration.build
         c.solr.url = URI::HTTP.build(
-          host: @config.hostnames[rand(@config.hostnames.size)],
+          host: get_hostname(),
           port: @config.port,
           path: "/solr/#{obj_col_name}"
         ).to_s
@@ -91,13 +92,13 @@ module Sunspot
         solr.collections.each do |col|
           c = Sunspot::Configuration.build
           c.solr.url = URI::HTTP.build(
-            host: @config.hostnames[rand(@config.hostnames.size)],
+            host: get_hostname(),
             port: @config.port,
             path: "/solr/#{col}"
           ).to_s
-          c.solr.read_timeout = conf.read_timeout
-          c.solr.open_timeout = conf.open_timeout
-          c.solr.proxy = conf.proxy
+          c.solr.read_timeout = @config.read_timeout
+          c.solr.open_timeout = @config.open_timeout
+          c.solr.proxy = @config.proxy
           @sessions << Session.new(c)
         end
       end
@@ -184,7 +185,9 @@ module Sunspot
         search = session.new_search(*types, &block)
         if search_collections.present?
           search.build do
-            adjust_solr_params { |params| params[:collection] = search_collections.join(',') }
+            adjust_solr_params do |params|
+              params[:collection] = search_collections.join(',')
+            end
           end
         end
         search
@@ -229,6 +232,15 @@ module Sunspot
       #
       def delete_dirty?
         all_sessions.any?(&:delete_dirty?)
+      end
+
+      def default_init_date
+        (Time.now.utc - 1.month).to_i if defined?(::Rails)
+        Time.now.utc.to_i - 30 * 24 * 3600 # naive version
+      end
+
+      def default_end_date
+        Time.now.utc.to_i
       end
 
       private
@@ -296,6 +308,13 @@ module Sunspot
         grouped_objects.each_pair do |session, group|
           yield(session, group)
         end
+      end
+
+      #
+      # Get hostname
+      #
+      def get_hostname
+        @config.hostnames[rand(@config.hostnames.size)]
       end
     end
   end

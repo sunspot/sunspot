@@ -23,6 +23,8 @@ module Sunspot
         LightConfig.build do
           solr do
             url 'http://127.0.0.1:8983/solr/default'
+            hostnames ['127.0.0.1']
+            port 8983
             read_timeout nil
             open_timeout nil
             proxy nil
@@ -36,6 +38,14 @@ module Sunspot
           end
           indexing do
             default_batch_size 50
+          end
+          proxy nil
+          collection do
+            base_name 'base'
+            num_shards 8
+            replication_factor 1
+            max_shards_per_node 2
+            config_name ''
           end
         end
       end

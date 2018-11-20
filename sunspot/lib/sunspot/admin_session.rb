@@ -6,25 +6,21 @@ module Sunspot
     # AdminSession connect direclty to the admin Solr endpoint
     # to handle admin stuff like collections listing, creation, etc...
     #
-    def initialize(config = Sunspot::Rails.configuration, refresh_every: 1800)
+    def initialize(config = Configuration.build, refresh_every: 1800)
       @initialized_at = Time.now
       @refresh_every = refresh_every
-      @config = config
+      @config = config.clone
       @connection = session.send(:connection)
     end
 
     #
     # Return the appropriate admin session
     def session
-      c = Sunspot::Configuration.build
-      c.solr.url = URI::HTTP.build(
-        host: @config.hostnames[rand(@config.hostnames.size)],
-        port: @config.port,
+      @config.solr.url = URI::HTTP.build(
+        host: @config.solr.hostnames[rand(@config.solr.hostnames.size)],
+        port: @config.solr.port,
         path: '/solr/admin'
       ).to_s
-      c.solr.read_timeout = @config.read_timeout
-      c.solr.open_timeout = @config.open_timeout
-      c.solr.proxy = @config.proxy
       Session.new(c)
     end
 
