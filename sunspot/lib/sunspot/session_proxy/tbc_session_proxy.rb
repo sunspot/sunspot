@@ -95,7 +95,7 @@ module Sunspot
       #
       def all_sessions
         @sessions = []
-        solr.collections.each do |col|
+        solr.collections(force: true).each do |col|
           c = Sunspot::Configuration.build
           c.solr.url = URI::HTTP.build(
             host: get_hostname,
@@ -107,6 +107,7 @@ module Sunspot
           c.solr.proxy = @config.proxy
           @sessions << Session.new(c)
         end
+        @sessions
       end
 
       #
@@ -148,8 +149,8 @@ module Sunspot
       #
       # Commit all shards. See Sunspot.commit
       #
-      def commit
-        all_sessions.each(&:commit)
+      def commit(soft_commit = false)
+        all_sessions.each{ |s| s.commit(soft_commit) }
       end
 
       #
@@ -176,6 +177,21 @@ module Sunspot
       #
       def commit_if_delete_dirty
         all_sessions.each(&:commit_if_delete_dirty)
+      end
+
+      #
+      # See Sunspot.remove_all
+      #
+      def remove_all(*classes)
+        all_sessions.each{ |s| s.remove_all(classes) }
+      end
+
+      #
+      # See Sunspot.remove_all!
+      #
+      def remove_all!(*classes)
+        remove_all(classes)
+        commit
       end
 
       #
