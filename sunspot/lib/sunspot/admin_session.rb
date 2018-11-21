@@ -63,7 +63,7 @@ module Sunspot
     # Array:: collections
     def live_nodes(force: false)
       with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
-        resp['cluster']['live_nodes']
+        resp['cluster']['live_nodes'].map { |n| n.split(':').first }
       end
     end
 
@@ -78,7 +78,7 @@ module Sunspot
       params[:name] = collection_name
       CREATE_COLLECTION_MAP.each do |k, v|
         ks = k.to_s
-        params[v] = collection_conf[ks] if collection_conf[ks].present?
+        params[v] = collection_conf.send(ks) if collection_conf.respond_to?(ks)
       end
       begin
         response = connection.get :collections, params: params
