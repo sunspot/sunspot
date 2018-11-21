@@ -6,7 +6,7 @@ module Sunspot
     # AdminSession connect direclty to the admin Solr endpoint
     # to handle admin stuff like collections listing, creation, etc...
     #
-
+    
     CREATE_COLLECTION_MAP = { async: 'async',
       auto_add_replicas: 'autoAddReplicas',
       config_name: 'collection.configName',
