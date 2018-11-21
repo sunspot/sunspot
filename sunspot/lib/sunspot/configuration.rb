@@ -20,7 +20,7 @@ module Sunspot
       # LightConfig::Configuration:: new configuration instance with defaults
       #
       def build #:nodoc:
-        LightConfig.build do
+        conf = LightConfig.build do
           solr do
             url 'http://127.0.0.1:8983/solr/default'
             hostnames ['127.0.0.1']
@@ -48,6 +48,25 @@ module Sunspot
             config_name ''
           end
         end
+
+        # helper
+        class <<conf
+          def hostname
+            return solr.hostnames[0] unless solr.hostnames.empty?
+            "locahost"
+          end
+
+          def hostnames; solr.hostnames; end
+          def port; solr.port; end
+          def read_timeout; solr.read_timeout; end
+          def open_timeout; solr.open_timeout; end
+
+          def collection_param(id)
+            collection.send(id.to_sym)
+          end
+        end
+
+        conf
       end
 
       # Location for the default solr configuration files,

@@ -30,14 +30,20 @@ module Sunspot
     # * atomic_update! with arguments
     #
     class TbcSessionProxy < AbstractSessionProxy
-      not_supported :batch, :remove_by_id, :remove_by_id!, :atomic_update, :atomic_update!, :remove_all, :remove_all!
+      not_supported :batch, :remove_by_id, :remove_by_id!, :atomic_update,
+                    :atomic_update!, :remove_all, :remove_all!
 
       attr_reader :solr, :config, :search_collections
 
       #config = Configuration.build
-      def initialize(config: Configuration.build, date_from: default_init_date, date_to: default_end_date, collections: nil)
+      def initialize(
+        config: Sunspot::Configuration.build,
+        date_from: default_init_date,
+        date_to: default_end_date,
+        collections: nil
+      )
         @config = config
-        @solr = AdminSession.new(@config)
+        @solr = AdminSession.new(config)
         @search_collections =
           collections || calculate_search_collections(
             date_from: date_from,
@@ -275,7 +281,7 @@ module Sunspot
         date_from = Time.at(date_from).utc.to_date
         date_to = Time.at(date_to).utc.to_date
         qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.uniq
-        qc &= solr.collections
+        qc & solr.collections
         # raise IllegalSearchError, 'With TbcSessionProxy you must provide a valid list of collections' if qc.empty?
         # qc
       end
@@ -295,7 +301,7 @@ module Sunspot
       # String:: collection_name
       #
       def collection_name(year:, month:)
-        "#{@config.collection['base_name']}_#{year}_#{month}"
+        "#{@config.collection_param('base_name')}_#{year}_#{month}"
       end
 
       #

@@ -65,21 +65,6 @@ module Sunspot #:nodoc:
       # appropriate java.util.logging.Level constant
       LOG_LEVELS = %w(FINE INFO WARNING SEVERE SEVERE INFO)
 
-      CREATE_COLLECTION_MAP = { async: 'async',
-                                auto_add_replicas: 'autoAddReplicas',
-                                config_name: 'collection.configName',
-                                max_shards_per_node: 'maxShardsPerNode',
-                                create_node_set: 'createNodeSet',
-                                create_node_set_shuffle: 'createNodeSet.shuffle',
-                                num_shards: 'numShards',
-                                property_name: 'property.name',
-                                replication_factor: 'replicationFactor',
-                                router_field: 'router.field',
-                                router_name: 'router.name',
-                                rule: 'rule',
-                                shards: 'shards',
-                                snitch: 'snitch' }.freeze
-
       attr_writer :user_configuration
 
       #
@@ -99,6 +84,19 @@ module Sunspot #:nodoc:
         not_valid_options = @collection.symbolize_keys.keys - CREATE_COLLECTION_MAP.keys - [:base_name]
         raise UnrecognizedOptionError.new("options #{not_valid_options.join(',')} not valid") if @collection.keys.present? && not_valid_options.present?
         @collection
+      end
+
+      #
+      # The attribute of the collection by id
+      # Valid configuration values:base_name, num_shards, replication factor, max_shards_per_node, config_name.
+      # Default nil
+      #
+      # ==== Returns
+      #
+      # Hash:: collection
+      #
+      def collection_param(id)
+        collection[id]
       end
 
       #

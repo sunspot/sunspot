@@ -1,44 +1,58 @@
 # frozen_string_literal: true
 
 module Sunspot
-  class AdminSession
+  class AdminSession < Session
     #
     # AdminSession connect direclty to the admin Solr endpoint
     # to handle admin stuff like collections listing, creation, etc...
     #
-    def initialize(config = Configuration.build, refresh_every: 1800)
+
+    CREATE_COLLECTION_MAP = { async: 'async',
+      auto_add_replicas: 'autoAddReplicas',
+      config_name: 'collection.configName',
+      max_shards_per_node: 'maxShardsPerNode',
+      create_node_set: 'createNodeSet',
+      create_node_set_shuffle: 'createNodeSet.shuffle',
+      num_shards: 'numShards',
+      property_name: 'property.name',
+      replication_factor: 'replicationFactor',
+      router_field: 'router.field',
+      router_name: 'router.name',
+      rule: 'rule',
+      shards: 'shards',
+      snitch: 'snitch' }.freeze
+
+    def initialize(config, refresh_every: 1800)
       @initialized_at = Time.now
       @refresh_every = refresh_every
-      @config = config.clone
-      @connection = session.send(:connection)
+      @config = config
     end
 
     #
     # Return the appropriate admin session
     def session
-      @config.solr.url = URI::HTTP.build(
-        host: @config.solr.hostnames[rand(@config.solr.hostnames.size)],
-        port: @config.solr.port,
+      c = Sunspot::Configuration.build
+      c.solr.url = URI::HTTP.build(
+        host: @config.hostnames[rand(@config.hostnames.size)],
+        port: @config.port,
         path: '/solr/admin'
       ).to_s
+      c.solr.read_timeout = @config.read_timeout
+      c.solr.open_timeout = @config.open_timeout
+      c.solr.proxy = @config.proxy
       Session.new(c)
+    end
+
+    def connection
+      session.connection
     end
 
     #
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def collections(force: false)
-      if defined?(::Rails.cache)
-        ::Rails.cache.delete('CACHE_SOLR_COLLECTIONS') if force
-        ::Rails.cache.fetch('CACHE_SOLR_COLLECTIONS', expires_in: @refresh_every) do
-          @connection.get(:collections, params: { action: 'LIST' })['collections']
-        end
-      else
-        if force || (Time.now - @initialized_at) > @refresh_every
-          @initialized_at = Time.now
-          @collections = nil
-        end
-        @collections ||= @connection.get(:collections, params: { action: 'LIST' })['collections']
+      with_cache('LIST', force: force, key: 'CACHE_SOLR_COLLECTIONS') do |resp|
+        resp['collections']
       end
     end
 
@@ -46,17 +60,8 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def live_nodes(force: false)
-      if defined?(::Rails.cache)
-        ::Rails.cache.delete('CACHE_SOLR_LIVE_NODES') if force
-        ::Rails.cache.fetch('CACHE_SOLR_LIVE_NODES', expires_in: @refresh_every) do
-          @connection.get(:collections, params: { action: 'CLUSTERSTATUS' })["cluster"]["live_nodes"]
-        end
-      else
-        if force || (Time.now - @initialized_at) > @refresh_every
-          @initialized_at = Time.now
-          @collections = nil
-        end
-        @collections ||= @connection.get(:collections, params: { action: 'CLUSTERSTATUS' })["cluster"]["live_nodes"]
+      with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
+        resp['cluster']['live_nodes']
       end
     end
 
@@ -69,11 +74,11 @@ module Sunspot
       params = {}
       params[:action] = 'CREATE'
       params[:name] = collection_name
-      Sunspot::Rails::Configuration::CREATE_COLLECTION_MAP.each do |k, v|
+      CREATE_COLLECTION_MAP.each do |k, v|
         params[v] = collection_conf[k.to_s] if collection_conf[k.to_s].present?
       end
       begin
-        response = @connection.get :collections, params: params
+        response = connection.get :collections, params: params
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
@@ -90,11 +95,32 @@ module Sunspot
       params[:action] = 'DELETE'
       params[:name] = collection_name
       begin
-        response = @connection.get :collections, params: params
+        response = connection.get :collections, params: params
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
         return { status: e.response[:status], message: e.message[/^.*$/] }
+      end
+    end
+
+    private
+
+    # Helper function for solr caching
+    def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
+      if defined?(::Rails.cache)
+        ::Rails.cache.delete(key) if force
+        ::Rails.cache.fetch(key, expires_in: @refresh_every) do
+          yield(connection.get(:collections, params: { action: action }))
+        end
+      else
+        if force || (Time.now - @initialized_at) > @refresh_every
+          @initialized_at = Time.now
+          @cached    ||= {}
+          @cached[key] = nil
+        end
+        @cached      ||= {}
+        @cached[key] ||=
+          yield(connection.get(:collections, params: { action: action }))
       end
     end
   end
