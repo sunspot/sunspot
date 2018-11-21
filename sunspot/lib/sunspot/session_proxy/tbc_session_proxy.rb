@@ -35,7 +35,6 @@ module Sunspot
 
       attr_reader :solr, :config, :search_collections
 
-      #config = Configuration.build
       def initialize(
         config: Sunspot::Configuration.build,
         date_from: default_init_date,
@@ -43,6 +42,7 @@ module Sunspot
         collections: nil
       )
         @config = config
+        @next_host_index = 0
         @solr = AdminSession.new(config)
         @search_collections =
           collections || calculate_search_collections(
@@ -80,7 +80,7 @@ module Sunspot
 
         c = Sunspot::Configuration.build
         c.solr.url = URI::HTTP.build(
-          host: get_hostname(),
+          host: get_hostname,
           port: @config.port,
           path: "/solr/#{obj_col_name}"
         ).to_s
@@ -98,7 +98,7 @@ module Sunspot
         solr.collections.each do |col|
           c = Sunspot::Configuration.build
           c.solr.url = URI::HTTP.build(
-            host: get_hostname(),
+            host: get_hostname,
             port: @config.port,
             path: "/solr/#{col}"
           ).to_s
@@ -320,7 +320,10 @@ module Sunspot
       # Get hostname
       #
       def get_hostname
-        @config.hostnames[rand(@config.hostnames.size)]
+        hostnames = (@solr.live_nodes + @config.hostnames).uniq
+        # round robin policy
+        @next_host_index = (@next_host_index + 1) % hostnames.size
+        hostnames[@next_host_index]
       end
     end
   end

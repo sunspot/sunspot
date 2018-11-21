@@ -81,7 +81,8 @@ module Sunspot #:nodoc:
           @collection ||= user_configuration_from_key('solr', 'collection')
           @collection ||= {}
         end
-        not_valid_options = @collection.symbolize_keys.keys - ::Sunspot::AdminSession::CREATE_COLLECTION_MAP.keys - [:base_name]
+        valid_options = [:num_shards, :replication_factor, :max_shards_per_node, :config_name, :base_name]
+        not_valid_options = @collection.symbolize_keys.keys - valid_options
         raise UnrecognizedOptionError.new("options #{not_valid_options.join(',')} not valid") if @collection.keys.present? && not_valid_options.present?
         @collection
       end

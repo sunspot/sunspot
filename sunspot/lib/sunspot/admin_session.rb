@@ -6,8 +6,9 @@ module Sunspot
     # AdminSession connect direclty to the admin Solr endpoint
     # to handle admin stuff like collections listing, creation, etc...
     #
-    
-    CREATE_COLLECTION_MAP = { async: 'async',
+
+    CREATE_COLLECTION_MAP = {
+      async: 'async',
       auto_add_replicas: 'autoAddReplicas',
       config_name: 'collection.configName',
       max_shards_per_node: 'maxShardsPerNode',
@@ -20,7 +21,8 @@ module Sunspot
       router_name: 'router.name',
       rule: 'rule',
       shards: 'shards',
-      snitch: 'snitch' }.freeze
+      snitch: 'snitch'
+    }.freeze
 
     def initialize(config, refresh_every: 1800)
       @initialized_at = Time.now
@@ -75,7 +77,8 @@ module Sunspot
       params[:action] = 'CREATE'
       params[:name] = collection_name
       CREATE_COLLECTION_MAP.each do |k, v|
-        params[v] = collection_conf[k.to_s] if collection_conf[k.to_s].present?
+        ks = k.to_s
+        params[v] = collection_conf[ks] if collection_conf[ks].present?
       end
       begin
         response = connection.get :collections, params: params
