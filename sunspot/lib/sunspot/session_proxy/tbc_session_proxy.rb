@@ -42,6 +42,7 @@ module Sunspot
         collections: nil
       )
         @config = config
+        @faulty_hosts = {}
         @next_host_index = 0
         @solr = AdminSession.new(config)
         @search_collections =
@@ -60,7 +61,7 @@ module Sunspot
         solr.create_collection(collection_name: col_name) unless solr.collections.include?(col_name)
         c = Sunspot::Configuration.build
         c.solr.url = URI::HTTP.build(
-          host: @config.hostnames[rand(@config.hostnames.size)],
+          host: take_hostname,
           port: @config.port,
           path: "/solr/#{col_name}"
         ).to_s
@@ -80,7 +81,7 @@ module Sunspot
 
         c = Sunspot::Configuration.build
         c.solr.url = URI::HTTP.build(
-          host: get_hostname,
+          host: take_hostname,
           port: @config.port,
           path: "/solr/#{obj_col_name}"
         ).to_s
@@ -98,7 +99,7 @@ module Sunspot
         solr.collections.each do |col|
           c = Sunspot::Configuration.build
           c.solr.url = URI::HTTP.build(
-            host: get_hostname,
+            host: take_hostname,
             port: @config.port,
             path: "/solr/#{col}"
           ).to_s
@@ -261,6 +262,11 @@ module Sunspot
           yield
         rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
           logger.error "Error connecting to Solr #{e.message}"
+
+          # update the map of faulty hosts
+          @faulty_hosts[@current_hostname] ||= 0
+          @faulty_hosts[@current_hostname]  += 1
+
           if retries < max_retries
             retries += 1
             sleep_for = 2**retries
@@ -317,13 +323,23 @@ module Sunspot
       end
 
       #
-      # Get hostname
+      # Get hostname (using RR policy)
       #
-      def get_hostname
-        hostnames = (@solr.live_nodes + @config.hostnames).uniq
+      def take_hostname
+        # takes all the configured nodes + that one that are derived by solr live config
+        @hostnames = (@solr.live_nodes + @config.hostnames)
+                     .uniq
+                     .select do |h|
+                       return true unless @faulty_hosts.key?(h)
+                       # select those that have a failure rate < 3
+                       return true if @faulty_hosts[h] < 3
+                       # otherwise exclude the host
+                       return false
+                     end
+
         # round robin policy
         @next_host_index = (@next_host_index + 1) % hostnames.size
-        hostnames[@next_host_index]
+        @current_hostname = hostnames[@next_host_index]
       end
     end
   end
