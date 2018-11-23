@@ -1,10 +1,7 @@
 require File.expand_path('../spec_helper', File.dirname(__FILE__))
-require 'byebug'
-
 
 describe 'fields lists' do
   before :all do
-    byebug
     Sunspot.remove_all
     @post = Post.new(title: 'A Title', body: 'A Body', featured: true, tags: ['tag'])
     Sunspot.index!(@post)
