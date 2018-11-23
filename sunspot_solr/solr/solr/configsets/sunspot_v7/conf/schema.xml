@@ -55,13 +55,15 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="string" class="solr.StrField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
+    <fieldType name="tdouble" class="solr.TrieDoubleField" omitNorms="true"/>
+
+    <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="text" class="solr.TextField" omitNorms="false">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.LengthFilterFactory" min="1" max="255"/>
-        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
         <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="0" splitOnNumerics="0" preserveOriginal="1" types="symbols.txt"/>
       </analyzer>
     </fieldType>
@@ -137,7 +139,8 @@
     <fieldType name="random" class="solr.RandomSortField" indexed="true" />
 
     <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
-    <fieldType name="location" class="solr.LatLonPointSpatialField" docValues="true"/>
+    <!-- <fieldType name="location" class="solr.LatLonPointSpatialField" docValues="true"/> -->
+    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
 
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tint" class="solr.TrieIntField" omitNorms="true"/>
@@ -194,9 +197,9 @@
     <field name="lng" stored="true" type="tdouble" multiValued="false" indexed="true"/>
 
     <field name="legacy_array_field_sm" stored="false" type="string" multiValued="true" docValues="true" indexed="true"/>
-    <field name="keywords_sm" stored="false" type="string" multiValued="true" docValues="true" indexed="true"/>
-    <field name="tag_list_sms" stored="false" type="string" docValues="true" multiValued="true" indexed="true"/>
-    <field name="body_textsv" stored="false" termVectors="true" type="text" docValues="false" multiValued="true" indexed="true"/>
+    <field name="keywords_sm" stored="false" type="string" multiValued="true" docValues="false" indexed="true"/>
+    <field name="tag_list_sms" stored="true" type="string" docValues="true" multiValued="true" indexed="true"/>
+    <field name="body_textsv" stored="true" termVectors="true" type="text" docValues="false" multiValued="true" indexed="true"/>
     <field name="title_text" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
     <field name="text_array_text" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
     <field name="body_text" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
@@ -208,11 +211,11 @@
     <field name="created_at_dt" stored="false" type="tdate" multiValued="false" indexed="true"/>
     <field name="size_it" stored="false" type="tint" multiValued="false" indexed="true"/>
     <field name="image_tags_sm" stored="false" type="string" multiValued="true" indexed="true"/>
-    <field name="tags_textv" stored="false" termVectors="true" type="text" docValues="false" multiValued="true" indexed="true"/>
+    <field name="tags_textv" stored="true" termVectors="true" type="text" docValues="false" multiValued="true" indexed="true"/>
     <field name="category_ids_im" stored="false" type="tint" multiValued="true" indexed="true"/>
-    <field name="author_name_text" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
+    <field name="author_name_text" stored="true" termVectors="true" type="text" multiValued="true" indexed="true"/>
     <field name="featured_for_dr" stored="false" type="daterange" multiValued="false" indexed="true" />
-
+    <field name="featured_dr" stored="false" type="daterange" multiValued="false" indexed="true" />
 
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="random_*" stored="false" type="random" multiValued="false" indexed="true"/>
@@ -258,6 +261,8 @@
 
     <dynamicField name="*_ll" stored="false" type="location" multiValued="false" indexed="true"/>
     <dynamicField name="*_lls" stored="true" type="location" multiValued="false" indexed="true"/>
+
+    <field name="textSpell" stored="false" type="textSpell" multiValued="true" indexed="true"/>
   </fields>
   <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field
