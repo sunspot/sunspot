@@ -20,7 +20,7 @@ start_solr_server() {
   /bin/echo -n "Starting Solr on port $SOLR_PORT for Sunspot specs..."
 
   # start solr
-  bundle exec sunspot-solr start -p $SOLR_PORT
+  bundle exec sunspot-solr start -p $SOLR_PORT --cloud
 
   # wait while Solr is up and running
   while ! solr_responding; do

@@ -98,4 +98,3 @@ end
 
 class PhotoPost < Post
 end
-

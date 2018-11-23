@@ -19,7 +19,7 @@ module Sunspot
 
       LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
-      attr_accessor :memory, :bind_address, :port, :log_file
+      attr_accessor :memory, :bind_address, :port, :log_file, :cloud
 
       attr_writer :pid_dir, :pid_file, :solr_home, :solr_executable
 
@@ -91,11 +91,14 @@ module Sunspot
         bootstrap
 
         command = %w[./solr start -f]
-        command << "-m" << "#{memory}" if memory
-        command << "-p" << "#{port}" if port
-        command << "-h" << "#{bind_address}" if bind_address
-        command << "-s" << "#{solr_home}" if solr_home
+        command << '-m' << "#{memory}" if memory
+        command << '-p' << "#{port}" if port
+        command << '-h' << "#{bind_address}" if bind_address
+        command << '-s' << "#{solr_home}" if solr_home
 
+        File.open("command", 'w') do |file|
+          file << command.inspect
+        end
         exec_in_solr_executable_directory(command)
       end
 

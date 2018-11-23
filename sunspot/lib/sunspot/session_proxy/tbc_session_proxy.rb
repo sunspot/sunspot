@@ -43,7 +43,7 @@ module Sunspot
       )
         @config = config
         @faulty_hosts = {}
-        @next_host_index = 0
+        @host_index = 0
         @solr = AdminSession.new(config)
         @search_collections =
           collections || calculate_search_collections(
@@ -59,16 +59,7 @@ module Sunspot
         now = Time.now.utc
         col_name = collection_name(year: now.year, month: now.month)
         solr.create_collection(collection_name: col_name) unless solr.collections.include?(col_name)
-        c = Sunspot::Configuration.build
-        c.solr.url = URI::HTTP.build(
-          host: take_hostname,
-          port: @config.port,
-          path: "/solr/#{col_name}"
-        ).to_s
-        c.solr.read_timeout = @config.read_timeout
-        c.solr.open_timeout = @config.open_timeout
-        c.solr.proxy = @config.proxy
-        Session.new(c)
+        gen_session("/solr/#{col_name}")
       end
 
       #
@@ -78,17 +69,7 @@ module Sunspot
         obj_col_name = collection_for(object)
         # If collection is not present, create it!
         solr.create_collection(collection_name: obj_col_name) unless solr.collections.include?(obj_col_name)
-
-        c = Sunspot::Configuration.build
-        c.solr.url = URI::HTTP.build(
-          host: take_hostname,
-          port: @config.port,
-          path: "/solr/#{obj_col_name}"
-        ).to_s
-        c.solr.read_timeout = @config.read_timeout
-        c.solr.open_timeout = @config.open_timeout
-        c.solr.proxy = @config.proxy
-        Session.new(c)
+        gen_session("/solr/#{obj_col_name}")
       end
 
       #
@@ -97,16 +78,7 @@ module Sunspot
       def all_sessions
         @sessions = []
         solr.collections.each do |col|
-          c = Sunspot::Configuration.build
-          c.solr.url = URI::HTTP.build(
-            host: take_hostname,
-            port: @config.port,
-            path: "/solr/#{col}"
-          ).to_s
-          c.solr.read_timeout = @config.read_timeout
-          c.solr.open_timeout = @config.open_timeout
-          c.solr.proxy = @config.proxy
-          @sessions << Session.new(c)
+          @sessions << gen_session("/solr/#{col}")
         end
       end
 
@@ -260,12 +232,13 @@ module Sunspot
         max_retries = 3
         begin
           yield
+          # reset counter of faulty_host for the current host
+          reset_counter_faulty(@current_hostname)
         rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
           logger.error "Error connecting to Solr #{e.message}"
 
           # update the map of faulty hosts
-          @faulty_hosts[@current_hostname] ||= 0
-          @faulty_hosts[@current_hostname]  += 1
+          update_faulty_host(@current_hostname)
 
           if retries < max_retries
             retries += 1
@@ -288,8 +261,6 @@ module Sunspot
         date_to = Time.at(date_to).utc.to_date
         qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.uniq
         qc & solr.collections
-        # raise IllegalSearchError, 'With TbcSessionProxy you must provide a valid list of collections' if qc.empty?
-        # qc
       end
 
       #
@@ -298,7 +269,8 @@ module Sunspot
       #
       def collection_for(object)
         raise NoMethodError, "Method :time_routed_on on class #{object.class} is not defined" unless object.respond_to?(:time_routed_on)
-        time_routed_on = object.published_at.utc
+        raise TypeError, "Type mismatch :time_routed_on on class #{object.class} is not a DateTime" unless object.time_routed_on.class.is_a?(DateTime)
+        time_routed_on = object.time_routed_on.utc
         collection_name(year: time_routed_on.year, month: time_routed_on.month)
       end
 
@@ -327,19 +299,76 @@ module Sunspot
       #
       def take_hostname
         # takes all the configured nodes + that one that are derived by solr live config
-        @hostnames = (@solr.live_nodes + @config.hostnames)
-                     .uniq
-                     .select do |h|
-                       return true unless @faulty_hosts.key?(h)
-                       # select those that have a failure rate < 3
-                       return true if @faulty_hosts[h] < 3
-                       # otherwise exclude the host
-                       return false
-                     end
+        hostnames = (@solr.live_nodes + seed_hosts)
+                    .uniq
+                    .reject { |h| is_faulty(h) }
+                    .sort
 
         # round robin policy
-        @next_host_index = (@next_host_index + 1) % hostnames.size
-        @current_hostname = hostnames[@next_host_index]
+        # hostname format: <ip|hostname> | <ip|hostname>:<port>
+        @current_hostname = hostnames[@host_index]
+        current_host = @current_hostname.split(':')
+        @host_index = (@host_index + 1) % hostnames.size
+        if current_host.size == 2
+          [current_host.first, current_host.last.to_i]
+        else
+          current_host + [@config.port]
+        end
+      end
+
+      #
+      # Return true if an host is in fault state
+      # An host is in fault state if and only if:
+      # - #number of fault >= 3
+      # - time in fault state is >= 1h
+      #
+      def is_faulty(hostname)
+        @faulty_hosts.key?(hostname) &&
+          @faulty_hosts[hostname].first >= 3 &&
+          (Time.now - @faulty_hosts[hostname].last).to_i >= 3600
+      end
+
+      def reset_counter_faulty(hostname)
+        @faulty_hosts.delete(hostname)
+      end
+
+      def update_faulty_host(hostname)
+        @faulty_hosts[hostname]   ||= [0, Time.now]
+        @faulty_hosts[hostname][0] += 1
+        @faulty_hosts[hostname][1]  = Time.now
+
+        if is_faulty(hostname)
+          logger.error "Putting #{hostname} in fault state"
+        end
+      end
+
+      def seed_hosts
+        # uniform seed host
+        @seed_hosts ||= @config.hostnames.map do |h|
+          h = h.split(':')
+          if h.size == 2
+            "#{h.first}:#{h.last.to_i}"
+          else
+            "#{h.first}:#{@config.port}"
+          end
+        end
+      end
+
+      #
+      # Session generator
+      #
+      def gen_session(path)
+        c = Sunspot::Configuration.build
+        current_host = take_hostname
+        c.solr.url = URI::HTTP.build(
+          host: current_host.first,
+          port: current_host.last,
+          path: path
+        ).to_s
+        c.solr.read_timeout = @config.read_timeout
+        c.solr.open_timeout = @config.open_timeout
+        c.solr.proxy = @config.proxy
+        Session.new(c)
       end
     end
   end
