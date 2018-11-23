@@ -151,6 +151,19 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true"/>
 
+    <!-- Special field type for spell correction. Be careful about
+         adding filters here, as they apply *before* your values go in
+         the spellcheck. For example, the lowercase filter here means
+         all spelling suggestions will be lower case (without it,
+         though, you'd have duplicate suggestions for lower and proper
+         cased words). -->
+    <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
   </types>
   <fields>
     <!-- Valid attributes for fields:
@@ -268,4 +281,11 @@
       Unless this field is marked with required="false", it will be a required field
    -->
   <uniqueKey>id</uniqueKey>
+
+  <solrQueryParser df="AND"/>
+
+  <!-- Use copyField to copy the fields you want to run spell checking
+     on into one field. For example: -->
+  <copyField source="*_text"  dest="textSpell" />
+  <copyField source="*_s"  dest="textSpell" />
 </schema>
