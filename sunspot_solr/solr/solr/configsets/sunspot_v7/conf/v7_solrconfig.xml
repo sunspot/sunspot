@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config>
+  <luceneMatchVersion>7.5.0</luceneMatchVersion>
+
+  <schemaFactory class="ClassicIndexSchemaFactory"/>
+
+  <lib dir="${solr.install.dir:../../../..}/contrib/extraction/lib" regex=".*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />
+
+  <lib dir="${solr.install.dir:../../../..}/contrib/clustering/lib/" regex=".*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-clustering-\d.*\.jar" />
+
+  <lib dir="${solr.install.dir:../../../..}/contrib/langid/lib/" regex=".*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-langid-\d.*\.jar" />
+
+  <lib dir="${solr.install.dir:../../../..}/contrib/velocity/lib" regex=".*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-velocity-\d.*\.jar" />
+
+  <dataDir>${solr.data.dir:}</dataDir>
+
+  <!-- <directoryFactory name="DirectoryFactory" class="NRTCachingDirectoryFactory"/> -->
+  <directoryFactory name="DirectoryFactory" class="solr.StandardDirectoryFactory"/>
+
+  <codecFactory class="solr.SchemaCodecFactory"/>
+
+  <indexConfig>
+    <!-- <mergePolicyFactory class="org.apache.solr.index.TieredMergePolicyFactory">
+      <int name="maxMergeAtOnce">10</int>
+      <int name="segmentsPerTier">10</int>
+      <double name="noCFSRatio">0.1</double>
+    </mergePolicyFactory> -->
+    <ramBufferSizeMB>1024</ramBufferSizeMB>
+    <rt>false</rt>
+    <!-- <lockType>native</lockType> -->
+  </indexConfig>
+  <jmx/>
+
+  <updateHandler class="solr.DirectUpdateHandler2">
+    <updateLog>
+      <str name="dir">${solr.ulog.dir:}</str>
+    </updateLog>
+
+    <autoCommit>
+      <maxDocs>100000</maxDocs>
+      <openSearcher>false</openSearcher>
+    </autoCommit>
+
+    <autoSoftCommit>
+      <maxTime>120000</maxTime>
+    </autoSoftCommit>
+  </updateHandler>
+
+  <query>
+    <!-- <filterCache class="solr.FastLRUCache" maxRamMB="24576" autowarmCount="90%" /> -->
+
+    <filterCache class="solr.FastLRUCache" siize="4096" initialSize="4096" autowarmCount="4096" showItems="1" />
+
+    <queryResultCache class="solr.LRUCache" size="163840" initialSize="40960" autowarmCount="40960"/>
+    <!-- This entry enables an int hash representation for filters (DocSets)
+         when the number of items in the set is less than maxSize. For smaller
+         sets, this representation is more memory efficient, more efficient to
+         iterate over, and faster to take intersections.
+     -->
+    <HashDocSet maxSize="400000" loadFactor="0.75"/>
+    <!-- boolToFilterOptimizer converts boolean clauses with zero boost
+         cached filters if the number of docs selected by the clause exceeds the
+         threshold (represented as a fraction of the total index)
+    -->
+    <boolTofilterOptimizer enabled="true" cacheSize="32" threshold=".05"/>
+    <enableLazyFieldLoading>true</enableLazyFieldLoading>
+    <useColdSearcher>false</useColdSearcher>
+    <maxWarmingSearchers>16</maxWarmingSearchers>
+    <maxBooleanClauses>1024</maxBooleanClauses>
+    <queryExecutorThreads>8</queryExecutorThreads>
+    <useFilterForSortedQuery>true</useFilterForSortedQuery>
+    <slowQueryThresholdMillis>1000</slowQueryThresholdMillis>
+    <listener event="firstSearcher" class="solr.QuerySenderListener">
+      <arr name="queries">
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"search_id_i","limit":-1,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"language_s","limit":10,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"buzz_location_city_s","limit":10,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"keywords":{"type":"terms","field":"keywords_sm","limit":20,"mincount":20,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"source_id":{"type":"terms","field":"source_id_i","limit":-1,"sort":{"count":"desc"},"facet":{"topics":{"type":"terms","field":"topics_sm","limit":40,"mincount":20,"sort":{"count":"desc"}}}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"domain_name":{"type":"terms","field":"domain_name_s","limit":100,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"links_url":{"type":"terms","field":"links_url_sm","limit":20,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"links_domain":{"type":"terms","field":"links_domain_sm","limit":100,"mincount":3,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"image_tags":{"type":"terms","field":"image_tags_sm","limit":100,"mincount":5,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"search_id_i","limit":-1,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"buzz_location_country_code_s","limit":10,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"user_gender_s","limit":-1,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"buzz_location_country_code":{"type":"terms","field":"buzz_location_country_code_s","limit":100,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"buzz_location_id":{"type":"terms","field":"buzz_location_id_s","limit":100,"mincount":1,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"buzz_location_city":{"type":"terms","field":"buzz_location_city_s","limit":50,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"buzz_location_state_code":{"type":"terms","field":"buzz_location_state_code_s","limit":100,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"search_id":{"type":"terms","field":"search_id_i","limit":10,"sort":{"count":"desc"},"offset":0}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"source_id":{"type":"terms","field":"source_id_i","limit":-1,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"main_emotion":{"type":"terms","field":"main_emotion_s","limit":10,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst name="spellchecker">
+          <str name="name">default</str>
+          <!-- change field to textSpell and use copyField in schema.xml
+          to spellcheck multiple fields -->
+          <str name="field">textSpell</str>
+          <str name="buildOnCommit">true</str>
+        </lst>
+      </arr>
+    </listener>
+    <listener event="newSearcher" class="solr.QuerySenderListener">
+      <arr name="queries">
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"search_id_i","limit":-1,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"language_s","limit":10,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"buzz_location_city_s","limit":10,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"keywords":{"type":"terms","field":"keywords_sm","limit":20,"mincount":20,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"source_id":{"type":"terms","field":"source_id_i","limit":-1,"sort":{"count":"desc"},"facet":{"topics":{"type":"terms","field":"topics_sm","limit":40,"mincount":20,"sort":{"count":"desc"}}}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"domain_name":{"type":"terms","field":"domain_name_s","limit":100,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"links_url":{"type":"terms","field":"links_url_sm","limit":20,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"links_domain":{"type":"terms","field":"links_domain_sm","limit":100,"mincount":3,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"image_tags":{"type":"terms","field":"image_tags_sm","limit":100,"mincount":5,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"search_id_i","limit":-1,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"buzz_location_country_code_s","limit":10,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"user_screen_name":{"type":"terms","field":"user_gender_s","limit":-1,"mincount":1,"sort":{"count":"desc"},"facet":{"distinct":"unique(user_screen_name_s)"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"buzz_location_country_code":{"type":"terms","field":"buzz_location_country_code_s","limit":100,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"buzz_location_id":{"type":"terms","field":"buzz_location_id_s","limit":100,"mincount":1,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"buzz_location_city":{"type":"terms","field":"buzz_location_city_s","limit":50,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"buzz_location_state_code":{"type":"terms","field":"buzz_location_state_code_s","limit":100,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"search_id":{"type":"terms","field":"search_id_i","limit":10,"sort":{"count":"desc"},"offset":0}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"source_id":{"type":"terms","field":"source_id_i","limit":-1,"sort":{"count":"desc"}}}</str>
+        </lst>
+
+        <lst>
+          <str name="q">*:*</str>
+          <str name="fq">*:*</str>
+          <str name="json.facet">{"main_emotion":{"type":"terms","field":"main_emotion_s","limit":10,"mincount":10,"sort":{"count":"desc"}}}</str>
+        </lst>
+        <lst name="spellchecker">
+          <str name="name">default</str>
+          <!-- change field to textSpell and use copyField in schema.xml
+          to spellcheck multiple fields -->
+          <str name="field">textSpell</str>
+          <str name="buildOnCommit">true</str>
+        </lst>
+      </arr>
+    </listener>
+  </query>
+
+  <requestDispatcher>
+    <requestParsers enableRemoteStreaming="true" multipartUploadLimitInKB="2048000"/>
+    <httpCaching never304="true"/>
+  </requestDispatcher>
+
+  <requestHandler name="/select" class="solr.SearchHandler">
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <int name="rows">10</int>
+      <str name="df">text</str>
+    </lst>
+  </requestHandler>
+  
+  <requestHandler name="/mlt" class="solr.MoreLikeThisHandler">
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <str name="wt">json</str>
+      <str name="df">text</str>
+      <str name="mlt.mintf">1</str>
+      <str name="mlt.mindf">2</str>
+    </lst>
+  </requestHandler>
+
+  <!-- <requestHandler class="solr.FieldAnalysisRequestHandler" name="/analysis/field" startup="lazy"/>
+  <requestHandler class="solr.DocumentAnalysisRequestHandler" name="/analysis/document" startup="lazy"/>
+
+  <requestHandler class="solr.PingRequestHandler" name="/admin/ping">
+    <lst name="invariants">
+      <str name="qt">search</str>
+      <str name="q">solrpingquery</str>
+    </lst>
+    <lst name="defaults">
+      <str name="echoParams">all</str>
+    </lst>
+  </requestHandler>
+
+  <requestHandler class="solr.DumpRequestHandler" name="/debug/dump">
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <str name="echoHandler">true</str>
+    </lst>
+  </requestHandler> -->
+</config>

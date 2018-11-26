@@ -64,7 +64,6 @@
         <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.LengthFilterFactory" min="1" max="255"/>
-        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="0" splitOnNumerics="0" preserveOriginal="1" types="symbols.txt"/>
       </analyzer>
     </fieldType>
     <!-- *** This fieldType is used by Sunspot! *** -->
@@ -149,7 +148,9 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tfloat" class="solr.TrieFloatField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
-    <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true"/>
+    <!-- <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true"/> -->
+    <fieldType name="tdate" class="solr.DatePointField" omitNorms="true"/>
+    
 
     <!-- Special field type for spell correction. Be careful about
          adding filters here, as they apply *before* your values go in
@@ -221,14 +222,13 @@
     <field name="average_rating_ft" stored="false" type="tfloat" multiValued="false" indexed="true"/>
     <field name="links_domain_sm" stored="false" type="string" multiValued="true" indexed="true"/>
     <field name="links_url_sm" stored="false" type="string" multiValued="true" indexed="true"/>
-    <field name="published_at_dt" stored="false" type="date" multiValued="false" indexed="true"/>
-    <field name="created_at_dt" stored="false" type="date" multiValued="false" indexed="true"/>
+    <field name="published_at_dt" stored="false" type="tdate" docValues="true" multiValued="false" indexed="true"/>
+    <field name="created_at_dt" stored="false" type="tdate"  docValues="true" multiValued="false" indexed="true"/>
     <field name="size_it" stored="false" type="tint" multiValued="false" indexed="true"/>
     <field name="image_tags_sm" stored="false" type="string" multiValued="true" indexed="true"/>
     <field name="tags_textv" stored="false" termVectors="true" type="text" docValues="false" multiValued="true" indexed="true"/>
     <field name="category_ids_im" stored="false" type="tint" multiValued="true" indexed="true"/>
     <field name="author_name_text" stored="false" termVectors="true" type="string" multiValued="false" indexed="true"/>
-    <field name="featured_for_dr" stored="false" type="daterange" multiValued="false" indexed="true" />
     <field name="featured_dr" stored="false" type="daterange" multiValued="false" indexed="true" />
 
     <!-- *** This dynamicField is used by Sunspot! *** -->

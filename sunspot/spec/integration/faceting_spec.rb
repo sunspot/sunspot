@@ -486,7 +486,6 @@ describe 'search faceting' do
       expect(search.facet(:published_at).rows.size).to eq(days_diff / 2)
       expect(search.facet(:published_at).rows[0].count).to eq(3)
     end
-
   end
 
   context 'class facets' do
@@ -519,7 +518,7 @@ describe 'search faceting' do
     it 'should return specified facets' do
       search = Sunspot.search(Post) do
         facet :rating_range, :sort => :count do
-          for rating in [1.0, 2.0, 3.0, 4.0]
+          [1.0, 2.0, 3.0, 4.0].each do |rating|
             range = rating..(rating + 1.0)
             row range do
               with :average_rating, rating..(rating + 1.0)
