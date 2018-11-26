@@ -10,3 +10,5 @@ sunspot_solr/solr/solr-webapp
 docs
 *.swp
 .idea
+.directory
+.byebug_history
