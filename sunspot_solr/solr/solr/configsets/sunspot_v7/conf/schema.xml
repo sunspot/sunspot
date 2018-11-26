@@ -60,7 +60,7 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="text" class="solr.TextField" omitNorms="false">
       <analyzer>
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.LengthFilterFactory" min="1" max="255"/>
@@ -195,7 +195,7 @@
     <field name="_version_" type="long" indexed="true" stored="true"/>
 
     <!-- *** This field is used by Sunspot! *** -->
-    <field name="id" stored="true" type="string" multiValued="false" indexed="true" docValues="true" />
+    <field name="id" stored="true" type="string" multiValued="false" indexed="true"/>
     <!-- *** This field is required by Solr to use Block Join queries *** -->
     <field name="_root_" type="string" indexed="true" stored="false"/>
     <!-- *** This field is used by Sunspot! *** -->
@@ -212,21 +212,22 @@
     <field name="legacy_array_field_sm" stored="false" type="string" multiValued="true" docValues="true" indexed="true"/>
     <field name="keywords_sm" stored="false" type="string" multiValued="true" docValues="false" indexed="true"/>
     <field name="tag_list_sms" stored="true" type="string" docValues="true" multiValued="true" indexed="true"/>
-    <field name="body_textsv" stored="true" termVectors="true" type="text" docValues="false" multiValued="true" indexed="true"/>
     <field name="title_text" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
     <field name="text_array_text" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
-    <field name="body_text" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
+    <field name="body_text" stored="false" termVectors="false" type="text" multiValued="true" indexed="true"/>
+    <field name="body_texts" stored="true" type="text" multiValued="true" indexed="true"/>
+    <field name="body_textsv" stored="true" termVectors="true" type="text" multiValued="true" indexed="true"/>
     <field name="backwards_title_text" stored="false" termVectors="true" type="text" multiValued="true" indexed="true"/>
     <field name="average_rating_ft" stored="false" type="tfloat" multiValued="false" indexed="true"/>
     <field name="links_domain_sm" stored="false" type="string" multiValued="true" indexed="true"/>
     <field name="links_url_sm" stored="false" type="string" multiValued="true" indexed="true"/>
-    <field name="published_at_dt" stored="false" type="tdate" multiValued="false" indexed="true"/>
-    <field name="created_at_dt" stored="false" type="tdate" multiValued="false" indexed="true"/>
+    <field name="published_at_dt" stored="false" type="date" multiValued="false" indexed="true"/>
+    <field name="created_at_dt" stored="false" type="date" multiValued="false" indexed="true"/>
     <field name="size_it" stored="false" type="tint" multiValued="false" indexed="true"/>
     <field name="image_tags_sm" stored="false" type="string" multiValued="true" indexed="true"/>
-    <field name="tags_textv" stored="true" termVectors="true" type="text" docValues="false" multiValued="true" indexed="true"/>
+    <field name="tags_textv" stored="false" termVectors="true" type="text" docValues="false" multiValued="true" indexed="true"/>
     <field name="category_ids_im" stored="false" type="tint" multiValued="true" indexed="true"/>
-    <field name="author_name_text" stored="true" termVectors="true" type="text" multiValued="true" indexed="true"/>
+    <field name="author_name_text" stored="false" termVectors="true" type="string" multiValued="false" indexed="true"/>
     <field name="featured_for_dr" stored="false" type="daterange" multiValued="false" indexed="true" />
     <field name="featured_dr" stored="false" type="daterange" multiValued="false" indexed="true" />
 
@@ -285,7 +286,8 @@
   <solrQueryParser df="AND"/>
 
   <!-- Use copyField to copy the fields you want to run spell checking
-     on into one field. For example: -->
+   on into one field. For example: -->
   <copyField source="*_text"  dest="textSpell" />
   <copyField source="*_s"  dest="textSpell" />
+
 </schema>

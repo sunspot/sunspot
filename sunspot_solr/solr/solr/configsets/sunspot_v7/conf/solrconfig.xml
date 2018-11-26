@@ -184,6 +184,13 @@
           <str name="fq">*:*</str>
           <str name="json.facet">{"main_emotion":{"type":"terms","field":"main_emotion_s","limit":10,"mincount":10,"sort":{"count":"desc"}}}</str>
         </lst>
+        <lst name="spellchecker">
+          <str name="name">default</str>
+          <!-- change field to textSpell and use copyField in schema.xml
+          to spellcheck multiple fields -->
+          <str name="field">textSpell</str>
+          <str name="buildOnCommit">true</str>
+        </lst>
       </arr>
     </listener>
     <listener event="newSearcher" class="solr.QuerySenderListener">
@@ -297,7 +304,13 @@
           <str name="fq">*:*</str>
           <str name="json.facet">{"main_emotion":{"type":"terms","field":"main_emotion_s","limit":10,"mincount":10,"sort":{"count":"desc"}}}</str>
         </lst>
-
+        <lst name="spellchecker">
+          <str name="name">default</str>
+          <!-- change field to textSpell and use copyField in schema.xml
+          to spellcheck multiple fields -->
+          <str name="field">textSpell</str>
+          <str name="buildOnCommit">true</str>
+        </lst>
       </arr>
     </listener>
   </query>
@@ -312,6 +325,16 @@
       <str name="echoParams">explicit</str>
       <int name="rows">10</int>
       <str name="df">text</str>
+    </lst>
+  </requestHandler>
+  
+  <requestHandler name="/mlt" class="solr.MoreLikeThisHandler">
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <str name="wt">json</str>
+      <str name="df">text</str>
+      <str name="mlt.mintf">1</str>
+      <str name="mlt.mindf">2</str>
     </lst>
   </requestHandler>
 
