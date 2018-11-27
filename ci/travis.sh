@@ -2,11 +2,21 @@
 
 set +e
 
-SOLR_PORT=8983
 export SUNSPOT_LIB_HOME=`pwd`
 
+SOLR_PORT=8983
+
+if [ "$1" = "cloud" ]; then
+  CLOUD_MODE=true
+  MODE="--cloud"
+else
+  CLOUD_MODE=false
+  MODE=""
+fi
+
+
 solr_responding() {
-  curl -o /dev/null "http://localhost:$SOLR_PORT/solr/admin/ping" > /dev/null 2>&1
+  curl -o /dev/null "http://localhost:${SOLR_PORT}/solr/admin/ping" > /dev/null 2>&1
 }
 
 start_solr_server() {
@@ -17,10 +27,10 @@ start_solr_server() {
 
   # stop solr of already running (but it should not be)
   if [ -f sunspot-solr.pid ]; then stop_solr_server || true; fi
-  /bin/echo -n "Starting Solr on port $SOLR_PORT for Sunspot specs..."
+  /bin/echo -n "Starting Solr on port ${SOLR_PORT} for Sunspot specs..."
 
   # start solr
-  bundle exec sunspot-solr start -p $SOLR_PORT --cloud
+  bundle exec sunspot-solr start -p ${SOLR_PORT} $MODE
 
   # wait while Solr is up and running
   while ! solr_responding; do
@@ -29,13 +39,20 @@ start_solr_server() {
   done
   /bin/echo "done."
 
+  # uploading config in case of cloud mode
+  if [ "$CLOUD_MODE" = true ]; then
+    ./solr/bin/solr create -d solr/solr/configsets/sunspot -c static_schema_1_6
+    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=CREATE&name=test&numShards=1&replicationFactor=1&collection.configName=static_schema_1_6"
+    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=CREATE&name=default&numShards=1&replicationFactor=1&collection.configName=static_schema_1_6"
+  fi
+
   cd $current_path
 }
 
 stop_solr_server() {
   cd ../sunspot_solr
   /bin/echo -n "Stopping Solr... "
-  bundle exec sunspot-solr stop -p $SOLR_PORT
+  bundle exec sunspot-solr stop -p ${SOLR_PORT}
   /bin/echo "done."
 }
 

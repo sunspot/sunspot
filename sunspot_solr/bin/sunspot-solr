@@ -50,7 +50,7 @@ opts = OptionParser.new do |opts|
     server.memory = m
   end
 
-  opts.on_tail '-c', '--cloud', 'Active the Cloud mode' do
+  opts.on_tail '--cloud', 'Active the Cloud mode' do
     server.cloud = true
   end
 end
