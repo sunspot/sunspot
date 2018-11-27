@@ -80,7 +80,7 @@ module Sunspot
       #
       def all_sessions
         @sessions = []
-        solr.collectionss(force: true).each do |col|
+        solr.collections(force: true).each do |col|
           @sessions << gen_session("/solr/#{col}")
         end
         @sessions
