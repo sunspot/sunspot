@@ -38,13 +38,13 @@ start_solr_server() {
     sleep 1
   done
   /bin/echo "done."
-
+  
   # uploading config in case of cloud mode
   if [ "${CLOUD_MODE}" = true ]; then
     sleep 10
-    curl -X GET "http://127.0.0.1:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=default"
-    curl -X GET "http://127.0.0.1:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=test"
-    curl -X GET "http://127.0.0.1:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=development"
+    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=default"
+    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=test"
+    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=development"
     ./solr/bin/solr create -d solr/solr/configsets/sunspot -c default
     ./solr/bin/solr create -d solr/solr/configsets/sunspot -c test
     ./solr/bin/solr create -d solr/solr/configsets/sunspot -c development

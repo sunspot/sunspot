@@ -25,6 +25,7 @@ module Sunspot
 
       def initialize
         Sunspot::Solr::Java.ensure_install!
+        @cloud = false
       end
 
       #
@@ -90,9 +91,8 @@ module Sunspot
       def run
         bootstrap
 
-        command = %w[./solr start]
-        command << '-cloud' if cloud
-        command << '-f'
+        command = %w[./solr start -f]
+#        command << '-cloud' if cloud
         command << '-p' << "#{port}" if port
         command << '-m' << "#{memory}" if memory
         command << '-h' << "#{bind_address}" if bind_address
