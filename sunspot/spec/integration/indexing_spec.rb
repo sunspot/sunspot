@@ -32,12 +32,11 @@ describe 'indexing' do
     expect(Sunspot.search(Post).results.size).to eq(1)
   end
 
-
-  describe "in batches" do
+  describe 'in batches' do
     let(:post_1) { Post.new :title => 'A tittle' }
     let(:post_2) { Post.new :title => 'Another title' }
 
-    describe "nested" do
+    describe 'nested' do
       let(:a_nested_batch) do
         Sunspot.batch do
           Sunspot.index post_1
@@ -48,7 +47,7 @@ describe 'indexing' do
         end
       end
 
-      it "does not fail" do
+      it 'does not fail' do
         expect { a_nested_batch }.to_not raise_error
       end
     end

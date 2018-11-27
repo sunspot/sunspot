@@ -34,9 +34,13 @@ module Sunspot
     # Return the appropriate admin session
     def session
       c = Sunspot::Configuration.build
+      host_port = @config.hostnames[rand(@config.hostnames.size)].split(':')
+      host_port = [host_port.first, host_port.last.to_i] if host_port.size == 2
+      host_port = [host_port.first, @config.port] if host_port.size == 1
+
       c.solr.url = URI::HTTP.build(
-        host: @config.hostnames[rand(@config.hostnames.size)],
-        port: @config.port,
+        host: host_port.first,
+        port: host_port.last,
         path: '/solr/admin'
       ).to_s
       c.solr.read_timeout = @config.read_timeout
@@ -63,7 +67,15 @@ module Sunspot
     # Array:: collections
     def live_nodes(force: false)
       with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
-        resp['cluster']['live_nodes'].map { |n| n.split(':').first }
+        resp['cluster']['live_nodes'].map do |node|
+          host_port = node.split(':')
+          if host_port.size == 2
+            port = host_port.last.gsub('_solr', '')
+            "#{host_port.first}:#{port}"
+          else
+            node
+          end
+        end
       end
     end
 

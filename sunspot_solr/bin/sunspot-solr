@@ -49,6 +49,10 @@ opts = OptionParser.new do |opts|
   opts.on '--memory=MEMORY', 'Specify the size of the memory allocation pool' do |m|
     server.memory = m
   end
+
+  opts.on_tail '--cloud', 'Active the Cloud mode' do
+    server.cloud = true
+  end
 end
 
 opts.parse!

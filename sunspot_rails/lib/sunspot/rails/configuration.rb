@@ -127,6 +127,7 @@ module Sunspot #:nodoc:
         unless defined?(@hostname)
           @hostname   = solr_url.host if solr_url
           @hostname ||= user_configuration_from_key('solr', 'hostname')
+          @hostname ||= hostnames[0] unless hostnames.empty?
           @hostname ||= default_hostname
         end
         @hostname
@@ -177,7 +178,7 @@ module Sunspot #:nodoc:
       #
       def userinfo
         unless defined?(@userinfo)
-          @userinfo   = solr_url.userinfo if solr_url
+          @userinfo = solr_url.userinfo if solr_url
           user = user_configuration_from_key('solr', 'user')
           pass = user_configuration_from_key('solr', 'pass')
           @userinfo ||= [user, pass].compact.join(':') if user && pass

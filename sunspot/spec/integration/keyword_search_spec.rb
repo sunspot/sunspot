@@ -19,7 +19,7 @@ describe 'keyword search' do
     context 'edismax' do
       it 'matches with wildcards' do
         results = Sunspot.search(Post) { keywords '*oas*' }.results
-        [0,2].each { |i| expect(results).to include(@posts[i])}
+        [0, 2].each { |i| expect(results).to include(@posts[i])}
         [1].each { |i| expect(results).not_to include(@posts[i])}
       end
 
@@ -65,7 +65,7 @@ describe 'keyword search' do
       results = Sunspot.search(Post, Namespaced::Comment) do
         keywords 'toast'
       end.results
-      [@posts[0], @posts[2], @comment].each  { |obj| expect(results).to include(obj) }
+      [@posts[0], @posts[2], @comment].each { |obj| expect(results).to include(obj) }
       expect(results).not_to include(@posts[1])
     end
 
