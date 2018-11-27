@@ -11,10 +11,9 @@ end
 
 class TbcPost < Post
   def time_routed_on
-    DateTime.new(2009, 10, 1, 12, 30, 0)
+    Time.new(2009, 10, 1, 12, 30, 0)
   end
 end
-
 
 describe Sunspot::SessionProxy::TbcSessionProxy do
   return unless ENV["SOLR_MODE"] == "cloud"

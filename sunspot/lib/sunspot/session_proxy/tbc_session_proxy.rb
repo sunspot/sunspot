@@ -1,4 +1,7 @@
+# encoding: UTF-8
 # frozen_string_literal: true
+
+require 'logger'
 
 module Sunspot
   module SessionProxy
@@ -285,9 +288,9 @@ module Sunspot
       #
       def collection_for(object)
         raise NoMethodError, "Method :time_routed_on on class #{object.class} is not defined" unless object.respond_to?(:time_routed_on)
-        raise TypeError, "Type mismatch :time_routed_on on class #{object.class} is not a DateTime" unless object.time_routed_on.is_a?(DateTime)
-        time_routed_on = object.time_routed_on.utc
-        collection_name(year: time_routed_on.year, month: time_routed_on.month)
+        raise TypeError, "Type mismatch :time_routed_on on class #{object.class} is not a DateTime" unless object.time_routed_on.is_a?(Time)
+        ts = object.time_routed_on.utc
+        collection_name(year: ts.year, month: ts.month)
       end
 
       #
@@ -386,6 +389,11 @@ module Sunspot
         c.solr.proxy = @config.proxy
         Session.new(c)
       end
+    end
+
+    def logger
+      @logger ||= Rails.logger
+      @logger ||= Logger.new(STDOUT)
     end
   end
 end

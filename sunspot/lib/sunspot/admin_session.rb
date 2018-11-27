@@ -90,7 +90,7 @@ module Sunspot
       params[:name] = collection_name
       CREATE_COLLECTION_MAP.each do |k, v|
         ks = k.to_s
-        params[v] = collection_conf[ks] if collection_conf[ks].present?
+        params[v] = collection_conf[ks] unless collection_conf[ks].nil?
       end
       begin
         response = connection.get :collections, params: params

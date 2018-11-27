@@ -62,7 +62,21 @@ module Sunspot
           def open_timeout; solr.open_timeout; end
 
           def collection_param(id)
-            collection.send(id.to_sym)
+            begin
+              collection.send(id.to_sym)
+            rescue
+              nil
+            end
+          end
+        end
+
+        class <<conf.collection
+          def [](id)
+            begin
+              self.send(id.to_sym)
+            rescue
+              nil
+            end
           end
         end
 
