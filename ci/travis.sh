@@ -6,7 +6,7 @@ export SUNSPOT_LIB_HOME=`pwd`
 
 SOLR_PORT=8983
 
-if [ "$SOLR_MODE" = "cloud" ]; then
+if [ "${SOLR_MODE}" = "cloud" ]; then
   CLOUD_MODE=true
   MODE="--cloud"
 else
@@ -38,7 +38,7 @@ start_solr_server() {
     sleep 1
   done
   /bin/echo "done."
-  
+
   # uploading config in case of cloud mode
   if [ "${CLOUD_MODE}" = true ]; then
     sleep 10

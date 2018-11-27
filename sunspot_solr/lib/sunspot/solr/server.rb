@@ -92,12 +92,16 @@ module Sunspot
         bootstrap
 
         command = %w[./solr start -f]
-#        command << '-cloud' if cloud
+        command << '-cloud' if cloud
         command << '-p' << "#{port}" if port
         command << '-m' << "#{memory}" if memory
         command << '-h' << "#{bind_address}" if bind_address
         command << '-s' << "#{solr_home}" if solr_home
 
+        File.open("/tmp/solr_command.txt", 'w') do |file|
+          file << solr_executable_directory
+          file << command.join(" ")
+        end
         exec_in_solr_executable_directory(command)
       end
 
