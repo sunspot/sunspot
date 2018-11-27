@@ -98,9 +98,6 @@ module Sunspot
         command << '-h' << "#{bind_address}" if bind_address
         command << '-s' << "#{solr_home}" if solr_home && !cloud
 
-        File.open("/tmp/solr_command.txt", 'w') do |file|
-          file << solr_executable_directory << "\n" << command.join(" ") << "\n"
-        end
         exec_in_solr_executable_directory(command)
       end
 
