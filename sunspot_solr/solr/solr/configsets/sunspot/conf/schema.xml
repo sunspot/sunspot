@@ -76,7 +76,8 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tfloat" class="solr.TrieFloatField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
-    <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true"/>
+    <fieldType name="tdate" class="solr.TrieDateField"
+               omitNorms="true"/>
 
     <fieldType name="daterange" class="solr.DateRangeField" omitNorms="true" />
 
