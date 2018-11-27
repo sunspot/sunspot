@@ -285,7 +285,7 @@ module Sunspot
       #
       def collection_for(object)
         raise NoMethodError, "Method :time_routed_on on class #{object.class} is not defined" unless object.respond_to?(:time_routed_on)
-        raise TypeError, "Type mismatch :time_routed_on on class #{object.class} is not a DateTime" unless object.time_routed_on.class.is_a?(DateTime)
+        raise TypeError, "Type mismatch :time_routed_on on class #{object.class} is not a DateTime" unless object.time_routed_on.is_a?(DateTime)
         time_routed_on = object.time_routed_on.utc
         collection_name(year: time_routed_on.year, month: time_routed_on.month)
       end
