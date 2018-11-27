@@ -59,6 +59,14 @@ stop_solr_server() {
   /bin/echo -n "Stopping Solr... "
   bundle exec sunspot-solr stop -p ${SOLR_PORT}
   /bin/echo "done."
+
+  # cleaning
+  if [ "${CLOUD_MODE}" = true ]; then
+    rm -rf solr/server/solr/default_shard1_replica1/
+    rm -rf solr/server/solr/development_shard1_replica1/
+    rm -rf solr/server/solr/test_shard1_replica1/
+    rm -rf solr/server/solr/zoo_data/
+  fi
 }
 
 case $GEM in
