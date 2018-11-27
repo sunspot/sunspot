@@ -6,7 +6,7 @@ export SUNSPOT_LIB_HOME=`pwd`
 
 SOLR_PORT=8983
 
-if [ "$1" = "cloud" ]; then
+if [ "$SOLR_MODE" = "cloud" ]; then
   CLOUD_MODE=true
   MODE="--cloud"
 else
@@ -40,10 +40,15 @@ start_solr_server() {
   /bin/echo "done."
 
   # uploading config in case of cloud mode
-  if [ "$CLOUD_MODE" = true ]; then
-    ./solr/bin/solr create -d solr/solr/configsets/sunspot -c static_schema_1_6
-    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=CREATE&name=test&numShards=1&replicationFactor=1&collection.configName=static_schema_1_6"
-    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=CREATE&name=default&numShards=1&replicationFactor=1&collection.configName=static_schema_1_6"
+  if [ "${CLOUD_MODE}" = true ]; then
+    sleep 10
+    curl -X GET "http://127.0.0.1:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=default"
+    curl -X GET "http://127.0.0.1:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=test"
+    curl -X GET "http://127.0.0.1:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=development"
+    ./solr/bin/solr create -d solr/solr/configsets/sunspot -c default
+    ./solr/bin/solr create -d solr/solr/configsets/sunspot -c test
+    ./solr/bin/solr create -d solr/solr/configsets/sunspot -c development
+    sleep 15
   fi
 
   cd $current_path
