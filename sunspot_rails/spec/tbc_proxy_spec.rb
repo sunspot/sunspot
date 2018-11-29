@@ -79,9 +79,9 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
   end
 
   it 'check valid collection for TbcPost' do
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_a")
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_b")
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_c")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_b")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_c")
     post = TbcPost.new(title: 'basic post')
     @proxy.index!(post)
     supported = @proxy.calculate_valid_collections(TbcPost)
@@ -94,6 +94,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
   end
 
   it 'index two documents and retrieve one in hr type collection' do
+    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_hr")
+    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_rt")
     post_a = TbcPost.new(title: 'basic post on Historic')
     post_b = TbcPost.new(title: 'basic post on Realtime')
     post_b.collection_postfix = 'rt'
@@ -103,11 +105,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
       :calculate_search_collections,
       date_from: Time.new(2009, 8),
       date_to: Time.new(2010, 1)
-    ).sort
+    )
 
-    expect(collections).to match_array([
+    expect(collections).to include(
       "#{@base_name}_2009_10_hr",
       "#{@base_name}_2009_10_rt"
-    ].sort)
+    )
   end
 end
