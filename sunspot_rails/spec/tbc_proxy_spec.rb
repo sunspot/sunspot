@@ -27,7 +27,6 @@ class TbcPost < Post
   end
 
   def self.select_valid_connection(collections)
-    byebug
     collections.select do |c|
       c.end_with?('_hr', '_rt')
     end
@@ -44,6 +43,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
       date_to: Time.new(2010, 1)
     )
     @old_session ||= Sunspot.session
+    @base_name = @config.collection['base_name']
     Sunspot.session = @proxy.session
   end
 
@@ -79,14 +79,18 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
   end
 
   it 'check valid collection for TbcPost' do
-    @proxy.solr.create_collection(collection_name: 'collection_a')
-    @proxy.solr.create_collection(collection_name: 'collection_b')
-    @proxy.solr.create_collection(collection_name: 'collection_c')
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_a")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_b")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_c")
     post = TbcPost.new(title: 'basic post')
     @proxy.index!(post)
-    expect(@proxy.calculate_valid_collections(TbcPost)).to eq([
-      "#{@config.collection['base_name']}_2009_10_hr"
-    ])
+    supported = @proxy.calculate_valid_collections(TbcPost)
+    expect(supported).to include("#{@base_name}_2009_10_hr")
+    expect(supported).not_to include(
+      "#{@base_name}_2009_10_a",
+      "#{@base_name}_2009_10_b",
+      "#{@base_name}_2009_10_c"
+    )
   end
 
   it 'index two documents and retrieve one in hr type collection' do
@@ -101,9 +105,9 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
       date_to: Time.new(2010, 1)
     ).sort
 
-    expect(collections).to eq([
-      "#{@config.collection['base_name']}_2009_10_hr",
-      "#{@config.collection['base_name']}_2009_10_rt"
+    expect(collections).to match_array([
+      "#{@base_name}_2009_10_hr",
+      "#{@base_name}_2009_10_rt"
     ].sort)
   end
 end

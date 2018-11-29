@@ -36,7 +36,7 @@ module Sunspot
       not_supported :batch, :remove_by_id, :remove_by_id!, :atomic_update,
                     :atomic_update!, :remove_all, :remove_all!
 
-      attr_reader :solr, :config, :search_collections
+      attr_reader :solr, :config
 
       def initialize(
         config: Sunspot::Configuration.build,
@@ -45,14 +45,12 @@ module Sunspot
         collections: nil
       )
         @config = config
+        @date_from = date_from
+        @date_to = date_to
         @faulty_hosts = {}
         @host_index = 0
         @solr = AdminSession.new(config)
-        @search_collections =
-          collections || calculate_search_collections(
-            date_from: date_from,
-            date_to: date_to
-          )
+        @collections = collections
       end
 
       #
@@ -73,6 +71,17 @@ module Sunspot
         # If collection is not present, create it!
         solr.create_collection(collection_name: obj_col_name) unless solr.collections.include?(obj_col_name)
         gen_session("/solr/#{obj_col_name}")
+      end
+
+      #
+      # Return the collections that match the current time range
+      # or the given collections in case are present
+      #
+      def search_collections
+        @collections || calculate_search_collections(
+          date_from: @date_from,
+          date_to: @date_to
+        )
       end
 
       #
@@ -199,16 +208,17 @@ module Sunspot
 
       def calculate_valid_collections(*types)
         valid_collections = []
+        sc = search_collections
         types.each do |type|
           # if the type support :select_valid_connection
           # use it to select the collection involved
           if type.respond_to?(:select_valid_connection)
-            valid_collections += type.select_valid_connection(search_collections)
+            valid_collections += type.select_valid_connection(sc)
           else
-            valid_collections += search_collections
+            valid_collections += sc
           end
         end
-        valid_collections.uniq!
+        valid_collections.uniq
       end
 
       #
