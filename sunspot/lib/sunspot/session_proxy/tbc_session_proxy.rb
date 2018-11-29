@@ -197,13 +197,13 @@ module Sunspot
         search
       end
 
-      def calculate_valid_connections(*types)
+      def calculate_valid_collections(*types)
         valid_collections = []
         types.each do |type|
-          # if the type support :filter_valid_connection
+          # if the type support :select_valid_connection
           # use it to select the collection involved
-          if type.respond_to?(:filter_valid_connection)
-            valid_collections += type.filter_valid_connection(search_collections)
+          if type.respond_to?(:select_valid_connection)
+            valid_collections += type.select_valid_connection(search_collections)
           else
             valid_collections += search_collections
           end

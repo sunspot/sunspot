@@ -8,7 +8,7 @@ end
 
 class TbcPostWrongTime < Post
   def collection_postfix
-    "hr"
+    'hr'
   end
   def time_routed_on
     DateTime.new(2009, 10, 1, 12, 30, 0)
@@ -19,19 +19,30 @@ class TbcPost < Post
   attr_accessor :collection_postfix
 
   def collection_postfix
-    "hr"
+    @collection_postfix || 'hr'
   end
+
   def time_routed_on
     Time.new(2009, 10, 1, 12, 30, 0)
+  end
+
+  def self.select_valid_connection(collections)
+    byebug
+    collections.select do |c|
+      c.end_with?('_hr', '_rt')
+    end
   end
 end
 
 describe Sunspot::SessionProxy::TbcSessionProxy do
-  return unless ENV["SOLR_MODE"] == "cloud"
+  return unless ENV['SOLR_MODE'] == 'cloud'
 
   before :all do
     @config = Sunspot::Configuration.build
-    @proxy = Sunspot::SessionProxy::TbcSessionProxy.new
+    @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
+      date_from: Time.new(2009, 1),
+      date_to: Time.new(2010, 1)
+    )
     @old_session ||= Sunspot.session
     Sunspot.session = @proxy.session
   end
@@ -40,7 +51,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
     Sunspot.session = @old_session
   end
 
-  it "simple indexing on wrong object" do
+  it 'simple indexing on wrong object' do
     expect {
       @proxy.index(TbcPostWrong.new(title: 'basic post'))
     }.to raise_error NoMethodError
@@ -50,11 +61,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
     }.to raise_error TypeError
   end
 
-  it "simple indexing on good object" do
+  it 'simple indexing on good object' do
     @proxy.index!(TbcPost.new(title: 'basic post'))
   end
 
-  it "collections shoud contains the current one" do
+  it 'collections shoud contains the current one' do
     post = TbcPost.new(title: 'basic post')
     ts = post.time_routed_on
     @proxy.index!(post)
@@ -64,23 +75,35 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
       date_from: Time.new(2009, 8),
       date_to: Time.new(2010, 1)
     )
-    expect(collections.include?("#{c_name}_#{post.collection_postfix}")).to eq(true)
+    expect(collections.include?("#{c_name}_#{post.collection_postfix}")).to be true
   end
 
-  it "index two documents and retrieve one in hr type collection" do
+  it 'check valid collection for TbcPost' do
+    @proxy.solr.create_collection(collection_name: 'collection_a')
+    @proxy.solr.create_collection(collection_name: 'collection_b')
+    @proxy.solr.create_collection(collection_name: 'collection_c')
+    post = TbcPost.new(title: 'basic post')
+    @proxy.index!(post)
+    expect(@proxy.calculate_valid_collections(TbcPost)).to eq([
+      "#{@config.collection['base_name']}_2009_10_hr"
+    ])
+  end
+
+  it 'index two documents and retrieve one in hr type collection' do
     post_a = TbcPost.new(title: 'basic post on Historic')
     post_b = TbcPost.new(title: 'basic post on Realtime')
-    post_b.collection_postfix = "rt"
+    post_b.collection_postfix = 'rt'
+
     @proxy.index!([post_a, post_b])
     collections = @proxy.send(
       :calculate_search_collections,
       date_from: Time.new(2009, 8),
-      date_to: Time.new(2010, 01)
+      date_to: Time.new(2010, 1)
     ).sort
 
     expect(collections).to eq([
       "#{@config.collection['base_name']}_2009_10_hr",
       "#{@config.collection['base_name']}_2009_10_rt"
-    ])
+    ].sort)
   end
 end
