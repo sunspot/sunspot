@@ -42,10 +42,10 @@ module Sunspot
           proxy nil
           collection do
             base_name 'base'
-            num_shards 8
+            num_shards 1
             replication_factor 1
             max_shards_per_node 2
-            config_name ''
+            config_name 'default'
           end
         end
 

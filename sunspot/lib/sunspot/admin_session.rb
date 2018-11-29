@@ -88,6 +88,7 @@ module Sunspot
       params = {}
       params[:action] = 'CREATE'
       params[:name] = collection_name
+      params[:config_name] = @config.collection['config_name']
       CREATE_COLLECTION_MAP.each do |k, v|
         ks = k.to_s
         params[v] = collection_conf[ks] unless collection_conf[ks].nil?

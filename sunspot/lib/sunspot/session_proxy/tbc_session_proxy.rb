@@ -159,7 +159,7 @@ module Sunspot
       # See Sunspot.remove_all
       #
       def remove_all(*classes)
-        all_sessions.each{ |s| s.remove_all(classes) }
+        all_sessions.each { |s| s.remove_all(classes) }
       end
 
       #
@@ -181,14 +181,34 @@ module Sunspot
       # If search_collections is empty we search on the latest collection
       def new_search(*types, &block)
         search = session.new_search(*types, &block)
-        if search_collections.present?
+        return search if search_collections.empty?
+
+        # filter all valid collections
+        valid_collections = calculate_valid_connections(*types)
+
+        # build the search
+        unless valid_collections.empty?
           search.build do
             adjust_solr_params do |params|
-              params[:collection] = search_collections.join(',')
+              params[:collection] = valid_collections.join(',')
             end
           end
         end
         search
+      end
+
+      def calculate_valid_connections(*types)
+        valid_collections = []
+        types.each do |type|
+          # if the type support :filter_valid_connection
+          # use it to select the collection involved
+          if type.respond_to?(:filter_valid_connection)
+            valid_collections += type.filter_valid_connection(search_collections)
+          else
+            valid_collections += search_collections
+          end
+        end
+        valid_collections.uniq!
       end
 
       #
@@ -278,8 +298,10 @@ module Sunspot
       def calculate_search_collections(date_from:, date_to:)
         date_from = Time.at(date_from).utc.to_date
         date_to = Time.at(date_to).utc.to_date
-        qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.uniq
-        qc & solr.collections
+        qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.sort.uniq
+        solr.collections.select do |collection|
+          collection.start_with?(*qc)
+        end
       end
 
       #
@@ -288,17 +310,23 @@ module Sunspot
       #
       def collection_for(object)
         raise NoMethodError, "Method :time_routed_on on class #{object.class} is not defined" unless object.respond_to?(:time_routed_on)
+        raise NoMethodError, "Method :collection_postfix on class #{object.class} is not defined" unless object.respond_to?(:collection_postfix)
         raise TypeError, "Type mismatch :time_routed_on on class #{object.class} is not a DateTime" unless object.time_routed_on.is_a?(Time)
         ts = object.time_routed_on.utc
-        collection_name(year: ts.year, month: ts.month)
+        c_prefix = object.collection_postfix
+        collection_name(year: ts.year, month: ts.month, collection_postfix: c_prefix)
       end
 
       #
       # The collection name is based on base_name, year, month
       # String:: collection_name
       #
-      def collection_name(year:, month:)
-        "#{@config.collection_param('base_name')}_#{year}_#{month}"
+      def collection_name(year:, month:, collection_postfix: nil)
+        names = []
+        names << @config.collection['base_name']
+        names << "#{year}_#{month}"
+        names << collection_postfix unless collection_postfix.nil?
+        names.join('_')
       end
 
       #
@@ -389,11 +417,11 @@ module Sunspot
         c.solr.proxy = @config.proxy
         Session.new(c)
       end
-    end
 
-    def logger
-      @logger ||= Rails.logger
-      @logger ||= Logger.new(STDOUT)
+      def logger
+        @logger ||= ::Rails.logger
+        @logger ||= Logger.new(STDOUT)
+      end
     end
   end
 end
