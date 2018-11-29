@@ -4,7 +4,7 @@ describe Sunspot::Rails::Server do
   before :each do
     @server = Sunspot::Rails::Server.new
     @config = Sunspot::Rails::Configuration.new
-    allow(@server).to receive(:configuration){ @config }
+    allow(@server).to receive(:configuration) { @config }
     @solr_home = File.join(@config.solr_home)
   end
 

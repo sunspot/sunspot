@@ -9,7 +9,7 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   create_table :tbc_posts, force: :cascade do |t|
-    t.string :title
+    t.text :title
     t.string :type
     t.text :body
     t.timestamps null: true

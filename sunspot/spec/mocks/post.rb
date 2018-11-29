@@ -32,6 +32,7 @@ class Post < SuperClass
   end
 
   private
+
   attr_writer :category_ids, :custom_string, :custom_underscored_string, :custom_fl, :custom_time, :custom_boolean
 end
 
