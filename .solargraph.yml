@@ -1,1 +1,6 @@
 max_files : 0
+include:
+- "**/*.rb"
+exclude:
+- spec/**/*
+- test/**/*
