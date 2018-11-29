@@ -3,36 +3,6 @@ require File.expand_path('../lib/sunspot/rails/spec_helper', File.dirname(__FILE
 
 require 'byebug'
 
-class TbcPostWrong < Post
-end
-
-class TbcPostWrongTime < Post
-  def collection_postfix
-    'hr'
-  end
-  def time_routed_on
-    DateTime.new(2009, 10, 1, 12, 30, 0)
-  end
-end
-
-class TbcPost < Post
-  attr_accessor :collection_postfix
-
-  def collection_postfix
-    @collection_postfix || 'hr'
-  end
-
-  def time_routed_on
-    Time.new(2009, 10, 1, 12, 30, 0)
-  end
-
-  def self.select_valid_connection(collections)
-    collections.select do |c|
-      c.end_with?('_hr', '_rt')
-    end
-  end
-end
-
 describe Sunspot::SessionProxy::TbcSessionProxy do
   return unless ENV['SOLR_MODE'] == 'cloud'
 
@@ -111,5 +81,27 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
       "#{@base_name}_2009_10_hr",
       "#{@base_name}_2009_10_rt"
     )
+  end
+
+  it 'index some documents and search for one i a particular collection' do
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_b")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_c")
+
+    (1..10).each do |index|
+      post = TbcPost.create(title: "basic post on Historic #{index}")
+      @proxy.index(post)
+    end
+    @proxy.commit
+
+    post = TbcPost.create(title: 'rt simple doc')
+    post.collection_postfix = 'rt'
+    @proxy.index!(post)
+
+    ret_posts = @proxy.search(TbcPost) do
+      fulltext 'basic post'
+    end
+    byebug
+    expect(ret_posts.hits.lenght).to be > 0
   end
 end

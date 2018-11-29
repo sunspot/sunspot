@@ -189,21 +189,21 @@ module Sunspot
       #
       # If search_collections is empty we search on the latest collection
       def new_search(*types, &block)
-        search = session.new_search(*types, &block)
-        return search if search_collections.empty?
+        r_search = session.new_search(*types, &block)
+        return r_search if search_collections.empty?
 
         # filter all valid collections
-        valid_collections = calculate_valid_connections(*types)
+        valid_collections = calculate_valid_collections(*types)
 
         # build the search
         unless valid_collections.empty?
-          search.build do
+          r_search.build do
             adjust_solr_params do |params|
               params[:collection] = valid_collections.join(',')
             end
           end
         end
-        search
+        r_search
       end
 
       def calculate_valid_collections(*types)

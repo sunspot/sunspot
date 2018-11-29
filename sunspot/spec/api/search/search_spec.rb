@@ -8,14 +8,14 @@ describe Sunspot::Search do
     end
     expect(search.results.first.title).to eq('custom title')
   end
-  
+
   it 'should re-execute search' do
     post_1, post_2 = Post.new, Post.new
-    
+
     stub_results(post_1)
     search = session.search Post
     expect(search.results).to eq([post_1])
-    
+
     stub_results(post_2)
     search.execute!
     expect(search.results).to eq([post_2])

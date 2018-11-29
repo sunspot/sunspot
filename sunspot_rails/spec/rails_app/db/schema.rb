@@ -8,6 +8,13 @@ ActiveRecord::Schema.define(version: 0) do
     t.timestamps null: true
   end
 
+  create_table :tbc_posts, force: :cascade do |t|
+    t.string :title
+    t.string :type
+    t.text :body
+    t.timestamps null: true
+  end
+
   create_table :locations, force: :cascade do |t|
     t.float :lat
     t.float :lng
