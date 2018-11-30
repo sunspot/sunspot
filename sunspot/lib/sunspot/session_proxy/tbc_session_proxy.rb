@@ -42,7 +42,7 @@ module Sunspot
         config: Sunspot::Configuration.build,
         date_from: default_init_date,
         date_to: default_end_date,
-        collections: nil
+        fn_collection_filter: ->(collections) { collections } # predicate filter for collection
       )
         @config = config
         @date_from = date_from
@@ -50,7 +50,7 @@ module Sunspot
         @faulty_hosts = {}
         @host_index = 0
         @solr = AdminSession.new(config)
-        @collections = collections
+        @fn_collection_filter = fn_collection_filter
       end
 
       #
@@ -78,9 +78,11 @@ module Sunspot
       # or the given collections in case are present
       #
       def search_collections
-        @collections || calculate_search_collections(
-          date_from: @date_from,
-          date_to: @date_to
+        @fn_collection_filter.call(
+          calculate_search_collections(
+            date_from: @date_from,
+            date_to: @date_to
+          )
         )
       end
 
@@ -207,15 +209,15 @@ module Sunspot
       end
 
       def calculate_valid_collections(*types)
+        searched_collections = search_collections
         valid_collections = []
-        sc = search_collections
         types.each do |type|
           # if the type support :select_valid_connection
           # use it to select the collection involved
-          if type.respond_to?(:select_valid_connection)
-            valid_collections += type.select_valid_connection(sc)
+          if type.method_defined?(:select_valid_collections)
+            valid_collections += type.select_valid_collections(searched_collections)
           else
-            valid_collections += sc
+            valid_collections += searched_collections
           end
         end
         valid_collections.uniq
@@ -320,11 +322,10 @@ module Sunspot
       #
       def collection_for(object)
         raise NoMethodError, "Method :time_routed_on on class #{object.class} is not defined" unless object.respond_to?(:time_routed_on)
-        raise NoMethodError, "Method :collection_postfix on class #{object.class} is not defined" unless object.respond_to?(:collection_postfix)
-        raise TypeError, "Type mismatch :time_routed_on on class #{object.class} is not a DateTime" unless object.time_routed_on.is_a?(Time)
+        raise TypeError, "Type mismatch :time_routed_on on class #{object.class} is not a Time" unless object.time_routed_on.is_a?(Time)
         ts = object.time_routed_on.utc
-        c_prefix = object.collection_postfix
-        collection_name(year: ts.year, month: ts.month, collection_postfix: c_prefix)
+        c_postfix = object.collection_postfix if object.respond_to?(:collection_postfix)
+        collection_name(year: ts.year, month: ts.month, collection_postfix: c_postfix)
       end
 
       #
@@ -335,7 +336,7 @@ module Sunspot
         names = []
         names << @config.collection['base_name']
         names << "#{year}_#{month}"
-        names << collection_postfix unless collection_postfix.nil?
+        names << collection_postfix if collection_postfix
         names.join('_')
       end
 
@@ -345,7 +346,9 @@ module Sunspot
       #
       def using_collection_session(objects)
         grouped_objects = Hash.new { |h, k| h[k] = [] }
-        objects.flatten.each { |object| grouped_objects[session_for(object)] << object }
+        objects.flatten.each do |object|
+          grouped_objects[session_for(object)] << object
+        end
         grouped_objects.each_pair do |session, group|
           yield(session, group)
         end

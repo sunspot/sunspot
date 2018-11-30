@@ -3,7 +3,6 @@ require File.expand_path('../lib/sunspot/rails/spec_helper', File.dirname(__FILE
 
 require 'byebug'
 
-
 class TbcPostWrong < Post
 end
 
@@ -23,8 +22,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
   before :all do
     @config = Sunspot::Configuration.build
     @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
-      date_from: Time.new(2009, 1),
-      date_to: Time.new(2010, 1)
+      date_from: Time.new(2009, 1, 1, 12),
+      date_to: Time.new(2010, 1, 1, 12),
+      fn_collection_filter: lambda do |collections|
+        collections.select { |c| c.end_with?('_hr', '_rt') }
+      end
     )
     @old_session ||= Sunspot.session
     @base_name = @config.collection['base_name']
@@ -46,31 +48,35 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
   end
 
   it 'simple indexing on good object' do
-    @proxy.index!(Post.new(title: 'basic post'))
+    @proxy.index!(Post.create(title: 'basic post'))
   end
 
   it 'collections shoud contains the current one' do
-    post = Post.new(title: 'basic post')
+    post = Post.create(title: 'basic post', created_at: Time.new(2009, 10, 1, 12))
     ts = post.time_routed_on
     @proxy.index!(post)
     c_name = @proxy.send(:collection_name, year: ts.year, month: ts.month)
+    ts_start = ts - 1.month
+    ts_end = ts + 1.month
     collections = @proxy.send(
       :calculate_search_collections,
-      date_from: Time.new(2009, 8),
-      date_to: Time.new(2010, 1)
+      date_from: ts_start,
+      date_to: ts_end
     )
-    expect(collections.include?("#{c_name}_#{post.collection_postfix}")).to be true
+    expect(collections).to include("#{c_name}_#{post.collection_postfix}")
   end
 
   it 'check valid collection for Post' do
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_b")
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_c")
-    post = Post.new(title: 'basic post')
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_a")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_b")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_c")
+    post = Post.create(title: 'basic post', created_at: Time.new(2009, 10, 1, 12))
     @proxy.index!(post)
     supported = @proxy.calculate_valid_collections(Post)
+
     expect(supported).to include("#{@base_name}_2009_10_hr")
     expect(supported).not_to include(
+      "#{@base_name}_2009_10_rt",
       "#{@base_name}_2009_10_a",
       "#{@base_name}_2009_10_b",
       "#{@base_name}_2009_10_c"
@@ -80,8 +86,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
   it 'index two documents and retrieve one in hr type collection' do
     @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_hr")
     @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_rt")
-    post_a = Post.new(title: 'basic post on Historic')
-    post_b = Post.new(title: 'basic post on Realtime')
+    post_a = Post.create(title: 'basic post on Historic', created_at: Time.new(2009, 10, 1, 12))
+    post_b = Post.create(title: 'basic post on Realtime', created_at: Time.new(2009, 10, 1, 12))
     post_b.collection_postfix = 'rt'
 
     @proxy.index!([post_a, post_b])
@@ -99,8 +105,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
 
   it 'index some documents and search for one i a particular collection' do
     # destroy dest collections
-    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_hr")
-    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_rt")
+    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_08_hr")
+    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_08_rt")
 
     # create fake collections
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
@@ -108,19 +114,23 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_c")
 
     (1..10).each do |index|
-      post = Post.create(body: "basic post on Historic #{index}", created_at: Time.new(2009, 8))
+      post = Post.create(
+        body: "basic post on Historic #{index}",
+        created_at: Time.new(2009, 8, 1, 12)
+      )
       @proxy.index(post)
     end
     @proxy.commit
 
-    post = Post.create(body: 'rt simple doc', created_at: Time.new(2009, 8))
+    post = Post.create(body: 'rt simple doc', created_at: Time.new(2009, 8, 1, 12))
     post.collection_postfix = 'rt'
     @proxy.index!(post)
 
     posts_hr = @proxy.search(Post) { fulltext 'basic post' }
     posts_rt = @proxy.search(Post) { fulltext 'rt simple' }
 
-    expect(posts_hr.hits.lenght).to be eq(10)
-    expect(posts_rt.hits.lenght).to be eq(1)
+    byebug
+    expect(posts_hr.hits.size).to be eq(10)
+    expect(posts_rt.hits.size).to be eq(1)
   end
 end

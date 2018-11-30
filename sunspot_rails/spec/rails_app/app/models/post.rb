@@ -14,7 +14,7 @@ class Post < ActiveRecord::Base
   }
 
   def time_routed_on
-    DateTime.new(year: created_at.year, month: created_at.month, day: created_at.day)
+    created_at.to_time
   end
 
   def collection_postfix
