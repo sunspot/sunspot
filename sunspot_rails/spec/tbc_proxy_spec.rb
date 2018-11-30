@@ -21,6 +21,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
 
   before :all do
     @config = Sunspot::Configuration.build
+    @base_name = @config.collection['base_name']
+    @old_session ||= Sunspot.session
+  end
+
+  before :each do
     @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
@@ -28,8 +33,6 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
         collections.select { |c| c.end_with?('_hr', '_rt') }
       end
     )
-    @old_session ||= Sunspot.session
-    @base_name = @config.collection['base_name']
     Sunspot.session = @proxy.session
   end
 
@@ -76,7 +79,6 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
 
     expect(supported).to include("#{@base_name}_2009_10_hr")
     expect(supported).not_to include(
-      "#{@base_name}_2009_10_rt",
       "#{@base_name}_2009_10_a",
       "#{@base_name}_2009_10_b",
       "#{@base_name}_2009_10_c"
@@ -129,8 +131,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
     posts_hr = @proxy.search(Post) { fulltext 'basic post' }
     posts_rt = @proxy.search(Post) { fulltext 'rt simple' }
 
-    byebug
-    expect(posts_hr.hits.size).to be eq(10)
-    expect(posts_rt.hits.size).to be eq(1)
+    expect(posts_hr.hits.size).to eq(10)
+    expect(posts_rt.hits.size).to eq(1)
   end
 end
