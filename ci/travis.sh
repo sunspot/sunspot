@@ -62,6 +62,8 @@ stop_solr_server() {
 
   # cleaning
   if [ "${CLOUD_MODE}" = true ]; then
+    rm -rf ../sunspot_rails/spec/rails_app/tmp/
+    rm -rf solr/server/solr/base_*_shard*_replica1/
     rm -rf solr/server/solr/default_shard1_replica1/
     rm -rf solr/server/solr/development_shard1_replica1/
     rm -rf solr/server/solr/test_shard1_replica1/

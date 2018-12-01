@@ -16,9 +16,7 @@ class TbcPostWrongTime < Post
 end
 
 
-describe Sunspot::SessionProxy::TbcSessionProxy do
-  return unless ENV['SOLR_MODE'] == 'cloud'
-
+describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   before :all do
     @config = Sunspot::Configuration.build
     @base_name = @config.collection['base_name']
