@@ -1,5 +1,4 @@
 require File.join(File.dirname(__FILE__), 'post')
-require File.join(File.dirname(__FILE__), 'tbc_post')
 
 module MockAdapter
   class InstanceAdapter < Sunspot::Adapters::InstanceAdapter
