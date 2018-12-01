@@ -33,7 +33,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
         collections.select { |c| c.end_with?('_hr', '_rt') }
       end
     )
-    Sunspot.session = @proxy.session
+    Sunspot.session = @proxy
   end
 
   after :all do
@@ -133,5 +133,21 @@ describe Sunspot::SessionProxy::TbcSessionProxy do
 
     expect(posts_hr.hits.size).to eq(10)
     expect(posts_rt.hits.size).to eq(1)
+  end
+
+  it 'create documents and retrieve it using Post.search method' do
+    # creation phase
+    (1..10).each do |index|
+      post = Post.create(
+        body: "basic post on Historic #{index}",
+        created_at: Time.new(2009, 8, 1, 12)
+      )
+      @proxy.index(post)
+    end
+    @proxy.commit
+
+    # retrieving phase
+    posts = Post.search { fulltext 'basic' }
+    expect(posts.hits.size).to be >= 10
   end
 end
