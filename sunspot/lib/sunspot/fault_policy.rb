@@ -14,10 +14,7 @@ module Sunspot
     #
     def take_hostname
       # takes all the configured nodes + that one that are derived by solr live config
-      hostnames = []
-      hostnames << self.solr.live_nodes if self.solr.live_nodes.kind_of?(Array)
-      hostnames << seed_hosts
-      hostnames = hostnames
+      hostnames = (self.solr.live_nodes + seed_hosts)
                   .flatten
                   .uniq
                   .reject { |h| is_faulty(h) }
