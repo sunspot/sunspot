@@ -53,7 +53,7 @@ module Sunspot
         class <<conf
           def hostname
             return solr.hostnames[0] unless solr.hostnames.empty?
-            "locahost"
+            'locahost'
           end
 
           def hostnames; solr.hostnames; end

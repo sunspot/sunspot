@@ -67,7 +67,8 @@ module Sunspot
     # Array:: collections
     def live_nodes(force: false)
       with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
-        resp['cluster']['live_nodes'].map do |node|
+        nodes = resp['cluster']['live_nodes']
+        nodes.map do |node|
           host_port = node.split(':')
           if host_port.size == 2
             port = host_port.last.gsub('_solr', '')
