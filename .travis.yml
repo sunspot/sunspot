@@ -24,6 +24,7 @@ env:
   - GEM=sunspot UPDATE_FORMAT=json
   - GEM=sunspot_rails
   - GEM=sunspot_solr
+  - SOLR_MODE=cloud GEM=sunspot_rails
 
 matrix:
   allow_failures:
