@@ -134,6 +134,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   it 'creates some documents and retrieves it using Post.search method' do
+    # create fake collections
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_rt")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2015_08_hr")
+
     # creation phase
     (1..10).each do |index|
       post = Post.create(
