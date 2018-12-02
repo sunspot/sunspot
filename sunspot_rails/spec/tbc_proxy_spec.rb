@@ -90,7 +90,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     post_b = Post.create(title: 'basic post on Realtime', created_at: Time.new(2009, 10, 1, 12))
     post_b.collection_postfix = 'rt'
 
-    @proxy.index!([post_a, post_b])
+    @proxy.index!(post_a)
+    @proxy.index!(post_b)
     collections = @proxy.send(
       :calculate_search_collections,
       date_from: Time.new(2009, 8),
