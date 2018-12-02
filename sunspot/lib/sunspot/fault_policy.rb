@@ -18,7 +18,8 @@ module Sunspot
       hostnames = tmp_hosts
                   .concat(seed_hosts)
                   .uniq
-                  .reject { |h| is_faulty(h) }.sort
+                  .reject { |h| is_faulty(h) }
+                  .sort
 
       # round robin policy
       # hostname format: <ip|hostname> | <ip|hostname>:<port>
