@@ -133,7 +133,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     expect(posts_rt.hits.size).to eq(1)
   end
 
-  it 'create documents and retrieve it using Post.search method' do
+  it 'creates some documents and retrieves it using Post.search method' do
     # creation phase
     (1..10).each do |index|
       post = Post.create(
