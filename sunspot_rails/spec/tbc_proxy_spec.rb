@@ -24,6 +24,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   before :each do
+    sleep 1
     @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
@@ -121,11 +122,13 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       )
       @proxy.index(post)
     end
-    @proxy.commit
 
     post = Post.create(body: 'rt simple doc', created_at: Time.new(2009, 8, 1, 12))
     post.collection_postfix = 'rt'
     @proxy.index!(post)
+    @proxy.commit
+
+    sleep 1
 
     posts_hr = @proxy.search(Post) { fulltext 'basic post' }
     posts_rt = @proxy.search(Post) { fulltext 'rt simple' }
