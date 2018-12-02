@@ -14,10 +14,11 @@ module Sunspot
     #
     def take_hostname
       # takes all the configured nodes + that one that are derived by solr live config
-      hostnames = (@solr.live_nodes + seed_hosts)
+      tmp_hosts = @solr.live_nodes.dup
+      hostnames = tmp_hosts
+                  .concat(seed_hosts)
                   .uniq
-                  .reject { |h| is_faulty(h) }
-                  .sort
+                  .reject { |h| is_faulty(h) }.sort
 
       # round robin policy
       # hostname format: <ip|hostname> | <ip|hostname>:<port>
