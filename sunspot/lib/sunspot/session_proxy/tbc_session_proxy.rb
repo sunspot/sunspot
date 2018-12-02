@@ -233,7 +233,9 @@ module Sunspot
       # See Sunspot.search
       #
       def search(*types, &block)
-        new_search(*types, &block).execute
+        with_exception_handling do
+          new_search(*types, &block).execute
+        end
       end
 
       def more_like_this(object, &block)
