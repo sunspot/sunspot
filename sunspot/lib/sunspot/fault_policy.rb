@@ -14,7 +14,7 @@ module Sunspot
     #
     def take_hostname
       # takes all the configured nodes + that one that are derived by solr live config
-      hostnames = [self.solr.live_nodes]
+      hostnames = self.solr.live_nodes
                   .concat([seed_hosts])
                   .flatten
                   .uniq
