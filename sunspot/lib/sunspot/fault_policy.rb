@@ -27,7 +27,7 @@ module Sunspot
       if current_host.size == 2
         [current_host.first, current_host.last.to_i]
       else
-        current_host + [@config.port]
+        current_host + [self.config.port]
       end
     end
 
@@ -59,12 +59,12 @@ module Sunspot
 
     def seed_hosts
       # uniform seed host
-      @seed_hosts ||= @config.hostnames.map do |h|
+      @seed_hosts ||= self.config.hostnames.map do |h|
         h = h.split(':')
         if h.size == 2
           "#{h.first}:#{h.last.to_i}"
         else
-          "#{h.first}:#{@config.port}"
+          "#{h.first}:#{self.config.port}"
         end
       end
     end
