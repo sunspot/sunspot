@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
-require '../fault_policy'
+require File.join(File.dirname(__FILE__), '..', 'fault_policy')
 
 module Sunspot
   module SessionProxy
