@@ -68,7 +68,6 @@ module Sunspot
     def live_nodes(force: false)
       with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
         nodes = resp['cluster']['live_nodes']
-        puts nodes.inspect
         nodes.map do |node|
           host_port = node.split(':')
           if host_port.size == 2
@@ -126,21 +125,14 @@ module Sunspot
 
     # Helper function for solr caching
     def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
-      if defined?(::Rails.cache)
-        ::Rails.cache.delete(key) if force
-        ::Rails.cache.fetch(key, expires_in: @refresh_every) do
-          yield(connection.get(:collections, params: { action: action }))
-        end
-      else
-        if force || (Time.now - @initialized_at) > @refresh_every
-          @initialized_at = Time.now
-          @cached    ||= {}
-          @cached[key] = nil
-        end
-        @cached      ||= {}
-        @cached[key] ||=
-          yield(connection.get(:collections, params: { action: action }))
+      if force || (Time.now - @initialized_at) > @refresh_every
+        @initialized_at = Time.now
+        @cached    ||= {}
+        @cached[key] = nil
       end
+      @cached      ||= {}
+      @cached[key] ||=
+        yield(connection.get(:collections, params: { action: action }))
     end
   end
 end
