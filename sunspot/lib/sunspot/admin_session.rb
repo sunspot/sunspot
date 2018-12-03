@@ -77,7 +77,7 @@ module Sunspot
           end
         end
       end
-      return [] unless nodes.is_a?(Array)
+      return [] unless list_nodes.is_a?(Array)
       list_nodes
     end
 
