@@ -66,9 +66,8 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def live_nodes(force: false)
-      with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
-        nodes = resp['cluster']['live_nodes']
-        nodes.map do |node|
+      list_nodes = with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
+        resp['cluster']['live_nodes'].map do |node|
           host_port = node.split(':')
           if host_port.size == 2
             port = host_port.last.gsub('_solr', '')
@@ -78,6 +77,8 @@ module Sunspot
           end
         end
       end
+      return [] unless nodes.is_a?(Array)
+      list_nodes
     end
 
     #

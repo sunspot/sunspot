@@ -10,7 +10,7 @@ shared_examples_for 'geohash query' do
 
   it 'searches for nearby points with non-Float arguments' do
     search do
-      with(:coordinates).near(BigDecimal.new('40.7'), BigDecimal.new('-73.5'))
+      with(:coordinates).near(BigDecimal('40.7'), BigDecimal('-73.5'))
     end
     expect(connection).to have_last_search_including(:q, build_geo_query)
   end
