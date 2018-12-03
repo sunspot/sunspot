@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'logger'
+
 module Sunspot
   class AdminSession < Session
     #
@@ -77,8 +79,13 @@ module Sunspot
           end
         end
       end
-      return [] unless list_nodes.is_a?(Array)
-      list_nodes
+
+      if list_nodes.is_a?(Array)
+        logger.error('error retrieving live nodes from solr')
+        []
+      else
+        list_nodes
+      end
     end
 
     #
@@ -152,6 +159,11 @@ module Sunspot
       end
       @cached      ||= {}
       @cached[key] ||= yield
+    end
+
+    def logger
+      @logger ||= ::Rails.logger
+      @logger ||= Logger.new(STDOUT)
     end
   end
 end

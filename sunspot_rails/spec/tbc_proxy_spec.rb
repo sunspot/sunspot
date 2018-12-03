@@ -1,8 +1,6 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 require File.expand_path('../lib/sunspot/rails/spec_helper', File.dirname(__FILE__))
 
-require 'byebug'
-
 class TbcPostWrong < Post
 end
 
@@ -14,7 +12,6 @@ class TbcPostWrongTime < Post
     DateTime.new(2009, 10, 1, 12, 30, 0)
   end
 end
-
 
 describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   before :all do

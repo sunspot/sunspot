@@ -53,19 +53,17 @@ module Sunspot
       @faulty_hosts[hostname][0] += 1
       @faulty_hosts[hostname][1]  = Time.now
 
-      if is_faulty(hostname)
-        logger.error "Putting #{hostname} in fault state"
-      end
+      logger.error "Putting #{hostname} in fault state" if is_faulty(hostname)
     end
 
     def seed_hosts
       # uniform seed host
-      @seed_hosts ||= self.config.hostnames.map do |h|
+      @seed_hosts ||= config.hostnames.map do |h|
         h = h.split(':')
         if h.size == 2
           "#{h.first}:#{h.last.to_i}"
         else
-          "#{h.first}:#{self.config.port}"
+          "#{h.first}:#{config.port}"
         end
       end
     end
