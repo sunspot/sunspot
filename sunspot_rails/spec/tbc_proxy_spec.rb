@@ -24,7 +24,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   before :each do
-    sleep 1
+    sleep 3
     @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
@@ -91,8 +91,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     post_b = Post.create(title: 'basic post on Realtime', created_at: Time.new(2009, 10, 1, 12))
     post_b.collection_postfix = 'rt'
 
-    @proxy.index!(post_a)
-    @proxy.index!(post_b)
+    @proxy.index!([post_a, post_b])
     collections = @proxy.send(
       :calculate_search_collections,
       date_from: Time.new(2009, 8),
@@ -123,13 +122,13 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       @proxy.index(post)
     end
 
+    sleep 1
     post = Post.create(body: 'rt simple doc', created_at: Time.new(2009, 8, 1, 12))
     post.collection_postfix = 'rt'
     @proxy.index!(post)
     @proxy.commit
 
     sleep 1
-
     posts_hr = @proxy.search(Post) { fulltext 'basic post' }
     posts_rt = @proxy.search(Post) { fulltext 'rt simple' }
 
@@ -153,6 +152,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     end
     @proxy.commit
 
+    sleep 1
     # retrieving phase
     posts = Post.search { fulltext 'basic' }
     expect(posts.hits.size).to be >= 10

@@ -125,14 +125,35 @@ module Sunspot
 
     # Helper function for solr caching
     def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
+      if defined?(::Rails.cache)
+        rails_cache(key, force) do
+          yield(connection.get(:collections, params: { action: action }))
+        end
+      else
+        simple_cache(key, force) do
+          yield(connection.get(:collections, params: { action: action }))
+        end
+      end
+    end
+
+    def rails_cache(key, force)
+      begin
+        ::Rails.cache.delete(key) if force
+        ::Rails.cache.fetch(key, expires_in: @refresh_every) do
+          yield
+        end
+      rescue
+        simple_cache(key, force) { yield }
+    end
+
+    def simple_cache(key, force)
       if force || (Time.now - @initialized_at) > @refresh_every
         @initialized_at = Time.now
         @cached    ||= {}
         @cached[key] = nil
       end
       @cached      ||= {}
-      @cached[key] ||=
-        yield(connection.get(:collections, params: { action: action }))
+      @cached[key] ||= yield
     end
   end
 end
