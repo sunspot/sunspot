@@ -137,11 +137,8 @@ module Sunspot
     end
 
     def rails_cache(key, force)
-      begin
-        ::Rails.cache.delete(key) if force
-        ::Rails.cache.fetch(key, expires_in: @refresh_every) do
-          yield
-        end
+      ::Rails.cache.delete(key) if force
+      ::Rails.cache.fetch(key, expires_in: @refresh_every) { yield }
       rescue
         simple_cache(key, force) { yield }
     end
