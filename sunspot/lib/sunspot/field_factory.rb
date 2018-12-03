@@ -7,7 +7,7 @@ module Sunspot
   # adds it into the Solr document for indexing.
   #
   module FieldFactory #:nodoc:all
-    # 
+    #
     # Base class for field factories.
     #
     class Abstract

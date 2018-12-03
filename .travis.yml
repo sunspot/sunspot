@@ -7,16 +7,13 @@ cache:
     - sunspot_solr/vendor/bundle
     - sunspot_rails/vendor/bundle
 
-bundler_args: --retry 3
-
 rvm:
   # - 1.9.3
   # - 2.0.0
   - 2.1.0
   - 2.3.1
   - 2.4.3
-  - 2.5.0
-  - 2.6.0
+  - 2.5.1
   - ruby-head
   # - rbx-2.0
   # - jruby

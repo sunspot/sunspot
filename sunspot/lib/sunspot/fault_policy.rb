@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'logger'
 
 module Sunspot
-
   #
   # Implement Fault Policy:
   # Takes server using a Round Robin policy from the current live nodes
@@ -19,7 +20,6 @@ module Sunspot
                   .uniq
                   .reject { |h| is_faulty(h) }
                   .sort
-
       # round robin policy
       # hostname format: <ip|hostname> | <ip|hostname>:<port>
       @current_hostname = hostnames[@host_index]
