@@ -174,5 +174,38 @@ module Sunspot
         [@name, @type]
       end
     end
+
+    #
+    # ChildFieldFactories create child field instances based on setup,
+    # looking at the +child_documents+ directive inside +Sunspot.setup+ block.
+    #
+    class Child
+      def initialize(field)
+        @extractor = DataExtractor::AttributeExtractor.new(field)
+      end
+
+      def populate_document(document, model, options = {})
+        values = extract_value(model, options)
+        document.add_field(::RSolr::Document::CHILD_DOCUMENT_KEY, values, options)
+      end
+
+      def extract_value(model, options = {})
+        # TODO(ar3s3ru): how to handle incorrect field values?
+        values  = @extractor.value_for(model)
+        adapter = options[:adapter]
+        unless values.is_a? Array
+          raise 'Child documents field must be an Array of indexable documents'
+        end
+        if adapter.nil? || !adapter.respond_to?(:call)
+          raise 'No adapter function specified: needed to translate childs into indexable documents'
+        end
+        # TODO(ar3s3ru): .map could be inefficient space-wise, maybe use .map! instead?
+        values.map { |value| options[:adapter].call(value) }
+      end
+
+      def signature
+        [field, ::RSolr::Document::CHILD_DOCUMENT_KEY]
+      end
+    end
   end
 end

@@ -109,12 +109,25 @@ module Sunspot
       setup.all_field_factories.each do |field_factory|
         field_factory.populate_document(document, model)
       end
+      unless setup.child_field_factory.nil?
+        setup.child_field_factory.populate_document(
+          document,
+          model,
+          adapter: ->(child_model) { prepare_full_update(child_model) }
+        )
+      end
       document
     end
 
     def prepare_atomic_update(clazz, id, updates = {})
       document = document_for_atomic_update(clazz, id)
-      setup_for_class(clazz).all_field_factories.each do |field_factory|
+      setup = setup_for_class(clazz)
+      # Child documents must be re-indexed with parent at each update,
+      # otherwise Solr would discard them.
+      unless setup.child_field_factory.nil?
+        raise 'Objects with child documents can\'t perform atomic updates'
+      end
+      setup.all_field_factories.each do |field_factory|
         if updates.has_key?(field_factory.name)
           field_factory.populate_document(document, nil, value: updates[field_factory.name], update: :set)
         end
@@ -149,8 +162,8 @@ module Sunspot
     def document_for_atomic_update(clazz, id)
       if Adapters::InstanceAdapter.for(clazz)
         RSolr::Xml::Document.new(
-            id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
-            type: Util.superclasses_for(clazz).map(&:name)
+          id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
+          type: Util.superclasses_for(clazz).map(&:name)
         )
       end
     end

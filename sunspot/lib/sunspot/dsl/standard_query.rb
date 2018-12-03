@@ -10,6 +10,8 @@ module Sunspot
     #
     class StandardQuery < FieldQuery
       include Paginatable, Adjustable, Spellcheckable
+      include BlockJoin
+      include BlockJoin::JsonFaceting
 
       # Specify a phrase that should be searched as fulltext. Only +text+
       # fields are searched - see DSL::Fields.text

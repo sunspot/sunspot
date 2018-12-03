@@ -3,6 +3,7 @@ require 'time'
 require 'date'
 require 'enumerator'
 require 'cgi'
+require 'semantic'
 begin
   require 'rsolr'
 rescue LoadError

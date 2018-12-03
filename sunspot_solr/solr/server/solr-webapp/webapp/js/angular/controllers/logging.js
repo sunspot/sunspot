@@ -24,8 +24,8 @@ var format_time_content = function( time, timeZone ) {
 }
 
 solrAdminApp.controller('LoggingController',
-  function($scope, $timeout, $cookies, Logging){
-    $scope.resetMenu("logging", true);
+  function($scope, $timeout, $cookies, Logging, Constants){
+    $scope.resetMenu("logging", Constants.IS_ROOT_PAGE);
     $scope.timezone = $cookies.logging_timezone || "Local";
     $scope.refresh = function() {
       Logging.events(function(data) {
@@ -71,7 +71,11 @@ solrAdminApp.controller('LoggingController',
         }
       */
       });
-      $timeout($scope.refresh, 10000);
+      $scope.timeout = $timeout($scope.refresh, 10000);
+      var onRouteChangeOff = $scope.$on('$routeChangeStart', function() {
+        $timeout.cancel($scope.timeout);
+        onRouteChangeOff();
+      });
     };
     $scope.refresh();
 

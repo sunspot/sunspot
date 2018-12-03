@@ -184,7 +184,7 @@ describe 'faceting', :type => :search do
   end
 
   it 'returns date range facet' do
-    stub_date_facet(:published_at_dt, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
+    stub_date_facet(:published_at_dt, 60*60*24, ['2009-07-08T04:00:00Z', 2, '2009-07-07T04:00:00Z', 1])
     start_time = Time.utc(2009, 7, 7, 4)
     end_time = start_time + 2*24*60*60
     result = session.search(Post) { facet(:published_at, :time_range => start_time..end_time) }
@@ -194,7 +194,7 @@ describe 'faceting', :type => :search do
   end
 
   it 'returns date range facet sorted by count' do
-    stub_date_facet(:published_at_dt, 60*60*24, '2009-07-08T04:00:00Z' => 2, '2009-07-07T04:00:00Z' => 1)
+    stub_date_facet(:published_at_dt, 60*60*24, ['2009-07-08T04:00:00Z', 2, '2009-07-07T04:00:00Z', 1])
     start_time = Time.utc(2009, 7, 7, 4)
     end_time = start_time + 2*24*60*60
     result = session.search(Post) { facet(:published_at, :time_range => start_time..end_time, :sort => :count) }

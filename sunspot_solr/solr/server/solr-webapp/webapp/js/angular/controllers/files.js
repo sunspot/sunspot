@@ -16,16 +16,16 @@
 */
 
 var contentTypeMap = { xml : 'text/xml', html : 'text/html', js : 'text/javascript', json : 'application/json', 'css' : 'text/css' };
-var languages = {js: "javascript", xml:"xml", xsl:"xml", vm: "xml", html: "xml", json: "text", css: "css"};
+var languages = {js: "javascript", xml:"xml", xsl:"xml", vm: "xml", html: "xml", json: "json", css: "css"};
 
 solrAdminApp.controller('FilesController',
-    function($scope, $rootScope, $routeParams, $location, Files) {
-        $scope.resetMenu("files");
+    function($scope, $rootScope, $routeParams, $location, Files, Constants) {
+        $scope.resetMenu("files", Constants.IS_COLLECTION_PAGE);
 
         $scope.file = $location.search().file;
         $scope.content = null;
 
-        $scope.baseurl = $location.protocol()+ "://" + $location.host() + ":" + $location.port();
+        $scope.baseurl = $location.absUrl().substr(0,$location.absUrl().indexOf("#")); // Including /solr/ context
 
         $scope.refresh = function () {
 
@@ -38,7 +38,10 @@ solrAdminApp.controller('FilesController',
                 }
 
                 Files.list(params, function (data) {
-                    for (var file in data.files) {
+                    var filenames = Object.keys(data.files);
+                    filenames.sort();
+                    for (var i in filenames) {
+                        var file = filenames[i];
                         var filedata = data.files[file];
                         var state = undefined;
                         var children = undefined;
@@ -68,16 +71,21 @@ solrAdminApp.controller('FilesController',
             process("", $scope.tree);
 
             if ($scope.file && $scope.file != '' && $scope.file.split('').pop()!='/') {
-                var extension = $scope.file.match( /\.(\w+)$/)[1] || '';
+                var extension;
+                if ($scope.file == "managed-schema") {
+                  extension = contentTypeMap['xml'];
+                } else {
+                  extension = $scope.file.match( /\.(\w+)$/)[1] || '';
+                }
                 var contentType = (contentTypeMap[extension] || 'text/plain' ) + ';charset=utf-8';
 
                 Files.get({core: $routeParams.core, file: $scope.file, contentType: contentType}, function(data) {
                     $scope.content = data.data;
-                    $scope.url = $scope.baseurl + data.config.url + "?" + $.param(data.config.params);
-                    if (contentType.indexOf("text/plain") && data.data.indexOf("<?xml") || data.data.indexOf("<!--")) {
+                    $scope.url = data.config.url + "?" + $.param(data.config.params);  // relative URL
+                    if (contentType.indexOf("text/plain") && (data.data.indexOf("<?xml")>=0) || data.data.indexOf("<!--")>=0) {
                         $scope.lang = "xml";
                     } else {
-                        $scope.lang = languages[extension] || "text";
+                        $scope.lang = languages[extension] || "txt";
                     }
                 });
             }

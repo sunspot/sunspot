@@ -352,6 +352,18 @@ ul
   display: none;
 }
 
+.exception
+{
+  background-color: #f00;
+  background-image: url( ../../img/ico/construction.png );
+  background-position: 10px 50%;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding: 10px;
+  padding-left: 35px;
+}
+
 #content-wrapper
 {
   margin-left: 150px;
@@ -722,3 +734,35 @@ pre.syntax .tex .formula
   -webkit-box-shadow: 1px 1px 0 #d8d8d8;
   color: #333;
 }
+
+.exception .show-exception {
+  margin-top: 4px;
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  color: #fff;
+}
+
+#exception .show-exception a:hover {
+  color: #333;
+}
+
+.other-ui-link {
+  margin: 0px;
+  position: absolute;
+  right: 0px;
+  top: -20px;
+}
+
+.other-ui-link span,
+.new-ui-warning span.help {
+  background-image: url( ../../img/ico/information-white.png );
+  right: 0px;
+  padding-left: 16px;
+}
+
+.other-ui-link a.ul {
+  text-decoration: underline;
+}
+

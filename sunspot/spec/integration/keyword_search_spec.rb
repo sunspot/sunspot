@@ -223,7 +223,7 @@ describe 'keyword search' do
           boost(1.5) { with(:average_rating).greater_than(3.0) }
         end
       end
-      expect(search.results).to eq(@posts)
+      expect(search.results.sort! { |a, b| a.id <=> b.id }).to eq(@posts)
       expect(search.hits[0].score).to be > search.hits[1].score
       expect(search.hits[1].score).to be > search.hits[2].score
     end
@@ -240,6 +240,10 @@ describe 'keyword search' do
       @search = Sunspot.search(Post) do
         keywords 'pepperoni sausage extra cheese', :minimum_match => 2
       end
+    end
+
+    it 'should add the q.op OR parameter to ensure minimum match is parsed' do
+      expect(@search.query.to_params[:'q.op']).to eq('OR')
     end
 
     it 'should match documents that contain the minimum_match number of search terms' do

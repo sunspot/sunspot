@@ -51,6 +51,14 @@ solrAdminApp.config([
         templateUrl: 'partials/cores.html',
         controller: 'CoreAdminController'
       }).
+      when('/~collections', {
+        templateUrl: 'partials/collections.html',
+        controller: 'CollectionsController'
+      }).
+      when('/~collections/:collection', {
+        templateUrl: 'partials/collections.html',
+        controller: 'CollectionsController'
+      }).
       when('/~threads', {
         templateUrl: 'partials/threads.html',
         controller: 'ThreadsController'
@@ -62,6 +70,10 @@ solrAdminApp.config([
       when('/:core', {
         templateUrl: 'partials/core_overview.html',
         controller: 'CoreOverviewController'
+      }).
+      when('/:core/collection-overview', {
+        templateUrl: 'partials/collection_overview.html',
+        controller: 'CollectionOverviewController'
       }).
       when('/:core/analysis', {
         templateUrl: 'partials/analysis.html',
@@ -97,6 +109,10 @@ solrAdminApp.config([
         templateUrl: 'partials/query.html',
         controller: 'QueryController'
       }).
+      when('/:core/stream', {
+        templateUrl: 'partials/stream.html',
+        controller: 'StreamController'
+      }).
       when('/:core/replication', {
         templateUrl: 'partials/replication.html',
         controller: 'ReplicationController'
@@ -109,9 +125,9 @@ solrAdminApp.config([
         templateUrl: 'partials/dataimport.html',
         controller: 'DataImportController'
       }).
-      when('/:core/schema-browser', {
-        templateUrl: 'partials/schema-browser.html',
-        controller: 'SchemaBrowserController'
+      when('/:core/schema', {
+        templateUrl: 'partials/schema.html',
+        controller: 'SchemaController'
       }).
       when('/:core/segments', {
         templateUrl: 'partials/segments.html',
@@ -121,9 +137,18 @@ solrAdminApp.config([
         redirectTo: '/'
       });
 }])
+.constant('Constants', {
+  IS_ROOT_PAGE: 1,
+  IS_CORE_PAGE: 2,
+  IS_COLLECTION_PAGE: 3,
+  ROOT_URL: "/"
+})
+.filter('uriencode', function() {
+  return window.encodeURIComponent;
+})
 .filter('highlight', function($sce) {
   return function(input, lang) {
-    if (lang && input && lang!="text") return hljs.highlight(lang, input).value;
+    if (lang && input && lang!="txt" && lang!="csv") return hljs.highlight(lang, input).value;
     return input;
   }
 })
@@ -137,6 +162,45 @@ solrAdminApp.config([
       $scope.$on('loadingStatusInactive', hide);
     }
   };
+})
+.directive('escapePressed', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 27) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.escapePressed);
+                });
+                event.preventDefault();
+            }
+        });
+    };
+})
+.directive('focusWhen', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      scope.$watch(attrs.focusWhen, function(value) {
+        if(value === true) {
+          $timeout(function() {
+            element[0].focus();
+          }, 100);
+        }
+      });
+    }
+  };
+})
+.directive('scrollableWhenSmall', function($window) {
+  return {
+    link: function(scope, element, attrs) {
+      var w = angular.element($window);
+
+      var checkFixedMenu = function() {
+        var shouldScroll = w.height() < (element.height() + $('#header').height() + 40);
+        element.toggleClass( 'scroll', shouldScroll);
+      };
+      w.bind('resize', checkFixedMenu);
+      w.bind('load', checkFixedMenu);
+    }
+  }
 })
 .filter('readableSeconds', function() {
     return function(input) {
@@ -185,10 +249,8 @@ solrAdminApp.config([
             browser.locale = match[1] + '_' + match[3];
         }
 
-        var result= ( input || 0 ).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+        return ( input || 0 ).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
             sep[ browser.locale ] || sep[ browser.language ] || sep['_']);
-        console.log(result);
-        return result;
     };
 })
 .filter('orderObjectBy', function() {
@@ -256,6 +318,9 @@ solrAdminApp.config([
     if (activeRequests == 0) {
       $rootScope.$broadcast('loadingStatusActive');
     }
+    if ($rootScope.exceptions[config.url]) {
+      delete $rootScope.exceptions[config.url];
+    }
     activeRequests++;
     config.timeout = 10000;
     return config || $q.when(config);
@@ -282,7 +347,7 @@ solrAdminApp.config([
     if (activeRequests == 0) {
       $rootScope.$broadcast('loadingStatusInactive');
     }
-    if (rejection.config.params.doNotIntercept) {
+    if (rejection.config.headers.doNotIntercept) {
         return rejection;
     }
     if (rejection.status === 0) {
@@ -293,7 +358,7 @@ solrAdminApp.config([
       var result = $http(rejection.config);
       return result;
     } else {
-      $rootScope.exception = rejection;
+      $rootScope.exceptions[rejection.config.url] = rejection.data.error;
     }
     return $q.reject(rejection);
   }
@@ -319,9 +384,21 @@ solrAdminApp.config([
     };
 });
 
-solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $location, Cores, System, Ping) {
-  $rootScope.hideException = function() {delete $rootScope.exception};
+solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $location, Cores, Collections, System, Ping, Constants) {
+
+  $rootScope.exceptions={};
+
+  $rootScope.toggleException = function() {
+    $scope.showException=!$scope.showException;
+  };
+
   $scope.refresh = function() {
+      $scope.cores = [];
+      $scope.collections = [];
+  }
+
+  $scope.refresh();
+  $scope.resetMenu = function(page, pageType) {
     Cores.list(function(data) {
       $scope.cores = [];
       var currentCoreName = $route.current.params.core;
@@ -329,26 +406,42 @@ solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $
       for (key in data.status) {
         var core = data.status[key];
         $scope.cores.push(core);
-        if (core.name == currentCoreName) {
+        if ((!$scope.isSolrCloud || pageType == Constants.IS_CORE_PAGE) && core.name == currentCoreName) {
             $scope.currentCore = core;
         }
       }
+      $scope.showInitFailures = Object.keys(data.initFailures).length>0;
+      $scope.initFailures = data.initFailures;
     });
-    System.get(function(data) {
-      $scope.isCloudEnabled = data.mode.match( /solrcloud/i )
-    });
-  };
-  $scope.refresh();
 
-  $scope.resetMenu = function(page, isMainPage) {
+    System.get(function(data) {
+      $scope.isCloudEnabled = data.mode.match( /solrcloud/i );
+
+      if ($scope.isCloudEnabled) {
+        Collections.list(function (data) {
+          $scope.collections = [];
+          var currentCollectionName = $route.current.params.core;
+          delete $scope.currentCollection;
+          for (key in data.collections) {
+            var collection = {name: data.collections[key]};
+            $scope.collections.push(collection);
+            if (pageType == Constants.IS_COLLECTION_PAGE && collection.name == currentCollectionName) {
+              $scope.currentCollection = collection;
+            }
+          }
+        })
+      }
+
+    });
+
     $scope.showingLogging = page.lastIndexOf("logging", 0) === 0;
     $scope.showingCloud = page.lastIndexOf("cloud", 0) === 0;
     $scope.page = page;
-    if (isMainPage) delete $scope.currentCore;
   };
 
   $scope.ping = function() {
     Ping.ping({core: $scope.currentCore.name}, function(data) {
+      $scope.showPing = true;
       $scope.pingMS = data.responseHeader.QTime;
     });
     // @todo .attr( 'title', '/admin/ping is not configured (' + xhr.status + ': ' + error_thrown + ')' );
@@ -357,8 +450,19 @@ solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $
   $scope.dumpCloud = function() {
       $scope.$broadcast("cloud-dump");
   }
-});
 
+  $scope.showCore = function(core) {
+    $location.url("/" + core.name);
+  }
+
+  $scope.showCollection = function(collection) {
+    $location.url("/" + collection.name + "/collection-overview")
+  }
+
+  $scope.$on('$routeChangeStart', function() {
+      $rootScope.exceptions = {};
+  });
+});
 
 
 (function(window, angular, undefined) {
@@ -623,8 +727,6 @@ var solr_admin = function( app_config )
         // load cores (indexInfo = false
         success : function( response )
         {
-          check_fixed_menu();
-          $( window ).resize( check_fixed_menu );
 
           var system_url = config.solr_path + '/admin/info/system?wt=json';
           $.ajax
@@ -693,21 +795,5 @@ var solr_admin = function( app_config )
               },
               error : function()
               {
-                show_global_error
-                (
-                  '<div class="message"><p>Unable to load environment info from <code>' + system_url.esc() + '</code>.</p>' +
-                  '<p>This interface requires that you activate the admin request handlers in all SolrCores by adding the ' +
-                  'following configuration to your <code>solrconfig.xml</code>:</p></div>' + "\n" +
-
-                  '<div class="code"><pre class="syntax language-xml"><code>' +
-                  '<!-- Admin Handlers - This will register all the standard admin RequestHandlers. -->'.esc() + "\n" +
-                  '<requestHandler name="/admin/" class="solr.admin.AdminHandlers" />'.esc() +
-                  '</code></pre></div>'
-                );
   };
-
-  check_fixed_menu = function check_fixed_menu()
-  {
-    $( '#wrapper' ).toggleClass( 'scroll', $( window ).height() < $( '#menu-wrapper' ).height() + $( '#header' ).height() + 40 );
-  }
 */
