@@ -81,10 +81,10 @@ module Sunspot
       end
 
       if list_nodes.is_a?(Array)
+        list_nodes
+      else
         logger.error('error retrieving live nodes from solr')
         []
-      else
-        list_nodes
       end
     end
 
