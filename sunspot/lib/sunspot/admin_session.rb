@@ -52,7 +52,7 @@ module Sunspot
     end
 
     def connection
-      @connection ||= session.connection
+      session.connection
     end
 
     #
@@ -83,7 +83,7 @@ module Sunspot
         end
       end
 
-      raise 'error retrieving live nodes from solr' unless list_nodes.is_a?(Array)
+      return [] unless list_nodes.is_a?(Array)
       list_nodes
     end
 
@@ -134,11 +134,11 @@ module Sunspot
     def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
       if defined?(::Rails.cache)
         rails_cache(key, force) do
-          yield(connection.get(:collections, params: { action: action }))
+          yield(retrieve_info_solr(action))
         end
       else
         simple_cache(key, force) do
-          yield(connection.get(:collections, params: { action: action }))
+          yield(retrieve_info_solr(action))
         end
       end
     end
@@ -159,6 +159,23 @@ module Sunspot
       end
       @cached      ||= {}
       @cached[key] ||= yield
+    end
+
+    def retrieve_info_solr(action)
+      retries = 0
+      max_retries = 3
+      begin
+        connection.get(:collections, params: { action: action })
+        rescue
+          if retries < max_retries
+            retries += 1
+            sleep_for = 2**retries
+            sleep(sleep_for)
+            retry
+          else
+            raise e
+          end
+      end
     end
   end
 end
