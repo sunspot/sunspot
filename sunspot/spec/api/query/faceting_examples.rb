@@ -220,14 +220,14 @@ shared_examples_for "facetable query" do
       search do |query|
         query.facet :published_at
       end
-      expect(connection).not_to have_last_search_with(:"facet.date")
+      expect(connection).not_to have_last_search_with(:"facet.range")
     end
 
     it 'sets the facet to a date facet if time range is specified' do
       search do |query|
         query.facet :published_at, :time_range => @time_range
       end
-      expect(connection).to have_last_search_with(:"facet.date" => ['published_at_dt'])
+      expect(connection).to have_last_search_with(:"facet.range" => ['published_at_dt'])
     end
 
     it 'sets the facet start and end' do
@@ -235,8 +235,8 @@ shared_examples_for "facetable query" do
         query.facet :published_at, :time_range => @time_range
       end
       expect(connection).to have_last_search_with(
-        :"f.published_at_dt.facet.date.start" => '2009-06-01T04:00:00Z',
-        :"f.published_at_dt.facet.date.end" => '2009-07-01T04:00:00Z'
+        :"f.published_at_dt.facet.range.start" => '2009-06-01T04:00:00Z',
+        :"f.published_at_dt.facet.range.end" => '2009-07-01T04:00:00Z'
       )
     end
 
@@ -244,14 +244,14 @@ shared_examples_for "facetable query" do
       search do |query|
         query.facet :published_at, :time_range => @time_range
       end
-      expect(connection).to have_last_search_with(:"f.published_at_dt.facet.date.gap" => "+86400SECONDS")
+      expect(connection).to have_last_search_with(:"f.published_at_dt.facet.range.gap" => "+86400SECONDS")
     end
 
     it 'uses custom time interval' do
       search do |query|
         query.facet :published_at, :time_range => @time_range, :time_interval => 3600
       end
-      expect(connection).to have_last_search_with(:"f.published_at_dt.facet.date.gap" => "+3600SECONDS")
+      expect(connection).to have_last_search_with(:"f.published_at_dt.facet.range.gap" => "+3600SECONDS")
     end
 
     it 'does not allow date faceting on a non-date field' do
@@ -448,7 +448,7 @@ shared_examples_for "facetable query" do
     it 'tags and excludes a scope filter in a query facet' do
       search do
         blog_filter = with(:blog_id, 1)
-        facet:foo, :exclude => blog_filter do
+        facet :foo, :exclude => blog_filter do
           row(:bar) do
             with(:category_ids, 1)
           end
@@ -466,7 +466,7 @@ shared_examples_for "facetable query" do
           with(:blog_id, 1)
           with(:blog_id, 2)
         end
-        facet:foo, :exclude => blog_filter do
+        facet :foo, :exclude => blog_filter do
           row(:bar) do
             with(:category_ids, 1)
           end
@@ -482,7 +482,7 @@ shared_examples_for "facetable query" do
       search do
         blog_filter = with(:blog_id, 1)
         category_filter = with(:category_ids, 2)
-        facet:foo, :exclude => [blog_filter, category_filter] do
+        facet :foo, :exclude => [blog_filter, category_filter] do
           row(:bar) do
             with(:category_ids, 1)
           end

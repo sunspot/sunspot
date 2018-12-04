@@ -34,10 +34,48 @@ module Sunspot
       #
       def text(*names, &block)
         options = names.last.is_a?(Hash) ? names.pop : {}
-
         names.each do |name|
           @setup.add_text_field_factory(name, options, &block)
         end
+      end
+
+      #
+      # child_documents is used to specify the field that will be serialized
+      # and indexed in Solr as child documents.
+      #
+      # It is mandatory for a child_documents field to be an +Array+ of
+      # searchable documents (must use +Sunspot.setup+).
+      #
+      # ==== Example
+      #
+      #   class Person
+      #     attr_accessor :name, :surname, :age
+      #   end
+      #
+      #   class Parent < Person
+      #     attr_accessor :children
+      #   end
+      #
+      #   Sunspot.setup(Person) do
+      #     string :name
+      #     string :surname
+      #     integer :age
+      #   end
+      #
+      #   Sunspot.setup(Parent) do
+      #     string :name
+      #     string :surname
+      #     integer :age
+      #     child_documents :children
+      #   end
+      #
+      # ==== Parameters
+      #
+      # field<Symbol>:: Field name at object level that contains child documents
+      #
+      def child_documents(field)
+        Sunspot::Util.ensure_child_documents_support
+        @setup.add_child_field_factory(field)
       end
 
       # 
