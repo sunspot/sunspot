@@ -26,7 +26,7 @@ module Sunspot
       snitch: 'snitch'
     }.freeze
 
-    def initialize(config, refresh_every: 1800)
+    def initialize(config, refresh_every: 600)
       @initialized_at = Time.now
       @refresh_every = refresh_every
       @config = config
@@ -59,9 +59,12 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def collections(force: false)
-      with_cache('LIST', force: force, key: 'CACHE_SOLR_COLLECTIONS') do |resp|
+      collections = with_cache('LIST', force: force, key: 'CACHE_SOLR_COLLECTIONS') do |resp|
         resp['collections']
       end
+
+      raise 'error retrieving list of collection from solr' unless collections.is_a?(Array)
+      collections
     end
 
     #
@@ -80,12 +83,8 @@ module Sunspot
         end
       end
 
-      if list_nodes.is_a?(Array)
-        list_nodes
-      else
-        logger.error('error retrieving live nodes from solr')
-        []
-      end
+      raise 'error retrieving live nodes from solr' unless list_nodes.is_a?(Array)
+      list_nodes
     end
 
     #
@@ -148,6 +147,7 @@ module Sunspot
       ::Rails.cache.delete(key) if force
       ::Rails.cache.fetch(key, expires_in: @refresh_every) { yield }
       rescue
+        ::Rails.cache.delete(key)
         simple_cache(key, force) { yield }
     end
 
@@ -159,11 +159,6 @@ module Sunspot
       end
       @cached      ||= {}
       @cached[key] ||= yield
-    end
-
-    def logger
-      @logger ||= ::Rails.logger
-      @logger ||= Logger.new(STDOUT)
     end
   end
 end

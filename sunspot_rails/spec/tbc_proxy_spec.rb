@@ -54,6 +54,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     post = Post.create(title: 'basic post', created_at: Time.new(2009, 10, 1, 12))
     ts = post.time_routed_on
     @proxy.index!(post)
+
+    sleep 3
     c_name = @proxy.send(:collection_name, year: ts.year, month: ts.month)
     ts_start = ts - 1.month
     ts_end = ts + 1.month
@@ -71,6 +73,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_c")
     post = Post.create(title: 'basic post', created_at: Time.new(2009, 10, 1, 12))
     @proxy.index!(post)
+
+    sleep 3
     supported = @proxy.calculate_valid_collections(Post)
 
     expect(supported).to include("#{@base_name}_2009_10_hr")
@@ -89,6 +93,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     post_b.collection_postfix = 'rt'
 
     @proxy.index!([post_a, post_b])
+
+    sleep 3
     collections = @proxy.send(
       :calculate_search_collections,
       date_from: Time.new(2009, 8),
@@ -119,13 +125,13 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       @proxy.index(post)
     end
 
-    sleep 1
+    sleep 3
     post = Post.create(body: 'rt simple doc', created_at: Time.new(2009, 8, 1, 12))
     post.collection_postfix = 'rt'
     @proxy.index!(post)
     @proxy.commit
 
-    sleep 1
+    sleep 3
     posts_hr = @proxy.search(Post) { fulltext 'basic post' }
     posts_rt = @proxy.search(Post) { fulltext 'rt simple' }
 
@@ -149,7 +155,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     end
     @proxy.commit
 
-    sleep 1
+    sleep 3
     # retrieving phase
     posts = Post.search { fulltext 'basic' }
     expect(posts.hits.size).to be >= 10
