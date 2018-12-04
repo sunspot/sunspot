@@ -18,10 +18,10 @@ module Sunspot #:nodoc:
     #       bind_address: 0.0.0.0
     #       proxy: false
     #       collection:
-    #         base_name: 'trac'
-    #         num_shards: 8
+    #         base_name: 'default'
+    #         num_shards: 1
     #         replication_factor: 1
-    #         config_name: 'static_schema_1_6'
+    #         config_name: 'config'
     #     disabled: false
     #   test:
     #     solr:
