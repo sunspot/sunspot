@@ -1553,6 +1553,13 @@ GEM=sunspot_rails ci/travis.sh
 GEM=sunspot_solr ci/travis.sh
 ```
 
+To run test using Solr Cloud:
+```bash
+SOLR_MODE=cloud GEM=sunspot ci/travis.sh
+SOLR_MODE=cloud GEM=sunspot_rails ci/travis.sh
+SOLR_MODE=cloud GEM=sunspot_solr ci/travis.sh
+```
+
 ### Generating Documentation
 
 Install the `yard` and `redcarpet` gems:

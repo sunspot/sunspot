@@ -84,7 +84,7 @@ describe 'search faceting' do
       end
       expect(search.facet(:title).rows.map { |row| row.value }).to include('zero')
     end
-    
+
     it 'should return facet rows from an offset' do
       search = Sunspot.search(Post) do
         facet :title, :offset => 3
@@ -170,7 +170,7 @@ describe 'search faceting' do
 
     it 'should return indexed elements' do
       search = Sunspot.search(Post) do
-         json_facet(:title)
+        json_facet(:title)
       end
       expect(search.facet(:title).rows.size).to eq(5)
     end
@@ -221,7 +221,6 @@ describe 'search faceting' do
       end
       expect(search.facet(:title).rows.map { |row| row.value }.sort).to eq(%w(three two))
     end
-
   end
 
   context 'nested json facet' do
@@ -237,7 +236,6 @@ describe 'search faceting' do
       end
 
       0.upto(9) { |i| Sunspot.index(Post.new(:title => 'zero', :author_name => "another#{i}", :blog_id => 1)) }
-      
       Sunspot.commit
     end
 
@@ -283,7 +281,6 @@ describe 'search faceting' do
       expect(search.facet(:title).rows.first.nested.first.nested.size).to eq(1)
       expect(search.facet(:title).rows.first.nested.first.nested.first.nested).to eq(nil)
     end
-
   end
 
   context 'prefix escaping' do
@@ -437,7 +434,6 @@ describe 'search faceting' do
       expect(search.facet(:blog_id).rows[0].count).to eq(3)
       expect(search.facet(:blog_id).rows[1].count).to eq(7)
     end
-
   end
 
   context 'date facets' do
@@ -445,7 +441,7 @@ describe 'search faceting' do
       Sunspot.remove_all
       time = Time.utc(2009, 7, 8)
       Sunspot.index!(
-        (0..2).map { |i| Post.new(:published_at => time + i*60*60*16) }
+        (0..2).map { |i| Post.new(:published_at => time + i * 60 * 60 * 16) }
       )
     end
 
@@ -454,9 +450,9 @@ describe 'search faceting' do
       search = Sunspot.search(Post) do
         facet :published_at, :time_range => time..(time + 60*60*24*2), :sort => :count
       end
-      expect(search.facet(:published_at).rows.first.value).to eq(time..(time + 60*60*24))
+      expect(search.facet(:published_at).rows.first.value).to eq(time..(time + 60 * 60 * 24))
       expect(search.facet(:published_at).rows.first.count).to eq(2)
-      expect(search.facet(:published_at).rows.last.value).to eq((time + 60*60*24)..(time + 60*60*24*2))
+      expect(search.facet(:published_at).rows.last.value).to eq((time + 60 * 60 * 24)..(time + 60 * 60 * 24 * 2))
       expect(search.facet(:published_at).rows.last.count).to eq(1)
     end
 
@@ -490,7 +486,6 @@ describe 'search faceting' do
       expect(search.facet(:published_at).rows.size).to eq(days_diff / 2)
       expect(search.facet(:published_at).rows[0].count).to eq(3)
     end
-
   end
 
   context 'class facets' do
@@ -523,7 +518,7 @@ describe 'search faceting' do
     it 'should return specified facets' do
       search = Sunspot.search(Post) do
         facet :rating_range, :sort => :count do
-          for rating in [1.0, 2.0, 3.0, 4.0]
+          [1.0, 2.0, 3.0, 4.0].each do |rating|
             range = rating..(rating + 1.0)
             row range do
               with :average_rating, rating..(rating + 1.0)

@@ -8,12 +8,12 @@ cache:
     - sunspot_rails/vendor/bundle
 
 rvm:
-  - 1.9.3
-  - 2.0.0
+  # - 1.9.3
+  # - 2.0.0
   - 2.1.0
   - 2.3.1
   - 2.4.3
-  - 2.5.0
+  - 2.5.1
   - ruby-head
   # - rbx-2.0
   # - jruby
@@ -23,10 +23,12 @@ env:
   - GEM=sunspot UPDATE_FORMAT=json
   - GEM=sunspot_rails
   - GEM=sunspot_solr
+  - SOLR_MODE=cloud GEM=sunspot_rails
 
 matrix:
   allow_failures:
     - rvm: ruby-head
+    - env: SOLR_MODE=cloud GEM=sunspot_rails
 
 before_install: 
   - gem install bundler

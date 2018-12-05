@@ -2,11 +2,21 @@
 
 set +e
 
-SOLR_PORT=8983
 export SUNSPOT_LIB_HOME=`pwd`
 
+SOLR_PORT=8983
+
+if [ "${SOLR_MODE}" = "cloud" ]; then
+  CLOUD_MODE=true
+  MODE="--cloud"
+else
+  CLOUD_MODE=false
+  MODE=""
+fi
+
+
 solr_responding() {
-  curl -o /dev/null "http://localhost:$SOLR_PORT/solr/admin/ping" > /dev/null 2>&1
+  curl -o /dev/null "http://localhost:${SOLR_PORT}/solr/admin/ping" > /dev/null 2>&1
 }
 
 start_solr_server() {
@@ -17,10 +27,10 @@ start_solr_server() {
 
   # stop solr of already running (but it should not be)
   if [ -f sunspot-solr.pid ]; then stop_solr_server || true; fi
-  /bin/echo -n "Starting Solr on port $SOLR_PORT for Sunspot specs..."
+  /bin/echo -n "Starting Solr on port ${SOLR_PORT} for Sunspot specs..."
 
   # start solr
-  bundle exec sunspot-solr start -p $SOLR_PORT
+  bundle exec sunspot-solr start -p ${SOLR_PORT} $MODE
 
   # wait while Solr is up and running
   while ! solr_responding; do
@@ -29,14 +39,36 @@ start_solr_server() {
   done
   /bin/echo "done."
 
+  # uploading config in case of cloud mode
+  if [ "${CLOUD_MODE}" = true ]; then
+    sleep 10
+    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=default"
+    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=test"
+    curl -X GET "http://localhost:${SOLR_PORT}/solr/admin/collections?action=DELETE&name=development"
+    ./solr/bin/solr create -d solr/solr/configsets/sunspot -c default
+    ./solr/bin/solr create -d solr/solr/configsets/sunspot -c test
+    ./solr/bin/solr create -d solr/solr/configsets/sunspot -c development
+    sleep 15
+  fi
+
   cd $current_path
 }
 
 stop_solr_server() {
   cd ../sunspot_solr
   /bin/echo -n "Stopping Solr... "
-  bundle exec sunspot-solr stop -p $SOLR_PORT
+  bundle exec sunspot-solr stop -p ${SOLR_PORT}
   /bin/echo "done."
+
+  # cleaning
+  if [ "${CLOUD_MODE}" = true ]; then
+    rm -rf ../sunspot_rails/spec/rails_app/tmp/
+    rm -rf solr/server/solr/base_*_shard*_replica1/
+    rm -rf solr/server/solr/default_shard1_replica1/
+    rm -rf solr/server/solr/development_shard1_replica1/
+    rm -rf solr/server/solr/test_shard1_replica1/
+    rm -rf solr/server/solr/zoo_data/
+  fi
 }
 
 case $GEM in

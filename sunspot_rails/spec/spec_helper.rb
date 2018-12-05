@@ -15,6 +15,7 @@ Dir[File.expand_path("shared_examples/*.rb", File.dirname(__FILE__))].each { |f|
 load File.join(File.expand_path('../rails_app', __FILE__), 'db', 'schema.rb')
 
 RSpec.configure do |config|
+  config.filter_run_excluding :type => 'cloud' unless ENV['SOLR_MODE'] == 'cloud'
   config.use_transactional_fixtures = true
   config.infer_base_class_for_anonymous_controllers = false
   config.order = 'random'

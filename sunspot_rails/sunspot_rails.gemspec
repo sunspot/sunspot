@@ -44,6 +44,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'nokogiri', '< 1.7' if RUBY_VERSION <= '2.0.0'
   s.add_development_dependency 'rake', '< 12.3'
   s.add_development_dependency 'rspec', '~> 3.7'
+  s.add_development_dependency 'byebug', '~> 3.1'
   s.add_development_dependency 'rspec-rails', '~> 3.7'
   s.add_development_dependency 'sqlite3',  '~> 1.3'
 
