@@ -166,15 +166,15 @@ module Sunspot
       max_retries = 3
       begin
         connection.get(:collections, params: { action: action })
-        rescue
-          if retries < max_retries
-            retries += 1
-            sleep_for = 2**retries
-            sleep(sleep_for)
-            retry
-          else
-            raise e
-          end
+      rescue StandardError => e
+        if retries < max_retries
+          retries += 1
+          sleep_for = 2**retries
+          sleep(sleep_for)
+          retry
+        else
+          raise e
+        end
       end
     end
   end
