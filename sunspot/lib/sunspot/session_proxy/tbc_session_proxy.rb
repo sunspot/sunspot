@@ -33,8 +33,7 @@ module Sunspot
     # * atomic_update! with arguments
     #
     class TbcSessionProxy < AbstractSessionProxy
-      not_supported :batch, :remove_by_id, :remove_by_id!, :atomic_update,
-                    :atomic_update!, :remove_all, :remove_all!
+      not_supported :batch, :atomic_update, :atomic_update!
 
       attr_reader :solr, :config
 
@@ -136,17 +135,39 @@ module Sunspot
       end
 
       #
+      # See Sunspot.remove_by_id
+      # you must pass objects to infer correct sessions
+      #
+      def remove_by_id(clazz, *objects)
+        using_collection_session(objects) do |session, group|
+          with_exception_handling { session.remove_by_id(clazz, group.map(&:id)) }
+        end
+      end
+
+      #
+      # See Sunspot.remove_by_id!
+      # you must pass objects to infer correct sessions
+      #
+      def remove_by_id!(clazz, *objects)
+        remove_by_id(clazz, objects)
+        # commits only the interested sessions
+        using_collection_session(objects) do |session, _|
+          with_exception_handling { session.commit }
+        end
+      end
+
+      #
       # Commit all shards. See Sunspot.commit
       #
       def commit(soft_commit = false)
-        all_sessions.each { |s| s.commit(soft_commit) }
+        with_exception_handling { all_sessions.each { |s| s.commit(soft_commit) } }
       end
 
       #
       # Optimize all shards. See Sunspot.optimize
       #
       def optimize
-        all_sessions.each(&:optimize)
+        with_exception_handling { all_sessions.each(&:optimize) }
       end
 
       #
@@ -155,7 +176,7 @@ module Sunspot
       # See Sunspot.commit_if_dirty
       #
       def commit_if_dirty
-        all_sessions.each(&:commit_if_dirty)
+        with_exception_handling { all_sessions.each(&:commit_if_dirty) }
       end
 
       #
@@ -165,14 +186,14 @@ module Sunspot
       # See Sunspot.commit_if_delete_dirty
       #
       def commit_if_delete_dirty
-        all_sessions.each(&:commit_if_delete_dirty)
+        with_exception_handling { all_sessions.each(&:commit_if_delete_dirty) }
       end
 
       #
       # See Sunspot.remove_all
       #
       def remove_all(*classes)
-        all_sessions.each { |s| s.remove_all(classes) }
+        with_exception_handling { all_sessions.each { |s| s.remove_all(classes) } }
       end
 
       #
@@ -233,7 +254,7 @@ module Sunspot
       # See Sunspot.search
       #
       def search(*types, &block)
-        new_search(*types, &block).execute
+        with_exception_handling { return new_search(*types, &block).execute }
       end
 
       def more_like_this(object, &block)
