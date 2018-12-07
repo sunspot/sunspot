@@ -160,4 +160,50 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     posts = Post.search { fulltext 'basic' }
     expect(posts.hits.size).to be >= 10
   end
+
+  describe 'remove' do
+
+    before do
+      # create fake collections
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_rt")
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2015_08_hr")
+
+      # creation phase
+      (1..10).each do |index|
+        post = Post.create(
+          body: "basic post on Historic #{index}",
+          created_at: Time.new(2009, 8, 1, 12)
+        )
+        @proxy.index(post)
+      end
+      @proxy.commit
+    end
+
+    it 'remove_by_id' do
+      @proxy.remove_by_id(Post, Post.first)
+      expect(Post.search.total).to eq(Post.count)
+      @proxy.commit
+      expect(Post.search.total).to eq(Post.count - 1)
+    end
+
+    it 'remove_by_id!' do
+      @proxy.remove_by_id!(Post, Post.first)
+      expect(Post.search.total).to eq(Post.count - 1)
+    end
+
+    it 'remove_all documents' do
+      @proxy.remove_all(Post)
+      expect(Post.search.total).to eq(Post.count)
+      @proxy.commit
+      expect(Post.search.total).to eq(0)
+    end
+
+    it 'remove_all! documents' do
+       @proxy.remove_all!(Post)
+      expect(Post.search.total).to eq(0)
+    end
+
+  end
+
 end
