@@ -1,8 +1,6 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 require File.expand_path('../lib/sunspot/rails/spec_helper', File.dirname(__FILE__))
 
-require 'byebug'
-
 class TbcPostWrong < Post
 end
 
@@ -174,17 +172,18 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       )
       @proxy.index(post)
     end
+    @proxy.commit
+    sleep 3
 
     # reset proxy
     @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
       fn_collection_filter: lambda do |collections|
-        ['fake_collection', "#{@base_name}_2018_08_hr"]
+        ['fake_collection']
       end
     )
     posts = @proxy.search(Post) { fulltext 'basic' }
-    byebug
     expect(posts.hits.size).to be == 0
   end
 
