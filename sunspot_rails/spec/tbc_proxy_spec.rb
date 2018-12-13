@@ -1,6 +1,8 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 require File.expand_path('../lib/sunspot/rails/spec_helper', File.dirname(__FILE__))
 
+require 'byebug'
+
 class TbcPostWrong < Post
 end
 
@@ -162,7 +164,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   it "ask to search on collections that doesn't exits" do
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_rt")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_hr")
     sleep 5
 
     (1..10).each do |index|
@@ -178,11 +180,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
       fn_collection_filter: lambda do |collections|
-        ['fake_collection']
+        ['fake_collection', "#{@base_name}_2018_08_hr"]
       end
     )
-
-    posts = @proxy.search { fulltext 'basic' }
+    posts = @proxy.search(Post) { fulltext 'basic' }
+    byebug
     expect(posts.hits.size).to be == 0
   end
 
