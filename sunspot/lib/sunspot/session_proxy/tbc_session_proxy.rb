@@ -79,12 +79,13 @@ module Sunspot
       # or the given collections in case are present
       #
       def search_collections
-        @fn_collection_filter.call(
+        collections = @fn_collection_filter.call(
           calculate_search_collections(
             date_from: @date_from,
             date_to: @date_to
           )
         )
+        filter_with_solr(collections)
       end
 
       #
@@ -298,13 +299,17 @@ module Sunspot
 
       private
 
+      def filter_with_solr(collections)
+        solr.collections.select do |collection|
+          collection.start_with?(*collections)
+        end
+      end
+
       def calculate_search_collections(date_from:, date_to:)
         date_from = Time.at(date_from).utc.to_date
         date_to = Time.at(date_to).utc.to_date
         qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.sort.uniq
-        solr.collections.select do |collection|
-          collection.start_with?(*qc)
-        end
+        filter_with_solr(qc)
       end
 
       #

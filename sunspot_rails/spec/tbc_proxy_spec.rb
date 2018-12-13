@@ -161,8 +161,33 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     expect(posts.hits.size).to be >= 10
   end
 
-  describe 'remove' do
+  it "ask to search on collections that doesn't exits" do
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_hr")
+    sleep 5
 
+    (1..10).each do |index|
+      post = Post.create(
+        body: "basic post on Historic #{index}",
+        created_at: Time.new(2009, 8, 1, 12)
+      )
+      @proxy.index(post)
+    end
+    @proxy.commit
+    sleep 3
+
+    # reset proxy
+    @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
+      date_from: Time.new(2009, 1, 1, 12),
+      date_to: Time.new(2010, 1, 1, 12),
+      fn_collection_filter: lambda do |collections|
+        ['fake_collection']
+      end
+    )
+    posts = @proxy.search(Post) { fulltext 'basic' }
+    expect(posts.hits.size).to be == 0
+  end
+
+  describe 'remove' do
     before do
       # create fake collections
       @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
@@ -200,10 +225,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     end
 
     it 'remove_all! documents' do
-       @proxy.remove_all!(Post)
+      @proxy.remove_all!(Post)
       expect(Post.search.total).to eq(0)
     end
-
   end
-
 end
