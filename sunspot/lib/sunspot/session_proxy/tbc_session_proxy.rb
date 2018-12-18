@@ -58,7 +58,7 @@ module Sunspot
       # Return a session.
       #
       def session
-        gen_session('')
+        gen_session("/solr/#{solr.collections.last}")
       end
 
       #
