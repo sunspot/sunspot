@@ -355,9 +355,9 @@ module Sunspot
         current_host = take_hostname
         opts = {
           host: current_host.first,
-          port: current_host.last
+          port: current_host.last,
+          path: path
         }
-        opts[:path] = path unless path.empty?
 
         c.solr.url = URI::HTTP.build(opts).to_s
         c.solr.read_timeout = @config.read_timeout
