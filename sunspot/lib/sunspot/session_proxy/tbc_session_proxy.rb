@@ -58,10 +58,7 @@ module Sunspot
       # Return a session.
       #
       def session
-        now = Time.now.utc
-        col_name = collection_name(year: now.year, month: now.month)
-        solr.create_collection(collection_name: col_name) unless solr.collections.include?(col_name)
-        gen_session("/solr/#{col_name}")
+        gen_session("/solr/#{solr.collections.last}")
       end
 
       #
@@ -356,11 +353,13 @@ module Sunspot
       def gen_session(path)
         c = Sunspot::Configuration.build
         current_host = take_hostname
-        c.solr.url = URI::HTTP.build(
+        opts = {
           host: current_host.first,
           port: current_host.last,
           path: path
-        ).to_s
+        }
+
+        c.solr.url = URI::HTTP.build(opts).to_s
         c.solr.read_timeout = @config.read_timeout
         c.solr.open_timeout = @config.open_timeout
         c.solr.proxy = @config.proxy

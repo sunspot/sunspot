@@ -189,6 +189,15 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
 
   describe 'remove' do
     before do
+      @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
+        date_from: Time.new(2009, 1, 1, 12),
+        date_to: Time.new(2010, 1, 1, 12),
+        fn_collection_filter: lambda do |collections|
+          collections.select { |c| c.end_with?('_hr', '_rt') }
+        end
+      )
+      Sunspot.session = @proxy
+
       # create fake collections
       @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
       @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_rt")
