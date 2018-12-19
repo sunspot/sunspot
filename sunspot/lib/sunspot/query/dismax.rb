@@ -1,6 +1,5 @@
 module Sunspot
   module Query
-
     #
     # Solr full-text queries use Solr's DisMaxRequestHandler, a search handler
     # designed to process user-entered phrases, and search for individual

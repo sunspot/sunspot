@@ -26,18 +26,19 @@ module Sunspot
 
     # 
     # Add field factory for scope/ordering
+    # DocValues are only available for specific field types:
+    # - StrField and UUIDField.
+    # - Any Trie* numeric fields, date fields and EnumField.
+    # - Boolean fields
+    # - Int|Long|Float|Double|Date PointField
     #
     def add_field_factory(name, type, options = {}, &block)
       stored, more_like_this = options[:stored], options[:more_like_this]
       field_factory = FieldFactory::Static.new(name, type, options, &block)
       @field_factories[field_factory.signature] = field_factory
       @field_factories_cache[field_factory.name] = field_factory
-      if stored
-        @stored_field_factories_cache[field_factory.name] << field_factory
-      end
-      if more_like_this
-        @more_like_this_field_factories_cache[field_factory.name] << field_factory
-      end
+      @stored_field_factories_cache[field_factory.name] << field_factory if stored || !type.is_a?(Sunspot::Type::TextType)
+      @more_like_this_field_factories_cache[field_factory.name] << field_factory if more_like_this
     end
 
     def add_join_field_factory(name, type, options = {}, &block)
