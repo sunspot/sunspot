@@ -64,12 +64,8 @@ module Sunspot
       field_factory = FieldFactory::Static.new(name, Type::TextType.instance, options, &block)
       @text_field_factories[name] = field_factory
       @text_field_factories_cache[field_factory.name] = field_factory
-      if stored
-        @stored_field_factories_cache[field_factory.name] << field_factory
-      end
-      if more_like_this
-        @more_like_this_field_factories_cache[field_factory.name] << field_factory
-      end
+      @stored_field_factories_cache[field_factory.name] << field_factory if stored
+      @more_like_this_field_factories_cache[field_factory.name] << field_factory if more_like_this
     end
 
     #
