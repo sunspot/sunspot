@@ -1359,14 +1359,16 @@ end
 
 ### Stored Fields
 
-Stored fields keep an original (untokenized/unanalyzed) version of their
+With the schema.xml version 1.6 the useDocValuesAsStored is true by default.
+This means that with a small effort you can keep an original (untokenized/unanalyzed) version of their
 contents in Solr.
 
 Stored fields allow data to be retrieved without also hitting the
-underlying database (usually an SQL server). They are also required for
-highlighting and more like this queries.
+underlying database (usually an SQL server).
+The store option using DocValues as stored is not like having the value really stored in the index, if you want to use   
+highlighting and more like this queries and atomic updates, remember to change the schema.xml according to this.
 
-Stored fields come at some performance cost in the Solr index, so use
+Stored fields (stored="true" in the schema) come at some performance cost in the Solr index, so use
 them wisely.
 
 ```ruby
