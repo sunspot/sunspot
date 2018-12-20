@@ -128,6 +128,23 @@ module Sunspot
       end
     end
 
+    #
+    # Return { status:, time: sec}.
+    # https://lucene.apache.org/solr/guide/6_6/collections-api.html
+    #
+    def reload_collection(collection_name:)
+      params = {}
+      params[:action] = 'RELOAD'
+      params[:name] = collection_name
+      begin
+        response = connection.get :collections, params: params
+        collections(force: true)
+        return { status: 200, time: response['responseHeader']['QTime'] }
+      rescue RSolr::Error::Http => e
+        return { status: e.response[:status], message: e.message[/^.*$/] }
+      end
+    end
+
     private
 
     # Helper function for solr caching
