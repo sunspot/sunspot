@@ -182,7 +182,7 @@ module Sunspot
       retries = 0
       max_retries = 3
       begin
-        connection.get(:collections, params: { action: action })
+        connection.get(:collections, params: { action: action, wt: 'json' })
       rescue StandardError => e
         if retries < max_retries
           retries += 1
