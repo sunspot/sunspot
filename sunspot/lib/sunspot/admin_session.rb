@@ -26,7 +26,7 @@ module Sunspot
       snitch: 'snitch'
     }.freeze
 
-    def initialize(config, refresh_every: 600)
+    def initialize(config:, refresh_every: 600)
       @initialized_at = Time.now
       @refresh_every = refresh_every
       @config = config
