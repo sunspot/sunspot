@@ -15,7 +15,7 @@ module Sunspot
     #
     def take_hostname
       # takes all the configured nodes + that one that are derived by solr live config
-      hostnames = (self.solr.live_nodes + seed_hosts)
+      hostnames = (solr.live_nodes + seed_hosts)
                   .flatten
                   .uniq
                   .reject { |h| is_faulty(h) }
@@ -28,32 +28,8 @@ module Sunspot
       if current_host.size == 2
         [current_host.first, current_host.last.to_i]
       else
-        current_host + [self.config.port]
+        current_host + [config.port]
       end
-    end
-
-    #
-    # Return true if an host is in fault state
-    # An host is in fault state if and only if:
-    # - #number of fault >= 3
-    # - time in fault state is >= 1h
-    #
-    def is_faulty(hostname)
-      @faulty_hosts.key?(hostname) &&
-        @faulty_hosts[hostname].first >= 3 &&
-        (Time.now - @faulty_hosts[hostname].last).to_i >= 3600
-    end
-
-    def reset_counter_faulty(hostname)
-      @faulty_hosts.delete(hostname)
-    end
-
-    def update_faulty_host(hostname)
-      @faulty_hosts[hostname]   ||= [0, Time.now]
-      @faulty_hosts[hostname][0] += 1
-      @faulty_hosts[hostname][1]  = Time.now
-
-      logger.error "Putting #{hostname} in fault state" if is_faulty(hostname)
     end
 
     def seed_hosts
@@ -84,6 +60,9 @@ module Sunspot
         # update the map of faulty hosts
         update_faulty_host(@current_hostname)
 
+        # clean host in fault state
+        clean_faulty_state
+
         if retries < max_retries
           retries += 1
           sleep_for = 2**retries
@@ -98,6 +77,42 @@ module Sunspot
     rescue StandardError => e
       logger.error "Exception: #{e.inspect}"
       raise e
+    end
+
+    private
+
+    # Remove the host from @faulty_host cache that are too 
+    def clean_faulty_state
+      @faulty_host = @faulty_host.select do |h|
+        if (Time.now - h.last).to_i < 3600
+          true
+        else
+          false
+        end
+      end
+    end
+
+    #
+    # Return true if an host is in fault state
+    # An host is in fault state if and only if:
+    # - #number of fault >= 3
+    # - time in fault state is 1h
+    #
+    def faulty?(hostname)
+      @faulty_hosts.key?(hostname) &&
+        @faulty_hosts[hostname].first >= 3
+    end
+
+    def reset_counter_faulty(hostname)
+      @faulty_hosts.delete(hostname)
+    end
+
+    def update_faulty_host(hostname)
+      @faulty_hosts[hostname]   ||= [0, Time.now]
+      @faulty_hosts[hostname][0] += 1
+      @faulty_hosts[hostname][1]  = Time.now
+
+      logger.error "Putting #{hostname} in fault state" if faulty?(hostname)
     end
 
     def logger
