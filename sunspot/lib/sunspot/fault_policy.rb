@@ -18,7 +18,7 @@ module Sunspot
       hostnames = (solr.live_nodes + seed_hosts)
                   .flatten
                   .uniq
-                  .reject { |h| is_faulty(h) }
+                  .reject { |h| faulty?(h) }
                   .sort
       # round robin policy
       # hostname format: <ip|hostname> | <ip|hostname>:<port>
