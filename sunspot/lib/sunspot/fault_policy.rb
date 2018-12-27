@@ -88,12 +88,8 @@ module Sunspot
 
     # Remove the host from @faulty_host cache that are too 
     def clean_faulty_state
-      @faulty_host = @faulty_host.select do |h|
-        if (Time.now - h.last).to_i < 3600
-          true
-        else
-          false
-        end
+      @faulty_hosts = @faulty_hosts.select do |_k, v|
+        (Time.now - v[1]).to_i < 3600
       end
     end
 
@@ -113,7 +109,8 @@ module Sunspot
     end
 
     def update_faulty_host(hostname)
-      @faulty_hosts[hostname]   ||= [0, Time.now]
+      @faulty_hosts ||= {}
+      @faulty_hosts[hostname] ||= [0, Time.now]
       @faulty_hosts[hostname][0] += 1
       @faulty_hosts[hostname][1]  = Time.now
 
