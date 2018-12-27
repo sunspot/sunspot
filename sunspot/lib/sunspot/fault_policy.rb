@@ -22,6 +22,11 @@ module Sunspot
                   .sort
       # round robin policy
       # hostname format: <ip|hostname> | <ip|hostname>:<port>
+      hostnames = seed_hosts if hostnames.empty?
+
+      # force host_index to stay in the correct range
+      @host_index = @host_index % hostnames.size
+
       @current_hostname = hostnames[@host_index]
       current_host = @current_hostname.split(':')
       @host_index = (@host_index + 1) % hostnames.size
