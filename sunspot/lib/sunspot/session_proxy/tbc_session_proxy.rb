@@ -45,6 +45,8 @@ module Sunspot
         date_to: default_end_date,
         fn_collection_filter: ->(collections) { collections } # predicate filter for collection
       )
+        validate_config(config)
+
         @config = config
         @date_from = date_from
         @date_to = date_to
@@ -306,7 +308,10 @@ module Sunspot
       def calculate_search_collections(date_from:, date_to:)
         date_from = Time.at(date_from).utc.to_date
         date_to = Time.at(date_to).utc.to_date
-        qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.sort.uniq
+        qc = (date_from..date_to)
+             .map { |d| collection_name(year: d.year, month: d.month) }
+             .sort
+             .uniq
         filter_with_solr(qc)
       end
 
@@ -365,6 +370,14 @@ module Sunspot
         c.solr.open_timeout = @config.open_timeout
         c.solr.proxy = @config.proxy
         Session.new(c)
+      end
+
+      def valid_collections(config)
+        raise NoMethodError, 'collection not defined for config object' unless config.method_defined?(collection)
+        raise KeyError, 'base_name not defined' unless config.collection.key?('base_name')
+        raise NoMethodError, 'proxy not defined for config object' unless config.method_defined?(proxy)
+        raise NoMethodError, 'open_timeout not defined for config object' unless config.method_defined?(open_timeout)
+        raise NoMethodError, 'read_timeout not defined for config object' unless config.method_defined?(read_timeout)
       end
     end
   end
