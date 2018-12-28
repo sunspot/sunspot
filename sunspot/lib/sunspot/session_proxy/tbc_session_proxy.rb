@@ -373,18 +373,20 @@ module Sunspot
       end
 
       def validate_config(config)
-        raise NoMethodError, 'hostname not defined for config object' unless config.method_defined?(:hostname)
-        raise NoMethodError, 'hostnames not defined for config object' unless config.method_defined?(:hostnames)
-        raise NoMethodError, 'collection not defined for config object' unless config.method_defined?(:collection)
-        raise KeyError, 'collection config_name not defined for config object' unless config.collection.key?('config_name')
-        raise KeyError, 'collection base_name not defined for config object' unless config.collection.key?('base_name')
-        raise KeyError, 'collection num_shards not defined for config object' unless config.collection.key?('num_shards')
-        raise KeyError, 'collection replication_factor not defined for config object' unless config.collection.key?('replication_factor')
-        raise KeyError, 'collection max_shards_per_node not defined for config object' unless config.collection.key?('max_shards_per_node')
-        raise NoMethodError, 'port not defined for config object' unless config.method_defined?(:port)
-        raise NoMethodError, 'proxy not defined for config object' unless config.method_defined?(:proxy)
-        raise NoMethodError, 'open_timeout not defined for config object' unless config.method_defined?(:open_timeout)
-        raise NoMethodError, 'read_timeout not defined for config object' unless config.method_defined?(:read_timeout)
+        # don't use method_defined? for config (could be an object instance)
+
+        raise NoMethodError, 'hostname not defined for config object' unless config.methods.include?(:hostname)
+        raise NoMethodError, 'hostnames not defined for config object' unless config.methods.include?(:hostnames)
+        raise NoMethodError, 'collection not defined for config object' unless config.methods.include?(:collection)
+        raise KeyError, 'collection config_name not defined for config object' unless config.collection['config_name'] != nil
+        raise KeyError, 'collection base_name not defined for config object' unless config.collection['base_name'] != nil
+        raise KeyError, 'collection num_shards not defined for config object' unless config.collection['num_shards'] != nil
+        raise KeyError, 'collection replication_factor not defined for config object' unless config.collection['replication_factor'] != nil
+        raise KeyError, 'collection max_shards_per_node not defined for config object' unless config.collection['max_shards_per_node'] != nil
+        raise NoMethodError, 'port not defined for config object' unless config.methods.include?(:port)
+        raise NoMethodError, 'proxy not defined for config object' unless config.methods.include?(:proxy)
+        raise NoMethodError, 'open_timeout not defined for config object' unless config.methods.include?(:open_timeout)
+        raise NoMethodError, 'read_timeout not defined for config object' unless config.methods.include?(:read_timeout)
       end
     end
   end
