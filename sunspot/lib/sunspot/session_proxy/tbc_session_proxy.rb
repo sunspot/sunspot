@@ -372,12 +372,19 @@ module Sunspot
         Session.new(c)
       end
 
-      def valid_collections(config)
-        raise NoMethodError, 'collection not defined for config object' unless config.method_defined?(collection)
-        raise KeyError, 'base_name not defined' unless config.collection.key?('base_name')
-        raise NoMethodError, 'proxy not defined for config object' unless config.method_defined?(proxy)
-        raise NoMethodError, 'open_timeout not defined for config object' unless config.method_defined?(open_timeout)
-        raise NoMethodError, 'read_timeout not defined for config object' unless config.method_defined?(read_timeout)
+      def validate_config(config)
+        raise NoMethodError, 'hostname not defined for config object' unless config.method_defined?(:hostname)
+        raise NoMethodError, 'hostnames not defined for config object' unless config.method_defined?(:hostnames)
+        raise NoMethodError, 'collection not defined for config object' unless config.method_defined?(:collection)
+        raise KeyError, 'collection config_name not defined for config object' unless config.collection.key?('config_name')
+        raise KeyError, 'collection base_name not defined for config object' unless config.collection.key?('base_name')
+        raise KeyError, 'collection num_shards not defined for config object' unless config.collection.key?('num_shards')
+        raise KeyError, 'collection replication_factor not defined for config object' unless config.collection.key?('replication_factor')
+        raise KeyError, 'collection max_shards_per_node not defined for config object' unless config.collection.key?('max_shards_per_node')
+        raise NoMethodError, 'port not defined for config object' unless config.method_defined?(:port)
+        raise NoMethodError, 'proxy not defined for config object' unless config.method_defined?(:proxy)
+        raise NoMethodError, 'open_timeout not defined for config object' unless config.method_defined?(:open_timeout)
+        raise NoMethodError, 'read_timeout not defined for config object' unless config.method_defined?(:read_timeout)
       end
     end
   end
