@@ -45,6 +45,8 @@ module Sunspot
         date_to: default_end_date,
         fn_collection_filter: ->(collections) { collections } # predicate filter for collection
       )
+        validate_config(config)
+
         @config = config
         @date_from = date_from
         @date_to = date_to
@@ -306,7 +308,10 @@ module Sunspot
       def calculate_search_collections(date_from:, date_to:)
         date_from = Time.at(date_from).utc.to_date
         date_to = Time.at(date_to).utc.to_date
-        qc = (date_from..date_to).map { |d| collection_name(year: d.year, month: d.month) }.sort.uniq
+        qc = (date_from..date_to)
+             .map { |d| collection_name(year: d.year, month: d.month) }
+             .sort
+             .uniq
         filter_with_solr(qc)
       end
 
@@ -365,6 +370,23 @@ module Sunspot
         c.solr.open_timeout = @config.open_timeout
         c.solr.proxy = @config.proxy
         Session.new(c)
+      end
+
+      def validate_config(config)
+        # don't use method_defined? for config (could be an object instance)
+
+        raise NoMethodError, 'hostname not defined for config object' unless config.methods.include?(:hostname)
+        raise NoMethodError, 'hostnames not defined for config object' unless config.methods.include?(:hostnames)
+        raise NoMethodError, 'collection not defined for config object' unless config.methods.include?(:collection)
+        raise KeyError, 'collection config_name not defined for config object' unless config.collection['config_name'] != nil
+        raise KeyError, 'collection base_name not defined for config object' unless config.collection['base_name'] != nil
+        raise KeyError, 'collection num_shards not defined for config object' unless config.collection['num_shards'] != nil
+        raise KeyError, 'collection replication_factor not defined for config object' unless config.collection['replication_factor'] != nil
+        raise KeyError, 'collection max_shards_per_node not defined for config object' unless config.collection['max_shards_per_node'] != nil
+        raise NoMethodError, 'port not defined for config object' unless config.methods.include?(:port)
+        raise NoMethodError, 'proxy not defined for config object' unless config.methods.include?(:proxy)
+        raise NoMethodError, 'open_timeout not defined for config object' unless config.methods.include?(:open_timeout)
+        raise NoMethodError, 'read_timeout not defined for config object' unless config.methods.include?(:read_timeout)
       end
     end
   end
