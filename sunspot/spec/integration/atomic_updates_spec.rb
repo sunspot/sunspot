@@ -21,7 +21,7 @@ describe 'atomic updates' do
   it 'should update single record fields one by one' do
     post = Post.new(title: 'A Title', featured: true)
     Sunspot.index!(post)
-    
+
     validate_hit(find_indexed_post(post.id), title: post.title, featured: post.featured)
 
     Sunspot.atomic_update!(Post, post.id => {title: 'A New Title'})

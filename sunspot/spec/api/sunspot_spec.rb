@@ -1,7 +1,6 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot do
-
   describe "setup" do
     it "should register the class in Sunspot.searchable" do
       Sunspot.setup(User) do

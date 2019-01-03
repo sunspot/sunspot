@@ -5,6 +5,15 @@ module Sunspot
   #
   module Util #:nodoc:
     class <<self
+      def ensure_child_documents_support
+        raise 'Child Documents features needs RSolr v2!' unless child_documents_supported?
+      end
+
+      def child_documents_supported?
+        rsolr_version = Semantic::Version.new(RSolr::VERSION)
+        rsolr_version.major >= 2
+      end
+
       #
       # Get all of the superclasses for a given class, including the class
       # itself.
@@ -189,6 +198,7 @@ module Sunspot
       end
 
       def parse_json_facet(field_name, options, setup)
+        return parse_block_join_json_facet(field_name, options, setup) unless options[:block_join].nil?
         field = setup.field(field_name)
         if options[:time_range]
           unless field.type.is_a?(Sunspot::Type::TimeType)
@@ -212,6 +222,18 @@ module Sunspot
       end
 
       private
+
+      def parse_block_join_json_facet(field_name, options, setup)
+        facet_op = options[:block_join]
+        inner_setup = Sunspot::Setup.for(facet_op[:type])
+        field = inner_setup.field(field_name)
+        Sunspot::Query::BlockJoin::JsonFacet.new(
+          field,
+          { op: facet_op[:op] }.merge!(options),
+          inner_setup,
+          facet_op[:query]
+        )
+      end
 
       #
       # Deep merge two hashes into a third hash, using rules that produce nice

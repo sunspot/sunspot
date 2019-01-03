@@ -1,6 +1,5 @@
 module Sunspot
   module Query
-
     #
     # Solr full-text queries use Solr's DisMaxRequestHandler, a search handler
     # designed to process user-entered phrases, and search for individual
@@ -28,7 +27,7 @@ module Sunspot
       # The query as Solr parameters
       #
       def to_params
-        params = { :q => @keywords }
+        params = { q: @keywords }
         params[:fl] = '* score'
         params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
         params[:defType] = 'edismax'
@@ -36,6 +35,12 @@ module Sunspot
         params[:ps] = @phrase_slop if @phrase_slop
         params[:qs] = @query_phrase_slop if @query_phrase_slop
         params[:tie] = @tie if @tie
+
+        # NOTE(ar3s3ru): the default operator in Sunspot is 'AND'.
+        # When using 'AND' in default q.op, the 'mm' parameter in Extended DisMax
+        # queries is disregarded by Solr (please, take a look at the JIRA board).
+        # This fixes the 'mm' parameter parsing for all Solr versions (hopefully).
+        params[:'q.op'] = 'OR' if @minimum_match
 
         if @phrase_fields
           params[:pf] = @phrase_fields.map { |field| field.to_boosted_field }.join(' ')
@@ -86,7 +91,6 @@ module Sunspot
       def add_fulltext_field(field, boost = nil)
         super unless field.is_a?(Sunspot::JoinField)
       end
-
     end
   end
 end

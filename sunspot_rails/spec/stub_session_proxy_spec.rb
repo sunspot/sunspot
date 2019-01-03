@@ -183,7 +183,8 @@ describe 'specs with Sunspot stubbed' do
           :missing,
           :sum_of_squares,
           :mean,
-          :standard_deviation)
+          :standard_deviation
+        )
       end
 
       it 'should return empty results for a given facet' do
@@ -193,7 +194,6 @@ describe 'specs with Sunspot stubbed' do
       it 'should return empty array if listing facets' do
         expect(@stats.facets).to eq([])
       end
-
     end
   end
 end

@@ -81,6 +81,46 @@ end
 `text` fields will be full-text searchable. Other fields (e.g.,
 `integer` and `string`) can be used to scope queries.
 
+### Nested Documents support
+
+You can use the `child_documents` feature to add nested documents to other models,
+as such:
+
+```ruby
+class Comment < ActiveRecord::Base
+  searchable do
+    # NOTE: this is not necessary, Solr uses '_root_' field to refer to the parent document
+    integer :post_id
+    # -------------------------------------------------------------------------------------
+    integer :author_id
+    
+    text :body
+    time :published_at
+  end
+end
+
+class Post < ActiveRecord::Base
+  searchable do
+    text :title, :body
+    child_documents :comments # Must be of type Comment
+    
+    boolean :featured
+    integer :blog_id
+    integer :author_id
+    integer :category_ids, :multiple => true
+    double  :average_rating
+    time    :published_at
+    time    :expired_at
+    
+    string  :sort_title do
+      title.downcase.gsub(/^(an?|the)/, '')
+    end
+  end
+end
+```
+
+Please note, you should always use an `Array` of `searchable` documents in the `child_documents` field.
+
 ## Searching Objects
 
 ```ruby
@@ -327,6 +367,40 @@ full-text term.
 Post.search do
   with(:blog_id, 1)
   fulltext("pizza")
+end
+```
+
+#### Nested Documents search with `ChildOf` and `ParentWhich`
+
+You can search for child (or parent) documents based on filters applied
+on parents (or children).
+
+##### `ChildOf` operator
+
+Using this operator, you can search for child documents using a
+filter on the parents.
+
+```ruby
+# Search all children which has a parent named as specified below.
+Sunspot.search(Child) do
+  child_of(Parent) do
+    with(:name, 'FirstName LastName')
+  end
+end
+```
+
+##### `ParentWhich` operator
+
+Using this operator, you can search for parent documents using
+a filter on their children.
+
+```ruby
+# Search all parents which have children
+# that are between 12 and 17 years old.
+Sunspot.search(Parent) do
+  parent_which(Child) do
+    with :age, 12..17
+  end
 end
 ```
 
@@ -596,6 +670,47 @@ end
 ```
 
 Nested facets have the same options of json facets
+
+#### BlockJoin Json Facet
+
+You can use `json_facet` on children or parents, based on the data
+you are querying on.
+
+##### `on_child` operator
+
+Use this operator when searching on parent documents.
+Faceting is performed on child documents related to parents found
+in the query.
+
+```ruby
+# Search for all books with specified title and facets
+# on the timestamp of reviews.
+# An additional filter on children can be specified inside the on_child operator. 
+Sunspot.search(Book) do
+  fulltext 'awesome book title', fields: [:title]
+  
+  json_facet :review_date, block_join: (on_child(Review) do
+    with(:review_date).greater_than(DateTime.parse('2015-01-01T00:00:00Z'))
+  end)
+end
+```
+
+##### `on_parent` operator
+
+Use this operator when searching on child documents.
+Faceting is performed on parents of the children found in the query.
+
+```ruby
+# Search for all reviews of a particular author.
+# Perform faceting on the book category.
+Sunspot.search(Review) do
+  with :author, 'yonik'
+  
+  # An empty block means no additional filters: takes all parents
+  # of the selected children. 
+  json_facet :category, block_join: on_parent(Book) {}
+end
+```
 
 ### Ordering
 
@@ -1020,6 +1135,37 @@ search.json_facet_stats(:featured).rows.each do |row|
 end
 ```
 
+#### BlockJoin Json Facet stats
+
+You can perform statistics on block join facets using the `json_facet` feature.
+
+For example, let's say we have `Book`s as parent documents, and `Review`s on those
+books as child documents.
+
+We want to know the average rating stars given by a particular user on all books
+from 1984.
+
+```ruby
+search = Sunspot.search(Book) do
+  with(:pub_year).greater_than(1983)
+  
+  # The :on parameter is needed here!
+  # It must match the type specified in :block_join
+  stats :stars, sort: :avg, on: Review do
+    json_facet :author_name, block_join: (on_child(Review) do
+      with :author_name, 'serious_reviewer1967'
+    end)
+  end
+end
+```
+
+Solr will execute the query, selecting all `Book`s with `pub_year` from 1984.
+
+Then, facets on the `author_name` values present in the `Review` documents
+that are children of the `Book`s found.  
+In this case, we'll have just one facet.
+
+At last, executes statistics on the generated facet.
 
 #### Multiple stats and selective faceting
 
@@ -1213,14 +1359,16 @@ end
 
 ### Stored Fields
 
-Stored fields keep an original (untokenized/unanalyzed) version of their
+With the schema.xml version 1.6 the useDocValuesAsStored is true by default.
+This means that with a small effort you can keep an original (untokenized/unanalyzed) version of their
 contents in Solr.
 
 Stored fields allow data to be retrieved without also hitting the
-underlying database (usually an SQL server). They are also required for
-highlighting and more like this queries.
+underlying database (usually an SQL server).
+The store option using DocValues as stored is not like having the value really stored in the index, if you want to use   
+highlighting and more like this queries and atomic updates, remember to change the schema.xml according to this.
 
-Stored fields come at some performance cost in the Solr index, so use
+Stored fields (stored="true" in the schema) come at some performance cost in the Solr index, so use
 them wisely.
 
 ```ruby
@@ -1405,6 +1553,13 @@ To run specs related to individual gems, consider using one of the following com
 GEM=sunspot ci/travis.sh
 GEM=sunspot_rails ci/travis.sh
 GEM=sunspot_solr ci/travis.sh
+```
+
+To run test using Solr Cloud:
+```bash
+SOLR_MODE=cloud GEM=sunspot ci/travis.sh
+SOLR_MODE=cloud GEM=sunspot_rails ci/travis.sh
+SOLR_MODE=cloud GEM=sunspot_solr ci/travis.sh
 ```
 
 ### Generating Documentation

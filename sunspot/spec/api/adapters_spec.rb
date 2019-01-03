@@ -51,15 +51,15 @@ describe Sunspot::Adapters::Registry do
   let(:mixin_accessor){ Sunspot::Adapters::DataAccessor::for(MixModel) }
 
   it "registers and retrieves a data accessor for abstractclass" do
-      expect(registry.retrieve(AbstractModel)).to be_a(abstractclass_accessor)
+    expect(registry.retrieve(AbstractModel)).to be_a(abstractclass_accessor)
   end
 
   it "registers and retrieves a data accessor for superclass" do
-      expect(registry.retrieve(Model)).to be_a(superclass_accessor)
+    expect(registry.retrieve(Model)).to be_a(superclass_accessor)
   end
 
   it "registers and retrieves a data accessor for mixin" do
-      expect(registry.retrieve(MixModel)).to be_a(mixin_accessor)
+    expect(registry.retrieve(MixModel)).to be_a(mixin_accessor)
   end
 
   it "injects inherited attributes" do

@@ -1,19 +1,25 @@
 language: ruby
 sudo: false
 cache:
-  bundler: true
+  bundler: false
   directories:
     - sunspot/vendor/bundle
     - sunspot_solr/vendor/bundle
     - sunspot_rails/vendor/bundle
 
+before_install:
+  - gem install rubygems-update -v 2.7.8
+  - update_rubygems
+  - gem install bundler -v 1.17.3
+
 rvm:
-  - 1.9.3
-  - 2.0.0
+  # - 1.9.3
+  # - 2.0.0
   - 2.1.0
   - 2.3.1
   - 2.4.3
-  - 2.5.0
+  - 2.5.1
+  # - 2.6.0
   - ruby-head
   # - rbx-2.0
   # - jruby
@@ -23,13 +29,12 @@ env:
   - GEM=sunspot UPDATE_FORMAT=json
   - GEM=sunspot_rails
   - GEM=sunspot_solr
+  - SOLR_MODE=cloud GEM=sunspot_rails
 
 matrix:
   allow_failures:
     - rvm: ruby-head
-
-before_install: 
-  - gem install bundler
+    - env: SOLR_MODE=cloud GEM=sunspot_rails
 
 script:
   - ci/travis.sh

@@ -8,7 +8,6 @@ module Sunspot
   # subclasses).
   #
   class Indexer #:nodoc:
-
     def initialize(connection)
       @connection = connection
     end
@@ -41,7 +40,7 @@ module Sunspot
       add_batch_documents(documents)
     end
 
-    # 
+    #
     # Remove the given model from the Solr index
     #
     def remove(*models)
@@ -50,7 +49,7 @@ module Sunspot
       )
     end
 
-    # 
+    #
     # Remove the model from the Solr index by specifying the class and ID
     #
     def remove_by_id(class_name, *ids)
@@ -71,14 +70,14 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # Remove all documents that match the scope given in the Query
     #
     def remove_by_scope(scope)
       @connection.delete_by_query(scope.to_boolean_phrase)
     end
 
-    # 
+    #
     # Start batch processing
     #
     def start_batch
@@ -98,7 +97,7 @@ module Sunspot
       @batcher ||= Batcher.new
     end
 
-    # 
+    #
     # Convert documents into hash of indexed properties
     #
     def prepare_full_update(model)
@@ -110,12 +109,25 @@ module Sunspot
       setup.all_field_factories.each do |field_factory|
         field_factory.populate_document(document, model)
       end
+      unless setup.child_field_factory.nil?
+        setup.child_field_factory.populate_document(
+          document,
+          model,
+          adapter: ->(child_model) { prepare_full_update(child_model) }
+        )
+      end
       document
     end
 
     def prepare_atomic_update(clazz, id, updates = {})
       document = document_for_atomic_update(clazz, id)
-      setup_for_class(clazz).all_field_factories.each do |field_factory|
+      setup = setup_for_class(clazz)
+      # Child documents must be re-indexed with parent at each update,
+      # otherwise Solr would discard them.
+      unless setup.child_field_factory.nil?
+        raise 'Objects with child documents can\'t perform atomic updates'
+      end
+      setup.all_field_factories.each do |field_factory|
         if updates.has_key?(field_factory.name)
           field_factory.populate_document(document, nil, value: updates[field_factory.name], update: :set)
         end
@@ -135,7 +147,7 @@ module Sunspot
       end
     end
 
-    # 
+    #
     # All indexed documents index and store the +id+ and +type+ fields.
     # These methods construct the document hash containing those key-value
     # pairs.
@@ -150,12 +162,13 @@ module Sunspot
     def document_for_atomic_update(clazz, id)
       if Adapters::InstanceAdapter.for(clazz)
         RSolr::Xml::Document.new(
-            id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
-            type: Util.superclasses_for(clazz).map(&:name)
+          id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
+          type: Util.superclasses_for(clazz).map(&:name)
         )
       end
     end
-    # 
+
+    #
     # Get the Setup object for the given object's class.
     #
     # ==== Parameters
