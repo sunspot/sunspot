@@ -6,6 +6,10 @@ cache:
     - sunspot/vendor/bundle
     - sunspot_solr/vendor/bundle
     - sunspot_rails/vendor/bundle
+  
+before_install:
+    - gem update --system
+    - gem --version
 
 rvm:
   # - 1.9.3
