@@ -1,16 +1,12 @@
 language: ruby
 sudo: false
 cache:
-  bundler: true
+#  bundler: true
   directories:
     - sunspot/vendor/bundle
     - sunspot_solr/vendor/bundle
     - sunspot_rails/vendor/bundle
-  
-before_install:
-    - gem i rubygems-update -v '<3' && update_rubygems
-    - gem --version
-
+ 
 rvm:
   # - 1.9.3
   # - 2.0.0
