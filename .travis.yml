@@ -11,8 +11,7 @@ before_install:
   - gem update --system
   - gem install rubygems-update
   - update_rubygems
-  - gem install bundler
-  - bundle update
+  - gem install bundler -v 1.17.3
 
 rvm:
   # - 1.9.3
