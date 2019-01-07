@@ -344,9 +344,12 @@ module Sunspot
       # each session and is corresponding group of objects.
       #
       def using_collection_session(objects)
+        cache_sessions = {}
         grouped_objects = Hash.new { |h, k| h[k] = [] }
         objects.flatten.each do |object|
-          grouped_objects[session_for(object)] << object
+          c_name = collection_for(object)
+          cache_sessions[c_name] = session_for(object) unless cache_sessions.key?(c_name)
+          grouped_objects[cache_sessions[c_name]] << object
         end
         grouped_objects.each_pair do |session, group|
           yield(session, group)
