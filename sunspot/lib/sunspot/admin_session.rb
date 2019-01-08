@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'logger'
+require 'terminal-table'
+
 
 module Sunspot
   class AdminSession < Session
@@ -143,6 +145,71 @@ module Sunspot
       rescue RSolr::Error::Http => e
         return { status: e.response[:status], message: e.message[/^.*$/] }
       end
+    end
+
+
+    ### CLUSTER MANTANANCE ###
+
+    def clusterstatus
+      with_cache('CLUSTERSTATUS', key: 'CACHE_SOLR_CLUSTERSTATUS') do |resp|
+        resp
+      end
+    end
+
+
+    def report
+      rows = []
+  
+      cluster = clusterstatus
+      collections = cluster['cluster']['collections']
+      collections.each_pair do |k, v|
+        replicas = v['replicationFactor'].to_i
+        shards = v['shards']
+        puts shards
+
+        leader = ''
+
+        shard_status = shards.reduce({:active => 0, :non_active => 0}) do |acc, (shard_name, v)|
+          if v['state'] == 'active'
+            acc[:active] += 1
+          else
+            acc[:non_active] += 1
+          end
+
+          if v['leader'] == 'true'
+            leader = shard_name
+          end
+
+          puts acc['shards']
+
+          acc
+        end
+
+        status = 'KO'
+        status = 'OK' if shard_status[:non_active] == 0
+
+        rows << [
+          k,
+          replicas,
+          shards.count(),
+          shard_status[:active],
+          shard_status[:non_active],
+          status
+        ]
+      end
+  
+      table = Terminal::Table.new(
+        :headings => [
+          'Collection',
+          'Replicas',
+          '#Shards',
+          'Active',
+          'Non Active',
+          'Status'
+        ],
+        :rows => rows
+      )
+      puts table
     end
 
     private
