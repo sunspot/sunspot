@@ -165,11 +165,9 @@ module Sunspot
       collections.each_pair do |k, v|
         replicas = v['replicationFactor'].to_i
         shards = v['shards']
-        puts shards
-
         leader = ''
 
-        shard_status = shards.reduce({:active => 0, :non_active => 0}) do |acc, (shard_name, v)|
+        shard_status = shards.reduce({:active => 0, :non_active => 0, replica_up: 0, replica_down: 0}) do |acc, (shard_name, v)|
           if v['state'] == 'active'
             acc[:active] += 1
           else
@@ -180,8 +178,17 @@ module Sunspot
             leader = shard_name
           end
 
-          puts acc['shards']
+          replica_status = v['replicas'].reduce({active: 0, non_active: 0}) do |memo, (core_name, val)|
+            if v['state'] == 'active'
+              memo[:active] += 1
+            else
+              memo[:non_active] += 1
+            end
+            memo
+          end
 
+          acc[:replica_up] += replica_status[:active]
+          acc[:replica_down] += replica_status[:non_active]
           acc
         end
 
@@ -194,6 +201,8 @@ module Sunspot
           shards.count(),
           shard_status[:active],
           shard_status[:non_active],
+          replica_status[:replica_up],
+          replica_status[:replica_down],
           status
         ]
       end
@@ -205,6 +214,8 @@ module Sunspot
           '#Shards',
           'Active',
           'Non Active',
+          'Replica UP',
+          'Replica DOWN',
           'Status'
         ],
         :rows => rows
