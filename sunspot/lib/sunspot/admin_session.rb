@@ -201,10 +201,18 @@ module Sunspot
           shards.count(),
           shard_status[:active],
           shard_status[:non_active],
-          replica_status[:replica_up],
-          replica_status[:replica_down],
+          shard_status[:replica_up],
+          shard_status[:replica_down],
           status
         ]
+      end
+
+      rows.sort! do |a, b|
+        if a[7] == "KO"
+          -1
+        else
+          1
+        end
       end
   
       table = Terminal::Table.new(
@@ -221,6 +229,25 @@ module Sunspot
         :rows => rows
       )
       puts table
+    end
+
+    def repair
+      replicas_not_active.each do |rep|
+        delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
+        add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
+      end
+    end
+  
+    private
+  
+    def delete_failed_replica(collection:, shard:, replica:)
+      uri = URI(@base_url + "/admin/collections?action=DELETEREPLICA&collection=#{collection}&shard=#{shard}&replica=#{replica}")
+      puts "DELETE REPLICA #{uri}"
+    end
+    
+    def add_failed_replica(collection:, shard:, node:)
+      uri = URI(@base_url + "/admin/collections?action=ADDREPLICA&collection=#{collection}&shard=#{shard}&node=#{node}")
+      puts "ADD REPLICA #{uri}"
     end
 
     private
