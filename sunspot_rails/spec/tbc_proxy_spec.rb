@@ -187,6 +187,26 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     expect(posts.hits.size).to be == 0
   end
 
+  describe 'all sessions' do
+
+    before do
+      @proxy = Sunspot::SessionProxy::TbcSessionProxy.new()
+      Sunspot.session = @proxy
+
+      # create fake collections
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_rt")
+
+      @proxy.solr.create_collection(collection_name: "other_2009_08_a")
+      @proxy.solr.create_collection(collection_name: "other_2009_08_rt")
+    end
+
+    it 'all sessions for this configuration' do
+      expect(@proxy.all_sessions.size).to eq(2)
+    end
+
+  end
+
   describe 'remove' do
     before do
       @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
