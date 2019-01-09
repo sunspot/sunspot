@@ -2,7 +2,7 @@
 
 require 'logger'
 require 'terminal-table'
-
+require 'json'
 
 module Sunspot
   class AdminSession < Session
@@ -150,12 +150,15 @@ module Sunspot
 
     ### CLUSTER MANTANANCE ###
 
-    def clusterstatus
-      with_cache('CLUSTERSTATUS', key: 'CACHE_SOLR_CLUSTERSTATUS') do |resp|
-        resp
+    def clusterstatus(as_json: false)
+      # don't cache it
+      status = retrieve_info_solr('CLUSTERSTATUS')
+      if as_json
+        status.to_json
+      else
+        status
       end
     end
-
 
     def report
       rows = []
@@ -167,7 +170,14 @@ module Sunspot
         shards = v['shards']
         leader = ''
 
-        shard_status = shards.reduce({:active => 0, :non_active => 0, replica_up: 0, replica_down: 0}) do |acc, (shard_name, v)|
+        shard_status = shards.reduce(
+          {
+            active: 0,
+            non_active: 0,
+            replica_up: 0,
+            replica_down: 0,
+            recoverable: 0
+        }) do |acc, (shard_name, v)|
           if v['state'] == 'active'
             acc[:active] += 1
           else
@@ -189,11 +199,14 @@ module Sunspot
 
           acc[:replica_up] += replica_status[:active]
           acc[:replica_down] += replica_status[:non_active]
+          acc[:recoverable] += 1 if replica_status[:active].positive?
           acc
         end
 
-        status = 'KO'
+        status = 'BAD'
         status = 'OK' if shard_status[:non_active] == 0
+        recoverable = 'NO'
+        recoverable = 'YES' if shard_status[:recoverable] == shards.count()
 
         rows << [
           k,
@@ -203,18 +216,20 @@ module Sunspot
           shard_status[:non_active],
           shard_status[:replica_up],
           shard_status[:replica_down],
-          status
+          status,
+          recoverable
         ]
       end
 
+      # order first by STATUS then by COLLECTION (name)
       rows.sort! do |a, b|
-        if a[7] == "KO"
+        if a[7] == "BAD"
           -1
         else
-          1
+          a[0] <=> b[0]
         end
       end
-  
+
       table = Terminal::Table.new(
         :headings => [
           'Collection',
@@ -224,7 +239,8 @@ module Sunspot
           'Non Active',
           'Replica UP',
           'Replica DOWN',
-          'Status'
+          'Status',
+          'Recoverable'
         ],
         :rows => rows
       )
