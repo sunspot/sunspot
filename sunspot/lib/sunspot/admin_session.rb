@@ -27,11 +27,14 @@ module Sunspot
       shards: 'shards',
       snitch: 'snitch'
     }.freeze
+    
+    attr_accessor :replicas_not_active
 
     def initialize(config:, refresh_every: 600)
       @initialized_at = Time.now
       @refresh_every = refresh_every
       @config = config
+      @replicas_not_active = []
     end
 
     #
@@ -160,12 +163,70 @@ module Sunspot
       end
     end
 
-    def report
-      rows = []
+    def report_clusterstatus(view: :table)
+      rows = check_cluster
+
+      case view
+      when :table
+        # order first by STATUS then by COLLECTION (name)
+        rows.sort! do |a, b|
+          if a[:status] == "BAD"
+            -1
+          else
+            a[:collection] <=> b[:collection]
+          end
+        end
+
+        table = Terminal::Table.new(
+          :headings => [
+            'Collection',
+            'Replicas',
+            '#Shards',
+            'Active',
+            'Non Active',
+            'Replica UP',
+            'Replica DOWN',
+            'Status',
+            'Recoverable'
+          ],
+          :rows => rows.map do |row|
+            [
+              row[:collection],
+              row[:num_replicas],
+              row[:num_shards],
+              row[:shard_active],
+              row[:shard_non_active],
+              row[:replicas_up],
+              row[:replicas_down],
+              row[:status],
+              row[:recoverable]
+            ]
+          end
+        )
+        puts table
+      when :json
+        rows.to_json
+      when :simple
+        rows
+      end
+    end
+
+    def repair_collection
+      replicas_not_active.each do |rep|
+        delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
+        add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
+      end
+    end
   
+    private
+
+    def check_cluster
+      rows = []
+      replicas_not_active = []
+
       cluster = clusterstatus
       collections = cluster['cluster']['collections']
-      collections.each_pair do |k, v|
+      collections.each_pair do |collection_name, v|
         replicas = v['replicationFactor'].to_i
         shards = v['shards']
         leader = ''
@@ -175,8 +236,7 @@ module Sunspot
             active: 0,
             non_active: 0,
             replica_up: 0,
-            replica_down: 0,
-            recoverable: 0
+            replica_down: 0
         }) do |acc, (shard_name, v)|
           if v['state'] == 'active'
             acc[:active] += 1
@@ -188,74 +248,50 @@ module Sunspot
             leader = shard_name
           end
 
-          replica_status = v['replicas'].reduce({active: 0, non_active: 0}) do |memo, (core_name, val)|
+          replica_status = v['replicas'].reduce({active: 0, non_active: 0}) do |memo, (core_name, v)|
             if v['state'] == 'active'
               memo[:active] += 1
             else
               memo[:non_active] += 1
+              @replicas_not_active <<
+              {
+                collection: collection_name,
+                shard: shard_name,
+                replica: core_name,
+                node: v["node_name"],
+                base_url: v["node_name"]
+              }
             end
             memo
           end
 
-          acc[:replica_up] += replica_status[:active]
+          acc[:replica_up] += replica_status[:active] or type == :timeout 
           acc[:replica_down] += replica_status[:non_active]
-          acc[:recoverable] += 1 if replica_status[:active].positive?
           acc
         end
 
         status = 'BAD'
         status = 'OK' if shard_status[:non_active] == 0
         recoverable = 'NO'
-        recoverable = 'YES' if shard_status[:recoverable] == shards.count()
+        recoverable = 'YES' if shard_status[:active] == shards.count()
 
-        rows << [
-          k,
-          replicas,
-          shards.count(),
-          shard_status[:active],
-          shard_status[:non_active],
-          shard_status[:replica_up],
-          shard_status[:replica_down],
-          status,
-          recoverable
-        ]
+        rows << {
+          collection: collection_name,
+          num_replicas: replicas,
+          num_shards: shards.count(),
+          shard_active: shard_status[:active],
+          shard_non_active: shard_status[:non_active],
+          replicas_up: shard_status[:replica_up],
+          replicas_down: shard_status[:replica_down],
+          status: status,
+          recoverable: recoverable
+        }
       end
 
-      # order first by STATUS then by COLLECTION (name)
-      rows.sort! do |a, b|
-        if a[7] == "BAD"
-          -1
-        else
-          a[0] <=> b[0]
-        end
-      end
-
-      table = Terminal::Table.new(
-        :headings => [
-          'Collection',
-          'Replicas',
-          '#Shards',
-          'Active',
-          'Non Active',
-          'Replica UP',
-          'Replica DOWN',
-          'Status',
-          'Recoverable'
-        ],
-        :rows => rows
-      )
-      puts table
+      rows
     end
 
-    def repair
-      replicas_not_active.each do |rep|
-        delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
-        add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
-      end
-    end
-  
-    private
-  
+    # Helper function for SOLR recovery
     def delete_failed_replica(collection:, shard:, replica:)
       uri = URI(@base_url + "/admin/collections?action=DELETEREPLICA&collection=#{collection}&shard=#{shard}&replica=#{replica}")
       puts "DELETE REPLICA #{uri}"
@@ -265,8 +301,6 @@ module Sunspot
       uri = URI(@base_url + "/admin/collections?action=ADDREPLICA&collection=#{collection}&shard=#{shard}&node=#{node}")
       puts "ADD REPLICA #{uri}"
     end
-
-    private
 
     # Helper function for solr caching
     def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
