@@ -219,14 +219,14 @@ module Sunspot
             status = 'red'
             bad_collections << {
               collection: row[:collection],
-              base_url: row[:bad_collections],
+              base_url: row[:bad_urls],
               status: 'non recoverable'
             }
           elsif row[:status] == :bad && row[:recoverable] == :yes
             status = 'orange' unless status == 'red'
             bad_collections << {
               collection: row[:collection],
-              base_url: row[:bad_collections],
+              base_url: row[:bad_urls],
               status: 'recoverable'
             }
           end
@@ -256,9 +256,10 @@ module Sunspot
         replica_factor = cs['replicationFactor'].to_i
         shards = cs['shards']
         shard_status = get_shard_status(collection_name, shards)
-        status = shard_status[:non_active] == 0 && shard_status[:replica_up] > 0 ? :ok : :bad
+        replica_up = shard_status[:replica_up]
         s_active = shard_status[:active]
-        recoverable = s_active > 0 && s_active == shards.count ? :yes : :no
+        status = shard_status[:non_active].zero? && replica_up > 0 ? :ok : :bad
+        recoverable = s_active > 0 && s_active == shards.count && replica_up > 0 ? :yes : :no
 
         rows << {
           collection: collection_name,
