@@ -150,7 +150,6 @@ module Sunspot
       end
     end
 
-
     ### CLUSTER MAINTENANCE ###
 
     def clusterstatus(as_json: false)
@@ -198,7 +197,7 @@ module Sunspot
               row[:shard_non_active],
               row[:replicas_up],
               row[:replicas_down],
-              row[:status] == :ok ? 'OK' : 'BAD',
+              row[:status] == :ok && row[:replicas_up].positive? ? 'OK' : 'BAD',
               row[:recoverable] == :yes ? 'YES' : 'NO'
             ]
           end
@@ -255,7 +254,8 @@ module Sunspot
         shards = cs['shards']
         shard_status = get_shard_status(collection_name, shards)
         status = shard_status[:non_active].zero? ? :ok : :bad
-        recoverable = shard_status[:active] == shards.count ? :yes : :no
+        s_active = shard_status[:active]
+        recoverable = s_active > 0 && s_active == shards.count ? :yes : :no
 
         rows << {
           collection: collection_name,
