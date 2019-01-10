@@ -241,38 +241,21 @@ module Sunspot
     private
 
     def check_cluster
-      rows = []
       replicas_not_active.clear
       @bad_urls = Hash.new { |hash, key| hash[key] = [] }
 
       cluster = clusterstatus
-      collections = cluster['cluster']['collections']
+      analyze_collections(cluster['cluster']['collections'])
+    end
 
-      collections.each_pair do |collection_name, v|
-        replicas = v['replicationFactor'].to_i
-        shards = v['shards']
-
-        shard_status = shards.each_with_object(
-          active: 0,
-          non_active: 0,
-          replica_up: 0,
-          replica_down: 0
-        ) do |(_shard_name, v), acc|
-          if v['state'] == 'active'
-            acc[:active] += 1
-          else
-            acc[:non_active] += 1
-          end
-
-          replica_status = calculate_replicas_status(v['replicas'])
-          acc[:replica_up] += replica_status[:active] || type == :timeout
-          acc[:replica_down] += replica_status[:non_active]
-        end
-
-        status = :bad
-        status = :ok if shard_status[:non_active].zero?
-        recoverable = :no
-        recoverable = :yes if shard_status[:active] == shards.count
+    def analyze_collections(collections)
+      rows = []
+      collections.each_pair do |collection_name, cs|
+        replicas = cs['replicationFactor'].to_i
+        shards = cs['shards']
+        shard_status = get_shard_status(collection_name, shards)
+        status = shard_status[:non_active].zero? ? :ok : :bad
+        recoverable = shard_status[:active] == shards.count ? :yes : :no
 
         rows << {
           collection: collection_name,
@@ -284,15 +267,36 @@ module Sunspot
           replicas_down: shard_status[:replica_down],
           status: status,
           recoverable: recoverable,
-          bad_urls: bad_urls[collection_name]
+          bad_urls: @bad_urls[collection_name]
         }
       end
 
       rows
     end
 
-    def calculate_replicas_status(replicas)
-      replicas.each_with_object(active: 0, non_active: 0) do |(core_name, v), memo|
+    def get_shard_status(collection_name, shards)
+      shards.each_with_object(
+        active: 0,
+        non_active: 0,
+        replica_up: 0,
+        replica_down: 0
+      ) do |(shard_name, v), acc|
+        if v['state'] == 'active'
+          acc[:active] += 1
+        else
+          acc[:non_active] += 1
+        end
+
+        replica_status = get_replicas_status(collection_name, shard_name, v['replicas'])
+        acc[:replica_up] += replica_status[:active] || type == :timeout
+        acc[:replica_down] += replica_status[:non_active]
+      end
+    end
+
+    def get_replicas_status(collection_name, shard_name, replicas)
+      replicas.each_with_object(
+        active: 0, non_active: 0
+      ) do |(core_name, v), memo|
         if v['state'] == 'active'
           memo[:active] += 1
         else
