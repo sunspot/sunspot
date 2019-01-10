@@ -198,8 +198,8 @@ module Sunspot
               row[:shard_non_active],
               row[:replicas_up],
               row[:replicas_down],
-              (if row[:status] == :ok "OK" else "BAD"),
-              (if row[:recoverable] == :yes "YES" else "NO"),
+              row[:status] == :ok ? 'OK' : 'BAD',
+              row[:recoverable] == :yes ? 'YES' : 'NO',
             ]
           end
         )
@@ -227,9 +227,8 @@ module Sunspot
             }
           end
         end
+        {status: status, bad_collections: bad_collections}.to_json
       end
-
-      {status: status, bad_collections: bad_collections}.to_json
     end
 
     def repair_collection
@@ -244,7 +243,7 @@ module Sunspot
     def check_cluster
       rows = []
       replicas_not_active = []
-      bad_collections = Hash.new { |hash, key| hash[key] = [] }
+      bad_urls = Hash.new { |hash, key| hash[key] = [] }
 
       cluster = clusterstatus
       collections = cluster['cluster']['collections']
@@ -276,14 +275,14 @@ module Sunspot
               memo[:active] += 1
             else
               memo[:non_active] += 1
-              bad_collections[collection_name] << v["base_url"]
+              bad_urls[collection_name] << v['base_url']
               @replicas_not_active <<
               {
                 collection: collection_name,
                 shard: shard_name,
                 replica: core_name,
-                node: v["node_name"],
-                base_url: v["base_url"]
+                node: v['node_name'],
+                base_url: v['base_url']
               }
             end
             memo
@@ -309,7 +308,7 @@ module Sunspot
           replicas_down: shard_status[:replica_down],
           status: status,
           recoverable: recoverable,
-          bad_collections: bad_collections[collection_name]
+          bad_urls: bad_urls[collection_name]
         }
       end
 
