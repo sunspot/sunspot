@@ -151,7 +151,7 @@ module Sunspot
     end
 
 
-    ### CLUSTER MANTANANCE ###
+    ### CLUSTER MAINTENANCE ###
 
     def clusterstatus(as_json: false)
       # don't cache it
@@ -198,8 +198,8 @@ module Sunspot
               row[:shard_non_active],
               row[:replicas_up],
               row[:replicas_down],
-              row[:status],
-              row[:recoverable]
+              (if row[:status] == :ok "OK" else "BAD"),
+              (if row[:recoverable] == :yes "YES" else "NO"),
             ]
           end
         )
@@ -207,8 +207,29 @@ module Sunspot
       when :json
         rows.to_json
       when :simple
-        rows
+        status = 'green'
+        bad_collections = []
+
+        rows.each do |row|
+          if row[:status] == :bad and row[:recoverable] == :no
+            status = 'red'
+            bad_collections << {
+              collection: row[:collection],
+              base_url: row[:bad_collections],
+              status: 'non recoverable'
+            }
+          elsif row[:status] == :bad and row[:recoverable] == :yes
+            status = 'orange' unless status == 'red'
+            bad_collections << {
+              collection: row[:collection],
+              base_url: row[:bad_collections],
+              status: 'recoverable'
+            }
+          end
+        end
       end
+
+      {status: status, bad_collections: bad_collections}.to_json
     end
 
     def repair_collection
@@ -223,9 +244,11 @@ module Sunspot
     def check_cluster
       rows = []
       replicas_not_active = []
+      bad_collections = Hash.new { |hash, key| hash[key] = [] }
 
       cluster = clusterstatus
       collections = cluster['cluster']['collections']
+
       collections.each_pair do |collection_name, v|
         replicas = v['replicationFactor'].to_i
         shards = v['shards']
@@ -253,13 +276,14 @@ module Sunspot
               memo[:active] += 1
             else
               memo[:non_active] += 1
+              bad_collections[collection_name] << v["base_url"]
               @replicas_not_active <<
               {
                 collection: collection_name,
                 shard: shard_name,
                 replica: core_name,
                 node: v["node_name"],
-                base_url: v["node_name"]
+                base_url: v["base_url"]
               }
             end
             memo
@@ -270,10 +294,10 @@ module Sunspot
           acc
         end
 
-        status = 'BAD'
-        status = 'OK' if shard_status[:non_active] == 0
-        recoverable = 'NO'
-        recoverable = 'YES' if shard_status[:active] == shards.count()
+        status = :bad
+        status = :ok if shard_status[:non_active] == 0
+        recoverable = :no
+        recoverable = :yes if shard_status[:active] == shards.count()
 
         rows << {
           collection: collection_name,
@@ -284,7 +308,8 @@ module Sunspot
           replicas_up: shard_status[:replica_up],
           replicas_down: shard_status[:replica_down],
           status: status,
-          recoverable: recoverable
+          recoverable: recoverable,
+          bad_collections: bad_collections[collection_name]
         }
       end
 
