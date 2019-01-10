@@ -204,7 +204,12 @@ module Sunspot
         )
         puts table
       when :json
-        rows.to_json
+        status = rows.each_with_object({}) do |row, acc|
+          name = row[:collection]
+          row.delete(:collection)
+          acc[name] = row
+        end
+        status.to_json
       when :simple
         status = 'green'
         bad_collections = []
@@ -241,8 +246,6 @@ module Sunspot
 
     def check_cluster
       replicas_not_active.clear
-      @bad_urls = Hash.new { |hash, key| hash[key] = [] }
-
       cluster = clusterstatus
       analyze_collections(cluster['cluster']['collections'])
     end
@@ -250,16 +253,16 @@ module Sunspot
     def analyze_collections(collections)
       rows = []
       collections.each_pair do |collection_name, cs|
-        replicas = cs['replicationFactor'].to_i
+        replica_factor = cs['replicationFactor'].to_i
         shards = cs['shards']
         shard_status = get_shard_status(collection_name, shards)
-        status = shard_status[:non_active].zero? ? :ok : :bad
+        status = shard_status[:non_active] == 0 && shard_status[:replica_up] > 0 ? :ok : :bad
         s_active = shard_status[:active]
         recoverable = s_active > 0 && s_active == shards.count ? :yes : :no
 
         rows << {
           collection: collection_name,
-          num_replicas: replicas,
+          num_replicas: replica_factor,
           num_shards: shards.count,
           shard_active: shard_status[:active],
           shard_non_active: shard_status[:non_active],
@@ -294,6 +297,8 @@ module Sunspot
     end
 
     def get_replicas_status(collection_name, shard_name, replicas)
+      @bad_urls = Hash.new { |hash, key| hash[key] = [] }
+
       replicas.each_with_object(
         active: 0, non_active: 0
       ) do |(core_name, v), memo|
