@@ -170,7 +170,7 @@ module Sunspot
       when :table
         # order first by STATUS then by COLLECTION (name)
         rows.sort! do |a, b|
-          if a[:status] == "BAD"
+          if a[:status] == :bad
             -1
           else
             a[:collection] <=> b[:collection]
@@ -178,7 +178,7 @@ module Sunspot
         end
 
         table = Terminal::Table.new(
-          :headings => [
+          headings: [
             'Collection',
             'Replicas',
             '#Shards',
@@ -189,7 +189,7 @@ module Sunspot
             'Status',
             'Recoverable'
           ],
-          :rows => rows.map do |row|
+          rows: rows.map do |row|
             [
               row[:collection],
               row[:num_replicas],
@@ -199,7 +199,7 @@ module Sunspot
               row[:replicas_up],
               row[:replicas_down],
               row[:status] == :ok ? 'OK' : 'BAD',
-              row[:recoverable] == :yes ? 'YES' : 'NO',
+              row[:recoverable] == :yes ? 'YES' : 'NO'
             ]
           end
         )
@@ -211,14 +211,14 @@ module Sunspot
         bad_collections = []
 
         rows.each do |row|
-          if row[:status] == :bad and row[:recoverable] == :no
+          if row[:status] == :bad && row[:recoverable] == :no
             status = 'red'
             bad_collections << {
               collection: row[:collection],
               base_url: row[:bad_collections],
               status: 'non recoverable'
             }
-          elsif row[:status] == :bad and row[:recoverable] == :yes
+          elsif row[:status] == :bad && row[:recoverable] == :yes
             status = 'orange' unless status == 'red'
             bad_collections << {
               collection: row[:collection],
@@ -227,7 +227,7 @@ module Sunspot
             }
           end
         end
-        {status: status, bad_collections: bad_collections}.to_json
+        { status: status, bad_collections: bad_collections }.to_json
       end
     end
 
@@ -237,13 +237,13 @@ module Sunspot
         add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
       end
     end
-  
+
     private
 
     def check_cluster
       rows = []
-      replicas_not_active = []
-      bad_urls = Hash.new { |hash, key| hash[key] = [] }
+      replicas_not_active.clear
+      @bad_urls = Hash.new { |hash, key| hash[key] = [] }
 
       cluster = clusterstatus
       collections = cluster['cluster']['collections']
@@ -251,57 +251,33 @@ module Sunspot
       collections.each_pair do |collection_name, v|
         replicas = v['replicationFactor'].to_i
         shards = v['shards']
-        leader = ''
 
-        shard_status = shards.reduce(
-          {
-            active: 0,
-            non_active: 0,
-            replica_up: 0,
-            replica_down: 0
-        }) do |acc, (shard_name, v)|
+        shard_status = shards.each_with_object(
+          active: 0,
+          non_active: 0,
+          replica_up: 0,
+          replica_down: 0
+        ) do |(_shard_name, v), acc|
           if v['state'] == 'active'
             acc[:active] += 1
           else
             acc[:non_active] += 1
           end
 
-          if v['leader'] == 'true'
-            leader = shard_name
-          end
-
-          replica_status = v['replicas'].reduce({active: 0, non_active: 0}) do |memo, (core_name, v)|
-            if v['state'] == 'active'
-              memo[:active] += 1
-            else
-              memo[:non_active] += 1
-              bad_urls[collection_name] << v['base_url']
-              @replicas_not_active <<
-              {
-                collection: collection_name,
-                shard: shard_name,
-                replica: core_name,
-                node: v['node_name'],
-                base_url: v['base_url']
-              }
-            end
-            memo
-          end
-
-          acc[:replica_up] += replica_status[:active] or type == :timeout 
+          replica_status = calculate_replicas_status(v['replicas'])
+          acc[:replica_up] += replica_status[:active] || type == :timeout
           acc[:replica_down] += replica_status[:non_active]
-          acc
         end
 
         status = :bad
-        status = :ok if shard_status[:non_active] == 0
+        status = :ok if shard_status[:non_active].zero?
         recoverable = :no
-        recoverable = :yes if shard_status[:active] == shards.count()
+        recoverable = :yes if shard_status[:active] == shards.count
 
         rows << {
           collection: collection_name,
           num_replicas: replicas,
-          num_shards: shards.count(),
+          num_shards: shards.count,
           shard_active: shard_status[:active],
           shard_non_active: shard_status[:non_active],
           replicas_up: shard_status[:replica_up],
@@ -315,12 +291,30 @@ module Sunspot
       rows
     end
 
+    def calculate_replicas_status(replicas)
+      replicas.each_with_object(active: 0, non_active: 0) do |(core_name, v), memo|
+        if v['state'] == 'active'
+          memo[:active] += 1
+        else
+          memo[:non_active] += 1
+          @bad_urls[collection_name] << v['base_url']
+          @replicas_not_active << {
+            collection: collection_name,
+            shard: shard_name,
+            replica: core_name,
+            node: v['node_name'],
+            base_url: v['base_url']
+          }
+        end
+      end
+    end
+
     # Helper function for SOLR recovery
     def delete_failed_replica(collection:, shard:, replica:)
       uri = URI(@base_url + "/admin/collections?action=DELETEREPLICA&collection=#{collection}&shard=#{shard}&replica=#{replica}")
       puts "DELETE REPLICA #{uri}"
     end
-    
+
     def add_failed_replica(collection:, shard:, node:)
       uri = URI(@base_url + "/admin/collections?action=ADDREPLICA&collection=#{collection}&shard=#{shard}&node=#{node}")
       puts "ADD REPLICA #{uri}"
@@ -342,9 +336,9 @@ module Sunspot
     def rails_cache(key, force)
       ::Rails.cache.delete(key) if force
       ::Rails.cache.fetch(key, expires_in: @refresh_every) { yield }
-      rescue
-        ::Rails.cache.delete(key)
-        simple_cache(key, force) { yield }
+    rescue
+      ::Rails.cache.delete(key)
+      simple_cache(key, force) { yield }
     end
 
     def simple_cache(key, force)
