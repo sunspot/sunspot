@@ -76,7 +76,7 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def live_nodes(force: false)
-      list_nodes = with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
+      list_nodes = with_cache('CLUSTERSTATUS', force: true, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
         resp['cluster']['live_nodes'].map do |node|
           host_port = node.split(':')
           if host_port.size == 2
@@ -179,10 +179,12 @@ module Sunspot
         table = Terminal::Table.new(
           headings: [
             'Collection',
-            'Replicas',
-            '#Shards',
-            'Active',
-            'Non Active',
+            'Replica Factor',
+            'Shards',
+            'Shard Active',
+            'Shard Down',
+            'Shard Good',
+            'Shard Bad',
             'Replica UP',
             'Replica DOWN',
             'Status',
@@ -195,6 +197,8 @@ module Sunspot
               row[:num_shards],
               row[:shard_active],
               row[:shard_non_active],
+              row[:shard_good],
+              row[:shard_bad],
               row[:replicas_up],
               row[:replicas_down],
               row[:status] == :ok && row[:replicas_up].positive? ? 'OK' : 'BAD',
@@ -220,14 +224,20 @@ module Sunspot
             bad_collections << {
               collection: row[:collection],
               base_url: row[:bad_urls],
-              status: 'non recoverable'
+              recoverable: false
             }
           elsif row[:status] == :bad && row[:recoverable] == :yes
             status = 'orange' unless status == 'red'
             bad_collections << {
               collection: row[:collection],
               base_url: row[:bad_urls],
-              status: 'recoverable'
+              recoverable: true
+            }
+          elsif row[:bad_urls].count > 0
+            bad_collections << {
+              collection: row[:collection],
+              base_url: row[:bad_urls],
+              recoverable: true
             }
           end
         end
@@ -256,10 +266,10 @@ module Sunspot
         replica_factor = cs['replicationFactor'].to_i
         shards = cs['shards']
         shard_status = get_shard_status(collection_name, shards)
-        replica_up = shard_status[:replica_up]
         s_active = shard_status[:active]
-        status = shard_status[:non_active].zero? && replica_up > 0 ? :ok : :bad
-        recoverable = s_active > 0 && s_active == shards.count && replica_up > 0 ? :yes : :no
+        s_bad = shard_status[:bad]
+        status = s_active.zero? || s_bad > 0 ? :bad : :ok
+        recoverable = s_active > 0 && s_bad.zero? ? :yes : :no
 
         rows << {
           collection: collection_name,
@@ -267,6 +277,8 @@ module Sunspot
           num_shards: shards.count,
           shard_active: shard_status[:active],
           shard_non_active: shard_status[:non_active],
+          shard_good: shard_status[:good],
+          shard_bad: shard_status[:bad],
           replicas_up: shard_status[:replica_up],
           replicas_down: shard_status[:replica_down],
           status: status,
@@ -282,6 +294,8 @@ module Sunspot
       shards.each_with_object(
         active: 0,
         non_active: 0,
+        good: 0,
+        bad: 0,
         replica_up: 0,
         replica_down: 0
       ) do |(shard_name, v), acc|
@@ -292,8 +306,14 @@ module Sunspot
         end
 
         replica_status = get_replicas_status(collection_name, shard_name, v['replicas'])
-        acc[:replica_up] += replica_status[:active] || type == :timeout
+        acc[:replica_up] += replica_status[:active]
         acc[:replica_down] += replica_status[:non_active]
+
+        if replica_status[:active] > 0
+          acc[:good] += 1
+        else
+          acc[:bad] += 1
+        end
       end
     end
 
