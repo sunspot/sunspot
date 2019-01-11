@@ -27,7 +27,7 @@ module Sunspot
       shards: 'shards',
       snitch: 'snitch'
     }.freeze
-    
+
     attr_accessor :replicas_not_active
 
     def initialize(config:, refresh_every: 600)
@@ -41,9 +41,10 @@ module Sunspot
     # Return the appropriate admin session
     def session
       c = Sunspot::Configuration.build
-      host_port = @config.hostnames[rand(@config.hostnames.size)].split(':')
+      host_port = @config.hostnames[0].split(':')
       host_port = [host_port.first, host_port.last.to_i] if host_port.size == 2
       host_port = [host_port.first, @config.port] if host_port.size == 1
+      @config.hostnames.rotate!
 
       c.solr.url = URI::HTTP.build(
         host: host_port.first,
@@ -154,7 +155,7 @@ module Sunspot
 
     def clusterstatus(as_json: false)
       # don't cache it
-      status = retrieve_info_solr('CLUSTERSTATUS')
+      status = solr_request('CLUSTERSTATUS')
       if as_json
         status.to_json
       else
@@ -252,6 +253,17 @@ module Sunspot
       end
     end
 
+    # Helper function for SOLR recovery
+    def delete_failed_replica(collection:, shard:, replica:)
+      uri = URI(@base_url + "/admin/collections?action=DELETEREPLICA&collection=#{collection}&shard=#{shard}&replica=#{replica}")
+      puts "DELETE REPLICA #{uri}"
+    end
+
+    def add_failed_replica(collection:, shard:, node:)
+      uri = URI(@base_url + "/admin/collections?action=ADDREPLICA&collection=#{collection}&shard=#{shard}&node=#{node}")
+      puts "ADD REPLICA #{uri}"
+    end
+
     private
 
     def check_cluster
@@ -339,26 +351,15 @@ module Sunspot
       end
     end
 
-    # Helper function for SOLR recovery
-    def delete_failed_replica(collection:, shard:, replica:)
-      uri = URI(@base_url + "/admin/collections?action=DELETEREPLICA&collection=#{collection}&shard=#{shard}&replica=#{replica}")
-      puts "DELETE REPLICA #{uri}"
-    end
-
-    def add_failed_replica(collection:, shard:, node:)
-      uri = URI(@base_url + "/admin/collections?action=ADDREPLICA&collection=#{collection}&shard=#{shard}&node=#{node}")
-      puts "ADD REPLICA #{uri}"
-    end
-
     # Helper function for solr caching
     def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
       if defined?(::Rails.cache)
         rails_cache(key, force) do
-          yield(retrieve_info_solr(action))
+          yield(solr_request(action))
         end
       else
         simple_cache(key, force) do
-          yield(retrieve_info_solr(action))
+          yield(solr_request(action))
         end
       end
     end
@@ -381,7 +382,7 @@ module Sunspot
       @cached[key] ||= yield
     end
 
-    def retrieve_info_solr(action)
+    def solr_request(action)
       retries = 0
       max_retries = 3
       begin
