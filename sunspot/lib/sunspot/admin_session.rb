@@ -242,26 +242,59 @@ module Sunspot
             }
           end
         end
-        { status: status, bad_collections: bad_collections }.to_json
+        { status: status, bad_collections: bad_collections }
       end
     end
 
-    def repair_collection
+    # rep is the collection to be repaired
+    def repair_collection(rep)
+      delete_failed_replica(
+        collection: rep[:collection],
+        shard: rep[:shard],
+        replica: rep[:replica]
+      )
+      add_failed_replica(
+        collection: rep[:collection],
+        shard: rep[:shard],
+        node: rep[:node]
+      )
+    end
+
+    def repair_all_collection
       replicas_not_active.each do |rep|
-        delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
-        add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
+        if rep[:recoverable]
+          delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
+          add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
+        end
       end
     end
 
     # Helper function for SOLR recovery
     def delete_failed_replica(collection:, shard:, replica:)
-      uri = URI(@base_url + "/admin/collections?action=DELETEREPLICA&collection=#{collection}&shard=#{shard}&replica=#{replica}")
-      puts "DELETE REPLICA #{uri}"
+      uri = "/admin/collections?action=DELETEREPLICA&collection=#{collection}&shard=#{shard}&replica=#{replica}"
+      puts "DELETE REPLICA: #{uri}"
+
+      solr_request(
+        'DELETEREPLICA',
+        extra_params: {
+          'collection' => collection,
+          'shard' => shard,
+          'replica' => replica
+        }
+      )
     end
 
     def add_failed_replica(collection:, shard:, node:)
-      uri = URI(@base_url + "/admin/collections?action=ADDREPLICA&collection=#{collection}&shard=#{shard}&node=#{node}")
+      uri = "/admin/collections?action=ADDREPLICA&collection=#{collection}&shard=#{shard}&node=#{node}"
       puts "ADD REPLICA #{uri}"
+      solr_request(
+        'ADDREPLICA',
+        extra_params: {
+          'collection' => collection,
+          'shard' => shard,
+          'node' => node
+        }
+      )
     end
 
     private
@@ -282,6 +315,12 @@ module Sunspot
         s_bad = shard_status[:bad]
         status = s_active.zero? || s_bad > 0 ? :bad : :ok
         recoverable = s_active > 0 && s_bad.zero? ? :yes : :no
+
+        @replicas_not_active = replicas_not_active.map do |r|
+          nr = r.dup
+          nr[:recoverable] = recoverable if r[:collection] == collection_name
+          nr
+        end
 
         rows << {
           collection: collection_name,
@@ -382,11 +421,11 @@ module Sunspot
       @cached[key] ||= yield
     end
 
-    def solr_request(action)
+    def solr_request(action, extra_params: {})
       retries = 0
       max_retries = 3
       begin
-        connection.get(:collections, params: { action: action, wt: 'json' })
+        connection.get(:collections, params: { action: action, wt: 'json' }.merge(extra_params))
       rescue StandardError => e
         if retries < max_retries
           retries += 1
