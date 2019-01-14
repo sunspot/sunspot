@@ -254,11 +254,17 @@ module Sunspot
     # Persist SOLR status to file (using pstore)
     #
     def persist_solr_status
-      rows = check_cluster
+      cluster = clusterstatus
+      rows = check_cluster(status: cluster)
+
       # store to disk the current status
       store = PStore.new('cluster_stauts.pstore')
       store.transaction do
-        store['solr_cluster_status'] = rows
+        # only for debug
+        store['solr_cluster_status'] = cluster
+
+        # save rows
+        store['solr_cluster_status_rows'] = rows
         store['replicas_not_active'] = @replicas_not_active
       end
     end
@@ -270,7 +276,7 @@ module Sunspot
       store = PStore.new('cluster_stauts.pstore')
       store.transaction(true) do
         @replicas_not_active = store['replicas_not_active'] || []
-        store['solr_cluster_status']
+        store['solr_cluster_status_rows']
       end
     end
 
@@ -299,9 +305,6 @@ module Sunspot
 
     # Helper function for SOLR recovery
     def delete_failed_replica(collection:, shard:, replica:)
-      uri = "/admin/collections?action=DELETEREPLICA&collection=#{collection}&shard=#{shard}&replica=#{replica}"
-      puts "DELETE REPLICA: #{uri}"
-
       solr_request(
         'DELETEREPLICA',
         extra_params: {
@@ -314,8 +317,6 @@ module Sunspot
     end
 
     def add_failed_replica(collection:, shard:, node:)
-      uri = "/admin/collections?action=ADDREPLICA&collection=#{collection}&shard=#{shard}&node=#{node}"
-      puts "ADD REPLICA #{uri}"
       solr_request(
         'ADDREPLICA',
         extra_params: {
@@ -329,9 +330,9 @@ module Sunspot
 
     private
 
-    def check_cluster
+    def check_cluster(status: nil)
       @replicas_not_active.clear
-      cluster = clusterstatus
+      cluster = status || clusterstatus
       analyze_collections(cluster['cluster']['collections'])
     end
 
