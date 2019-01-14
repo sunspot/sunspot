@@ -59,7 +59,7 @@ module Sunspot
       #
       def session(collection: nil)
         solr.create_collection(collection_name: "#{@config.collection['base_name']}_default") if solr.collections.empty?
-        gen_session("/solr/#{collection||solr.collections.last}")
+        gen_session("/solr/#{collection || solr.collections.last}")
       end
 
       #
@@ -71,7 +71,7 @@ module Sunspot
         solr.create_collection(collection_name: obj_col_name) unless solr.collections.include?(obj_col_name)
         gen_session("/solr/#{obj_col_name}")
       end
-      
+
       #
       # Return the collections that match the current time range
       # or the given collections in case are present
