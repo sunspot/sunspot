@@ -2,7 +2,9 @@
 
 require 'logger'
 require 'terminal-table'
+require 'pstore'
 require 'json'
+
 
 module Sunspot
   class AdminSession < Session
@@ -27,8 +29,6 @@ module Sunspot
       shards: 'shards',
       snitch: 'snitch'
     }.freeze
-
-    attr_accessor :replicas_not_active
 
     def initialize(config:, refresh_every: 600)
       @initialized_at = Time.now
@@ -59,6 +59,10 @@ module Sunspot
 
     def connection
       session.connection
+    end
+
+    def add_hostname(h)
+      @config.hostnames << h
     end
 
     #
@@ -163,8 +167,8 @@ module Sunspot
       end
     end
 
-    def report_clusterstatus(view: :table)
-      rows = check_cluster
+    def report_clusterstatus(view: :table, using_persisted: false)
+      rows = using_persisted ? restore_solr_status : check_cluster
 
       case view
       when :table
@@ -203,7 +207,7 @@ module Sunspot
               row[:replicas_up],
               row[:replicas_down],
               row[:status] == :ok && row[:replicas_up].positive? ? 'OK' : 'BAD',
-              row[:recoverable] == :yes ? 'YES' : 'NO'
+              row[:recoverable] ? 'YES' : 'NO'
             ]
           end
         )
@@ -246,6 +250,30 @@ module Sunspot
       end
     end
 
+    #
+    # Persist SOLR status to file (using pstore)
+    #
+    def persist_solr_status
+      rows = check_cluster
+      # store to disk the current status
+      store = PStore.new('cluster_stauts.pstore')
+      store.transaction do
+        store['solr_cluster_status'] = rows
+        store['replicas_not_active'] = @replicas_not_active
+      end
+    end
+
+    #
+    # Return the SOLR status stored in a persisted store
+    #
+    def restore_solr_status
+      store = PStore.new('cluster_stauts.pstore')
+      store.transaction(true) do
+        @replicas_not_active = store['replicas_not_active'] || []
+        store['solr_cluster_status']
+      end
+    end
+
     # rep is the collection to be repaired
     def repair_collection(rep)
       delete_failed_replica(
@@ -261,7 +289,7 @@ module Sunspot
     end
 
     def repair_all_collection
-      replicas_not_active.each do |rep|
+      @replicas_not_active.each do |rep|
         if rep[:recoverable]
           delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
           add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
@@ -282,6 +310,7 @@ module Sunspot
           'replica' => replica
         }
       )
+    rescue RSolr::Error::Http => _e
     end
 
     def add_failed_replica(collection:, shard:, node:)
@@ -295,12 +324,13 @@ module Sunspot
           'node' => node
         }
       )
+    rescue RSolr::Error::Http => _e
     end
 
     private
 
     def check_cluster
-      replicas_not_active.clear
+      @replicas_not_active.clear
       cluster = clusterstatus
       analyze_collections(cluster['cluster']['collections'])
     end
@@ -314,7 +344,7 @@ module Sunspot
         s_active = shard_status[:active]
         s_bad = shard_status[:bad]
         status = s_active.zero? || s_bad > 0 ? :bad : :ok
-        recoverable = s_active > 0 && s_bad.zero? ? :yes : :no
+        recoverable = s_active > 0 && s_bad.zero?
 
         @replicas_not_active = replicas_not_active.map do |r|
           nr = r.dup
