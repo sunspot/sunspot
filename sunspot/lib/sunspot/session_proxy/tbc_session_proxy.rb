@@ -72,6 +72,12 @@ module Sunspot
         gen_session("/solr/#{obj_col_name}")
       end
 
+      def session_for_collection(collection)
+        # If collection is not present, create it!
+        solr.create_collection(collection_name: collection) unless solr.collections.include?(collection)
+        gen_session("/solr/#{collection}")
+      end
+
       #
       # Return the collections that match the current time range
       # or the given collections in case are present
@@ -358,7 +364,8 @@ module Sunspot
         grouped_objects = Hash.new { |h, k| h[k] = [] }
         objects.flatten.each do |object|
           c_name = collection_for(object)
-          cache_sessions[c_name] = session_for(object) unless cache_sessions.key?(c_name)
+          puts "collection_name: #{c_name}"
+          cache_sessions[c_name] = session_for_collection(c_name) unless cache_sessions.key?(c_name)
           grouped_objects[cache_sessions[c_name]] << object
         end
         grouped_objects.each_pair do |session, group|
