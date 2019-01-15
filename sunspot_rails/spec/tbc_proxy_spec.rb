@@ -209,8 +209,6 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       # create fake collections
       @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_8_hr")
       @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_8_a")
-      @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_8_rt")
-      @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_8_hr")
 
       # creation phase
       (1..10).each do |index|
@@ -218,7 +216,6 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
           body: "basic post on Historic #{index}",
           created_at: Time.new(2009, 8, 1, 12)
         )
-        puts "indexing: #{post.inspect}"
         @proxy.index(post)
       end
       @proxy.commit

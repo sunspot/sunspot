@@ -364,7 +364,6 @@ module Sunspot
         grouped_objects = Hash.new { |h, k| h[k] = [] }
         objects.flatten.each do |object|
           c_name = collection_for(object)
-          puts "collection_name: #{c_name}"
           cache_sessions[c_name] = session_for_collection(c_name) unless cache_sessions.key?(c_name)
           grouped_objects[cache_sessions[c_name]] << object
         end
