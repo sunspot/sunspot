@@ -1,6 +1,8 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 require File.expand_path('../lib/sunspot/rails/spec_helper', File.dirname(__FILE__))
 
+require 'byebug'
+
 class TbcPostWrong < Post
 end
 
@@ -8,6 +10,7 @@ class TbcPostWrongTime < Post
   def collection_postfix
     'hr'
   end
+
   def time_routed_on
     DateTime.new(2009, 10, 1, 12, 30, 0)
   end
@@ -193,7 +196,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   describe 'remove' do
-    before do
+    before :each do
       @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
         date_from: Time.new(2009, 1, 1, 12),
         date_to: Time.new(2010, 1, 1, 12),
@@ -220,37 +223,19 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     end
 
     it 'remove_by_id' do
-      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_hr")
-      sleep 3
-
-      post = Post.create(
-        body: 'basic post on Historic',
-        created_at: Time.new(2009, 8, 1, 12)
-      )
-      @proxy.index!(post)
-      sleep 2
-
       ndocs = Post.count
       expect(Post.search.total).to eq(ndocs)
-      @proxy.remove_by_id(Post, "#{@base_name}_2009_08_hr", post)
+      @proxy.remove_by_id(Post, "#{@base_name}_2009_08_hr", Post.first.id)
       @proxy.commit
+      sleep 3
       expect(Post.search.total).to eq(ndocs - 1)
     end
 
     it 'remove_by_id!' do
-      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_hr")
-      sleep 3
-
-      post = Post.create(
-        body: 'basic post on Historic',
-        created_at: Time.new(2009, 8, 1, 12)
-      )
-      @proxy.index!(post)
-      sleep 2
-
       ndocs = Post.count
       expect(Post.search.total).to eq(ndocs)
-      @proxy.remove_by_id!(Post, "#{@base_name}_2009_08_hr", post)
+      @proxy.remove_by_id!(Post, "#{@base_name}_2009_08_hr", Post.first.id)
+      sleep 3
       expect(Post.search.total).to eq(ndocs - 1)
     end
 
