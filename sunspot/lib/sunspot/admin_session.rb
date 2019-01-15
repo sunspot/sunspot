@@ -61,8 +61,11 @@ module Sunspot
       session.connection
     end
 
-    def add_hostname(h)
-      @config.hostnames << h
+    #
+    # Add an host to the configure hostname
+    #
+    def add_hostname(host)
+      @config.hostnames << host
     end
 
     #
@@ -74,6 +77,7 @@ module Sunspot
       end
 
       raise 'error retrieving list of collection from solr' unless collections.is_a?(Array)
+
       collections
     end
 
@@ -94,6 +98,7 @@ module Sunspot
       end
 
       return [] unless list_nodes.is_a?(Array)
+
       list_nodes
     end
 

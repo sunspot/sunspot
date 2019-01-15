@@ -184,7 +184,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       end
     )
     posts = @proxy.search(Post) { fulltext 'basic' }
-    expect(posts.hits.size).to be == 0
+    expect(posts.hits.size).to be.zero?
   end
 
   it 'all sessions for this configuration' do
@@ -220,8 +220,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     end
 
     it 'remove_by_id' do
-      @proxy.remove_by_id(Post, "#{@base_name}_2009_08_a", Post.first)
       expect(Post.search.total).to eq(Post.count)
+      @proxy.remove_by_id(Post, "#{@base_name}_2009_08_a", Post.first)
       @proxy.commit
       expect(Post.search.total).to eq(Post.count - 1)
     end
@@ -232,8 +232,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     end
 
     it 'remove_all documents' do
-      @proxy.remove_all(Post)
       expect(Post.search.total).to eq(Post.count)
+      @proxy.remove_all(Post)
       @proxy.commit
       expect(Post.search.total).to eq(0)
     end
