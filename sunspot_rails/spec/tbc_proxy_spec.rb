@@ -230,10 +230,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       @proxy.index!(post)
       sleep 2
 
-      expect(Post.search.total).to eq(Post.count)
+      ndocs = Post.count
+      expect(Post.search.total).to eq(ndocs)
       @proxy.remove_by_id(Post, "#{@base_name}_2009_08_hr", post)
       @proxy.commit
-      expect(Post.search.total).to eq(Post.count - 1)
+      expect(Post.search.total).to eq(ndocs - 1)
     end
 
     it 'remove_by_id!' do
@@ -247,9 +248,10 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       @proxy.index!(post)
       sleep 2
 
-      expect(Post.search.total).to eq(Post.count)
+      ndocs = Post.count
+      expect(Post.search.total).to eq(ndocs)
       @proxy.remove_by_id!(Post, "#{@base_name}_2009_08_hr", post)
-      expect(Post.search.total).to eq(Post.count - 1)
+      expect(Post.search.total).to eq(ndocs - 1)
     end
 
     it 'remove_all documents' do
