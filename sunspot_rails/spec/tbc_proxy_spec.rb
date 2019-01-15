@@ -187,6 +187,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     expect(posts.hits.size).to be == 0
   end
 
+  it 'all sessions for this configuration' do
+    project_sessions = @proxy.solr.collections.select { |c| c.start_with?(@base_name) }
+    expect(@proxy.all_sessions.size).to eq(project_sessions.size)
+  end
+
   describe 'remove' do
     before do
       @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
@@ -215,14 +220,14 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     end
 
     it 'remove_by_id' do
-      @proxy.remove_by_id(Post, Post.first)
+      @proxy.remove_by_id(Post, "#{@base_name}_2009_08_a", Post.first)
       expect(Post.search.total).to eq(Post.count)
       @proxy.commit
       expect(Post.search.total).to eq(Post.count - 1)
     end
 
     it 'remove_by_id!' do
-      @proxy.remove_by_id!(Post, Post.first)
+      @proxy.remove_by_id!(Post, "#{@base_name}_2009_08_a", Post.first)
       expect(Post.search.total).to eq(Post.count - 1)
     end
 

@@ -25,8 +25,6 @@ module Sunspot
     # cases be able to support them):
     #
     # * batch
-    # * remove_by_id
-    # * remove_by_id!
     # * remove_all with an argument
     # * remove_all! with an argument
     # * atomic_update with arguments
@@ -59,9 +57,9 @@ module Sunspot
       #
       # Return a session.
       #
-      def session
-        solr.create_collection(collection_name: 'default') if solr.collections.empty?
-        gen_session("/solr/#{solr.collections.last}")
+      def session(collection: nil)
+        solr.create_collection(collection_name: "#{@config.collection['base_name']}_default") if solr.collections.empty?
+        gen_session("/solr/#{collection || solr.collections.last}")
       end
 
       #
@@ -93,7 +91,7 @@ module Sunspot
       #
       def all_sessions
         @sessions = []
-        solr.collections(force: true).each do |col|
+        solr.collections(force: true).select { |c| c.start_with?(@config.collection['base_name']) }.each do |col|
           @sessions << gen_session("/solr/#{col}")
         end
         @sessions
@@ -137,31 +135,29 @@ module Sunspot
 
       #
       # See Sunspot.remove_by_id
-      # you must pass objects to infer correct sessions
+      # you must pass clazz and collection to infer correct sessions
       #
-      def remove_by_id(clazz, *objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.remove_by_id(clazz, group.map(&:id)) }
-        end
+      def remove_by_id(clazz, collection, *ids)
+        with_exception_handling { session(collection: collection).remove_by_id(clazz, ids) }
       end
 
       #
       # See Sunspot.remove_by_id!
-      # you must pass objects to infer correct sessions
+      # you must pass Clazz and collection name to infer correct sessions
       #
-      def remove_by_id!(clazz, *objects)
-        remove_by_id(clazz, objects)
+      def remove_by_id!(clazz, collection, *ids)
         # commits only the interested sessions
-        using_collection_session(objects) do |session, _|
-          with_exception_handling { session.commit }
-        end
+        with_exception_handling {
+          remove_by_id(clazz, collection, ids)
+          session(collection: collection).commit
+        }
       end
 
       #
       # Commit all shards. See Sunspot.commit
       #
       def commit(soft_commit = false)
-        with_exception_handling { all_sessions.each { |s| s.commit(soft_commit) } }
+        with_exception_handling { all_sessions.each { |s| s.commit(soft_commit) }}
       end
 
       #
