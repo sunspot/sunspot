@@ -179,12 +179,12 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
-      fn_collection_filter: lambda do |collections|
+      fn_collection_filter: lambda do |_collections|
         ['fake_collection']
       end
     )
     posts = @proxy.search(Post) { fulltext 'basic' }
-    expect(posts.hits.size).to be.zero?
+    expect(posts.hits.size).to be == 0
   end
 
   it 'all sessions for this configuration' do
@@ -220,14 +220,35 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     end
 
     it 'remove_by_id' do
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_hr")
+      sleep 3
+
+      post = Post.create(
+        body: 'basic post on Historic',
+        created_at: Time.new(2009, 8, 1, 12)
+      )
+      @proxy.index!(post)
+      sleep 2
+
       expect(Post.search.total).to eq(Post.count)
-      @proxy.remove_by_id(Post, "#{@base_name}_2009_08_a", Post.first)
+      @proxy.remove_by_id(Post, "#{@base_name}_2009_08_hr", post)
       @proxy.commit
       expect(Post.search.total).to eq(Post.count - 1)
     end
 
     it 'remove_by_id!' do
-      @proxy.remove_by_id!(Post, "#{@base_name}_2009_08_a", Post.first)
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_hr")
+      sleep 3
+
+      post = Post.create(
+        body: 'basic post on Historic',
+        created_at: Time.new(2009, 8, 1, 12)
+      )
+      @proxy.index!(post)
+      sleep 2
+
+      expect(Post.search.total).to eq(Post.count)
+      @proxy.remove_by_id!(Post, "#{@base_name}_2009_08_hr", post)
       expect(Post.search.total).to eq(Post.count - 1)
     end
 

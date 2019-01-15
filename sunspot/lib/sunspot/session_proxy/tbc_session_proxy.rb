@@ -138,7 +138,20 @@ module Sunspot
       # you must pass clazz and collection to infer correct sessions
       #
       def remove_by_id(clazz, collection, *ids)
-        with_exception_handling { session(collection: collection).remove_by_id(clazz, ids) }
+        with_exception_handling do
+          s = session(collection: collection)
+          s.remove_by_id(clazz, ids)
+        end
+      end
+
+      #
+      # See Sunspot.remove_by_id
+      # you must pass clazz and a valid session
+      #
+      def remove_by_id_from_session(clazz, session, *ids)
+        with_exception_handling do
+          session.remove_by_id(clazz, ids)
+        end
       end
 
       #
@@ -147,10 +160,11 @@ module Sunspot
       #
       def remove_by_id!(clazz, collection, *ids)
         # commits only the interested sessions
-        with_exception_handling {
-          remove_by_id(clazz, collection, ids)
-          session(collection: collection).commit
-        }
+        with_exception_handling do
+          c_session = session(collection: collection)
+          remove_by_id_from_session(clazz, c_session, ids)
+          c_session.commit
+        end
       end
 
       #
