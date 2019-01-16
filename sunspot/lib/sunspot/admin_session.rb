@@ -76,7 +76,7 @@ module Sunspot
         resp['collections']
       end
 
-      raise 'error retrieving list of collection from solr' unless collections.is_a?(Array)
+      [] unless collections.is_a?(Array)
 
       collections
     end
@@ -430,11 +430,11 @@ module Sunspot
     def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
       if defined?(::Rails.cache)
         rails_cache(key, force) do
-          yield(solr_request(action))
+          with_retry { yield(solr_request(action)) }
         end
       else
         simple_cache(key, force) do
-          yield(solr_request(action))
+          with_retry { yield(solr_request(action)) }
         end
       end
     end
@@ -458,13 +458,17 @@ module Sunspot
     end
 
     def solr_request(action, extra_params: {})
-      retries = 0
+      connection.get(
+        :collections,
+        params: { action: action, wt: 'json' }.merge(extra_params)
+      )
+    end
+
+    def with_retry
       max_retries = 3
+      retries = 0
       begin
-        connection.get(
-          :collections,
-          params: { action: action, wt: 'json' }.merge(extra_params)
-        )
+        yield
       rescue StandardError => e
         if retries < max_retries
           retries += 1
