@@ -461,12 +461,14 @@ module Sunspot
       retries = 0
       max_retries = 3
       begin
-        connection.get(:collections, params: { action: action, wt: 'json' }.merge(extra_params))
+        connection.get(
+          :collections,
+          params: { action: action, wt: 'json' }.merge(extra_params)
+        )
       rescue StandardError => e
         if retries < max_retries
           retries += 1
-          sleep_for = 2**retries
-          sleep(sleep_for)
+          sleep(2**retries)
           retry
         else
           raise e

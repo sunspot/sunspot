@@ -107,8 +107,10 @@ module Sunspot
       # See Sunspot.index
       #
       def index(*objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.index(group) }
+        with_exception_handling do
+          using_collection_session(objects) do |session, group|
+            session.index(group)
+          end
         end
       end
 
@@ -116,8 +118,10 @@ module Sunspot
       # See Sunspot.index!
       #
       def index!(*objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.index!(group) }
+        with_exception_handling do
+          using_collection_session(objects) do |session, group|
+            session.index!(group)
+          end
         end
       end
 
@@ -125,8 +129,10 @@ module Sunspot
       # See Sunspot.remove
       #
       def remove(*objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.remove(group) }
+        with_exception_handling do
+          using_collection_session(objects) do |session, group|
+            session.remove(group)
+          end
         end
       end
 
@@ -134,8 +140,10 @@ module Sunspot
       # See Sunspot.remove!
       #
       def remove!(*objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.remove!(group) }
+        with_exception_handling do
+          using_collection_session(objects) do |session, group|
+            session.remove!(group)
+          end
         end
       end
 
