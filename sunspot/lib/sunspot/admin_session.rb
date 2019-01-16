@@ -71,17 +71,11 @@ module Sunspot
     #
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
-    def collections(force: false, tentative: 0)
-      return [] if tentative == 3
-
-      rcs = with_cache('LIST', force: force, key: 'CACHE_SOLR_COLLECTIONS') do |resp|
-        resp['collections']
-      end
-
-      if !rcs.is_a?(Array) || rcs.count.zero?
-        collections(force: true, tentative: tentative + 1)
-      else
-        rcs
+    def collections(force: false)
+      with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
+        resp = solr_request('LIST')
+        r = resp['collections']
+        return !r.is_a?(Array) || r.count.zero? ? nil : r
       end
     end
 
@@ -89,8 +83,9 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def live_nodes(force: false)
-      list_nodes = with_cache('CLUSTERSTATUS', force: true, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
-        resp['cluster']['live_nodes'].map do |node|
+      with_cache(force: true, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
+        resp = solr_request('CLUSTERSTATUS')
+        r = resp['cluster']['live_nodes'].map do |node|
           host_port = node.split(':')
           if host_port.size == 2
             port = host_port.last.gsub('_solr', '')
@@ -99,11 +94,9 @@ module Sunspot
             node
           end
         end
+
+        return !r.is_a?(Array) || r.count.zero? ? nil : r
       end
-
-      return [] unless list_nodes.is_a?(Array)
-
-      list_nodes
     end
 
     #
@@ -431,15 +424,30 @@ module Sunspot
     end
 
     # Helper function for solr caching
-    def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
+    def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil)
+      return default if retries >= max_retries
+
+      r = default
       if defined?(::Rails.cache)
         rails_cache(key, force) do
-          with_retry { yield(solr_request(action)) }
+          r = yield
         end
       else
         simple_cache(key, force) do
-          with_retry { yield(solr_request(action)) }
+          r = yield
         end
+      end
+
+      if r.nil?
+        with_cache(
+          force: true,
+          key: key,
+          retries: retries + 1,
+          max_retries: max_retries,
+          default: default
+        ) { yield }
+      else
+        r
       end
     end
 
@@ -448,7 +456,7 @@ module Sunspot
       ::Rails.cache.fetch(key, expires_in: @refresh_every) { yield }
     rescue
       ::Rails.cache.delete(key)
-      simple_cache(key, force) { yield }
+      simple_cache(key, true) { yield }
     end
 
     def simple_cache(key, force)
@@ -466,22 +474,6 @@ module Sunspot
         :collections,
         params: { action: action, wt: 'json' }.merge(extra_params)
       )
-    end
-
-    def with_retry
-      max_retries = 3
-      retries = 0
-      begin
-        yield
-      rescue StandardError => e
-        if retries < max_retries
-          retries += 1
-          sleep(2**retries)
-          retry
-        else
-          raise e
-        end
-      end
     end
   end
 end
