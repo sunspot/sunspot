@@ -13,6 +13,8 @@ module Sunspot
     # to handle admin stuff like collections listing, creation, etc...
     #
 
+    attr_reader :replicas_not_active
+
     CREATE_COLLECTION_MAP = {
       async: 'async',
       auto_add_replicas: 'autoAddReplicas',
@@ -349,7 +351,7 @@ module Sunspot
         status = s_active.zero? || s_bad > 0 ? :bad : :ok
         recoverable = s_active > 0 && s_bad.zero?
 
-        @replicas_not_active = replicas_not_active.map do |r|
+        @replicas_not_active = @replicas_not_active.map do |r|
           nr = r.dup
           nr[:recoverable] = recoverable if r[:collection] == collection_name
           nr
