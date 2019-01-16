@@ -71,14 +71,18 @@ module Sunspot
     #
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
-    def collections(force: false)
-      collections = with_cache('LIST', force: force, key: 'CACHE_SOLR_COLLECTIONS') do |resp|
+    def collections(force: false, tentative: 0)
+      return [] if tentative == 3
+
+      rcs = with_cache('LIST', force: force, key: 'CACHE_SOLR_COLLECTIONS') do |resp|
         resp['collections']
       end
 
-      [] unless collections.is_a?(Array)
-
-      collections
+      if !rcs.is_a?(Array) || rcs.count.zero?
+        collections(force: true, tentative: tentative + 1)
+      else
+        rcs
+      end
     end
 
     #
