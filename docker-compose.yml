@@ -1,0 +1,93 @@
+version: '3'
+
+services:
+  sunspot_solr1:
+    container_name: sunspot_solr1
+    image: solr
+    ports:
+     - "8981:8983"
+    depends_on:
+      - sunspot_zookepper
+    volumes:
+      - ./data/sunspot_solr1:/opt/solr/server/solr/mycores
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr
+      - start
+      - -f
+      - -c
+      - -z
+      - sunspot_zookepper:2181
+      - -a
+      - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
+    networks:
+      - solr
+  sunspot_solr2:
+    image: solr
+    container_name: sunspot_solr2
+    ports:
+     - "8982:8983"
+    depends_on:
+      - sunspot_zookepper
+    volumes:
+      - ./data/sunspot_solr2:/opt/solr/server/solr/mycores
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr
+      - start
+      - -f
+      - -c
+      - -z
+      - sunspot_zookepper:2181
+      - -a
+      - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
+    networks:
+      - solr
+  sunspot_solr3:
+    image: solr
+    container_name: sunspot_solr3
+    ports:
+     - "8983:8983"
+    depends_on:
+      - sunspot_zookepper
+    volumes:
+      - ./data/sunspot_solr3:/opt/solr/server/solr/mycores
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr
+      - start
+      - -f
+      - -c
+      - -z
+      - sunspot_zookepper:2181
+      - -a
+      - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
+    networks:
+      - solr
+  sunspot_solr4:
+    image: solr
+    container_name: sunspot_solr4
+    ports:
+     - "8984:8983"
+    depends_on:
+      - sunspot_zookepper
+    volumes:
+      - ./data/sunspot_solr4:/opt/solr/server/solr/mycores
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr
+      - start
+      - -f
+      - -c
+      - -z
+      - sunspot_zookepper:2181
+      - -a
+      - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
+    networks:
+      - solr
+  sunspot_zookepper:
+    image: zookeeper:latest
+    networks:
+        - solr
+networks:
+  solr:
