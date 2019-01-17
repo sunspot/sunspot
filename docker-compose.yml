@@ -1,15 +1,26 @@
 version: '3'
 
 services:
-  sunspot_solr1:
-    container_name: sunspot_solr1
-    image: solr
+  zookepper:
+    image: zookeeper:latest
+    restart: always
+    container_name: zookepper
+    hostname: zookepper
+    ports:
+      - "2181:2181"
+    networks:
+      - local_net
+  solr1:
+    container_name: solr1
+    image: solr:7.6.0
     ports:
      - "8981:8983"
     depends_on:
-      - sunspot_zookepper
+      - zookepper
     volumes:
       - ./data/sunspot_solr1:/opt/solr/server/solr/mycores
+      - ./sunspot_solr/solr/solr/configsets:/etc/configsets
+      - ./ci/solr_init.sh:/usr/bin/solr_init.sh
     entrypoint:
       - docker-entrypoint.sh
       - solr
@@ -17,18 +28,18 @@ services:
       - -f
       - -c
       - -z
-      - sunspot_zookepper:2181
+      - zookepper:2181
       - -a
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:
-      - solr
-  sunspot_solr2:
-    image: solr
-    container_name: sunspot_solr2
+      - local_net
+  solr2:
+    container_name: solr2
+    image: solr:7.6.0
     ports:
      - "8982:8983"
     depends_on:
-      - sunspot_zookepper
+      - zookepper
     volumes:
       - ./data/sunspot_solr2:/opt/solr/server/solr/mycores
     entrypoint:
@@ -38,18 +49,18 @@ services:
       - -f
       - -c
       - -z
-      - sunspot_zookepper:2181
+      - zookepper:2181
       - -a
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:
-      - solr
-  sunspot_solr3:
-    image: solr
-    container_name: sunspot_solr3
+      - local_net
+  solr3:
+    container_name: solr3
+    image: solr:7.6.0
     ports:
      - "8983:8983"
     depends_on:
-      - sunspot_zookepper
+      - zookepper
     volumes:
       - ./data/sunspot_solr3:/opt/solr/server/solr/mycores
     entrypoint:
@@ -59,18 +70,18 @@ services:
       - -f
       - -c
       - -z
-      - sunspot_zookepper:2181
+      - zookepper:2181
       - -a
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:
-      - solr
-  sunspot_solr4:
-    image: solr
-    container_name: sunspot_solr4
+      - local_net
+  solr4:
+    container_name: solr4
+    image: solr:7.6.0
     ports:
      - "8984:8983"
     depends_on:
-      - sunspot_zookepper
+      - zookepper
     volumes:
       - ./data/sunspot_solr4:/opt/solr/server/solr/mycores
     entrypoint:
@@ -80,14 +91,10 @@ services:
       - -f
       - -c
       - -z
-      - sunspot_zookepper:2181
+      - zookepper:2181
       - -a
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:
-      - solr
-  sunspot_zookepper:
-    image: zookeeper:latest
-    networks:
-        - solr
+      - local_net
 networks:
-  solr:
+  local_net:
