@@ -1,3 +1,6 @@
+services:
+  - docker
+
 language: ruby
 sudo: false
 cache:
