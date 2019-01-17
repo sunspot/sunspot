@@ -5,7 +5,6 @@ require 'terminal-table'
 require 'pstore'
 require 'json'
 
-
 module Sunspot
   class AdminSession < Session
     #
@@ -121,7 +120,9 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        return { status: e.response[:status], message: e.message[/^.*$/] }
+        status = e.response[:status] || 0
+        message = e.message[/^.*$/] || e.inspect
+        return { status: status, message: message }
       end
     end
 
@@ -138,7 +139,9 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        return { status: e.response[:status], message: e.message[/^.*$/] }
+        status = e.response[:status] || 0
+        message = e.message[/^.*$/] || e.inspect
+        return { status: status, message: message }
       end
     end
 
@@ -155,7 +158,9 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        return { status: e.response[:status], message: e.message[/^.*$/] }
+        status = e.response[:status] || 0
+        message = e.message[/^.*$/] || e.inspect
+        return { status: status, message: message }
       end
     end
 

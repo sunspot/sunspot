@@ -1,8 +1,6 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 require File.expand_path('../lib/sunspot/rails/spec_helper', File.dirname(__FILE__))
 
-require 'byebug'
-
 class TbcPostWrong < Post
 end
 
