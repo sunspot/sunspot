@@ -8,6 +8,7 @@ class TbcPostWrongTime < Post
   def collection_postfix
     'hr'
   end
+
   def time_routed_on
     DateTime.new(2009, 10, 1, 12, 30, 0)
   end
@@ -109,13 +110,13 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
 
   it 'index some documents and search for one i a particular collection' do
     # destroy dest collections
-    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_08_hr")
-    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_08_rt")
+    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_8_hr")
+    @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_8_rt")
 
     # create fake collections
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_b")
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_c")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_8_a")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_8_b")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_8_c")
 
     (1..10).each do |index|
       post = Post.create(
@@ -141,9 +142,9 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
 
   it 'creates some documents and retrieves it using Post.search method' do
     # create fake collections
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_rt")
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2015_08_hr")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_8_a")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_8_rt")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2015_8_hr")
 
     # creation phase
     (1..10).each do |index|
@@ -162,7 +163,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   it "ask to search on collections that doesn't exits" do
-    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_hr")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_8_hr")
     sleep 5
 
     (1..10).each do |index|
@@ -179,7 +180,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
-      fn_collection_filter: lambda do |collections|
+      fn_collection_filter: lambda do |_collections|
         ['fake_collection']
       end
     )
@@ -193,7 +194,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   describe 'remove' do
-    before do
+    before :each do
       @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
         date_from: Time.new(2009, 1, 1, 12),
         date_to: Time.new(2010, 1, 1, 12),
@@ -204,9 +205,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       Sunspot.session = @proxy
 
       # create fake collections
-      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_08_a")
-      @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_08_rt")
-      @proxy.solr.create_collection(collection_name: "#{@base_name}_2015_08_hr")
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_8_hr")
+      @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_8_a")
 
       # creation phase
       (1..10).each do |index|
@@ -217,23 +217,30 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
         @proxy.index(post)
       end
       @proxy.commit
+
+      sleep 5
     end
 
     it 'remove_by_id' do
-      @proxy.remove_by_id(Post, "#{@base_name}_2009_08_a", Post.first)
-      expect(Post.search.total).to eq(Post.count)
+      ndocs = Post.count
+      expect(Post.search.total).to eq(ndocs)
+      @proxy.remove_by_id(Post, "#{@base_name}_2009_8_hr", Post.first.id)
       @proxy.commit
-      expect(Post.search.total).to eq(Post.count - 1)
+      sleep 3
+      expect(Post.search.total).to eq(ndocs - 1)
     end
 
     it 'remove_by_id!' do
-      @proxy.remove_by_id!(Post, "#{@base_name}_2009_08_a", Post.first)
-      expect(Post.search.total).to eq(Post.count - 1)
+      ndocs = Post.count
+      expect(Post.search.total).to eq(ndocs)
+      @proxy.remove_by_id!(Post, "#{@base_name}_2009_8_hr", Post.first.id)
+      sleep 3
+      expect(Post.search.total).to eq(ndocs - 1)
     end
 
     it 'remove_all documents' do
-      @proxy.remove_all(Post)
       expect(Post.search.total).to eq(Post.count)
+      @proxy.remove_all(Post)
       @proxy.commit
       expect(Post.search.total).to eq(0)
     end

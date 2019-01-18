@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require 'logger'
+require 'terminal-table'
+require 'pstore'
+require 'json'
 
 module Sunspot
   class AdminSession < Session
@@ -8,6 +11,8 @@ module Sunspot
     # AdminSession connect direclty to the admin Solr endpoint
     # to handle admin stuff like collections listing, creation, etc...
     #
+
+    attr_reader :replicas_not_active
 
     CREATE_COLLECTION_MAP = {
       async: 'async',
@@ -30,13 +35,14 @@ module Sunspot
       @initialized_at = Time.now
       @refresh_every = refresh_every
       @config = config
+      @replicas_not_active = []
     end
 
     #
     # Return the appropriate admin session
     def session
       c = Sunspot::Configuration.build
-      host_port = @config.hostnames[rand(@config.hostnames.size)].split(':')
+      host_port = @config.hostnames[rand(@config.hostnames.count)].split(':')
       host_port = [host_port.first, host_port.last.to_i] if host_port.size == 2
       host_port = [host_port.first, @config.port] if host_port.size == 1
 
@@ -56,23 +62,30 @@ module Sunspot
     end
 
     #
+    # Add an host to the configure hostname
+    #
+    def add_hostname(host)
+      @config.hostnames << host
+    end
+
+    #
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def collections(force: false)
-      collections = with_cache('LIST', force: force, key: 'CACHE_SOLR_COLLECTIONS') do |resp|
-        resp['collections']
+      with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
+        resp = solr_request('LIST')
+        r = resp['collections']
+        return !r.is_a?(Array) || r.count.zero? ? nil : r
       end
-
-      raise 'error retrieving list of collection from solr' unless collections.is_a?(Array)
-      collections
     end
 
     #
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
     def live_nodes(force: false)
-      list_nodes = with_cache('CLUSTERSTATUS', force: force, key: 'CACHE_SOLR_LIVE_NODES') do |resp|
-        resp['cluster']['live_nodes'].map do |node|
+      with_cache(force: true, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
+        resp = solr_request('CLUSTERSTATUS')
+        r = resp['cluster']['live_nodes'].map do |node|
           host_port = node.split(':')
           if host_port.size == 2
             port = host_port.last.gsub('_solr', '')
@@ -81,10 +94,9 @@ module Sunspot
             node
           end
         end
-      end
 
-      return [] unless list_nodes.is_a?(Array)
-      list_nodes
+        return !r.is_a?(Array) || r.count.zero? ? nil : r
+      end
     end
 
     #
@@ -107,7 +119,9 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        return { status: e.response[:status], message: e.message[/^.*$/] }
+        status = e.try(:response).try(:[], :status)
+        message = e.try(:message) || e.inspect
+        return { status: status, message: (status ? message[/^.*$/] : message) }
       end
     end
 
@@ -124,7 +138,9 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        return { status: e.response[:status], message: e.message[/^.*$/] }
+        status = e.try(:response).try(:[], :status)
+        message = e.try(:message) || e.inspect
+        return { status: status, message: (status ? message[/^.*$/] : message) }
       end
     end
 
@@ -141,31 +157,312 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        return { status: e.response[:status], message: e.message[/^.*$/] }
+        status = e.try(:response).try(:[], :status)
+        message = e.try(:message) || e.inspect
+        return { status: status, message: (status ? message[/^.*$/] : message) }
       end
+    end
+
+    ### CLUSTER MAINTENANCE ###
+
+    def clusterstatus(as_json: false)
+      # don't cache it
+      status = solr_request('CLUSTERSTATUS')
+      if as_json
+        status.to_json
+      else
+        status
+      end
+    end
+
+    def report_clusterstatus(view: :table, using_persisted: false)
+      rows = using_persisted ? restore_solr_status : check_cluster
+
+      case view
+      when :table
+        # order first by STATUS then by COLLECTION (name)
+        rows.sort! do |a, b|
+          if a[:status] == :bad
+            -1
+          else
+            a[:collection] <=> b[:collection]
+          end
+        end
+
+        table = Terminal::Table.new(
+          headings: [
+            'Collection',
+            'Replica Factor',
+            'Shards',
+            'Shard Active',
+            'Shard Down',
+            'Shard Good',
+            'Shard Bad',
+            'Replica UP',
+            'Replica DOWN',
+            'Status',
+            'Recoverable'
+          ],
+          rows: rows.map do |row|
+            [
+              row[:collection],
+              row[:num_replicas],
+              row[:num_shards],
+              row[:shard_active],
+              row[:shard_non_active],
+              row[:shard_good],
+              row[:shard_bad],
+              row[:replicas_up],
+              row[:replicas_down],
+              row[:status] == :ok && row[:replicas_up].positive? ? 'OK' : 'BAD',
+              row[:recoverable] ? 'YES' : 'NO'
+            ]
+          end
+        )
+        puts table
+      when :json
+        status = rows.each_with_object({}) do |row, acc|
+          name = row[:collection]
+          row.delete(:collection)
+          acc[name] = row
+        end
+        status.to_json
+      when :simple
+        status = 'green'
+        bad_collections = []
+
+        rows.each do |row|
+          if row[:status] == :bad && row[:recoverable] == :no
+            status = 'red'
+            bad_collections << {
+              collection: row[:collection],
+              base_url: row[:bad_urls],
+              recoverable: false
+            }
+          elsif row[:status] == :bad && row[:recoverable] == :yes
+            status = 'orange' unless status == 'red'
+            bad_collections << {
+              collection: row[:collection],
+              base_url: row[:bad_urls],
+              recoverable: true
+            }
+          elsif row[:bad_urls].count > 0
+            bad_collections << {
+              collection: row[:collection],
+              base_url: row[:bad_urls],
+              recoverable: true
+            }
+          end
+        end
+        { status: status, bad_collections: bad_collections }
+      end
+    end
+
+    #
+    # Persist SOLR status to file (using pstore)
+    #
+    def persist_solr_status
+      cluster = clusterstatus
+      rows = check_cluster(status: cluster)
+
+      # store to disk the current status
+      store = PStore.new('cluster_stauts.pstore')
+      store.transaction do
+        # only for debug
+        store['solr_cluster_status'] = cluster
+
+        # save rows
+        store['solr_cluster_status_rows'] = rows
+        store['replicas_not_active'] = @replicas_not_active
+      end
+    end
+
+    #
+    # Return the SOLR status stored in a persisted store
+    #
+    def restore_solr_status
+      store = PStore.new('cluster_stauts.pstore')
+      store.transaction(true) do
+        @replicas_not_active = store['replicas_not_active'] || []
+        store['solr_cluster_status_rows']
+      end
+    end
+
+    # rep is the collection to be repaired
+    def repair_collection(rep)
+      delete_failed_replica(
+        collection: rep[:collection],
+        shard: rep[:shard],
+        replica: rep[:replica]
+      )
+      add_failed_replica(
+        collection: rep[:collection],
+        shard: rep[:shard],
+        node: rep[:node]
+      )
+    end
+
+    def repair_all_collection
+      @replicas_not_active.each do |rep|
+        if rep[:recoverable]
+          delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
+          add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
+        end
+      end
+    end
+
+    # Helper function for SOLR recovery
+    def delete_failed_replica(collection:, shard:, replica:)
+      solr_request(
+        'DELETEREPLICA',
+        extra_params: {
+          'collection' => collection,
+          'shard' => shard,
+          'replica' => replica
+        }
+      )
+    rescue RSolr::Error::Http => _e
+    end
+
+    def add_failed_replica(collection:, shard:, node:)
+      solr_request(
+        'ADDREPLICA',
+        extra_params: {
+          'collection' => collection,
+          'shard' => shard,
+          'node' => node
+        }
+      )
+    rescue RSolr::Error::Http => _e
     end
 
     private
 
+    def check_cluster(status: nil)
+      @replicas_not_active.clear
+      cluster = status || clusterstatus
+      analyze_collections(cluster['cluster']['collections'])
+    end
+
+    def analyze_collections(collections)
+      rows = []
+      collections.each_pair do |collection_name, cs|
+        replica_factor = cs['replicationFactor'].to_i
+        shards = cs['shards']
+        shard_status = get_shard_status(collection_name, shards)
+        s_active = shard_status[:active]
+        s_bad = shard_status[:bad]
+        status = s_active.zero? || s_bad > 0 ? :bad : :ok
+        recoverable = s_active > 0 && s_bad.zero?
+
+        @replicas_not_active = @replicas_not_active.map do |r|
+          nr = r.dup
+          nr[:recoverable] = recoverable if r[:collection] == collection_name
+          nr
+        end
+
+        rows << {
+          collection: collection_name,
+          num_replicas: replica_factor,
+          num_shards: shards.count,
+          shard_active: shard_status[:active],
+          shard_non_active: shard_status[:non_active],
+          shard_good: shard_status[:good],
+          shard_bad: shard_status[:bad],
+          replicas_up: shard_status[:replica_up],
+          replicas_down: shard_status[:replica_down],
+          status: status,
+          recoverable: recoverable,
+          bad_urls: @bad_urls[collection_name]
+        }
+      end
+
+      rows
+    end
+
+    def get_shard_status(collection_name, shards)
+      shards.each_with_object(
+        active: 0,
+        non_active: 0,
+        good: 0,
+        bad: 0,
+        replica_up: 0,
+        replica_down: 0
+      ) do |(shard_name, v), acc|
+        if v['state'] == 'active'
+          acc[:active] += 1
+        else
+          acc[:non_active] += 1
+        end
+
+        replica_status = get_replicas_status(collection_name, shard_name, v['replicas'])
+        acc[:replica_up] += replica_status[:active]
+        acc[:replica_down] += replica_status[:non_active]
+
+        if replica_status[:active] > 0
+          acc[:good] += 1
+        else
+          acc[:bad] += 1
+        end
+      end
+    end
+
+    def get_replicas_status(collection_name, shard_name, replicas)
+      @bad_urls = Hash.new { |hash, key| hash[key] = [] }
+
+      replicas.each_with_object(
+        active: 0, non_active: 0
+      ) do |(core_name, v), memo|
+        if v['state'] == 'active'
+          memo[:active] += 1
+        else
+          memo[:non_active] += 1
+          @bad_urls[collection_name] << v['base_url']
+          @replicas_not_active << {
+            collection: collection_name,
+            shard: shard_name,
+            replica: core_name,
+            node: v['node_name'],
+            base_url: v['base_url']
+          }
+        end
+      end
+    end
+
     # Helper function for solr caching
-    def with_cache(action, force: false, key: "#{CACHE_SOLR}_#{action}")
+    def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil)
+      return default if retries >= max_retries
+
+      r = default
       if defined?(::Rails.cache)
         rails_cache(key, force) do
-          yield(retrieve_info_solr(action))
+          r = yield
         end
       else
         simple_cache(key, force) do
-          yield(retrieve_info_solr(action))
+          r = yield
         end
+      end
+
+      if r.nil?
+        with_cache(
+          force: true,
+          key: key,
+          retries: retries + 1,
+          max_retries: max_retries,
+          default: default
+        ) { yield }
+      else
+        r
       end
     end
 
     def rails_cache(key, force)
       ::Rails.cache.delete(key) if force
       ::Rails.cache.fetch(key, expires_in: @refresh_every) { yield }
-      rescue
-        ::Rails.cache.delete(key)
-        simple_cache(key, force) { yield }
+    rescue
+      ::Rails.cache.delete(key)
+      simple_cache(key, true) { yield }
     end
 
     def simple_cache(key, force)
@@ -178,21 +475,11 @@ module Sunspot
       @cached[key] ||= yield
     end
 
-    def retrieve_info_solr(action)
-      retries = 0
-      max_retries = 3
-      begin
-        connection.get(:collections, params: { action: action, wt: 'json' })
-      rescue StandardError => e
-        if retries < max_retries
-          retries += 1
-          sleep_for = 2**retries
-          sleep(sleep_for)
-          retry
-        else
-          raise e
-        end
-      end
+    def solr_request(action, extra_params: {})
+      connection.get(
+        :collections,
+        params: { action: action, wt: 'json' }.merge(extra_params)
+      )
     end
   end
 end

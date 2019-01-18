@@ -4,8 +4,8 @@ production:
     port: 8983
     log_level: WARNING
     path: /solr/production
-    # read_timeout: 2
-    # open_timeout: 0.5
+    read_timeout: 5
+    open_timeout: 3
 
 development:
   solr:

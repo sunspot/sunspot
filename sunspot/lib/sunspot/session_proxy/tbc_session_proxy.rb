@@ -72,6 +72,12 @@ module Sunspot
         gen_session("/solr/#{obj_col_name}")
       end
 
+      def session_for_collection(collection)
+        # If collection is not present, create it!
+        solr.create_collection(collection_name: collection) unless solr.collections.include?(collection)
+        gen_session("/solr/#{collection}")
+      end
+
       #
       # Return the collections that match the current time range
       # or the given collections in case are present
@@ -101,8 +107,10 @@ module Sunspot
       # See Sunspot.index
       #
       def index(*objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.index(group) }
+        with_exception_handling do
+          using_collection_session(objects) do |session, group|
+            session.index(group)
+          end
         end
       end
 
@@ -110,8 +118,10 @@ module Sunspot
       # See Sunspot.index!
       #
       def index!(*objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.index!(group) }
+        with_exception_handling do
+          using_collection_session(objects) do |session, group|
+            session.index!(group)
+          end
         end
       end
 
@@ -119,8 +129,10 @@ module Sunspot
       # See Sunspot.remove
       #
       def remove(*objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.remove(group) }
+        with_exception_handling do
+          using_collection_session(objects) do |session, group|
+            session.remove(group)
+          end
         end
       end
 
@@ -128,8 +140,10 @@ module Sunspot
       # See Sunspot.remove!
       #
       def remove!(*objects)
-        using_collection_session(objects) do |session, group|
-          with_exception_handling { session.remove!(group) }
+        with_exception_handling do
+          using_collection_session(objects) do |session, group|
+            session.remove!(group)
+          end
         end
       end
 
@@ -138,7 +152,20 @@ module Sunspot
       # you must pass clazz and collection to infer correct sessions
       #
       def remove_by_id(clazz, collection, *ids)
-        with_exception_handling { session(collection: collection).remove_by_id(clazz, ids) }
+        with_exception_handling do
+          s = session(collection: collection)
+          s.remove_by_id(clazz, ids)
+        end
+      end
+
+      #
+      # See Sunspot.remove_by_id
+      # you must pass clazz and a valid session
+      #
+      def remove_by_id_from_session(clazz, session, *ids)
+        with_exception_handling do
+          session.remove_by_id(clazz, ids)
+        end
       end
 
       #
@@ -147,10 +174,11 @@ module Sunspot
       #
       def remove_by_id!(clazz, collection, *ids)
         # commits only the interested sessions
-        with_exception_handling {
-          remove_by_id(clazz, collection, ids)
-          session(collection: collection).commit
-        }
+        with_exception_handling do
+          c_session = session(collection: collection)
+          remove_by_id_from_session(clazz, c_session, ids)
+          c_session.commit
+        end
       end
 
       #
@@ -344,7 +372,7 @@ module Sunspot
         grouped_objects = Hash.new { |h, k| h[k] = [] }
         objects.flatten.each do |object|
           c_name = collection_for(object)
-          cache_sessions[c_name] = session_for(object) unless cache_sessions.key?(c_name)
+          cache_sessions[c_name] = session_for_collection(c_name) unless cache_sessions.key?(c_name)
           grouped_objects[cache_sessions[c_name]] << object
         end
         grouped_objects.each_pair do |session, group|
