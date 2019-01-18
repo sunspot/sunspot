@@ -1,13 +1,37 @@
 version: '3'
 
 services:
-  zookepper:
-    image: zookeeper:latest
+  zoo1:
+    image: zookeeper
     restart: always
-    container_name: zookepper
-    hostname: zookepper
+    hostname: zoo1
     ports:
-      - "2181:2181"
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+    networks:
+      - local_net
+  zoo2:
+    image: zookeeper
+    restart: always
+    hostname: zoo2
+    ports:
+      - 2182:2181
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zoo3:2888:3888
+    networks:
+      - local_net
+  zoo3:
+    image: zookeeper
+    restart: always
+    hostname: zoo3
+    ports:
+      - 2183:2181
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=0.0.0.0:2888:3888
     networks:
       - local_net
   solr1:
@@ -16,7 +40,9 @@ services:
     ports:
      - "8981:8983"
     depends_on:
-      - zookepper
+      - zoo1
+      - zoo2
+      - zoo3
     volumes:
       - ./data/sunspot_solr1:/opt/solr/server/solr/mycores
       - ./sunspot_solr/solr/solr/configsets:/etc/configsets
@@ -28,7 +54,7 @@ services:
       - -f
       - -c
       - -z
-      - zookepper:2181
+      - zoo1:2181,zoo2:2181,zoo3:2181
       - -a
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:
@@ -39,7 +65,9 @@ services:
     ports:
      - "8982:8983"
     depends_on:
-      - zookepper
+      - zoo1
+      - zoo2
+      - zoo3
     volumes:
       - ./data/sunspot_solr2:/opt/solr/server/solr/mycores
     entrypoint:
@@ -49,7 +77,7 @@ services:
       - -f
       - -c
       - -z
-      - zookepper:2181
+      - zoo1:2181,zoo2:2181,zoo3:2181
       - -a
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:
@@ -60,7 +88,9 @@ services:
     ports:
      - "8983:8983"
     depends_on:
-      - zookepper
+      - zoo1
+      - zoo2
+      - zoo3
     volumes:
       - ./data/sunspot_solr3:/opt/solr/server/solr/mycores
     entrypoint:
@@ -70,7 +100,7 @@ services:
       - -f
       - -c
       - -z
-      - zookepper:2181
+      - zoo1:2181,zoo2:2181,zoo3:2181
       - -a
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:
@@ -81,7 +111,9 @@ services:
     ports:
      - "8984:8983"
     depends_on:
-      - zookepper
+      - zoo1
+      - zoo2
+      - zoo3
     volumes:
       - ./data/sunspot_solr4:/opt/solr/server/solr/mycores
     entrypoint:
@@ -91,7 +123,7 @@ services:
       - -f
       - -c
       - -z
-      - zookepper:2181
+      - zoo1:2181,zoo2:2181,zoo3:2181
       - -a
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:

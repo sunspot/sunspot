@@ -42,10 +42,9 @@ module Sunspot
     # Return the appropriate admin session
     def session
       c = Sunspot::Configuration.build
-      host_port = @config.hostnames[0].split(':')
+      host_port = @config.hostnames[rand(@config.hostnames.count)].split(':')
       host_port = [host_port.first, host_port.last.to_i] if host_port.size == 2
       host_port = [host_port.first, @config.port] if host_port.size == 1
-      @config.hostnames.rotate!
 
       c.solr.url = URI::HTTP.build(
         host: host_port.first,
@@ -120,9 +119,9 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        status = e.response[:status] || 0
-        message = e.message[/^.*$/] || e.inspect
-        return { status: status, message: message }
+        status = e.try(:response).try(:[], :status)
+        message = e.try(:message) || e.inspect
+        return { status: status, message: (status ? message[/^.*$/] : message) }
       end
     end
 
@@ -139,9 +138,9 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        status = e.response[:status] || 0
-        message = e.message[/^.*$/] || e.inspect
-        return { status: status, message: message }
+        status = e.try(:response).try(:[], :status)
+        message = e.try(:message) || e.inspect
+        return { status: status, message: (status ? message[/^.*$/] : message) }
       end
     end
 
@@ -158,9 +157,9 @@ module Sunspot
         collections(force: true)
         return { status: 200, time: response['responseHeader']['QTime'] }
       rescue RSolr::Error::Http => e
-        status = e.response[:status] || 0
-        message = e.message[/^.*$/] || e.inspect
-        return { status: status, message: message }
+        status = e.try(:response).try(:[], :status)
+        message = e.try(:message) || e.inspect
+        return { status: status, message: (status ? message[/^.*$/] : message) }
       end
     end
 
