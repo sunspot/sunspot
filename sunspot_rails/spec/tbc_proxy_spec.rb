@@ -68,6 +68,14 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     expect(collections).to include("#{c_name}_#{post.collection_postfix}")
   end
 
+  it 'retrieve collections' do
+    assert @proxy.solr.live_nodes.positive?
+  end
+
+  it 'retrieve collections' do
+    assert @proxy.solr.collections.positive?
+  end
+
   it 'check valid collection for Post' do
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_a")
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_b")

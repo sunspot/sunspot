@@ -75,28 +75,26 @@ module Sunspot
       with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
         resp = solr_request('LIST')
         r = resp['collections']
-        return !r.is_a?(Array) || r.count.zero? ? [] : r
+        !r.is_a?(Array) || r.count.zero? ? [] : r
       end
     end
 
     #
     # Return all collections. Refreshing every @refresh_every (default: 30.min)
     # Array:: collections
-    def live_nodes(force: false)
-      with_cache(force: true, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
-        resp = solr_request('CLUSTERSTATUS')
-        r = resp['cluster']['live_nodes'].map do |node|
-          host_port = node.split(':')
-          if host_port.size == 2
-            port = host_port.last.gsub('_solr', '')
-            "#{host_port.first}:#{port}"
-          else
-            node
-          end
+    def live_nodes
+      resp = solr_request('CLUSTERSTATUS')
+      r = resp['cluster']['live_nodes'].map do |node|
+        host_port = node.split(':')
+        if host_port.size == 2
+          port = host_port.last.gsub('_solr', '')
+          "#{host_port.first}:#{port}"
+        else
+          node
         end
-
-        return !r.is_a?(Array) || r.count.zero? ? [] : r
       end
+
+      !r.is_a?(Array) || r.count.zero? ? [] : r
     end
 
     #
@@ -190,7 +188,7 @@ module Sunspot
       when :table
         # order first by STATUS then by COLLECTION (name)
         rows.sort! do |a, b|
-          if a[:status] == :bad || row[:replicas_up].zero?
+          if a[:status] == :bad || a[:replicas_up].zero?
             -1
           else
             a[:collection] <=> b[:collection]
@@ -440,15 +438,15 @@ module Sunspot
     # Helper function for solr caching
     def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil)
       return default if retries >= max_retries
-
       r = default
+
       if defined?(::Rails.cache)
-        rails_cache(key, force) do
-          r = yield
+        r = rails_cache(key, force) do
+          yield
         end
       else
-        simple_cache(key, force) do
-          r = yield
+        r = simple_cache(key, force) do
+          yield
         end
       end
 
@@ -466,11 +464,11 @@ module Sunspot
     end
 
     def rails_cache(key, force)
-      ::Rails.cache.delete(key) if force
-      ::Rails.cache.fetch(key, expires_in: @refresh_every) { yield }
-    rescue
-      ::Rails.cache.delete(key)
-      simple_cache(key, true) { yield }
+      ::Rails.cache.fetch(
+        key,
+        expires_in: @refresh_every,
+        force: force
+      ) { yield }
     end
 
     def simple_cache(key, force)
