@@ -175,6 +175,14 @@ module Sunspot
       end
     end
 
+    ##
+    # Generate a report of the current collection/shards status
+    # view: type of rapresentation
+    #  - :table
+    #  - :json
+    #  - :simple
+    # using_persisted: if true doesn't make a request to SOLR
+    #                  but use the persisted state
     def report_clusterstatus(view: :table, using_persisted: false)
       rows = using_persisted ? restore_solr_status : check_cluster
 
@@ -182,7 +190,7 @@ module Sunspot
       when :table
         # order first by STATUS then by COLLECTION (name)
         rows.sort! do |a, b|
-          if a[:status] == :bad
+          if a[:status] == :bad || row[:replicas_up].zero?
             -1
           else
             a[:collection] <=> b[:collection]
