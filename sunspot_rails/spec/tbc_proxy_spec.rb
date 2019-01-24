@@ -52,6 +52,8 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   it 'collections shoud contains the current one' do
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_hr")
+
     post = Post.create(title: 'basic post', created_at: Time.new(2009, 10, 1, 12))
     ts = post.time_routed_on
     @proxy.index!(post)
@@ -69,11 +71,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   it 'retrieve collections' do
-    assert @proxy.solr.live_nodes.positive?
+    assert @proxy.solr.live_nodes.count > 0
   end
 
   it 'retrieve collections' do
-    assert @proxy.solr.collections.positive?
+    assert @proxy.solr.collections.count > 0
   end
 
   it 'check valid collection for Post' do
@@ -83,7 +85,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     post = Post.create(title: 'basic post', created_at: Time.new(2009, 10, 1, 12))
     @proxy.index!(post)
 
-    sleep 3
+    sleep 5
     supported = @proxy.calculate_valid_collections(Post)
 
     expect(supported).to include("#{@base_name}_2009_10_hr")
@@ -97,8 +99,16 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   it 'index two documents and retrieve one in hr type collection' do
     @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_hr")
     @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_rt")
-    post_a = Post.create(title: 'basic post on Historic', created_at: Time.new(2009, 10, 1, 12))
-    post_b = Post.create(title: 'basic post on Realtime', created_at: Time.new(2009, 10, 1, 12))
+    sleep 3
+
+    post_a = Post.create(
+      title: 'basic post on Historic',
+      created_at: Time.new(2009, 10, 1, 12)
+    )
+    post_b = Post.create(
+      title: 'basic post on Realtime',
+      created_at: Time.new(2009, 10, 1, 12)
+    )
     post_b.collection_postfix = 'rt'
 
     @proxy.index!([post_a, post_b])
