@@ -75,7 +75,7 @@ module Sunspot
       with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
         resp = solr_request('LIST')
         r = resp['collections']
-        return !r.is_a?(Array) || r.count.zero? ? nil : r
+        return !r.is_a?(Array) || r.count.zero? ? [] : r
       end
     end
 
@@ -95,7 +95,7 @@ module Sunspot
           end
         end
 
-        return !r.is_a?(Array) || r.count.zero? ? nil : r
+        return !r.is_a?(Array) || r.count.zero? ? [] : r
       end
     end
 
