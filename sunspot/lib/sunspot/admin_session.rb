@@ -187,20 +187,7 @@ module Sunspot
       case view
       when :table
         # order first by STATUS then by COLLECTION (name)
-        rows.map! do |row|
-          row[:gstatus] = row[:status] == :ok && row[:replicas_up].positive?
-          row
-        end
-
-        rows.sort! do |a, b|
-          if a[:gstatus] == b[:gstatus]
-            a[:collection] <=> b[:collection]
-          elsif a[:gstatus] == false || b[:gstatus] == false
-            -1
-          else
-            a[:collection] <=> b[:collection]
-          end
-        end
+        rows = sort_rows(rows)
 
         table = Terminal::Table.new(
           headings: [
@@ -439,6 +426,21 @@ module Sunspot
             base_url: v['base_url']
           }
         end
+      end
+    end
+
+    def sort_rows(rows)
+      rows.map! do |row|
+        row[:gstatus] = row[:status] == :ok && row[:replicas_up].positive?
+        row
+      end
+
+      frows = rows.select { |row| row[:gstatus] == false }.sort do |a, b|
+        a[:collection] <=> b[:collection]
+      end
+
+      frows + rows.select { |row| row[:gstatus] == true }.sort do |a, b|
+        a[:collection] <=> b[:collection]
       end
     end
 
