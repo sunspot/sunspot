@@ -105,28 +105,5 @@ services:
       - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
     networks:
       - local_net
-  solr4:
-    container_name: solr4
-    image: solr:7.6.0
-    ports:
-     - "8984:8983"
-    depends_on:
-      - zoo1
-      - zoo2
-      - zoo3
-    volumes:
-      - ./data/sunspot_solr4:/opt/solr/server/solr/mycores
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr
-      - start
-      - -f
-      - -c
-      - -z
-      - zoo1:2181,zoo2:2181,zoo3:2181
-      - -a
-      - "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
-    networks:
-      - local_net
 networks:
   local_net:

@@ -5,6 +5,7 @@ set +e
 export SUNSPOT_LIB_HOME=`pwd`
 
 SOLR_PORT=8983
+NSOLR_INSTANCE=`cat docker-compose.yml | grep "image: solr" | wc -l`
 
 if [ "${SOLR_MODE}" = "cloud" ]; then
   CLOUD_MODE=true
@@ -21,7 +22,7 @@ solr_responding() {
 
 solr_cloud_responding() {
   instance=`docker-compose logs --tail=100 | grep "Server Started" | wc -l`
-  if [ $instance -eq "4" ]; then
+  if [ $instance -eq "$NSOLR_INSTANCE" ]; then
     return 0
   else
     return 1

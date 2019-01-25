@@ -22,7 +22,6 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   before :each do
-    sleep 3
     @proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
@@ -31,6 +30,10 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       end
     )
     Sunspot.session = @proxy
+  end
+
+  after :each do
+    sleep 5
   end
 
   after :all do
@@ -88,7 +91,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
       date_from: Time.new(2009, 1, 1, 12),
       date_to: Time.new(2010, 1, 1, 12),
       fn_collection_filter: lambda do |_collections|
-        "#{@base_name}_2009_10"
+        ["#{@base_name}_2009_10"]
       end
     )
     assert my_proxy.search_collections == ["#{@base_name}_2009_10"]
