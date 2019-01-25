@@ -80,7 +80,7 @@ module Sunspot
 
       #
       # Return the collections that match the current time range
-      # or the given collections in case are present
+      # and that are filtered using fn_collection_filter function
       #
       def search_collections
         collections = @fn_collection_filter.call(

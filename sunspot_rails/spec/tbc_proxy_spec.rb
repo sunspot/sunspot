@@ -70,19 +70,40 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     expect(collections).to include("#{c_name}_#{post.collection_postfix}")
   end
 
-  it 'retrieve collections' do
+  it 'has some livenodes' do
     assert @proxy.solr.live_nodes.count > 0
   end
 
-  it 'retrieve collections' do
+  it 'has some collections' do
     assert @proxy.solr.collections.count > 0
+  end
+
+  it 'retrieve only selected collection' do
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_1")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_100")
+    sleep 5
+
+    my_proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
+      date_from: Time.new(2009, 1, 1, 12),
+      date_to: Time.new(2010, 1, 1, 12),
+      fn_collection_filter: lambda do |_collections|
+        "#{@base_name}_2009_10"
+      end
+    )
+    assert my_proxy.search_collections == ["#{@base_name}_2009_10"]
   end
 
   it 'check valid collection for Post' do
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_a")
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_b")
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_c")
-    post = Post.create(title: 'basic post', created_at: Time.new(2009, 10, 1, 12))
+    sleep 3
+
+    post = Post.create(
+      title: 'basic post',
+      created_at: Time.new(2009, 10, 1, 12)
+    )
     @proxy.index!(post)
 
     sleep 5
