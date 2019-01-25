@@ -187,8 +187,15 @@ module Sunspot
       case view
       when :table
         # order first by STATUS then by COLLECTION (name)
+        rows.map! do |row|
+          row[:gstatus] = row[:status] == :ok && row[:replicas_up].positive?
+          row
+        end
+
         rows.sort! do |a, b|
-          if a[:status] == :bad || a[:replicas_up].zero?
+          if a[:gstatus] == b[:gstatus]
+            a[:collection] <=> b[:collection]
+          elsif a[:gstatus] == false || b[:gstatus] == false
             -1
           else
             a[:collection] <=> b[:collection]
@@ -220,7 +227,7 @@ module Sunspot
               row[:shard_bad],
               row[:replicas_up],
               row[:replicas_down],
-              row[:status] == :ok && row[:replicas_up].positive? ? 'OK' : 'BAD',
+              row[:gstatus] ? 'OK' : 'BAD',
               row[:recoverable] ? 'YES' : 'NO'
             ]
           end
