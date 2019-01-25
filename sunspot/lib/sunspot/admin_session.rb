@@ -75,12 +75,12 @@ module Sunspot
       with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
         resp = solr_request('LIST')
         r = resp['collections']
-        !r.is_a?(Array) || r.count.zero? ? [] : r
+        !r.is_a?(Array) || r.count.zero? ? default : r
       end
     end
 
     #
-    # Return all collections. Refreshing every @refresh_every (default: 30.min)
+    # Return all collections. Cache is not used.
     # Array:: collections
     def live_nodes
       resp = solr_request('CLUSTERSTATUS')
@@ -305,8 +305,16 @@ module Sunspot
     def repair_all_collection
       @replicas_not_active.each do |rep|
         if rep[:recoverable]
-          delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
-          add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
+          delete_failed_replica(
+            collection: rep[:collection],
+            shard: rep[:shard],
+            replica: rep[:replica]
+          )
+          add_failed_replica(
+            collection: rep[:collection],
+            shard: rep[:shard],
+            node: rep[:node]
+          )
         end
       end
     end
@@ -483,8 +491,7 @@ module Sunspot
     def simple_cache(key, force)
       if force || (Time.now - @initialized_at) > @refresh_every
         @initialized_at = Time.now
-        @cached    ||= {}
-        @cached[key] = nil
+        @cached = {}
       end
       @cached      ||= {}
       @cached[key] ||= yield
