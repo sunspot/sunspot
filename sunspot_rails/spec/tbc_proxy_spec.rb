@@ -97,6 +97,23 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
     assert my_proxy.search_collections == ["#{@base_name}_2009_10"]
   end
 
+  it 'retrieve all collections in the range' do
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_10_a")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_10_b")
+    @proxy.solr.create_collection(collection_name: "#{@base_name}_2018_10_c")
+    sleep 5
+
+    my_proxy = Sunspot::SessionProxy::TbcSessionProxy.new(
+      date_from: Time.new(2018, 10, 1, 12),
+      date_to: Time.new(2018, 10, 1, 12)
+    )
+    assert my_proxy.search_collections.sort == [
+      "#{@base_name}_2018_10_a",
+      "#{@base_name}_2018_10_b",
+      "#{@base_name}_2018_10_c"
+    ]
+  end
+
   it 'check valid collection for Post' do
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_a")
     @proxy.solr.create_collection(collection_name: "#{@base_name}_2009_10_b")
