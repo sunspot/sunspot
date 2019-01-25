@@ -123,7 +123,7 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   it 'index two documents and retrieve one in hr type collection' do
     @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_hr")
     @proxy.solr.delete_collection(collection_name: "#{@base_name}_2009_10_rt")
-    sleep 3
+    sleep 7
 
     post_a = Post.create(
       title: 'basic post on Historic',
