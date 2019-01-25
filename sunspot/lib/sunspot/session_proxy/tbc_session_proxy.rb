@@ -89,7 +89,7 @@ module Sunspot
             date_to: @date_to
           )
         )
-        filter_with_solr(collections)
+        filter_with_solr_eq(collections)
       end
 
       #
@@ -327,6 +327,10 @@ module Sunspot
         solr.collections.select do |collection|
           collection.start_with?(*collections)
         end
+      end
+
+      def filter_with_solr_eq(collections)
+        collections & solr.collections
       end
 
       def calculate_search_collections(date_from:, date_to:)
