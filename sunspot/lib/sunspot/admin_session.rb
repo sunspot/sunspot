@@ -69,13 +69,14 @@ module Sunspot
     end
 
     #
-    # Return all collections. Refreshing every @refresh_every (default: 30.min)
+    # Return all collections. Refreshing every @refresh_every (30.min)
     # Array:: collections
     def collections(force: false)
-      with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
+      no_value = []
+      with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: no_value) do
         resp = solr_request('LIST')
         r = resp['collections']
-        !r.is_a?(Array) || r.count.zero? ? default : r
+        !r.is_a?(Array) || r.count.zero? ? no_value : r
       end
     end
 
@@ -454,8 +455,8 @@ module Sunspot
 
     # Helper function for solr caching
     def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil)
-      return default if retries >= max_retries
       r = default
+      return r if retries >= max_retries
 
       if defined?(::Rails.cache)
         r = rails_cache(key, force) do
