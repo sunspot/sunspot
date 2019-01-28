@@ -72,11 +72,10 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (30.min)
     # Array:: collections
     def collections(force: false)
-      no_value = []
-      with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: no_value) do
+      with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
         resp = solr_request('LIST')
         r = resp['collections']
-        !r.is_a?(Array) || r.count.zero? ? no_value : r
+        !r.is_a?(Array) || r.count.zero? ? [] : r
       end
     end
 

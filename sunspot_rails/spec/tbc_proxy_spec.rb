@@ -74,11 +74,11 @@ describe Sunspot::SessionProxy::TbcSessionProxy, :type => :cloud do
   end
 
   it 'has some livenodes' do
-    assert @proxy.solr.live_nodes.count > 0
+    assert @proxy.solr.live_nodes.length > 0
   end
 
   it 'has some collections' do
-    assert @proxy.solr.collections.count > 0
+    assert @proxy.solr.collections.length > 0
   end
 
   it 'retrieve only selected collection' do
