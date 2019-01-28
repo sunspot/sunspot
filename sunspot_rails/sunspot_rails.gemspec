@@ -25,12 +25,12 @@ Gem::Specification.new do |s|
     Rails request.
   TEXT
 
-  s.rubyforge_project = "sunspot"
+  s.rubyforge_project = 'sunspot'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
+  s.require_paths = ['lib']
 
   if RUBY_VERSION < '2.2'
     s.add_dependency 'rails', '>= 3', '< 5'
@@ -42,10 +42,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'terminal-table', '~>1.8'
 
   s.add_development_dependency 'appraisal', '2.2.0'
+  s.add_development_dependency 'byebug', '~> 3.1'
   s.add_development_dependency 'nokogiri', '< 1.7' if RUBY_VERSION <= '2.0.0'
   s.add_development_dependency 'rake', '< 12.3'
   s.add_development_dependency 'rspec', '~> 3.7'
-  s.add_development_dependency 'byebug', '~> 3.1'
   s.add_development_dependency 'rspec-rails', '~> 3.7'
   s.add_development_dependency 'sqlite3',  '~> 1.3'
 
