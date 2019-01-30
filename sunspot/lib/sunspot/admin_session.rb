@@ -80,21 +80,22 @@ module Sunspot
     end
 
     #
-    # Return all collections. Cache is not used.
-    # Array:: collections
-    def live_nodes
-      resp = solr_request('CLUSTERSTATUS')
-      r = resp['cluster']['live_nodes'].map do |node|
-        host_port = node.split(':')
-        if host_port.size == 2
-          port = host_port.last.gsub('_solr', '')
-          "#{host_port.first}:#{port}"
-        else
-          node
+    # Return all live nodes.
+    # Array:: live_nodes
+    def live_nodes(force: false)
+      with_cache(force: force, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
+        resp = solr_request('CLUSTERSTATUS')
+        r = resp['cluster']['live_nodes'].map do |node|
+          host_port = node.split(':')
+          if host_port.size == 2
+            port = host_port.last.gsub('_solr', '')
+            "#{host_port.first}:#{port}"
+          else
+            node
+          end
         end
+        !r.is_a?(Array) || r.count.zero? ? [] : r
       end
-
-      !r.is_a?(Array) || r.count.zero? ? [] : r
     end
 
     #
