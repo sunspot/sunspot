@@ -147,6 +147,20 @@ if Sunspot::Util.child_documents_supported?
         expect(search.json_facet_stats(:book_id).rows[0].avg).to eq(4.0)
       end
 
+      it 'executes correct stats on children using block join faceting on root' do
+        search = Sunspot.search(Book) do
+          fulltext(books[0].title, fields: [:title])
+          stats :stars, sort: :avg, on: Review do
+            json_facet :_root_, block_join: (on_child(Review) {})
+          end
+        end
+
+        expect(search.json_facet_stats(:_root_).rows.length).to eq(1)
+        expect(search.json_facet_stats(:_root_).rows[0].min).to eq(3.0)
+        expect(search.json_facet_stats(:_root_).rows[0].max).to eq(5.0)
+        expect(search.json_facet_stats(:_root_).rows[0].avg).to eq(4.0)
+      end
+
       it 'executes correct stats on parents using block join faceting' do
         search = Sunspot.search(Review) do
           with(:stars).greater_than(2.0)

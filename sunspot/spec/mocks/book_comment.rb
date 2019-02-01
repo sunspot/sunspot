@@ -25,6 +25,7 @@ if Sunspot::Util.child_documents_supported?
   end
 
   Sunspot.setup(Review) do
+    is_child
     integer :book_id
     time    :review_date
     integer :stars

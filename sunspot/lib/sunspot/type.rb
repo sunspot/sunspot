@@ -131,16 +131,6 @@ module Sunspot
     register(StringType, String)
 
     #
-    # The String type represents string data for an id
-    # this doesn't postpone the _s.
-    #
-    class IdStringType < StringType
-      def indexed_name(name) #:nodoc:
-        name
-      end
-    end
-
-    #
     # The Integer type represents integers.
     #
     class IntegerType < AbstractType

@@ -262,5 +262,26 @@ module Sunspot
       id.to_s
     end
   end
+
+  class ParentIdField #:nodoc:
+    ROOT = '_root_'.freeze
+    class <<self
+      def instance
+        @instance ||= new
+      end
+    end
+
+    def name
+      ROOT
+    end
+
+    def indexed_name
+      ROOT
+    end
+
+    def to_indexed(id)
+      id.to_s
+    end
+  end
 end
 
