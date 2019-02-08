@@ -59,7 +59,7 @@ module Sunspot
       #
       def session(collection: nil)
         default_collection = "#{@config.collection['base_name']}_default"
-        solr.create_collection(collection_name: default_collection) if solr.collections.empty?
+        solr.create_collection(collection_name: default_collection) unless solr.collections.find { |c| c == default_collection }.present?
         gen_session("/solr/#{collection || default_collection}")
       end
 
