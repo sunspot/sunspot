@@ -48,6 +48,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 3.7'
   s.add_development_dependency 'rspec-rails', '~> 3.7'
   s.add_development_dependency 'sqlite3',  '~> 1.3'
+  s.add_development_dependency 'semantic', '1.6.1'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                   '--title' << 'Sunspot-Rails - Rails integration for the Sunspot Solr search library - API Documentation' <<
