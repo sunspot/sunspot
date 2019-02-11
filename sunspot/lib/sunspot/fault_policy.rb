@@ -86,7 +86,7 @@ module Sunspot
 
     private
 
-    # Remove the host from @faulty_host cache that are too 
+    # Remove the host from @faulty_host cache that are too
     def clean_faulty_state
       @faulty_hosts = @faulty_hosts.select do |_k, v|
         (Time.now - v[1]).to_i < 3600

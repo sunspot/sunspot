@@ -201,8 +201,8 @@ module Sunspot
       #
       # See Sunspot.commit_if_dirty
       #
-      def commit_if_dirty
-        with_exception_handling { all_sessions.each(&:commit_if_dirty) }
+      def commit_if_dirty(soft_commit = false)
+        with_exception_handling { all_sessions.each { |s| s.commit_if_dirty(soft_commit) } }
       end
 
       #
@@ -211,8 +211,8 @@ module Sunspot
       #
       # See Sunspot.commit_if_delete_dirty
       #
-      def commit_if_delete_dirty
-        with_exception_handling { all_sessions.each(&:commit_if_delete_dirty) }
+      def commit_if_delete_dirty(soft_commit = false)
+        with_exception_handling { all_sessions.each { |s| s.commit_if_delete_dirty(soft_commit) } }
       end
 
       #
