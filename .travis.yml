@@ -37,7 +37,6 @@ env:
 matrix:
   allow_failures:
     - rvm: ruby-head
-    - env: SOLR_MODE=cloud GEM=sunspot_rails
 
 script:
   - ci/travis.sh
