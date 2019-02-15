@@ -51,6 +51,19 @@ with:
 bundle exec rake sunspot:solr:start # or sunspot:solr:run to start in foreground
 ```
 
+This will generate a `/solr` folder with default configuration files and indexes.
+
+If you're using source control, it's recommended that the files generated for indexing and running (PIDs) are not checked in. You can do this by adding the following lines to `.gitignore`:
+
+```
+solr/data
+solr/test/data
+solr/development/data
+solr/default/data
+solr/pids
+```
+
+
 ## Setting Up Objects
 
 Add a `searchable` block to the objects you wish to index.
