@@ -135,7 +135,7 @@ module Sunspot
 
         protected
 
-        # 
+        #
         # Return escaped Solr API representation of given value
         #
         # ==== Parameters
@@ -158,9 +158,13 @@ module Sunspot
       end
 
       class InRadius < Base
-        def initialize(negated, field, lat, lon, radius)
-          @lat, @lon, @radius = lat, lon, radius
-          super negated, field, [lat, lon, radius]
+        def initialize(negated, field, *value)
+          @lat, @lon, @radius = value
+          super negated, field, value
+        end
+
+        def negate
+          self.class.new(!@negated, @field, *@value)
         end
 
         private
