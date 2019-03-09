@@ -47,6 +47,7 @@ module Sunspot
           "#{h.first}:#{config.port}"
         end
       end
+      @seed_hosts
     end
 
     #
