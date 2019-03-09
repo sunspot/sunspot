@@ -85,7 +85,7 @@ module Sunspot
     def live_nodes(force: false)
       with_cache(force: force, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
         resp = solr_request('CLUSTERSTATUS')
-        r = resp['cluster']['live_nodes'].map do |node|
+        r = resp.dig('cluster', 'live_nodes').map do |node|
           host_port = node.split(':')
           if host_port.size == 2
             port = host_port.last.gsub('_solr', '')
@@ -94,7 +94,7 @@ module Sunspot
             node
           end
         end
-        !r.is_a?(Array) || r.count.zero? ? [] : r
+        r.nil? || !r.is_a?(Array) || r.count.zero? ? [] : r
       end
     end
 
@@ -455,18 +455,18 @@ module Sunspot
 
     # Helper function for solr caching
     def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil)
-      r = default
-      return r if retries >= max_retries
+      return default if retries >= max_retries
 
-      if defined?(::Rails.cache)
-        r = rails_cache(key, force) do
-          yield
+      r =
+        if defined?(::Rails.cache)
+          rails_cache(key, force) do
+            yield
+          end
+        else
+          simple_cache(key, force) do
+            yield
+          end
         end
-      else
-        r = simple_cache(key, force) do
-          yield
-        end
-      end
 
       if r.nil?
         with_cache(
@@ -496,6 +496,7 @@ module Sunspot
       end
       @cached      ||= {}
       @cached[key] ||= yield
+      @cached[key]
     end
 
     def solr_request(action, extra_params: {})
