@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'terminal-table', '~>1.8'
 
   s.add_development_dependency 'appraisal', '2.2.0'
-  s.add_development_dependency 'bundler', '~> 1.0'
+  s.add_development_dependency 'bundler', '>= 1.3.0', '< 2.0' if RUBY_VERSION <= '2.0.0'
   s.add_development_dependency 'byebug', '~> 3.1'
   s.add_development_dependency 'nokogiri', '< 1.7' if RUBY_VERSION <= '2.0.0'
   s.add_development_dependency 'rake', '< 12.3'
