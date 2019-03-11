@@ -8,12 +8,10 @@ cache:
     - sunspot_rails/vendor/bundle
 
 rvm:
-  - 1.9.3
-  - 2.0.0
   - 2.1.0
-  - 2.3.4
-  - 2.4.3
-  - 2.5.0
+  - 2.3.8
+  - 2.4.5
+  - 2.5.3
   - ruby-head
   # - rbx-2.0
   # - jruby
