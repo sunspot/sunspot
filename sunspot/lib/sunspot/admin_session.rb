@@ -74,6 +74,12 @@ module Sunspot
     def collections(force: false)
       with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
         resp = solr_request('LIST')
+        return [] if resp.nil?
+
+        puts "**************************************"
+        puts inspect(resp)
+        puts "**************************************"
+
         r = resp['collections']
         !r.is_a?(Array) || r.count.zero? ? [] : r
       end
