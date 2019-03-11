@@ -77,7 +77,7 @@ module Sunspot
         return [] if resp.nil?
 
         puts "**************************************"
-        puts inspect(resp)
+        puts resp.inspect
         puts "**************************************"
 
         r = resp['collections']
