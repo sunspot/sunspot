@@ -72,18 +72,22 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (30.min)
     # Array:: collections
     def collections(force: false)
-      with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
+      cs = with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
         resp = solr_request('LIST')
+        return [] if resp.nil?
+
         r = resp['collections']
         !r.is_a?(Array) || r.count.zero? ? [] : r
       end
+
+      adjsut_solr_resp(cs)
     end
 
     #
     # Return all live nodes.
     # Array:: live_nodes
     def live_nodes(force: false)
-      with_cache(force: force, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
+      lnodes = with_cache(force: force, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
         resp = solr_request('CLUSTERSTATUS')
         r = resp['cluster']
         return [] if r.nil?
@@ -99,6 +103,8 @@ module Sunspot
         end
         r.nil? || !r.is_a?(Array) || r.count.zero? ? [] : r
       end
+
+      adjsut_solr_resp(lnodes)
     end
 
     #
@@ -349,6 +355,14 @@ module Sunspot
     end
 
     private
+
+    def adjsut_solr_resp(x)
+      if x.is_a?(String) && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4')
+        Marshal.load(x)
+      else
+        x
+      end
+    end
 
     def check_cluster(status: nil)
       @replicas_not_active.clear

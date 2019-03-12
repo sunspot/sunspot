@@ -36,10 +36,5 @@ matrix:
     - rvm: ruby-head
     - env: SOLR_MODE=cloud GEM=sunspot_rails
 
-before_install:
-  #  https://docs.travis-ci.com/user/languages/ruby/#bundler-20
-  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
-  - gem install bundler -v '< 2'
-
 script:
   - ci/travis.sh
