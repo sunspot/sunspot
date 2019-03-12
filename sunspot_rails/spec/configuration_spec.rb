@@ -123,6 +123,10 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
     expect(@config.hostname).to eq('some.host')
   end
 
+  it "should handle the 'hostnames' property when set" do
+    expect(@config.hostnames).to eq(['some.host', 'some2.host', 'some3.host'])
+  end
+
   it "should handle the 'port' property when set" do
     expect(@config.port).to eq(1234)
   end
@@ -156,7 +160,7 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
   end
 
   it "should handle the 'bind_address' property when set" do
-    expect(@config.bind_address).to eq("127.0.0.1")
+    expect(@config.bind_address).to eq('127.0.0.1')
   end
 
   it "should handle the 'read_timeout' property when set" do

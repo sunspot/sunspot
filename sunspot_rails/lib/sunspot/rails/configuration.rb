@@ -109,9 +109,15 @@ module Sunspot #:nodoc:
       #
       def hostnames
         unless defined?(@hostnames)
-          @hostnames ||= user_configuration_from_key('solr', 'hostnames')
-          @hostnames = @hostnames.split(',') if @hostnames.is_a?(String)
-          @hostnames ||= [default_hostname]
+          @hostnames = user_configuration_from_key('solr', 'hostnames')
+          @hostnames = case @hostnames
+                       when Array
+                         @hostnames
+                       when String
+                         @hostnames.split(',')
+                       when nil
+                         [default_hostname]
+                       end
         end
         @hostnames
       end

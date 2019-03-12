@@ -72,24 +72,25 @@ module Sunspot
     # Return all collections. Refreshing every @refresh_every (30.min)
     # Array:: collections
     def collections(force: false)
-      with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
+      cs = with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
         resp = solr_request('LIST')
         return [] if resp.nil?
-
-        puts "**************************************"
-        puts resp.inspect
-        puts "**************************************"
 
         r = resp['collections']
         !r.is_a?(Array) || r.count.zero? ? [] : r
       end
+
+      # belive or not this line is needed only for Ruby 2.3
+      return Marshal.load(cs) if cs.is_a?(String)
+
+      cs
     end
 
     #
     # Return all live nodes.
     # Array:: live_nodes
     def live_nodes(force: false)
-      with_cache(force: force, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
+      lnodes = with_cache(force: force, key: 'CACHE_SOLR_LIVE_NODES', default: []) do
         resp = solr_request('CLUSTERSTATUS')
         r = resp['cluster']
         return [] if r.nil?
@@ -105,6 +106,11 @@ module Sunspot
         end
         r.nil? || !r.is_a?(Array) || r.count.zero? ? [] : r
       end
+
+      # belive or not this line is needed only for Ruby 2.3
+      return Marshal.load(lnodes) if lnodes.is_a?(String)
+
+      lnodes
     end
 
     #
