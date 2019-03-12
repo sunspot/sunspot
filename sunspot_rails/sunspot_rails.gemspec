@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+
 lib = File.expand_path('../../sunspot/lib/', __FILE__)
 
 $:.unshift(lib) unless $:.include?(lib)
@@ -51,6 +52,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sqlite3',  '~> 1.3', '< 1.4'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
-                  '--title' << 'Sunspot-Rails - Rails integration for the Sunspot Solr search library - API Documentation' <<
-                  '--main' << 'README.rdoc'
+                    '--title' << 'Sunspot-Rails - Rails integration for the Sunspot Solr search library - API Documentation' <<
+                    '--main' << 'README.rdoc'
 end
