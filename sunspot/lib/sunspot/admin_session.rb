@@ -31,6 +31,8 @@ module Sunspot
       snitch: 'snitch'
     }.freeze
 
+    RB_VERSION = Gem::Version.new(RUBY_VERSION).freeze
+
     def initialize(config:, refresh_every: 600)
       @initialized_at = Time.now
       @refresh_every = refresh_every
@@ -80,10 +82,7 @@ module Sunspot
         !r.is_a?(Array) || r.count.zero? ? [] : r
       end
 
-      # belive or not this line is needed only for Ruby 2.3
-      return Marshal.load(cs) if cs.is_a?(String)
-
-      cs
+      adjsut_solr_resp(cs)
     end
 
     #
@@ -107,10 +106,7 @@ module Sunspot
         r.nil? || !r.is_a?(Array) || r.count.zero? ? [] : r
       end
 
-      # belive or not this line is needed only for Ruby 2.3
-      return Marshal.load(lnodes) if lnodes.is_a?(String)
-
-      lnodes
+      adjsut_solr_resp(lnodes)
     end
 
     #
@@ -361,6 +357,12 @@ module Sunspot
     end
 
     private
+
+    def adjsut_solr_resp(x)
+      return Marshal.load(x) if x.is_a?(String) && RB_VERSION >= Gem::Version.new('2.3') && RB_VERSION < Gem::Version.new('2.4')
+
+      x
+    end
 
     def check_cluster(status: nil)
       @replicas_not_active.clear
