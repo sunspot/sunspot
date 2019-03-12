@@ -53,13 +53,30 @@ module Sunspot
         class <<conf
           def hostname
             return solr.hostnames[0] unless solr.hostnames.empty?
+
             'locahost'
           end
 
-          def hostnames; solr.hostnames; end
-          def port; solr.port; end
-          def read_timeout; solr.read_timeout; end
-          def open_timeout; solr.open_timeout; end
+          def hostnames
+            hosts = solr.hostnames
+            if hosts.is_a?(Array)
+              hosts
+            else
+              hosts.split(',')
+            end
+          end
+
+          def port
+            solr.port
+          end
+
+          def read_timeout
+            solr.read_timeout
+          end
+
+          def open_timeout
+            solr.open_timeout
+          end
 
           def collection_param(id)
             begin

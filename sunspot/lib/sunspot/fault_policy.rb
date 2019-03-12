@@ -15,21 +15,21 @@ module Sunspot
     #
     def take_hostname
       # takes all the configured nodes + that one that are derived by solr live config
-      hostnames = (solr.live_nodes + seed_hosts)
-                  .flatten
-                  .uniq
-                  .reject { |h| faulty?(h) }
-                  .sort
+      selected_hosts = (solr.live_nodes + seed_hosts)
+                       .flatten
+                       .uniq
+                       .reject { |h| faulty?(h) }
+                       .sort
       # round robin policy
-      # hostname format: <ip|hostname> | <ip|hostname>:<port>
-      hostnames = seed_hosts if hostnames.empty?
+      # hostname format: <ip | hostname> | <ip | hostname>:<port>
+      selected_hosts = seed_hosts if selected_hosts.empty?
 
       # force host_index to stay in the correct range
-      @host_index = @host_index % hostnames.size
+      @host_index = @host_index % selected_hosts.size
 
-      @current_hostname = hostnames[@host_index]
+      @current_hostname = selected_hosts[@host_index]
       current_host = @current_hostname.split(':')
-      @host_index = (@host_index + 1) % hostnames.size
+      @host_index = (@host_index + 1) % selected_hosts.size
       if current_host.size == 2
         [current_host.first, current_host.last.to_i]
       else
@@ -47,6 +47,7 @@ module Sunspot
           "#{h.first}:#{config.port}"
         end
       end
+      @seed_hosts
     end
 
     #

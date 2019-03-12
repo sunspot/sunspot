@@ -130,6 +130,7 @@ case $GEM in
 
     cd ../sunspot_rails
     bundle install --quiet --path vendor/bundle
+    gem list
     bundle exec appraisal install && bundle exec appraisal rspec
     rv=$?
 
