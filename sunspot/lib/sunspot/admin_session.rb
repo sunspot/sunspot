@@ -357,7 +357,7 @@ module Sunspot
     private
 
     def adjsut_solr_resp(x)
-      if x.is_a?(String) && Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4')
+      if x.is_a?(String) && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4')
         Marshal.load(x)
       else
         x
