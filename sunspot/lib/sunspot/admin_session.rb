@@ -31,8 +31,6 @@ module Sunspot
       snitch: 'snitch'
     }.freeze
 
-    RB_VERSION = Gem::Version.new(RUBY_VERSION).freeze
-
     def initialize(config:, refresh_every: 600)
       @initialized_at = Time.now
       @refresh_every = refresh_every
@@ -296,7 +294,7 @@ module Sunspot
       store = PStore.new('cluster_stauts.pstore')
       store.transaction(true) do
         @replicas_not_active = store['replicas_not_active'] || []
-        store['solr_cluster_status_rows']
+        store['solr_cluster_statusRB_VERSION_rows']
       end
     end
 
@@ -359,9 +357,11 @@ module Sunspot
     private
 
     def adjsut_solr_resp(x)
-      return Marshal.load(x) if x.is_a?(String) && RB_VERSION >= Gem::Version.new('2.3') && RB_VERSION < Gem::Version.new('2.4')
-
-      x
+      if x.is_a?(String) && Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.3') && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4')
+        Marshal.load(x)
+      else
+        x
+      end
     end
 
     def check_cluster(status: nil)
