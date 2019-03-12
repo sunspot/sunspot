@@ -294,7 +294,7 @@ module Sunspot
       store = PStore.new('cluster_stauts.pstore')
       store.transaction(true) do
         @replicas_not_active = store['replicas_not_active'] || []
-        store['solr_cluster_statusRB_VERSION_rows']
+        store['solr_cluster_status_rows']
       end
     end
 
