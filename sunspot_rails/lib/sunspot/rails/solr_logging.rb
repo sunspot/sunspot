@@ -1,7 +1,6 @@
 module Sunspot
   module Rails
     module SolrLogging
-
       COMMIT = %r{<commit/>}
 
       def execute_with_rails_logging(request_context)
@@ -33,7 +32,7 @@ module Sunspot
 
       def format_log_entry(message, dump = nil)
         @colorize_logging ||= ::Rails.application.config.colorize_logging
-          
+
         if @colorize_logging
           message_color, dump_color = "4;32;1", "0;1"
           log_entry = "  \e[#{message_color}m#{message}\e[0m   "

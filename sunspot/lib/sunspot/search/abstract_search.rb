@@ -227,7 +227,6 @@ module Sunspot
         self
       end
 
-
       def inspect #:nodoc:
         "<Sunspot::Search:#{query.to_params.inspect}>"
       end

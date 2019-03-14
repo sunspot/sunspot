@@ -106,7 +106,7 @@ class Comment < ActiveRecord::Base
     integer :post_id
     # -------------------------------------------------------------------------------------
     integer :author_id
-    
+
     text :body
     time :published_at
   end
@@ -116,7 +116,7 @@ class Post < ActiveRecord::Base
   searchable do
     text :title, :body
     child_documents :comments # Must be of type Comment
-    
+
     boolean :featured
     integer :blog_id
     integer :author_id
@@ -124,7 +124,7 @@ class Post < ActiveRecord::Base
     double  :average_rating
     time    :published_at
     time    :expired_at
-    
+
     string  :sort_title do
       title.downcase.gsub(/^(an?|the)/, '')
     end
