@@ -87,7 +87,9 @@ module Sunspot
         #
         def secondary_filter
           return [] if filter_query.to_params[:q] == '*:*'
-          filter_query.to_params[:q]
+          ret = []
+          ret << filter_query.fulltext.to_subquery[:q] if filter_query.fulltext.present?
+          ret
         end
 
         private
