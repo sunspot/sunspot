@@ -5,9 +5,29 @@ if Sunspot::Util.child_documents_supported?
     let(:children) { Array.new(3) { |i| Child.new(name: "BJ Child #{i}") } }
     let(:parent)   { Parent.new(name: 'BJ Parent', children: children) }
 
+    let(:children_desc) { [Child.new(name: 'BJ Child desc')] }
+    let(:parent_desc)   do
+      Parent.new(
+        name: 'BJ Parent desc',
+        children: children_desc,
+        description: 'new options'
+      )
+    end
+
+    let(:children_desc_2) { [Child.new(name: 'BJ Child desc_2')] }
+    let(:parent_desc_2)   do
+      Parent.new(
+        name: 'BJ Parent desc_2',
+        children: children_desc_2,
+        description: 'something new to tell'
+      )
+    end
+
     before :each do
       Sunspot.remove_all! # Ensure to write in a clean index
       Sunspot.index! parent
+      Sunspot.index! parent_desc
+      Sunspot.index! parent_desc_2
     end
 
     after :all do
@@ -36,6 +56,18 @@ if Sunspot::Util.child_documents_supported?
             end
           end
         end.results).to eq(children)
+      end
+
+      it 'should return correct multiple children in case of fulltext parent filter' do
+        expect(Sunspot.search(Child) do
+          child_of(Parent) { fulltext('something OR new', fields: :description) }
+        end.results).to eq(children_desc_2 + children_desc)
+      end
+
+      it 'should return correct children in case of fulltext parent filter' do
+        expect(Sunspot.search(Child) do
+          child_of(Parent) { fulltext('something', fields: :description) }
+        end.results).to eq(children_desc_2)
       end
     end
 

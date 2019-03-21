@@ -1,6 +1,6 @@
 if Sunspot::Util.child_documents_supported?
   class Person < MockRecord
-    attr_accessor :name, :surname, :age
+    attr_accessor :name, :surname, :age, :description
   end
 
   class Child < Person
@@ -14,12 +14,14 @@ if Sunspot::Util.child_documents_supported?
     string  :name
     string  :surname
     integer :age
+    text    :description
   end
 
   Sunspot.setup(Parent) do
     string  :name
     string  :surname
     integer :age
+    text    :description
 
     child_documents :children
   end
