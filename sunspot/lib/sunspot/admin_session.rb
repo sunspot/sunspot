@@ -354,13 +354,85 @@ module Sunspot
     rescue RSolr::Error::Http => _e
     end
 
+    #
+    # Retrieve stats for the given collection
+    #
+    # @param [String] collection_name: is the collection name
+    #
+    # @return [Hash] stats info
+    #
+    def retrieve_stats_for(collection_name)
+      uri = connection.uri
+      c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
+      begin
+        response = c.get 'admin/luke', params: {
+          _: (Time.now.to_f * 1000).to_i,
+          numTerms: 0,
+          show: 'index'
+        }
+
+        response = response['index']
+        del_perc = response['numDocs'].to_i > 0 ? (100 * response['deletedDocs'].to_f / response['numDocs'].to_f) : 0
+
+        {
+          has_deletions: response['hasDeletions'],
+          max_docs: response['maxDoc'].to_i,
+          num_docs: response['numDocs'].to_i,
+          deleted_docs: response['deletedDocs'].to_i,
+          deleted_perc: del_perc.to_i
+        }
+      rescue RSolr::Error::Http => _e
+        nil
+      end
+    end
+
+    def retrieve_stats(as: :json)
+      stats = retrieve_stats_as_json
+      case as
+      when :json
+        stats
+      when :table
+        s_stats = stats.sort do |a, b|
+          a.deleted_perc > b.deleted_perc
+        end
+
+        table = Terminal::Table.new(
+          headings: [
+            'Collection',
+            'Has deletions',
+            '# Docs',
+            '# Max Docs',
+            '# Deleted'
+          ],
+          rows: s_stats.map do |row|
+            [
+              row[:collection_name],
+              row[:has_deletions],
+              row[:num_docs],
+              row[:max_docs],
+              "#{row[:deleted_docs]} (#{row[:deleted_perc]}%)"
+            ]
+          end
+        )
+        puts table
+      end
+    end
+
+    ###############################################
+
     private
 
-    def adjsut_solr_resp(x)
-      if x.is_a?(String) && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4')
-        Marshal.load(x)
+    def retrieve_stats_as_json
+      collections(force: true)
+        .map { |c| retrieve_stats_for(c).merge(collection_name: c) }
+        .compact
+    end
+
+    def adjsut_solr_resp(resp)
+      if resp.is_a?(String) && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4')
+        Marshal.load(resp)
       else
-        x
+        resp
       end
     end
 
