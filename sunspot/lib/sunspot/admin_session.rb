@@ -386,6 +386,13 @@ module Sunspot
       end
     end
 
+    #
+    # Retrieve stats for all collections
+    #
+    # @param [Symbol] :as <:json, :table>
+    #
+    # Example: retrieve_stats(as: :table)
+    #
     def retrieve_stats(as: :json)
       stats = retrieve_stats_as_json
       case as
@@ -415,6 +422,29 @@ module Sunspot
           end
         )
         puts table
+      end
+    end
+
+    def optimize_collection(collection_name)
+      uri = connection.uri
+      c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
+      begin
+        response = c.get 'update', params: {
+          _: (Time.now.to_f * 1000).to_i,
+          commit: true,
+          optimize: true
+        }
+
+        response
+      rescue RSolr::Error::Http => _e
+        nil
+      end
+    end
+
+    def optimize_collections
+      collections(force: true).each do |c|
+        puts "Optimizing #{c}"
+        optimize_collection(c)
       end
     end
 
