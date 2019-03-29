@@ -441,11 +441,20 @@ module Sunspot
       end
     end
 
-    def optimize_collections
-      collections(force: true).each do |c|
-        puts "Optimizing #{c}"
-        optimize_collection(c)
-      end
+    #
+    # Optimize all collections using a threshold of deleted docs
+    #
+    # @param [Number] deleted_threshold the reference threshold
+    #
+    #
+    def optimize_collections(deleted_threshold = 10)
+      retrieve_stats_as_json
+        .select { |e| e[:deleted_perc] > deleted_threshold }
+        .each do |e|
+          c = e[:collection_name]
+          puts "Optimizing #{c}"
+          optimize_collection(c)
+        end
     end
 
     ###############################################
