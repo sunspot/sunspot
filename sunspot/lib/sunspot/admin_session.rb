@@ -379,7 +379,7 @@ module Sunspot
           max_docs: response['maxDoc'].to_i,
           num_docs: response['numDocs'].to_i,
           deleted_docs: response['deletedDocs'].to_i,
-          deleted_perc: del_perc.to_i
+          deleted_perc: del_perc
         }
       rescue RSolr::Error::Http => _e
         nil
@@ -393,7 +393,7 @@ module Sunspot
         stats
       when :table
         s_stats = stats.sort do |a, b|
-          a.deleted_perc > b.deleted_perc
+          b[:deleted_docs] <=> a[:deleted_docs]
         end
 
         table = Terminal::Table.new(
@@ -410,7 +410,7 @@ module Sunspot
               row[:has_deletions],
               row[:num_docs],
               row[:max_docs],
-              "#{row[:deleted_docs]} (#{row[:deleted_perc]}%)"
+              format('%d (%.2f%%)', row[:deleted_docs], row[:deleted_perc])
             ]
           end
         )
