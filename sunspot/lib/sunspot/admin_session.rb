@@ -425,6 +425,13 @@ module Sunspot
       end
     end
 
+    #
+    # Optimize a single collection given the collection name
+    #
+    # @param [String] collection_name: the name of the collection
+    #
+    # @return [RSolrResponse]
+    #
     def optimize_collection(collection_name)
       uri = connection.uri
       c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
