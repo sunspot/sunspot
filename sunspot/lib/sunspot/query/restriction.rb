@@ -316,7 +316,7 @@ module Sunspot
 
         def to_solr_conditional
           if @value.empty?
-            "[* TO *]"
+            '[* TO *]'
           else
             "(#{@value.map { |v| solr_value v } * ' OR '})"
           end
@@ -340,7 +340,7 @@ module Sunspot
 
         def to_solr_conditional
           if @value.empty?
-            "[* TO *]"
+            '[* TO *]'
           else
             "(#{@value.map { |v| solr_value v } * ' AND '})"
           end

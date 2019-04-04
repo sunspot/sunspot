@@ -23,7 +23,7 @@ module Sunspot
 
       private
 
-      # 
+      #
       # True if a tag has been generated for this filter (e.g., if it's been
       # excluded from a given facet). If a tag has not been generated at the
       # time that the filter query param is requested, then it is not necessary

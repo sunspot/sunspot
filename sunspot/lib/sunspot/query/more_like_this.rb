@@ -15,6 +15,7 @@ module Sunspot
 
       def add_field(field, boost = nil)
         raise(ArgumentError, "Field #{field.name} is not set up for more_like_this") unless field.more_like_this?
+
         @fields[field.indexed_name] = TextFieldBoost.new(field, boost)
       end
 
@@ -47,12 +48,10 @@ module Sunspot
           @params,
           :q => @document_scope.to_boolean_phrase
         )
-        params[:"mlt.fl"] = @fields.keys.join(",")
-        boosted_fields = @fields.values.select { |field| field.boost }
+        params[:"mlt.fl"] = @fields.keys.join(',')
+        boosted_fields = @fields.values.select(&:boost)
         unless boosted_fields.empty?
-          params[:"mlt.qf"] = boosted_fields.map do |field|
-            field.to_boosted_field
-          end.join(' ')
+          params[:"mlt.qf"] = boosted_fields.map(&:to_boosted_field).join(' ')
         end
         params
       end
