@@ -33,7 +33,7 @@ module Sunspot
       def maximum_word_length=(maxwl)
         @params[:"mlt.maxwl"] = maxwl
       end
-      
+
       def maximum_query_terms=(maxqt)
         @params[:"mlt.maxqt"] = maxqt
       end

@@ -108,7 +108,7 @@ module Sunspot
           end
         end
 
-        # 
+        #
         # Connectives can be negated during the process of denormalization that
         # is performed when a disjunction contains a negated component. This
         # method conforms to the duck type for all boolean query components.
@@ -117,7 +117,7 @@ module Sunspot
           @negated
         end
 
-        # 
+        #
         # Returns a new connective that's a negated version of this one.
         #
         def negate
@@ -129,7 +129,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Disjunctions combine their components with an OR operator.
       #
       class Disjunction < Abstract
@@ -139,7 +139,7 @@ module Sunspot
           end
         end
 
-        # 
+        #
         # Express this disjunction as a Lucene boolean phrase
         #
         def to_boolean_phrase
@@ -150,7 +150,7 @@ module Sunspot
           end
         end
 
-        # 
+        #
         # No-op - this is already a disjunction
         #
         def add_disjunction
@@ -181,7 +181,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Conjunctions combine their components with an AND operator.
       #
       class Conjunction < Abstract

@@ -1,8 +1,7 @@
 module Sunspot
   module Query
     module Filter
-
-      # 
+      #
       # Express this filter as an :fq parameter; i.e., the boolean phrase,
       # maybe prefixed by local params.
       #
@@ -21,7 +20,7 @@ module Sunspot
       def tag
         @tag ||= to_boolean_phrase.hash.abs.to_s(36)
       end
-      
+
       private
 
       # 
