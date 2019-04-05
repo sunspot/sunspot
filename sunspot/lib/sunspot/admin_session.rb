@@ -185,16 +185,16 @@ module Sunspot
 
     ##
     # Generate a report of the current collection/shards status
-    # view: type of rapresentation
+    # as: type of rapresentation
     #  - :table
     #  - :json
     #  - :simple
     # using_persisted: if true doesn't make a request to SOLR
     #                  but use the persisted state
-    def report_clusterstatus(view: :table, using_persisted: false)
+    def report_clusterstatus(as: :table, using_persisted: false)
       rows = using_persisted ? restore_solr_status : check_cluster
 
-      case view
+      case as
       when :table
         # order first by STATUS then by COLLECTION (name)
         rows = sort_rows(rows)
@@ -362,27 +362,30 @@ module Sunspot
     # @return [Hash] stats info
     #
     def retrieve_stats_for(collection_name)
-      uri = connection.uri
-      c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
-      begin
-        response = c.get 'admin/luke', params: {
-          _: (Time.now.to_f * 1000).to_i,
-          numTerms: 0,
-          show: 'index'
-        }
+      with_cache(force: force, key: "CACHE_SOLR_COLLECTION_STATS_#{collection_name}", default: {}) do
+        uri = connection.uri
+        c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
+        begin
+          response = c.get 'admin/luke', params: {
+            _: (Time.now.to_f * 1000).to_i,
+            numTerms: 0,
+            show: 'index'
+          }
 
-        response = response['index']
-        del_perc = response['numDocs'].to_i > 0 ? (100 * response['deletedDocs'].to_f / response['numDocs'].to_f) : 0
+          response = response['index']
+          del_perc =
+            response['numDocs'].to_i > 0 ? (100 * response['deletedDocs'].to_f / response['numDocs'].to_f) : 0
 
-        {
-          has_deletions: response['hasDeletions'],
-          max_docs: response['maxDoc'].to_i,
-          num_docs: response['numDocs'].to_i,
-          deleted_docs: response['deletedDocs'].to_i,
-          deleted_perc: del_perc
-        }
-      rescue RSolr::Error::Http => _e
-        nil
+          {
+            has_deletions: response['hasDeletions'],
+            max_docs: response['maxDoc'].to_i,
+            num_docs: response['numDocs'].to_i,
+            deleted_docs: response['deletedDocs'].to_i,
+            deleted_perc: del_perc
+          }
+        rescue RSolr::Error::Http => _e
+          nil
+        end
       end
     end
 
