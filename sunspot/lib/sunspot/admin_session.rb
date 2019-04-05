@@ -362,7 +362,7 @@ module Sunspot
     # @return [Hash] stats info
     #
     def retrieve_stats_for(collection_name)
-      with_cache(force: force, key: "CACHE_SOLR_COLLECTION_STATS_#{collection_name}", default: {}) do
+      with_cache(force: force, key: "CACHE_SOLR_COLLECTION_STATS_#{collection_name}", default: {}, expires_in: 15) do
         uri = connection.uri
         c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
         begin
@@ -592,16 +592,16 @@ module Sunspot
     end
 
     # Helper function for solr caching
-    def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil)
+    def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil, expires_in: @expires_in)
       return default if retries >= max_retries
 
       r =
         if defined?(::Rails.cache)
-          rails_cache(key, force) do
+          rails_cache(key, force, expires_in) do
             yield
           end
         else
-          simple_cache(key, force) do
+          simple_cache(key, force, expires_in) do
             yield
           end
         end
@@ -619,16 +619,16 @@ module Sunspot
       end
     end
 
-    def rails_cache(key, force)
+    def rails_cache(key, force, expires_in)
       ::Rails.cache.fetch(
         key,
-        expires_in: @refresh_every,
+        expires_in: expires_in,
         force: force
       ) { yield }
     end
 
-    def simple_cache(key, force)
-      if force || (Time.now - @initialized_at) > @refresh_every
+    def simple_cache(key, force, expires_in)
+      if force || (Time.now - @initialized_at) > expires_in
         @initialized_at = Time.now
         @cached = {}
       end
