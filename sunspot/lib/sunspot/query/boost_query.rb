@@ -1,6 +1,6 @@
 module Sunspot
   module Query
-    # 
+    #
     # Representation of a BoostQuery, which allows the searcher to specify a
     # scope for which matching documents should have an extra boost. This is
     # essentially a conjunction, with an extra instance variable containing
@@ -14,7 +14,7 @@ module Sunspot
 
       def to_boolean_phrase
         if @boost.is_a?(FunctionQuery)
-          "#{@boost}"
+          @boost.to_s
         else
           "#{super}^#{@boost}"
         end

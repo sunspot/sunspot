@@ -1,8 +1,7 @@
 module Sunspot
   module Query
     module Filter
-
-      # 
+      #
       # Express this filter as an :fq parameter; i.e., the boolean phrase,
       # maybe prefixed by local params.
       #
@@ -21,10 +20,10 @@ module Sunspot
       def tag
         @tag ||= to_boolean_phrase.hash.abs.to_s(36)
       end
-      
+
       private
 
-      # 
+      #
       # True if a tag has been generated for this filter (e.g., if it's been
       # excluded from a given facet). If a tag has not been generated at the
       # time that the filter query param is requested, then it is not necessary
