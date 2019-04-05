@@ -69,7 +69,7 @@ module Sunspot
     end
 
     #
-    # Return all collections. Refreshing every @refresh_every (30.min)
+    # Return all collections. Refreshing every @refresh_every (10.min)
     # Array:: collections
     def collections(force: false)
       cs = with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
@@ -185,16 +185,16 @@ module Sunspot
 
     ##
     # Generate a report of the current collection/shards status
-    # view: type of rapresentation
+    # as: type of rapresentation
     #  - :table
     #  - :json
     #  - :simple
     # using_persisted: if true doesn't make a request to SOLR
     #                  but use the persisted state
-    def report_clusterstatus(view: :table, using_persisted: false)
+    def report_clusterstatus(as: :table, using_persisted: false)
       rows = using_persisted ? restore_solr_status : check_cluster
 
-      case view
+      case as
       when :table
         # order first by STATUS then by COLLECTION (name)
         rows = sort_rows(rows)
@@ -354,13 +354,137 @@ module Sunspot
     rescue RSolr::Error::Http => _e
     end
 
+    #
+    # Retrieve stats for the given collection
+    #
+    # @param [String] collection_name: is the collection name
+    #
+    # @return [Hash] stats info
+    #
+    def retrieve_stats_for(collection_name)
+      with_cache(force: false, key: calc_key_collection_stats(collection_name), default: {}) do
+        uri = connection.uri
+        c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
+        begin
+          response = c.get 'admin/luke', params: {
+            _: (Time.now.to_f * 1000).to_i,
+            numTerms: 0,
+            show: 'index'
+          }
+
+          response = response['index']
+          del_perc =
+            response['numDocs'].to_i > 0 ? (100 * response['deletedDocs'].to_f / response['numDocs'].to_f) : 0
+
+          {
+            has_deletions: response['hasDeletions'],
+            max_docs: response['maxDoc'].to_i,
+            num_docs: response['numDocs'].to_i,
+            deleted_docs: response['deletedDocs'].to_i,
+            deleted_perc: del_perc
+          }
+        rescue RSolr::Error::Http => _e
+          nil
+        end
+      end
+    end
+
+    #
+    # Retrieve stats for all collections
+    #
+    # @param [Symbol] :as <:json, :table>
+    #
+    # Example: retrieve_stats(as: :table)
+    #
+    def retrieve_stats(as: :json)
+      stats = retrieve_stats_as_json
+      case as
+      when :json
+        stats
+      when :table
+        s_stats = stats.sort do |a, b|
+          b[:deleted_perc] <=> a[:deleted_perc]
+        end
+
+        table = Terminal::Table.new(
+          headings: [
+            'Collection',
+            'Has deletions',
+            '# Docs',
+            '# Max Docs',
+            '# Deleted'
+          ],
+          rows: s_stats.map do |row|
+            [
+              row[:collection_name],
+              row[:has_deletions],
+              row[:num_docs],
+              row[:max_docs],
+              format('%d (%.2f%%)', row[:deleted_docs], row[:deleted_perc])
+            ]
+          end
+        )
+        puts table
+      end
+    end
+
+    #
+    # Optimize a single collection given the collection name
+    #
+    # @param [String] collection_name: the name of the collection
+    #
+    # @return [RSolrResponse]
+    #
+    def optimize_collection(collection_name)
+      uri = connection.uri
+      c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
+      begin
+        response = c.get 'update', params: {
+          _: (Time.now.to_f * 1000).to_i,
+          commit: true,
+          optimize: true
+        }
+
+        # destroy cache for that collection
+        remove_key_from_cache(calc_key_collection_stats(collection_name))
+
+        response
+      rescue RSolr::Error::Http => _e
+        nil
+      end
+    end
+
+    #
+    # Optimize all collections using a threshold of deleted docs
+    #
+    # @param [Number] deleted_threshold the reference threshold
+    #
+    #
+    def optimize_collections(deleted_threshold = 10)
+      retrieve_stats_as_json
+        .select { |e| e[:deleted_perc] > deleted_threshold }
+        .each do |e|
+          c = e[:collection_name]
+          puts "Optimizing #{c}"
+          optimize_collection(c)
+        end
+    end
+
+    ###############################################
+
     private
 
-    def adjsut_solr_resp(x)
-      if x.is_a?(String) && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4')
-        Marshal.load(x)
+    def retrieve_stats_as_json
+      collections(force: true)
+        .map { |c| retrieve_stats_for(c).merge(collection_name: c) }
+        .compact
+    end
+
+    def adjsut_solr_resp(resp)
+      if resp.is_a?(String) && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4')
+        Marshal.load(resp)
       else
-        x
+        resp
       end
     end
 
@@ -471,16 +595,16 @@ module Sunspot
     end
 
     # Helper function for solr caching
-    def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil)
+    def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil, expires_in: @refresh_every)
       return default if retries >= max_retries
 
       r =
         if defined?(::Rails.cache)
-          rails_cache(key, force) do
+          rails_cache(key, force, expires_in) do
             yield
           end
         else
-          simple_cache(key, force) do
+          simple_cache(key, force, expires_in) do
             yield
           end
         end
@@ -498,16 +622,16 @@ module Sunspot
       end
     end
 
-    def rails_cache(key, force)
+    def rails_cache(key, force, expires_in)
       ::Rails.cache.fetch(
         key,
-        expires_in: @refresh_every,
+        expires_in: expires_in,
         force: force
       ) { yield }
     end
 
-    def simple_cache(key, force)
-      if force || (Time.now - @initialized_at) > @refresh_every
+    def simple_cache(key, force, expires_in)
+      if force || (Time.now - @initialized_at) > expires_in
         @initialized_at = Time.now
         @cached = {}
       end
@@ -516,11 +640,23 @@ module Sunspot
       @cached[key]
     end
 
+    def remove_key_from_cache(key)
+      if defined?(::Rails.cache)
+        ::Rails.cache.delete(key)
+      else
+        @cached.delete(key)
+      end
+    end
+
     def solr_request(action, extra_params: {})
       connection.get(
         :collections,
         params: { action: action, wt: 'json' }.merge(extra_params)
       )
+    end
+
+    def calc_key_collection_stats(collection_name)
+      "CACHE_SOLR_COLLECTION_STATS_#{collection_name}"
     end
   end
 end
