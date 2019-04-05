@@ -362,7 +362,7 @@ module Sunspot
     # @return [Hash] stats info
     #
     def retrieve_stats_for(collection_name)
-      with_cache(force: force, key: "CACHE_SOLR_COLLECTION_STATS_#{collection_name}", default: {}, expires_in: 15) do
+      with_cache(force: false, key: "CACHE_SOLR_COLLECTION_STATS_#{collection_name}", default: {}, expires_in: 15) do
         uri = connection.uri
         c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
         begin
@@ -444,6 +444,9 @@ module Sunspot
           commit: true,
           optimize: true
         }
+
+        # destroy cache for that collection
+        remove_key_from_cache(collection_name)
 
         response
       rescue RSolr::Error::Http => _e
@@ -635,6 +638,14 @@ module Sunspot
       @cached      ||= {}
       @cached[key] ||= yield
       @cached[key]
+    end
+
+    def remove_key_from_cache(key)
+      if defined?(::Rails.cache)
+        ::Rails.cache.delete(key)
+      else
+        @cached.delete(key)
+      end
     end
 
     def solr_request(action, extra_params: {})
