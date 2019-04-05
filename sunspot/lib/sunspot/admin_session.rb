@@ -69,7 +69,7 @@ module Sunspot
     end
 
     #
-    # Return all collections. Refreshing every @refresh_every (30.min)
+    # Return all collections. Refreshing every @refresh_every (10.min)
     # Array:: collections
     def collections(force: false)
       cs = with_cache(force: force, key: 'CACHE_SOLR_COLLECTIONS', default: []) do
@@ -362,7 +362,7 @@ module Sunspot
     # @return [Hash] stats info
     #
     def retrieve_stats_for(collection_name)
-      with_cache(force: false, key: "CACHE_SOLR_COLLECTION_STATS_#{collection_name}", default: {}, expires_in: 15) do
+      with_cache(force: false, key: "CACHE_SOLR_COLLECTION_STATS_#{collection_name}", default: {}) do
         uri = connection.uri
         c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
         begin
@@ -403,7 +403,7 @@ module Sunspot
         stats
       when :table
         s_stats = stats.sort do |a, b|
-          b[:deleted_docs] <=> a[:deleted_docs]
+          b[:deleted_perc] <=> a[:deleted_perc]
         end
 
         table = Terminal::Table.new(
@@ -595,7 +595,7 @@ module Sunspot
     end
 
     # Helper function for solr caching
-    def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil, expires_in: @expires_in)
+    def with_cache(force: false, key:, retries: 0, max_retries: 3, default: nil, expires_in: @refresh_every)
       return default if retries >= max_retries
 
       r =
