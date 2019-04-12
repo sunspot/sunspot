@@ -306,9 +306,7 @@ module Sunspot
 
     def repair_all_collections
       @replicas_not_active.each do |rep|
-        if rep[:recoverable]
-          repair_collection(rep)
-        end
+        repair_collection(rep) if rep[:recoverable]
       end
     end
 
@@ -436,20 +434,20 @@ module Sunspot
     # Optimize all collections using a threshold of deleted docs
     #
     # @param [Number] deleted_threshold: call optimize_collection if the deleted_docs fragmentation is above the threshold
-    # @param [Bool] do_reload: if true reload the collection after optimization
+    # @param [Bool] reload: if true reload the collection after optimization
     #
-    def optimize_collections(deleted_threshold = 10, do_reload = false)
+    def optimize_collections(deleted_threshold: 10, reload: false)
       retrieve_stats_as_json
         .select { |e| e[:deleted_perc] > deleted_threshold }
         .each do |e|
           c = e[:collection_name]
           puts "Optimizing #{c}"
           optimize_collection(collection_name: c)
-          reload_collection(collection_name: c) if do_reload
+          reload_collection(collection_name: c) if reload
         end
     end
 
-    ############################################### PRIVATE ###############################################
+    ############################## PRIVATE ####################################
 
     private
 
