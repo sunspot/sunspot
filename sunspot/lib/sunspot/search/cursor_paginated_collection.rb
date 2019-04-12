@@ -1,6 +1,5 @@
 module Sunspot
   module Search
-
     class CursorPaginatedCollection < Array
       attr_reader :per_page, :total_count, :current_cursor, :next_page_cursor
       alias :total_entries :total_count

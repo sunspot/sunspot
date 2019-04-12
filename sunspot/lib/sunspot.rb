@@ -14,10 +14,12 @@ end
 require File.join(File.dirname(__FILE__), 'light_config')
 
 %w(util adapters configuration setup composite_setup text_field_setup field
-   field_factory data_extractor indexer query search session admin_session session_proxy
+   field_factory data_extractor indexer query search session session_proxy
    type dsl class_set).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
 end
+
+require File.join(File.dirname(__FILE__), 'sunspot', 'admin', 'admin_session.rb')
 
 #
 # The Sunspot module provides class-method entry points to most of the
