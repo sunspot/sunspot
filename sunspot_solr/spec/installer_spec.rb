@@ -12,6 +12,7 @@ describe Sunspot::Solr::Installer do
       "configsets/sunspot/conf/mapping-ISOLatin1Accent.txt",
       "configsets/sunspot/conf/protwords.txt",
       "configsets/sunspot/conf/schema.xml",
+      "configsets/sunspot/conf/schema_1_6.xml",
       "configsets/sunspot/conf/scripts.conf",
       "configsets/sunspot/conf/solrconfig.xml",
       "configsets/sunspot/conf/spellings.txt",

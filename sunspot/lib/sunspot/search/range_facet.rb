@@ -15,7 +15,7 @@ module Sunspot
             data = @search.facet_response['facet_ranges'][@field.indexed_name]
             gap = (@options[:range_interval] || 10).to_i
             rows = []
-            
+
             if data['counts']
               Hash[*data['counts']].each_pair do |start_str, count|
                 start = start_str.to_f

@@ -3,7 +3,7 @@ module Sunspot
     # The Fields class provides a DSL for specifying field definitions in the
     # Sunspot.setup block. As well as the #text method, which creates fulltext
     # fields, uses #method_missing to allow definition of typed fields. The
-    # available methods are determined by the constants defined in 
+    # available methods are determined by the constants defined in
     # Sunspot::Type - in theory (though this is untested), plugin developers
     # should be able to add support for new types simply by creating new
     # implementations in Sunspot::Type
@@ -34,13 +34,81 @@ module Sunspot
       #
       def text(*names, &block)
         options = names.last.is_a?(Hash) ? names.pop : {}
-
         names.each do |name|
           @setup.add_text_field_factory(name, options, &block)
         end
       end
 
-      # 
+      #
+      # child_documents is used to specify the field that will be serialized
+      # and indexed in Solr as child documents.
+      #
+      # It is mandatory for a child_documents field to be an +Array+ of
+      # searchable documents (must use +Sunspot.setup+).
+      #
+      # ==== Example
+      #
+      #   class Person
+      #     attr_accessor :name, :surname, :age
+      #   end
+      #
+      #   class Parent < Person
+      #     attr_accessor :children
+      #   end
+      #
+      #   Sunspot.setup(Person) do
+      #     string :name
+      #     string :surname
+      #     integer :age
+      #   end
+      #
+      #   Sunspot.setup(Parent) do
+      #     string :name
+      #     string :surname
+      #     integer :age
+      #     child_documents :children
+      #   end
+      #
+      # ==== Parameters
+      #
+      # field<Symbol>:: Field name at object level that contains child documents
+      #
+      def child_documents(field)
+        Sunspot::Util.ensure_child_documents_support
+        @setup.add_child_field_factory(field)
+      end
+
+      ## needed to query for _root_ field in a child relation
+      #
+      # ==== Example
+      #
+      #   class Person
+      #     attr_accessor :name, :surname, :age
+      #   end
+      #
+      #   class Parent < Person
+      #     attr_accessor :children
+      #   end
+      #
+      #   Sunspot.setup(Person) do
+      #     is_child
+      #     string :name
+      #     string :surname
+      #     integer :age
+      #   end
+      #
+      #   Sunspot.setup(Parent) do
+      #     string :name
+      #     string :surname
+      #     integer :age
+      #     child_documents :children
+      #   end
+      def is_child
+        Sunspot::Util.ensure_child_documents_support
+        @setup.is_child = true
+      end
+
+      #
       # Specify a document-level boost. As with fields, you have the option of
       # passing an attribute name which will be called on each model, or a block
       # to be evaluated in the model's context. As well as these two options,

@@ -125,6 +125,8 @@
    -->
     <!-- *** This field is used by Sunspot! *** -->
     <field name="id" stored="true" type="string" multiValued="false" indexed="true"/>
+    <!-- *** This field is required by Solr to use Block Join queries *** -->
+    <field name="_root_" type="string" indexed="true" stored="false"/>
     <!-- *** This field is used by Sunspot! *** -->
     <field name="type" stored="false" type="string" multiValued="true" indexed="true"/>
     <!-- *** This field is used by Sunspot! *** -->
@@ -262,10 +264,7 @@
       Unless this field is marked with required="false", it will be a required field
    -->
   <uniqueKey>id</uniqueKey>
-  <!-- field for the QueryParser to use when an explicit fieldname is absent -->
-  <defaultSearchField>text</defaultSearchField>
-  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
-  <solrQueryParser defaultOperator="AND"/>
+
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
         or to add multiple fields to the same field for easier/faster

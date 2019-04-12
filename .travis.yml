@@ -1,11 +1,19 @@
+services:
+  - docker
+
 language: ruby
 sudo: false
 cache:
-  bundler: true
+  bundler: false
   directories:
     - sunspot/vendor/bundle
     - sunspot_solr/vendor/bundle
     - sunspot_rails/vendor/bundle
+
+before_install:
+  - gem install rubygems-update -v 2.7.8
+  - update_rubygems
+  - gem install bundler -v 1.17.3
 
 rvm:
   - 2.1.0
@@ -21,16 +29,11 @@ env:
   - GEM=sunspot UPDATE_FORMAT=json
   - GEM=sunspot_rails
   - GEM=sunspot_solr
+  - SOLR_MODE=cloud GEM=sunspot_rails
 
 matrix:
   allow_failures:
     - rvm: ruby-head
 
-before_install:
-  #  https://docs.travis-ci.com/user/languages/ruby/#bundler-20
-  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
-  - gem install bundler -v '< 2'
-
 script:
   - ci/travis.sh
-

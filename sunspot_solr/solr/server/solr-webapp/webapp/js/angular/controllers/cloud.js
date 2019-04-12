@@ -16,7 +16,7 @@
 */
 
 solrAdminApp.controller('CloudController',
-    function($scope, $location, Zookeeper) {
+    function($scope, $location, Zookeeper, Constants) {
 
         $scope.showDebug = false;
 
@@ -30,13 +30,13 @@ solrAdminApp.controller('CloudController',
 
         var view = $location.search().view ? $location.search().view : "graph";
         if (view == "tree") {
-            $scope.resetMenu("cloud-tree", true);
+            $scope.resetMenu("cloud-tree", Constants.IS_ROOT_PAGE);
             treeSubController($scope, Zookeeper);
         } else if (view == "rgraph") {
-            $scope.resetMenu("cloud-rgraph", true);
+            $scope.resetMenu("cloud-rgraph", Constants.IS_ROOT_PAGE);
             graphSubController($scope, Zookeeper, true);
         } else if (view == "graph") {
-            $scope.resetMenu("cloud-graph", true);
+            $scope.resetMenu("cloud-graph", Constants.IS_ROOT_PAGE);
             graphSubController($scope, Zookeeper, false);
         }
     }
@@ -55,6 +55,11 @@ var treeSubController = function($scope, Zookeeper) {
             var path = data.znode.path.split( '.' );
             if(path.length >1) {
               $scope.lang = path.pop();
+            } else {
+              var lastPathElement = data.znode.path.split( '/' ).pop();
+              if (lastPathElement == "managed-schema") {
+                  $scope.lang = "xml";
+              }
             }
             $scope.showData = true;
         });
@@ -134,6 +139,8 @@ var graphSubController = function ($scope, Zookeeper, isRadial) {
                     for (var c in state) {
                         var shards = [];
                         for (var s in state[c].shards) {
+                            var shard_status = state[c].shards[s].state;
+                            shard_status = shard_status == 'inactive' ? 'shard-inactive' : shard_status;
                             var nodes = [];
                             for (var n in state[c].shards[s].replicas) {
                                 leaf_count++;
@@ -155,17 +162,19 @@ var graphSubController = function ($scope, Zookeeper, isRadial) {
                                 $scope.helperData.port.push(uri_parts.port);
                                 $scope.helperData.pathname.push(uri_parts.pathname);
 
-                                var status = replica.state;
+                                var replica_status = replica.state;
 
                                 if (!live_nodes[replica.node_name]) {
-                                    status = 'gone';
+                                    replica_status = 'gone';
+                                } else if(shard_status=='shard-inactive') {
+                                    replica_status += ' ' + shard_status;
                                 }
 
                                 var node = {
                                     name: uri,
                                     data: {
                                         type: 'node',
-                                        state: status,
+                                        state: replica_status,
                                         leader: 'true' === replica.leader,
                                         uri: uri_parts
                                     }
@@ -174,9 +183,10 @@ var graphSubController = function ($scope, Zookeeper, isRadial) {
                             }
 
                             var shard = {
-                                name: s,
+                                name: shard_status == "shard-inactive" ? s + ' (inactive)' : s,
                                 data: {
-                                    type: 'shard'
+                                    type: 'shard',
+                                    state: shard_status
                                 },
                                 children: nodes
                             };
@@ -241,7 +251,7 @@ var graphSubController = function ($scope, Zookeeper, isRadial) {
     $scope.initGraph();
 };
 
-solrAdminApp.directive('graph', function() {
+solrAdminApp.directive('graph', function(Constants) {
     return {
         restrict: 'EA',
         scope: {
@@ -275,7 +285,9 @@ solrAdminApp.directive('graph', function() {
                 }
 
                 if (d.data && d.data.state) {
-                    classes.push(d.data.state);
+                    if(!(d.data.type=='shard' && d.data.state=='active')){
+                        classes.push(d.data.state);
+                    }
                 }
 
                 return classes.join(' ');
@@ -312,6 +324,32 @@ solrAdminApp.directive('graph', function() {
                     }
                 }
             });
+
+
+            function setNodeNavigationBehavior(node, view){
+                node
+                .attr('data-href', function (d) {
+                    if (d.type == "node"){
+                        return getNodeUrl(d, view);
+                    }
+                    else{
+                        return "";
+                    }
+                })
+                .on('click', function(d) {
+                    if (d.data.type == "node"){
+                        location.href = getNodeUrl(d, view);
+                    }
+                });
+            }
+
+            function getNodeUrl(d, view){
+                var url = d.name + Constants.ROOT_URL + "#/~cloud";
+                if (view != undefined){
+                    url += "?view=" + view;
+                }
+                return url;
+            }
 
             var flatGraph = function(element, graphData, leafCount) {
                 var w = element.width(),
@@ -358,14 +396,10 @@ solrAdminApp.directive('graph', function() {
                     })
                     .attr('text-anchor', function (d) {
                         return 0 === d.depth ? 'end' : 'start';
-                    })
-                    .attr('data-href', function (d) {
-                        return d.name;
-                    })
-                    .text(helper_node_text)
-                    .on('click', function(d,i) {
-                        location.href = d.name;
-                    });
+                    })                    
+                    .text(helper_node_text);
+
+                setNodeNavigationBehavior(node);
             };
 
             var radialGraph = function(element, graphData, leafCount) {
@@ -417,13 +451,9 @@ solrAdminApp.directive('graph', function() {
                     .attr('transform', function (d) {
                         return d.x < 180 ? null : 'rotate(180)';
                     })
-                    .attr('data-href', function (d) {
-                        return d.name;
-                    })
-                    .text(helper_node_text)
-                    .on('click', function(d,i) {
-                        location.href = d.name;
-                    });
+                    .text(helper_node_text);
+
+                setNodeNavigationBehavior(node, "rgraph");
             }
         }
     };

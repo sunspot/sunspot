@@ -115,10 +115,10 @@ module Sunspot
       def merge_fulltext(params)
         return nil if @fulltexts.empty?
         return Sunspot::Util.deep_merge!(params, @fulltexts.first.to_params) if @fulltexts.length == 1
-        subqueries = @fulltexts.map {|fulltext| fulltext.to_subquery }.join(' ')
+
+        subqueries = @fulltexts.map(&:to_subquery).join(' ')
         Sunspot::Util.deep_merge!(params, {:q => subqueries})
       end
-
     end
   end
 end

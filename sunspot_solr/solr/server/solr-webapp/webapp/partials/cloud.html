@@ -23,7 +23,8 @@ limitations under the License.
 
       <div id="file-content" class="clearfix">
 
-        <div id="prop" ng-show="znode.prop && showData">
+        <a id="toggle" ng-click="showProps = !showProps" ng-show="showData" ng-class="showProps ? 'minus' : 'plus'">Metadata</a>
+        <div id="prop" ng-show="znode.prop && showData && showProps">
           <ul>
             <li ng-class="{odd:$odd}" ng-repeat="(key, prop) in znode.prop">
               <dl class="clearfix">
@@ -58,6 +59,7 @@ limitations under the License.
           <li class="recovering"><svg width="15" height="15"><g transform="translate(5,2)"><g transform="translate(0,5)"><circle r="4.5"></circle></g></g></svg> Recovering</li>
           <li class="down"><svg width="15" height="15"><g transform="translate(5,2)"><g transform="translate(0,5)"><circle r="4.5"></circle></g></g></svg> Down</li>
           <li class="recovery_failed"><svg width="15" height="15"><g transform="translate(5,2)"><g transform="translate(0,5)"><circle r="4.5"></circle></g></g></svg> Recovery Failed</li>
+          <li class="shard-inactive"><svg width="15" height="15"><g transform="translate(5,2)"><g transform="translate(0,5)"><circle r="4.5"></circle></g></g></svg> Inactive</li>
           <li class="gone"><svg width="15" height="15"><g transform="translate(5,2)"><g transform="translate(0,5)"><circle r="4.5"></circle></g></g></svg> Gone</li>
         </ul>
       </div>

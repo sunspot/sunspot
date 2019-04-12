@@ -19,7 +19,7 @@ describe 'keyword search' do
     context 'edismax' do
       it 'matches with wildcards' do
         results = Sunspot.search(Post) { keywords '*oas*' }.results
-        [0,2].each { |i| expect(results).to include(@posts[i])}
+        [0, 2].each { |i| expect(results).to include(@posts[i])}
         [1].each { |i| expect(results).not_to include(@posts[i])}
       end
 
@@ -65,7 +65,7 @@ describe 'keyword search' do
       results = Sunspot.search(Post, Namespaced::Comment) do
         keywords 'toast'
       end.results
-      [@posts[0], @posts[2], @comment].each  { |obj| expect(results).to include(obj) }
+      [@posts[0], @posts[2], @comment].each { |obj| expect(results).to include(obj) }
       expect(results).not_to include(@posts[1])
     end
 
@@ -223,7 +223,7 @@ describe 'keyword search' do
           boost(1.5) { with(:average_rating).greater_than(3.0) }
         end
       end
-      expect(search.results).to eq(@posts)
+      expect(search.results.sort! { |a, b| a.id <=> b.id }).to eq(@posts)
       expect(search.hits[0].score).to be > search.hits[1].score
       expect(search.hits[1].score).to be > search.hits[2].score
     end
@@ -240,6 +240,10 @@ describe 'keyword search' do
       @search = Sunspot.search(Post) do
         keywords 'pepperoni sausage extra cheese', :minimum_match => 2
       end
+    end
+
+    it 'should add the q.op OR parameter to ensure minimum match is parsed' do
+      expect(@search.query.to_params[:'q.op']).to eq('OR')
     end
 
     it 'should match documents that contain the minimum_match number of search terms' do

@@ -243,7 +243,7 @@ module Sunspot
       indexer.flush_batch
     end
 
-    private
+    protected
 
     #
     # Retrieve the Solr connection for this session, creating one if it does not
@@ -262,6 +262,8 @@ module Sunspot
         update_format: config.solr.update_format || :xml
       )
     end
+
+    private
 
     def indexer
       @indexer ||= Indexer.new(connection)

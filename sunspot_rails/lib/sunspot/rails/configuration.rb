@@ -10,12 +10,18 @@ module Sunspot #:nodoc:
     #
     #   development:
     #     solr:
+    #       hostnames: [host1, host2,...] or "host1,host2"
     #       hostname: localhost
     #       port: 8982
     #       memory: 1G
     #       solr_jar: /some/path/solr15/start.jar
     #       bind_address: 0.0.0.0
     #       proxy: false
+    #       collection:
+    #         base_name: 'default'
+    #         num_shards: 1
+    #         replication_factor: 1
+    #         config_name: 'config'
     #     disabled: false
     #   test:
     #     solr:
@@ -60,6 +66,62 @@ module Sunspot #:nodoc:
       LOG_LEVELS = %w(FINE INFO WARNING SEVERE SEVERE INFO)
 
       attr_writer :user_configuration
+
+      #
+      # The collection options used to create a collection fot time based routing.
+      # Valid configuration values:base_name, num_shards, replication factor, max_shards_per_node, config_name.
+      # Default {}
+      #
+      # ==== Returns
+      #
+      # Hash:: collection
+      #
+      def collection
+        unless defined?(@collection)
+          @collection ||= user_configuration_from_key('solr', 'collection')
+          @collection ||= {}
+        end
+        valid_options = [:num_shards, :replication_factor, :max_shards_per_node, :config_name, :base_name]
+        not_valid_options = @collection.symbolize_keys.keys - valid_options
+        raise UnrecognizedOptionError.new("options #{not_valid_options.join(',')} not valid") if @collection.keys.present? && not_valid_options.present?
+        @collection
+      end
+
+      #
+      # The attribute of the collection by id
+      # Valid configuration values:base_name, num_shards, replication factor, max_shards_per_node, config_name.
+      # Default nil
+      #
+      # ==== Returns
+      #
+      # Hash:: collection
+      #
+      def collection_param(id)
+        collection[id]
+      end
+
+      #
+      # The host names at which to connect to Solr. Default ['localhost'].
+      #
+      # ==== Returns
+      #
+      # Array:: hostnames
+      #
+      def hostnames
+        unless defined?(@hostnames)
+          @hostnames = user_configuration_from_key('solr', 'hostnames')
+          @hostnames = case @hostnames
+                       when Array
+                         @hostnames
+                       when String
+                         @hostnames.split(',')
+                       when nil
+                         [default_hostname]
+                       end
+        end
+        @hostnames
+      end
+
       #
       # The host name at which to connect to Solr. Default 'localhost'.
       #
@@ -71,6 +133,7 @@ module Sunspot #:nodoc:
         unless defined?(@hostname)
           @hostname   = solr_url.host if solr_url
           @hostname ||= user_configuration_from_key('solr', 'hostname')
+          @hostname ||= hostnames[0] unless hostnames.empty?
           @hostname ||= default_hostname
         end
         @hostname
@@ -121,10 +184,10 @@ module Sunspot #:nodoc:
       #
       def userinfo
         unless defined?(@userinfo)
-          @userinfo   = solr_url.userinfo if solr_url
+          @userinfo = solr_url.userinfo if solr_url
           user = user_configuration_from_key('solr', 'user')
           pass = user_configuration_from_key('solr', 'pass')
-          @userinfo ||= [ user, pass ].compact.join(":") if user && pass
+          @userinfo ||= [user, pass].compact.join(':') if user && pass
           @userinfo ||= default_userinfo
         end
         @userinfo
@@ -234,9 +297,8 @@ module Sunspot #:nodoc:
       #
       def auto_commit_after_delete_request?
         @auto_commit_after_delete_request ||=
-          (user_configuration_from_key('auto_commit_after_delete_request') || false)
+          user_configuration_from_key('auto_commit_after_delete_request') || false
       end
-
 
       #
       # The log directory for solr logfiles
@@ -253,7 +315,6 @@ module Sunspot #:nodoc:
         @pid_dir ||= user_configuration_from_key('solr', 'pid_dir') || File.join(::Rails.root, 'solr', 'pids', ::Rails.env)
       end
 
-
       #
       # The solr home directory. Sunspot::Rails expects this directory
       # to contain a config, data and pids directory. See
@@ -264,12 +325,8 @@ module Sunspot #:nodoc:
       # String:: solr_home
       #
       def solr_home
-        @solr_home ||=
-          if user_configuration_from_key('solr', 'solr_home')
-            user_configuration_from_key('solr', 'solr_home')
-          else
-            File.join(::Rails.root, 'solr')
-          end
+        @solr_home ||= user_configuration_from_key('solr', 'solr_home')
+        @solr_home ||= File.join(::Rails.root, 'solr')
       end
 
       #
@@ -346,7 +403,7 @@ module Sunspot #:nodoc:
       # String:: default_log_file_location
       #
       def default_log_file_location
-        File.join(::Rails.root, 'log', "solr_" + ::Rails.env + ".log")
+        File.join(::Rails.root, 'log', "solr_#{::Rails.env}.log")
       end
 
       #
@@ -356,7 +413,7 @@ module Sunspot #:nodoc:
       #
       # Mixed:: requested_key or nil
       #
-      def user_configuration_from_key( *keys )
+      def user_configuration_from_key(*keys)
         keys.inject(user_configuration) do |hash, key|
           hash[key] if hash
         end
@@ -421,7 +478,6 @@ module Sunspot #:nodoc:
       def default_path
         '/solr/default'
       end
-
     end
   end
 end

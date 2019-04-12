@@ -41,7 +41,7 @@ module Sunspot
       #
       def highlights(field_name = nil)
         if field_name.nil?
-          highlights_cache.values.flatten 
+          highlights_cache.values.flatten
         else
           highlights_cache[field_name.to_sym]
         end || []

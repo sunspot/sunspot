@@ -16,8 +16,8 @@
 */
 
 solrAdminApp.controller('CoreOverviewController',
-function($scope, $rootScope, $routeParams, Luke, CoreSystem, Update, Replication, Ping) {
-  $scope.resetMenu("overview");
+function($scope, $rootScope, $routeParams, Luke, CoreSystem, Update, Replication, Ping, Constants) {
+  $scope.resetMenu("overview", Constants.IS_CORE_PAGE);
   $scope.refreshIndex = function() {
     Luke.index({core: $routeParams.core},
       function(data) {
@@ -103,14 +103,13 @@ function($scope, $rootScope, $routeParams, Luke, CoreSystem, Update, Replication
 
   $scope.refreshPing = function() {
     Ping.status({core: $routeParams.core}, function(data) {
-      $scope.healthcheckStatus = data.status == "enabled";
-    }).$promise.catch(function(error) {
-      if (error.status == 404) {
+      if (data.error) {
         $scope.healthcheckStatus = false;
+        if (data.error.code == 503) {
+          $scope.healthcheckMessage = 'Ping request handler is not configured with a healthcheck file.';
+        }
       } else {
-        $scope.healthcheckStatus = false;
-        delete $rootScope.exception;
-        $scope.healthcheckMessage = 'Ping request handler is not configured with a healthcheck file.';
+        $scope.healthcheckStatus = data.status == "enabled";
       }
     });
   };
@@ -140,86 +139,3 @@ function($scope, $rootScope, $routeParams, Luke, CoreSystem, Update, Replication
   $scope.refresh();
 });
 
-/*******
-
-// @todo admin-extra
-    var core_basepath = this.active_core.attr( 'data-basepath' );
-    var content_element = $( '#content' );
-
-    content_element
-      .removeClass( 'single' );
-
-    if( !app.core_menu.data( 'admin-extra-loaded' ) )
-    {
-      app.core_menu.data( 'admin-extra-loaded', new Date() );
-
-      $.get
-      (
-        core_basepath + '/admin/file/?file=admin-extra.menu-top.html&contentType=text/html;charset=utf-8',
-        function( menu_extra )
-        {
-          app.core_menu
-            .prepend( menu_extra );
-        }
-      );
-
-      $.get
-      (
-        core_basepath + '/admin/file/?file=admin-extra.menu-bottom.html&contentType=text/html;charset=utf-8',
-        function( menu_extra )
-        {
-          app.core_menu
-            .append( menu_extra );
-        }
-      );
-    }
-
-
-
-////////////////////////////////// ADMIN EXTRA
-        $.ajax
-        (
-          {
-            url : core_basepath + '/admin/file/?file=admin-extra.html',
-            dataType : 'html',
-            context : $( '#admin-extra', dashboard_element ),
-            beforeSend : function( xhr, settings )
-            {
-              $( 'h2', this )
-                .addClass( 'loader' );
-
-              $( '.message', this )
-                .show()
-                .html( 'Loading' );
-
-              $( '.content', this )
-                .hide();
-            },
-            success : function( response, text_status, xhr )
-            {
-              $( '.message', this )
-                .hide()
-                .empty();
-
-              $( '.content', this )
-                .show()
-                .html( response );
-            },
-            error : function( xhr, text_status, error_thrown)
-            {
-              this
-                .addClass( 'disabled' );
-
-              $( '.message', this )
-                .show()
-                .html( 'We found no "admin-extra.html" file.' );
-            },
-            complete : function( xhr, text_status )
-            {
-              $( 'h2', this )
-                .removeClass( 'loader' );
-            }
-          }
-        );
-
-***/

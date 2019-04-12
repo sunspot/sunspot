@@ -4,3 +4,4 @@ pkg/*
 log
 .bundle
 gemfiles/*.gemfile*
+spec/rails_app/tmp/

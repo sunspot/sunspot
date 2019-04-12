@@ -98,7 +98,8 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should index latitude and longitude passed as non-Floats' do
     coordinates = Sunspot::Util::Coordinates.new(
-      BigDecimal.new('40.7'), BigDecimal.new('-73.5'))
+      BigDecimal('40.7'), BigDecimal('-73.5')
+    )
     session.index(post(:coordinates => coordinates))
     expect(connection).to have_add_with(:coordinates_s => 'dr5xx3nytvgs')
   end
@@ -120,12 +121,12 @@ describe 'indexing attribute fields', :type => :indexer do
   end
 
   it 'should throw a NoMethodError only if a nonexistent type is defined' do
-    expect { Sunspot.setup(Post) { string :author_name }}.not_to raise_error
-    expect { Sunspot.setup(Post) { bogus :journey }}.to raise_error(NoMethodError)
+    expect { Sunspot.setup(Post) { string :author_name } }.not_to raise_error
+    expect { Sunspot.setup(Post) { bogus :journey } }.to raise_error(NoMethodError)
   end
 
   it 'should throw a NoMethodError if a nonexistent field argument is passed' do
-    expect { Sunspot.setup(Post) { string :author_name, :bogus => :argument }}.to raise_error(ArgumentError)
+    expect { Sunspot.setup(Post) { string :author_name, :bogus => :argument } }.to raise_error(ArgumentError)
   end
 
   it 'should throw an ArgumentError if single-value field tries to index multiple values' do
@@ -149,6 +150,5 @@ describe 'indexing attribute fields', :type => :indexer do
   it 'should use a specified field name when the :as option is set for array values' do
     session.index(post(:title => 'Another Title'))
     expect(connection).to have_add_with(:legacy_array_field_sm => ['first string', 'second string'])
- 	end
+  end
 end
-
