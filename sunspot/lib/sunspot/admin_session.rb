@@ -300,31 +300,14 @@ module Sunspot
 
     # rep is the collection to be repaired
     def repair_collection(rep)
-      delete_failed_replica(
-        collection: rep[:collection],
-        shard: rep[:shard],
-        replica: rep[:replica]
-      )
-      add_failed_replica(
-        collection: rep[:collection],
-        shard: rep[:shard],
-        node: rep[:node]
-      )
+      delete_failed_replica(collection: rep[:collection], shard: rep[:shard], replica: rep[:replica])
+      add_failed_replica(collection: rep[:collection], shard: rep[:shard], node: rep[:node])
     end
 
-    def repair_all_collection
+    def repair_all_collections
       @replicas_not_active.each do |rep|
         if rep[:recoverable]
-          delete_failed_replica(
-            collection: rep[:collection],
-            shard: rep[:shard],
-            replica: rep[:replica]
-          )
-          add_failed_replica(
-            collection: rep[:collection],
-            shard: rep[:shard],
-            node: rep[:node]
-          )
+          repair_collection(rep)
         end
       end
     end
@@ -340,6 +323,7 @@ module Sunspot
         }
       )
     rescue RSolr::Error::Http => _e
+      false
     end
 
     def add_failed_replica(collection:, shard:, node:)
@@ -352,6 +336,7 @@ module Sunspot
         }
       )
     rescue RSolr::Error::Http => _e
+      false
     end
 
     #
@@ -361,7 +346,7 @@ module Sunspot
     #
     # @return [Hash] stats info
     #
-    def retrieve_stats_for(collection_name)
+    def retrieve_stats_for(collection_name:)
       with_cache(force: false, key: calc_key_collection_stats(collection_name), default: {}) do
         uri = connection.uri
         c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
@@ -407,13 +392,7 @@ module Sunspot
         end
 
         table = Terminal::Table.new(
-          headings: [
-            'Collection',
-            'Has deletions',
-            '# Docs',
-            '# Max Docs',
-            '# Deleted'
-          ],
+          headings: ['Collection', 'Has deletions', '# Docs', '# Max Docs', '# Deleted'],
           rows: s_stats.map do |row|
             [
               row[:collection_name],
@@ -435,7 +414,7 @@ module Sunspot
     #
     # @return [RSolrResponse]
     #
-    def optimize_collection(collection_name)
+    def optimize_collection(collection_name:)
       uri = connection.uri
       c = RSolr.connect(url: "http://#{uri.host}:#{uri.port}/solr/#{collection_name}")
       begin
@@ -447,7 +426,6 @@ module Sunspot
 
         # destroy cache for that collection
         remove_key_from_cache(calc_key_collection_stats(collection_name))
-
         response
       rescue RSolr::Error::Http => _e
         nil
@@ -457,26 +435,29 @@ module Sunspot
     #
     # Optimize all collections using a threshold of deleted docs
     #
-    # @param [Number] deleted_threshold the reference threshold
+    # @param [Number] deleted_threshold: call optimize_collection if the deleted_docs fragmentation is above the threshold
+    # @param [Bool] do_reload: if true reload the collection after optimization
     #
-    #
-    def optimize_collections(deleted_threshold = 10)
+    def optimize_collections(deleted_threshold = 10, do_reload = false)
       retrieve_stats_as_json
         .select { |e| e[:deleted_perc] > deleted_threshold }
         .each do |e|
           c = e[:collection_name]
           puts "Optimizing #{c}"
-          optimize_collection(c)
+          optimize_collection(collection_name: c)
+          reload_collection(collection_name: c) if do_reload
         end
     end
 
-    ###############################################
+    ############################################### PRIVATE ###############################################
 
     private
 
     def retrieve_stats_as_json
       collections(force: true)
-        .map { |c| retrieve_stats_for(c).merge(collection_name: c) }
+        .map do |c|
+          retrieve_stats_for(collection_name: c).merge(collection_name: c)
+        end
         .compact
     end
 
@@ -531,29 +512,26 @@ module Sunspot
     end
 
     def get_shard_status(collection_name, shards)
-      shards.each_with_object(
-        active: 0,
-        non_active: 0,
-        good: 0,
-        bad: 0,
-        replica_up: 0,
-        replica_down: 0
-      ) do |(shard_name, v), acc|
-        if v['state'] == 'active'
-          acc[:active] += 1
-        else
-          acc[:non_active] += 1
-        end
+      empty = {
+        active: 0, non_active: 0,
+        good: 0, bad: 0,
+        replica_up: 0, replica_down: 0
+      }
 
-        replica_status = get_replicas_status(collection_name, shard_name, v['replicas'])
+      shards.each_with_object(empty) do |(shard_name, v), acc|
+        acc[:active] += 1 if v['state'] == 'active'
+        acc[:non_active] += 1 if v['state'] != 'active'
+
+        replica_status = get_replicas_status(
+          collection_name,
+          shard_name,
+          v['replicas']
+        )
         acc[:replica_up] += replica_status[:active]
         acc[:replica_down] += replica_status[:non_active]
 
-        if replica_status[:active] > 0
-          acc[:good] += 1
-        else
-          acc[:bad] += 1
-        end
+        acc[:good] += 1 if replica_status[:active] > 0
+        acc[:bad] += 1 if replica_status[:active] == 0
       end
     end
 
@@ -585,13 +563,12 @@ module Sunspot
         row
       end
 
-      frows = rows.select { |row| row[:gstatus] == false }.sort do |a, b|
-        a[:collection] <=> b[:collection]
-      end
+      frows = rows
+              .select { |row| row[:gstatus] == false }
+              .sort_by { |a| a[:collection] }
 
-      frows + rows.select { |row| row[:gstatus] == true }.sort do |a, b|
-        a[:collection] <=> b[:collection]
-      end
+      (frows + rows.select { |row| row[:gstatus] == true })
+        .sort_by { |a| a[:collection] }
     end
 
     # Helper function for solr caching
