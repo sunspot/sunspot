@@ -561,12 +561,15 @@ module Sunspot
         row
       end
 
-      frows = rows
-              .select { |row| row[:gstatus] == false }
+      failed = rows
+               .select { |row| row[:gstatus] == false }
+               .sort_by { |a| a[:collection] }
+
+      valid = rows
+              .select { |row| row[:gstatus] == true }
               .sort_by { |a| a[:collection] }
 
-      (frows + rows.select { |row| row[:gstatus] == true })
-        .sort_by { |a| a[:collection] }
+      failed + valid
     end
 
     # Helper function for solr caching
@@ -598,11 +601,7 @@ module Sunspot
     end
 
     def rails_cache(key, force, expires_in)
-      ::Rails.cache.fetch(
-        key,
-        expires_in: expires_in,
-        force: force
-      ) { yield }
+      ::Rails.cache.fetch(key, expires_in: expires_in, force: force) { yield }
     end
 
     def simple_cache(key, force, expires_in)
