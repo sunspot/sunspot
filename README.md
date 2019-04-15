@@ -1249,8 +1249,8 @@ Post.search.hits.each do |hit|
 end
 ```
 
-Please note that when you have stored fields declared, they all going to be retrieved from Solr every time,
-even if you dont really need them. You can reduce returned stored dataset by using field lists,
+Please note that when you have stored fields declared, they are all going to be retrieved from Solr every time,
+even if you don't really need them. You can reduce returned stored dataset by using field lists,
 or you can skip all of them entirely:
 
 ```ruby
