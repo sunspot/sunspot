@@ -36,7 +36,6 @@ set GC_TUNE=-XX:NewRatio=3 ^
  -XX:TargetSurvivorRatio=90 ^
  -XX:MaxTenuringThreshold=8 ^
  -XX:+UseConcMarkSweepGC ^
- -XX:+UseParNewGC ^
  -XX:ConcGCThreads=4 -XX:ParallelGCThreads=4 ^
  -XX:+CMSScavengeBeforeRemark ^
  -XX:PretenureSizeThreshold=64m ^
