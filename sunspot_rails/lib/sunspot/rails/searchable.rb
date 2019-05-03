@@ -99,9 +99,15 @@ module Sunspot #:nodoc:
 
             unless options[:auto_remove] == false
               # after_commit { |searchable| searchable.remove_from_index }, :on => :destroy
-              __send__ Sunspot::Rails.configuration.auto_remove_callback,
-                       proc { |searchable| searchable.remove_from_index },
-                       :on => :destroy
+              if ::Rails::VERSION::MAJOR >= 6
+                __send__ Sunspot::Rails.configuration.auto_remove_callback,
+                         proc { |searchable| searchable.remove_from_index },
+                         :if => :destroy
+              else
+                __send__ Sunspot::Rails.configuration.auto_remove_callback,
+                         proc { |searchable| searchable.remove_from_index },
+                         :on => :destroy
+              end
             end
             options[:include] = Util::Array(options[:include])
 
