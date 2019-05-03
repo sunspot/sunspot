@@ -61,3 +61,13 @@ if ruby_version >= Gem::Version.new('2.2.0')
     end
   end
 end
+
+if ruby_version >= Gem::Version.new('2.2.0')
+  appraise "rails-6.0.0.rc1" do
+    gem 'sunspot', path: File.expand_path('sunspot', ENV['SUNSPOT_LIB_HOME'])
+    gem 'sunspot_solr', path: File.expand_path('sunspot_solr', ENV['SUNSPOT_LIB_HOME'])
+    gem 'rails', "~> 6.0.0.rc1"
+    gem 'sqlite3', "~> 1.4.0"
+    gem 'progress_bar', '~> 1.0.5', require: false
+  end
+end
