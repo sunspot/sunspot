@@ -15,6 +15,7 @@ module Sunspot
       @more_like_this_field_factories_cache = Hash.new { |h, k| h[k] = [] }
       @dsl = DSL::Fields.new(self)
       @document_boost_extractor = nil
+      @id_prefix_extractor = nil
       add_field_factory(:class, Type::ClassType.instance)
     end
 
@@ -104,6 +105,24 @@ module Sunspot
           end
         else
           DataExtractor::BlockExtractor.new(&block)
+        end
+    end
+
+    #
+    # Add id prefix for compositeId router
+    #
+    def add_id_prefix(attr_name, &block)
+      @id_prefix_extractor =
+        case attr_name
+        when Symbol
+          DataExtractor::AttributeExtractor.new(attr_name)
+        when String
+          DataExtractor::Constant.new(attr_name)
+        when nil
+          DataExtractor::BlockExtractor.new(&block) if block_given?
+        else
+          raise ArgumentError,
+            "The ID prefix has to be either a Symbol, a String or a Proc"
         end
     end
 
@@ -268,6 +287,14 @@ module Sunspot
     def document_boost_for(model)
       if @document_boost_extractor
         @document_boost_extractor.value_for(model)
+      end
+    end
+
+    def id_prefix_for(model)
+      if @id_prefix_extractor
+        value = @id_prefix_extractor.value_for(model)
+
+        "#{value}!" if value.is_a?(String) and value.size > 0 and value[-1] != "!"
       end
     end
 

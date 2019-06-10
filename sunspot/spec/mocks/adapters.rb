@@ -7,7 +7,30 @@ end
 class UnseenModel < AbstractModel
 end
 
+class ModelWithPrefixId < AbstractModel
+  def id
+    1
+  end
+end
+
+Sunspot.setup(ModelWithPrefixId) do
+  id_prefix { "USERDATA" }
+end
+
+class ModelWithoutPrefixId < AbstractModel
+  def id
+    1
+  end
+end
+
+Sunspot.setup(ModelWithoutPrefixId) do
+end
+
+
 class AbstractModelInstanceAdapter < Sunspot::Adapters::InstanceAdapter
+  def id
+    @instance.id
+  end
 end
 
 class AbstractModelDataAccessor < Sunspot::Adapters::DataAccessor
