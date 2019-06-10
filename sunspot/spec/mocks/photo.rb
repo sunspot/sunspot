@@ -13,6 +13,15 @@ Sunspot.setup(Photo) do
   time :created_at, :trie => true
 end
 
+class Picture < MockRecord
+  attr_accessor :description, :photo_container_id
+end
+
+Sunspot.setup(Picture) do
+  text :description
+  integer :photo_container_id
+end
+
 class PhotoContainer < MockRecord
   attr_accessor :description
 
@@ -25,8 +34,9 @@ Sunspot.setup(PhotoContainer) do
   integer :id
   text :description, :default_boost => 1.2
 
-  join(:caption, :target => Photo, :type => :string, :join => { :from => :photo_container_id, :to => :id })
-  join(:photo_rating, :target => Photo, :type => :trie_float, :join => { :from => :photo_container_id, :to => :id }, :as => 'average_rating_ft')
-  join(:caption, :target => Photo, :type => :text, :join => { :from => :photo_container_id, :to => :id })
-  join(:description, :prefix => "photo", :target => Photo, :type => :text, :join => { :from => :photo_container_id, :to => :id })
+  join(:caption,      :target => Photo,   :type => :string,     :join => { :from => :photo_container_id, :to => :id })
+  join(:photo_rating, :target => Photo,   :type => :trie_float, :join => { :from => :photo_container_id, :to => :id }, :as => 'average_rating_ft')
+  join(:caption,      :target => Photo,   :type => :text,       :join => { :from => :photo_container_id, :to => :id })
+  join(:description,  :target => Photo,   :type => :text,       :join => { :from => :photo_container_id, :to => :id }, :prefix => "photo")
+  join(:description,  :target => Picture, :type => :text,       :join => { :from => :photo_container_id, :to => :id }, :prefix => "picture")
 end
