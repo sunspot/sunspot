@@ -294,7 +294,9 @@ module Sunspot
       if @id_prefix_extractor
         value = @id_prefix_extractor.value_for(model)
 
-        "#{value}!" if value.is_a?(String) and value.size > 0 and value[-1] != "!"
+        if value.is_a?(String) and value.size > 0
+          value[-1] == "!" ? value : "#{value}!"
+        end
       end
     end
 

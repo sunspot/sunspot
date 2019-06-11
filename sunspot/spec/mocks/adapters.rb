@@ -14,7 +14,17 @@ class ModelWithPrefixId < AbstractModel
 end
 
 Sunspot.setup(ModelWithPrefixId) do
-  id_prefix { "USERDATA" }
+  id_prefix { "USERDATA!" }
+end
+
+class ModelWithNestedPrefixId < AbstractModel
+  def id
+    1
+  end
+end
+
+Sunspot.setup(ModelWithNestedPrefixId) do
+  id_prefix { "USER!USERDATA!" }
 end
 
 class ModelWithoutPrefixId < AbstractModel

@@ -938,6 +938,82 @@ end
 # qRss91753840: _query_:"{!field f=type}Rss"+_query_:"{!edismax qf='keywords_text'}keyword3"
 ```
 
+### Composite ID
+
+**SolrCloud only**
+
+If you use the compositeId router (the default), you can send documents with a prefix in the
+document ID which will be used to calculate the hash Solr uses to determine the shard a
+document is sent to for indexing. The prefix can be anything you’d like it to be (it doesn’t
+have to be the shard name, for example), but it must be consistent so Solr behaves
+consistently.
+
+For example, if you want to co-locate documents for a customer, you could use the customer
+name or ID as the prefix. If your customer is "IBM", for example, with a document with the
+ID "12345", you would insert the prefix into the document id field: "IBM!12345".
+The exclamation mark ('!') is critical here, as it distinguishes the prefix used to determine
+which shard to direct the document to.
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    id_prefix do
+      "IBM!"
+    end
+    # ...
+  end
+end
+```
+
+The compositeId router supports prefixes containing up to 2 levels of routing. For
+example: a prefix routing first by region, then by customer: "USA!IBM!12345"
+
+```ruby
+class Post < ActiveRecord::Base
+  searchable do
+    id_prefix do
+      "USA!IBM!"
+    end
+    # ...
+  end
+end
+```
+
+This feature is also useful if you are using Joins, which require joined collections to
+be single-sharded. For example, if you have `Blog` and `Post` models and want to join
+Fields from Posts when searching Blogs you need these two collections to stay on the
+same and single shard. Thus the configuration would be:
+
+```ruby
+class Blog < ActiveRecord::Base
+  has_many :posts
+
+  searchable do
+    id_prefix do
+      "BLOGDATA!"
+    end
+    # ...
+  end
+end
+
+class Post < ActiveRecord::Base
+  belongs_to :blog
+
+  searchable do
+    id_prefix do
+      "BLOGDATA!"
+    end
+    # ...
+  end
+end
+```
+
+As a result all Blogs and their Posts will be stored on a single shard.
+
+*NOTE:* Solr developers also recommend adjusting replication factor so every shard
+node contains replicas of all shards in the cluster. If you have 4 shards on separate
+nodes each of these nodes should have 4 replicas (one replica of each shard).
+
 ### Highlighting
 
 Highlighting allows you to display snippets of the part of the document
