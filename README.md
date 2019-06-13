@@ -942,47 +942,77 @@ end
 
 **SolrCloud only**
 
-If you use the compositeId router (the default), you can send documents with a prefix in the
-document ID which will be used to calculate the hash Solr uses to determine the shard a
+If you use the `compositeId` router (the default), you can send documents with a prefix in
+the `document ID` which will be used to calculate the hash Solr uses to determine the shard a
 document is sent to for indexing. The prefix can be anything you’d like it to be (it doesn’t
 have to be the shard name, for example), but it must be consistent so Solr behaves
 consistently.
 
 For example, if you want to co-locate documents for a customer, you could use the customer
-name or ID as the prefix. If your customer is "IBM", for example, with a document with the
-ID "12345", you would insert the prefix into the document id field: "IBM!12345".
-The exclamation mark ('!') is critical here, as it distinguishes the prefix used to determine
+name or ID as the prefix. If your customer is `IBM`, for example, with a document with the
+ID `12345`, you would insert the prefix into the document id field: `IBM!12345`.
+The exclamation mark (`!`) is critical here, as it distinguishes the prefix used to determine
 which shard to direct the document to.
 
 ```ruby
 class Post < ActiveRecord::Base
   searchable do
-    id_prefix do
-      "IBM!"
-    end
+    id_prefix "IBM!"
     # ...
   end
 end
 ```
 
 The compositeId router supports prefixes containing up to 2 levels of routing. For
-example: a prefix routing first by region, then by customer: "USA!IBM!12345"
+example: a prefix routing first by region, then by customer: `USA!IBM!12345`
 
 ```ruby
 class Post < ActiveRecord::Base
   searchable do
-    id_prefix do
-      "USA!IBM!"
-    end
+    id_prefix "USA!IBM!"
     # ...
   end
 end
 ```
 
-This feature is also useful if you are using Joins, which require joined collections to
-be single-sharded. For example, if you have `Blog` and `Post` models and want to join
-Fields from Posts when searching Blogs you need these two collections to stay on the
-same and single shard. Thus the configuration would be:
+**Usage with Joins**
+
+This feature is also useful with `joins`, which require joined collections to
+be single-sharded. For example, if you have `Blog` and `Post` models and want
+to join fields from `Posts` when searching `Blogs`, you need these two collections
+to stay on the same shard. In this case the configuration would be:
+
+```ruby
+class Blog < ActiveRecord::Base
+  has_many :posts
+
+  searchable do
+    id_prefix "BLOGDATA!"
+    # ...
+  end
+end
+
+class Post < ActiveRecord::Base
+  belongs_to :blog
+
+  searchable do
+    id_prefix "BLOGDATA!"
+    # ...
+  end
+end
+```
+
+As a result, all `Blogs` and `Posts` will be stored on a single shard. But 
+since other `Blogs` will generate other prefixes Solr will distribute them
+evenly across the available shards.
+
+If you have large collections that you want to use joins with and still want to 
+utilize sharding instead of storing everything on a single shard, it's also 
+possible to only ensure a single `Blog` and its associated `Posts` stored on
+a signle shard, while the whole collections could still be distributed across
+multiple shards. The thing is that Solr **can** do distributed joins across
+multiple shards, but the records that have to be joined should be stored on
+a single shard. To achieve this your configuration would look like this:
 
 ```ruby
 class Blog < ActiveRecord::Base
@@ -990,7 +1020,7 @@ class Blog < ActiveRecord::Base
 
   searchable do
     id_prefix do
-      "BLOGDATA!"
+      "BLOGDATA#{self.id}!"
     end
     # ...
   end
@@ -1001,18 +1031,22 @@ class Post < ActiveRecord::Base
 
   searchable do
     id_prefix do
-      "BLOGDATA!"
+      "BLOGDATA#{self.blog_id}!"
     end
     # ...
   end
 end
 ```
 
-As a result all Blogs and their Posts will be stored on a single shard.
+This way a single `Blog` and its `Ports` have the same ID prefix and will go 
+to a single Shard.
 
 *NOTE:* Solr developers also recommend adjusting replication factor so every shard
 node contains replicas of all shards in the cluster. If you have 4 shards on separate
 nodes each of these nodes should have 4 replicas (one replica of each shard).
+
+More information and usage examples could be found here: 
+https://lucene.apache.org/solr/guide/6_6/shards-and-indexing-data-in-solrcloud.html  
 
 ### Highlighting
 
