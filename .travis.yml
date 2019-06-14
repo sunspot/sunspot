@@ -16,6 +16,9 @@ rvm:
   # - rbx-2.0
   # - jruby
 
+jdk:
+  - openjdk8
+
 env:
   - GEM=sunspot UPDATE_FORMAT=xml
   - GEM=sunspot UPDATE_FORMAT=json
