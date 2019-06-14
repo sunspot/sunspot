@@ -933,9 +933,9 @@ end
 # ...produces:
 # sort: "score desc", fl: "* score", start: 0, rows: 20,
 # fq: ["type:Profile"],
-# q: "(_query_:"{!join from=profile_ids_i to=id_i v=$qTweet91755700 fq=$fqTweet91755700}" OR _query_:"{!join from=profile_ids_i to=id_i v=$qRss91753840 fq=$fqRss91753840}")",
-# qTweet91755700: "_query_:"{!edismax qf='keywords_text' mm='1'}keyword1 keyword2"", fqTweet91755700: "type:Tweet",
-# qRss91753840: "_query_:"{!edismax qf='keywords_text'}keyword3"", fqRss91753840: "type:Rss"
+# q: (_query_:"{!join from=profile_ids_i to=id_i v=$qTweet91755700}" OR _query_:"{!join from=profile_ids_i to=id_i v=$qRss91753840}"),
+# qTweet91755700: _query_:"{!field f=type}Tweet"+_query_:"{!edismax qf='keywords_text' mm='1'}keyword1 keyword2",
+# qRss91753840: _query_:"{!field f=type}Rss"+_query_:"{!edismax qf='keywords_text'}keyword3"
 ```
 
 ### Highlighting
