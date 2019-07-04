@@ -98,10 +98,9 @@ module Sunspot #:nodoc:
             end
 
             unless options[:auto_remove] == false
-              on_filter_invalid = /(before|after|around)_(save|destroy|create)/
               # after_commit { |searchable| searchable.remove_from_index }, :on => :destroy
               # Only add the on filter if the callback supports it
-              if on_filter_invalid.match?(Sunspot::Rails.configuration.auto_remove_callback)
+              if Sunspot::Rails.configuration.auto_remove_callback =~ /save|destroy|create/
                 __send__ Sunspot::Rails.configuration.auto_remove_callback,
                         proc { |searchable| searchable.remove_from_index }
               else
