@@ -20,6 +20,19 @@ describe Sunspot::Adapters::InstanceAdapter do
     Sunspot::Adapters::InstanceAdapter::for(UnseenModel)
     expect(Sunspot::Adapters::InstanceAdapter::registered_adapter_for(UnseenModel)).to be(AbstractModelInstanceAdapter)
   end
+
+  it "appends ID prefix when configured" do
+    expect(AbstractModelInstanceAdapter.new(ModelWithPrefixId.new).index_id).to eq "USERDATA!ModelWithPrefixId 1"
+  end
+
+  it "supports nested ID prefixes" do
+    expect(AbstractModelInstanceAdapter.
+      new(ModelWithNestedPrefixId.new).index_id).to eq "USER!USERDATA!ModelWithNestedPrefixId 1"
+  end
+
+  it "doesn't appends ID prefix when not configured" do
+    expect(AbstractModelInstanceAdapter.new(ModelWithoutPrefixId.new).index_id).to eq "ModelWithoutPrefixId 1"
+  end
 end
 
 describe Sunspot::Adapters::DataAccessor do

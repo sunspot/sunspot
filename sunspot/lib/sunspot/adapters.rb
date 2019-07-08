@@ -63,7 +63,10 @@ module Sunspot
       # String:: ID for use in Solr
       #
       def index_id #:nodoc:
-        InstanceAdapter.index_id_for(@instance.class.name, id)
+        setup     = Sunspot::Setup.for(@instance.class)
+        id_prefix = setup ? setup.id_prefix_for(@instance) : nil
+
+        InstanceAdapter.index_id_for("#{id_prefix}#{@instance.class.name}", id)
       end
 
       class <<self

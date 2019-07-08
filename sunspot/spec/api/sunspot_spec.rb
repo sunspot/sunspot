@@ -24,6 +24,9 @@ describe Sunspot do
       config_before_reset = Sunspot.config
       Sunspot.reset!(true)
       expect(Sunspot.config).to eq(config_before_reset)
+
+      # Restore sunspot config after test
+      Sunspot.reset!(false)
     end
   end
 end

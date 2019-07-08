@@ -55,6 +55,22 @@ module Sunspot
         @setup.add_document_boost(attr_name, &block)
       end
 
+      #
+      # If you use the compositeId router for shards, you can send documents
+      # with a prefix in the document ID which will be used to calculate the
+      # hash Solr uses to determine the shard a document is sent to for indexing.
+      # The prefix can be anything you’d like it to be (it doesn’t have to be
+      # the shard name, for example), but it must be consistent so Solr
+      # behaves consistently.
+      #
+      # ==== Parameters
+      #
+      # attr_name<Symbol,String>:: Attribute name to call or a string constant
+      #
+      def id_prefix(attr_name = nil, &block)
+        @setup.add_id_prefix(attr_name, &block)
+      end
+
       # method_missing is used to provide access to typed fields, because
       # developers should be able to add new Sunspot::Type implementations
       # dynamically and have them recognized inside the Fields DSL. Like #text,
