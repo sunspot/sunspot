@@ -62,6 +62,7 @@ module Sunspot
       field_factory = FieldFactory::Static.new(name, Type::TextType.instance, options, &block)
       @text_field_factories[name] = field_factory
       @text_field_factories_cache[field_factory.name] = field_factory
+      @field_factories_cache[field_factory.name] = field_factory
       if stored
         @stored_field_factories_cache[field_factory.name] << field_factory
       end
@@ -82,6 +83,7 @@ module Sunspot
       field_factory = FieldFactory::Dynamic.new(name, type, options, &block)
       @dynamic_field_factories[field_factory.signature] = field_factory
       @dynamic_field_factories_cache[field_factory.name] = field_factory
+      @field_factories_cache[field_factory.name] = field_factory
       if stored
         @stored_field_factories_cache[field_factory.name] << field_factory
       end
