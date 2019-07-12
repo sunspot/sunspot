@@ -22,7 +22,8 @@ jdk:
 env:
   - GEM=sunspot UPDATE_FORMAT=xml
   - GEM=sunspot UPDATE_FORMAT=json
-  - GEM=sunspot_rails
+  - GEM=sunspot_rails UPDATE_FORMAT=xml
+  - GEM=sunspot_rails UPDATE_FORMAT=json
   - GEM=sunspot_solr
 
 matrix:
