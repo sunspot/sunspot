@@ -12,6 +12,20 @@ describe 'hits', :type => :search do
     end).to eq([['Post', post_1.id.to_s], ['Post', post_2.id.to_s]])
   end
 
+  it "should return ID prefix when used with compositeId shard router" do
+    Sunspot.index!(ModelWithPrefixId.new)
+
+    expect(Sunspot.search(ModelWithPrefixId).
+      hits.map { |h| h.id_prefix }.uniq).to eq ["USERDATA!"]
+  end
+
+  it "should parse nested ID prefixes" do
+    Sunspot.index!(ModelWithNestedPrefixId.new)
+
+    expect(Sunspot.search(ModelWithNestedPrefixId).
+      hits.map { |h| h.id_prefix }.uniq).to eq ["USER!USERDATA!"]
+  end
+
   it 'returns search total as attribute of hits' do
     stub_results(Post.new, 4)
     expect(session.search(Post) do

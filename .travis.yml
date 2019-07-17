@@ -12,6 +12,7 @@ rvm:
   - 2.3.8
   - 2.4.5
   - 2.5.3
+  - 2.6.3
   - ruby-head
   # - rbx-2.0
   # - jruby
@@ -22,7 +23,8 @@ jdk:
 env:
   - GEM=sunspot UPDATE_FORMAT=xml
   - GEM=sunspot UPDATE_FORMAT=json
-  - GEM=sunspot_rails
+  - GEM=sunspot_rails UPDATE_FORMAT=xml
+  - GEM=sunspot_rails UPDATE_FORMAT=json
   - GEM=sunspot_solr
 
 matrix:

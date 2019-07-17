@@ -2,6 +2,7 @@ test:
   solr:
     hostname: localhost
     port: 8983
+    update_format: <%= ENV.fetch('UPDATE_FORMAT', 'xml') %>
   auto_index_callback: after_save
   auto_remove_callback: after_destroy
 development:

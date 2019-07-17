@@ -17,6 +17,10 @@ module Sunspot
       # Class name of object associated with this hit, as string.
       #
       attr_reader :class_name
+      #
+      # ID prefix used for compositeId shard router
+      #
+      attr_reader :id_prefix
       # 
       # Keyword relevance score associated with this result. Nil if this hit
       # is not from a keyword search.
@@ -27,7 +31,8 @@ module Sunspot
       attr_writer :result #:nodoc:
 
       def initialize(raw_hit, highlights, search) #:nodoc:
-        @class_name, @primary_key = *raw_hit['id'].match(/([^ ]+) (.+)/)[1..2]
+        @id_prefix, @class_name, @primary_key =
+          *raw_hit['id'].match(/((?:[^!]+!)+)*([^\s]+)\s(.+)/)[1..3]
         @score = raw_hit['score']
         @search = search
         @stored_values = raw_hit
