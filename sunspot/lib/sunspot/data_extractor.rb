@@ -9,7 +9,7 @@ module Sunspot
     # Abstract extractor to perform common actions on extracted values
     #
     class AbstractExtractor
-      BLACKLIST_REGEXP = /[\x0-\x8\xB\xC\xE-\x1F\x7f]/
+      BLACKLIST_REGEXP = /[\x0-\x8\xB\xC\xE-\x1F\x7f\uFFFE-\uFFFF]/
 
       def value_for(object)
         extract_value_from(object)
