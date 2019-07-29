@@ -60,8 +60,8 @@ module Sunspot
       #
       # ==== Returns
       #
-      # String:: ID prefix for use in index ID to control shards
-      # a document ise stored on
+      # String:: ID prefix for use in index ID to determine
+      # the shard a document is sent to for indexing
       #
       def id_prefix
         setup = Sunspot::Setup.for(@instance.class)
