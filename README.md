@@ -1528,6 +1528,30 @@ You can also use Docker Solr for development which, regardless of how you deploy
 the version you have deployed in production with the version you develop against. This can simplify maintenance of
 your cores. See the examples directory for a suitable starting point for a core you can use.
 
+You can run solr in a docker container with the following commands:
+
+```bash
+docker pull solr:7.7.2
+docker run -p 8983:8983 solr:7.7.2 #Add -d to run it in the background
+```
+
+Or in a docker-compose environment:
+
+```yaml
+solr:
+  image: solr:7.7.2
+  ports:
+    - "8983:8983"
+  volumes:
+    - ./solr/init:/docker-entrypoint-initdb.d/
+    - data:/opt/solr/server/solr/mycores
+  restart:
+    unless-stopped
+```
+
+where the `./solr/init` directory contains a shell script that does any initial setup like downloading and unzipping your cores.
+In both cases, the solr images by default expects cores to be placed in `/opt/solr/server/solr/mycores`.
+
 ## Development
 
 ### Running Tests
