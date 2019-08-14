@@ -209,6 +209,10 @@ module Sunspot
       @default_boost = options.delete(:default_boost)
       @joined = true
 
+      if @target.is_a?(String)
+        @target = Util.full_const_get(@target)
+      end
+
       check_options(options)
     end
 
@@ -220,8 +224,10 @@ module Sunspot
       Sunspot::Setup.for(@clazz).field(@join[:to]).indexed_name
     end
 
-    def local_params
-      "{!join from=#{from} to=#{to}}"
+    def local_params(value)
+      query = ["type:\"#{@target.name}\""] | Util.Array(value)
+
+      "{!join from=#{from} to=#{to} v='#{query.join(' AND ')}'}"
     end
 
     def eql?(field)
