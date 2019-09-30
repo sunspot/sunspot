@@ -538,4 +538,82 @@ describe 'scoped_search' do
       expect(search.results.first).to eq(@p1)
     end
   end
+
+  describe 'boosting' do
+    before :all do
+      Sunspot.remove_all
+      @p1 = Post.new(:title => 'Post', :body => 'Lorem', :blog_id => 1, :category_ids => [3], :ratings_average => 30)
+      @p2 = Post.new(:title => 'Post', :body => 'Ipsum', :blog_id => 2, :category_ids => [2], :ratings_average => 60)
+      @p3 = Post.new(:title => 'Post', :body => 'Dolor', :blog_id => 3, :category_ids => [1], :ratings_average => 90)
+      Sunspot.index([@p1, @p2, @p3])
+      Sunspot.commit
+    end
+
+    it 'without boost should returns post in default order' do
+      search = Sunspot.search(Post) {}
+
+      expect(search.results[0]).to eq(@p1)
+      expect(search.results[1]).to eq(@p2)
+      expect(search.results[2]).to eq(@p3)
+    end
+
+    it 'should apply boost function' do
+      search = Sunspot.search(Post) do
+        boost(function() { field(:average_rating) })
+      end
+
+      expect(search.results[0]).to eq(@p3)
+      expect(search.results[1]).to eq(@p2)
+      expect(search.results[2]).to eq(@p1)
+    end
+
+    it 'should apply multilicative boost function' do
+      search = Sunspot.search(Post) do
+        boost_multiplicative(function() { field(:average_rating) })
+      end
+
+      expect(search.results[0]).to eq(@p3)
+      expect(search.results[1]).to eq(@p2)
+      expect(search.results[2]).to eq(@p1)
+    end
+
+    it 'should apply boost query' do
+      search = Sunspot.search(Post) do
+        boost(5) do
+          with(:blog_id, 1)
+        end
+
+        boost(10) do
+          with(:blog_id, 3)
+        end
+      end
+
+      expect(search.results[0]).to eq(@p3)
+      expect(search.results[1]).to eq(@p1)
+      expect(search.results[2]).to eq(@p2)
+    end
+
+    it 'should work properly when combined with fulltext' do
+      search = Sunspot.search(Post) do
+        fulltext('Post Ipsum') do
+          boost_fields :body => 0.2
+          minimum_match 1
+        end
+
+        boost(0.9) do
+          with(:blog_id, 1)
+        end
+
+        boost(function() { div(field(:average_rating), 100) })
+
+        fulltext('Post') do
+          minimum_match 1
+        end
+      end
+
+      expect(search.results[0]).to eq(@p2)
+      expect(search.results[1]).to eq(@p3)
+      expect(search.results[2]).to eq(@p1)
+    end
+  end
 end

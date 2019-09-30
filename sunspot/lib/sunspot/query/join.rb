@@ -52,7 +52,7 @@ module Sunspot
       #
       # Assign a new boost query and return it.
       #
-      def create_boost_query(factor)
+      def add_boost_query(factor)
       end
 
       #
