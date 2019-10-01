@@ -605,10 +605,6 @@ describe 'scoped_search' do
         end
 
         boost(function() { div(field(:average_rating), 100) })
-
-        fulltext('Post') do
-          minimum_match 1
-        end
       end
 
       expect(search.results[0]).to eq(@p2)
