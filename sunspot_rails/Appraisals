@@ -57,6 +57,7 @@ if ruby_version >= Gem::Version.new('2.2.0')
       gem 'sunspot', path: File.expand_path('sunspot', ENV['SUNSPOT_LIB_HOME'])
       gem 'sunspot_solr', path: File.expand_path('sunspot_solr', ENV['SUNSPOT_LIB_HOME'])
       gem 'rails', "~> #{rails_version}"
+      gem 'sprockets', '~> 3.0'
       gem 'progress_bar', '~> 1.0.5', require: false
     end
   end
