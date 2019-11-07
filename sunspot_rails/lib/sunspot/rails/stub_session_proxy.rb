@@ -127,6 +127,9 @@ module Sunspot
         def execute
           self
         end
+
+        def spellcheck_collation
+        end
       end
 
 
