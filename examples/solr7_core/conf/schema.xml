@@ -95,7 +95,6 @@
     <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
       <analyzer>
         <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
