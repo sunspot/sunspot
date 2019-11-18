@@ -20,9 +20,6 @@ For questions about how to use Sunspot in your app, please use the
 [Sunspot Mailing List](http://groups.google.com/group/ruby-sunspot) or search
 [Stack Overflow](http://www.stackoverflow.com).
 
-## Looking for maintainers
-This project is looking for maintainers. An ideal candidate would be someone on a team whose app makes heavy use of the Sunspot gem. If you think you're a good fit, send a message to contact@culturecode.ca.
-
 ## Quickstart with Rails
 
 Add to Gemfile:
