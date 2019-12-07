@@ -108,7 +108,7 @@ module Sunspot
           []
         end
 
-        def facet(name)
+        def facet(name, dynamic_name = nil)
           FacetStub.new
         end
 
@@ -226,7 +226,7 @@ module Sunspot
           []
         end
 
-        def facet(name)
+        def facet(name, dynamic_name = nil)
           FacetStub.new
         end
 
