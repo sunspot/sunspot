@@ -176,7 +176,7 @@ module Sunspot
           @query.add_additive_boost_function(factor_or_function)
         else
           Sunspot::Util.instance_eval_or_call(
-            Scope.new(@query.create_boost_query(factor_or_function), @setup),
+            Scope.new(@query.add_boost_query(factor_or_function), @setup),
             &block
           )
         end

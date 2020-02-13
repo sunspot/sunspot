@@ -28,10 +28,16 @@ module Sunspot
       # The query as Solr parameters
       #
       def to_params
-        params = { :q => @keywords }
-        params[:fl] = '* score'
-        params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
-        params[:defType] = 'edismax'
+        params = {
+          :q => @keywords,
+          :defType => 'edismax',
+          :fl => '* score'
+        }
+
+        if @fulltext_fields.any?
+          params[:qf] = @fulltext_fields.values.map { |field| field.to_boosted_field }.join(' ')
+        end
+
         params[:mm] = @minimum_match if @minimum_match
         params[:ps] = @phrase_slop if @phrase_slop
         params[:qs] = @query_phrase_slop if @query_phrase_slop

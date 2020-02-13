@@ -10,7 +10,7 @@ module Sunspot
       #
       # Assign a new boost query and return it.
       #
-      def create_boost_query(factor)
+      def add_boost_query(factor)
         @boost_queries << boost_query = BoostQuery.new(factor)
         boost_query
       end
@@ -19,14 +19,18 @@ module Sunspot
       # Add a boost function
       #
       def add_additive_boost_function(function_query)
-        @additive_boost_functions << function_query
+        unless @additive_boost_functions.include?(function_query)
+          @additive_boost_functions << function_query
+        end
       end
 
       #
       # Add a multiplicative boost function
       #
       def add_multiplicative_boost_function(function_query)
-        @multiplicative_boost_functions << function_query
+        unless @multiplicative_boost_functions.include?(function_query)
+          @multiplicative_boost_functions << function_query
+        end
       end
 
       #

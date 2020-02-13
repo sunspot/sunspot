@@ -1166,8 +1166,19 @@ Sunspot supports functions in two ways:
 #Posts with pizza, scored higher (square promotion field) if is_promoted
 Post.search do
   fulltext 'pizza' do
-    boost(function {sqrt(:promotion)}) { with(:is_promoted, true) }
+    boost(function { sqrt(:promotion) }) { with(:is_promoted, true) }
   end
+
+  # adds boost query (bq parameter)
+  boost(0.5) do
+    with(:is_promoted, true)
+  end
+
+  # adds a boost function (bf parameter)
+  boost(function { sqrt(:promotion) })
+
+  # adds a multiplicative boost function (boost parameter)
+  boost_multiplicative(function { sqrt(:promotion) })
 end
 ```
 
