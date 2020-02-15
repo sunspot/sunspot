@@ -136,8 +136,7 @@ module Sunspot
         if options[:as]
           options.delete(:as).to_s
         else
-          name = options[:prefix] ? @name.to_s.sub(/^#{options[:prefix]}_/, '') : @name
-          "#{@type.indexed_name(name)}#{'m' if multiple? }#{'s' if @stored}#{'v' if more_like_this?}"
+          "#{@type.indexed_name(@name)}#{'m' if multiple? }#{'s' if @stored}#{'v' if more_like_this?}"
         end
     end
 
@@ -203,6 +202,7 @@ module Sunspot
       super(name, type, options)
 
       @prefix = options.delete(:prefix)
+      @original_name = @prefix ? name.to_s.sub(/^#{@prefix}_/, '').to_sym : name
       @join = options.delete(:join)
       @clazz = options.delete(:clazz)
       @target = options.delete(:target)
@@ -214,6 +214,11 @@ module Sunspot
       end
 
       check_options(options)
+    end
+
+    def indexed_name
+      @indexed_name ||= Sunspot::Setup.for(target).all_field_factories.
+        find { |f| f.field.type == @type && f.field.name == @original_name }&.field&.indexed_name
     end
 
     def from
@@ -235,6 +240,12 @@ module Sunspot
     end
 
     alias_method :==, :eql?
+
+    private
+
+    def set_indexed_name(options)
+      super if options[:as]
+    end
   end
 
   class TypeField #:nodoc:
