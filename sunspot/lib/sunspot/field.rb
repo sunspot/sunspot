@@ -217,8 +217,14 @@ module Sunspot
     end
 
     def indexed_name
-      @indexed_name ||= Sunspot::Setup.for(target).all_field_factories.
-        find { |f| f.field.type == @type && f.field.name == @original_name }&.field&.indexed_name
+      unless @indexed_name
+        factory = Sunspot::Setup.for(target).all_field_factories.
+          find { |f| f.field.type == @type && f.field.name == @original_name }
+
+        @indexed_name = factory && factory.field.indexed_name
+      end
+
+      @indexed_name
     end
 
     def from
