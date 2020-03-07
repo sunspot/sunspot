@@ -54,9 +54,19 @@ module Sunspot
     # Remove the model from the Solr index by specifying the class and ID
     #
     def remove_by_id(class_name, *ids)
+      id_prefix = nil
+      clazz_setup = setup_for_class(Util.full_const_get(class_name))
+      if clazz_setup.id_prefix_defined?
+        if clazz_setup.id_prefix_requires_instance?
+          warn(Sunspot::RemoveByIdWarningMessage.call(class_name))
+        else
+          id_prefix = clazz_setup.id_prefix_for_class
+        end
+      end
+
       ids.flatten!
       @connection.delete_by_id(
-        ids.map { |id| Adapters::InstanceAdapter.index_id_for(class_name, id) }
+        ids.map { |id| Adapters::InstanceAdapter.index_id_for("#{id_prefix}#{class_name}", id) }
       )
     end
 

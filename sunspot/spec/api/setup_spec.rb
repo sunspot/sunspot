@@ -31,7 +31,7 @@ describe Sunspot::Setup do
     end
 
     context 'when `id_prefix` is not defined on model' do
-      let(:clazz) { Post }
+      let(:clazz) { PostWithoutPrefixId }
 
       it 'returns nil' do
         is_expected.to be_nil
@@ -51,7 +51,7 @@ describe Sunspot::Setup do
     end
 
     context 'when `id_prefix` is not defined on model' do
-      let(:clazz) { Post }
+      let(:clazz) { PostWithoutPrefixId }
 
       it 'returns false' do
         is_expected.to be_falsey
@@ -89,7 +89,7 @@ describe Sunspot::Setup do
     end
 
     context 'when `id_prefix` is not defined on model' do
-      let(:clazz) { Post }
+      let(:clazz) { PostWithoutPrefixId }
 
       it 'returns false' do
         is_expected.to be_falsey

@@ -43,6 +43,9 @@ module Sunspot
   AtomicUpdateWarningMessage = lambda do |class_name|
     "WARNING: `id_prefix` is defined for #{class_name}. Use instance as key for `atomic_update` instead of ID."
   end
+  RemoveByIdWarningMessage = lambda do |class_name|
+    "WARNING: `id_prefix` is defined for #{class_name}. `remove_by_id` does not support it. Use `remove` instead."
+  end
 
   autoload :Installer, File.join(File.dirname(__FILE__), 'sunspot', 'installer')
 

@@ -125,3 +125,11 @@ Sunspot.setup(PostWithStringPrefixId) do
   string :title, :stored => true
   boolean :featured, :using => :featured?, :stored => true
 end
+
+class PostWithoutPrefixId < Post
+end
+
+Sunspot.setup(PostWithoutPrefixId) do
+  string :title, :stored => true
+  boolean :featured, :using => :featured?, :stored => true
+end
