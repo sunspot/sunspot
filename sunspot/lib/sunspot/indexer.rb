@@ -147,13 +147,29 @@ module Sunspot
       )
     end
 
-    def document_for_atomic_update(clazz, id)
-      if Adapters::InstanceAdapter.for(clazz)
-        RSolr::Xml::Document.new(
-            id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
-            type: Util.superclasses_for(clazz).map(&:name)
-        )
+    def document_for_atomic_update(clazz, key)
+      return unless Adapters::InstanceAdapter.for(clazz)
+
+      clazz_setup = setup_for_class(clazz)
+      if clazz_setup.id_prefix_defined?
+        if clazz_setup.id_prefix_requires_instance?
+          if key.respond_to?(:id)
+            id = Adapters::InstanceAdapter.adapt(key).index_id
+          else
+            warn(Sunspot::AtomicUpdateWarningMessage.call(clazz.name))
+          end
+        else
+          id_prefix = clazz_setup.id_prefix_for_class
+          instance_id = key.respond_to?(:id) ? key.id : key
+          id = Adapters::InstanceAdapter.index_id_for("#{id_prefix}#{clazz.name}", instance_id)
+        end
       end
+
+      id ||= Adapters::InstanceAdapter.index_id_for(clazz.name, key)
+      RSolr::Xml::Document.new(
+        id: id,
+        type: Util.superclasses_for(clazz).map(&:name)
+      )
     end
     # 
     # Get the Setup object for the given object's class.
