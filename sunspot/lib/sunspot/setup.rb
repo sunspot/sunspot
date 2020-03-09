@@ -307,7 +307,7 @@ module Sunspot
     #
     # ==== Returns
     #
-    # String:: value for `id_prefix`
+    # String:: value for `id_prefix` defined as String
     #
     def id_prefix_for_class
       return if !id_prefix_defined? || id_prefix_requires_instance?
