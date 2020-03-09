@@ -40,10 +40,10 @@ module Sunspot
   NoSetupError = Class.new(StandardError)
   IllegalSearchError = Class.new(StandardError)
   NotImplementedError = Class.new(StandardError)
-  AtomicUpdateWarningMessage = lambda do |class_name|
+  AtomicUpdateRequireInstanceForCompositeIdMessage = lambda do |class_name|
     "WARNING: `id_prefix` is defined for #{class_name}. Use instance as key for `atomic_update` instead of ID."
   end
-  RemoveByIdWarningMessage = lambda do |class_name|
+  RemoveByIdNotSupportCompositeIdMessage = lambda do |class_name|
     "WARNING: `id_prefix` is defined for #{class_name}. `remove_by_id` does not support it. Use `remove` instead."
   end
 

@@ -22,7 +22,7 @@ shared_examples 'atomic update with instance as key' do
 
     expect do
       Sunspot.atomic_update!(clazz, post => { title: 'A New Title' })
-    end.to_not output(Sunspot::AtomicUpdateWarningMessage.call(clazz)).to_stderr
+    end.to_not output(Sunspot::AtomicUpdateRequireInstanceForCompositeIdMessage.call(clazz)).to_stderr
   end
 
   it 'does not create duplicate document' do
@@ -59,7 +59,7 @@ shared_examples 'atomic update with id as key' do
 
     expect do
       Sunspot.atomic_update!(clazz, post.id => { title: 'A New Title' })
-    end.to output(Sunspot::AtomicUpdateWarningMessage.call(clazz) + "\n").to_stderr
+    end.to output(Sunspot::AtomicUpdateRequireInstanceForCompositeIdMessage.call(clazz) + "\n").to_stderr
   end
 
   it 'creates duplicate document that have only fields provided for update' do
@@ -111,7 +111,7 @@ describe 'Atomic Update feature' do
   it 'updates single record fields one by one' do
     post = Post.new(title: 'A Title', featured: true)
     Sunspot.index!(post)
-    
+
     validate_hit(find_indexed_post(post.id), title: post.title, featured: post.featured)
 
     Sunspot.atomic_update!(Post, post.id => {title: 'A New Title'})
@@ -203,7 +203,7 @@ describe 'Atomic Update feature' do
 
           expect do
             Sunspot.atomic_update!(clazz, post.id => { title: 'A New Title' })
-          end.to_not output(Sunspot::AtomicUpdateWarningMessage.call(clazz) + "\n").to_stderr
+          end.to_not output(Sunspot::AtomicUpdateRequireInstanceForCompositeIdMessage.call(clazz) + "\n").to_stderr
         end
 
         it 'does not create duplicate document' do

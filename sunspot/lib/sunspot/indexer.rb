@@ -58,7 +58,7 @@ module Sunspot
       clazz_setup = setup_for_class(Util.full_const_get(class_name))
       if clazz_setup.id_prefix_defined?
         if clazz_setup.id_prefix_requires_instance?
-          warn(Sunspot::RemoveByIdWarningMessage.call(class_name))
+          warn(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(class_name))
         else
           id_prefix = clazz_setup.id_prefix_for_class
         end
@@ -166,7 +166,7 @@ module Sunspot
           if key.respond_to?(:id)
             id = Adapters::InstanceAdapter.adapt(key).index_id
           else
-            warn(Sunspot::AtomicUpdateWarningMessage.call(clazz.name))
+            warn(Sunspot::AtomicUpdateRequireInstanceForCompositeIdMessage.call(clazz.name))
           end
         else
           id_prefix = clazz_setup.id_prefix_for_class

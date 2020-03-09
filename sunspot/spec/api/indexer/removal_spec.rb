@@ -73,7 +73,7 @@ describe 'document removal', :type => :indexer do
         it 'prints warning' do
           expect do
             session.remove_by_id(clazz, post.id)
-          end.to output(Sunspot::RemoveByIdWarningMessage.call(clazz) + "\n").to_stderr
+          end.to output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
         end
 
         it 'does not remove record' do
@@ -89,7 +89,7 @@ describe 'document removal', :type => :indexer do
         it 'prints warning' do
           expect do
             session.remove_by_id(clazz, post.id)
-          end.to output(Sunspot::RemoveByIdWarningMessage.call(clazz) + "\n").to_stderr
+          end.to output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
         end
 
         it 'does not remove record' do
@@ -105,7 +105,7 @@ describe 'document removal', :type => :indexer do
         it 'does not print warning' do
           expect do
             session.remove_by_id(clazz, post.id)
-          end.to_not output(Sunspot::RemoveByIdWarningMessage.call(clazz) + "\n").to_stderr
+          end.to_not output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
         end
 
         it 'removes record' do
@@ -122,7 +122,7 @@ describe 'document removal', :type => :indexer do
       it 'does not print warning' do
         expect do
           session.remove_by_id(clazz, post.id)
-        end.to_not output(Sunspot::RemoveByIdWarningMessage.call(clazz) + "\n").to_stderr
+        end.to_not output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
       end
 
       it 'removes record' do
