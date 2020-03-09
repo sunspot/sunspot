@@ -54,15 +54,14 @@ module Sunspot
     # Remove the model from the Solr index by specifying the class and ID
     #
     def remove_by_id(class_name, *ids)
-      id_prefix = nil
       clazz_setup = setup_for_class(Util.full_const_get(class_name))
-      if clazz_setup.id_prefix_defined?
-        if clazz_setup.id_prefix_requires_instance?
-          warn(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(class_name))
-        else
-          id_prefix = clazz_setup.id_prefix_for_class
-        end
-      end
+      id_prefix = if clazz_setup.id_prefix_defined?
+                    if clazz_setup.id_prefix_requires_instance?
+                      warn(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(class_name))
+                    else
+                      clazz_setup.id_prefix_for_class
+                    end
+                  end
 
       ids.flatten!
       @connection.delete_by_id(
@@ -161,23 +160,21 @@ module Sunspot
       return unless Adapters::InstanceAdapter.for(clazz)
 
       clazz_setup = setup_for_class(clazz)
-      if clazz_setup.id_prefix_defined?
-        if clazz_setup.id_prefix_requires_instance?
-          if key.respond_to?(:id)
-            id = Adapters::InstanceAdapter.adapt(key).index_id
-          else
-            warn(Sunspot::AtomicUpdateRequireInstanceForCompositeIdMessage.call(clazz.name))
-          end
-        else
-          id_prefix = clazz_setup.id_prefix_for_class
-          instance_id = key.respond_to?(:id) ? key.id : key
-          id = Adapters::InstanceAdapter.index_id_for("#{id_prefix}#{clazz.name}", instance_id)
-        end
-      end
+      id_prefix = if clazz_setup.id_prefix_defined?
+                    if clazz_setup.id_prefix_requires_instance?
+                      if key.respond_to?(:id)
+                        clazz_setup.id_prefix_for(key)
+                      else
+                        warn(Sunspot::AtomicUpdateRequireInstanceForCompositeIdMessage.call(clazz.name))
+                      end
+                    else
+                      clazz_setup.id_prefix_for_class
+                    end
+                  end
 
-      id ||= Adapters::InstanceAdapter.index_id_for(clazz.name, key)
+      instance_id = key.respond_to?(:id) ? key.id : key
       RSolr::Xml::Document.new(
-        id: id,
+        id: Adapters::InstanceAdapter.index_id_for("#{id_prefix}#{clazz.name}", instance_id),
         type: Util.superclasses_for(clazz).map(&:name)
       )
     end
