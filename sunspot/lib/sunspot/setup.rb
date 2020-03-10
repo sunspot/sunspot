@@ -302,6 +302,44 @@ module Sunspot
       end
     end
 
+    #
+    # Get value for `id_prefix` defined as String
+    #
+    # ==== Returns
+    #
+    # String:: value for `id_prefix` defined as String
+    #
+    def id_prefix_for_class
+      return if !id_prefix_defined? || id_prefix_requires_instance?
+
+      @id_prefix_extractor.value_for(nil)
+    end
+
+    #
+    # Check if `id_prefix` is defined for class associated with this setup.
+    #
+    # ==== Returns
+    #
+    # Boolean:: True if class associated with this setup has defined `id_prefix`
+    #
+    def id_prefix_defined?
+      !@id_prefix_extractor.nil?
+    end
+
+    #
+    # Check if instance is required to get `id_prefix` value (instance is required for Proc and
+    # Symbol `id_prefix` only. Value for String `id_prefix` can be get on class level)
+    #
+    # ==== Returns
+    #
+    # Boolean:: True if instance is required to get `id_prefix` value
+    #
+    def id_prefix_requires_instance?
+      return false unless id_prefix_defined?
+
+      !@id_prefix_extractor.is_a?(DataExtractor::Constant)
+    end
+
     protected
 
     # 

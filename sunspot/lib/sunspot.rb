@@ -40,6 +40,12 @@ module Sunspot
   NoSetupError = Class.new(StandardError)
   IllegalSearchError = Class.new(StandardError)
   NotImplementedError = Class.new(StandardError)
+  AtomicUpdateRequireInstanceForCompositeIdMessage = lambda do |class_name|
+    "WARNING: `id_prefix` is defined for #{class_name}. Use instance as key for `atomic_update` instead of ID."
+  end
+  RemoveByIdNotSupportCompositeIdMessage = lambda do |class_name|
+    "WARNING: `id_prefix` is defined for #{class_name}. `remove_by_id` does not support it. Use `remove` instead."
+  end
 
   autoload :Installer, File.join(File.dirname(__FILE__), 'sunspot', 'installer')
 
@@ -208,6 +214,8 @@ module Sunspot
     #
     #   post1, post2 = new Array(2) { Post.create }
     #   Sunspot.atomic_update(Post, post1.id => {title: 'New Title'}, post2.id => {description: 'new description'})
+    #   Or
+    #   Sunspot.atomic_update(Post, post1 => {title: 'New Title'}, post2 => {description: 'new description'})
     #
     # Note that indexed objects won't be reflected in search until a commit is
     # sent - see Sunspot.index! and Sunspot.commit
@@ -223,7 +231,7 @@ module Sunspot
     # ==== Parameters
     #
     # clazz<Class>:: the class of the objects to be updated
-    # updates<Hash>:: hash of updates where keys are model ids
+    # updates<Hash>:: hash of updates where keys are models or model ids
     #                 and values are hash with property name/values to be updated
     #
     def atomic_update!(clazz, updates = {})

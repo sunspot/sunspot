@@ -1210,6 +1210,13 @@ Post.atomic_update post1.id => {title: 'A New Title'}, post2.id => {body: 'A New
 post1.atomic_update body: 'A New Body', title: 'Another New Title'
 ```
 
+#### Important
+If you are using [Composite ID](#composite-id) you should pass instance as key, not id. 
+```ruby
+Post.atomic_update post1 => {title: 'A New Title'}, post2 => {body: 'A New Body'}
+```
+It's required only for atomic updates on class level.
+
 ### More Like This
 
 Sunspot can extract related items using more_like_this. When searching

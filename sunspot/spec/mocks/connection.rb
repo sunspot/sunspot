@@ -92,6 +92,12 @@ module Mock
       end
     end
 
+    def has_no_delete?(*ids)
+      @deletes.none? do |delete|
+        delete & ids == ids
+      end
+    end
+
     def has_delete_by_query?(query)
       @deletes_by_query.include?(query)
     end
