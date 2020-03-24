@@ -2,12 +2,6 @@ module Sunspot
   module Rails
     module SolrLogging
 
-      class <<self
-        def included(base)
-          base.alias_method_chain :execute, :rails_logging
-        end
-      end
-
       COMMIT = %r{<commit/>}
 
       def execute_with_rails_logging(client, request_context)
@@ -56,4 +50,6 @@ end
 
 RSolr::Connection.module_eval do
   include Sunspot::Rails::SolrLogging
+  alias_method :execute_without_rails_logging, :execute
+  alias_method :execute, :execute_with_rails_logging
 end
