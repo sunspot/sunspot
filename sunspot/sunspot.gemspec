@@ -20,8 +20,6 @@ Gem::Specification.new do |s|
     can be performed without hand-writing any boolean queries or building Solr parameters by hand.
   TEXT
 
-  s.rubyforge_project = "sunspot"
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
