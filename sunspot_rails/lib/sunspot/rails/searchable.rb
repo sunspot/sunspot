@@ -287,7 +287,7 @@ module Sunspot #:nodoc:
         #
         # ==== Updates (passed as a hash)
         #
-        # updates should be specified as a hash, where key - is the object ID
+        # updates should be specified as a hash, where key - is the object or the object ID
         # and values is hash with property name/values to be updated.
         #
         # ==== Examples
@@ -303,6 +303,8 @@ module Sunspot #:nodoc:
         #
         #   # update single property
         #   Post.atomic_update(post1.id => {description: 'New post description'})
+        #   Or
+        #   Post.atomic_update(post1 => {description: 'New post description'})
         #
         # ==== Notice
         # all non-stored properties in Solr index will be lost after update.
@@ -453,7 +455,7 @@ module Sunspot #:nodoc:
         # you only need to pass hash with property changes
         #
         def solr_atomic_update(updates = {})
-          Sunspot.atomic_update(self.class, self.id => updates)
+          Sunspot.atomic_update(self.class, self => updates)
         end
 
         #
@@ -461,7 +463,7 @@ module Sunspot #:nodoc:
         # See #solr_atomic_update
         #
         def solr_atomic_update!(updates = {})
-          Sunspot.atomic_update!(self.class, self.id => updates)
+          Sunspot.atomic_update!(self.class, self => updates)
         end
         
         # 

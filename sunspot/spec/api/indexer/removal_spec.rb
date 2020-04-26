@@ -60,4 +60,75 @@ describe 'document removal', :type => :indexer do
     end
     expect(connection).to have_delete_by_query("(type:Post AND title_ss:monkeys)")
   end
+
+  context 'when call #remove_by_id' do
+    let(:post) { clazz.new(title: 'A Title') }
+    before(:each) { index_post(post) }
+
+    context 'and `id_prefix` is defined on model' do
+      context 'as Proc' do
+        let(:clazz) { PostWithProcPrefixId }
+        let(:id_prefix) { lambda { |post| "USERDATA-#{post.id}!" } }
+
+        it 'prints warning' do
+          expect do
+            session.remove_by_id(clazz, post.id)
+          end.to output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
+        end
+
+        it 'does not remove record' do
+          session.remove_by_id(clazz, post.id)
+          expect(connection).to have_no_delete(post_solr_id)
+        end
+      end
+
+      context 'as Symbol' do
+        let(:clazz) { PostWithSymbolPrefixId }
+        let(:id_prefix) { lambda { |post| "#{post.title}!" } }
+
+        it 'prints warning' do
+          expect do
+            session.remove_by_id(clazz, post.id)
+          end.to output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
+        end
+
+        it 'does not remove record' do
+          session.remove_by_id(clazz, post.id)
+          expect(connection).to have_no_delete(post_solr_id)
+        end
+      end
+
+      context 'as String' do
+        let(:clazz) { PostWithStringPrefixId }
+        let(:id_prefix) { 'USERDATA!' }
+
+        it 'does not print warning' do
+          expect do
+            session.remove_by_id(clazz, post.id)
+          end.to_not output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
+        end
+
+        it 'removes record' do
+          session.remove_by_id(clazz, post.id)
+          expect(connection).to have_delete(post_solr_id)
+        end
+      end
+    end
+
+    context 'and `id_prefix` is not defined on model' do
+      let(:clazz) { PostWithoutPrefixId }
+      let(:id_prefix) { nil }
+
+      it 'does not print warning' do
+        expect do
+          session.remove_by_id(clazz, post.id)
+        end.to_not output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
+      end
+
+      it 'removes record' do
+        session.remove_by_id(clazz, post.id)
+        expect(connection).to have_delete(post_solr_id)
+      end
+    end
+  end
 end

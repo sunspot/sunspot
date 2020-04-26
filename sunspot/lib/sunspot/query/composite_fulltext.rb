@@ -3,11 +3,30 @@ module Sunspot
     class CompositeFulltext
       def initialize
         @components = []
+        @dismax = nil
       end
 
       def add_fulltext(keywords)
-        @components << dismax = Dismax.new(keywords)
-        dismax
+        @components << @dismax = Dismax.new(keywords)
+        @dismax
+      end
+
+      def add_boost_query(factor)
+        @dismax ||= Dismax.new("*:*")
+        @components << @dismax unless @components.include?(@dismax)
+        @dismax.add_boost_query(factor)
+      end
+
+      def add_boost_function(function)
+        @dismax ||= Dismax.new("*:*")
+        @components << @dismax unless @components.include?(@dismax)
+        @dismax.add_additive_boost_function(function)
+      end
+
+      def add_multiplicative_boost_function(function)
+        @dismax ||= Dismax.new("*:*")
+        @components << @dismax unless @components.include?(@dismax)
+        @dismax.add_multiplicative_boost_function(function)
       end
 
       def add_join(keywords, target, from, to)

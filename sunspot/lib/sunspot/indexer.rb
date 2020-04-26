@@ -54,9 +54,18 @@ module Sunspot
     # Remove the model from the Solr index by specifying the class and ID
     #
     def remove_by_id(class_name, *ids)
+      clazz_setup = setup_for_class(Util.full_const_get(class_name))
+      id_prefix = if clazz_setup.id_prefix_defined?
+                    if clazz_setup.id_prefix_requires_instance?
+                      warn(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(class_name))
+                    else
+                      clazz_setup.id_prefix_for_class
+                    end
+                  end
+
       ids.flatten!
       @connection.delete_by_id(
-        ids.map { |id| Adapters::InstanceAdapter.index_id_for(class_name, id) }
+        ids.map { |id| Adapters::InstanceAdapter.index_id_for("#{id_prefix}#{class_name}", id) }
       )
     end
 
@@ -147,13 +156,27 @@ module Sunspot
       )
     end
 
-    def document_for_atomic_update(clazz, id)
-      if Adapters::InstanceAdapter.for(clazz)
-        RSolr::Xml::Document.new(
-            id: Adapters::InstanceAdapter.index_id_for(clazz.name, id),
-            type: Util.superclasses_for(clazz).map(&:name)
-        )
-      end
+    def document_for_atomic_update(clazz, key)
+      return unless Adapters::InstanceAdapter.for(clazz)
+
+      clazz_setup = setup_for_class(clazz)
+      id_prefix = if clazz_setup.id_prefix_defined?
+                    if clazz_setup.id_prefix_requires_instance?
+                      if key.respond_to?(:id)
+                        clazz_setup.id_prefix_for(key)
+                      else
+                        warn(Sunspot::AtomicUpdateRequireInstanceForCompositeIdMessage.call(clazz.name))
+                      end
+                    else
+                      clazz_setup.id_prefix_for_class
+                    end
+                  end
+
+      instance_id = key.respond_to?(:id) ? key.id : key
+      RSolr::Xml::Document.new(
+        id: Adapters::InstanceAdapter.index_id_for("#{id_prefix}#{clazz.name}", instance_id),
+        type: Util.superclasses_for(clazz).map(&:name)
+      )
     end
     # 
     # Get the Setup object for the given object's class.

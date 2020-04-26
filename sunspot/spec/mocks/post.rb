@@ -37,7 +37,7 @@ end
 
 Sunspot.setup(Post) do
   text :title, :boost => 2
-  text :text_array, :boost => 3 do
+  text :text_array do
     [title, title]
   end
   text :body, :stored => true, :more_like_this => true
@@ -99,3 +99,37 @@ end
 class PhotoPost < Post
 end
 
+class PostWithProcPrefixId < Post
+end
+
+Sunspot.setup(PostWithProcPrefixId) do
+  id_prefix { "USERDATA-#{id}!" }
+  string :title, :stored => true
+  boolean :featured, :using => :featured?, :stored => true
+end
+
+class PostWithSymbolPrefixId < Post
+end
+
+Sunspot.setup(PostWithSymbolPrefixId) do
+  id_prefix :title
+  string :title, :stored => true
+  boolean :featured, :using => :featured?, :stored => true
+end
+
+class PostWithStringPrefixId < Post
+end
+
+Sunspot.setup(PostWithStringPrefixId) do
+  id_prefix 'USERDATA!'
+  string :title, :stored => true
+  boolean :featured, :using => :featured?, :stored => true
+end
+
+class PostWithoutPrefixId < Post
+end
+
+Sunspot.setup(PostWithoutPrefixId) do
+  string :title, :stored => true
+  boolean :featured, :using => :featured?, :stored => true
+end

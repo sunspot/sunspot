@@ -95,6 +95,7 @@ module Sunspot
         command << "-p" << "#{port}" if port
         command << "-h" << "#{bind_address}" if bind_address
         command << "-s" << "#{solr_home}" if solr_home
+        command << "-Dlog4j.configuration=file:#{logging_config.path}" if logging_config
 
         exec_in_solr_executable_directory(command)
       end
@@ -194,18 +195,26 @@ module Sunspot
 
       private
 
-      def logging_config_path
-        return @logging_config_path if defined?(@logging_config_path)
-        @logging_config_path =
+      def logging_config
+        return @logging_config if defined?(@logging_config)
+        @logging_config =
           if log_file
-            logging_config = Tempfile.new('logging.properties')
-            logging_config.puts("handlers = java.util.logging.FileHandler")
-            logging_config.puts("java.util.logging.FileHandler.level = #{log_level.to_s.upcase}")
-            logging_config.puts("java.util.logging.FileHandler.pattern = #{log_file}")
-            logging_config.puts("java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter")
+            logging_config = Tempfile.new('log4j.properties')
+            logging_config.puts("log4j.rootLogger=#{log_level.to_s.upcase}, file, CONSOLE")
+            logging_config.puts("log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender")
+            logging_config.puts("log4j.appender.CONSOLE.layout=org.apache.log4j.EnhancedPatternLayout")
+            logging_config.puts("log4j.appender.CONSOLE.layout.ConversionPattern=%-4r %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%n")
+            logging_config.puts("log4j.appender.file=org.apache.log4j.RollingFileAppender")
+            logging_config.puts("log4j.appender.file.MaxFileSize=4MB")
+            logging_config.puts("log4j.appender.file.MaxBackupIndex=9")
+            logging_config.puts("log4j.appender.file.File=#{log_file}")
+            logging_config.puts("log4j.appender.file.layout=org.apache.log4j.EnhancedPatternLayout")
+            logging_config.puts("log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%n")
+            logging_config.puts("log4j.logger.org.apache.solr.update.LoggingInfoStream=OFF")
+
             logging_config.flush
             logging_config.close
-            logging_config.path
+            logging_config
           end
       end
     end

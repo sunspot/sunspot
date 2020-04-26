@@ -16,6 +16,18 @@ module Sunspot
         @fulltext.add_join(keywords, target, from, to)
       end
 
+      def add_boost_query(factor)
+        @fulltext.add_boost_query(factor)
+      end
+
+      def add_boost_function(function)
+        @fulltext.add_boost_function(function)
+      end
+
+      def add_multiplicative_boost_function(function)
+        @fulltext.add_multiplicative_boost_function(function)
+      end
+
       def disjunction
         parent_fulltext = @fulltext
         @fulltext = @fulltext.add_disjunction

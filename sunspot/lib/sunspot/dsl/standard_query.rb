@@ -9,7 +9,7 @@ module Sunspot
     # See Sunspot.search for usage examples
     #
     class StandardQuery < FieldQuery
-      include Paginatable, Adjustable, Spellcheckable
+      include Paginatable, Adjustable, Spellcheckable, Functional
 
       # Specify a phrase that should be searched as fulltext. Only +text+
       # fields are searched - see DSL::Fields.text
@@ -121,6 +121,34 @@ module Sunspot
         @query.conjunction do
           Util.instance_eval_or_call(self, &block)
         end
+      end
+
+      #
+      # Defines a boost query
+      #
+      # === Examples
+      #
+      #   Sunspot.search(Post) do
+      #     with(:blog_id, 1)
+      #
+      #     boost(10) do
+      #       with(:category_id, 2)
+      #     end
+      #   end
+      #
+      def boost(factor_or_function, &block)
+        if factor_or_function.is_a?(Sunspot::Query::FunctionQuery)
+          @query.add_boost_function(factor_or_function)
+        else
+          Sunspot::Util.instance_eval_or_call(
+            Scope.new(@query.add_boost_query(factor_or_function), @setup),
+            &block
+          )
+        end
+      end
+
+      def boost_multiplicative(factor_or_function)
+        @query.add_multiplicative_boost_function(factor_or_function)
       end
 
       private

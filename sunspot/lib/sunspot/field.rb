@@ -195,7 +195,7 @@ module Sunspot
   # Could be of any type
   #
   class JoinField < Field #:nodoc:
-    attr_reader :default_boost, :target
+    attr_reader :default_boost
 
     def initialize(name, type, options = {})
       @multiple = !!options.delete(:multiple)
@@ -213,15 +213,17 @@ module Sunspot
     end
 
     def from
-      Sunspot::Setup.for(@target).field(@join[:from]).indexed_name
+      Sunspot::Setup.for(target).field(@join[:from]).indexed_name
     end
 
     def to
       Sunspot::Setup.for(@clazz).field(@join[:to]).indexed_name
     end
 
-    def local_params
-      "{!join from=#{from} to=#{to}}"
+    def local_params(value)
+      query = ["type:\"#{target.name}\""] | Util.Array(value)
+
+      "{!join from=#{from} to=#{to} v='#{query.join(' AND ')}'}"
     end
 
     def eql?(field)
@@ -229,6 +231,11 @@ module Sunspot
     end
 
     alias_method :==, :eql?
+
+    def target
+      @target = Util.full_const_get(@target) if @target.is_a?(String)
+      @target
+    end
   end
 
   class TypeField #:nodoc:
