@@ -1484,6 +1484,18 @@ Post.search do
 end
 ```
 
+## Eager Loading
+
+If you want to do eager loading on your sunspot search all you have to do is add this:
+
+Sunspot.search Post do
+  data_accessor_for(Post).include = [:comment]
+end
+
+This is as long as you have the relationship in the model as a has_many etc.
+
+In this case you could call the Post.comment and not have any sql queries
+
 ## Session Proxies
 
 TODO
