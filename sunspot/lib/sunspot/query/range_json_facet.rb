@@ -5,10 +5,11 @@ module Sunspot
       SECONDS_IN_DAY = 86400
 
       def initialize(field, options, setup)
-        raise Exception.new("Need to specify a range") if options[:range].nil?
+        raise Exception.new("Need to specify a range") if options[:range].nil? && options[:time_range].nil?
         @start = options[:range].first
         @end = options[:range].last
         @gap = options[:gap] || SECONDS_IN_DAY
+        @other = options[:other]
         super
       end
 
@@ -19,7 +20,8 @@ module Sunspot
             field: @field.indexed_name,
             start: @field.to_indexed(@start),
             end: @field.to_indexed(@end),
-            gap: @gap
+            gap: @gap,
+            other: @other
           }.merge!(init_params)
         }
       end

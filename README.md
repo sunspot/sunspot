@@ -538,7 +538,7 @@ end
 
 #### Json Facets
 
-The [json facet](http://yonik.com/json-facet-api/) can be used with the following syntaxt:
+The [json facet](http://yonik.com/json-facet-api/) can be used with the following syntax:
 
 ```ruby
 Sunspot.search(Post) do
@@ -552,6 +552,9 @@ There are some options you can pass to the json facet:
 :minimum_count
 :sort
 :prefix
+:missing
+:all_buckets
+:method
 ```
 
 Some examples
@@ -575,11 +578,86 @@ end
 Sunspot.search(Post) do
   json_facet(:title, prefix: 't')
 end
+
+# compute the total number of records in all buckets
+# accessible via search.other_count('allBuckets')
+search = Sunspot.search(Post) do
+  json_facet(:title, all_buckets: true)
+end
+
+# compute the total number of records that do not have a title value
+# accessible via search.other_count('missing')
+search = Sunspot.search(Post) do
+  json_facet(:title, missing: true)
+end
+
+# force usage of the dv faceting algorithm
+search = Sunspot.search(Post) do
+  json_facet(:title, method: 'dv')
+end
+```
+
+#### Json Range Facets
+
+Range facets are supported on numeric, date, or time fields. The `range`
+parameter is required. `gap` may be optionally specified to control the size
+of each bucket (defaults to 86400):
+
+```ruby
+# minimum of 1 and maximum of 10 in steps of 3
+# by default the lower bound is inclusive and the upper bound is exclusive
+# [1-4], [4-7], [7-9], [9-10]
+search = Sunspot.search(Post) do
+  json_facet(:blog_id, range: [1, 10], gap: 3)
+end
+```
+
+The `other` parameter may also be specified to compute additional counts besides
+the ones in each bucket:
+
+```ruby
+# compute total count of records with blog_id less than 1
+search = Sunspot.search(Post) do
+  json_facet(:blog_id, range: [1, 10], gap: 3, other: 'before')
+end
+search.other_count('before') # 3
+
+# compute total count of records with blog_id 10 or greater
+search = Sunspot.search(Post) do
+  json_facet(:blog_id, range: [1, 10], gap: 3, other: 'after')
+end
+search.other_count('after') # 2
+
+# compute total count of records between the specified range
+search = Sunspot.search(Post) do
+  json_facet(:blog_id, range: [1, 10], gap: 3, other: 'between')
+end
+search.other_count('between') # 4
+
+# compute before/between/after counts
+search = Sunspot.search(Post) do
+  json_facet(:blog_id, range: [1, 10], gap: 3, other: 'all')
+end
+search.other_count('before') # 3
+search.other_count('after') # 2
+search.other_count('between') # 4
+```
+
+For date or time fields, you may also specify `gap_unit`, which controls how
+`gap` is interpreted. A list of supported units can be found [here](https://github.com/apache/lucene-solr/blob/master/solr/core/src/java/org/apache/solr/util/DateMathParser.java#L152).
+Defaults to `SECONDS`:
+
+```ruby
+# minimum of 2 years ago, maximum of 1 year ago
+# group into buckets of 3 months each
+search = Sunspot.search(Post) do
+  json_facet(:published_at, range: [2.years.ago, 1.year.ago], gap: 3, gap_unit: 'MONTHS')
+end
 ```
 
 #### Json Facet Distinct
 
-The [json facet count distinct](http://yonik.com/solr-count-distinct/) can be used with the following syntaxt:
+The [json facet count distinct](http://yonik.com/solr-count-distinct/) can be used with the following syntax:
 
 ```ruby
 # Get posts with distinct title
@@ -591,7 +669,7 @@ end
 
 #### Json Facet nested
 
-The [nested facets](http://yonik.com/solr-subfacets/) can be used with the following syntaxt:
+The [nested facets](http://yonik.com/solr-subfacets/) can be used with the following syntax:
 ```ruby
 Sunspot.search(Post) do
   json_facet(:title, nested: { field: :author_name } )
@@ -999,12 +1077,12 @@ class Post < ActiveRecord::Base
 end
 ```
 
-As a result, all `Blogs` and `Posts` will be stored on a single shard. But 
+As a result, all `Blogs` and `Posts` will be stored on a single shard. But
 since other `Blogs` will generate other prefixes Solr will distribute them
 evenly across the available shards.
 
-If you have large collections that you want to use joins with and still want to 
-utilize sharding instead of storing everything on a single shard, it's also 
+If you have large collections that you want to use joins with and still want to
+utilize sharding instead of storing everything on a single shard, it's also
 possible to only ensure a single `Blog` and its associated `Posts` stored on
 a signle shard, while the whole collections could still be distributed across
 multiple shards. The thing is that Solr **can** do distributed joins across
@@ -1035,14 +1113,14 @@ class Post < ActiveRecord::Base
 end
 ```
 
-This way a single `Blog` and its `Ports` have the same ID prefix and will go 
+This way a single `Blog` and its `Ports` have the same ID prefix and will go
 to a single Shard.
 
 *NOTE:* Solr developers also recommend adjusting replication factor so every shard
 node contains replicas of all shards in the cluster. If you have 4 shards on separate
 nodes each of these nodes should have 4 replicas (one replica of each shard).
 
-More information and usage examples could be found here: 
+More information and usage examples could be found here:
 https://lucene.apache.org/solr/guide/6_6/shards-and-indexing-data-in-solrcloud.html  
 
 ### Highlighting
@@ -1211,7 +1289,7 @@ post1.atomic_update body: 'A New Body', title: 'Another New Title'
 ```
 
 #### Important
-If you are using [Composite ID](#composite-id) you should pass instance as key, not id. 
+If you are using [Composite ID](#composite-id) you should pass instance as key, not id.
 ```ruby
 Post.atomic_update post1 => {title: 'A New Title'}, post2 => {body: 'A New Body'}
 ```
