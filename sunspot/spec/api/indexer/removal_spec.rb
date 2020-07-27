@@ -130,5 +130,21 @@ describe 'document removal', :type => :indexer do
         expect(connection).to have_delete(post_solr_id)
       end
     end
+
+    context 'and `id_prefix` is passed along with `class_name`' do
+      let(:clazz) { PostWithProcPrefixId }
+      let(:id_prefix) { lambda { |post| "USERDATA-#{post.id}!" } }
+
+      it 'does not print warning' do
+        expect do
+          session.remove_by_id("USERDATA-#{post.id}!#{clazz.name}", post.id)
+        end.to_not output(Sunspot::RemoveByIdNotSupportCompositeIdMessage.call(clazz) + "\n").to_stderr
+      end
+
+      it 'removes record' do
+        session.remove_by_id("USERDATA-#{post.id}!#{clazz.name}", post.id)
+        expect(connection).to have_delete(post_solr_id)
+      end
+    end
   end
 end
