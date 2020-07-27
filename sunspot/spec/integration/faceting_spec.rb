@@ -248,6 +248,21 @@ describe 'search faceting' do
       Sunspot.commit
     end
 
+    it 'facets properly with the range specified as time_range' do
+      time_range = [Time.new(2020, 4, 1), Time.now]
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :published_at, time_range: time_range, gap: 1, gap_unit: 'MONTHS'
+      end
+      expected_rows = [
+        { count: 1, value: Time.new(2020, 4, 1).utc.iso8601 },
+        { count: 1, value: Time.new(2020, 5, 1).utc.iso8601 },
+        { count: 2, value: Time.new(2020, 6, 1).utc.iso8601 },
+        { count: 1, value: Time.new(2020, 7, 1).utc.iso8601 }
+      ]
+      expect(search.facet(:published_at).rows.map { |row| { count: row.count, value: row.value } }).to eq(expected_rows)
+    end
+
     it 'should use custom gap parameters if provided' do
       time_range = [Time.new(2020, 4, 1), Time.now]
       search = Sunspot.search(Post) do

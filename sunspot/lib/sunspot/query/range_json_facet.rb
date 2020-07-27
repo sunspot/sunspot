@@ -5,6 +5,7 @@ module Sunspot
       SECONDS_IN_DAY = 86400
 
       def initialize(field, options, setup)
+        options[:range] ||= options[:time_range]
         raise Exception.new("Need to specify a range") if options[:range].nil? && options[:time_range].nil?
         @start = options[:range].first
         @end = options[:range].last
