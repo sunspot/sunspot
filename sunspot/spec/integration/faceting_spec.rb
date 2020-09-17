@@ -249,7 +249,7 @@ describe 'search faceting' do
     end
 
     it 'facets properly with the range specified as time_range' do
-      time_range = [Time.new(2020, 4, 1), Time.now]
+      time_range = [Time.new(2020, 4, 1), Time.new(2020, 7, 31)]
       search = Sunspot.search(Post) do
         with :blog_id, 1
         json_facet :published_at, time_range: time_range, gap: 1, gap_unit: 'MONTHS'
@@ -264,7 +264,7 @@ describe 'search faceting' do
     end
 
     it 'should use custom gap parameters if provided' do
-      time_range = [Time.new(2020, 4, 1), Time.now]
+      time_range = [Time.new(2020, 4, 1), Time.new(2020, 7, 31)]
       search = Sunspot.search(Post) do
         with :blog_id, 1
         json_facet :published_at, range: time_range, gap: 1, gap_unit: 'MONTHS'
