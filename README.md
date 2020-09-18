@@ -1692,7 +1692,7 @@ $ yardoc -o docs */lib/**/*.rb - README.md
 
 ## Tutorials and Articles
 
-* [Using Sunspot, Websolr, and Solr on Heroku](http://mrdanadams.com/2012/sunspot-websolr-solr-heroku/) (mrdanadams)
+* [Using Sunspot, Websolr, and Solr on Heroku](https://gist.github.com/mrdanadams/2230763/) (mrdanadams)
 * [Full Text Searching with Solr and Sunspot](http://collectiveidea.com/blog/archives/2011/03/08/full-text-searching-with-solr-and-sunspot/) (Collective Idea)
 * [Full-text search in Rails with Sunspot](http://tech.favoritemedium.com/2010/01/full-text-search-in-rails-with-sunspot.html) (Tropical Software Observations)
 * [Sunspot: A Solr-Powered Search Engine for Ruby](http://www.linux-mag.com/id/7341) (Linux Magazine)
