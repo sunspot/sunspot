@@ -11,8 +11,8 @@ describe 'sunspot namespace rake task' do
     it "should reindex all models if none are specified" do
       run_rake_task("sunspot:reindex", '', '', true)
 
-      # This model should not be used by any other test and therefore should only be loaded by this test
-      expect(Sunspot.searchable.collect(&:name)).to include('RakeTaskAutoLoadTestModel')
+      # This models should not be used by any other test and therefore should only be loaded by this test
+      expect(Sunspot.searchable.collect(&:name)).to include('RakeTaskAutoLoadTestModel', 'TestEngine::RakeTaskAutoLoadTestModel')
     end
 
     it "should accept a space delimited list of models to reindex" do
