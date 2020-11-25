@@ -2,7 +2,7 @@ require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'stats', :type => :search do
   it 'returns field name for stats field' do
-    stub_stats(:average_rating_ft, {})
+    stub_stats(:average_rating_f, {})
     result = session.search Post do
       stats :average_rating
     end
@@ -10,7 +10,7 @@ describe 'stats', :type => :search do
   end
 
   it 'returns min for stats field' do
-    stub_stats(:average_rating_ft, { 'min' => 1.0 })
+    stub_stats(:average_rating_f, { 'min' => 1.0 })
     result = session.search Post do
       stats :average_rating
     end
@@ -18,7 +18,7 @@ describe 'stats', :type => :search do
   end
 
   it 'returns max for stats field' do
-    stub_stats(:average_rating_ft, { 'max' => 5.0 })
+    stub_stats(:average_rating_f, { 'max' => 5.0 })
     result = session.search Post do
       stats :average_rating
     end
@@ -26,7 +26,7 @@ describe 'stats', :type => :search do
   end
 
   it 'returns count for stats field' do
-    stub_stats(:average_rating_ft, { 'count' => 120 })
+    stub_stats(:average_rating_f, { 'count' => 120 })
     result = session.search Post do
       stats :average_rating
     end
@@ -34,7 +34,7 @@ describe 'stats', :type => :search do
   end
 
   it 'returns sum for stats field' do
-    stub_stats(:average_rating_ft, { 'sum' => 2200.0 })
+    stub_stats(:average_rating_f, { 'sum' => 2200.0 })
     result = session.search Post do
       stats :average_rating
     end
@@ -42,7 +42,7 @@ describe 'stats', :type => :search do
   end
 
   it 'returns facet rows for stats field' do
-    stub_stats_facets(:average_rating_ft, 'featured_bs' => {
+    stub_stats_facets(:average_rating_f, 'featured_bs' => {
       'false' => {},
       'true' => {}
     })
@@ -55,7 +55,7 @@ describe 'stats', :type => :search do
   end
 
   it 'returns facet stats for stats field' do
-    stub_stats_facets(:average_rating_ft, 'featured_bs' => {
+    stub_stats_facets(:average_rating_f, 'featured_bs' => {
       'true' => { 'min' => 2.0, 'max' => 4.0 }
     })
     result = session.search Post do
@@ -69,7 +69,7 @@ describe 'stats', :type => :search do
 
   it 'returns instantiated stats facet values' do
     blogs = 2.times.map { Blog.new }
-    stub_stats_facets(:average_rating_ft, 'blog_id_i' => {
+    stub_stats_facets(:average_rating_f, 'blog_id_i' => {
       blogs[0].id.to_s => {}, blogs[1].id.to_s => {} })
     search = session.search(Post) do
       stats :average_rating do
@@ -81,7 +81,7 @@ describe 'stats', :type => :search do
 
   it 'only returns verified instances when requested' do
     blog = Blog.new
-    stub_stats_facets(:average_rating_ft, 'blog_id_i' => {
+    stub_stats_facets(:average_rating_f, 'blog_id_i' => {
       blog.id.to_s => {}, '0' => {} })
 
     search = session.search(Post) do

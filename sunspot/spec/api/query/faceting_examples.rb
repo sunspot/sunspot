@@ -279,7 +279,7 @@ shared_examples_for "facetable query" do
       search do |query|
         query.facet :average_rating, :range => @range
       end
-      expect(connection).to have_last_search_with(:"facet.range" => ['average_rating_ft'])
+      expect(connection).to have_last_search_with(:"facet.range" => ['average_rating_f'])
     end
 
     it 'sets the facet start and end' do
@@ -287,8 +287,8 @@ shared_examples_for "facetable query" do
         query.facet :average_rating, :range => @range
       end
       expect(connection).to have_last_search_with(
-        :"f.average_rating_ft.facet.range.start" => '2.0',
-        :"f.average_rating_ft.facet.range.end" => '4.0'
+        :"f.average_rating_f.facet.range.start" => '2.0',
+        :"f.average_rating_f.facet.range.end" => '4.0'
       )
     end
 
@@ -296,14 +296,14 @@ shared_examples_for "facetable query" do
       search do |query|
         query.facet :average_rating, :range => @range
       end
-      expect(connection).to have_last_search_with(:"f.average_rating_ft.facet.range.gap" => "10")
+      expect(connection).to have_last_search_with(:"f.average_rating_f.facet.range.gap" => "10")
     end
 
     it 'uses custom range interval' do
       search do |query|
         query.facet :average_rating, :range => @range, :range_interval => 1
       end
-      expect(connection).to have_last_search_with(:"f.average_rating_ft.facet.range.gap" => "1")
+      expect(connection).to have_last_search_with(:"f.average_rating_f.facet.range.gap" => "1")
     end
 
     it 'tags and excludes a scope filter in a range facet' do
@@ -313,7 +313,7 @@ shared_examples_for "facetable query" do
       end
       filter_tag = get_filter_tag('blog_id_i:1')
       expect(connection).to have_last_search_with(
-        :"facet.range" => %W({!ex=#{filter_tag}}average_rating_ft)
+        :"facet.range" => %W({!ex=#{filter_tag}}average_rating_f)
       )
     end
 
@@ -321,7 +321,7 @@ shared_examples_for "facetable query" do
       search do |query|
         query.facet :average_rating, :range => @range, :include => :edge
       end
-      expect(connection).to have_last_search_with(:"f.average_rating_ft.facet.range.include" => "edge")
+      expect(connection).to have_last_search_with(:"f.average_rating_f.facet.range.include" => "edge")
     end
 
     it 'does not allow date faceting on a non-continuous field' do
@@ -353,7 +353,7 @@ shared_examples_for "facetable query" do
           end
         end
       end
-      expect(connection).to have_last_search_with(:"facet.query" => 'average_rating_ft:[4\.0 TO 5\.0]')
+      expect(connection).to have_last_search_with(:"facet.query" => 'average_rating_f:[4\.0 TO 5\.0]')
     end
 
     it 'requests multiple query facets' do
@@ -369,8 +369,8 @@ shared_examples_for "facetable query" do
       end
       expect(connection).to have_last_search_with(
         :"facet.query" => [
-          'average_rating_ft:[3\.0 TO 4\.0]',
-          'average_rating_ft:[4\.0 TO 5\.0]'
+          'average_rating_f:[3\.0 TO 4\.0]',
+          'average_rating_f:[4\.0 TO 5\.0]'
         ]
       )
     end

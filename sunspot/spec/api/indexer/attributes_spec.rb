@@ -19,27 +19,12 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should correctly index a float attribute field' do
     session.index(post(:ratings_average => 2.23))
-    expect(connection).to have_add_with(:average_rating_ft => '2.23')
+    expect(connection).to have_add_with(:average_rating_f => '2.23')
   end
 
   it 'should correctly index a double attribute field' do
     session.index(Namespaced::Comment.new(:average_rating => 2.23))
     expect(connection).to have_add_with(:average_rating_e => '2.23')
-  end
-
-  it 'should correctly index a trie integer attribute field' do
-    session.index(Photo.new(:size => 104856))
-    expect(connection).to have_add_with(:size_it => '104856')
-  end
-
-  it 'should correctly index a trie float attribute field' do
-    session.index(Photo.new(:average_rating => 2.23))
-    expect(connection).to have_add_with(:average_rating_ft => '2.23')
-  end
-
-  it 'should correctly index a trie time attribute field' do
-    session.index(Photo.new(:created_at => Time.parse('2009-12-16 15:00:00 -0400')))
-    expect(connection).to have_add_with(:created_at_dt => '2009-12-16T19:00:00Z')
   end
 
   it 'should allow indexing by a multiple-value field' do

@@ -21,9 +21,6 @@ module Sunspot
       FieldType.new('string', 'Str', 's'),
       FieldType.new('sdouble', 'SortableDouble', 'e'),
       FieldType.new('slong', 'SortableLong', 'l'),
-      FieldType.new('tint', 'TrieInteger', 'it'),
-      FieldType.new('tfloat', 'TrieFloat', 'ft'),
-      FieldType.new('tdate', 'TrieInt', 'dt'),
       FieldType.new('daterange', 'DateRange', 'dr')
 
     ]

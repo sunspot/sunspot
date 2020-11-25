@@ -24,7 +24,7 @@ shared_examples_for "query with connective scope and boost" do
     end
 
     expect(connection).to have_last_search_including(
-      :bf, 'field(average_rating_ft)'
+      :bf, 'field(average_rating_f)'
     )
 
     expect(connection).to have_last_search_including(
@@ -38,7 +38,7 @@ shared_examples_for "query with connective scope and boost" do
     end
 
     expect(connection).to have_last_search_including(
-      :boost, 'field(average_rating_ft)'
+      :boost, 'field(average_rating_f)'
     )
 
     expect(connection).to have_last_search_including(
@@ -64,11 +64,11 @@ shared_examples_for "query with connective scope and boost" do
     )
 
     expect(connection).to have_last_search_including(
-      :bf, 'field(average_rating_ft)'
+      :bf, 'field(average_rating_f)'
     )
 
     expect(connection).to have_last_search_including(
-      :boost, 'field(average_rating_ft)'
+      :boost, 'field(average_rating_f)'
     )
   end
 
@@ -79,7 +79,7 @@ shared_examples_for "query with connective scope and boost" do
       boost_multiplicative(function() { field(:average_rating) })
     end
 
-    expect(connection.searches.last[:bf]).to eq ['field(average_rating_ft)']
-    expect(connection.searches.last[:boost]).to eq ['field(average_rating_ft)']
+    expect(connection.searches.last[:bf]).to eq ['field(average_rating_f)']
+    expect(connection.searches.last[:boost]).to eq ['field(average_rating_f)']
   end
 end

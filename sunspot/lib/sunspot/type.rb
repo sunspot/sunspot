@@ -267,38 +267,7 @@ module Sunspot
     end
     register DateType, Date
 
-    # 
-    # Store integers in a TrieField, which makes range queries much faster.
     #
-    class TrieIntegerType < IntegerType
-      def indexed_name(name)
-        "#{super}t"
-      end
-    end
-
-    # 
-    # Store floats in a TrieField, which makes range queries much faster.
-    #
-    class TrieFloatType < FloatType
-      def indexed_name(name)
-        "#{super}t"
-      end
-    end
-
-    # 
-    # Index times using a TrieField. Internally, trie times are indexed as
-    # Unix timestamps in a trie integer field, as TrieField does not support
-    # datetime types natively. This distinction should have no effect from the
-    # standpoint of the library's API.
-    #
-    class TrieTimeType < TimeType
-      def indexed_name(name)
-        "#{super}t"
-      end
-    end
-
-
-    # 
     # The boolean type represents true/false values. Note that +nil+ will not be
     # indexed at all; only +false+ will be indexed with a false value.
     #

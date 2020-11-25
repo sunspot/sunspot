@@ -53,7 +53,7 @@ describe 'faceting', :type => :search do
   end
 
   it 'returns float facet' do
-    stub_facet(:average_rating_ft, '9.3' => 2, '1.1' => 1)
+    stub_facet(:average_rating_f, '9.3' => 2, '1.1' => 1)
     result = session.search Post do
       facet :average_rating
     end
@@ -99,16 +99,8 @@ describe 'faceting', :type => :search do
     )
   end
 
-  it 'returns trie integer facet' do
-    stub_facet(:size_it, '3' => 2, '1' => 1)
-    result = session.search Photo do
-      facet :size
-    end
-    expect(facet_values(result, :size)).to eq([3, 1])
-  end
-
   it 'returns float facet' do
-    stub_facet(:average_rating_ft, '9.3' => 2, '1.1' => 1)
+    stub_facet(:average_rating_f, '9.3' => 2, '1.1' => 1)
     result = session.search Photo do
       facet :average_rating
     end
@@ -205,8 +197,8 @@ describe 'faceting', :type => :search do
 
   it 'returns query facet' do
     stub_query_facet(
-      'average_rating_ft:[3\.0 TO 5\.0]' => 3,
-      'average_rating_ft:[1\.0 TO 3\.0]' => 1
+      'average_rating_f:[3\.0 TO 5\.0]' => 3,
+      'average_rating_f:[1\.0 TO 3\.0]' => 1
     )
     search = session.search(Post) do
       facet :average_rating do
@@ -239,10 +231,10 @@ describe 'faceting', :type => :search do
 
     before :each do
       stub_query_facet(
-        'average_rating_ft:[1\.0 TO 2\.0]' => 2,
-        'average_rating_ft:[2\.0 TO 3\.0]' => 3,
-        'average_rating_ft:[3\.0 TO 4\.0]' => 1,
-        'average_rating_ft:[4\.0 TO 5\.0]' => 0
+        'average_rating_f:[1\.0 TO 2\.0]' => 2,
+        'average_rating_f:[2\.0 TO 3\.0]' => 3,
+        'average_rating_f:[3\.0 TO 4\.0]' => 1,
+        'average_rating_f:[4\.0 TO 5\.0]' => 0
       )
     end
 

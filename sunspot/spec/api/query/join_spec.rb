@@ -14,6 +14,6 @@ describe 'join' do
       with(:photo_rating).greater_than(3)
     end
     expect(connection).to have_last_search_including(
-      :fq, "{!join from=photo_container_id_i to=id_i v='type:\"Photo\" AND average_rating_ft:{3\\.0 TO *}'}")
+      :fq, "{!join from=photo_container_id_i to=id_i v='type:\"Photo\" AND average_rating_f:{3\\.0 TO *}'}")
   end
 end
