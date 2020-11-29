@@ -132,7 +132,7 @@ module Sunspot
       def initialize(name, type, options = {}, &block)
         super(name, options, &block)
         @type, @options = type, options
-        @separator = @options.delete(:separator) || ':'
+        @separator = @options.delete(:separator) || '__'
       end
 
       #

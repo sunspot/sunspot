@@ -67,7 +67,7 @@ Sunspot.setup(Post) do
   latlon(:coordinates_new) { coordinates }
 
   dynamic_string :custom_string, :stored => true
-  dynamic_string :custom_underscored_string, separator: '__'
+  dynamic_string :custom_underscored_string, separator: '___'
   dynamic_float :custom_float, :multiple => true, :using => :custom_fl
   dynamic_integer :custom_integer do
     category_ids.inject({}) do |hash, category_id|
