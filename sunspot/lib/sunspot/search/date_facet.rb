@@ -12,10 +12,10 @@ module Sunspot
       def rows
         @rows ||=
           begin
-            data = @search.facet_response['facet_dates'][@field.indexed_name]
+            data = @search.facet_response['facet_ranges'][@field.indexed_name]['counts']
             gap = (@options[:time_interval] || 86400).to_i
             rows = []
-            data.each_pair do |value, count|
+            data.each_slice(2) do |value, count|
               if value =~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
                 start_time = @field.cast(value)
                 end_time = start_time + gap
