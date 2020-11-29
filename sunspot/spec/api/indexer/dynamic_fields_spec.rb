@@ -18,7 +18,7 @@ describe 'indexing dynamic fields' do
 
   it 'indexes time data' do
     session.index(post(:custom_time => { :test => Time.parse('2009-05-18 18:05:00 -0400') }))
-    expect(connection).to have_add_with(:"custom_time:test_d" => '2009-05-18T22:05:00Z')
+    expect(connection).to have_add_with(:"custom_time:test_dt" => '2009-05-18T22:05:00Z')
   end
 
   it 'indexes boolean data' do

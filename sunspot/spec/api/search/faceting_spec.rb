@@ -86,7 +86,7 @@ describe 'faceting', :type => :search do
 
   it 'returns date facet' do
     stub_facet(
-      :expire_date_d,
+      :expire_date_dt,
       '2009-07-13T00:00:00Z' => 3,
       '2009-04-01T00:00:00Z' => 1
     )

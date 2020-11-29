@@ -150,7 +150,7 @@ describe 'hits', :type => :search do
 
   it 'should typecast stored field values in hits' do
     time = Time.utc(2008, 7, 8, 2, 45)
-    stub_full_results('instance' => Post.new, 'last_indexed_at_ds' => time.xmlschema)
+    stub_full_results('instance' => Post.new, 'last_indexed_at_dts' => time.xmlschema)
     expect(session.search(Post).hits.first.stored(:last_indexed_at)).to eq(time)
   end
 

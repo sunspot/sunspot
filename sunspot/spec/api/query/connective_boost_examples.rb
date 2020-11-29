@@ -10,7 +10,7 @@ shared_examples_for "query with connective scope and boost" do
     end
 
     expect(connection).to have_last_search_including(
-      :bq, '(coordinates_new_ll:[23,-46 TO 25,-44] OR coordinates_new_ll:[42,56 TO 43,58])^10'
+      :bq, '(coordinates_new_p:[23,-46 TO 25,-44] OR coordinates_new_p:[42,56 TO 43,58])^10'
     )
 
     expect(connection).to have_last_search_including(
@@ -60,7 +60,7 @@ shared_examples_for "query with connective scope and boost" do
     end
 
     expect(connection).to have_last_search_including(
-      :bq, '(coordinates_new_ll:[23,-46 TO 25,-44] OR coordinates_new_ll:[42,56 TO 43,58])^10'
+      :bq, '(coordinates_new_p:[23,-46 TO 25,-44] OR coordinates_new_p:[42,56 TO 43,58])^10'
     )
 
     expect(connection).to have_last_search_including(

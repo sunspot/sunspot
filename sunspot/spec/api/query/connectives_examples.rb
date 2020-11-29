@@ -195,7 +195,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '(_query_:"{!geofilt sfield=coordinates_new_ll pt=23,-46 d=100}" OR _query_:"{!geofilt sfield=coordinates_new_ll pt=42,56 d=50}")'
+      :fq, '(_query_:"{!geofilt sfield=coordinates_new_p pt=23,-46 d=100}" OR _query_:"{!geofilt sfield=coordinates_new_p pt=42,56 d=50}")'
     )
   end
   
@@ -207,7 +207,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '(coordinates_new_ll:[23,-46 TO 25,-44] OR coordinates_new_ll:[42,56 TO 43,58])'
+      :fq, '(coordinates_new_p:[23,-46 TO 25,-44] OR coordinates_new_p:[42,56 TO 43,58])'
     )
   end
 end

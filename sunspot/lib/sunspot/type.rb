@@ -189,7 +189,7 @@ module Sunspot
     #
     class DoubleType < FloatType
       def indexed_name(name)
-        "#{name}_e"
+        "#{name}_d"
       end
     end
 
@@ -201,7 +201,7 @@ module Sunspot
       XMLSCHEMA = "%Y-%m-%dT%H:%M:%SZ"
 
       def indexed_name(name) #:nodoc:
-        "#{name}_d"
+        "#{name}_dt"
       end
 
       def to_indexed(value) #:nodoc:
@@ -325,7 +325,7 @@ module Sunspot
 
     # 
     # The Latlon type encodes geographical coordinates in the native
-    # Solr LatLonType.
+    # Solr LatLonPointSpatialField.
     #
     # The data for this type must respond to the `lat` and `lng` methods; you
     # can use Sunspot::Util::Coordinates as a wrapper if your source data does
@@ -336,7 +336,7 @@ module Sunspot
     #
     class LatlonType < AbstractType
       def indexed_name(name)
-        "#{name}_ll"
+        "#{name}_p"
       end
 
       def to_indexed(value)

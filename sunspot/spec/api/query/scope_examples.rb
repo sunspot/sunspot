@@ -31,7 +31,7 @@ shared_examples_for "scoped query" do
     end
     expect(connection).to have_last_search_including(
       :fq,
-      'expire_date_d:1983\-07\-08T00\:00\:00Z'
+      'expire_date_dt:1983\-07\-08T00\:00\:00Z'
     )
   end
   

@@ -24,7 +24,7 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should correctly index a double attribute field' do
     session.index(Namespaced::Comment.new(:average_rating => 2.23))
-    expect(connection).to have_add_with(:average_rating_e => '2.23')
+    expect(connection).to have_add_with(:average_rating_d => '2.23')
   end
 
   it 'should allow indexing by a multiple-value field' do
@@ -53,7 +53,7 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should correctly index a date field' do
     session.index(post(:expire_date => Date.new(2009, 07, 13)))
-    expect(connection).to have_add_with(:expire_date_d => '2009-07-13T00:00:00Z')
+    expect(connection).to have_add_with(:expire_date_dt => '2009-07-13T00:00:00Z')
   end
 
   it 'should correctly index a date range field' do

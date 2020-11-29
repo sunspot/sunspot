@@ -122,12 +122,12 @@ shared_examples_for "facetable query" do
         end
       end
       if connection.searches.last.has_key?(:"mlt.fl")
-        filter_tag = get_filter_tag('_query_:"{!geofilt sfield=coordinates_new_ll pt=32,-68 d=1}"')
+        filter_tag = get_filter_tag('_query_:"{!geofilt sfield=coordinates_new_p pt=32,-68 d=1}"')
       else
-        filter_tag = get_filter_tag('{!geofilt sfield=coordinates_new_ll pt=32,-68 d=1}')
+        filter_tag = get_filter_tag('{!geofilt sfield=coordinates_new_p pt=32,-68 d=1}')
       end
       expect(connection).to have_last_search_with(
-        :"facet.query" => "{!ex=#{filter_tag}}_query_:\"{!geofilt sfield=coordinates_new_ll pt=32,-68 d=10}\""
+        :"facet.query" => "{!ex=#{filter_tag}}_query_:\"{!geofilt sfield=coordinates_new_p pt=32,-68 d=10}\""
       )
     end
 
