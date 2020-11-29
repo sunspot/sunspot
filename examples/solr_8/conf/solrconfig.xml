@@ -699,11 +699,16 @@
          will be overridden by parameters in the request
       -->
     <lst name="defaults">
+      <str name="spellcheck.dictionary">default</str>
+      <str name="spellcheck.extendedResults">true</str>
+      <str name="spellcheck.collate">true</str>
+      <str name="q.op">AND</str>
+<!--
       <str name="echoParams">explicit</str>
       <int name="rows">10</int>
-      <!-- Default search field
-         <str name="df">text</str> 
-        -->
+-->
+      <!-- Default search field -->
+      <str name="df">text</str>
       <!-- Change from JSON to XML format (the default prior to Solr 7.0)
          <str name="wt">xml</str> 
         -->
@@ -760,6 +765,9 @@
          <str>nameOfCustomComponent2</str>
        </arr>
       -->
+    <arr name="last-components">
+      <str>spellcheck</str>
+    </arr>
   </requestHandler>
 
   <!-- A request handler that returns indented JSON by default -->
@@ -768,12 +776,14 @@
       <str name="echoParams">explicit</str>
       <str name="wt">json</str>
       <str name="indent">true</str>
+      <str name="df">text</str>
+      <str name="q.op">AND</str>
     </lst>
   </requestHandler>
 
   <initParams path="/update/**,/query,/select,/spell">
     <lst name="defaults">
-      <str name="df">_text_</str>
+      <str name="df">text</str>
     </lst>
   </initParams>
 
@@ -829,38 +839,46 @@
     -->
   <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
 
-    <str name="queryAnalyzerFieldType">text_general</str>
+    <str name="queryAnalyzerFieldType">textSpell</str>
 
     <!-- Multiple "Spell Checkers" can be declared and used by this
          component
       -->
+    <lst name="spellchecker">
+      <str name="name">default</str>
+      <!-- change field to textSpell and use copyField in schema.xml
+      to spellcheck multiple fields -->
+      <str name="field">textSpell</str>
+      <str name="buildOnCommit">true</str>
+    </lst>
 
     <!-- a spellchecker built from a field of the main index -->
+<!--
     <lst name="spellchecker">
       <str name="name">default</str>
       <str name="field">_text_</str>
       <str name="classname">solr.DirectSolrSpellChecker</str>
-      <!-- the spellcheck distance measure used, the default is the internal levenshtein -->
+      &lt;!&ndash; the spellcheck distance measure used, the default is the internal levenshtein &ndash;&gt;
       <str name="distanceMeasure">internal</str>
-      <!-- minimum accuracy needed to be considered a valid spellcheck suggestion -->
+      &lt;!&ndash; minimum accuracy needed to be considered a valid spellcheck suggestion &ndash;&gt;
       <float name="accuracy">0.5</float>
-      <!-- the maximum #edits we consider when enumerating terms: can be 1 or 2 -->
+      &lt;!&ndash; the maximum #edits we consider when enumerating terms: can be 1 or 2 &ndash;&gt;
       <int name="maxEdits">2</int>
-      <!-- the minimum shared prefix when enumerating terms -->
+      &lt;!&ndash; the minimum shared prefix when enumerating terms &ndash;&gt;
       <int name="minPrefix">1</int>
-      <!-- maximum number of inspections per result. -->
+      &lt;!&ndash; maximum number of inspections per result. &ndash;&gt;
       <int name="maxInspections">5</int>
-      <!-- minimum length of a query term to be considered for correction -->
+      &lt;!&ndash; minimum length of a query term to be considered for correction &ndash;&gt;
       <int name="minQueryLength">4</int>
-      <!-- maximum threshold of documents a query term can appear to be considered for correction -->
+      &lt;!&ndash; maximum threshold of documents a query term can appear to be considered for correction &ndash;&gt;
       <float name="maxQueryFrequency">0.01</float>
-      <!-- uncomment this to require suggestions to occur in 1% of the documents
+      &lt;!&ndash; uncomment this to require suggestions to occur in 1% of the documents
         <float name="thresholdTokenFrequency">.01</float>
-      -->
+      &ndash;&gt;
     </lst>
+-->
 
     <!-- a spellchecker that can break or combine words.  See "/spell" handler below for usage -->
-    <!--
     <lst name="spellchecker">
       <str name="name">wordbreak</str>
       <str name="classname">solr.WordBreakSolrSpellChecker</str>
@@ -869,7 +887,6 @@
       <str name="breakWords">true</str>
       <int name="maxChanges">10</int>
     </lst>
-    -->
   </searchComponent>
 
   <!-- A request handler for demonstrating the spellcheck component.
@@ -885,12 +902,13 @@
        See http://wiki.apache.org/solr/SpellCheckComponent for details
        on the request parameters.
     -->
+<!--
   <requestHandler name="/spell" class="solr.SearchHandler" startup="lazy">
     <lst name="defaults">
-      <!-- Solr will use suggestions from both the 'default' spellchecker
+      &lt;!&ndash; Solr will use suggestions from both the 'default' spellchecker
            and from the 'wordbreak' spellchecker and combine them.
            collations (re-written queries) can include a combination of
-           corrections from both spellcheckers -->
+           corrections from both spellcheckers &ndash;&gt;
       <str name="spellcheck.dictionary">default</str>
       <str name="spellcheck">on</str>
       <str name="spellcheck.extendedResults">true</str>
@@ -906,6 +924,7 @@
       <str>spellcheck</str>
     </arr>
   </requestHandler>
+-->
 
   <!-- Terms Component
 
@@ -925,6 +944,13 @@
     <arr name="components">
       <str>terms</str>
     </arr>
+  </requestHandler>
+
+  <requestHandler name="/mlt" class="solr.MoreLikeThisHandler">
+    <lst name="defaults">
+      <str name="mlt.mintf">1</str>
+      <str name="mlt.mindf">2</str>
+    </lst>
   </requestHandler>
 
   <!-- Highlighting Component
