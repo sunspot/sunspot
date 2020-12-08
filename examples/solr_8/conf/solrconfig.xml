@@ -779,6 +779,9 @@
       <str name="df">text</str>
       <str name="q.op">AND</str>
     </lst>
+    <arr name="last-components">
+      <str>spellcheck</str>
+    </arr>
   </requestHandler>
 
   <initParams path="/update/**,/query,/select,/spell">

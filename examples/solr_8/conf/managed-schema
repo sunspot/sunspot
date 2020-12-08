@@ -153,10 +153,10 @@
     <dynamicField name="*_drs" type="rdate" indexed="true" stored="true" multiValued="false"/>
     <dynamicField name="*_drms" type="rdate" indexed="true" stored="true" multiValued="true"/>
 
-    <dynamicField name="*_text" type="text" indexed="true" stored="false" multiValued="true"/>
-    <dynamicField name="*_textv" type="text" indexed="true" stored="false" termVectors="true" multiValued="true"/>
-    <dynamicField name="*_texts" type="text" indexed="true" stored="true" multiValued="true"/>
-    <dynamicField name="*_textsv" type="text" indexed="true" stored="true" termVectors="true" multiValued="true"/>
+    <dynamicField name="*_text" type="text" indexed="true" stored="false" multiValued="true" omitNorms="false"/>
+    <dynamicField name="*_textv" type="text" indexed="true" stored="false" multiValued="true" termVectors="true"  omitNorms="false"/>
+    <dynamicField name="*_texts" type="text" indexed="true" stored="true" multiValued="true" omitNorms="false"/>
+    <dynamicField name="*_textsv" type="text" indexed="true" stored="true" multiValued="true" termVectors="true"  omitNorms="false"/>
 
     <dynamicField name="*_p" type="location" indexed="true" stored="false" multiValued="false"/>
     <dynamicField name="*_pm" type="location" indexed="true" stored="false" multiValued="true"/>
