@@ -283,8 +283,8 @@
     RankFields can be used to store scoring factors to improve document ranking. They should be used
     in combination with RankQParserPlugin.
     (experimental)
-    --> 
     <fieldType name="rank" class="solr.RankField"/>
+    -->
 
     <!-- https://lucene.apache.org/solr/guide/8_6/field-types-included-with-solr.html -->
     <fieldType name="rdate" class="solr.DateRangeField"/>
