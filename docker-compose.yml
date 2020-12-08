@@ -8,26 +8,38 @@ services:
     volumes:
       - .:/home/app/webapp
     links:
-      - solr
+      - solr7
+      - solr8
     depends_on:
-      - solr
+      - solr7
+      - solr8
     environment:
       - PASSENGER_APP_ENV=development
       - RAILS_ENV=development
       - NODE_ENV=development
       - RAILS_APPLICATION_URL=http://sunspot.local
-      - SOLR_HOST=solr
+      - SOLR_HOST=solr7
       - SOLR_PORT=8983
-      - SOLR_URL=http://solr:8983/solr/test
+      - SOLR_URL=http://solr7:8983/solr/test
 
-  solr:
-    image: solr:8
+  solr7:
+    image: solr:7.0
+    ports:
+      - '9984:8983'
+    volumes:
+      - ./solr-7-data:/opt/solr/server/solr/mycores:cached
+    command:
+      - solr-precreate
+      - test
+      # note: only one core can be precreated
+
+  solr8:
+    image: solr:8.0
     ports:
       - '9983:8983'
     volumes:
       - ./solr-8-data:/var/solr:cached
-    entrypoint:
-      - docker-entrypoint.sh
+    command:
       - solr-precreate
       - test
       # note: only one core can be precreated

@@ -11,3 +11,4 @@ docs
 *.swp
 .idea
 /solr-8-data
+/solr-7-data
