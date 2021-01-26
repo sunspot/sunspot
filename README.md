@@ -1615,6 +1615,33 @@ test:
     log_level: WARNING
 ```
 
+### Solr Cloud
+
+You can specify an array of nodes, so if you need to reboot a node later you can do this safely, without interruption of your search service. Sunspot will catch the error and try another node. Only if all nodes failed you will receive an error.
+
+```yaml
+development:
+  solr:
+    hosts:
+      - localhost:8080/solr/crm-prod
+      - localhost:8081/solr/crm-prod
+      - localhost:8090/solr/crm-prod
+      - localhost:8091/solr/crm-prod
+```
+
+You can specify `master_hosts` same way:
+
+```yaml
+development:
+  solr:
+    hosts:
+      - localhost:8080/solr/crm-prod
+      - localhost:8081/solr/crm-prod
+    master_hosts:
+      - localhost:8090/solr/crm-prod
+      - localhost:8091/solr/crm-prod
+```
+
 You may want to use SSL for production environments with a username and password. For example, set `SOLR_URL` to `https://username:password@production.solr.example.com/solr`.
 
 You can examine the value of `Sunspot::Rails.configuration` at runtime.
