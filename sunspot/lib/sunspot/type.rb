@@ -201,7 +201,7 @@ module Sunspot
       XMLSCHEMA = "%Y-%m-%dT%H:%M:%SZ"
 
       def indexed_name(name) #:nodoc:
-        "#{name}_d"
+        "#{name}_dt"
       end
 
       def to_indexed(value) #:nodoc:
