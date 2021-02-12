@@ -18,9 +18,9 @@ services:
       - RAILS_ENV=development
       - NODE_ENV=development
       - RAILS_APPLICATION_URL=http://sunspot.local
-      - SOLR_HOST=solr7
+      - SOLR_HOST=solr8
       - SOLR_PORT=8983
-      - SOLR_URL=http://solr7:8983/solr/test
+      - SOLR_URL=http://solr8:8983/solr/test
 
   solr7:
     image: solr:7.0
