@@ -38,7 +38,10 @@ module Sunspot
               next if param == :sort
               param = param.to_sym
               if params.has_key?(param) && params[param] != value
-                raise "encountered duplicate additional sort param '#{param}' with different values ('#{params[param]}' vs. '#{value}')"
+                raise(
+                  ArgumentError,
+                  "Encountered duplicate additional sort param '#{param}' with different values ('#{params[param]}' vs. '#{value}')"
+                )
               end
 
               params[param] = value
