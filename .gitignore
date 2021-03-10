@@ -10,5 +10,4 @@ sunspot_solr/solr/solr-webapp
 docs
 *.swp
 .idea
-/solr-8-data
-/solr-7-data
+/solr-*-data
