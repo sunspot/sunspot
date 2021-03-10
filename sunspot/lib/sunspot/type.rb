@@ -249,7 +249,7 @@ module Sunspot
     class DateType < TimeType
       def to_indexed(value) #:nodoc:
         if value
-          time = 
+          time =
             if %w(year mon mday).all? { |method| value.respond_to?(method) }
               Time.utc(value.year, value.mon, value.mday)
             else
@@ -344,25 +344,29 @@ module Sunspot
       end
     end
 
-    class DateRangeType < DateType
+    class TimeRangeType < TimeType
       def indexed_name(name)
         "#{name}_dr"
       end
 
       def to_indexed(value)
         if value.respond_to?(:first) && value.respond_to?(:last)
-          "[#{super value.first} TO #{super value.last}]"
+          first = value.first ? super(value.first) : '*'
+          last = value.last ? super(value.last) : '*'
+          "[#{first} TO #{last}]"
         else
-          super value
+          super
         end
       end
 
       def cast(value)
         return super unless m = value.match(/^\[(?<start>.+) TO (?<end>.+)\]$/)
-        Range.new super(m[:start]), super(m[:end])
+        first = m[:start] == '*' ? nil : super(m[:start])
+        last = m[:end] == '*' ? nil : super(m[:end])
+        Range.new first, last
       end
     end
-    register DateRangeType, Range
+    register TimeRangeType, Range
 
     class ClassType < AbstractType
       def indexed_name(name) #:nodoc:

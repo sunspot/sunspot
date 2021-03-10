@@ -52,7 +52,7 @@ Sunspot.setup(Post) do
   float :average_rating, :using => :ratings_average
   time :published_at
   date :expire_date
-  date_range :featured_for
+  time_range :featured_for
   boolean :featured, :using => :featured?, :stored => true
   string :sort_title do
     title.downcase.sub(/^(a|an|the)\W+/, '') if title
