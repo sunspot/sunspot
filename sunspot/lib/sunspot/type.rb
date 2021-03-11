@@ -352,7 +352,27 @@ module Sunspot
       def to_indexed(value)
         if value.respond_to?(:first) && value.respond_to?(:last)
           first = value.first ? super(value.first) : '*'
-          last = value.last ? super(value.last) : '*'
+          last =
+            if value.last
+              date = value_to_utc_time(value.last)
+              if value.respond_to?(:exclude_end?) && value.exclude_end?
+                # subtract one second (as seconds are the smallest unit in Solr DateFields)
+                date =
+                  if date.is_a?(Time)
+                    # Time uses seconds as unit, subtract one
+                    date - 1
+                  else
+                    # DateTime uses days as unit, subtract 1/86400th of a day (=one second)
+                    # use Rational to avoid rounding errors
+                    date - Rational("1/86400")
+                  end
+              end
+
+              super(date)
+            else
+              '*'
+            end
+
           "[#{first} TO #{last}]"
         else
           super

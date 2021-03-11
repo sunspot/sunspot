@@ -56,9 +56,24 @@ describe 'indexing attribute fields', :type => :indexer do
     expect(connection).to have_add_with(:expire_date_dt => '2009-07-13T00:00:00Z')
   end
 
-  it 'should correctly index a date range field' do
+  it 'should correctly index a time range field with inclusive dates' do
     session.index(post(:featured_for => Date.new(2009, 07, 13)..Date.new(2009, 12, 25)))
     expect(connection).to have_add_with(:featured_for_dr => '[2009-07-13T00:00:00Z TO 2009-12-25T00:00:00Z]')
+  end
+
+  it 'should correctly index a time range field with exclusive dates' do
+    session.index(post(:featured_for => Date.new(2009, 07, 13)...Date.new(2009, 12, 25)))
+    expect(connection).to have_add_with(:featured_for_dr => '[2009-07-13T00:00:00Z TO 2009-12-24T23:59:59Z]')
+  end
+
+  it 'should correctly index a time range field with inclusive times' do
+    session.index(post(:featured_for => Time.new(2009, 07, 13, 11, 55, 23)..Time.new(2009, 12, 25, 9, 59, 1)))
+    expect(connection).to have_add_with(:featured_for_dr => '[2009-07-13T11:55:23Z TO 2009-12-25T09:59:01Z]')
+  end
+
+  it 'should correctly index a time range field with exclusive times' do
+    session.index(post(:featured_for => Time.new(2009, 07, 13, 11, 55, 23)...Time.new(2009, 12, 25, 9, 59, 1)))
+    expect(connection).to have_add_with(:featured_for_dr => '[2009-07-13T11:55:23Z TO 2009-12-25T09:59:00Z]')
   end
 
   it 'should correctly index a boolean field' do
