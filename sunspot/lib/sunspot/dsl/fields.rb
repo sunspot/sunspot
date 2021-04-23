@@ -90,17 +90,11 @@ module Sunspot
         join = method.to_s == 'join'
         type_string = join ? options.delete(:type).to_s : method.to_s
         type_const_name = "#{Util.camel_case(type_string.sub(/^dynamic_/, ''))}Type"
-        trie = options.delete(:trie)
-        type_const_name = "Trie#{type_const_name}" if trie
 
         begin
           type_class = Type.const_get(type_const_name)
         rescue NameError
-          if trie
-            raise ArgumentError, "Trie fields are only valid for numeric and time types"
-          else
-            super(method, *args, &block)
-          end
+          super(method, *args, &block)
         end
 
         type = type_class.instance

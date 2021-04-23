@@ -109,8 +109,8 @@ describe 'keyword search' do
 
     it 'matches multiple keywords different options' do
       search = Sunspot.search(Post) do
-        keywords 'insufficient nonexistent', :fields => [:title], :minimum_match => 1
-        keywords 'wind does', :fields => [:body], :minimum_match => 2
+        keywords 'insufficient OR nonexistent', :fields => [:title], :minimum_match => 1
+        keywords 'wind OR does', :fields => [:body], :minimum_match => 2
       end
       expect(search.results).to eq([@posts[0]])
     end
@@ -238,7 +238,7 @@ describe 'keyword search' do
       ]
       Sunspot.index!(@posts)
       @search = Sunspot.search(Post) do
-        keywords 'pepperoni sausage extra cheese', :minimum_match => 2
+        keywords 'pepperoni OR sausage OR extra OR cheese', :minimum_match => 2
       end
     end
 

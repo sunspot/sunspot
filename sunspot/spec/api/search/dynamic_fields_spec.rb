@@ -2,7 +2,7 @@ require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe 'search with dynamic fields' do
   it 'returns dynamic string facet' do
-    stub_facet(:"custom_string:test_ss", 'two' => 2, 'one' => 1)
+    stub_facet(:"custom_string__test_ss", 'two' => 2, 'one' => 1)
     result = session.search(Post) { dynamic(:custom_string) { facet(:test) }}
     expect(result.facet(:custom_string, :test).rows.map { |row| row.value }).to eq(['two', 'one'])
   end
@@ -15,7 +15,7 @@ describe 'search with dynamic fields' do
 
   it 'returns query facet specified in dynamic call' do
     stub_query_facet(
-      'custom_string\:test_ss:(foo OR bar)' => 3
+      'custom_string__test_ss:(foo OR bar)' => 3
     )
     search = session.search(Post) do
       dynamic :custom_string do

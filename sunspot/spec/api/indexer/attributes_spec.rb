@@ -19,27 +19,12 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should correctly index a float attribute field' do
     session.index(post(:ratings_average => 2.23))
-    expect(connection).to have_add_with(:average_rating_ft => '2.23')
+    expect(connection).to have_add_with(:average_rating_f => '2.23')
   end
 
   it 'should correctly index a double attribute field' do
     session.index(Namespaced::Comment.new(:average_rating => 2.23))
-    expect(connection).to have_add_with(:average_rating_e => '2.23')
-  end
-
-  it 'should correctly index a trie integer attribute field' do
-    session.index(Photo.new(:size => 104856))
-    expect(connection).to have_add_with(:size_it => '104856')
-  end
-
-  it 'should correctly index a trie float attribute field' do
-    session.index(Photo.new(:average_rating => 2.23))
-    expect(connection).to have_add_with(:average_rating_ft => '2.23')
-  end
-
-  it 'should correctly index a trie time attribute field' do
-    session.index(Photo.new(:created_at => Time.parse('2009-12-16 15:00:00 -0400')))
-    expect(connection).to have_add_with(:created_at_dt => '2009-12-16T19:00:00Z')
+    expect(connection).to have_add_with(:average_rating_d => '2.23')
   end
 
   it 'should allow indexing by a multiple-value field' do
@@ -68,12 +53,27 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should correctly index a date field' do
     session.index(post(:expire_date => Date.new(2009, 07, 13)))
-    expect(connection).to have_add_with(:expire_date_d => '2009-07-13T00:00:00Z')
+    expect(connection).to have_add_with(:expire_date_dt => '2009-07-13T00:00:00Z')
   end
 
-  it 'should correctly index a date range field' do
+  it 'should correctly index a time range field with inclusive dates' do
     session.index(post(:featured_for => Date.new(2009, 07, 13)..Date.new(2009, 12, 25)))
     expect(connection).to have_add_with(:featured_for_dr => '[2009-07-13T00:00:00Z TO 2009-12-25T00:00:00Z]')
+  end
+
+  it 'should correctly index a time range field with exclusive dates' do
+    session.index(post(:featured_for => Date.new(2009, 07, 13)...Date.new(2009, 12, 25)))
+    expect(connection).to have_add_with(:featured_for_dr => '[2009-07-13T00:00:00Z TO 2009-12-24T23:59:59Z]')
+  end
+
+  it 'should correctly index a time range field with inclusive times' do
+    session.index(post(:featured_for => Time.new(2009, 07, 13, 11, 55, 23)..Time.new(2009, 12, 25, 9, 59, 1)))
+    expect(connection).to have_add_with(:featured_for_dr => '[2009-07-13T11:55:23Z TO 2009-12-25T09:59:01Z]')
+  end
+
+  it 'should correctly index a time range field with exclusive times' do
+    session.index(post(:featured_for => Time.new(2009, 07, 13, 11, 55, 23)...Time.new(2009, 12, 25, 9, 59, 1)))
+    expect(connection).to have_add_with(:featured_for_dr => '[2009-07-13T11:55:23Z TO 2009-12-25T09:59:00Z]')
   end
 
   it 'should correctly index a boolean field' do
@@ -98,7 +98,7 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should index latitude and longitude passed as non-Floats' do
     coordinates = Sunspot::Util::Coordinates.new(
-      BigDecimal.new('40.7'), BigDecimal.new('-73.5'))
+      BigDecimal('40.7'), BigDecimal('-73.5'))
     session.index(post(:coordinates => coordinates))
     expect(connection).to have_add_with(:coordinates_s => 'dr5xx3nytvgs')
   end

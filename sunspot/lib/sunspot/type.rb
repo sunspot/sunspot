@@ -189,7 +189,7 @@ module Sunspot
     #
     class DoubleType < FloatType
       def indexed_name(name)
-        "#{name}_e"
+        "#{name}_d"
       end
     end
 
@@ -201,7 +201,7 @@ module Sunspot
       XMLSCHEMA = "%Y-%m-%dT%H:%M:%SZ"
 
       def indexed_name(name) #:nodoc:
-        "#{name}_d"
+        "#{name}_dt"
       end
 
       def to_indexed(value) #:nodoc:
@@ -249,7 +249,7 @@ module Sunspot
     class DateType < TimeType
       def to_indexed(value) #:nodoc:
         if value
-          time = 
+          time =
             if %w(year mon mday).all? { |method| value.respond_to?(method) }
               Time.utc(value.year, value.mon, value.mday)
             else
@@ -267,38 +267,7 @@ module Sunspot
     end
     register DateType, Date
 
-    # 
-    # Store integers in a TrieField, which makes range queries much faster.
     #
-    class TrieIntegerType < IntegerType
-      def indexed_name(name)
-        "#{super}t"
-      end
-    end
-
-    # 
-    # Store floats in a TrieField, which makes range queries much faster.
-    #
-    class TrieFloatType < FloatType
-      def indexed_name(name)
-        "#{super}t"
-      end
-    end
-
-    # 
-    # Index times using a TrieField. Internally, trie times are indexed as
-    # Unix timestamps in a trie integer field, as TrieField does not support
-    # datetime types natively. This distinction should have no effect from the
-    # standpoint of the library's API.
-    #
-    class TrieTimeType < TimeType
-      def indexed_name(name)
-        "#{super}t"
-      end
-    end
-
-
-    # 
     # The boolean type represents true/false values. Note that +nil+ will not be
     # indexed at all; only +false+ will be indexed with a false value.
     #
@@ -356,7 +325,7 @@ module Sunspot
 
     # 
     # The Latlon type encodes geographical coordinates in the native
-    # Solr LatLonType.
+    # Solr LatLonPointSpatialField.
     #
     # The data for this type must respond to the `lat` and `lng` methods; you
     # can use Sunspot::Util::Coordinates as a wrapper if your source data does
@@ -367,7 +336,7 @@ module Sunspot
     #
     class LatlonType < AbstractType
       def indexed_name(name)
-        "#{name}_ll"
+        "#{name}_p"
       end
 
       def to_indexed(value)
@@ -375,25 +344,49 @@ module Sunspot
       end
     end
 
-    class DateRangeType < DateType
+    class TimeRangeType < TimeType
       def indexed_name(name)
         "#{name}_dr"
       end
 
       def to_indexed(value)
-        if value.respond_to?(:first) && value.respond_to?(:last)
-          "[#{super value.first} TO #{super value.last}]"
+        if value.respond_to?(:begin) && value.respond_to?(:end)
+          first = value.begin ? super(value.begin) : '*'
+          last =
+            if value.end
+              date = value_to_utc_time(value.end)
+              if value.exclude_end?
+                # subtract one second (as seconds are the smallest unit in Solr DateFields)
+                date =
+                  if date.is_a?(Time)
+                    # Time uses seconds as unit, subtract one
+                    date - 1
+                  else
+                    # DateTime uses days as unit, subtract 1/86400th of a day (=one second)
+                    # use Rational to avoid rounding errors
+                    date - Rational("1/86400")
+                  end
+              end
+
+              super(date)
+            else
+              '*'
+            end
+
+          "[#{first} TO #{last}]"
         else
-          super value
+          super
         end
       end
 
       def cast(value)
         return super unless m = value.match(/^\[(?<start>.+) TO (?<end>.+)\]$/)
-        Range.new super(m[:start]), super(m[:end])
+        first = m[:start] == '*' ? nil : super(m[:start])
+        last = m[:end] == '*' ? nil : super(m[:end])
+        Range.new first, last
       end
     end
-    register DateRangeType, Range
+    register TimeRangeType, Range
 
     class ClassType < AbstractType
       def indexed_name(name) #:nodoc:

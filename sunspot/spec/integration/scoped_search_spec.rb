@@ -122,10 +122,6 @@ describe 'scoped_search' do
   test_field_type 'Double', :average_rating, :average_rating, Namespaced::Comment, -2.5, 0.0, 3.2, 3.5, 16.0
   test_field_type 'Time', :published_at, :published_at, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
                                                            '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
-  test_field_type 'Trie Integer', :size, :size, Photo, -2, 0, 3, 12, 20
-  test_field_type 'Trie Float', :average_rating, :average_rating, Photo, -2.5, 0.0, 3.2, 3.5, 16.0
-  test_field_type 'Trie Time', :created_at, :created_at, Photo, *(['1970-01-01 00:00:00 UTC', '1983-07-08 04:00:00 UTC', '1983-07-08 02:00:00 -0500',
-                                                                   '2005-11-05 10:00:00 UTC', Time.now.to_s].map { |t| Time.parse(t) })
   describe 'Date range field type' do
     let(:date_ranges) do
       {

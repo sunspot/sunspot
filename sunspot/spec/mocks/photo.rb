@@ -9,9 +9,9 @@ Sunspot.setup(Photo) do
   integer :photo_container_id
   boolean :published
   boost 0.75
-  integer :size, :trie => true
-  float :average_rating, :trie => true
-  time :created_at, :trie => true
+  integer :size
+  float :average_rating
+  time :created_at
 end
 
 class Picture < MockRecord
@@ -37,7 +37,7 @@ Sunspot.setup(PhotoContainer) do
   text :description, :default_boost => 1.2
 
   join(:caption,      :target => 'Photo',   :type => :string,     :join => { :from => :photo_container_id, :to => :id })
-  join(:photo_rating, :target => 'Photo',   :type => :trie_float, :join => { :from => :photo_container_id, :to => :id }, :as => 'average_rating_ft')
+  join(:photo_rating, :target => 'Photo',   :type => :float,      :join => { :from => :photo_container_id, :to => :id }, :as => 'average_rating_f')
   join(:caption,      :target => 'Photo',   :type => :text,       :join => { :from => :photo_container_id, :to => :id })
   join(:description,  :target => 'Photo',   :type => :text,       :join => { :from => :photo_container_id, :to => :id }, :prefix => "photo")
   join(:published,    :target => 'Photo',   :type => :boolean,    :join => { :from => :photo_container_id, :to => :id }, :prefix => "photo")

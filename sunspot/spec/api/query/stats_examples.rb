@@ -15,14 +15,14 @@ shared_examples_for 'stats query' do
     search do
       stats :average_rating
     end
-    expect(connection).to have_last_search_with(:"stats.field" => %w{average_rating_ft})
+    expect(connection).to have_last_search_with(:"stats.field" => %w{average_rating_f})
   end
 
   it 'requests multiple field stats' do
     search do
       stats :average_rating, :published_at
     end
-    expect(connection).to have_last_search_with(:"stats.field" => %w{average_rating_ft published_at_dt})
+    expect(connection).to have_last_search_with(:"stats.field" => %w{average_rating_f published_at_dt})
   end
 
   it 'facets on a stats field' do
@@ -31,14 +31,14 @@ shared_examples_for 'stats query' do
         facet :featured
       end
     end
-    expect(connection).to have_last_search_with(:"f.average_rating_ft.stats.facet" => %w{featured_bs})
+    expect(connection).to have_last_search_with(:"f.average_rating_f.stats.facet" => %w{featured_bs})
   end
 
   it 'only facets on a stats field when requested' do
     search do
       stats :average_rating
     end
-    expect(connection).not_to have_last_search_with(:"f.average_rating_ft.stats.facet")
+    expect(connection).not_to have_last_search_with(:"f.average_rating_f.stats.facet")
   end
 
   it 'facets on multiple stats fields' do
@@ -48,7 +48,7 @@ shared_examples_for 'stats query' do
       end
     end
     expect(connection).to have_last_search_with(
-      :"f.average_rating_ft.stats.facet" => %w{featured_bs},
+      :"f.average_rating_f.stats.facet" => %w{featured_bs},
       :"f.published_at_dt.stats.facet" => %w{featured_bs}
     )
   end
@@ -60,7 +60,7 @@ shared_examples_for 'stats query' do
       end
     end
     expect(connection).to have_last_search_with(
-      :"f.average_rating_ft.stats.facet" => %w{featured_bs primary_category_id_i}
+      :"f.average_rating_f.stats.facet" => %w{featured_bs primary_category_id_i}
     )
   end
 end

@@ -264,7 +264,7 @@ module Sunspot #:nodoc:
 
           if options[:batch_size].to_i > 0
             batch_counter = 0
-            self.includes(options[:include]).find_in_batches(options.slice(:batch_size, :start)) do |records|
+            self.includes(options[:include]).find_in_batches(**options.slice(:batch_size, :start)) do |records|
 
               solr_benchmark(options[:batch_size], batch_counter += 1) do
                 Sunspot.index(records.select(&:indexable?))

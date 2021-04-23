@@ -64,7 +64,7 @@ shared_examples_for 'sortable query' do
     search do
       order_by :average_rating, :desc
     end
-    expect(connection).to have_last_search_with(:sort => 'average_rating_ft desc')
+    expect(connection).to have_last_search_with(:sort => 'average_rating_f desc')
   end
 
   it 'orders by multiple fields' do
@@ -72,7 +72,7 @@ shared_examples_for 'sortable query' do
       order_by :average_rating, :desc
       order_by :sort_title, :asc
     end
-    expect(connection).to have_last_search_with(:sort => 'average_rating_ft desc, sort_title_s asc')
+    expect(connection).to have_last_search_with(:sort => 'average_rating_f desc, sort_title_s asc')
   end
 
   it 'orders by random' do
@@ -114,7 +114,7 @@ shared_examples_for 'sortable query' do
     search do
       order_by_geodist :coordinates_new, 32, -68, :desc
     end
-    expect(connection).to have_last_search_with(:sort => 'geodist(coordinates_new_ll,32,-68) desc')
+    expect(connection).to have_last_search_with(:sfield => 'coordinates_new_p', :pt => '32,-68', :sort => 'geodist() desc')
   end
 
   it 'throws an ArgumentError if a bogus order direction is given' do

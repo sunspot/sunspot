@@ -23,7 +23,7 @@ shared_examples_for "query with connective scope" do
     end
     expect(connection).to have_last_search_including(
       :fq,
-      '(blog_id_i:2 OR (category_ids_im:1 AND average_rating_ft:{3\.0 TO *}))'
+      '(blog_id_i:2 OR (category_ids_im:1 AND average_rating_f:{3\.0 TO *}))'
     )
   end
 
@@ -38,7 +38,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '(category_ids_im:1 OR (-average_rating_ft:{3\.0 TO *} AND blog_id_i:1))'
+      :fq, '(category_ids_im:1 OR (-average_rating_f:{3\.0 TO *} AND blog_id_i:1))'
     )
   end
 
@@ -62,7 +62,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '-(-category_ids_im:1 AND average_rating_ft:{3\.0 TO *})'
+      :fq, '-(-category_ids_im:1 AND average_rating_f:{3\.0 TO *})'
     )
   end
 
@@ -80,7 +80,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '-(title_ss:Yes AND -(blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_ft:2\.0)))'
+      :fq, '-(title_ss:Yes AND -(blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_f:2\.0)))'
     )
   end
   it 'creates a disjunction with nested conjunction with nested disjunction with negated restriction' do
@@ -97,7 +97,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '(title_ss:Yes OR (blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_ft:2\.0)))'
+      :fq, '(title_ss:Yes OR (blog_id_i:1 AND -(-category_ids_im:4 AND average_rating_f:2\.0)))'
     )
   end
 
@@ -149,7 +149,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '-(average_rating_ft:[* TO *] AND -average_rating_ft:{3\.0 TO *})'
+      :fq, '-(average_rating_f:[* TO *] AND -average_rating_f:{3\.0 TO *})'
     )
   end
 
@@ -162,7 +162,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, "(id:(Post\\ #{post.id}) OR average_rating_ft:{3\\.0 TO *})"
+      :fq, "(id:(Post\\ #{post.id}) OR average_rating_f:{3\\.0 TO *})"
     )
   end
 
@@ -195,7 +195,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '(_query_:"{!geofilt sfield=coordinates_new_ll pt=23,-46 d=100}" OR _query_:"{!geofilt sfield=coordinates_new_ll pt=42,56 d=50}")'
+      :fq, '(_query_:"{!geofilt sfield=coordinates_new_p pt=23,-46 d=100}" OR _query_:"{!geofilt sfield=coordinates_new_p pt=42,56 d=50}")'
     )
   end
   
@@ -207,7 +207,7 @@ shared_examples_for "query with connective scope" do
       end
     end
     expect(connection).to have_last_search_including(
-      :fq, '(coordinates_new_ll:[23,-46 TO 25,-44] OR coordinates_new_ll:[42,56 TO 43,58])'
+      :fq, '(coordinates_new_p:[23,-46 TO 25,-44] OR coordinates_new_p:[42,56 TO 43,58])'
     )
   end
 end
