@@ -134,6 +134,16 @@ describe 'Atomic Update feature' do
     validate_hit(find_indexed_post(post2.id), title: 'A Second Title', featured: true)
   end
 
+  it 'sets array value' do
+    post = Post.new(title: 'A Title', tags: %w(tag1 tag2))
+    Sunspot.index!(post)
+    validate_hit(find_indexed_post(post.id), title: post.title, tag_list: post.tags)
+
+    updated_array = %w(tag3 tag4)
+    Sunspot.atomic_update!(Post, post.id => { tag_list: updated_array })
+    validate_hit(find_indexed_post(post.id), title: post.title, tag_list: updated_array)
+  end
+
   it 'clears field value properly' do
     post = Post.new(title: 'A Title', tags: %w(tag1 tag2), featured: true)
     Sunspot.index!(post)
