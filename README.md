@@ -14,7 +14,7 @@ objects such as the filesystem.
 
 This README provides a high level overview; class-by-class and
 method-by-method documentation is available in the [API
-reference](http://sunspot.github.com/sunspot/docs/).
+reference](http://sunspot.github.io/sunspot/docs/).
 
 For questions about how to use Sunspot in your app, please use the
 [Sunspot Mailing List](http://groups.google.com/group/ruby-sunspot) or search
