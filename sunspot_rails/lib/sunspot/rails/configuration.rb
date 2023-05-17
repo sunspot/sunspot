@@ -23,7 +23,7 @@ module Sunspot #:nodoc:
     #       port: 8983
     #       log_level: OFF
     #       open_timeout: 0.5
-    #       read_timeout: 2
+    #       timeout: 2
     #       proxy: false
     #   production:
     #     solr:
@@ -36,7 +36,7 @@ module Sunspot #:nodoc:
     #       log_level: WARNING
     #       solr_home: /some/path
     #       open_timeout: 0.5
-    #       read_timeout: 2
+    #       timeout: 2
     #       proxy: http://proxy.com:12345
     #     master_solr:
     #       hostname: localhost
@@ -293,7 +293,14 @@ module Sunspot #:nodoc:
         @bind_address ||= user_configuration_from_key('solr', 'bind_address')
       end
 
+      def timeout
+        @timeout ||= user_configuration_from_key('solr', 'timeout')
+      end
+
       def read_timeout
+        if user_configuration_from_key('solr', 'read_timeout')
+          warn "DEPRECATION: Rsolr.new/connect option `read_timeout` is deprecated and will be removed in Rsolr 3. `timeout` is currently a synonym, use that instead."
+        end
         @read_timeout ||= user_configuration_from_key('solr', 'read_timeout')
       end
 

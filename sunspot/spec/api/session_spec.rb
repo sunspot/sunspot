@@ -107,6 +107,12 @@ describe 'Session' do
     end
 
     it 'should open a connection with custom read timeout' do
+      Sunspot.config.solr.timeout = 0.5
+      Sunspot.commit
+      expect(connection.opts[:timeout]).to eq(0.5)
+    end
+
+    it 'should open a connection with custom read timeout' do
       Sunspot.config.solr.read_timeout = 0.5
       Sunspot.commit
       expect(connection.opts[:read_timeout]).to eq(0.5)

@@ -23,6 +23,7 @@ module Sunspot
         LightConfig.build do
           solr do
             url 'http://127.0.0.1:8983/solr/default'
+            timeout nil
             read_timeout nil
             open_timeout nil
             proxy nil

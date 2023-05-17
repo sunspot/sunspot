@@ -50,6 +50,10 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
   end
 
   it "should set the read timeout to nil when not set" do
+    expect(@config.timeout).to be_nil
+  end
+
+  it "should set the read timeout to nil when not set" do
     expect(@config.read_timeout).to be_nil
   end
 
@@ -157,6 +161,10 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
 
   it "should handle the 'bind_address' property when set" do
     expect(@config.bind_address).to eq("127.0.0.1")
+  end
+
+  it "should handle the 'timeout' property when set" do
+    expect(@config.timeout).to eq(2)
   end
 
   it "should handle the 'read_timeout' property when set" do

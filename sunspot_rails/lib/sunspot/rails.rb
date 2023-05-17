@@ -50,6 +50,7 @@ module Sunspot #:nodoc:
           :path => sunspot_rails_configuration.master_path,
           :userinfo => sunspot_rails_configuration.userinfo
         ).to_s
+        config.solr.timeout = sunspot_rails_configuration.timeout
         config.solr.read_timeout = sunspot_rails_configuration.read_timeout
         config.solr.open_timeout = sunspot_rails_configuration.open_timeout
         config.solr.proxy = sunspot_rails_configuration.proxy
@@ -66,6 +67,7 @@ module Sunspot #:nodoc:
           :path => sunspot_rails_configuration.path,
           :userinfo => sunspot_rails_configuration.userinfo
         ).to_s
+        config.solr.timeout = sunspot_rails_configuration.timeout
         config.solr.read_timeout = sunspot_rails_configuration.read_timeout
         config.solr.open_timeout = sunspot_rails_configuration.open_timeout
         config.solr.proxy = sunspot_rails_configuration.proxy

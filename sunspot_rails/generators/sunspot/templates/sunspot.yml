@@ -4,7 +4,7 @@ production:
     port: 8983
     log_level: WARNING
     path: /solr/production
-    read_timeout: 20
+    timeout: 20
     open_timeout: 1
   auto_index_callback: after_commit
   auto_remove_callback: after_commit
