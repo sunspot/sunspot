@@ -1667,9 +1667,9 @@ To run all the specs just call `rake` from the library root folder.
 To run specs related to individual gems, consider using one of the following commands:
 
 ```bash
-GEM=sunspot ci/travis.sh
-GEM=sunspot_rails ci/travis.sh
-GEM=sunspot_solr ci/travis.sh
+GEM=sunspot ci/sunspot_test_script.sh
+GEM=sunspot_rails ci/sunspot_test_script.sh
+GEM=sunspot_solr ci/sunspot_test_script.sh
 ```
 
 ### Generating Documentation
