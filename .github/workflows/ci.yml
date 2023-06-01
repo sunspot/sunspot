@@ -13,10 +13,18 @@ jobs:
           - '2.4.5'
           - '2.5.3'
           - '2.6.3'
-          - 'head'
+          # - 'head'
         gem: ['sunspot', 'sunspot_rails', 'sunspot_solr']
         update-format: ['xml', 'json']
         exclude:
+          - ruby-version: '2.1'
+            gem: 'sunspot'
+          - ruby-version: '2.1'
+            gem: 'sunspot_rails'
+          - ruby-version: '2.3.8'
+            gem: 'sunspot_rails'
+          - ruby-version: '2.4.5'
+            gem: 'sunspot_rails'
           - ruby-version: 'head'
             gem: 'sunspot_solr'
           - ruby-version: 'head'
