@@ -30,6 +30,7 @@ jobs:
           - '2.5'
           - '2.6'
           - '2.7'
+          - '3.0'
           # - 'head'
         gem: ['sunspot', 'sunspot_rails', 'sunspot_solr']
         update-format: ['xml', 'json']
