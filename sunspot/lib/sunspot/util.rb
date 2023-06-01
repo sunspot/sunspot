@@ -289,21 +289,39 @@ module Sunspot
         __proxy_method__(:sub, *args, &block)
       end
 
-      def method_missing(method, *args, **kwargs, &block)
-        __proxy_method__(method, *args, **kwargs, &block)
-      end
+      if RUBY_VERSION >= '3.0'
+        def method_missing(method, *args, **kwargs, &block)
+          __proxy_method__(method, *args, **kwargs, &block)
+        end
 
-      def respond_to_missing?(method, _)
-        @__receiver__.respond_to?(method, true) || super
-      end
+        def respond_to_missing?(method, _)
+          @__receiver__.respond_to?(method, true) || super
+        end
 
-      def __proxy_method__(method, *args, **kwargs, &block)
-        @__receiver__.__send__(method.to_sym, *args, **kwargs, &block)
-      rescue ::NoMethodError => e
-        begin
-          @__calling_context__.__send__(method.to_sym, *args, **kwargs, &block)
-        rescue ::NoMethodError
-          raise(e)
+        def __proxy_method__(method, *args, **kwargs, &block)
+          @__receiver__.__send__(method.to_sym, *args, **kwargs, &block)
+        rescue ::NoMethodError => e
+          begin
+            @__calling_context__.__send__(method.to_sym, *args, **kwargs, &block)
+          rescue ::NoMethodError
+            raise(e)
+          end
+        end
+      else
+        def method_missing(method, *args, &block)
+          __proxy_method__(method, *args, &block)
+        end
+
+        def __proxy_method__(method, *args, &block)
+          begin
+            @__receiver__.__send__(method.to_sym, *args, &block)
+          rescue ::NoMethodError => e
+            begin
+              @__calling_context__.__send__(method.to_sym, *args, &block)
+            rescue ::NoMethodError
+              raise(e)
+            end
+          end
         end
       end
     end
