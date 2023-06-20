@@ -42,9 +42,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler',  '>= 1.3.0', '< 2.0' if RUBY_VERSION <= '2.0.0'
   s.add_development_dependency 'nokogiri', '< 1.7' if RUBY_VERSION <= '2.0.0'
   s.add_development_dependency 'rake', '< 12.3'
-  s.add_development_dependency 'rspec', '~> 3.7'
-  s.add_development_dependency 'rspec-rails', '~> 3.7'
-  s.add_development_dependency 'sqlite3',  '~> 1.3.0'
 
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                   '--title' << 'Sunspot-Rails - Rails integration for the Sunspot Solr search library - API Documentation' <<
