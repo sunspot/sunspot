@@ -30,12 +30,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  if RUBY_VERSION < '2.2'
-    s.add_dependency 'rails', '>= 3', '< 5'
-  else
-    s.add_dependency 'rails', '>= 3'
-  end
-
+  s.add_dependency 'rails', '>= 5'
   s.add_dependency 'sunspot', Sunspot::VERSION
   
   s.add_development_dependency 'appraisal', '2.2.0'
