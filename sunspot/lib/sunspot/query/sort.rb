@@ -140,6 +140,23 @@ module Sunspot
         def initialize(setup,args)
           @function=args.shift
           @fields = []
+          @extras = []
+
+          case @function.to_s
+          when "strdist"
+            # Reference: http://wiki.apache.org/solr/FunctionQuery#strdist
+            valid_measures = [:jw, :edit, :ngram]
+            extra = args.pop
+            if valid_measures.include? extra.to_sym
+              @extras.push(extra)
+            else
+              raise(
+                UnrecognizedRestrictionError,
+                "Use only valid measure options with strdist (#{valid_measures.to_s})"
+              )
+            end
+          end
+
           args.each do |argument|
             case argument.class.name
             when "Array"
@@ -152,7 +169,9 @@ module Sunspot
           end
         end
         def to_s
-          "#{function}(#{fields.map(&:to_s).join(",")})"
+          mapped_fields = fields
+          mapped_fields = mapped_fields + @extras if not @extras.empty?
+          "#{function}(#{mapped_fields.map(&:to_s).join(",")})"
         end
       end
     end
