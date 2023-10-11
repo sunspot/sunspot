@@ -357,7 +357,11 @@ module Sunspot #:nodoc:
             if File.exist?(path)
               File.open(path) do |file|
                 processed = ERB.new(file.read).result
-                YAML.load(processed)[::Rails.env]
+                begin
+                  YAML.load(processed, aliases: true)[::Rails.env]
+                rescue ArgumentError
+                  YAML.load(processed)[::Rails.env]
+                end
               end
             else
               {}
