@@ -31,13 +31,19 @@ module Sunspot
       end
 
       # 
-      # Base class for sorts. All subclasses should implement the #to_param
+      # Base class for sorts. All subclasses must either implement a #to_param
       # method, which is a string that is then concatenated with other sort
-      # strings by the SortComposite to form the sort parameter.
+      # strings by the SortComposite to form the sort parameter or a #to_params
+      # method which returns a hash of all solr query parameters the sorting
+      # class requires, containing at least the key :sort.
       #
       class Abstract
         def initialize(direction)
           @direction = (direction || :asc).to_sym
+        end
+
+        def to_params
+          { sort: to_param }
         end
 
         private
@@ -110,8 +116,12 @@ module Sunspot
           super(field, direction)
         end
 
-        def to_param
-          "geodist(#{@field.indexed_name.to_sym},#{@lat},#{@lon}) #{direction_for_solr}"
+        def to_params
+          {
+            sfield: @field.indexed_name.to_s,
+            pt: "#{@lat},#{@lon}",
+            sort: "geodist() #{direction_for_solr}"
+          }
         end
       end
 

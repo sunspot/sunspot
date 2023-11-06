@@ -7,7 +7,7 @@ describe 'function query' do
         boost(function { :average_rating })
       end
     end
-    expect(connection).to have_last_search_including(:bf, 'average_rating_ft')
+    expect(connection).to have_last_search_including(:bf, 'average_rating_f')
   end
 
   it "should send query to solr with boost function and boost amount" do
@@ -16,7 +16,7 @@ describe 'function query' do
         boost(function { :average_rating }^5)
       end
     end
-    expect(connection).to have_last_search_including(:bf, 'average_rating_ft^5')
+    expect(connection).to have_last_search_including(:bf, 'average_rating_f^5')
   end
 
   it "should handle boost function with constant float" do
@@ -52,7 +52,7 @@ describe 'function query' do
         boost(function { product(:average_rating, 10) })
       end
     end
-    expect(connection).to have_last_search_including(:bf, 'product(average_rating_ft,10)')
+    expect(connection).to have_last_search_including(:bf, 'product(average_rating_f,10)')
   end
 
   it "should handle the sub function in a function query block" do
@@ -61,7 +61,7 @@ describe 'function query' do
         boost(function { sub(:average_rating, 10) })
       end
     end
-    expect(connection).to have_last_search_including(:bf, 'sub(average_rating_ft,10)')
+    expect(connection).to have_last_search_including(:bf, 'sub(average_rating_f,10)')
   end
 
   it "should handle boost amounts on function query block" do
@@ -70,7 +70,7 @@ describe 'function query' do
         boost(function { sub(:average_rating, 10)^5 })
       end
     end
-    expect(connection).to have_last_search_including(:bf, 'sub(average_rating_ft,10)^5')
+    expect(connection).to have_last_search_including(:bf, 'sub(average_rating_f,10)^5')
   end
  
   it "should handle nested functions in a function query block" do
@@ -79,7 +79,7 @@ describe 'function query' do
         boost(function { product(:average_rating, sum(:average_rating, 20)) })
       end
     end
-    expect(connection).to have_last_search_including(:bf, 'product(average_rating_ft,sum(average_rating_ft,20))')
+    expect(connection).to have_last_search_including(:bf, 'product(average_rating_f,sum(average_rating_f,20))')
   end
 
   # TODO SOLR 1.5
@@ -109,7 +109,7 @@ describe 'function query' do
         multiplicative_boost(function { :average_rating })
       end
     end
-    expect(connection).to have_last_search_including(:boost, 'average_rating_ft')
+    expect(connection).to have_last_search_including(:boost, 'average_rating_f')
   end
 
   it "should send query to solr with multiplicative boost function and boost amount" do
@@ -118,7 +118,7 @@ describe 'function query' do
         multiplicative_boost(function { :average_rating }^5)
       end
     end
-    expect(connection).to have_last_search_including(:boost, 'average_rating_ft^5')
+    expect(connection).to have_last_search_including(:boost, 'average_rating_f^5')
   end
 
   it "should handle multiplicative boost function with constant float" do
@@ -154,7 +154,7 @@ describe 'function query' do
         multiplicative_boost(function { product(:average_rating, 10) })
       end
     end
-    expect(connection).to have_last_search_including(:boost, 'product(average_rating_ft,10)')
+    expect(connection).to have_last_search_including(:boost, 'product(average_rating_f,10)')
   end
 
   it "should handle the sub function in a multiplicative boost function query block" do
@@ -163,7 +163,7 @@ describe 'function query' do
         multiplicative_boost(function { sub(:average_rating, 10) })
       end
     end
-    expect(connection).to have_last_search_including(:boost, 'sub(average_rating_ft,10)')
+    expect(connection).to have_last_search_including(:boost, 'sub(average_rating_f,10)')
   end
 
   it "should handle boost amounts on multiplicative boost function query block" do
@@ -172,7 +172,7 @@ describe 'function query' do
         multiplicative_boost(function { sub(:average_rating, 10)^5 })
       end
     end
-    expect(connection).to have_last_search_including(:boost, 'sub(average_rating_ft,10)^5')
+    expect(connection).to have_last_search_including(:boost, 'sub(average_rating_f,10)^5')
   end
  
   it "should handle nested functions in a multiplicative boost function query block" do
@@ -181,7 +181,7 @@ describe 'function query' do
         multiplicative_boost(function { product(:average_rating, sum(:average_rating, 20)) })
       end
     end
-    expect(connection).to have_last_search_including(:boost, 'product(average_rating_ft,sum(average_rating_ft,20))')
+    expect(connection).to have_last_search_including(:boost, 'product(average_rating_f,sum(average_rating_f,20))')
   end
 
   # TODO SOLR 1.5

@@ -44,11 +44,11 @@ module SearchHelper
     }
   end
 
-  def stub_date_facet(name, gap, values)
+  def stub_date_facet(name, gap, *values)
     connection.response = {
       'facet_counts' => {
-        'facet_dates' => {
-          name.to_s => { 'gap' => "+#{gap}SECONDS" }.merge(values)
+        'facet_ranges' => {
+          name.to_s => { 'gap' => "+#{gap}SECONDS", 'counts' => values }
         }
       }
     }

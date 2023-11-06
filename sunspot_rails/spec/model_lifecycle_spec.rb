@@ -15,7 +15,7 @@ describe 'searchable with lifecycle' do
   describe 'on update' do
     before :each do
       @post = PostWithAuto.create
-      @post.update_attributes(:title => 'Test 1')
+      @post.update(:title => 'Test 1')
       Sunspot.commit
     end
 

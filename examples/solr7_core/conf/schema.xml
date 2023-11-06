@@ -156,21 +156,13 @@
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_bms" stored="true" type="boolean" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_d" stored="false" type="tdate" multiValued="false" indexed="true"/>
+    <dynamicField name="*_d" stored="false" type="tdouble" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_dm" stored="false" type="tdate" multiValued="true" indexed="true"/>
+    <dynamicField name="*_dm" stored="false" type="tdouble" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_ds" stored="true" type="tdate" multiValued="false" indexed="true"/>
+    <dynamicField name="*_ds" stored="true" type="tdouble" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_dms" stored="true" type="tdate" multiValued="true" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_e" stored="false" type="tdouble" multiValued="false" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_em" stored="false" type="tdouble" multiValued="true" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_es" stored="true" type="tdouble" multiValued="false" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_ems" stored="true" type="tdouble" multiValued="true" indexed="true"/>
+    <dynamicField name="*_dms" stored="true" type="tdouble" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_f" stored="false" type="tfloat" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->

@@ -25,7 +25,10 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   end
 
   def fake_rsolr_response(status)
-    {:status => status.to_s}
+    {
+      :status => status.to_s,
+      :body => ''
+    }
   end
 
   let :post do

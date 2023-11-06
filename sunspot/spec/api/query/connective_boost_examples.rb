@@ -10,7 +10,7 @@ shared_examples_for "query with connective scope and boost" do
     end
 
     expect(connection).to have_last_search_including(
-      :bq, '(coordinates_new_ll:[23,-46 TO 25,-44] OR coordinates_new_ll:[42,56 TO 43,58])^10'
+      :bq, '(coordinates_new_p:[23,-46 TO 25,-44] OR coordinates_new_p:[42,56 TO 43,58])^10'
     )
 
     expect(connection).to have_last_search_including(
@@ -24,7 +24,7 @@ shared_examples_for "query with connective scope and boost" do
     end
 
     expect(connection).to have_last_search_including(
-      :bf, 'field(average_rating_ft)'
+      :bf, 'field(average_rating_f)'
     )
 
     expect(connection).to have_last_search_including(
@@ -38,7 +38,7 @@ shared_examples_for "query with connective scope and boost" do
     end
 
     expect(connection).to have_last_search_including(
-      :boost, 'field(average_rating_ft)'
+      :boost, 'field(average_rating_f)'
     )
 
     expect(connection).to have_last_search_including(
@@ -60,15 +60,15 @@ shared_examples_for "query with connective scope and boost" do
     end
 
     expect(connection).to have_last_search_including(
-      :bq, '(coordinates_new_ll:[23,-46 TO 25,-44] OR coordinates_new_ll:[42,56 TO 43,58])^10'
+      :bq, '(coordinates_new_p:[23,-46 TO 25,-44] OR coordinates_new_p:[42,56 TO 43,58])^10'
     )
 
     expect(connection).to have_last_search_including(
-      :bf, 'field(average_rating_ft)'
+      :bf, 'field(average_rating_f)'
     )
 
     expect(connection).to have_last_search_including(
-      :boost, 'field(average_rating_ft)'
+      :boost, 'field(average_rating_f)'
     )
   end
 
@@ -79,7 +79,7 @@ shared_examples_for "query with connective scope and boost" do
       boost_multiplicative(function() { field(:average_rating) })
     end
 
-    expect(connection.searches.last[:bf]).to eq ['field(average_rating_ft)']
-    expect(connection.searches.last[:boost]).to eq ['field(average_rating_ft)']
+    expect(connection.searches.last[:bf]).to eq ['field(average_rating_f)']
+    expect(connection.searches.last[:boost]).to eq ['field(average_rating_f)']
   end
 end

@@ -22,16 +22,33 @@ module Sunspot
       # Check sort presence
       #
       def include?(sort)
-        @sorts.any? { |s| s.to_param.include?(sort) }
+        @sorts.any? { |s| s.to_params[:sort].include?(sort) }
       end
 
       # 
-      # Combine the sorts into a single param by joining them
+      # Combine the sorts into a single sort-param by joining them and add
+      # possible custom additional params
       #
       def to_params(prefix = "")
         unless @sorts.empty?
           key = "#{prefix}sort".to_sym
-          { key => @sorts.map { |sort| sort.to_param } * ', ' }
+          params = { key => @sorts.map { |sort| sort.to_params[:sort] } * ', ' }
+          @sorts.each do |sort|
+            sort.to_params.each do |param, value|
+              next if param == :sort
+              param = param.to_sym
+              if params.has_key?(param) && params[param] != value
+                raise(
+                  ArgumentError,
+                  "Encountered duplicate additional sort param '#{param}' with different values ('#{params[param]}' vs. '#{value}')"
+                )
+              end
+
+              params[param] = value
+            end
+          end
+
+          params
         else
           {}
         end

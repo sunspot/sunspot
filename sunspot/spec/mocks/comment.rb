@@ -13,9 +13,9 @@ end
 Sunspot.setup(Namespaced::Comment) do
   text :body, :author_name
   string :author_name
-  time :published_at, :trie => true
+  time :published_at
   long :hash
   double :average_rating
   dynamic_float :custom_float, :multiple => true
-  boost :boost
+  boost(:boost)
 end

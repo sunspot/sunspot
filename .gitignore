@@ -10,3 +10,4 @@ sunspot_solr/solr/solr-webapp
 docs
 *.swp
 .idea
+/solr-*-data
