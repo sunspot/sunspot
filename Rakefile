@@ -51,7 +51,7 @@ end
 
 desc 'Run all the tests'
 task :default do
-  exit system([ "GEM=sunspot ci/travis.sh",
-                "GEM=sunspot_rails ci/travis.sh",
-                "GEM=sunspot_solr ci/travis.sh"].join(" && ")) ? 0 : 1
+  exit system([ "GEM=sunspot ci/sunspot_test_script.sh",
+                "GEM=sunspot_rails ci/sunspot_test_script.sh",
+                "GEM=sunspot_solr ci/sunspot_test_script.sh"].join(" && ")) ? 0 : 1
 end

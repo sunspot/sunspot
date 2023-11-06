@@ -36,6 +36,17 @@ describe "DSL bindings" do
         end
       end
     end
+    expect(value).to eq('value')
+  end
+
+  it 'should give access to calling context\'s methods with keyword arguments' do
+    value = nil
+    session.search(Post) do
+      any_of do
+        value = kwargs_method(a: 10, b: 20)
+      end
+    end
+    expect(value).to eq({ a: 10, b: 20 })
   end
 
   private
@@ -46,5 +57,9 @@ describe "DSL bindings" do
 
   def id
     16
+  end
+
+  def kwargs_method(a:, b:)
+    { a: a, b: b }
   end
 end
