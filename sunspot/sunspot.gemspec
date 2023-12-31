@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
                   'Dylan Vaughn', 'Brian Durand', 'Sam Granieri', 'Nick Zadrozny', 'Jason Ronallo', 'Ryan Wallace', 'Nicholas Jakobsen',
                   'Bragadeesh J', 'Ethiraj Srinivasan']
   s.email       = ["mat@patch.com"]
-  s.homepage    = "http://outoftime.github.com/sunspot"
+  s.homepage    = "https://sunspot.github.io"
   s.summary = 'Library for expressive, powerful interaction with the Solr search engine'
   s.license = 'MIT'
   s.description = <<-TEXT
