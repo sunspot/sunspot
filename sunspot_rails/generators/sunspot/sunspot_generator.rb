@@ -5,5 +5,4 @@ class SunspotGenerator < Rails::Generator::Base
       m.template 'sunspot.yml', 'config/sunspot.yml'
     end
   end
-  
 end
