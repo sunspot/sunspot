@@ -21,7 +21,7 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   end
 
   let :fake_rsolr_request do
-    {:uri => 'http://solr.test/uri'}
+    {:uri => URI('http://solr.test/uri')}
   end
 
   def fake_rsolr_response(status)
