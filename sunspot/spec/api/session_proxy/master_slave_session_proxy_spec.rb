@@ -38,7 +38,7 @@ describe Sunspot::SessionProxy::MasterSlaveSessionProxy do
   end
 
   it 'should raise ArgumentError when bogus config specified' do
-    expect { @proxy.config(:bogus) }.to raise_error
+    expect { @proxy.config(:bogus) }.to raise_error(ArgumentError)
   end
 
   it_should_behave_like 'session proxy'
