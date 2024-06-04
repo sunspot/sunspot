@@ -1,7 +1,7 @@
 # Sunspot
 
 [![Gem Version](https://badge.fury.io/rb/sunspot.svg)](http://badge.fury.io/rb/sunspot)
-[![Build Status](https://secure.travis-ci.org/sunspot/sunspot.svg?branch=master)](http://travis-ci.org/sunspot/sunspot)
+[![CI](https://github.com/sunspot/sunspot/actions/workflows/ci.yml/badge.svg)](https://github.com/sunspot/sunspot/actions/workflows/ci.yml)
 
 Sunspot is a Ruby library for expressive, powerful interaction with the Solr
 search engine. Sunspot is built on top of the RSolr library, which
@@ -1667,9 +1667,9 @@ To run all the specs just call `rake` from the library root folder.
 To run specs related to individual gems, consider using one of the following commands:
 
 ```bash
-GEM=sunspot ci/travis.sh
-GEM=sunspot_rails ci/travis.sh
-GEM=sunspot_solr ci/travis.sh
+GEM=sunspot ci/sunspot_test_script.sh
+GEM=sunspot_rails ci/sunspot_test_script.sh
+GEM=sunspot_solr ci/sunspot_test_script.sh
 ```
 
 ### Generating Documentation
