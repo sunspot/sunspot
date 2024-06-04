@@ -248,7 +248,7 @@ module Sunspot
     Coordinates = Struct.new(:lat, :lng)
 
     class ContextBoundDelegate
-      class <<self
+      class << self
         def instance_eval_with_context(receiver, &block)
           calling_context = eval('self', block.binding)
           if parent_calling_context = calling_context.instance_eval{@__calling_context__ if defined?(@__calling_context__)}
@@ -289,21 +289,31 @@ module Sunspot
         __proxy_method__(:sub, *args, &block)
       end
 
-      def method_missing(method, *args, &block)
-        __proxy_method__(method, *args, &block)
+      def method_missing(method, *args, **kwargs, &block)
+        __proxy_method__(method, *args, **kwargs, &block)
       end
 
-      def __proxy_method__(method, *args, &block)
-        begin
-          @__receiver__.__send__(method.to_sym, *args, &block)
-        rescue ::NoMethodError => e
-          begin
-            @__calling_context__.__send__(method.to_sym, *args, &block)
-          rescue ::NoMethodError
-            raise(e)
-          end
-        end
+      def respond_to_missing?(method, _)
+        @__receiver__.respond_to?(method, true) || super
       end
+
+      def __proxy_method__(method, *args, **kwargs, &block)
+        if kwargs.empty?
+          @__receiver__.__send__(method.to_sym, *args, &block)
+        else
+          @__receiver__.__send__(method.to_sym, *args, **kwargs, &block)
+        end
+      rescue ::NoMethodError => e
+        begin
+          if kwargs.empty?
+            @__calling_context__.__send__(method.to_sym, *args, &block)
+          else
+            @__calling_context__.__send__(method.to_sym, *args, **kwargs, &block)
+          end
+        rescue ::NoMethodError
+          raise(e)
+        end
+      end      
     end
   end
 end

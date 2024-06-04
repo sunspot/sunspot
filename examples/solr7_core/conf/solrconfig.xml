@@ -544,7 +544,7 @@
       <!-- change field to textSpell and use copyField in schema.xml
       to spellcheck multiple fields -->
       <str name="field">textSpell</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnOptimize">true</str>
     </lst>
 
     <lst name="spellchecker">
