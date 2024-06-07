@@ -15,7 +15,7 @@ if ruby_version < Gem::Version.new('3.0.0')
   end
 end
 
-if Gem::Version.new('3.0.0') <= ruby_version && ruby_version < Gem::Version.new('3.3.0')
+if Gem::Version.new('3.0.0') <= ruby_version && ruby_version < Gem::Version.new('3.4.0')
   ['6.1.0', '7.0.0'].each do |rails_version|
     appraise "rails-#{rails_version}" do
       gem 'sunspot', path: File.expand_path('sunspot', ENV['SUNSPOT_LIB_HOME'])
