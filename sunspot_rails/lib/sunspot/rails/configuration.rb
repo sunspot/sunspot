@@ -377,7 +377,8 @@ module Sunspot #:nodoc:
             if File.exist?(path)
               File.open(path) do |file|
                 processed = ERB.new(file.read).result
-                YAML.load(processed)[::Rails.env]
+                user_configurations = YAML.respond_to?(:unsafe_load) ? YAML.unsafe_load(processed) : YAML.load(processed)
+                user_configurations[::Rails.env]
               end
             else
               {}
