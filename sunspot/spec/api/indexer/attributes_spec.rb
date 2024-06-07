@@ -98,7 +98,7 @@ describe 'indexing attribute fields', :type => :indexer do
 
   it 'should index latitude and longitude passed as non-Floats' do
     coordinates = Sunspot::Util::Coordinates.new(
-      BigDecimal.new('40.7'), BigDecimal.new('-73.5'))
+      BigDecimal('40.7'), BigDecimal('-73.5'))
     session.index(post(:coordinates => coordinates))
     expect(connection).to have_add_with(:coordinates_s => 'dr5xx3nytvgs')
   end

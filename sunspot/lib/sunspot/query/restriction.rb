@@ -208,7 +208,8 @@ module Sunspot
         private
 
         def to_solr_conditional
-          "#{solr_value}"
+          @field.respond_to?(:to_solr_conditional) ?
+            @field.to_solr_conditional(solr_value) : "#{solr_value}"
         end
       end
 

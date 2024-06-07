@@ -1,7 +1,7 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
 
 describe Sunspot::SessionProxy::Retry5xxSessionProxy do
-  
+
   before :each do
     Sunspot::Session.connection_class = Mock::ConnectionFactory.new
     @sunspot_session = Sunspot.session
@@ -21,11 +21,14 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   end
 
   let :fake_rsolr_request do
-    {:uri => 'http://solr.test/uri'}
+    {:uri => URI('http://solr.test/uri')}
   end
 
   def fake_rsolr_response(status)
-    {:status => status.to_s}
+    {
+      :status => status.to_s,
+      :body => ''
+    }
   end
 
   let :post do
@@ -67,12 +70,12 @@ describe Sunspot::SessionProxy::Retry5xxSessionProxy do
   it "should not retry a 4xx" do
     e = FakeRSolrErrorHttp.new(fake_rsolr_request, fake_rsolr_response(400))
     expect(@sunspot_session).to receive(:index).and_raise(e)
-    expect { Sunspot.index(post) }.to raise_error
+    expect { Sunspot.index(post) }.to raise_error(FakeRSolrErrorHttp)
   end
 
   # TODO: try against more than just Sunspot.index? but that's just testing the
   # invocation of delegate, so probably not important. -nz 11Apr12
 
   it_should_behave_like 'session proxy'
-  
+
 end

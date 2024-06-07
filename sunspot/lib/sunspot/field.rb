@@ -237,6 +237,10 @@ module Sunspot
       "{!join from=#{from} to=#{to} v='#{query.join(' AND ')}'}"
     end
 
+    def to_solr_conditional(value)
+      "\"#{value}\""
+    end
+
     def eql?(field)
       super && target == field.target && from == field.from && to == field.to
     end

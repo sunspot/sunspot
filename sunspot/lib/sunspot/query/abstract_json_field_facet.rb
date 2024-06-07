@@ -17,6 +17,9 @@ module Sunspot
         params[:sort] = { @options[:sort] => @options[:sort_type]||'desc' } unless @options[:sort].nil?
         params[:prefix] = @options[:prefix] unless @options[:prefix].nil?
         params[:offset] = @options[:offset] unless @options[:offset].nil?
+        params[:allBuckets] = @options[:all_buckets] unless @options[:all_buckets].nil?
+        params[:missing] = @options[:missing] unless @options[:missing].nil?
+        params[:method] = @options[:method] unless @options[:method].nil?
 
         if !@options[:distinct].nil?
           dist_opts = @options[:distinct]

@@ -84,7 +84,7 @@ describe 'search faceting' do
       end
       expect(search.facet(:title).rows.map { |row| row.value }).to include('zero')
     end
-    
+
     it 'should return facet rows from an offset' do
       search = Sunspot.search(Post) do
         facet :title, :offset => 3
@@ -214,6 +214,15 @@ describe 'search faceting' do
       expect(search.facet(:title).rows.map { |row| row.value }).to eq(%w(four three two one))
     end
 
+    it 'should include allBuckets and missing' do
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :title, all_buckets: true, missing: true
+      end
+      expect(search.facet(:title).other_count('allBuckets')).to eq(10)
+      expect(search.facet(:title).other_count('missing')).to eq(1)
+    end
+
     it 'should limit facet values by prefix' do
       search = Sunspot.search(Post) do
         with :blog_id, 1
@@ -221,7 +230,64 @@ describe 'search faceting' do
       end
       expect(search.facet(:title).rows.map { |row| row.value }.sort).to eq(%w(three two))
     end
+  end
 
+  context 'date or time json facet' do
+    before :all do
+      Sunspot.remove_all
+      posts = [
+        Post.new(title: 'dt test', blog_id: 1, published_at: Time.new(2020, 8, 20)),
+        Post.new(title: 'dt test', blog_id: 1, published_at: Time.new(2020, 7, 20)),
+        Post.new(title: 'dt test', blog_id: 1, published_at: Time.new(2020, 6, 20)),
+        Post.new(title: 'dt test', blog_id: 1, published_at: Time.new(2020, 6, 15)),
+        Post.new(title: 'dt test', blog_id: 1, published_at: Time.new(2020, 5, 20)),
+        Post.new(title: 'dt test', blog_id: 1, published_at: Time.new(2020, 4, 20)),
+        Post.new(title: 'dt test', blog_id: 1, published_at: Time.new(2020, 3, 20))
+      ]
+      posts.each { |p| Sunspot.index(p) }
+      Sunspot.commit
+    end
+
+    it 'facets properly with the range specified as time_range' do
+      time_range = [Time.new(2020, 4, 1), Time.new(2020, 7, 31)]
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :published_at, time_range: time_range, gap: 1, gap_unit: 'MONTHS'
+      end
+      expected_rows = [
+        { count: 1, value: Time.new(2020, 4, 1).utc.iso8601 },
+        { count: 1, value: Time.new(2020, 5, 1).utc.iso8601 },
+        { count: 2, value: Time.new(2020, 6, 1).utc.iso8601 },
+        { count: 1, value: Time.new(2020, 7, 1).utc.iso8601 }
+      ]
+      expect(search.facet(:published_at).rows.map { |row| { count: row.count, value: row.value } }).to eq(expected_rows)
+    end
+
+    it 'should use custom gap parameters if provided' do
+      time_range = [Time.new(2020, 4, 1), Time.new(2020, 7, 31)]
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :published_at, range: time_range, gap: 1, gap_unit: 'MONTHS'
+      end
+      expected_rows = [
+        { count: 1, value: Time.new(2020, 4, 1).utc.iso8601 },
+        { count: 1, value: Time.new(2020, 5, 1).utc.iso8601 },
+        { count: 2, value: Time.new(2020, 6, 1).utc.iso8601 },
+        { count: 1, value: Time.new(2020, 7, 1).utc.iso8601 }
+      ]
+      expect(search.facet(:published_at).rows.map { |row| { count: row.count, value: row.value } }).to eq(expected_rows)
+    end
+
+    it 'should support computing other statistics' do
+      time_range = [Time.new(2020, 5, 1), Time.new(2020, 7, 1)]
+      search = Sunspot.search(Post) do
+        with :blog_id, 1
+        json_facet :published_at, range: time_range, gap: 1, gap_unit: 'MONTHS', other: 'all'
+      end
+      expect(search.facet(:published_at).other_count('before')).to eq(2)
+      expect(search.facet(:published_at).other_count('after')).to eq(2)
+      expect(search.facet(:published_at).other_count('between')).to eq(3)
+    end
   end
 
   context 'nested json facet' do
@@ -237,7 +303,7 @@ describe 'search faceting' do
       end
 
       0.upto(9) { |i| Sunspot.index(Post.new(:title => 'zero', :author_name => "another#{i}", :blog_id => 1)) }
-      
+
       Sunspot.commit
     end
 
@@ -459,38 +525,6 @@ describe 'search faceting' do
       expect(search.facet(:published_at).rows.last.value).to eq((time + 60*60*24)..(time + 60*60*24*2))
       expect(search.facet(:published_at).rows.last.count).to eq(1)
     end
-
-    it 'json facet should return time ranges' do
-      days_diff = 15
-      time_from = Time.utc(2009, 7, 8)
-      time_to = Time.utc(2009, 7, 8 + days_diff)
-      search = Sunspot.search(Post) do
-        json_facet(
-            :published_at,
-            :time_range => time_from..time_to
-        )
-      end
-
-      expect(search.facet(:published_at).rows.size).to eq(days_diff)
-      expect(search.facet(:published_at).rows[0].count).to eq(2)
-      expect(search.facet(:published_at).rows[1].count).to eq(1)
-    end
-
-    it 'json facet should return time ranges with custom gap' do
-      days_diff = 10
-      time_from = Time.utc(2009, 7, 8)
-      time_to = Time.utc(2009, 7, 8 + days_diff)
-      search = Sunspot.search(Post) do
-        json_facet(
-            :published_at,
-            :time_range => time_from..time_to,
-            gap: 60*60*24*2
-        )
-      end
-      expect(search.facet(:published_at).rows.size).to eq(days_diff / 2)
-      expect(search.facet(:published_at).rows[0].count).to eq(3)
-    end
-
   end
 
   context 'class facets' do
