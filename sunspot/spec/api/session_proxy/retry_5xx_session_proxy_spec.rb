@@ -1,4 +1,5 @@
 require File.expand_path('spec_helper', File.dirname(__FILE__))
+require 'uri'
 
 describe Sunspot::SessionProxy::Retry5xxSessionProxy do
 
