@@ -243,6 +243,8 @@ module Sunspot
   end
 
   class TypeField #:nodoc:
+    MODULAR_MODEL_MARK = '\:\:'
+
     class <<self
       def instance
         @instance ||= new
@@ -258,7 +260,7 @@ module Sunspot
     end
 
     def to_solr_conditional(value)
-      "\"#{value}\""
+      value.include?(MODULAR_MODEL_MARK) ? "\"#{value}\"" : value
     end
   end
 

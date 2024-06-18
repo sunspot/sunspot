@@ -317,8 +317,13 @@ module Sunspot
           if @value.empty?
             "[* TO *]"
           else
-            "(#{@value.map { |v| solr_value v } * ' OR '})"
+            "(#{@value.map { |v| to_solr_conditional_per_value v } * ' OR '})"
           end
+        end
+
+        def to_solr_conditional_per_value(v)
+          @field.respond_to?(:to_solr_conditional) ?
+            @field.to_solr_conditional(solr_value(v)) : "#{solr_value(v)}"
         end
       end
 
