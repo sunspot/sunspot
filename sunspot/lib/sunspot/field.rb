@@ -256,6 +256,10 @@ module Sunspot
     def to_indexed(clazz)
       clazz.name
     end
+
+    def to_solr_conditional(value)
+      "\"#{value}\""
+    end
   end
 
   class IdField #:nodoc:
