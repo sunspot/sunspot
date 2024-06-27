@@ -1,12 +1,12 @@
 describe 'typed query' do
   it 'properly escapes namespaced type names' do
     session.search(Namespaced::Comment)
-    expect(connection).to have_last_search_with(:fq => ['type:Namespaced\:\:Comment'])
+    expect(connection).to have_last_search_with(:fq => ['type:"Namespaced\:\:Comment"'])
   end
 
   it 'builds search for multiple types' do
     session.search(Post, Namespaced::Comment)
-    expect(connection).to have_last_search_with(:fq => ['type:(Post OR Namespaced\:\:Comment)'])
+    expect(connection).to have_last_search_with(:fq => ['type:(Post OR "Namespaced\:\:Comment")'])
   end
 
   it 'searches type of subclass when superclass is configured' do

@@ -243,6 +243,8 @@ module Sunspot
   end
 
   class TypeField #:nodoc:
+    MODULAR_MODEL_MARK = '\:\:'
+
     class <<self
       def instance
         @instance ||= new
@@ -255,6 +257,10 @@ module Sunspot
 
     def to_indexed(clazz)
       clazz.name
+    end
+
+    def to_solr_conditional(value)
+      value.include?(MODULAR_MODEL_MARK) ? "\"#{value}\"" : value
     end
   end
 
