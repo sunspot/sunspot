@@ -20,6 +20,11 @@ describe 'ActiveRecord mixin' do
       posts = Array.new(2) { |j| PostWithDefaultScope.create! :title => (10-j).to_s }
       expect { PostWithDefaultScope.index(:batch_size => 1) }.not_to raise_error
     end
+
+    it "should blow up if the record isn't persisted" do
+      post = Post.new
+      expect { post.index}.to raise_error
+    end
   end
 
   describe 'single table inheritence' do
@@ -41,6 +46,11 @@ describe 'ActiveRecord mixin' do
 
     it 'should immediately index and commit' do
       expect(Post.search.results).to eq([@post])
+    end
+
+    it "should blow up if the record isn't persisted" do
+      post = Post.new
+      expect { post.index!}.to raise_error
     end
   end
 
