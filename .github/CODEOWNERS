@@ -1,0 +1,15 @@
+# Each line is a file pattern followed by one or more owners.
+
+# https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
+
+ci/ @mdx-dev/codeowners-s365api
+sunspot/ @mdx-dev/codeowners-s365api
+sunspot_rails/ @mdx-dev/codeowners-s365api
+sunspot_solr/ @mdx-dev/codeowners-s365api
+tools/ @mdx-dev/codeowners-s365api
+
+# Order matters. This has to stay at the bottom of the file
+
+# These owners will be the default owners for everything in the repo.
+
+- @mdx-dev/codeowners-s365api
