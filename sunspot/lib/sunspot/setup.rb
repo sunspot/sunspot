@@ -118,7 +118,9 @@ module Sunspot
     # Return the Field with the given (public-facing) name
     #
     def field(field_name)
-      if field_factory = @field_factories_cache[field_name.to_sym]
+      if field_name.match? /_textv?$/
+        text_fields(field_name.to_s.gsub(/_textv?$/, '').to_sym).first
+      elsif field_factory = @field_factories_cache[field_name.to_sym]
         field_factory.build
       else
         raise(
