@@ -439,6 +439,23 @@ describe 'scoped_search' do
       end
       expect(search.results).to eq(posts[0..2])
     end
+
+    it 'should return results that have no value for field in conjunction of a single nil condition nested in disjunction alongside a single nil condition' do
+      posts = [
+        Post.new(:title => nil, :blog_id => 1),
+        Post.new(:title => 'Yes', :blog_id => nil),
+        Post.new(:title => nil, :blog_id => 2)
+      ]
+      Sunspot.index!(posts)
+      Sunspot.search(Post) do
+        any_of do
+          with(:title, nil)
+          all_of do
+            with(:blog_id, nil)
+          end
+        end
+      end.results.should == posts
+    end
   end
 
   describe 'multiple column ordering' do
