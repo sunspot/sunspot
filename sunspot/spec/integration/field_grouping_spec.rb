@@ -19,8 +19,7 @@ describe "field grouping" do
       group :title
     end
 
-    expect(search.group(:title).groups).to include { |g| g.value == "Title1" }
-    expect(search.group(:title).groups).to include { |g| g.value == "Title2" }
+    expect(search.group(:title).groups.map(&:value)).to include("Title1", "Title2")
   end
 
   it "returns the number of matches unique groups" do
