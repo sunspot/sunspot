@@ -174,7 +174,7 @@ module Sunspot
       # Boolean:: success
       #
       def install_solr_home
-        unless File.exists?(solr_home)
+        unless File.exist?(solr_home)
           Sunspot::Solr::Installer.execute(
             solr_home,
             :force => true,
@@ -192,7 +192,7 @@ module Sunspot
       #
       def create_solr_directories
         [solr_data_dir, pid_dir].each do |path|
-          FileUtils.mkdir_p(path) unless File.exists?(path)
+          FileUtils.mkdir_p(path) unless File.exist?(path)
         end
       end
 
