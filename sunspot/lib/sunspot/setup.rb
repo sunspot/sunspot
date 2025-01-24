@@ -168,6 +168,32 @@ module Sunspot
     end
 
     #
+    # Return one or more text fields with the given public-facing name. This
+    # implementation will always return a single field (in an array), but
+    # CompositeSetup objects might return more than one.
+    # Here field name should be of TextType or StringType.
+
+    def highlight_fields(field_name)
+      raise_error = Proc.new{
+        raise(
+          UnrecognizedFieldError,
+          "No stored field configured for #{@class_name} with name '#{field_name}' as type string or text"
+        )
+      }
+
+      field_factory = @field_factories_cache[field_name.to_sym]
+      raise_error.call if field_factory.nil? || field_factory.instance_variable_get('@field').nil?
+
+      field = field_factory.instance_variable_get('@field')
+      is_stored = field.instance_variable_get("@stored")
+      is_text_or_string  = field.type.class.in?([Sunspot::Type::TextType, Sunspot::Type::StringType])
+
+      raise_error.call unless is_text_or_string && is_stored
+
+      [field_factory.build]
+    end
+
+    #
     # Return one or more stored fields (can be either attribute or text fields)
     # for the given name.
     #
