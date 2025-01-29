@@ -49,6 +49,14 @@ describe Sunspot::Rails::Configuration, "default values without a sunspot.yml" d
     end
   end
 
+  it "should set hosts to an empty array when not set" do
+    @config.hosts.should eq []
+  end
+
+  it "should set master_hosts to an empty array when not set" do
+    @config.master_hosts.should eq []
+  end
+
   it "should set the read timeout to nil when not set" do
     expect(@config.read_timeout).to be_nil
   end
@@ -109,6 +117,14 @@ describe Sunspot::Rails::Configuration, "user provided sunspot.yml" do
   before(:each) do
     allow(::Rails).to receive(:env).and_return('config_test')
     @config = Sunspot::Rails::Configuration.new
+  end
+
+  it "should parse hosts array" do
+    @config.hosts.should eq ['http://localhost:8081/solr/test', 'http://localhost:8091/solr/test']
+  end
+
+  it "should parse master_hosts array" do
+    @config.master_hosts.should eq ['http://localhost:8080/solr/test', 'http://localhost:8090/solr/test']
   end
 
   it "should handle the 'scheme' property when set" do

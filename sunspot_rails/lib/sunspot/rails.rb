@@ -42,30 +42,44 @@ module Sunspot #:nodoc:
       private
 
       def master_config(sunspot_rails_configuration)
-        config = Sunspot::Configuration.build
-        builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
-        config.solr.url = builder.build(
-          :host => sunspot_rails_configuration.master_hostname,
-          :port => sunspot_rails_configuration.master_port,
-          :path => sunspot_rails_configuration.master_path,
-          :userinfo => sunspot_rails_configuration.userinfo
-        ).to_s
-        config.solr.read_timeout = sunspot_rails_configuration.read_timeout
-        config.solr.open_timeout = sunspot_rails_configuration.open_timeout
-        config.solr.proxy = sunspot_rails_configuration.proxy
-        config.solr.update_format = sunspot_rails_configuration.update_format
-        config
+        build_config(sunspot_rails_configuration) do |config|
+          config.solr.url = if sunspot_rails_configuration.master_hosts.empty?
+            builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
+
+            builder.build(
+              :host => sunspot_rails_configuration.master_hostname,
+              :port => sunspot_rails_configuration.master_port,
+              :path => sunspot_rails_configuration.master_path,
+              :userinfo => sunspot_rails_configuration.userinfo
+            ).to_s
+          else
+            sunspot_rails_configuration.hosts
+          end
+        end
       end
 
       def slave_config(sunspot_rails_configuration)
+        build_config(sunspot_rails_configuration) do |config|
+          config.solr.url = if sunspot_rails_configuration.hosts.empty?
+            builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
+
+            builder.build(
+              :host => sunspot_rails_configuration.hostname,
+              :port => sunspot_rails_configuration.port,
+              :path => sunspot_rails_configuration.path,
+              :userinfo => sunspot_rails_configuration.userinfo
+            ).to_s
+          else
+            sunspot_rails_configuration.hosts
+          end
+        end
+      end
+
+      def build_config(sunspot_rails_configuration)
         config = Sunspot::Configuration.build
-        builder = sunspot_rails_configuration.scheme == 'http' ? URI::HTTP : URI::HTTPS
-        config.solr.url = builder.build(
-          :host => sunspot_rails_configuration.hostname,
-          :port => sunspot_rails_configuration.port,
-          :path => sunspot_rails_configuration.path,
-          :userinfo => sunspot_rails_configuration.userinfo
-        ).to_s
+
+        yield config
+
         config.solr.read_timeout = sunspot_rails_configuration.read_timeout
         config.solr.open_timeout = sunspot_rails_configuration.open_timeout
         config.solr.proxy = sunspot_rails_configuration.proxy
