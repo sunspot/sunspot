@@ -1505,16 +1505,20 @@ part of the `save` callbacks.
 There are a number of ways to index manually within Ruby:
 ```ruby
 # On a class itself
-Person.reindex
+Person.reindex # Reindexes every record in the scope
 Sunspot.commit # or commit(true) for a soft commit (Solr4)
+Person.solr_remove_all_from_index # Eliminates Person record from the index, including records that no longer exist
 
 # On mixed objects
 Sunspot.index [post1, item2]
 Sunspot.index person3
 Sunspot.commit # or commit(true) for a soft commit (Solr4)
+Sunspot.remove_all!(User, Person)
 
 # With autocommit
 Sunspot.index! [post1, item2, person3]
+Person.solr_remove_all_from_index!
+Sunspot.remove_all!(User)
 ```
 
 If you make a change to the object's "schema" (code in the `searchable` block),
