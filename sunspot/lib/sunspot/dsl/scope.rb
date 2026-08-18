@@ -14,7 +14,12 @@ module Sunspot
 
       # Build a restriction to return only fields of the type in the results.
       def field_list(*args)
-        list = args.flatten.map { |field| @setup.field(field.to_sym).indexed_name.to_sym }
+        # if field list is * then all fields
+        if(args.length == 1 && args[0] == '*')
+          list = ['*']
+        else
+          list = args.flatten.map { |field| @setup.field(field.to_sym).indexed_name.to_sym }
+        end
         @query.add_field_list(Sunspot::Query::FieldList.new([:id] + list)) unless list.empty?
       end
 

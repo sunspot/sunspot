@@ -96,7 +96,7 @@ module Sunspot
       def highlight(*args)
         options = args.last.kind_of?(Hash) ? args.pop : {}
         fields = []
-        args.each { |field_name| fields.concat(@setup.text_fields(field_name)) }
+        args.each { |field_name| fields.concat(@setup.highlight_fields(field_name)) }
 
         @query.add_highlight(fields, options)
       end
