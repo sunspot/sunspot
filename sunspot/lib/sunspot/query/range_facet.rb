@@ -23,12 +23,15 @@ module Sunspot
 
       private
 
-      def local_params
+      def local_params 
         @local_params ||=
           begin
             local_params = {}
             local_params[:ex] = @exclude_tag if @exclude_tag
             local_params[:key] = @options[:name] if @options[:name]
+            # Allow tags on range facets
+            # NOTE: This should also be available on queries, stats etc
+            local_params[:tag] = @options[:tag] if @options[:tag]
             local_params
           end
       end
