@@ -39,6 +39,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler',  '>= 1.3.0', '< 2.0' if RUBY_VERSION <= '2.0.0'
   s.add_development_dependency 'nokogiri', '< 1.7' if RUBY_VERSION <= '2.0.0'
   s.add_development_dependency 'rake', '~> 13.2'
+  # ActiveSupport passes quirks_mode to JSON.generate/parse and json 3 rejects it.
+  # Rails 8 dropped the option; nothing in the Rails matrix is that new.
+  s.add_development_dependency 'json', '< 3'
   
   # Ruby 2.5 compatibility
   if RUBY_VERSION < '2.6'
