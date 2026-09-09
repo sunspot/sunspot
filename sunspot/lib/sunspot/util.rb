@@ -298,20 +298,31 @@ module Sunspot
       end
 
       def __proxy_method__(method, *args, **kwargs, &block)
-        if kwargs.empty?
-          @__receiver__.__send__(method.to_sym, *args, &block)
-        else
-          @__receiver__.__send__(method.to_sym, *args, **kwargs, &block)
+        method = method.to_sym
+
+        # Fast path: skip the rescue below when respond_to? can say where the
+        # method lives, avoiding a raise on every call into the calling context.
+        if !@__receiver__.respond_to?(method, true) &&
+           @__calling_context__.respond_to?(method, true)
+          return __dispatch__(@__calling_context__, method, args, kwargs, &block)
         end
-      rescue ::NoMethodError => e
+
         begin
-          if kwargs.empty?
-            @__calling_context__.__send__(method.to_sym, *args, &block)
-          else
-            @__calling_context__.__send__(method.to_sym, *args, **kwargs, &block)
+          __dispatch__(@__receiver__, method, args, kwargs, &block)
+        rescue ::NoMethodError => e
+          begin
+            __dispatch__(@__calling_context__, method, args, kwargs, &block)
+          rescue ::NoMethodError
+            raise(e)
           end
-        rescue ::NoMethodError
-          raise(e)
+        end
+      end
+
+      def __dispatch__(target, method, args, kwargs, &block)
+        if kwargs.empty?
+          target.__send__(method, *args, &block)
+        else
+          target.__send__(method, *args, **kwargs, &block)
         end
       end      
     end
