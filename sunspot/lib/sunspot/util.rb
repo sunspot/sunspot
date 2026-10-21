@@ -298,20 +298,43 @@ module Sunspot
       end
 
       def __proxy_method__(method, *args, **kwargs, &block)
-        if kwargs.empty?
-          @__receiver__.__send__(method.to_sym, *args, &block)
-        else
-          @__receiver__.__send__(method.to_sym, *args, **kwargs, &block)
+        method = method.to_sym
+
+        # Fast path: skip the rescue below when the receiver can't handle the
+        # method, avoiding a raise on every call into the calling context.
+        if !__may_handle__?(@__receiver__, method) &&
+           ::Kernel === @__calling_context__ &&
+           @__calling_context__.respond_to?(method, true)
+          return __dispatch__(@__calling_context__, method, args, kwargs, &block)
         end
-      rescue ::NoMethodError => e
+
         begin
-          if kwargs.empty?
-            @__calling_context__.__send__(method.to_sym, *args, &block)
-          else
-            @__calling_context__.__send__(method.to_sym, *args, **kwargs, &block)
+          __dispatch__(@__receiver__, method, args, kwargs, &block)
+        rescue ::NoMethodError => e
+          begin
+            __dispatch__(@__calling_context__, method, args, kwargs, &block)
+          rescue ::NoMethodError
+            raise(e)
           end
-        rescue ::NoMethodError
-          raise(e)
+        end
+      end
+
+      KERNEL_METHOD = ::Kernel.instance_method(:method)
+
+      # respond_to? only settles it when method_missing is the default one;
+      # receivers like DSL::Function answer everything through method_missing.
+      # Objects without Kernel (BasicObject proxies) may not have respond_to?.
+      def __may_handle__?(target, method)
+        !(::Kernel === target) ||
+          target.respond_to?(method, true) ||
+          KERNEL_METHOD.bind(target).call(:method_missing).owner != ::BasicObject
+      end
+
+      def __dispatch__(target, method, args, kwargs, &block)
+        if kwargs.empty?
+          target.__send__(method, *args, &block)
+        else
+          target.__send__(method, *args, **kwargs, &block)
         end
       end      
     end
