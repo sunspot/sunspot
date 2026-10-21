@@ -49,6 +49,50 @@ describe "DSL bindings" do
     expect(value).to eq({ a: 10, b: 20 })
   end
 
+  it 'should build function queries whose names the calling context also defines' do
+    # Like a model class method calling solr_search, where the model responds
+    # to ActiveRecord's #sum.
+    searcher = Class.new do
+      def search(session)
+        session.search(Post) do
+          keywords('pizza') do
+            boost(function { sum(:average_rating, 10) })
+          end
+        end
+      end
+
+      def sum(*)
+        'from context'
+      end
+    end.new
+
+    searcher.search(session)
+    expect(connection).to have_last_search_including(:bf, 'sum(average_rating_ft,10)')
+  end
+
+  it 'should define typed fields whose names the calling context also defines' do
+    stub_const('BindingSpecDocument', Class.new)
+    # The example group responds to rspec-mocks' #double.
+    Sunspot::Setup.setup(BindingSpecDocument) { double :rating }
+    expect(Sunspot::Setup.for(BindingSpecDocument).field(:rating).type).to be_a(Sunspot::Type::DoubleType)
+  end
+
+  it 'should prefer the record\'s method_missing in index-time blocks' do
+    record_class = Class.new do
+      def method_missing(name, *args, &block)
+        name == :name ? 'from record' : super
+      end
+      # respond_to_missing? is deliberately not defined.
+    end
+    # Inside a searchable block the calling context is the model class, which
+    # responds to Class#name.
+    extractor = record_class.instance_eval do
+      Sunspot::DataExtractor::BlockExtractor.new { name }
+    end
+
+    expect(extractor.value_for(record_class.new)).to eq('from record')
+  end
+
   private
 
   def test_method
@@ -68,8 +112,9 @@ describe Sunspot::Util::ContextBoundDelegate do
   # Resolution must not depend on raising; the discarded backtraces are costly.
   it 'does not raise NoMethodError when resolving a calling context method' do
     raised = 0
+    test_thread = Thread.current
     tracer = TracePoint.new(:raise) do |tp|
-      raised += 1 if tp.raised_exception.is_a?(NoMethodError)
+      raised += 1 if Thread.current == test_thread && tp.raised_exception.is_a?(NoMethodError)
     end
 
     context = Class.new do
@@ -138,5 +183,44 @@ describe Sunspot::Util::ContextBoundDelegate do
     end.new
 
     expect(context.resolve(receiver)).to eq('from receiver')
+  end
+
+  it 'prefers a receiver method_missing over a context method of the same name' do
+    receiver = Class.new do
+      def method_missing(name, *args, &block)
+        name == :shared_method ? 'from receiver' : super
+      end
+      # respond_to_missing? is deliberately not defined.
+    end.new
+
+    context = Class.new do
+      def resolve(receiver)
+        Sunspot::Util::ContextBoundDelegate
+          .instance_eval_with_context(receiver) { shared_method }
+      end
+
+      def shared_method
+        'from context'
+      end
+    end.new
+
+    expect(context.resolve(receiver)).to eq('from receiver')
+  end
+
+  it 'dispatches to a BasicObject receiver that does not implement respond_to?' do
+    receiver = Class.new(BasicObject) do
+      def method_missing(name, *args, &block)
+        name == :proxied_method ? 'from proxy' : super
+      end
+    end.new
+
+    context = Class.new do
+      def resolve(receiver)
+        Sunspot::Util::ContextBoundDelegate
+          .instance_eval_with_context(receiver) { proxied_method }
+      end
+    end.new
+
+    expect(context.resolve(receiver)).to eq('from proxy')
   end
 end

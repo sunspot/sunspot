@@ -300,9 +300,10 @@ module Sunspot
       def __proxy_method__(method, *args, **kwargs, &block)
         method = method.to_sym
 
-        # Fast path: skip the rescue below when respond_to? can say where the
-        # method lives, avoiding a raise on every call into the calling context.
-        if !@__receiver__.respond_to?(method, true) &&
+        # Fast path: skip the rescue below when the receiver can't handle the
+        # method, avoiding a raise on every call into the calling context.
+        if !__may_handle__?(@__receiver__, method) &&
+           ::Kernel === @__calling_context__ &&
            @__calling_context__.respond_to?(method, true)
           return __dispatch__(@__calling_context__, method, args, kwargs, &block)
         end
@@ -316,6 +317,17 @@ module Sunspot
             raise(e)
           end
         end
+      end
+
+      KERNEL_METHOD = ::Kernel.instance_method(:method)
+
+      # respond_to? only settles it when method_missing is the default one;
+      # receivers like DSL::Function answer everything through method_missing.
+      # Objects without Kernel (BasicObject proxies) may not have respond_to?.
+      def __may_handle__?(target, method)
+        !(::Kernel === target) ||
+          target.respond_to?(method, true) ||
+          KERNEL_METHOD.bind(target).call(:method_missing).owner != ::BasicObject
       end
 
       def __dispatch__(target, method, args, kwargs, &block)
