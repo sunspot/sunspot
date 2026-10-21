@@ -12,7 +12,7 @@ end
 
 require File.join(File.dirname(__FILE__), 'light_config')
 
-%w(util adapters configuration setup composite_setup text_field_setup field
+%w(version util adapters configuration setup composite_setup text_field_setup field
    field_factory data_extractor indexer query search session session_proxy
    type dsl class_set).each do |filename|
   require File.join(File.dirname(__FILE__), 'sunspot', filename)
