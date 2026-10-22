@@ -11,7 +11,7 @@ module Sunspot
     # Base class for field factories.
     #
     class Abstract
-      attr_reader :name
+      attr_reader :name, :field
 
       def initialize(name, options = {}, &block)
         @name = name.to_sym
