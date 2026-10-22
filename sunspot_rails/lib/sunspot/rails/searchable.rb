@@ -7,6 +7,7 @@ module Sunspot #:nodoc:
     # created and destroyed.
     #
     module Searchable
+      UnpersistedObjectError = Class.new(RuntimeError)
       class <<self
         def included(base) #:nodoc:
           base.module_eval do
@@ -439,6 +440,7 @@ module Sunspot #:nodoc:
         # manually.
         #
         def solr_index
+          raise UnpersistedObjectError if self.new_record?
           Sunspot.index(self)
         end
 
@@ -446,6 +448,7 @@ module Sunspot #:nodoc:
         # Index the model in Solr and immediately commit. See #index
         #
         def solr_index!
+          raise UnpersistedObjectError if self.new_record?
           Sunspot.index!(self)
         end
 
