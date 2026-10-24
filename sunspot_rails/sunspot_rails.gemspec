@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   end
 
   # Ruby 2.7 compatibility: its Bundler picks prism 2's precompiled gems, which need Ruby 3.3
-  if RUBY_VERSION < '3.0'
+  if RUBY_VERSION >= '2.7' && RUBY_VERSION < '3.0'
     s.add_development_dependency 'prism', '< 2'
   end
 
