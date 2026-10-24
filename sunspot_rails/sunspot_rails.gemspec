@@ -45,6 +45,11 @@ Gem::Specification.new do |s|
     s.add_development_dependency 'psych', '< 4.0'
   end
 
+  # Ruby 2.7 compatibility: its Bundler picks prism 2's precompiled gems, which need Ruby 3.3
+  if RUBY_VERSION >= '2.7' && RUBY_VERSION < '3.0'
+    s.add_development_dependency 'prism', '< 2'
+  end
+
   s.rdoc_options << '--webcvs=http://github.com/outoftime/sunspot/tree/master/%s' <<
                   '--title' << 'Sunspot-Rails - Rails integration for the Sunspot Solr search library - API Documentation' <<
                   '--main' << 'README.rdoc'
