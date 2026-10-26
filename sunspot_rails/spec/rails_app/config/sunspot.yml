@@ -11,6 +11,12 @@ development:
     port: 8981
 config_test:
   solr:
+    hosts:
+      - 'localhost:8081/solr/test'
+      - 'localhost:8091/solr/test'
+    master_hosts:
+      - 'localhost:8080/solr/test'
+      - 'localhost:8090/solr/test'
     scheme: http
     user: user
     pass: pass

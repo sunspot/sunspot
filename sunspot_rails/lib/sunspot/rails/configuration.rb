@@ -58,8 +58,25 @@ module Sunspot #:nodoc:
       # ActiveSupport log levels are integers; this array maps them to the
       # appropriate java.util.logging.Level constant
       LOG_LEVELS = %w(FINE INFO WARNING SEVERE SEVERE INFO)
+      SCHEME_EXP = /\Ahttps?:\/\//
 
       attr_writer :user_configuration
+      #
+      # The host names array at which to connect to Solr.
+      #
+      # ==== Returns
+      #
+      # Array:: hosts
+      #
+      def hosts
+        unless defined?(@hosts)
+          @hosts = [user_configuration_from_key('solr', 'hosts')].flatten.compact.
+            map { |host| host.prepend("#{scheme}://") unless host[SCHEME_EXP] }
+        end
+
+        @hosts
+      end
+
       #
       # The host name at which to connect to Solr. Default 'localhost'.
       #
@@ -148,6 +165,22 @@ module Sunspot #:nodoc:
       end
 
       #
+      # The host names array at which to connect to the master Solr instances.
+      #
+      # ==== Returns
+      #
+      # Array:: master_hosts
+      #
+      def master_hosts
+        unless defined?(@master_hosts)
+          @master_hosts = [user_configuration_from_key('solr', 'master_hosts')].flatten.compact.
+            map { |host| host.prepend("#{scheme}://") unless host[SCHEME_EXP] }
+        end
+
+        @master_hosts
+      end
+
+      #
       # The host name at which to connect to the master Solr instance. Defaults
       # to the 'hostname' configuration option.
       #
@@ -191,7 +224,7 @@ module Sunspot #:nodoc:
       # Boolean:: bool
       #
       def has_master?
-        @has_master = !!user_configuration_from_key('master_solr')
+        @has_master = !!user_configuration_from_key('master_solr') || !!user_configuration_from_key('master_hosts')
       end
 
       #
